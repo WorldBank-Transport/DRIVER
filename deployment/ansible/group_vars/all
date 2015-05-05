@@ -1,0 +1,24 @@
+---
+developing: "'development' in group_names"
+developing_or_testing: "'development' in group_names or 'test' in group_names"
+not_developing: "'development' not in group_names"
+not_testing: "'test' not in group_names"
+
+app_username: "vagrant"
+
+python_version: "2.7.*"
+pip_version: "1.*"
+
+postgis_liblwgeom_package_version: "2.1.*"
+postgis_package_version: "2.1.*"
+
+postgresql_package_version: "9.4.1*.pgdg14.04+1"
+postgresql_host: "localhost"
+postgresql_port: 5432
+postgresql_version: "9.4"
+
+## WEB SETTINGS
+js_html5mode: "true"
+js_html5mode_prefix: "!"
+
+nodejs_npm_version: "2.1.5"

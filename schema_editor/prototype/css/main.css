@@ -1,0 +1,189 @@
+body {
+  font-weight: 300; }
+
+h5 {
+  text-transform: uppercase;
+  color: #555; }
+
+a {
+  text-decoration: none;
+  color: #000; }
+  a:hover {
+    text-decoration: none;
+    color: #999; }
+
+svg {
+  width: 15px; }
+
+.btn {
+  border-radius: 20px; }
+
+label {
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-top: 10px;
+  color: #555; }
+
+.checkbox label {
+  text-transform: initial;
+  margin-top: 5px; }
+
+.row {
+  margin-left: 0;
+  margin-right: 0; }
+
+/* MAIN BODY */
+.form-area {
+  position: relative;
+  padding-top: 80px; }
+
+/* MAIN BODY HEADING */
+.content-border {
+  border-bottom: 3px solid #dedede;
+  margin-bottom: 20px; }
+
+.form-area-heading .btn {
+  float: right;
+  margin-top: -40px; }
+
+.edit, .delete {
+  color: #000;
+  fill: #000; }
+  .edit:hover, .delete:hover {
+    color: #999;
+    fill: #999; }
+
+/* SAVE BUTTON AREA */
+.save-area {
+  margin: 25px 39%;
+  display: inline-block; }
+  .save-area .btn {
+    margin-right: 15px; }
+
+.navbar-default {
+  position: fixed;
+  z-index: 10;
+  width: 100%; }
+
+.content-types {
+  position: fixed;
+  width: 220px;
+  height: 100%;
+  background-color: #555;
+  margin-top: 50px;
+  z-index: 9; }
+  .content-types > ul {
+    padding-left: 0; }
+    .content-types > ul > li {
+      color: #fff;
+      list-style-type: none;
+      border-bottom: 1px solid #777; }
+      .content-types > ul > li a {
+        font-size: 14px;
+        color: #AAA;
+        padding: 12px 16px;
+        display: block;
+        cursor: pointer; }
+        .content-types > ul > li a:hover {
+          text-decoration: none;
+          color: #FFF;
+          background-color: #666; }
+      .content-types > ul > li > ul {
+        overflow: hidden;
+        max-height: 0;
+        transition: 0.5s max-height;
+        list-style-type: none;
+        padding-left: 0; }
+        .content-types > ul > li > ul a {
+          padding-left: 40px; }
+          .content-types > ul > li > ul a:hover {
+            background-color: #666; }
+      .content-types > ul > li.in > ul {
+        max-height: 400px; }
+  .content-types .active-parent > a {
+    color: #fff !important;
+    background: #333; }
+  .content-types .active-page > a {
+    color: #fff;
+    background: #444; }
+
+/* FIELD HEADING */
+.field {
+  border-top: 3px solid #fff;
+  background-color: #efefef;
+  padding: 15px; }
+  .field h4, .field h5, .field svg, .field p {
+    display: inline; }
+  .field p, .field svg {
+    float: right; }
+  .field p {
+    margin-left: 5px;
+    margin-right: 30px; }
+  .field .btn-group {
+    margin: 10px 40%; }
+
+/* FIELD OPTIONS */
+.field-type-options, form {
+  background-color: #efefef;
+  padding-bottom: 20px;
+  margin-bottom: -10px; }
+
+.form-collapse {
+  border-top: 2px solid #ddd;
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.25s max-height; }
+  .form-collapse.active {
+    max-height: 600px; }
+
+/*.form-collapse-2 {
+	border-top: 1px solid #ddd;
+}*/
+.form-horizontal .control-label {
+  text-align: left; }
+
+.all-event-types #Layer_1 {
+  float: left;
+  width: 12px; }
+.all-event-types .content-border {
+  margin-bottom: 0; }
+.all-event-types .type {
+  border-top: 3px solid #fff;
+  border-bottom: 1px solid #DDD;
+  padding: 15px;
+  background-color: #fff; }
+  .all-event-types .type h4 {
+    margin-left: 16px;
+    margin-top: 2px;
+    border-bottom: 1px solid #000; }
+  .all-event-types .type h4, .all-event-types .type h5, .all-event-types .type svg, .all-event-types .type p {
+    display: inline; }
+  .all-event-types .type p, .all-event-types .type svg {
+    float: right; }
+  .all-event-types .type p {
+    margin-left: 5px;
+    margin-right: 30px; }
+
+.add-new {
+  /* background-image in select doesn't work in Chrome */ }
+  .add-new form {
+    background-color: transparent; }
+  .add-new input[type="file"] {
+    text-align: right; }
+  .add-new select#boundary-color option[value="Red"] {
+    background-image: url(red.png);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    padding-left: 30px; }
+  .add-new select#boundary-color option[value="Blue"] {
+    background-image: url(blue.png);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    padding-left: 30px; }
+  .add-new select#boundary-color option[value="Green"] {
+    background-image: url(green.png);
+    background-repeat: no-repeat;
+    background-position: bottom left;
+    padding-left: 30px; }
+
+/*# sourceMappingURL=main.css.map */

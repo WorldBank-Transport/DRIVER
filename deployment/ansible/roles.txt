@@ -1,0 +1,10 @@
+azavea.postgresql,0.3.0
+azavea.postgresql-support,0.2.1
+azavea.postgis,0.2.1
+azavea.nginx,0.2.0
+azavea.gunicorn,0.1.0
+azavea.git,0.1.0
+azavea.python,0.1.0
+azavea.pip,0.1.0
+azavea.ruby,0.3.0
+azavea.nodejs,0.3.0

@@ -1,0 +1,41 @@
+---
+- name: Install build essential
+  apt: name=build-essential state=present
+
+- name: Install Sass
+  gem: name=sass
+       version="{{ web_sass_version }}"
+       user_install=no
+       state=present
+
+- name: Install Compass
+  gem: name=compass
+       user_install=no
+       state=present
+
+- name: Install grunt-cli and bower
+  command: npm install -g bower grunt-cli
+  args:
+    chdir: "{{ web_dir }}"
+
+- name: Install application javascript dependencies (npm)
+  command: npm install
+  sudo: no
+  args:
+    chdir: "{{ web_dir }}"
+
+- name: Install application javascript dependencies (bower)
+  command: bower install
+  sudo: no
+  args:
+    chdir: "{{ web_dir }}"
+
+- name: Copy JS config to scripts dir
+  template: src=config-js.j2 dest="{{ web_scripts_dir}}/config.js"
+  sudo: no
+
+- name: Build production app
+  command: grunt build
+  sudo: no
+  args:
+    chdir: "{{ web_dir }}"
