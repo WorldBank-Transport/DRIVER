@@ -6,7 +6,7 @@
         $locationProvider.html5Mode(Config.html5Mode.enabled);
         $locationProvider.hashPrefix(Config.html5Mode.prefix);
 
-        $urlRouterProvider.otherwise('/');
+        $urlRouterProvider.otherwise('/boundary');
     }
 
     /* ngInject */
@@ -24,7 +24,7 @@
      */
     angular.module('ase', [
         'ase.config',
-        'ase.views.recordtype'
+        'ase.views.boundary'
     ])
     .config(DefaultRoutingConfig)
     .config(LogConfig);
