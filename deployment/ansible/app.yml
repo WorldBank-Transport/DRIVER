@@ -1,0 +1,15 @@
+---
+
+# Installs packages/dependencies for web servers
+
+- hosts: app-servers
+
+  sudo: True
+
+  pre_tasks:
+    - name: Update APT cache
+      apt: update_cache=yes
+
+  roles:
+    - { role: "driver.ashlar" }
+    - { role: "ashlar.app" }

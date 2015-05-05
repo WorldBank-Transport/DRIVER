@@ -1,0 +1,9 @@
+---
+
+web_dir: "/opt/web"
+web_scripts_dir: "{{ web_dir }}/app/scripts"
+web_build_dir: "{{ web_dir }}/dist"
+
+web_sass_version: 3.4.9
+
+js_html5mode: "false"

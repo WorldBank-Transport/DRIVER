@@ -1,0 +1,17 @@
+(function () {
+    'use strict';
+
+    // WARNING: This file is templated by ansible, any changes will be overridden on next provision
+    // Modify this file in: `deployment/ansible/roles/lgbs.web/templates/config-js.conf.j2`
+
+    var config = {
+        debug: {% if developing %}true{% else %}false{% endif %},
+        html5Mode: {
+            enabled: {{ js_html5mode }},
+            prefix: '{{ js_html5mode_prefix }}'
+        },
+    };
+
+    angular.module('ase.config', [])
+    .constant('Config', config);
+})();

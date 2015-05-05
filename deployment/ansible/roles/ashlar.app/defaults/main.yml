@@ -1,0 +1,11 @@
+ashlar_user: "{{ ansible_ssh_user }}"
+root_conf_dir: "/etc/ashlar.d"
+app_log: "/var/log/ashlar.log"
+root_app_dir: "/opt/app"
+ashlar_session_timeout_s: 40
+root_www_dir: "/var/www"
+root_static_dir: "{{ root_www_dir }}/static"
+root_media_dir: "{{ root_www_dir }}/media"
+
+database_driver: "postgresql"
+database_host: "database.service.ashlar.internal"
