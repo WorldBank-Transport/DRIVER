@@ -1,0 +1,5 @@
+---
+  dependencies:
+    - { role: "azavea.python", python_development: True }
+    - { role: "azavea.pip" }
+    - { role: "azavea.postgresql-support"}  # Installs pg_config, required to pip install psycopg2

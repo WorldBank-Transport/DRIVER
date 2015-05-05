@@ -1,27 +1,9 @@
 ---
 
-- name: Install dev packages
-  apt: name={{ item }}
-  with_items:
-    - libgeos-dev
-    - binutils
-    - libproj-dev
-    - gdal-bin
-
 - name: Install python requirements
   pip: name={{ item.name }} version={{ item.version }}
   with_items:
-    - { name: 'Django', version: '1.8' }
-    - { name: 'djangorestframework', version: '3.1.1' }
-    - { name: 'djangorestframework-gis', version: '0.8.1' }
     - { name: 'django-oauth-toolkit', version: '0.8.1' }
-    - { name: 'django-filter', version: '0.9.2' }
-    - { name: 'jsonschema', version: '2.4.0' }
-    - { name: 'django-pgjson', version: '0.2.3' }
-    - { name: 'psycopg2', version: '2.6' }
-    - { name: 'django-extensions', version: '1.5.2' }
-    - { name: 'PyYAML', version: '3.11' }
-  notify: Restart ashlar
 
 - name: Install python dev requirements
   pip: name={{ item.name }} version={{ item.version }}
