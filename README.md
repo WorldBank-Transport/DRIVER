@@ -1,6 +1,7 @@
 # DRIVER
 DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
 
+[![Build Status](https://travis-ci.org/WorldBank-Transport/DRIVER.svg?branch=develop)](https://travis-ci.org/WorldBank-Transport/DRIVER)
 
 ## Developing
 
