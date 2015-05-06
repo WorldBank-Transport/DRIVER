@@ -27,6 +27,18 @@
             controller: 'RTDetailController',
             controllerAs: 'rtDetail'
         });
+        $stateProvider.state('rt.schema-add', {
+            url: '/detail/:uuid/schema/add',
+            templateUrl: 'scripts/views/recordtype/schema/add-partial.html',
+            controller: 'RTSchemaAddController',
+            controllerAs: 'rtSchemaAdd'
+        });
+        $stateProvider.state('rt.schema-edit', {
+            url: '/detail/:uuid/schema/:schema',
+            templateUrl: 'scripts/views/recordtype/schema/edit-partial.html',
+            controller: 'RTSchemaEditController',
+            controllerAs: 'rtSchemaEdit'
+        });
     }
 
     angular.module('ase.views.recordtype', [

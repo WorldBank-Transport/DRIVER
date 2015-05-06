@@ -27,8 +27,12 @@
 /* FIELD OPTIONS */
 
 .field-type-options, form {
-	background-color: #efefef;
-	margin-bottom: -10px;
+    background-color: #efefef;
+    margin-bottom: -10px;
+}
+
+.field-type-options {
+    padding-bottom: 20px;
 }
 
 .form-collapse {
