@@ -1,5 +1,5 @@
 # DRIVER
-DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting 
+DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
 
 
 ## Developing
@@ -63,3 +63,12 @@ curl -X POST -d "grant_type=password&username=<user_name>&password=<password>&sc
 ```
 
 Now, this token will have read-only access to the API.
+
+
+## Testing
+
+### Javascript
+
+First, ssh into the app vm: `vagrant ssh app`
+
+Then, cd to the web dir and run the grunt tests: `cd /opt/web && grunt test`
