@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function ListController() {
+    function SidebarController() {
         var ctl = this;
         initialize();
 
@@ -11,7 +11,6 @@
         }
     }
 
-    angular.module('ase.views.recordtype')
-    .controller('ListController', ListController);
-
+    angular.module('ase.views.sidebar')
+    .controller('SidebarController', SidebarController);
 })();
