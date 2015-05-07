@@ -41,8 +41,11 @@
         mode=0775
         state=directory
 
+# When developing/testing allow the secrets file to be read by all, so we can
+# easily run tests with the default user. But keep it locked down otherwise.
 - name: Copy app configuration
-  template: src=secrets.yaml.j2 dest=/etc/secrets.yaml mode=0660
+  template: src=secrets.yaml.j2 dest=/etc/secrets.yaml
+            mode={{ 0664 if developing_or_testing else 0660 }}
             owner={{ app_username }} group={{ app_username }}
   notify: Restart driver
 
