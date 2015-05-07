@@ -12,4 +12,4 @@
 
   roles:
     - { role: "driver.ashlar" }
-    - { role: "ashlar.app" }
+    - { role: "driver.app" }

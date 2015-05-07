@@ -1,11 +1,11 @@
-ashlar_user: "{{ ansible_ssh_user }}"
-root_conf_dir: "/etc/ashlar.d"
+driver_user: "{{ ansible_ssh_user }}"
+root_conf_dir: "/etc/driver.d"
 app_log: "{{ gunicorn_errorlog }}"
 root_app_dir: "/opt/app"
-ashlar_session_timeout_s: 40
+driver_session_timeout_s: 40
 root_www_dir: "/var/www"
 root_static_dir: "{{ root_www_dir }}/static"
 root_media_dir: "{{ root_www_dir }}/media"
 
 database_driver: "postgresql"
-database_host: "database.service.ashlar.internal"
+database_host: "database.service.driver.internal"

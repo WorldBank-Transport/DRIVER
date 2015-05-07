@@ -11,4 +11,4 @@
       apt: update_cache=yes
 
   roles:
-    - { role: "ashlar.database" }
+    - { role: "driver.database" }
