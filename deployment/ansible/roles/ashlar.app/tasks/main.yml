@@ -46,15 +46,6 @@
             owner={{ app_username }} group={{ app_username }}
   notify: Restart ashlar
 
-- name: Configure gunicorn
-  template: src=gunicorn-ashlar.py.j2 dest={{ root_conf_dir }}/gunicorn.py
-            owner={{ app_username }} group={{ app_username }}
-  notify: Restart ashlar
-
-- name: Configure service definition
-  template: src=upstart-ashlar.conf.j2 dest=/etc/init/ashlar.conf
-  notify: Restart ashlar
-
 - name: Copy nginx config
   template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
   notify: Restart nginx

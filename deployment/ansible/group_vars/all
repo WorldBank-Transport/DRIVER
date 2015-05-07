@@ -4,7 +4,7 @@ developing_or_testing: "'development' in group_names or 'test' in group_names"
 not_developing: "'development' not in group_names"
 not_testing: "'test' not in group_names"
 
-app_username: "vagrant"
+app_username: "driver"
 
 python_version: "2.7.*"
 pip_version: "1.*"
