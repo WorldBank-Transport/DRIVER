@@ -4,9 +4,6 @@ python:
 
 cache:
   directories:
-    # Fun race conditions on older npm versions likely cause lodash lockfile to almost always
-    #   exist. So cache this dir so we don't npm install every time. It's faster anyways.
-    #   https://github.com/npm/npm/issues/6309
     - schema_editor/node_modules
     - schema_editor/bower_components
     - $HOME/.cache/pip
@@ -17,6 +14,12 @@ addons:
 env:
   - DJANGO_SETTINGS_MODULE='driver.settings_travis'
 
+before_install:
+    # Fun race conditions on npm<2.1.1 when installing packages, so upgrade
+    #   https://github.com/npm/npm/issues/6309
+  - nvm install 0.12
+  - nvm use 0.12
+
 install:
   - gem install -q sass compass
   - pip install "git+https://github.com/azavea/ashlar.git@develop"
@@ -24,7 +27,6 @@ install:
   - pushd schema_editor
   - npm --version
   - npm install -g bower grunt-cli
-  - npm cache clean
   - npm install
   - bower install
   - popd
