@@ -89,7 +89,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "database" do |database|
     database.vm.hostname = "database"
-    database.hostmanager.aliases = %w(database.service.ashlar.internal)
+    database.hostmanager.aliases = %w(database.service.driver.internal)
     database.vm.network "private_network", ip: "192.168.11.101"
 
     database.vm.synced_folder ".", "/vagrant", disabled: true
@@ -110,7 +110,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "app" do |app|
     app.vm.hostname = "app"
-    app.hostmanager.aliases = %w(app.service.ashlar.internal)
+    app.hostmanager.aliases = %w(app.service.driver.internal)
     app.vm.network "private_network", ip: "192.168.11.102"
 
     app.vm.synced_folder ".", "/vagrant", disabled: true

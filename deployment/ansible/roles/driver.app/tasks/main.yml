@@ -11,7 +11,7 @@
     - { name: 'ipython', version: '3.0.0' }
     - { name: 'ipdb', version: '0.8' }
   when: developing
-  notify: Restart ashlar
+  notify: Restart driver
 
 - name: Touch log file if it does not exist
   command: touch {{ app_log }}
@@ -44,16 +44,7 @@
 - name: Copy app configuration
   template: src=secrets.yaml.j2 dest=/etc/secrets.yaml mode=0660
             owner={{ app_username }} group={{ app_username }}
-  notify: Restart ashlar
-
-- name: Configure gunicorn
-  template: src=gunicorn-ashlar.py.j2 dest={{ root_conf_dir }}/gunicorn.py
-            owner={{ app_username }} group={{ app_username }}
-  notify: Restart ashlar
-
-- name: Configure service definition
-  template: src=upstart-ashlar.conf.j2 dest=/etc/init/ashlar.conf
-  notify: Restart ashlar
+  notify: Restart driver
 
 - name: Copy nginx config
   template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default

@@ -1,6 +1,6 @@
 ---
-- name: Restart ashlar
-  service: name=ashlar state=restarted
+- name: Restart driver
+  service: name=driver state=restarted
 
 - name: Restart nginx
   service: name=nginx state=restarted

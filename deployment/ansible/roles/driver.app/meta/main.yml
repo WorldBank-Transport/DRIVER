@@ -6,4 +6,4 @@
     - { role: "azavea.gunicorn" }
     - { role: "azavea.nginx", nginx_delete_default_site: False }
     - { role: "azavea.nodejs" }
-    - { role: "ashlar.web"}
+    - { role: "driver.web"}
