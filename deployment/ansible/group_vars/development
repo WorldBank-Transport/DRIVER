@@ -6,7 +6,7 @@ gunicorn_reload: true
 gunicorn_workers: 4
 gunicorn_loglevel: "debug"
 gunicorn_app_dir: "{{ root_app_dir }}"
-gunicorn_wsgi: "ashlar.wsgi"
+gunicorn_wsgi: "driver.wsgi"
 
 ## POSTGRESQL SETTINGS
 postgresql_listen_addresses: "*"

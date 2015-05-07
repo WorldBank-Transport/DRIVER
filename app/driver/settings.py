@@ -96,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ashlar.wsgi.application'
+WSGI_APPLICATION = 'driver.wsgi.application'
 
 
 # Database

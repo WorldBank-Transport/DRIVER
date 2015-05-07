@@ -11,4 +11,4 @@ respawn
 setuid {{ app_username }}
 chdir {{ root_app_dir }}
 
-exec gunicorn --config {{ root_conf_dir }}/gunicorn.py --timeout {{ ashlar_session_timeout_s }} ashlar.wsgi:application
+exec gunicorn --config {{ root_conf_dir }}/gunicorn.py --timeout {{ ashlar_session_timeout_s }} driver.wsgi:application
