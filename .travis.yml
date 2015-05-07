@@ -1,0 +1,41 @@
+language: python
+python:
+  - "2.7"
+
+cache:
+  directories:
+    # Fun race conditions on older npm versions likely cause lodash lockfile to almost always
+    #   exist. So cache this dir so we don't npm install every time. It's faster anyways.
+    #   https://github.com/npm/npm/issues/6309
+    - schema_editor/node_modules
+    - schema_editor/bower_components
+    - $HOME/.cache/pip
+
+addons:
+    postgresql: "9.4"
+
+env:
+  - DJANGO_SETTINGS_MODULE='driver.settings_travis'
+
+install:
+  - gem install -q sass compass
+  - pip install "git+https://github.com/azavea/ashlar.git@develop"
+  - pip install oauth2_provider
+  - pushd schema_editor
+  - npm --version
+  - npm install -g bower grunt-cli
+  - npm cache clean
+  - npm install
+  - bower install
+  - popd
+
+before_script:
+  - psql -U postgres -c "create extension postgis"
+
+script:
+  - pushd schema_editor
+  - grunt test
+  - popd
+  - pushd app
+  - python manage.py test
+  - popd

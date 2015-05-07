@@ -16,8 +16,23 @@ import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-with open('/etc/secrets.yaml', 'r') as f:
-    secrets = yaml.load(f)
+try:
+    with open('/etc/secrets.yaml', 'r') as f:
+        secrets = yaml.safe_load(f)
+except (IOError, NameError):
+    # Only use yaml serializable objects here, like string, int, list.
+    # If you need another type, such as tuple, write like so:
+    # secrets['somesetting'] = tuple(['a', 'b', 'c'])
+    secrets = {
+        'development': True,
+        'ashlar_db_host': 'localhost',
+        'ashlar_db_port': 5432,
+        'ashlar_db_user': 'ashlar',
+        'ashlar_db_password': 'ashlar',
+        'ashlar_database': 'ashlar',
+        'ashlar_static_dir': '/var/www/static',
+        'ashlar_media_dir': '/var/www/media',
+    }
 
 DEVELOP = True if secrets['development'] else False
 PRODUCTION = not DEVELOP
