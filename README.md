@@ -26,6 +26,16 @@ https://github.com/WorldBank-Transport/DRIVER` should be sufficient.
 
 Then run `vagrant up` from the DRIVER repository.
 
+For development, ssh into the app vm with `vagrant ssh app`.
+
+Then, run the development server via:
+```
+cd /opt/web
+grunt serve
+```
+
+The app will be available on port 7001 and will reload automatically as changes are made.
+
 ## Production
 
 TODO: Notes on creating a production superuser and adding a production OAuth2 application
