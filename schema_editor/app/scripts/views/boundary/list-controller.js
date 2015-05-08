@@ -2,13 +2,12 @@
     'use strict';
 
     /* ngInject */
-    function BoundaryListController() {
+    function BoundaryListController(Boundaries) {
         var ctl = this;
         initialize();
 
         function initialize() {
-            // TODO: Delete once ctl is used
-            ctl.field = 'foo';
+          ctl.bounds = Boundaries.query();
         }
     }
 
