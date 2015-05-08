@@ -134,11 +134,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # nginx
     app.vm.network "forwarded_port", guest: 80, host: Integer(ENV.fetch("DRIVER_WEB_PORT_80", 7000))
-
     # Runserver
     app.vm.network "forwarded_port", guest: 4000, host: Integer(ENV.fetch("DRIVER_DJANGO_PORT_3000", 3000))
     # Grunt serve
     app.vm.network "forwarded_port", guest: 9000, host: Integer(ENV.fetch("DRIVER_GRUNT_PORT_7001", 7001))
+    # livereload
+    app.vm.network "forwarded_port", guest: 35731, host: 35731
 
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "deployment/ansible/app.yml"
