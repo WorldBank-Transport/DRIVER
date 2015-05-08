@@ -20,7 +20,8 @@
     angular.module('ase.views.boundary', [
         'ui.router',
         'ase.config',
-        'ase.views.sidebar'
+        'ase.views.sidebar',
+        'ase.resources'
     ]).config(StateConfig);
 
 })();
