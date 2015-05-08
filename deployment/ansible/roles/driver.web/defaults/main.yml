@@ -7,3 +7,4 @@ web_build_dir: "{{ web_dir }}/dist"
 web_sass_version: 3.4.9
 
 js_html5mode: "false"
+js_api_hostname: "http://localhost:7000"
