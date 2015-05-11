@@ -34,6 +34,7 @@ module.exports = function(config) {
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
+      'bower_components/json-editor/dist/jsoneditor.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',
       // endbower

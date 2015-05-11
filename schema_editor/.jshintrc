@@ -19,6 +19,7 @@
   "smarttabs": true,
   "globals": {
     "$": true,
-    "angular": false
+    "angular": false,
+    "JSONEditor": true
   }
 }
