@@ -16,7 +16,7 @@
 
     var defaults = {};
 
-    function JsonEditor (Editor) {
+    function JsonEditor ($log, Editor) {
 
         var editor = null;
 
@@ -24,7 +24,8 @@
             restrict: 'E',
             scope: {
                 editorId: '@',
-                options: '='
+                options: '=',
+                onDataChange: '&'
             },
             link: link
         };
@@ -32,11 +33,43 @@
 
         function link(scope, element) {
             var htmlElement = element[0];
-            var options = angular.extend({}, defaults, scope.options);
-            editor = new JSONEditor(htmlElement, options);
+            var changeRef = null;
+            scope.$watch('options', function (newValue) {
+                if (!(newValue && newValue.schema)) {
+                    return;
+                }
+                var options = angular.extend({}, defaults, scope.options);
+                delete options.startval;
 
-            Editor.set(scope.editorId, editor);
-            scope.$emit('json-editor:ready', editor);
+                var oldData = null;
+                // Delete old editor
+                if (editor) {
+                    oldData = editor.getValue();
+                    $log.info('BEFORE DELETE', oldData);
+                    editor.off('change', changeRef);
+                    Editor.remove(scope.editorId);
+                    editor.destroy();
+                    editor = null;
+                }
+
+                // Recreate with new options
+                editor = new JSONEditor(htmlElement, options);
+                Editor.set(scope.editorId, editor);
+                if (oldData !== null) {
+                    // Extend new with old
+                    var newData = editor.getValue();
+                    angular.extend(newData, oldData);
+                    editor.setValue(newData);
+                }
+                $log.debug('AFTER CREATE', editor.getValue());
+                changeRef = editor.on('change', function () {
+                    var editorData = editor.getValue();
+                    scope.onDataChange()(editorData);
+                });
+
+                function clearEditor() {
+                }
+            });
         }
     }
 

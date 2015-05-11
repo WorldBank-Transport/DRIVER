@@ -33,10 +33,6 @@
             url: '/detail/:uuid/add',
             template: '<ase-rt-detail-add></ase-rt-detail-add>'
         });
-        $stateProvider.state('rt.schema-add', {
-            url: '/detail/:uuid/schema/add',
-            template: '<ase-rt-schema-add></ase-rt-schema-add>'
-        });
         $stateProvider.state('rt.schema-edit', {
             url: '/detail/:uuid/schema/:schema',
             template: '<ase-rt-schema-edit></ase-rt-schema-edit>'
@@ -45,6 +41,8 @@
 
     angular.module('ase.views.recordtype', [
         'ui.router',
+        'ui.bootstrap',
+        'json-editor',
         'ase.config',
         'ase.schemas',
         'ase.resources'

@@ -1,13 +1,26 @@
 <div class="form-area">
     <div class="col-sm-8 col-sm-offset-3">
         <div class="form-area-heading">
-            <h2>People</h2>
-            <button type="button" class="btn btn-default">Add a field</button>
+            <h2>{{ ::rtSchemaEdit.schemaKey }}</h2>
+            <div class="btn-group pull-right" dropdown>
+                <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
+                    Add a field <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="(key, value) in rtSchemaEdit.fieldTypes">
+                        <a ng-click="rtSchemaEdit.onEditorAddClicked(key)">{{ ::value }}</a>
+                    </li>
+                </ul>
+            </div>
             <div class="content-border"></div>
         </div>
-        <div class="form-area-body">
+        <json-editor editor-id="{{ rtSchemaEdit.editor.id }}"
+                     options="rtSchemaEdit.editor.options"
+                     on-data-change="rtSchemaEdit.onDataChange"
+                     class="form-area-body">
+        </json-editor>
 
-            <!-- FIRST NAME -->
+<!--
             <div class="row">
                 <div class="field">
                     <h4>First Name</h4>
@@ -28,7 +41,7 @@
                     </a>
                 </div>
             </div>
-            <section class="form-collapse">
+            <section class="form-collapse active">
                 <div class="row field-type-options">
                     <div class="col-sm-8">
                         <label for="image" class="control-label">Field Title</label>
@@ -71,7 +84,6 @@
                 </div>
             </section>
 
-            <!-- FAMILY NAME -->
             <div class="row">
                 <div class="field">
                     <h4>Family Name</h4>
@@ -135,7 +147,6 @@
                 </div>
             </section>
 
-            <!-- INVOLVEMENT -->
             <div class="row">
                 <div class="field">
                     <h4>Involvement</h4>
@@ -156,7 +167,7 @@
                     </a>
                 </div>
             </div>
-            <section class="form-collapse">
+            <section class="form-collapse active">
                 <div class="row field-type-options">
                     <div class="col-sm-8">
                         <label for="image" class="control-label">Field Title</label>
@@ -197,7 +208,6 @@
                 </div>
             </section>
 
-            <!-- IMAGE -->
             <div class="row">
                 <div class="field">
                     <h4>Image</h4>
@@ -218,7 +228,7 @@
                     </a>
                 </div>
             </div>
-            <section class="form-collapse">
+            <section class="form-collapse active">
                 <div class="row field-type-options">
                     <div class="col-sm-8">
                         <label for="image" class="control-label">Field Title</label>
@@ -254,7 +264,6 @@
                 </div>
             </section>
 
-            <!-- VEHICLE -->
             <div class="row">
                 <div class="field">
                     <h4>Vehicle</h4>
@@ -275,7 +284,7 @@
                     </a>
                 </div>
             </div>
-            <section class="form-collapse">
+            <section class="form-collapse active">
                 <div class="row field-type-options">
                     <div class="col-sm-8">
                         <label for="image" class="control-label">Field Title</label>
@@ -334,9 +343,10 @@
                     </div>
                 </div>
             </div>
+-->
             <div class="save-area">
                 <button type="button" class="btn btn-default">Save</button>
-                <button type="button" class="btn btn-default">Cancel</button>
+                <button type="button" class="btn btn-default" ui-sref="rt.detail({uuid: rtSchemaEdit.recordType.uuid })">Cancel</button>
             </div>
         </div>
     </div>
