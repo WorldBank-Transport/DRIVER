@@ -46,6 +46,7 @@
     angular.module('ase.views.recordtype', [
         'ui.router',
         'ase.config',
+        'ase.schemas',
         'ase.resources'
     ]).config(StateConfig);
 
