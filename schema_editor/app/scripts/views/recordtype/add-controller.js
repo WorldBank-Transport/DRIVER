@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RTAddController($state, RecordTypes) {
+    function RTAddController($log, $state, RecordTypes) {
         var ctl = this;
         initialize();
 
@@ -18,7 +18,7 @@
             RecordTypes.create(ctl.recordType, function() {
                 $state.go('rt.list');
             }, function(error) {
-                console.error('Error while adding recordType: ', error);
+                $log.debug('Error while adding recordType: ', error);
             });
         }
     }

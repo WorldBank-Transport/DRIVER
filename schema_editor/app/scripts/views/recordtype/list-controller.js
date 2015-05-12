@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RTListController(RecordTypes) {
+    function RTListController($log, RecordTypes) {
         var ctl = this;
         initialize();
 
@@ -31,7 +31,7 @@
             }, function() {
                 refreshRecordTypes();
             }, function(error) {
-                console.error('Error while deleting recordType: ', error);
+                $log.debug('Error while deleting recordType: ', error);
             });
         }
     }

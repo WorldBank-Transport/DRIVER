@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RTEditController($state, $stateParams, RecordTypes) {
+    function RTEditController($log, $state, $stateParams, RecordTypes) {
         var ctl = this;
         initialize();
 
@@ -18,7 +18,7 @@
             RecordTypes.update(ctl.recordType, function() {
                 $state.go('rt.list');
             }, function(error) {
-                console.error('Error while editing recordType: ', error);
+                $log.debug('Error while editing recordType: ', error);
             });
         }
     }
