@@ -2,12 +2,12 @@
     'use strict';
 
     /* ngInject */
-    function RTDetailController() {
+    function RTDetailController($stateParams, RecordTypes) {
         var ctl = this;
         initialize();
 
         function initialize() {
-
+            ctl.recordType = RecordTypes.get({ id: $stateParams.uuid });
         }
     }
 
