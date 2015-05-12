@@ -25,6 +25,14 @@
             url: '/detail/:uuid',
             template: '<ase-rt-detail></ase-rt-detail>'
         });
+        $stateProvider.state('rt.detail-edit', {
+            url: '/detail/:uuid/edit',
+            template: '<ase-rt-detail-edit></ase-rt-detail-edit>'
+        });
+        $stateProvider.state('rt.detail-add', {
+            url: '/detail/:uuid/add',
+            template: '<ase-rt-detail-add></ase-rt-detail-add>'
+        });
         $stateProvider.state('rt.schema-add', {
             url: '/detail/:uuid/schema/add',
             template: '<ase-rt-schema-add></ase-rt-schema-add>'

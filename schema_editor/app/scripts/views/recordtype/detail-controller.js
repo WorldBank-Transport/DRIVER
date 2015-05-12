@@ -2,12 +2,15 @@
     'use strict';
 
     /* ngInject */
-    function RTDetailController($stateParams, RecordTypes) {
+    function RTDetailController($stateParams, RecordSchemas, RecordTypes) {
         var ctl = this;
         initialize();
 
         function initialize() {
-            ctl.recordType = RecordTypes.get({ id: $stateParams.uuid });
+            RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (data) {
+                ctl.recordType = data;
+                ctl.currentSchema = RecordSchemas.get({ id: ctl.recordType.current_schema });
+            });
         }
     }
 
