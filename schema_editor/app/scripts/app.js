@@ -25,7 +25,8 @@
     angular.module('ase', [
         'ase.config',
         'ase.views.boundary',
-        'ase.views.recordtype'
+        'ase.views.recordtype',
+        'ase.resources'
     ])
     .config(DefaultRoutingConfig)
     .config(LogConfig);

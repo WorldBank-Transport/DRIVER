@@ -17,9 +17,15 @@
         });
         $stateProvider.state('rt.add', {
             url: '/add',
-            templateUrl: 'scripts/views/recordtype/add-partial.html',
+            templateUrl: 'scripts/views/recordtype/add-edit-partial.html',
             controller: 'RTAddController',
-            controllerAs: 'rtAdd'
+            controllerAs: 'rt'
+        });
+        $stateProvider.state('rt.edit', {
+            url: '/edit/:uuid',
+            templateUrl: 'scripts/views/recordtype/add-edit-partial.html',
+            controller: 'RTEditController',
+            controllerAs: 'rt'
         });
         $stateProvider.state('rt.detail', {
             url: '/detail/:uuid',
@@ -43,6 +49,7 @@
 
     angular.module('ase.views.recordtype', [
         'ui.router',
+        'ase.resources'
     ]).config(StateConfig);
 
 })();
