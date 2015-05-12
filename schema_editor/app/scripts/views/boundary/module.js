@@ -8,21 +8,18 @@
         $stateProvider.state('boundary', {
             url: '/boundary',
             parent: 'sidebar',
-            templateUrl: 'scripts/views/boundary/list-partial.html',
-            controller: 'BoundaryListController',
-            controllerAs: 'boundaryList'
+            template: '<ase-boundary-list></ase-boundary-list>'
         });
         $stateProvider.state('boundaryUpload', {
             url: '/boundary/upload',
             parent: 'sidebar',
-            templateUrl: 'scripts/views/boundary/upload-partial.html',
-            controller: 'BoundaryUploadController',
-            controllerAs: 'boundaryUpload'
+            template: '<ase-boundary-upload></ase-boundary-upload>'
         });
     }
 
     angular.module('ase.views.boundary', [
         'ui.router',
+        'ase.config',
         'ase.views.sidebar'
     ]).config(StateConfig);
 

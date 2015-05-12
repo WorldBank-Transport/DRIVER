@@ -8,14 +8,12 @@
         $stateProvider.state('sidebar', {
             abstract: true,
             url: '',
-            templateUrl: 'scripts/views/sidebar/sidebar-partial.html',
-            controller: 'SidebarController',
-            controllerAs: 'sb'
+            template: '<ase-sidebar></ase-sidebar>'
         });
     }
 
     angular.module('ase.views.sidebar', [
-        'ui.router',
+        'ui.router'
     ]).config(StateConfig);
 
 })();
