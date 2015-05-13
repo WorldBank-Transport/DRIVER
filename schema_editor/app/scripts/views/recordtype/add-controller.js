@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RTAddController($log, $state, RecordSchemas, RecordTypes, Schemas) {
+    function RTAddController($log, $scope, $state, RecordSchemas, RecordTypes, Schemas) {
         var ctl = this;
         initialize();
 
@@ -25,6 +25,7 @@
          * @return {[type]} [description]
          */
         function onRecordTypeCreateSuccess(recordType) {
+            $scope.$emit('ase.recordtypes.changed');
             RecordSchemas.create({
                 /* jshint camelcase: false */
                 record_type: recordType.uuid,

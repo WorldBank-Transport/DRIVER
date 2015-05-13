@@ -8,18 +8,12 @@
                     <li><a ui-sref="rt.add">Add a new event type</a>
                 </ul>
             </li>
-            <li class="active-parent in">
-                <a>&#8212; Crimes</a>
+            <li class="active-parent row" ng-repeat="recordType in sb.recordTypes | orderBy:'label'"
+                ng-class="{ 'in': expand }" ng-click="expand = !expand">
+                <a>&#8212; {{ recordType.label }}</a>
                 <ul>
-                    <li><a ui-sref="rt.detail({uuid: 'abcd'})">View related content</a></li>
-                    <li><a ui-sref="rt.schema-add({uuid: 'abcd'})">Add related content</a></li>
-                </ul>
-            </li>
-            <li class="active-parent in">
-                <a>&#8212; Accidents</a>
-                <ul>
-                    <li><a ui-sref="rt.detail({uuid: 'abcd'})">View related content</a></li>
-                    <li><a ui-sref="rt.schema-add({uuid: 'abcd'})">Add related content</a></li>
+                    <li><a ui-sref="rt.detail({uuid: '{{recordType.uuid}}'})">View related content</a></li>
+                    <li><a ui-sref="rt.detail-add({uuid: '{{recordType.uuid}}'})">Add related content</a></li>
                 </ul>
             </li>
             <li class="active-parent in">

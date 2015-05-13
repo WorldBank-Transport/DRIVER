@@ -2,13 +2,14 @@
     'use strict';
 
     /* ngInject */
-    function RTListController($log, RecordTypes) {
+    function RTListController($log, $scope, RecordTypes) {
         var ctl = this;
         initialize();
 
         function initialize() {
             ctl.deactivateRecordType = deactivateRecordType;
             refreshRecordTypes();
+            $scope.$on('ase.recordtypes.changed', refreshRecordTypes);
         }
 
         /*
@@ -29,7 +30,7 @@
                 uuid: recordType.uuid,
                 active: false
             }, function() {
-                refreshRecordTypes();
+                $scope.$emit('ase.recordtypes.changed');
             }, function(error) {
                 $log.debug('Error while deleting recordType: ', error);
             });
