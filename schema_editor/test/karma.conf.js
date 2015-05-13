@@ -35,6 +35,8 @@ module.exports = function(config) {
       "app/scripts/config.js",
       "app/scripts/resources/module.js",
       "app/scripts/resources/**.js",
+      "app/scripts/schemas/module.js",
+      "app/scripts/schemas/**.js",
       "app/scripts/views/sidebar/module.js",
       "app/scripts/views/sidebar/**.js",
       "app/scripts/views/boundary/module.js",
