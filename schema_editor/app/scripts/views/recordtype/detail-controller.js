@@ -10,7 +10,9 @@
         function initialize() {
             RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (data) {
                 ctl.recordType = data;
+                /* jshint camelcase:false */
                 ctl.currentSchema = RecordSchemas.get({ id: ctl.recordType.current_schema });
+                /* jshint camelcase:true */
             });
         }
 
@@ -19,8 +21,10 @@
                 delete ctl.currentSchema.schema.definitions[key];
                 // TODO: Error handle and revert delete if failure
                 RecordSchemas.create({
+                    /* jshint camelcase:false */
                     record_type: ctl.recordType.uuid,
                     schema: ctl.currentSchema.schema
+                    /* jshint camelcase:true */
                 });
             }
         }

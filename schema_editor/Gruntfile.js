@@ -122,14 +122,14 @@ module.exports = function (grunt) {
       all: {
         src: [
           'Gruntfile.js',
-          '<%= yeoman.app %>/scripts/{,*/}*.js'
+          '<%= yeoman.app %>/scripts/**/*.js'
         ]
       },
       test: {
         options: {
           jshintrc: 'test/.jshintrc'
         },
-        src: ['test/spec/{,*/}*.js']
+        src: ['test/spec/**/*.js']
       }
     },
 
@@ -441,7 +441,13 @@ module.exports = function (grunt) {
     grunt.task.run(['serve:' + target]);
   });
 
+  grunt.registerTask('travis', [
+    'jshint:all',
+    'test'
+  ]);
+
   grunt.registerTask('test', [
+    'newer:jshint',
     'clean:server',
     'wiredep',
     'concurrent:test',
