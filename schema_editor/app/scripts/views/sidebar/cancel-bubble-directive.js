@@ -1,4 +1,6 @@
-
+/**
+ * Attribute directive which cancels upward propagation of click events on that element
+ */
 (function () {
     'use strict';
 
