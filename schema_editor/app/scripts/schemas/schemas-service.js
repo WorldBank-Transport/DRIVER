@@ -5,11 +5,12 @@
     /* ngInject */
     function Schemas() {
         var module = {
-            Object: Object
+            JsonObject: JsonObject
         };
         return module;
 
-        function Object() {
+/* jshint camelcase: false */
+        function JsonObject() {
             return {
                 type: 'object',
                 title: '',
@@ -20,6 +21,7 @@
             };
         }
     }
+/* jshint camelcase: true */
 
     angular.module('ase.schemas')
     .service('Schemas', Schemas);

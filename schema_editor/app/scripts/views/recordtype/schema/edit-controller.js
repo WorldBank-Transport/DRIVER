@@ -7,7 +7,8 @@
         initialize();
 
         function initialize() {
-
+            // TODO: Delete once ctl is used
+            ctl.field = 'foo';
         }
     }
 

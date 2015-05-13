@@ -9,10 +9,12 @@
         initialize();
 
         function initialize() {
-            ctl.definition = Schemas.Object();
+            ctl.definition = Schemas.JsonObject();
             RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (data) {
                 ctl.recordType = data;
+                /* jshint camelcase:false */
                 ctl.currentSchema = RecordSchemas.get({ id: ctl.recordType.current_schema });
+                /* jshint camelcase:true */
             });
         }
 
@@ -25,8 +27,10 @@
 
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
             RecordSchemas.create({
+                /* jshint camelcase:false */
                 schema: ctl.currentSchema.schema,
                 record_type: ctl.recordType.uuid
+                /* jshint camelcase:true */
             }, function (newSchema) {
                 $log.debug(newSchema);
                 $state.go('rt.detail', {uuid: ctl.recordType.uuid});

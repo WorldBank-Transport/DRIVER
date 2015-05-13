@@ -26,8 +26,10 @@
          */
         function onRecordTypeCreateSuccess(recordType) {
             RecordSchemas.create({
+                /* jshint camelcase: false */
                 record_type: recordType.uuid,
-                schema: Schemas.Object()
+                schema: Schemas.JsonObject()
+                /* jshint camelcase: true */
             }).$promise.then(function () {
                 $state.go('rt.list');
             }, function (error) {

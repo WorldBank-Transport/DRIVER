@@ -14,7 +14,9 @@
             ctl.definition = {};
             RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (data) {
                 ctl.recordType = data;
+                /* jshint camelcase: false */
                 RecordSchemas.get({ id: ctl.recordType.current_schema }).$promise.then(function (recordSchema) {
+                /* jshint camelcase: true */
                     currentSchema = recordSchema;
                     ctl.definition = currentSchema.schema.definitions[ctl.schemaKey];
                 });
@@ -25,8 +27,10 @@
             var key = ctl.definition.title;
             currentSchema.schema.definitions[key] = ctl.definition;
             RecordSchemas.create({
+                /* jshint camelcase: false */
                 schema: currentSchema.schema,
                 record_type: ctl.recordType.uuid
+                /* jshint camelcase: true */
             }, function (newSchema) {
                 $log.debug(newSchema);
                 $state.go('^.detail', {uuid: ctl.recordType.uuid});
