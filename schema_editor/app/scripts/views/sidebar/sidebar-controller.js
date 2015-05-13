@@ -2,13 +2,20 @@
     'use strict';
 
     /* ngInject */
-    function SidebarController() {
+    function SidebarController($scope, RecordTypes) {
         var ctl = this;
         initialize();
 
         function initialize() {
-            // TODO: Delete once ctl is used
-            ctl.field = 'foo';
+            refreshRecordTypes();
+            $scope.$on('ase.recordtypes.changed', refreshRecordTypes);
+        }
+
+        /*
+         * Queries for an updated set of active record types
+         */
+        function refreshRecordTypes() {
+            ctl.recordTypes = RecordTypes.query({ active: 'True' });
         }
     }
 
