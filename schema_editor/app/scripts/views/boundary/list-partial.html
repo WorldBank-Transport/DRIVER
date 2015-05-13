@@ -2,13 +2,13 @@
     <div class="col-sm-8 col-sm-offset-3">
         <div class="form-area-heading">
             <h2>Geographic Boundaries Files</h2>
-            <button type="button" class="btn btn-default">Add new Shapefile</button>
+            <button type="button" class="btn btn-default" ui-sref="boundaryUpload">Add new Shapefile</button>
             <div class="content-border"></div>
         </div>
         <div class="form-area-body">
 
             <!-- BARANGUAYS -->
-            <div ng-repeat="bound in boundaryList.bounds" class="row">
+            <div ng-repeat="bound in boundaryList.boundaries" class="row">
                 <div class="type">
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"

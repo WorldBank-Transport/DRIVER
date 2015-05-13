@@ -20,6 +20,7 @@
     angular.module('ase.views.boundary', [
         'ui.router',
         'ase.config',
+        'ngFileUpload',
         'ase.views.sidebar',
         'ase.resources'
     ]).config(StateConfig);

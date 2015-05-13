@@ -4,37 +4,67 @@
             <h2>Add New Geographic Boundary</h2>
             <div class="content-border"></div>
         </div>
-
+        <div class="alert alert-danger" role="alert" ng-show="boundaryUpload.shpInvalid">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="sr-only">Error:</span>
+            Invalid shapefile
+        </div>
+        <div class="alert alert-success" role="alert" ng-show="boundaryUpload.shpValid">
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            <span class="sr-only">Success:</span>
+            Shapefile upload successful! Select a primary field below.
+        </div>
         <form>
             <div class="form-group col-sm-12">
-                <label for="uploadShapefile">Upload Shapefile</label>
-                <input type="file" class="form-control" id="uploadShapefile">
+                <label for="boundary-label">Boundary Label</label>
+                <input type="text"
+                       ng-model="boundaryUpload.boundaryFields.label"
+                       class="form-control"
+                       id="boundary-label"
+                       placeholder="Manila">
             </div>
             <div class="form-group col-sm-12">
-                <label for="boundary-name">Boundary Name</label>
-                <input type="text" class="form-control" id="boundary-name" placeholder="Person">
+                <label for="uploadShapefile">Boundary Shapefile</label>
+                <input type="file"
+                       class="form-control"
+                       id="uploadShapefile"
+                       ng-disabled="boundaryUpload.shpValid"
+                       ng-model="boundaryUpload.files"
+                       ngf-select
+                       ngf-drop
+                       ngf-drag-over-class="dragover"
+                       accept="application/zip"
+                       ng-change="boundaryUpload.shpInvalid=false;">
             </div>
             <div class="form-group col-sm-6">
-                <label for="primary-field">Primary Field</label>
-                <select class="form-control" id="primary-field">
-                    <option value="People">People</option>
-                    <option value="Places">Places</option>
-                    <option value="Things">Things</option>
-                    <option value="Ideas">Ideas</option>
+                <label for="primary-field">Primary Field (select after upload)</label>
+                <select class="form-control"
+                        id="primary-field"
+                        ng-options="field for field in boundaryUpload.fields"
+                        ng-model="boundaryUpload.boundaryFields.display_field"
+                        ng-disabled="!boundaryUpload.shpValid">
                 </select>
             </div>
             <div class="form-group col-sm-6">
                 <label for="boundary-color">Boundary Color</label>
-                <select class="form-control" id="boundary-color">
-                    <option value="Red">Red</option>
-                    <option value="Blue">Blue</option>
-                    <option value="Green">Green</option>
+                <select class="form-control"
+                        id="boundary-color"
+                        ng-model="boundaryUpload.boundaryFields.color"
+                        ng-options="color for color in boundaryUpload.colors"
+                        ng-init="boundaryUpload.boundaryColor = boundaryUpload.boundaryColor || boundaryUpload.colors[0]">
                 </select>
             </div>
         </form>
         <div class="save-area">
-            <button type="button" class="btn btn-default">Save</button>
             <button type="button" class="btn btn-default">Cancel</button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-hide="boundaryUpload.shpValid"
+                    ng-click="boundaryUpload.boundaryUpload()">Upload</button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-show="boundaryUpload.shpValid"
+                    ng-click="boundaryUpload.boundaryUpdate()">Save</button>
         </div>
     </div>
 </div>

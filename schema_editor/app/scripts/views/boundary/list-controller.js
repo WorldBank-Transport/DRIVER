@@ -7,7 +7,7 @@
         initialize();
 
         function initialize() {
-          ctl.bounds = Boundaries.query();
+          ctl.boundaries = Boundaries.query();
         }
     }
 

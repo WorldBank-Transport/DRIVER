@@ -8,7 +8,8 @@
 
     angular.module('ase.resources', [
         'ngResource',
-        'ase.config'
+        'ase.config',
+        'ngFileUpload'
     ]).config(ResourceConfig);
 
 })();
