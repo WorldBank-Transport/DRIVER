@@ -37,7 +37,7 @@ before_script:
 
 script:
   - pushd schema_editor
-  - grunt test
+  - grunt travis
   - popd
   - pushd app
   - python manage.py test
