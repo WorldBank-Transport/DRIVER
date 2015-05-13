@@ -16,7 +16,7 @@
 
     var defaults = {};
 
-    function JsonEditor ($log, Editor) {
+    function JsonEditor() {
 
         var editor = null;
 
@@ -45,30 +45,23 @@
                 // Delete old editor
                 if (editor) {
                     oldData = editor.getValue();
-                    $log.info('BEFORE DELETE', oldData);
                     editor.off('change', changeRef);
-                    Editor.remove(scope.editorId);
                     editor.destroy();
                     editor = null;
                 }
 
                 // Recreate with new options
                 editor = new JSONEditor(htmlElement, options);
-                Editor.set(scope.editorId, editor);
                 if (oldData !== null) {
                     // Extend new with old
                     var newData = editor.getValue();
                     angular.extend(newData, oldData);
                     editor.setValue(newData);
                 }
-                $log.debug('AFTER CREATE', editor.getValue());
                 changeRef = editor.on('change', function () {
                     var editorData = editor.getValue();
                     scope.onDataChange()(editorData);
                 });
-
-                function clearEditor() {
-                }
             });
         }
     }
