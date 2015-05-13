@@ -22,7 +22,9 @@
   "globals": {
     "angular": false,
     "browser": false,
-    "inject": false
+    "inject": false,
+    "jsonSchemaV4": true,
+    "jjv": true
   }
 }
 
