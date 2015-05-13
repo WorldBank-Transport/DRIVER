@@ -13,7 +13,8 @@
     }
 
     angular.module('ase.views.sidebar', [
-        'ui.router'
+        'ui.router',
+        'ase.views.recordtype'
     ]).config(StateConfig);
 
 })();
