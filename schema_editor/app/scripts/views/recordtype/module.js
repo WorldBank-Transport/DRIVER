@@ -44,6 +44,7 @@
         'ui.bootstrap',
         'json-editor',
         'ase.config',
+        'ase.utils',
         'ase.schemas',
         'ase.resources'
     ]).config(StateConfig);

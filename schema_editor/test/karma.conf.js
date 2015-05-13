@@ -40,7 +40,9 @@ module.exports = function(config) {
       'bower_components/jjv/lib/jjv.js',
       // endbower
       'app/scripts/config.js',
-      "app/scripts/**/*.html",
+      'app/scripts/**/*.html',
+      'app/scripts/utils/module.js',
+      'app/scripts/utils/**.js',
       'app/scripts/schemas/module.js',
       'app/scripts/schemas/**.js',
       'app/scripts/resources/module.js',

@@ -13,9 +13,26 @@
             Fields: {
                 TextField: textField,
                 SelectList: selectList
-            }
+            },
+            fieldFromKey: fieldFromKey
         };
         return module;
+
+        function fieldFromKey(fieldKey, fieldOptions) {
+            fieldOptions = fieldOptions || {};
+            var field = null;
+            switch (fieldKey) {
+                case 'text':
+                    field = textField(fieldOptions);
+                    break;
+                case 'selectlist':
+                    field = selectList(fieldOptions);
+                    break;
+                default:
+                    throw 'key must be one of Schemas.FieldTypes';
+            }
+            return field;
+        }
 
         function jsonObject(newObject) {
             newObject = newObject || {};

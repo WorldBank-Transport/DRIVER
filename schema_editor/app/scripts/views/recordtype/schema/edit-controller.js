@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RTSchemaEditController($log, $stateParams,
-                                    RecordTypes, RecordSchemas, Schemas) {
+                                    RecordTypes, RecordSchemas, Schemas, Utils) {
         var ctl = this;
         var schema = null;
         var editorData = null;
@@ -55,28 +55,8 @@
             var fieldOptions = {
                 title: fieldTitle
             };
-            var field = null;
-            switch (fieldKey) {
-                case 'text':
-                    field = Schemas.Fields.TextField(fieldOptions);
-                    break;
-                case 'selectlist':
-                    field = Schemas.Fields.SelectList(fieldOptions);
-                    break;
-                default:
-                    throw 'key must be one of Schemas.FieldTypes';
-            }
-            schema.properties[makeID()] = field;
+            schema.properties[Utils.makeID()] = Schemas.fieldFromKey(fieldKey, fieldOptions);
             extendEditor({ schema: schema });
-        }
-
-        function makeID() {
-            var text = '';
-            var possible = 'ABCDEFGHIkLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            for (var i = 0; i < 8; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
         }
     }
 

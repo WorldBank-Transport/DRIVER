@@ -6,6 +6,8 @@
  *                          from the associated Editor service
  * @param {object} options A JSONEditor options object, passed directly to the constructor
  *                         default: {}
+ * @param {function} onDataChange A function on the wrapper scope to be called when the editor
+ *                                data changes, passes new editor data as first argument.
  *
  * Events:
  *      json-editor:ready
@@ -34,6 +36,9 @@
         function link(scope, element) {
             var htmlElement = element[0];
             var changeRef = null;
+
+            // Every time the editor options change, we need to destroy and recreate
+            // the form, preserving the user-entered data in the form
             scope.$watch('options', function (newValue) {
                 if (!(newValue && newValue.schema)) {
                     return;
