@@ -8,7 +8,8 @@
                     <li><a ui-sref="rt.add">Add a new event type</a>
                 </ul>
             </li>
-            <li class="active-parent in" ng-repeat="recordType in sb.recordTypes | orderBy:'label'" class="row">
+            <li class="active-parent row" ng-repeat="recordType in sb.recordTypes | orderBy:'label'"
+                ng-class="{ 'in': expand }" ng-click="expand = !expand">
                 <a>&#8212; {{ recordType.label }}</a>
                 <ul>
                     <li><a ui-sref="rt.detail({uuid: '{{recordType.uuid}}'})">View related content</a></li>
