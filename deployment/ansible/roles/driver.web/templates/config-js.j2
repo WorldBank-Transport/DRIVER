@@ -2,7 +2,10 @@
     'use strict';
 
     // WARNING: This file is templated by ansible, any changes will be overridden on next provision
-    // Modify this file in: `deployment/ansible/roles/lgbs.web/templates/config-js.conf.j2`
+    // Modify this file in: `deployment/ansible/roles/driver.web/templates/config-js.conf.j2`
+    //
+    // Note: This module is also mocked for Travis. If any changes are made to it, they should also
+    // be made in: `schema_editor/test/mock/config.js`
 
     var config = {
         debug: {% if developing %}true{% else %}false{% endif %},
