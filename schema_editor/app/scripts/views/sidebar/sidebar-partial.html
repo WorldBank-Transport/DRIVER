@@ -11,7 +11,7 @@
             <li class="active-parent row" ng-repeat="recordType in sb.recordTypes | orderBy:'label'"
                 ng-class="{ 'in': expand }" ng-click="expand = !expand">
                 <a>&#8212; {{ recordType.label }}</a>
-                <ul>
+                <ul cancel-bubble>
                     <li><a ui-sref="rt.detail({uuid: '{{recordType.uuid}}'})">View related content</a></li>
                     <li><a ui-sref="rt.detail-add({uuid: '{{recordType.uuid}}'})">Add related content</a></li>
                 </ul>
