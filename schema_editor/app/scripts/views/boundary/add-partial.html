@@ -11,46 +11,55 @@
             </div>
             <div class="alert alert-info" ng-switch-when="requesting">
                 <span class="sr-only">Loading...:</span>
-                <wave-spinner></wave-spinner>
                 Loading...
             </div>
-            <div class="alert alert-danger" role="alert" ng-switch-when="invalid-shape">
+            <div class="alert alert-danger" role="alert" ng-switch-when="upload-error">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span class="sr-only">Error:</span>
                 Invalid shapefile
             </div>
-            <div class="alert alert-success" role="alert" ng-switch-when="successful-upload">
+            <div class="alert alert-success" role="alert" ng-switch-when="upload-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 <span class="sr-only">Success:</span>
                 Geography upload successful! Select a primary field below.
             </div>
-            <div class="alert alert-success" role="alert" ng-switch-when="successful-update">
+            <div class="alert alert-success" role="alert" ng-switch-when="update-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
                 <span class="sr-only">Success:</span>
                 Geography update successful!
             </div>
         </div>
-        <form>
+        <form name="geoAddForm" ng-submit="" novalidate>
             <div class="form-group col-sm-12">
                 <label for="boundary-label">Geography Label</label>
                 <input type="text"
+                       name="label"
                        ng-model="boundsAdd.boundaryFields.label"
                        class="form-control"
                        id="boundary-label"
-                       placeholder="Manila">
+                       placeholder="Manila"
+                       required
+                       ng-minlength="3"
+                       ng-maxlength="64">
+                <span ng-show="geoAddForm.label.$invalid && !geoAddForm.label.$span" class="help-block">Label is required</span>
+                <span ng-show="geoAddForm.label.$error.minlength" class="help-block">Label too short</span>
+                <span ng-show="geoAddForm.label.$error.maxlength" class="help-block">Label too long</span>
             </div>
             <div class="form-group col-sm-12">
                 <label for="uploadShapefile">Geography Shapefile</label>
                 <input type="file"
+                       name="file"
                        class="form-control"
                        id="uploadShapefile"
-                       ng-disabled="boundsAdd.uploadState==='successful-upload'"
+                       ng-disabled="boundsAdd.uploadState==='upload-success'"
                        ng-model="boundsAdd.files"
                        ngf-select
                        ngf-drop
                        ngf-drag-over-class="dragover"
                        accept="application/zip"
-                       ng-change="boundsAdd.shpInvalid=false;">
+                       ng-change="boundsAdd.shpInvalid=false;"
+                       required>
+                <p ng-show="boundsAdd.files.length < 1" class="help-block">A shapefile is required</p>
             </div>
             <div class="form-group col-sm-6">
                 <label for="display-field">Display Field (select after upload)</label>
@@ -58,7 +67,7 @@
                         id="display-field"
                         ng-options="field for field in boundsAdd.fields"
                         ng-model="boundsAdd.boundaryFields.display_field"
-                        ng-disabled="boundsAdd.uploadState!=='successful-upload'">
+                        ng-disabled="boundsAdd.uploadState!=='upload-success'">
                 </select>
             </div>
             <div class="form-group col-sm-6">
@@ -77,12 +86,14 @@
                     ng-click="boundsAdd.cancel()">Cancel</button>
             <button type="button"
                     class="btn btn-default"
-                    ng-hide="boundsAdd.uploadState==='successful-upload'"
-                    ng-click="boundsAdd.boundaryUpload()">Upload</button>
+                    ng-show="!boundsAdd.fileUploaded"
+                    ng-click="boundsAdd.geoUpload()"
+                    ng-disabled="geoAddForm.$invalid">Upload</button>
             <button type="button"
                     class="btn btn-default"
-                    ng-show="boundsAdd.uploadState==='successful-upload'"
-                    ng-click="boundsAdd.boundaryUpdate()">Save</button>
+                    ng-show="boundsAdd.fileUploaded"
+                    ng-click="boundsAdd.geoUpdate()"
+                    ng-disabled="geoAddForm.$invalid">Save</button>
         </div>
     </div>
 </div>

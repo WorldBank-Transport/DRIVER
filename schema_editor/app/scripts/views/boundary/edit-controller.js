@@ -6,13 +6,16 @@
         var ctl = this;
         initialize();
 
-        ctl.colors = ['Red', 'Blue', 'Green'];
 
+        /**
+         * Updates the selected geometry
+         */
         ctl.boundaryUpdate = function() {
             delete(ctl.workingBoundary.source_file);
             var bounds = new Boundaries(ctl.workingBoundary);
 
             var updateRequest = bounds.$update();
+            ctl.updateState = 'requesting';
             updateRequest.then(function(res) {
                 ctl.updateState = 'update-success';
                 ctl.serverSays = res;
@@ -24,7 +27,8 @@
         };
 
         function initialize() {
-          ctl.workingBoundary = Boundaries.get({ uuid: $stateParams.uuid });
+            ctl.colors = ['Red', 'Blue', 'Green'];
+            ctl.workingBoundary = Boundaries.get({ uuid: $stateParams.uuid });
         }
     }
 
