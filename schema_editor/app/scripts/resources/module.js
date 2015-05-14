@@ -7,7 +7,8 @@
     }
 
     angular.module('ase.resources', [
-        'ngResource'
+        'ngResource',
+        'ase.config'
     ]).config(ResourceConfig);
 
 })();
