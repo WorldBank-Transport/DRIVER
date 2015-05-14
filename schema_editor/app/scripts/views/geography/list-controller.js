@@ -11,10 +11,10 @@
          */
         ctl.noFailures = function() {
             return function(putativeGeography) {
-                if (putativeGeography.status === 'ERROR') {
-                    return false;
-                } else {
+                if (putativeGeography.status === 'COMPLETE') {
                     return true;
+                } else {
+                    return false;
                 }
             };
         };

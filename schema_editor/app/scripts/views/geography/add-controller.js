@@ -19,7 +19,7 @@
          *  display fields
          */
         ctl.geoUpload = function() {
-            function successCB(data, status) {
+            function successCB(data) {
                 if (data.status === 'COMPLETE') {
                     ctl.serverGeoFields = data;
                     ctl.fileUploaded = true;

@@ -19,7 +19,7 @@
             updateRequest.then(function(data) {
                 ctl.updateState = 'update-success';
                 ctl.serverSays = data;
-            }, function(data, status) {
+            }, function(data) {
                 ctl.updateState = 'update-error';
                 ctl.errorMessage = Geography.errorMessage(data.status);
             });
