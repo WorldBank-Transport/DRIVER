@@ -11,7 +11,7 @@
                 {
                     'uuid': '80c10057-2cfc-4a32-8e3c-0573e8bf8f3f',
                     'schema': {
-                        // TODO: is this right? What are these blank properties for?
+                        // Note: the format of this is still in flux and will change a bit
                         'description': '',
                         'title': '',
                         'plural_title': '',
