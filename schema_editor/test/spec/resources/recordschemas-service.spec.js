@@ -20,12 +20,9 @@ describe('ase.resources: RecordSchemas', function () {
         $httpBackend.whenGET(requestUrl).respond(ResourcesMock.RecordSchemaResponse);
         RecordSchemas.query().$promise.then(function (data) {
             expect(data.length).toBe(1);
-            var firearms = data[0].schema.definitions.Firearm;
-            expect(firearms.title).toBe('Firearm');
-            /* jshint camelcase: false */
-            expect(firearms.plural_title).toBe('Firearms');
-            /* jshint camelcase: true */
-            expect(firearms.description).toBe('Guns and other projectiles.');
+
+            var recordSchema = data[0];
+            expect(recordSchema.schema).toEqual(jasmine.any(Object));
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();

@@ -21,21 +21,8 @@ describe('ase.resources: RecordTypes', function () {
         RecordTypes.query({ active: 'True' }).$promise.then(function (data) {
             expect(data.length).toBe(2);
 
-            var accidents = data[0];
-            expect(accidents.label).toBe('Accident');
-            /* jshint camelcase: false */
-            expect(accidents.plural_label).toBe('Accidents');
-            /* jshint camelcase: true */
-            expect(accidents.description).toBe('An accident.');
-            expect(accidents.active).toBe(true);
-
-            var birds = data[1];
-            expect(birds.label).toBe('Bird Sighting');
-            /* jshint camelcase: false */
-            expect(birds.plural_label).toBe('Bird Sightings');
-            /* jshint camelcase: true */
-            expect(birds.description).toBe('Birds and their environments.');
-            expect(birds.active).toBe(true);
+            var recordType = data[0];
+            expect(recordType.label).toEqual(jasmine.any(String));
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
