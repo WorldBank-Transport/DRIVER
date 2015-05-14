@@ -2,8 +2,8 @@
 
 describe('ase.resources: RecordSchemas', function () {
 
-    beforeEach(module('ase.resources'));
     beforeEach(module('ase.mock.resources'));
+    beforeEach(module('ase.resources'));
 
     var $httpBackend;
     var RecordSchemas;

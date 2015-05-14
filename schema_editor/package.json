@@ -28,6 +28,7 @@
     "grunt-wiredep": "^2.0.0",
     "jshint-stylish": "^1.0.0",
     "karma-jasmine": "*",
+    "karma-ng-html2js-preprocessor": "^0.1.2",
     "karma-phantomjs-launcher": "*",
     "load-grunt-tasks": "^3.1.0",
     "time-grunt": "^1.0.0"

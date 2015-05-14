@@ -2,8 +2,8 @@
 
 describe('ase.views.recordtype: ListController', function () {
 
-    beforeEach(module('ase.views.recordtype'));
     beforeEach(module('ase.mock.resources'));
+    beforeEach(module('ase.views.recordtype'));
 
     var $controller;
     var $httpBackend;
@@ -12,7 +12,6 @@ describe('ase.views.recordtype: ListController', function () {
     var RecordTypes;
     var Controller;
     var ResourcesMock;
-    //var $stateParams = {};
 
     // Initialize the controller and a mock scope
     beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
