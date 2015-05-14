@@ -7,22 +7,37 @@
         initialize();
 
         /**
+         * Callback which routes responses on error to the appropriate dialog
+         */
+        function geoUploadErrorCB(data, status) {
+            ctl.uploadState = 'upload-error';
+            if (status === 409) {
+                ctl.errorText = 'Uniqueness violation - verify that your geography label is unique';
+            } else {
+                ctl.errorText = 'Error - check that your upload is a valid shapefile';
+            }
+        }
+
+        /**
          * Uploads shapefile to be processed on the backend - thus allowing us to list the possible
          *  display fields
          */
-        ctl.geoUpload = function(valid) {
-            function callback(data, status, headers, config) {
+        ctl.geoUpload = function() {
+            function successCB(data, status) {
                 if (data.status === 'COMPLETE') {
                     ctl.serverBoundaryFields = data;
                     ctl.fileUploaded = true;
                     ctl.uploadState = 'upload-success';
                     ctl.fields = data.data_fields;
-                } else if (data.status === 'ERROR') {
-                    ctl.uploadState = 'upload-error';
+                } else if (status === 'ERROR') {
                 }
             }
             ctl.uploadState = 'requesting';
-            Boundaries.create(ctl.files, ctl.boundaryFields.label, ctl.boundaryFields.color, callback);
+            Boundaries.create(ctl.files,
+                              ctl.boundaryFields.label,
+                              ctl.boundaryFields.color,
+                              successCB,
+                              geoUploadErrorCB);
         };
 
         /**
@@ -37,11 +52,7 @@
             updateRequest.then(function(res) {
                 ctl.uploadState = 'update-success';
                 ctl.serverSays = res;
-            }, function(res) {
-                ctl.uploadState = 'update-error';
-                ctl.serverSays = res;
-            });
-
+            }, geoUploadErrorCB);
         };
 
         /**

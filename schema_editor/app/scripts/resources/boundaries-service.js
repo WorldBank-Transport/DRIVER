@@ -31,7 +31,7 @@
          *                            upload
          *
          */
-        res.create = function(files, label, color, success) {
+        res.create = function(files, label, color, success, error) {
             if (files && files.length) {
                 var file = files[0];
                 Upload.upload({
@@ -44,7 +44,7 @@
                 }).progress(function (evt) {
                     var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
                     console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
-                }).success(success);
+                }).success(success).error(error);
             }
         };
 

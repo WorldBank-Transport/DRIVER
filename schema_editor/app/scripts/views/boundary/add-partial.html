@@ -16,7 +16,7 @@
             <div class="alert alert-danger" role="alert" ng-switch-when="upload-error">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span class="sr-only">Error:</span>
-                Invalid shapefile
+                {{ boundsAdd.errorText }}
             </div>
             <div class="alert alert-success" role="alert" ng-switch-when="upload-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
