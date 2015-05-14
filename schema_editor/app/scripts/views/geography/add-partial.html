@@ -4,7 +4,7 @@
             <h2>Add New Geography</h2>
             <div class="content-border"></div>
         </div>
-        <div ng-switch="boundsAdd.uploadState">
+        <div ng-switch="geoAdd.uploadState">
             <div class="alert alert-info" role="alert" ng-switch-default>
                 <span class="sr-only">Info:</span>
                 Upload your zipped shapefile; once uploaded, select a primary field for display
@@ -16,7 +16,7 @@
             <div class="alert alert-danger" role="alert" ng-switch-when="upload-error">
                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span class="sr-only">Error:</span>
-                {{ boundsAdd.errorText }}
+                {{ geoAdd.errorMessage }}
             </div>
             <div class="alert alert-success" role="alert" ng-switch-when="upload-success">
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
@@ -31,12 +31,12 @@
         </div>
         <form name="geoAddForm" ng-submit="" novalidate>
             <div class="form-group col-sm-12">
-                <label for="boundary-label">Geography Label</label>
+                <label for="geo-label">Geography Label</label>
                 <input type="text"
                        name="label"
-                       ng-model="boundsAdd.boundaryFields.label"
+                       ng-model="geoAdd.geoFields.label"
                        class="form-control"
-                       id="boundary-label"
+                       id="geo-label"
                        placeholder="Manila"
                        required
                        ng-minlength="3"
@@ -51,49 +51,49 @@
                        name="file"
                        class="form-control"
                        id="uploadShapefile"
-                       ng-disabled="boundsAdd.uploadState==='upload-success'"
-                       ng-model="boundsAdd.files"
+                       ng-disabled="geoAdd.uploadState==='upload-success'"
+                       ng-model="geoAdd.files"
                        ngf-select
                        ngf-drop
                        ngf-drag-over-class="dragover"
                        accept="application/zip"
-                       ng-change="boundsAdd.shpInvalid=false;"
+                       ng-change="geoAdd.shpInvalid=false;"
                        required>
-                <p ng-show="boundsAdd.files.length < 1" class="help-block">A shapefile is required</p>
+                <p ng-show="geoAdd.files.length < 1" class="help-block">A shapefile is required</p>
             </div>
             <div class="form-group col-sm-6">
                 <label for="display-field">Display Field (select after upload)</label>
                 <select class="form-control"
                         id="display-field"
-                        ng-options="field for field in boundsAdd.fields"
-                        ng-model="boundsAdd.boundaryFields.display_field"
-                        ng-disabled="boundsAdd.uploadState!=='upload-success'">
+                        ng-options="field for field in geoAdd.fields"
+                        ng-model="geoAdd.geoFields.display_field"
+                        ng-disabled="geoAdd.uploadState!=='upload-success'">
                 </select>
             </div>
             <div class="form-group col-sm-6">
-                <label for="boundary-color">Geography Color</label>
+                <label for="geo-color">Geography Color</label>
                 <select class="form-control"
-                        id="boundary-color"
-                        ng-model="boundsAdd.boundaryFields.color"
-                        ng-options="color for color in boundsAdd.colors"
-                        ng-init="boundsAdd.boundaryFields.color = boundsAdd.boundaryFields.color || boundsAdd.colors[0]">
+                        id="geo-color"
+                        ng-model="geoAdd.geoFields.color"
+                        ng-options="color for color in geoAdd.colors"
+                        ng-init="geoAdd.geoFields.color = geoAdd.geoFields.color || geoAdd.colors[0]">
                 </select>
             </div>
         </form>
         <div class="save-area">
             <button type="button"
                     class="btn btn-default"
-                    ng-click="boundsAdd.cancel()">Cancel</button>
+                    ng-click="geoAdd.cancel()">Cancel</button>
             <button type="button"
                     class="btn btn-default"
-                    ng-show="!boundsAdd.fileUploaded"
-                    ng-click="boundsAdd.geoUpload()"
+                    ng-show="!geoAdd.fileUploaded"
+                    ng-click="geoAdd.geoUpload()"
                     ng-disabled="geoAddForm.$invalid">Upload</button>
             <button type="button"
                     class="btn btn-default"
-                    ng-show="boundsAdd.fileUploaded"
-                    ng-click="boundsAdd.geoUpdate()"
-                    ng-disabled="geoAddForm.$invalid">Save</button>
+                    ng-show="geoAdd.fileUploaded"
+                    ng-click="geoAdd.geoUpdate()"
+                    ng-disabled="geoAddForm.$invalid && geoAdd.files.length < 1">Save</button>
         </div>
     </div>
 </div>

@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function Boundaries($resource, Upload, Config) {
+    function Geography($resource, Upload, Config) {
         var urlString = Config.api.hostname + '/api/boundaries/';
 
         var res = $resource(urlString + ':uuid/ ', {uuid: '@uuid'}, {
@@ -17,7 +17,7 @@
         });
 
         /**
-         * Custom extension of boundaries resource which uses ng-file-upload to send along the
+         * Custom extension of geographies resource which uses ng-file-upload to send along the
          *  shapefile which will be used to generate a geometry
          *
          * @param {array} files A list of files (most likely grabbed from a form) from which the
@@ -48,9 +48,27 @@
             }
         };
 
+        /**
+         * Semantically route response status
+         *
+         * @param {integer} status Status code of an error response
+         * @return {string} Meaning of status code
+         */
+        res.errorMessage = function(status) {
+            var intension;
+            if (status === 409) {
+                 intension = 'Uniqueness violation - verify that your geography label is unique';
+            } else if (status === 500) {
+                intension = 'Error - check that your upload is a valid shapefile';
+            } else {
+                intension = 'Error - ensure that all fields have appropriate values';
+            }
+            return intension;
+        };
+
         return res;
     }
 
     angular.module('ase.resources')
-      .factory('Boundaries', Boundaries);
+      .factory('Geography', Geography);
 })();

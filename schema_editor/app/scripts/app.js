@@ -24,7 +24,7 @@
      */
     angular.module('ase', [
         'ase.config',
-        'ase.views.boundary',
+        'ase.views.geography',
         'ase.views.recordtype',
         'ase.resources'
     ])

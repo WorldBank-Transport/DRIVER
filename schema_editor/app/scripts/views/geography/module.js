@@ -3,27 +3,27 @@
 
     /* ngInject */
     function StateConfig($stateProvider) {
-        $stateProvider.state('bounds', {
+        $stateProvider.state('geo', {
             abstract: true,
             parent: 'sidebar',
-            url: '/boundary',
+            url: '/geography',
             template: '<ui-view></ui-view>'
         });
-        $stateProvider.state('bounds.list', {
+        $stateProvider.state('geo.list', {
             url: '',
-            template: '<ase-boundary-list></ase-boundary-list>'
+            template: '<ase-geo-list></ase-geo-list>'
         });
-        $stateProvider.state('bounds.add', {
+        $stateProvider.state('geo.add', {
             url: '/add',
-            template: '<ase-boundary-add></ase-boundary-add>'
+            template: '<ase-geo-add></ase-geo-add>'
         });
-        $stateProvider.state('bounds.edit', {
+        $stateProvider.state('geo.edit', {
             url: '/edit/:uuid',
-            template: '<ase-boundary-edit></ase-boundary-edit>'
+            template: '<ase-geo-edit></ase-geo-edit>'
         });
     }
 
-    angular.module('ase.views.boundary', [
+    angular.module('ase.views.geography', [
         'ui.router',
         'ase.config',
         'ngFileUpload',
