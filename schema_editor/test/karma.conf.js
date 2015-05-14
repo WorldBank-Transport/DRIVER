@@ -19,6 +19,10 @@ module.exports = function(config) {
       "jasmine"
     ],
 
+    preprocessors: {
+      "**/*.html": 'ng-html2js'
+    },
+
     // list of files / patterns to load in the browser
     files: [
       // bower:js
@@ -34,6 +38,7 @@ module.exports = function(config) {
       'bower_components/jjv/lib/jjv.js',
       // endbower
       "app/scripts/config.js",
+      "app/scripts/**/*.html",
       "app/scripts/schemas/module.js",
       "app/scripts/schemas/**.js",
       "app/scripts/resources/module.js",
@@ -73,8 +78,16 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       "karma-phantomjs-launcher",
-      "karma-jasmine"
+      "karma-jasmine",
+      "karma-ng-html2js-preprocessor"
     ],
+
+    // Load all templates into $templateCache. They can be imported with:
+    //   beforeEach(module('ase.templates'));
+    ngHtml2JsPreprocessor: {
+      stripPrefix: "app/",
+      moduleName: "ase.templates"
+    },
 
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
