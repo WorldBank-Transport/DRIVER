@@ -24,7 +24,9 @@
                     ctl.serverGeoFields = data;
                     ctl.fileUploaded = true;
                     ctl.uploadState = 'upload-success';
+                    /* jshint camelcase: false */
                     ctl.fields = data.data_fields;
+                    /* jshint camelcase: true */
                 }
             }
             ctl.uploadState = 'requesting';
@@ -39,9 +41,11 @@
          * Updates geometry - primarily used for adding a display field
          */
         ctl.geoUpdate = function() {
+            /* jshint camelcase: false */
             var updated_fields = angular.extend(ctl.serverGeoFields, ctl.geoFields);
             delete(updated_fields.source_file);
             var geo = new Geography(updated_fields);
+            /* jshint camelcase: true */
             var updateRequest = geo.$update();
             ctl.uploadState = 'requesting';
             updateRequest.then(function(res) {

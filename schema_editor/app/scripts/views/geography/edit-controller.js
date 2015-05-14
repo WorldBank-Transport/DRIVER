@@ -11,7 +11,9 @@
          * Updates the selected geometry
          */
         ctl.geoUpdate = function() {
+            /* jshint camelcase: false */
             delete(ctl.workingGeo.source_file);
+            /* jshint camelcase: true */
             var bounds = new Geography(ctl.workingGeo);
 
             var updateRequest = bounds.$update();
