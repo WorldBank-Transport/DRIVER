@@ -7,7 +7,7 @@
         initialize();
 
         /**
-         * Custom filter to remove all boundaries which failed to parse
+         * Predicate function used by template filter to remove boundaries which failed to parse
          */
         ctl.noFailures = function() {
             return function(putativeGeography) {
