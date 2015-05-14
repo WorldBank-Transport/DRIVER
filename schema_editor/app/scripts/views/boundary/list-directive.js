@@ -7,7 +7,7 @@
             restrict: 'E',
             templateUrl: 'scripts/views/boundary/list-partial.html',
             controller: 'BoundaryListController',
-            controllerAs: 'boundaryList',
+            controllerAs: 'boundsList',
             bindToController: true
         };
         return module;

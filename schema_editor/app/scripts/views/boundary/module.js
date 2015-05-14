@@ -1,19 +1,25 @@
 (function () {
     'use strict';
 
-    // TODO: Need to create view hierarchy rather than having this be a top-level view
-
     /* ngInject */
     function StateConfig($stateProvider) {
-        $stateProvider.state('boundary', {
-            url: '/boundary',
+        $stateProvider.state('bounds', {
+            abstract: true,
             parent: 'sidebar',
+            url: '/boundary',
+            template: '<ui-view></ui-view>'
+        });
+        $stateProvider.state('bounds.list', {
+            url: '',
             template: '<ase-boundary-list></ase-boundary-list>'
         });
-        $stateProvider.state('boundaryUpload', {
-            url: '/boundary/upload',
-            parent: 'sidebar',
-            template: '<ase-boundary-upload></ase-boundary-upload>'
+        $stateProvider.state('bounds.add', {
+            url: '/add',
+            template: '<ase-boundary-add></ase-boundary-add>'
+        });
+        $stateProvider.state('bounds.edit', {
+            url: '/edit/:uuid',
+            template: '<ase-boundary-edit></ase-boundary-edit>'
         });
     }
 
