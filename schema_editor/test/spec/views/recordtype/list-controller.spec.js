@@ -27,7 +27,7 @@ describe('ase.views.recordtype: ListController', function () {
 
     it('should make an httprequest for active recordtypes on controller initialize', function () {
         var requestUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypesResponse);
+        $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         Controller = $controller('RTListController', {
             $scope: $scope
