@@ -84,6 +84,7 @@
         };
 
         var module = {
+            GeographyResponse: GeographyResponse,
             RecordSchemaResponse: RecordSchemaResponse,
             RecordTypeResponse: RecordTypeResponse
         };

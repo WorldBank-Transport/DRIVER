@@ -9,15 +9,13 @@ describe('ase.views.geography: geoAdd', function () {
     var $compile;
     var $httpBackend;
     var $rootScope;
-    var RecordTypes;
     var ResourcesMock;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
-                                _RecordTypes_, _ResourcesMock_) {
+                                _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
-        RecordTypes = _RecordTypes_;
         ResourcesMock = _ResourcesMock_;
     }));
 
