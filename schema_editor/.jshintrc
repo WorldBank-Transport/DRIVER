@@ -18,6 +18,7 @@
   "trailing": true,
   "smarttabs": true,
   "globals": {
+    "_": true,
     "$": true,
     "angular": false,
     "JSONEditor": true

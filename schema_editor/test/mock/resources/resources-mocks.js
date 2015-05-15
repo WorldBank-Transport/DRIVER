@@ -3,6 +3,24 @@
     'use strict';
 
     function ResourcesMock () {
+        var GeographyResponse = {
+            'count': 1,
+            'next': null,
+            'previous': null,
+            'results': [{
+                'uuid': '80c10057-2cfc-4a32-8e3c-0573e8bf853f',
+                'label': 'some_geo',
+                'color': 'fuschia',
+                'display_field': 'ballparks',
+                'data_fields': ['ballparks'],
+                'errors': null,
+                'created': '2015-05-13T00:22:50.465802Z',
+                'modified': '2015-05-13T00:23:28.041375Z',
+                'status': 'COMPLETE',
+                'source_file': 'http://localhost:7000/media/boundaries/2015/05/13/phila-city_limits_shp_IbasPjb.zip'
+            }]
+        };
+
         var RecordSchemaResponse = {
             'count': 1,
             'next': null,
@@ -66,6 +84,7 @@
         };
 
         var module = {
+            GeographyResponse: GeographyResponse,
             RecordSchemaResponse: RecordSchemaResponse,
             RecordTypeResponse: RecordTypeResponse
         };
