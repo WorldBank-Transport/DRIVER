@@ -49,17 +49,24 @@
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
     <script src="bower_components/angular-resource/angular-resource.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/config.js"></script>
+        <script src="scripts/utils/module.js"></script>
+        <script src="scripts/utils/utils-service.js"></script>
         <script src="scripts/schemas/module.js"></script>
         <script src="scripts/schemas/schemas-service.js"></script>
         <script src="scripts/resources/module.js"></script>
         <script src="scripts/resources/recordschemas-service.js"></script>
         <script src="scripts/resources/recordtypes-service.js"></script>
+        <script src="scripts/json-editor/module.js"></script>
+        <script src="scripts/json-editor/json-editor-directive.js"></script>
         <script src="scripts/views/sidebar/module.js"></script>
+        <script src="scripts/views/sidebar/cancel-bubble-directive.js"></script>
         <script src="scripts/views/sidebar/sidebar-controller.js"></script>
         <script src="scripts/views/sidebar/sidebar-directive.js"></script>
         <script src="scripts/views/boundary/module.js"></script>
@@ -78,8 +85,6 @@
         <script src="scripts/views/recordtype/detail-directive.js"></script>
         <script src="scripts/views/recordtype/detail-add-directive.js"></script>
         <script src="scripts/views/recordtype/detail-edit-directive.js"></script>
-        <script src="scripts/views/recordtype/schema/add-controller.js"></script>
-        <script src="scripts/views/recordtype/schema/add-directive.js"></script>
         <script src="scripts/views/recordtype/schema/edit-controller.js"></script>
         <script src="scripts/views/recordtype/schema/edit-directive.js"></script>
         <script src="scripts/app.js"></script>

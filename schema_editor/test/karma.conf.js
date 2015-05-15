@@ -16,7 +16,7 @@ module.exports = function(config) {
     // testing framework to use (jasmine/mocha/qunit/...)
     // as well as any additional frameworks (requirejs/chai/sinon/...)
     frameworks: [
-      "jasmine"
+      'jasmine'
     ],
 
     preprocessors: {
@@ -34,26 +34,30 @@ module.exports = function(config) {
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
+      'bower_components/json-editor/dist/jsoneditor.js',
+      'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',
       // endbower
-      "app/scripts/config.js",
-      "app/scripts/**/*.html",
-      "app/scripts/schemas/module.js",
-      "app/scripts/schemas/**.js",
-      "app/scripts/resources/module.js",
-      "app/scripts/resources/**.js",
-      "app/scripts/schemas/module.js",
-      "app/scripts/schemas/**.js",
-      "app/scripts/views/sidebar/module.js",
-      "app/scripts/views/sidebar/**.js",
-      "app/scripts/views/boundary/module.js",
-      "app/scripts/views/boundary/**.js",
-      "app/scripts/views/recordtype/module.js",
-      "app/scripts/views/recordtype/**.js",
-      "test/mock/**/*.js",
-      "test/spec/**/*.js",
-      "app/scripts/app.js"
+      'app/scripts/config.js',
+      'app/scripts/**/*.html',
+      'app/scripts/utils/module.js',
+      'app/scripts/utils/**.js',
+      'app/scripts/schemas/module.js',
+      'app/scripts/schemas/**.js',
+      'app/scripts/resources/module.js',
+      'app/scripts/resources/**.js',
+      'app/scripts/json-editor/module.js',
+      'app/scripts/json-editor/**.js',
+      'app/scripts/views/sidebar/module.js',
+      'app/scripts/views/sidebar/**.js',
+      'app/scripts/views/boundary/module.js',
+      'app/scripts/views/boundary/**.js',
+      'app/scripts/views/recordtype/module.js',
+      'app/scripts/views/recordtype/**.js',
+      'test/mock/**/*.js',
+      'test/spec/**/*.js',
+      'app/scripts/app.js'
     ],
 
     // list of files / patterns to exclude
@@ -72,14 +76,14 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: [
-      "PhantomJS"
+      'PhantomJS'
     ],
 
     // Which plugins to enable
     plugins: [
-      "karma-phantomjs-launcher",
-      "karma-jasmine",
-      "karma-ng-html2js-preprocessor"
+      'karma-phantomjs-launcher',
+      'karma-jasmine',
+      'karma-ng-html2js-preprocessor'
     ],
 
     // Load all templates into $templateCache. They can be imported with:
