@@ -19,6 +19,18 @@
             };
         };
 
+        /**
+         * Function which attaches to the angular DOM and fires in case of deletion being called on geom
+         */
+        ctl.deleteGeo = function(uuid) {
+            var deletionRequest = Geography.remove({uuid: uuid});
+            deletionRequest.$promise.then(function() {
+                ctl.geographies = _.filter(ctl.geographies, function(geo) {
+                  return geo.uuid !== uuid;
+                });
+            });
+        };
+
         function initialize() {
           ctl.geographies = Geography.query();
         }

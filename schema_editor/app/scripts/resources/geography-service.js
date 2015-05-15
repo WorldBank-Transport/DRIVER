@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function Geography($resource, Upload, Config) {
+    function Geography($resource, $log, Upload, Config) {
         var urlString = Config.api.hostname + '/api/boundaries/';
 
         var res = $resource(urlString + ':uuid/ ', {uuid: '@uuid'}, {
@@ -42,8 +42,8 @@
                     file: file,
                     fileFormDataName: 'source_file'
                 }).progress(function (evt) {
-                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-                    console.log('progress: ' + progressPercentage + '% ' + evt.config.file.name);
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total, 10);
+                    $log.debug('progress: ' + progressPercentage + '% ' + evt.config.file.name);
                 }).success(success).error(error);
             }
         };
@@ -58,8 +58,6 @@
             var intension;
             if (status === 409) {
                  intension = 'Uniqueness violation - verify that your geography label is unique';
-            } else if (status === 500) {
-                intension = 'Error - check that your upload is a valid shapefile';
             } else {
                 intension = 'Error - ensure that all fields have appropriate values';
             }

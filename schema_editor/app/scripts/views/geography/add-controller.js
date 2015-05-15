@@ -27,6 +27,9 @@
                     /* jshint camelcase: false */
                     ctl.fields = data.data_fields;
                     /* jshint camelcase: true */
+                } else if (data.status === 'ERROR') {
+                    ctl.uploadState = 'upload-error';
+                    ctl.errorMessage = 'Error - check that your upload is a valid shapefile';
                 }
             }
             ctl.uploadState = 'requesting';
