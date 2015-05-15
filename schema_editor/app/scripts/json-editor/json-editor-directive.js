@@ -44,7 +44,6 @@
                     return;
                 }
                 var options = angular.extend({}, defaults, scope.options);
-                delete options.startval;
 
                 var oldData = null;
                 // Delete old editor
@@ -60,7 +59,7 @@
                 if (oldData !== null) {
                     // Extend new with old
                     var newData = editor.getValue();
-                    angular.extend(newData, oldData);
+                    angular.extend(newData, options.startval, oldData);
                     editor.setValue(newData);
                 }
                 changeRef = editor.on('change', function () {
