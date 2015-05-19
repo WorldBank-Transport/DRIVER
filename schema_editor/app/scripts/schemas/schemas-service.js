@@ -24,11 +24,13 @@
             JsonObject: jsonObject,
             FieldTypes: {
                 'text': 'Text Field',
-                'selectlist': 'Select List'
+                'selectlist': 'Select List',
+                'image': 'Image Uploader'
             },
             Fields: {
                 TextField: textField,
-                SelectList: selectList
+                SelectList: selectList,
+                ImageUploader: imageUploader
             },
             fieldFromKey: fieldFromKey
         };
@@ -50,6 +52,9 @@
                     break;
                 case 'selectlist':
                     field = selectList(fieldOptions);
+                    break;
+                case 'image':
+                    field = imageUploader(fieldOptions);
                     break;
                 default:
                     throw 'key must be one of Schemas.FieldTypes';
@@ -150,13 +155,39 @@
                             'select',
                             'checkbox'
                         ]
+                    },
+                    fieldOptions: {
+                        title: 'Field Options',
+                        type: 'string',
+                        format: 'textarea'
                     }
                 },
                 options: {
                     fieldType: 'selectlist'
                 }
             });
+        }
 
+        function imageUploader(newImage) {
+            newImage = newImage || {};
+            var newImageUploader = jsonObject(newImage);
+            return angular.extend(newImageUploader, {
+                headerTemplate: '{{ self.fieldTitle }}',
+                properties: {
+                    fieldTitle: {
+                        type: 'string',
+                        title: 'Field Title',
+                    },
+                    isRequired: {
+                        type: 'boolean',
+                        format: 'checkbox',
+                        title: 'Required'
+                    },
+                },
+                options: {
+                    fieldType: 'image'
+                }
+            });
         }
     }
 
