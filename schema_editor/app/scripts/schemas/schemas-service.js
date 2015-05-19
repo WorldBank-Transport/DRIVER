@@ -155,6 +155,11 @@
                             'select',
                             'checkbox'
                         ]
+                    },
+                    fieldOptions: {
+                        title: 'Field Options',
+                        type: 'string',
+                        format: 'textarea'
                     }
                 },
                 options: {
