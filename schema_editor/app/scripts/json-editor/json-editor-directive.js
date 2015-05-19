@@ -20,8 +20,6 @@
 
     function JsonEditor() {
 
-        var editor = null;
-
         var module = {
             restrict: 'E',
             scope: {
@@ -34,6 +32,7 @@
         return module;
 
         function link(scope, element) {
+            var editor = null;
             var htmlElement = element[0];
             var changeRef = null;
 
