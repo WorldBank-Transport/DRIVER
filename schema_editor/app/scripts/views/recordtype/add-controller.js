@@ -26,10 +26,20 @@
          */
         function onRecordTypeCreateSuccess(recordType) {
             $scope.$emit('ase.recordtypes.changed');
+
+            // Automatically add 'Details' related content type to all record types
+            var schema = Schemas.JsonObject();
+            var definition = Schemas.JsonObject();
+            definition.description = 'Details for ' + recordType.label;
+            /* jshint camelcase: false */
+            definition.title = definition.plural_title = recordType.label + ' Details';
+            /* jshint camelcase: true */
+            schema.definitions[definition.title] = definition;
+
             RecordSchemas.create({
                 /* jshint camelcase: false */
                 record_type: recordType.uuid,
-                schema: Schemas.JsonObject()
+                schema: schema
                 /* jshint camelcase: true */
             }).$promise.then(function () {
                 $state.go('rt.list');
