@@ -3,7 +3,7 @@
     'use strict';
 
     /* ngInject */
-    function RTDetailEditController($log, $state, $stateParams, RecordSchemas, RecordTypes) {
+    function RTRelatedEditController($log, $state, $stateParams, RecordSchemas, RecordTypes) {
         var ctl = this;
         var currentSchema = null;
         ctl.submitForm = submitForm;
@@ -33,7 +33,7 @@
                 /* jshint camelcase: true */
             }, function (newSchema) {
                 $log.debug(newSchema);
-                $state.go('^.detail', {uuid: ctl.recordType.uuid});
+                $state.go('^.related', {uuid: ctl.recordType.uuid});
             }, function (error) {
                 $log.debug('Error saving new schema: ', error);
             });
@@ -41,19 +41,19 @@
     }
 
     /* ngInject */
-    function RTDetailEdit() {
+    function RTRelatedEdit() {
         var module = {
             restrict: 'E',
-            templateUrl: 'scripts/views/recordtype/detail-add-edit-partial.html',
-            controller: 'RTDetailEditController',
-            controllerAs: 'rtDetail',
+            templateUrl: 'scripts/views/recordtype/related-add-edit-partial.html',
+            controller: 'RTRelatedEditController',
+            controllerAs: 'rtRelated',
             bindToController: true
         };
         return module;
     }
 
     angular.module('ase.views.recordtype')
-    .controller('RTDetailEditController', RTDetailEditController)
-    .directive('aseRtDetailEdit', RTDetailEdit);
+    .controller('RTRelatedEditController', RTRelatedEditController)
+    .directive('aseRtRelatedEdit', RTRelatedEdit);
 
 })();

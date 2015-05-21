@@ -2,11 +2,11 @@
     'use strict';
 
     /* ngInject */
-    function RTDetail() {
+    function RTRelated() {
         var module = {
             restrict: 'E',
-            templateUrl: 'scripts/views/recordtype/detail-partial.html',
-            controller: 'RTDetailController',
+            templateUrl: 'scripts/views/recordtype/related-partial.html',
+            controller: 'RTRelatedController',
             controllerAs: 'rt',
             bindToController: true
         };
@@ -14,6 +14,6 @@
     }
 
     angular.module('ase.views.recordtype')
-    .directive('aseRtDetail', RTDetail);
+    .directive('aseRtRelated', RTRelated);
 
 })();

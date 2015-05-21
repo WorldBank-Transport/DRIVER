@@ -1,6 +1,6 @@
 'use strict';
 
-describe('ase.views.recordtype: RTDetailEdit', function () {
+describe('ase.views.recordtype: RTRelated', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.templates'));
@@ -26,10 +26,10 @@ describe('ase.views.recordtype: RTDetailEdit', function () {
         $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var scope = $rootScope.$new();
-        var element = $compile('<ase-rt-detail-edit></ase-rt-detail-edit>')(scope);
+        var element = $compile('<ase-rt-related></ase-rt-related>')(scope);
         $rootScope.$apply();
 
-        // 'Save' and 'Cancel' buttons
-        expect(element.find('button').length).toEqual(2);
+        // 'Add new content' button
+        expect(element.find('button').length).toEqual(1);
     });
 });

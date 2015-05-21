@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RTDetailController($stateParams, RecordSchemas, RecordTypes) {
+    function RTRelatedController($stateParams, RecordSchemas, RecordTypes) {
         var ctl = this;
         ctl.deleteSchema = deleteSchema;
         initialize();
@@ -31,5 +31,5 @@
     }
 
     angular.module('ase.views.recordtype')
-    .controller('RTDetailController', RTDetailController);
+    .controller('RTRelatedController', RTRelatedController);
 })();
