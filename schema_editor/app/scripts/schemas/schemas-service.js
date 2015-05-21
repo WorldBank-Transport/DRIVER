@@ -84,7 +84,7 @@
                 properties: {
                     fieldTitle: {
                         type: 'string',
-                        title: 'Field Title',
+                        title: 'Field Title'
                     },
                     isRequired: {
                         type: 'boolean',
@@ -137,7 +137,7 @@
                 properties: {
                     fieldTitle: {
                         type: 'string',
-                        title: 'Field Title',
+                        title: 'Field Title'
                     },
                     isRequired: {
                         type: 'boolean',
@@ -176,13 +176,13 @@
                 properties: {
                     fieldTitle: {
                         type: 'string',
-                        title: 'Field Title',
+                        title: 'Field Title'
                     },
                     isRequired: {
                         type: 'boolean',
                         format: 'checkbox',
                         title: 'Required'
-                    },
+                    }
                 },
                 options: {
                     fieldType: 'image'
