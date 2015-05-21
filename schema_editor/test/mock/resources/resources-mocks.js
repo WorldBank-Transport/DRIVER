@@ -83,9 +83,23 @@
             ]
         };
 
+        var RecordType = RecordTypeResponse.results[0];
+        var RecordSchemaRequest = angular.extend({}, RecordType, {
+            definitions: {
+                'Accident Details': {
+                    type: 'object',
+                    title: 'Accident Details',
+                    plural_title: 'Accident Details',
+                    description: 'Details for Accident'
+                }
+            }
+        });
+
         var module = {
             GeographyResponse: GeographyResponse,
             RecordSchemaResponse: RecordSchemaResponse,
+            RecordSchemaRequest: RecordSchemaRequest,
+            RecordType: RecordType,
             RecordTypeResponse: RecordTypeResponse
         };
         return module;
