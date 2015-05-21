@@ -2,15 +2,15 @@
 <div class="form-area">
     <div class="col-sm-8 col-sm-offset-3">
         <div class="form-area-heading">
-            <h2 ng-show="!rtDetail.schemaKey">Add New Related Content</h2>
-            <h2 ng-show="rtDetail.schemaKey">Edit Related Content</h2>
+            <h2 ng-show="!rtRelated.schemaKey">Add New Related Content</h2>
+            <h2 ng-show="rtRelated.schemaKey">Edit Related Content</h2>
             <div class="content-border"></div>
         </div>
 
-        <form name="rtForm" novalidate ng-submit="rtDetail.submitForm()">
+        <form name="rtForm" novalidate ng-submit="rtRelated.submitForm()">
             <div class="form-group col-sm-6">
                 <label for="single-title">Single Title</label>
-                <input required type="text" name="label" ng-model="rtDetail.definition.title"
+                <input required type="text" name="label" ng-model="rtRelated.definition.title"
                        class="form-control" id="single-title" placeholder="Accident"
                        ng-minlength="3" ng-maxlength="64" />
                 <p ng-show="rtForm.title.$invalid && !rtForm.title.$pristine" class="help-block">
@@ -21,7 +21,7 @@
             </div>
             <div class="form-group col-sm-6">
                 <label for="plural-title">Plural Title</label>
-                <input required type="text" name="plural_label" ng-model="rtDetail.definition.plural_title"
+                <input required type="text" name="plural_label" ng-model="rtRelated.definition.plural_title"
                        class="form-control" id="plural-title" placeholder="Accidents"
                        ng-minlength="3" ng-maxlength="64" />
                 <p ng-show="rtForm.plural_title.$invalid && !rtForm.plural_title.$pristine" class="help-block">
@@ -32,7 +32,7 @@
             </div>
             <div class="form-group col-sm-12">
                 <label for="description">Description</label>
-                <textarea required name="description" class="form-control" ng-model="rtDetail.definition.description"
+                <textarea required name="description" class="form-control" ng-model="rtRelated.definition.description"
                           id="description" rows="5" placeholder="Lorem ipsum"
                           ng-minlength="3" ng-maxlength="255">
                 </textarea>
@@ -47,7 +47,8 @@
                 <button type="submit" class="btn btn-default" ng-disabled="rtForm.$invalid">
                     Save
                 </button>
-                <button type="button" ui-sref="rt.detail({uuid: rtDetail.recordType.uuid})" class="btn btn-default">Cancel</button>
+                <button type="button" ui-sref="rt.related({uuid: rtRelated.recordType.uuid})"
+                        class="btn btn-default">Cancel</button>
             </div>
         </form>
     </div>

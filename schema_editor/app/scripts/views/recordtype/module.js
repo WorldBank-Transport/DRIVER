@@ -21,20 +21,20 @@
             url: '/edit/:uuid',
             template: '<ase-rt-edit></ase-rt-edit>'
         });
-        $stateProvider.state('rt.detail', {
-            url: '/detail/:uuid',
-            template: '<ase-rt-detail></ase-rt-detail>'
+        $stateProvider.state('rt.related', {
+            url: '/related/:uuid',
+            template: '<ase-rt-related></ase-rt-related>'
         });
-        $stateProvider.state('rt.detail-edit', {
-            url: '/detail/:uuid/edit/:schema',
-            template: '<ase-rt-detail-edit></ase-rt-detail-edit>'
+        $stateProvider.state('rt.related-edit', {
+            url: '/related/:uuid/edit/:schema',
+            template: '<ase-rt-related-edit></ase-rt-related-edit>'
         });
-        $stateProvider.state('rt.detail-add', {
-            url: '/detail/:uuid/add',
-            template: '<ase-rt-detail-add></ase-rt-detail-add>'
+        $stateProvider.state('rt.related-add', {
+            url: '/related/:uuid/add',
+            template: '<ase-rt-related-add></ase-rt-related-add>'
         });
         $stateProvider.state('rt.schema-edit', {
-            url: '/detail/:uuid/schema/:schema',
+            url: '/related/:uuid/schema/:schema',
             template: '<ase-rt-schema-edit></ase-rt-schema-edit>'
         });
     }

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('ase.views.recordtype: RTDetailAdd', function () {
+describe('ase.views.recordtype: RTRelatedAdd', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.templates'));
@@ -26,7 +26,7 @@ describe('ase.views.recordtype: RTDetailAdd', function () {
         $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var scope = $rootScope.$new();
-        var element = $compile('<ase-rt-detail-add></ase-rt-detail-add>')(scope);
+        var element = $compile('<ase-rt-related-add></ase-rt-related-add>')(scope);
         $rootScope.$apply();
 
         // 'Save' and 'Cancel' buttons
