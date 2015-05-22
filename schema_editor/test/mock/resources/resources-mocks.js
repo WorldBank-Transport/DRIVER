@@ -90,7 +90,8 @@
                     type: 'object',
                     title: 'Accident Details',
                     plural_title: 'Accident Details',
-                    description: 'Details for Accident'
+                    description: 'Details for Accident',
+                    multiple: false
                 }
             }
         });

@@ -31,6 +31,7 @@
             var schema = Schemas.JsonObject();
             var definition = Schemas.JsonObject();
             definition.description = 'Details for ' + recordType.label;
+            definition.multiple = false;
             /* jshint camelcase: false */
             definition.title = definition.plural_title = recordType.label + ' Details';
             /* jshint camelcase: true */
