@@ -98,6 +98,7 @@
 
         var module = {
             GeographyResponse: GeographyResponse,
+            RecordSchema: RecordSchemaResponse.results[0],
             RecordSchemaResponse: RecordSchemaResponse,
             RecordSchemaRequest: RecordSchemaRequest,
             RecordType: RecordType,
