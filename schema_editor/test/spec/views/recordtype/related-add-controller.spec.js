@@ -26,13 +26,12 @@ describe('ase.views.recordtype: RelatedAddController', function () {
     }));
 
     it('should add related content and switch view', function () {
-        /* jshint camelcase: false */
-        var recordType = {
-            label: 'Accident',
-            plural_label: 'Accidents',
-            description: 'An Accident'
-        };
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeIdUrl = new RegExp('api\/recordtypes\/' + recordTypeId);
+        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
 
+        /* jshint camelcase: false */
         var recordSchema = {
             schema: {
                 type: 'object',
@@ -50,31 +49,34 @@ describe('ase.views.recordtype: RelatedAddController', function () {
                         properties: {},
                         definitions: {}
                     }
-                }
+                },
+                recordType: recordType.uuid
             }
         };
         /* jshint camelcase: true */
 
-        var recordTypeUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
-
         var recordSchemaUrl = /\/api\/recordschemas\//;
         $httpBackend.expectPOST(recordSchemaUrl, recordSchema).respond(201);
 
-        var recordSchemaByIdUrl = /\/api\/recordschemas\/.*\//;
-        $httpBackend.expectGET(recordSchemaByIdUrl).respond(200, ResourcesMock.RecordType);
+        var recordSchemaId = ResourcesMock.RecordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api\/recordschemas\/' + recordSchemaId);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         spyOn(StateMock, 'go');
 
         Controller = $controller('RTRelatedAddController', {
             $scope: $scope,
+            $stateParams: { uuid: recordTypeId },
             $state: StateMock
         });
+
         $scope.$apply();
 
-        Controller.recordType = recordType;
+        Controller.recordType = recordType.uuid;
         Controller.currentSchema = recordSchema;
         Controller.submitForm();
+
+        $scope.$apply();
 
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
