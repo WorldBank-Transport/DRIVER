@@ -20,7 +20,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      "**/*.html": 'ng-html2js'
+      '**/*.html': 'ng-html2js'
     },
 
     // list of files / patterns to load in the browser
@@ -52,10 +52,12 @@ module.exports = function(config) {
       'app/scripts/resources/**.js',
       'app/scripts/json-editor/module.js',
       'app/scripts/json-editor/**.js',
+      'app/scripts/notifications/module.js',
+      'app/scripts/notifications/**.js',
       'app/scripts/views/sidebar/module.js',
       'app/scripts/views/sidebar/**.js',
-      "app/scripts/views/geography/module.js",
-      "app/scripts/views/geography/**.js",
+      'app/scripts/views/geography/module.js',
+      'app/scripts/views/geography/**.js',
       'app/scripts/views/recordtype/module.js',
       'app/scripts/views/recordtype/**.js',
       'test/mock/**/*.js',
@@ -92,8 +94,8 @@ module.exports = function(config) {
     // Load all templates into $templateCache. They can be imported with:
     //   beforeEach(module('ase.templates'));
     ngHtml2JsPreprocessor: {
-      stripPrefix: "app/",
-      moduleName: "ase.templates"
+      stripPrefix: 'app/',
+      moduleName: 'ase.templates'
     },
 
     // Continuous Integration mode

@@ -27,6 +27,7 @@
         'ui.router',
         'ase.config',
         'ngFileUpload',
+        'ase.notifications',
         'ase.views.sidebar',
         'ase.resources'
     ]).config(StateConfig);
