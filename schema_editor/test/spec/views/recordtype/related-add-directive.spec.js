@@ -2,6 +2,12 @@
 
 describe('ase.views.recordtype: RTRelatedAdd', function () {
 
+    // Need to override the controller, mostly because it relies on $stateParams being set,
+    // but also because we already have tests for the controller, and don't need extra logic here
+    beforeEach(module('ase', function ($controllerProvider) {
+        $controllerProvider.register('RTRelatedAddController', angular.noop);
+    }));
+
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('ase.views.recordtype'));
@@ -19,17 +25,30 @@ describe('ase.views.recordtype: RTRelatedAdd', function () {
         $rootScope = _$rootScope_;
         RecordTypes = _RecordTypes_;
         ResourcesMock = _ResourcesMock_;
+
     }));
 
-    it('should load directive', function () {
-        var requestUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
-
+    it('should allow adding new related type', function () {
         var scope = $rootScope.$new();
         var element = $compile('<ase-rt-related-add></ase-rt-related-add>')(scope);
         $rootScope.$apply();
 
-        // 'Save' and 'Cancel' buttons
+        // Check for existence of 'Save' and 'Cancel' buttons
         expect(element.find('button').length).toEqual(2);
+        var saveButton = element.find('button:submit');
+
+        // Helper for testing whether or not the save button is disabled
+        var checkSaveButtonDisabled = function(disabled) {
+            expect(saveButton.prop('disabled')).toBe(disabled);
+        };
+
+        // Save button should be disabled until all the required fields are entered
+        checkSaveButtonDisabled(true);
+        element.find('#single-title').val('Vehicle').change();
+        checkSaveButtonDisabled(true);
+        element.find('#plural-title').val('Vehicles').change();
+        checkSaveButtonDisabled(true);
+        element.find('#description').val('A vehicle').change();
+        checkSaveButtonDisabled(false);
     });
 });
