@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function GeographyAddController($state, Geography) {
+    function GeographyAddController($state, Geography, Notifications) {
         var ctl = this;
         initialize();
 
@@ -11,7 +11,8 @@
          */
         function geoUploadErrorCB(data, status) {
             ctl.uploadState = 'upload-error';
-            ctl.errorMessage = Geography.errorMessage(status);
+            Notifications.show({text: Geography.errorMessage(status),
+                                displayClass: 'alert-danger'});
         }
 
         /**
@@ -24,20 +25,24 @@
                     ctl.serverGeoFields = data;
                     ctl.fileUploaded = true;
                     ctl.uploadState = 'upload-success';
+                    Notifications.show({text: 'Geography upload successful! Select a primary field below.',
+                                        displayClass: 'alert-success'});
                     /* jshint camelcase: false */
                     ctl.fields = data.data_fields;
                     /* jshint camelcase: true */
                 } else if (data.status === 'ERROR') {
                     ctl.uploadState = 'upload-error';
-                    ctl.errorMessage = 'Error - check that your upload is a valid shapefile';
+                    Notifications.show({text: 'Error - check that your upload is a valid shapefile',
+                                        displayClass: 'alert-danger'});
                 }
             }
             ctl.uploadState = 'requesting';
+            Notifications.show({text: 'Loading...'});
             Geography.create(ctl.files,
-                              ctl.geoFields.label,
-                              ctl.geoFields.color,
-                              successCB,
-                              geoUploadErrorCB);
+                             ctl.geoFields.label,
+                             ctl.geoFields.color,
+                             successCB,
+                             geoUploadErrorCB);
         };
 
         /**
@@ -51,8 +56,11 @@
             /* jshint camelcase: true */
             var updateRequest = geo.$update();
             ctl.uploadState = 'requesting';
+            Notifications.show({text: 'Loading...'});
             updateRequest.then(function(res) {
                 ctl.uploadState = 'update-success';
+                Notifications.show({text: 'Geography update successful!',
+                                    displayClass: 'alert-success'});
                 ctl.serverSays = res;
             }, geoUploadErrorCB);
         };
@@ -78,6 +86,9 @@
         function initialize() {
             ctl.fileUploaded = false;
             ctl.uploadState = '';
+            Notifications.show({text: 'Upload your zipped shapefile; once uploaded, ' +
+                                      'select a primary field for display',
+                                displayClass: 'alert-info'});
             ctl.files = [];
             ctl.colors = ['Red', 'Blue', 'Green'];
         }
