@@ -52,9 +52,7 @@
             };
             var opts = angular.extend({}, defaults, options);
             active = opts;
-            timeoutId = $timeout(function () {
-                $rootScope.$broadcast('ase.notifications.show', opts);
-            });
+            $rootScope.$broadcast('ase.notifications.show', opts);
         }
     }
 
