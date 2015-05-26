@@ -90,13 +90,15 @@
                     type: 'object',
                     title: 'Accident Details',
                     plural_title: 'Accident Details',
-                    description: 'Details for Accident'
+                    description: 'Details for Accident',
+                    multiple: false
                 }
             }
         });
 
         var module = {
             GeographyResponse: GeographyResponse,
+            RecordSchema: RecordSchemaResponse.results[0],
             RecordSchemaResponse: RecordSchemaResponse,
             RecordSchemaRequest: RecordSchemaRequest,
             RecordType: RecordType,

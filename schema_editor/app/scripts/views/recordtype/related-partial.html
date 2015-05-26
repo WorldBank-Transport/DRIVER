@@ -7,12 +7,18 @@
         </div>
         <div class="form-area-body">
             <div ng-repeat="(key, definition) in rt.currentSchema.schema.definitions">
-                <div class="row">
+                <div class="row" ng-class="{ 'multiple': definition.multiple }">
                     <div class="type">
                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 10 22" enable-background="new 0 0 10 22" xml:space="preserve">
                             <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" fill="#4A4A4A" d="M4.6,20.6L8,17.3H1.3L4.6,20.6z M1.3,4H8L4.6,0.7 L1.3,4z M8,10.7c0-1.8-1.5-3.3-3.3-3.3c-1.8,0-3.3,1.5-3.3,3.3c0,1.8,1.5,3.3,3.3,3.3C6.5,14,8,12.5,8,10.7z"/>
                         </svg>
                         <a ui-sref="rt.related-edit({uuid: rt.recordType.uuid, schema: key})"><h4>{{ definition.title }}</h4></a>
+
+                        <!--Placeholder styling for denoting 'multiple'. A 'multiple' class has been added
+                            to the row for future styling work.
+                          -->
+                        <h5 ng-if="definition.multiple">[MULTIPLE]</h5>
+
                         <a ng-click="rt.deleteSchema(key)" role="button" class="delete">
                             <p>Trash</p>
                             <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 80 100" enable-background="new 0 0 80 100" xml:space="preserve">
