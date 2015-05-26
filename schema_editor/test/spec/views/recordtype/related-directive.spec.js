@@ -24,7 +24,7 @@ describe('ase.views.recordtype: RTRelatedAdd', function () {
 
     }));
 
-    it('should load directive and reflect multiple rows', function () {
+    it('should load directive', function () {
         var scope = $rootScope.$new();
 
         var element = $compile('<ase-rt-related></ase-rt-related>')(scope);
@@ -39,6 +39,20 @@ describe('ase.views.recordtype: RTRelatedAdd', function () {
 
         // Check for existence of 'Add new content' button
         expect(element.find('button').length).toEqual(1);
+    });
+
+    it('should reflect multiple rows', function () {
+        var scope = $rootScope.$new();
+
+        var element = $compile('<ase-rt-related></ase-rt-related>')(scope);
+        $rootScope.$apply();
+
+        angular.extend(scope, {
+            rt: {
+                currentSchema: ResourcesMock.RecordSchema
+            }
+        });
+        $rootScope.$apply();
 
         // There shouldn't be any rows denoted as 'multiple'
         expect(element.find('.multiple').length).toEqual(0);

@@ -11,6 +11,13 @@ describe('ase.views.recordtype: RelatedAddController', function () {
     var $scope;
     var Controller;
     var ResourcesMock;
+    var recordSchema;
+    var recordSchemaId;
+    var recordSchemaIdUrl;
+    var recordSchemaUrl;
+    var recordType;
+    var recordTypeId;
+    var recordTypeIdUrl;
     var StateMock = {
         go: angular.noop
     };
@@ -23,16 +30,9 @@ describe('ase.views.recordtype: RelatedAddController', function () {
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         ResourcesMock = _ResourcesMock_;
-    }));
-
-    it('should add related content and switch view', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-        var recordTypeIdUrl = new RegExp('api\/recordtypes\/' + recordTypeId);
-        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
 
         /* jshint camelcase: false */
-        var recordSchema = {
+        recordSchema = {
             schema: {
                 type: 'object',
                 title: '',
@@ -50,16 +50,45 @@ describe('ase.views.recordtype: RelatedAddController', function () {
                         definitions: {}
                     }
                 },
-                recordType: recordType.uuid
+                recordType: ResourcesMock.RecordType.uuid
             }
         };
         /* jshint camelcase: true */
 
-        var recordSchemaUrl = /\/api\/recordschemas\//;
-        $httpBackend.expectPOST(recordSchemaUrl, recordSchema).respond(201);
+        recordType = ResourcesMock.RecordType;
+        recordTypeId = recordType.uuid;
+        recordTypeIdUrl = new RegExp('api\/recordtypes\/' + recordTypeId);
+        recordSchemaId = ResourcesMock.RecordSchema.uuid;
+        recordSchemaIdUrl = new RegExp('api\/recordschemas\/' + recordSchemaId);
+        recordSchemaUrl = /\/api\/recordschemas\//;
+    }));
 
-        var recordSchemaId = ResourcesMock.RecordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api\/recordschemas\/' + recordSchemaId);
+    it('should add related content', function () {
+        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+        $httpBackend.expectPOST(recordSchemaUrl, recordSchema).respond(201);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
+        Controller = $controller('RTRelatedAddController', {
+            $scope: $scope,
+            $stateParams: { uuid: recordTypeId },
+            $state: StateMock
+        });
+
+        $scope.$apply();
+
+        Controller.recordType = recordType.uuid;
+        Controller.currentSchema = recordSchema;
+        Controller.submitForm();
+
+        $scope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should switch view', function () {
+        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+        $httpBackend.expectPOST(recordSchemaUrl, recordSchema).respond(201);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         spyOn(StateMock, 'go');
