@@ -148,7 +148,7 @@
         function textField(newField) {
             newField = newField || {};
             var newTextField = jsonObject(newField);
-            return angular.extend(newTextField, {
+            newTextField = angular.extend(newTextField, {
                 headerTemplate: '{{ self.fieldTitle }}',
                 properties: {
                     fieldTitle: {
@@ -195,18 +195,21 @@
                         options: {
                             hidden: true
                         },
-                        type: 'string',
-                        default: 'text'
+                        type: 'string'
+                        // Set default: 'text' below since default is a reserved word
                     }
                 },
                 required: ['fieldTitle']
             });
+            newTextField.properties.fieldType['default'] = 'text';
+            return newTextField;
+
         }
 
         function selectList(newList) {
             newList = newList || {};
             var newSelectList = jsonObject(newList);
-            return angular.extend(newSelectList, {
+            newSelectList = angular.extend(newSelectList, {
                 headerTemplate: '{{ self.fieldTitle }}',
                 properties: {
                     fieldTitle: {
@@ -238,25 +241,26 @@
                         items: {
                             type: 'string',
                             title: 'Option value'
-                        },
-                        default: ['']
+                        }
                     },
                     fieldType: {
                         options: {
                             hidden: true
                         },
-                        type: 'string',
-                        default: 'selectlist'
+                        type: 'string'
+                        // Set default: 'selectlist' below since default is a reserved word
                     }
                 },
                 required: ['fieldTitle']
             });
+            newSelectList.properties.fieldType['default'] = 'selectlist';
+            return newSelectList;
         }
 
         function imageUploader(newImage) {
             newImage = newImage || {};
             var newImageUploader = jsonObject(newImage);
-            return angular.extend(newImageUploader, {
+            newImageUploader = angular.extend(newImageUploader, {
                 headerTemplate: '{{ self.fieldTitle }}',
                 properties: {
                     fieldTitle: {
@@ -272,12 +276,14 @@
                         options: {
                             hidden: true
                         },
-                        type: 'string',
-                        default: 'image'
+                        type: 'string'
+                        // Set default: 'image' below since default is a reserved word
                     }
                 },
                 required: ['fieldTitle']
             });
+            newImageUploader.properties.fieldType['default'] = 'image';
+            return newImageUploader;
         }
     }
 
