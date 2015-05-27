@@ -35,7 +35,13 @@
             /* jshint camelcase: false */
             definition.title = definition.plural_title = recordType.label + ' Details';
             /* jshint camelcase: true */
-            schema.definitions[definition.title] = definition;
+            // FIXME: json-editor currently does not appear to decode the URI encoding for JSON pointers
+            // properly. So encode everything by default; this will make names which include spaces
+            // look ugly but at least the $refs will work.
+            schema.definitions[Schemas.encodeJSONPointer(definition.title)] = definition;
+            schema.properties[definition.title] = {
+                $ref: '#/definitions/' + Schemas.encodeJSONPointer(definition.title)
+            };
 
             RecordSchemas.create({
                 /* jshint camelcase: false */

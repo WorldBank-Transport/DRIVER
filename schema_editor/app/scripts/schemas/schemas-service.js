@@ -23,16 +23,30 @@
         var module = {
             JsonObject: jsonObject,
             FieldTypes: {
-                'text': 'Text Field',
-                'selectlist': 'Select List',
-                'image': 'Image Uploader'
+                'text': {
+                    label: 'Text Field',
+                    jsonType: 'string',
+                    create: textField
+                },
+                'selectlist': {
+                    label: 'Select List',
+                    jsonType: 'string',
+                    create: selectList,
+                },
+                'image': {
+                    label: 'Image Uploader',
+                    jsonType: 'string',
+                    create: imageUploader
+                }
             },
             Fields: {
                 TextField: textField,
                 SelectList: selectList,
                 ImageUploader: imageUploader
             },
-            fieldFromKey: fieldFromKey
+            fieldFromKey: fieldFromKey,
+            definitionFromSchemaFormData: definitionFromSchemaFormData,
+            encodeJSONPointer: encodeJSONPointer
         };
         return module;
 
@@ -45,21 +59,73 @@
          */
         function fieldFromKey(fieldKey, fieldOptions) {
             fieldOptions = fieldOptions || {};
-            var field = null;
-            switch (fieldKey) {
-                case 'text':
-                    field = textField(fieldOptions);
-                    break;
-                case 'selectlist':
-                    field = selectList(fieldOptions);
-                    break;
-                case 'image':
-                    field = imageUploader(fieldOptions);
-                    break;
-                default:
-                    throw 'key must be one of Schemas.FieldTypes';
+            if (module.FieldTypes[fieldKey] === undefined) {
+                throw 'key must be one of Schemas.FieldTypes';
             }
-            return field;
+            return module.FieldTypes[fieldKey].create(fieldOptions);
+        }
+
+        /**
+         * Encode a string so that it complies with the JSON Pointer spec
+         * http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-02
+         * This is what is used in $ref to specify sub-schema paths
+         * @param {string} str
+         * @return {string} Currently just returns encodeURIComponent(string)
+         */
+        function encodeJSONPointer(str) {
+            return encodeURIComponent(str);
+        }
+
+        /**
+         * Converts part of the output of a Schema Entry Form (data about fields)
+         * into a snippet designed to be inserted into the 'properties' key of a Data Form Schema
+         * which would be used for data entry / editing. Does not perform validation.
+         * @param {object} fieldData The value of one Schema Entry Form field, specifying required,
+         *      searchable, possible values, etc.
+         * @return {object} A snippet designed to be inserted into the 'properties' of a Data Form
+         *      Schema
+         */
+        // TODO: This monolithic function isn't great; investigate more modular options
+        function _propertyFromSchemaFieldData(fieldData) {
+            var propertyDefinition = {};
+            propertyDefinition.type = module.FieldTypes[fieldData.fieldType].jsonType;
+
+            if (fieldData.fieldType === 'selectlist') {
+                propertyDefinition.enum = fieldData.fieldOptions;
+            }
+            if (fieldData.fieldType === 'image') {
+                propertyDefinition.media = {
+                    binaryEncoding: 'base64',
+                    type: 'image/jpeg'
+                };
+            }
+            return propertyDefinition;
+        }
+
+        /**
+         * Converts the outut of a Schema Entry Form into a sub-schema designed to be
+         * inserted into the 'definitions' key of a Data Form Schema. Does not perform
+         * validation.
+         * @param {array} formData The values in the Schema Form, defining the fields in
+         *      this Data Form Schema
+         */
+        function definitionFromSchemaFormData(formData) {
+            var definition = {
+                type: 'object',
+                properties: {}
+            };
+
+            // properties
+            _.each(formData, function(fieldData) {
+                definition.properties[fieldData.fieldTitle] = _propertyFromSchemaFieldData(fieldData);
+            });
+
+            // required
+            // A list containing the titles of properties which are required.
+            definition.required = _.pluck(_.filter(formData, function(fieldData) {
+                    return fieldData.isRequired;
+                }), 'fieldTitle');
+            return definition;
         }
 
         function jsonObject(newObject) {
@@ -121,11 +187,16 @@
                             ]
                             /* jshint camelcase: true */
                         }
+                    },
+                    fieldType: {
+                        options: {
+                            hidden: true
+                        },
+                        type: 'string',
+                        default: 'text'
                     }
                 },
-                options: {
-                    fieldType: 'text'
-                }
+                required: ['fieldTitle']
             });
         }
 
@@ -158,13 +229,24 @@
                     },
                     fieldOptions: {
                         title: 'Field Options',
+                        type: 'array',
+                        format: 'table',
+                        uniqueItems: true,
+                        items: {
+                            type: 'string',
+                            title: 'Option value'
+                        },
+                        default: ['']
+                    },
+                    fieldType: {
+                        options: {
+                            hidden: true
+                        },
                         type: 'string',
-                        format: 'textarea'
+                        default: 'selectlist'
                     }
                 },
-                options: {
-                    fieldType: 'selectlist'
-                }
+                required: ['fieldTitle']
             });
         }
 
@@ -176,17 +258,22 @@
                 properties: {
                     fieldTitle: {
                         type: 'string',
-                        title: 'Field Title'
+                        title: 'Field Title',
                     },
                     isRequired: {
                         type: 'boolean',
                         format: 'checkbox',
                         title: 'Required'
+                    },
+                    fieldType: {
+                        options: {
+                            hidden: true
+                        },
+                        type: 'string',
+                        default: 'image'
                     }
                 },
-                options: {
-                    fieldType: 'image'
-                }
+                required: ['fieldTitle']
             });
         }
     }

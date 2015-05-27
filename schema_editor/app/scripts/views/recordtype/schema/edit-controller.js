@@ -18,12 +18,16 @@
                     schema: null,
                     disable_edit_json: true,
                     disable_properties: true,
-                    disable_array_add: true,
+                    disable_array_add: false,
                     theme: 'bootstrap3'
                     /* jshint camelcase: true */
                 }
             };
-            ctl.fieldTypes = Schemas.FieldTypes;
+
+            // Pick out just the labels; these will go into the dropdown.
+            ctl.fieldTypes = _.mapValues(Schemas.FieldTypes, function(ft) {
+                return ft.label;
+            });
 
             RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (recordType) {
                 ctl.recordType = recordType;
@@ -41,17 +45,18 @@
         }
 
         function onSchemaReady(recordSchema) {
+            // TODO: Schema deserialization here, probably
             schema = recordSchema.schema.definitions[ctl.schemaKey];
             extendEditor({ schema: schema });
         }
 
         function onDataChange(newData) {
-            $log.debug('EditController Form Data:', newData);
+            $log.debug('Related type definition from form data:', Schemas.definitionFromSchemaFormData(newData));
             editorData = newData;
         }
 
         function onEditorAddClicked(fieldKey) {
-            var fieldTitle = Schemas.FieldTypes[fieldKey];
+            var fieldTitle = Schemas.FieldTypes[fieldKey].label;
             var fieldOptions = {
                 title: fieldTitle
             };

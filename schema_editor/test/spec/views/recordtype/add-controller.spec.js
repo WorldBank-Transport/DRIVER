@@ -47,9 +47,11 @@ describe('ase.views.recordtype: AddController', function () {
                 title: '',
                 plural_title: '',
                 description: '',
-                properties: {},
+                properties: {
+                    'Accident Details': { $ref: '#/definitions/Accident%20Details' }
+                },
                 definitions: {
-                    'Accident Details': {
+                    'Accident%20Details': {
                         type: 'object',
                         title: 'Accident Details',
                         plural_title: 'Accident Details',
