@@ -73,7 +73,10 @@
          * @return {string} Currently just returns encodeURIComponent(string)
          */
         function encodeJSONPointer(str) {
-            return encodeURIComponent(str);
+            // TODO: Technically, we should be doing this:
+            // return encodeURIComponent(str);
+            // But json-editor doesn't seem to support that properly.
+            return str;
         }
 
         /**

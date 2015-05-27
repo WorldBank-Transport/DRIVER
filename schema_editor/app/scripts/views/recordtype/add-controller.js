@@ -35,10 +35,12 @@
             /* jshint camelcase: false */
             definition.title = definition.plural_title = recordType.label + ' Details';
             /* jshint camelcase: true */
-            // FIXME: json-editor currently does not appear to decode the URI encoding for JSON pointers
-            // properly. So encode everything by default; this will make names which include spaces
-            // look ugly but at least the $refs will work.
-            schema.definitions[Schemas.encodeJSONPointer(definition.title)] = definition;
+            // TODO: $refs should be stored as JSON Pointers, which use URI encoding for certain
+            // characters, such as spaces. However, json-editor currently does not appear to decode
+            // the URI encoding for JSON pointers properly. Putting in spaces directly works with
+            // json-editor, but is technically not a valid JSON Pointer. If this causes problems
+            // with other libraries, we may need to find a fix.
+            schema.definitions[definition.title] = definition;
             schema.properties[definition.title] = {
                 $ref: '#/definitions/' + Schemas.encodeJSONPointer(definition.title)
             };
