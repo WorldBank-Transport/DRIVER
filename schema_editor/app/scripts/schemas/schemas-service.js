@@ -44,6 +44,7 @@
                 SelectList: selectList,
                 ImageUploader: imageUploader
             },
+            addVersion4Declaration: addVersion4Declaration,
             fieldFromKey: fieldFromKey,
             definitionFromSchemaFormData: definitionFromSchemaFormData,
             encodeJSONPointer: encodeJSONPointer
@@ -129,6 +130,15 @@
                     return fieldData.isRequired;
                 }), 'fieldTitle');
             return definition;
+        }
+
+        /**
+         * Adds a $schema keyword to an object; this declares that the object is JSON-Schema v4
+         * @param {object} schema Object to which the declaration should be added
+         * @return {object} The schema with the $schema keyword added, pointing to Draft 4
+         */
+        function addVersion4Declaration(schema) {
+            return angular.extend(schema, { $schema: 'http://json-schema.org/draft-04/schema#' });
         }
 
         function jsonObject(newObject) {

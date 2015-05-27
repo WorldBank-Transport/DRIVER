@@ -29,6 +29,7 @@
 
             // Automatically add 'Details' related content type to all record types
             var schema = Schemas.JsonObject();
+            schema = Schemas.addVersion4Declaration(schema); // Make root object a "real" JSON-Schema
             var definition = Schemas.JsonObject();
             definition.description = 'Details for ' + recordType.label;
             definition.multiple = false;
