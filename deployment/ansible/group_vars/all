@@ -12,7 +12,7 @@ pip_version: "1.*"
 postgis_liblwgeom_package_version: "2.1.*"
 postgis_package_version: "2.1.*"
 
-postgresql_package_version: "9.4.1*.pgdg14.04+1"
+postgresql_package_version: "9.4.*.pgdg14.04+1"
 postgresql_host: "localhost"
 postgresql_port: 5432
 postgresql_version: "9.4"
