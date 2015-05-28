@@ -3,16 +3,6 @@
         <ase-notifications></ase-notifications>
         <div class="form-area-heading">
             <h2>{{ ::rtSchemaEdit.schemaKey }}</h2>
-            <div class="btn-group pull-right" dropdown>
-                <button type="button" class="btn btn-default dropdown-toggle" dropdown-toggle>
-                    Add a field <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li ng-repeat="(key, value) in rtSchemaEdit.fieldTypes">
-                        <a ng-click="rtSchemaEdit.onEditorAddClicked(key)">{{ ::value }}</a>
-                    </li>
-                </ul>
-            </div>
             <div class="content-border"></div>
         </div>
         <json-editor editor-id="{{ rtSchemaEdit.editor.id }}"
