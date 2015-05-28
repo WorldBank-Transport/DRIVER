@@ -25,7 +25,7 @@
                 }
             }
         },
-        "abstractRequiredField": {
+        "abstractRequirableField": {
             "properties": {
                 "isRequired": {
                     "title": "Required",
@@ -38,7 +38,7 @@
             "allOf": [
                 { "$ref": "#/definitions/abstractBaseField" },
                 { "$ref": "#/definitions/abstractSearchableField" },
-                { "$ref": "#/definitions/abstractRequiredField" }
+                { "$ref": "#/definitions/abstractRequirableField" }
             ],
             "title": "Text Field",
             "properties": {
@@ -84,7 +84,7 @@
             "allOf": [
                 { "$ref": "#/definitions/abstractBaseField" },
                 { "$ref": "#/definitions/abstractSearchableField" },
-                { "$ref": "#/definitions/abstractRequiredField" }
+                { "$ref": "#/definitions/abstractRequirableField" }
             ],
             "title": "Select List",
             "properties": {
@@ -123,7 +123,7 @@
         "imageUploader": {
             "allOf": [
                 { "$ref": "#/definitions/abstractBaseField" },
-                { "$ref": "#/definitions/abstractRequiredField" }
+                { "$ref": "#/definitions/abstractRequirableField" }
             ],
             "title": "Image Uploader",
             "properties": {
