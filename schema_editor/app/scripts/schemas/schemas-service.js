@@ -46,6 +46,7 @@
             },
             addVersion4Declaration: addVersion4Declaration,
             fieldFromKey: fieldFromKey,
+            validateSchemaFormData: validateSchemaFormData,
             definitionFromSchemaFormData: definitionFromSchemaFormData,
             encodeJSONPointer: encodeJSONPointer
         };
@@ -130,6 +131,29 @@
                     return fieldData.isRequired;
                 }), 'fieldTitle');
             return definition;
+        }
+
+        /**
+         * Validate that a Schema Entry Form has valid data; currently validates that there are
+         * no duplicate fieldTitles because this is currently not easily done in native
+         * JSON-Schema (the uniqueItems keyword doesn't allow specifying which fields should
+         * be used to determine uniqueness).
+         * @param {object} formData The values in a Schema Form
+         * @return {array} List of errors, if any
+         */
+        function validateSchemaFormData(formData) {
+            var errors = [];
+            var titleCounts = _.countBy(formData, function(fieldData) {
+                return fieldData.fieldTitle;
+            });
+            _.forEach(titleCounts, function(count, title) {
+                if (count > 1) {
+                    errors.push({ 'message': 'Invalid schema: The field title "' + title +
+                        '" is used more than once.'
+                    });
+                }
+            });
+            return errors;
         }
 
         /**

@@ -1,5 +1,6 @@
 <div class="form-area">
     <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
         <div class="form-area-heading">
             <h2>{{ ::rtSchemaEdit.schemaKey }}</h2>
             <div class="btn-group pull-right" dropdown>
@@ -20,7 +21,8 @@
                      class="form-area-body">
         </json-editor>
         <div class="save-area">
-            <button type="button" class="btn btn-default">Save</button>
+          <button type="button" class="btn btn-default"
+              ng-click="rtSchemaEdit.onSaveClicked()">Save</button>
             <button type="button" class="btn btn-default"
                     ui-sref="rt.related({uuid: rtSchemaEdit.recordType.uuid })">Cancel</button>
             </div>

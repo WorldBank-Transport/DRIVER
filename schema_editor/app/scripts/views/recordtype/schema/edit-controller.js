@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RTSchemaEditController($log, $stateParams,
-                                    RecordTypes, RecordSchemas, Schemas, Utils) {
+                                    RecordTypes, RecordSchemas, Schemas, Utils, Notifications) {
         var ctl = this;
         var schema = null;
         var editorData = null;
@@ -19,9 +19,11 @@
                     disable_edit_json: true,
                     disable_properties: true,
                     disable_array_add: false,
-                    theme: 'bootstrap3'
+                    theme: 'bootstrap3',
+                    show_errors: 'change'
                     /* jshint camelcase: true */
-                }
+                },
+                errors: []
             };
 
             // Pick out just the labels; these will go into the dropdown.
@@ -38,6 +40,7 @@
 
             ctl.onDataChange = onDataChange;
             ctl.onEditorAddClicked = onEditorAddClicked;
+            ctl.onSaveClicked = onSaveClicked;
         }
 
         function extendEditor(options) {
@@ -50,9 +53,13 @@
             extendEditor({ schema: schema });
         }
 
-        function onDataChange(newData) {
-            $log.debug('Related type definition from form data:', Schemas.definitionFromSchemaFormData(newData));
+        function onDataChange(newData, validationErrors) {
+            $log.debug('Schema Entry Form data:', newData, 'Errors:', validationErrors);
             editorData = newData;
+            // Perform custom validation
+            var customErrors = Schemas.validateSchemaFormData(editorData);
+            ctl.editor.errors = validationErrors.concat(customErrors);
+            // TODO: Fix Save button disablement
         }
 
         function onEditorAddClicked(fieldKey) {
@@ -62,6 +69,23 @@
             };
             schema.properties[Utils.makeID()] = Schemas.fieldFromKey(fieldKey, fieldOptions);
             extendEditor({ schema: schema });
+        }
+
+        function onSaveClicked() {
+            // First we confirm that the form data is valid; then we know we have something which
+            // we can transform into a Data Form Schema.
+            if (ctl.editor.errors.length > 0) {
+                Notifications.show({
+                    displayClass: 'alert-danger',
+                    text: 'Saving failed: invalid data schema definition'
+                });
+                $log.debug('Validation errors on save:', ctl.editor.errors);
+                return;
+            }
+            // All is well; serialize the form data into a JSON-Schema snippet.
+            var dataToSave = Schemas.definitionFromSchemaFormData(editorData);
+            $log.debug('Serialized schema to save:', dataToSave);
+            Notifications.show({ text: 'Success!', displayClass: 'alert-success', timeout: 3000 });
         }
     }
 

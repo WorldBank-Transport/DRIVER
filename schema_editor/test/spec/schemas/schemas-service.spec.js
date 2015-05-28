@@ -28,7 +28,7 @@ describe('ase.schemas:Schemas', function () {
         expect(schemaEnv.validate('v4', field)).toBe(null);
     });
 
-    it('should add the $schema declaration to schemas', function () {
+    it('should be able to add the $schema declaration to schemas', function () {
         var obj = Schemas.JsonObject();
         obj = Schemas.addVersion4Declaration(obj);
         expect(schemaEnv.validate('v4', obj)).toBe(null);
@@ -48,7 +48,7 @@ describe('ase.schemas:Schemas', function () {
         }));
     });
 
-    it('should include an enum key in selectlist fields', function () {
+    it('should serialize an enum key in selectlist fields', function () {
         var schemaFormData = [{
             fieldType: 'selectlist',
             isRequired: false,
@@ -59,7 +59,7 @@ describe('ase.schemas:Schemas', function () {
         expect(dataFormSchemaDef.properties.Text['enum']).toEqual(schemaFormData[0].fieldOptions);
     });
 
-    it('should include a media key in image fields', function () {
+    it('should serialize a media key in image fields', function () {
         var schemaFormData = [{
             fieldType: 'image',
             isRequired: false,
@@ -83,5 +83,41 @@ describe('ase.schemas:Schemas', function () {
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
         expect(dataFormSchemaDef.required.length).toEqual(1);
         expect(dataFormSchemaDef.required[0]).toEqual('Photo');
+    });
+
+    it('should validate that no two Schema Entry Form fields have the same title', function () {
+        var schemaFormData = [{
+            fieldType: 'selectlist',
+            isRequired: false,
+            fieldTitle: 'Same1',
+            fieldOptions: ['opt1', 'opt2', 'opt3']
+        },{
+            fieldType: 'image',
+            isRequired: true,
+            fieldTitle: 'Same2'
+        },{
+            fieldType: 'text',
+            isRequired: false,
+            fieldTitle: 'Same1'
+        },{
+            fieldType: 'text',
+            isRequired: false,
+            fieldTitle: 'Diff'
+        },{
+            fieldType: 'text',
+            isRequired: false,
+            fieldTitle: 'Same2'
+        }];
+        var errors = Schemas.validateSchemaFormData(schemaFormData);
+        expect(errors.length).toEqual(2);
+        expect(errors).toEqual(jasmine.arrayContaining([{
+            message: jasmine.stringMatching('Same1')
+        }]));
+        expect(errors).toEqual(jasmine.arrayContaining([{
+            message: jasmine.stringMatching('Same2')
+        }]));
+        expect(errors).not.toEqual(jasmine.arrayContaining([{
+            message: jasmine.stringMatching('Diff')
+        }]));
     });
 });
