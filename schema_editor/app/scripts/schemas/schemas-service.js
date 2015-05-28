@@ -4,7 +4,7 @@
  * In order to add a new FieldType, you need to do the following:
  * 1. Add a key/value pair to the module.FieldTypes object
  * 2. Add a new field definition object to the json schema (builder-schemas/related.json).
- *    Ensure your newly created object has a matching fieldType attribute.
+ *    Ensure your newly created object has a matching fieldType attribute, which must be unique.
  *    This is so that when we serialize this object to data and back, we can remember what
  *    type of field it is.
  *
