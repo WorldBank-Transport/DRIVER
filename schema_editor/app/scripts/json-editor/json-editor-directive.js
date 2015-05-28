@@ -63,7 +63,8 @@
                 }
                 changeRef = editor.on('change', function () {
                     var editorData = editor.getValue();
-                    scope.onDataChange()(editorData);
+                    var errors = editor.validate();
+                    scope.onDataChange()(editorData, errors);
                 });
             });
         }
