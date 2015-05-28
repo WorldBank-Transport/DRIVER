@@ -38,6 +38,11 @@
 
             // Every time the editor options change, we need to destroy and recreate
             // the form, preserving the user-entered data in the form
+            //
+            // Note: since the switch to using arrays as the form builder root, the options
+            // are never updated, and this destroy/recreate logic isn't run. Keeping the logic
+            // in here for the time being as it doesn't hurt anything and may be useful to
+            // someone if this is released as a standalone directive.
             scope.$watch('options', function (newValue) {
                 if (!(newValue && newValue.schema)) {
                     return;
