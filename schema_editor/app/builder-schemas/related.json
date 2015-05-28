@@ -44,7 +44,8 @@
             "properties": {
                 "fieldTitle": {
                     "title": "Text Field Title",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
                 "textOptions": {
                     "title": "Text Options",
@@ -89,7 +90,8 @@
             "properties": {
                 "fieldTitle": {
                     "title": "Select List Title",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
                 "displayType": {
                     "title": "Display Type",
@@ -127,7 +129,8 @@
             "properties": {
                 "fieldTitle": {
                     "title": "Image Uploader Title",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
                 "fieldType": {
                     "options": {
