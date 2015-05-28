@@ -18,16 +18,6 @@ describe('ase.schemas:Schemas', function () {
         expect(schemaEnv.validate('v4', obj)).toBe(null);
     });
 
-    it('should ensure Fields.TextField is a valid jsonschema v4', function () {
-        var field = Schemas.Fields.TextField();
-        expect(schemaEnv.validate('v4', field)).toBe(null);
-    });
-
-    it('should ensure Fields.SelectList is a valid jsonschema v4', function () {
-        var field = Schemas.Fields.SelectList();
-        expect(schemaEnv.validate('v4', field)).toBe(null);
-    });
-
     it('should add the $schema declaration to schemas', function () {
         var obj = Schemas.JsonObject();
         obj = Schemas.addVersion4Declaration(obj);
