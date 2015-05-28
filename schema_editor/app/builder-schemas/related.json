@@ -14,7 +14,7 @@
     "definitions": {
         "abstractBaseField": {
             "type": "object",
-            "required": ["fieldTitle"]
+            "required": ["fieldTitle", "fieldType"]
         },
         "abstractSearchableField": {
             "properties": {
