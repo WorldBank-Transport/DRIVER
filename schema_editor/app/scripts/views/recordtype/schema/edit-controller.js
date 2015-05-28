@@ -2,55 +2,78 @@
     'use strict';
 
     /* ngInject */
-    function RTSchemaEditController($log, $stateParams,
-                                    RecordTypes, RecordSchemas, Schemas, Utils, Notifications) {
+    function RTSchemaEditController($log, $stateParams, BuilderSchemas, RecordTypes,
+                                    RecordSchemas, Schemas, Notifications) {
         var ctl = this;
-        var schema = null;
         var editorData = null;
         initialize();
 
         function initialize() {
             ctl.schemaKey = $stateParams.schema;
+            ctl.onDataChange = onDataChange;
+            ctl.onSaveClicked = onSaveClicked;
+            loadRecordType()
+                .then(loadRecordSchema)
+                .then(loadRelatedBuilderSchema)
+                .then(onSchemaReady);
+        }
+
+        // Helper for loading the record type
+        function loadRecordType () {
+            return RecordTypes.get({ id: $stateParams.uuid })
+                .$promise.then(function(recordType) {
+                    ctl.recordType = recordType;
+                });
+        }
+
+        // Helper for loading the record schema
+        function loadRecordSchema() {
+            /* jshint camelcase: false */
+            var currentSchemaId = ctl.recordType.current_schema;
+            /* jshint camelcase: true */
+
+            return RecordSchemas.get({ id: currentSchemaId })
+                .$promise.then(function(recordSchema) {
+                    ctl.recordSchema = recordSchema;
+                });
+        }
+
+        // Helper for loading the related builder schema
+        function loadRelatedBuilderSchema () {
+            return BuilderSchemas.get({ name: 'related' })
+                .$promise.then(function(relatedBuilderSchema) {
+                    ctl.relatedBuilderSchema = relatedBuilderSchema;
+                });
+        }
+
+        // Called after all prerequesite data has been loaded
+        function onSchemaReady() {
+            // Need to call toJSON here in order to strip the additional angular
+            // resource properties, as they don't play well with json-editor.
+            var schema = ctl.relatedBuilderSchema.toJSON();
+
+            // Populate saved properties
+            // TODO: Schema deserialization here, probably
+            var definition = ctl.recordSchema.schema.definitions[ctl.schemaKey];
+            schema.description = definition.description;
+            schema.title = definition.title;
+
+            // Configure the json-editor
             ctl.editor = {
-                id: 'test-id',
+                id: 'schema-editor',
                 options: {
                     /* jshint camelcase: false */
-                    schema: null,
+                    schema: schema,
                     disable_edit_json: true,
                     disable_properties: true,
                     disable_array_add: false,
                     theme: 'bootstrap3',
-                    show_errors: 'change'
+                    show_errors: 'change',
+                    no_additional_properties: true
                     /* jshint camelcase: true */
                 },
                 errors: []
             };
-
-            // Pick out just the labels; these will go into the dropdown.
-            ctl.fieldTypes = _.mapValues(Schemas.FieldTypes, function(ft) {
-                return ft.label;
-            });
-
-            RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (recordType) {
-                ctl.recordType = recordType;
-                /* jshint camelcase: false */
-                RecordSchemas.get({ id: ctl.recordType.current_schema }).$promise.then(onSchemaReady);
-                /* jshint camelcase: true */
-            });
-
-            ctl.onDataChange = onDataChange;
-            ctl.onEditorAddClicked = onEditorAddClicked;
-            ctl.onSaveClicked = onSaveClicked;
-        }
-
-        function extendEditor(options) {
-            ctl.editor.options = angular.extend({}, ctl.editor.options, options);
-        }
-
-        function onSchemaReady(recordSchema) {
-            // TODO: Schema deserialization here, probably
-            schema = recordSchema.schema.definitions[ctl.schemaKey];
-            extendEditor({ schema: schema });
         }
 
         function onDataChange(newData, validationErrors) {
@@ -60,15 +83,6 @@
             var customErrors = Schemas.validateSchemaFormData(editorData);
             ctl.editor.errors = validationErrors.concat(customErrors);
             // TODO: Fix Save button disablement
-        }
-
-        function onEditorAddClicked(fieldKey) {
-            var fieldTitle = Schemas.FieldTypes[fieldKey].label;
-            var fieldOptions = {
-                title: fieldTitle
-            };
-            schema.properties[Utils.makeID()] = Schemas.fieldFromKey(fieldKey, fieldOptions);
-            extendEditor({ schema: schema });
         }
 
         function onSaveClicked() {
