@@ -35,8 +35,7 @@
                 schema: ctl.currentSchema.schema,
                 record_type: ctl.recordType.uuid
                 /* jshint camelcase:true */
-            }, function (newSchema) {
-                $log.debug(newSchema);
+            }, function () {
                 $state.go('rt.related', {uuid: ctl.recordType.uuid});
             }, function (error) {
                 $log.debug('Error saving new schema: ', error);
