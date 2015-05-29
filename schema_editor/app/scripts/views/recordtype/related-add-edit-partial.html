@@ -11,6 +11,7 @@
             <div class="form-group col-sm-6">
                 <label for="single-title">Single Title</label>
                 <input required type="text" name="label" ng-model="rtRelated.definition.title"
+                       ng-readonly="!!rtRelated.schemaKey"
                        class="form-control" id="single-title" placeholder="Accident"
                        ng-minlength="3" ng-maxlength="64" />
                 <p ng-show="rtForm.title.$invalid && !rtForm.title.$pristine" class="help-block">
