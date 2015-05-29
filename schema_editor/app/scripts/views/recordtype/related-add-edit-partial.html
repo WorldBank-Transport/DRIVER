@@ -47,6 +47,7 @@
             <div class="form-group col-sm-12">
                 <label for="multiple">Allow multiple?</label>
                 <input type="checkbox" name="multiple"
+                       ng-disabled="!!rtRelated.schemaKey"
                        ng-model="rtRelated.definition.multiple" id="multiple">
                 </input>
             </div>
