@@ -98,6 +98,21 @@ describe('ase.schemas:Schemas', function () {
         expect(dataFormSchemaDef.required[0]).toEqual('Photo');
     });
 
+    it('should net set the "required" key when there are no required fields', function () {
+        var schemaFormData = [{
+            fieldType: 'selectlist',
+            isRequired: false,
+            fieldTitle: 'Text',
+            fieldOptions: ['opt1', 'opt2', 'opt3']
+        },{
+            fieldType: 'image',
+            isRequired: false,
+            fieldTitle: 'Photo'
+        }];
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        expect(dataFormSchemaDef.required).toBeUndefined();
+    });
+
     it('should validate that no two Schema Entry Form fields have the same title', function () {
         var schemaFormData = [{
             fieldType: 'selectlist',
