@@ -73,7 +73,13 @@
                     binaryEncoding: 'base64',
                     type: 'image/jpeg'
                 };
+            } else if (fieldData.fieldType === 'text') {
+                propertyDefinition.textOptions = fieldData.textOptions;
             }
+
+            // Set the common properties
+            propertyDefinition.isSearchable = fieldData.isSearchable;
+
             return propertyDefinition;
         }
 
@@ -98,9 +104,18 @@
 
             // required
             // A list containing the titles of properties which are required.
-            definition.required = _.pluck(_.filter(formData, function(fieldData) {
+            var required = _.pluck(
+                _.filter(formData, function(fieldData) {
                     return fieldData.isRequired;
                 }), 'fieldTitle');
+
+            // The schema doesn't validate on save if required is an empty array:
+            // "Invalid schema: [] is too short"
+            // so only set it if there are required fields.
+            if (required.length) {
+                definition.required = required;
+            }
+
             return definition;
         }
 
