@@ -26,6 +26,10 @@
             }
 
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
+            ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                $ref: '#/definitions/' + Schemas.encodeJSONPointer(ctl.definition.title)
+            };
+
             RecordSchemas.create({
                 /* jshint camelcase:false */
                 schema: ctl.currentSchema.schema,
