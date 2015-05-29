@@ -32,10 +32,33 @@ describe('ase.schemas:Schemas', function () {
         }];
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
         expect(dataFormSchemaDef).toEqual(jasmine.objectContaining({
-            required: jasmine.anything(),
             properties: jasmine.anything(),
             type: 'object'
         }));
+    });
+
+    it('should serialize a textOptions key in text fields', function () {
+        var schemaFormData = [{
+            fieldType: 'text',
+            isRequired: false,
+            fieldTitle: 'Text',
+            textOptions: 'datetime'
+        }];
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        expect(dataFormSchemaDef.properties.Text.textOptions).toEqual(schemaFormData[0].textOptions);
+    });
+
+    it('should serialize an isSearchable key', function () {
+        var schemaFormData = [{
+            fieldType: 'text',
+            isRequired: false,
+            isSearchable: true,
+            fieldTitle: 'Text',
+            textOptions: 'datetime'
+        }];
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        expect(dataFormSchemaDef.properties.Text.isSearchable)
+            .toEqual(schemaFormData[0].isSearchable);
     });
 
     it('should serialize an enum key in selectlist fields', function () {
@@ -73,6 +96,21 @@ describe('ase.schemas:Schemas', function () {
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
         expect(dataFormSchemaDef.required.length).toEqual(1);
         expect(dataFormSchemaDef.required[0]).toEqual('Photo');
+    });
+
+    it('should net set the "required" key when there are no required fields', function () {
+        var schemaFormData = [{
+            fieldType: 'selectlist',
+            isRequired: false,
+            fieldTitle: 'Text',
+            fieldOptions: ['opt1', 'opt2', 'opt3']
+        },{
+            fieldType: 'image',
+            isRequired: false,
+            fieldTitle: 'Photo'
+        }];
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        expect(dataFormSchemaDef.required).toBeUndefined();
     });
 
     it('should validate that no two Schema Entry Form fields have the same title', function () {

@@ -83,6 +83,12 @@
             var customErrors = Schemas.validateSchemaFormData(editorData);
             ctl.editor.errors = validationErrors.concat(customErrors);
             // TODO: Fix Save button disablement
+            // Multiple developers have now attempted to fix the save button disablement, and
+            // it seems to be a very strange issue with scope. Right now, ng-disabled is being
+            // set on the button to "rtSchemaEdit.editor.errors.length > 0". This should work,
+            // but doesn't for some reason and needs further investigation. Multiple other fixes
+            // were attempted, including using a separate variable/object for storing validation,
+            // but in all cases the changes are not reflected in the HTML.
         }
 
         function onSaveClicked() {
@@ -99,7 +105,34 @@
             // All is well; serialize the form data into a JSON-Schema snippet.
             var dataToSave = Schemas.definitionFromSchemaFormData(editorData);
             $log.debug('Serialized schema to save:', dataToSave);
-            Notifications.show({ text: 'Success!', displayClass: 'alert-success', timeout: 3000 });
+
+            // Extend the definitions with the new data. Need to extend rather than
+            // update in order to preserve the other attributes (title/etc.)
+            var definitions = ctl.recordSchema.schema.definitions;
+            definitions[ctl.schemaKey] = angular.extend(definitions[ctl.schemaKey], dataToSave);
+
+            // Save the updated schema
+            RecordSchemas.create({
+                /* jshint camelcase:false */
+                record_type: ctl.recordType.uuid,
+                schema: ctl.recordSchema.schema
+                /* jshint camelcase:true */
+            }).$promise
+                .then(function() {
+                    Notifications.show({
+                        text: 'Schema saved successfully',
+                        displayClass: 'alert-success',
+                        timeout: 3000
+                    });
+                })
+                .catch(function(error) {
+                    $log.debug('Error saving schema:', error);
+                    Notifications.show({
+                        text: 'Error saving schema: ' + error.statusText,
+                        displayClass: 'alert-danger',
+                        timeout: 3000
+                    });
+                });
         }
     }
 
