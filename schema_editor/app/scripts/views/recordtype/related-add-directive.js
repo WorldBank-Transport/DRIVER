@@ -26,9 +26,21 @@
             }
 
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
-            ctl.currentSchema.schema.properties[ctl.definition.title] = {
-                $ref: '#/definitions/' + Schemas.encodeJSONPointer(ctl.definition.title)
-            };
+
+            // Use an array or object depending on the 'multiple' setting
+            var ref = '#/definitions/' + Schemas.encodeJSONPointer(ctl.definition.title);
+            if (ctl.definition.multiple) {
+                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                    type: 'array',
+                    items: {
+                        $ref: ref
+                    }
+                };
+            } else {
+                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                    $ref: ref
+                };
+            }
 
             RecordSchemas.create({
                 /* jshint camelcase:false */
