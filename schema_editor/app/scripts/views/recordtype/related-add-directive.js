@@ -26,13 +26,28 @@
             }
 
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
+
+            // Use an array or object depending on the 'multiple' setting
+            var ref = '#/definitions/' + Schemas.encodeJSONPointer(ctl.definition.title);
+            if (ctl.definition.multiple) {
+                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                    type: 'array',
+                    items: {
+                        $ref: ref
+                    }
+                };
+            } else {
+                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                    $ref: ref
+                };
+            }
+
             RecordSchemas.create({
                 /* jshint camelcase:false */
                 schema: ctl.currentSchema.schema,
                 record_type: ctl.recordType.uuid
                 /* jshint camelcase:true */
-            }, function (newSchema) {
-                $log.debug(newSchema);
+            }, function () {
                 $state.go('rt.related', {uuid: ctl.recordType.uuid});
             }, function (error) {
                 $log.debug('Error saving new schema: ', error);
