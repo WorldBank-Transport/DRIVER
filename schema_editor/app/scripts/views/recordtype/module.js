@@ -44,6 +44,7 @@
         'ui.bootstrap',
         'json-editor',
         'ase.config',
+        'ase.directives',
         'ase.notifications',
         'ase.utils',
         'ase.schemas',

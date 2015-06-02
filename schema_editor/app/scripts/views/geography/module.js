@@ -26,6 +26,7 @@
     angular.module('ase.views.geography', [
         'ui.router',
         'ase.config',
+        'ase.directives',
         'ngFileUpload',
         'ase.notifications',
         'ase.views.sidebar',
