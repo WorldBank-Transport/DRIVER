@@ -14,7 +14,15 @@
     "definitions": {
         "abstractBaseField": {
             "type": "object",
-            "required": ["fieldTitle", "fieldType"]
+            "required": ["fieldTitle", "fieldType"],
+            "properties": {
+                "propertyOrder": {
+                    "type": "number",
+                    "options": {
+                        "hidden": true
+                    }
+                }
+            }
         },
         "abstractSearchableField": {
             "properties": {
@@ -99,13 +107,15 @@
                     "enum": [
                         "select",
                         "checkbox"
-                    ]
+                    ],
+                    "default": "select"
                 },
                 "fieldOptions": {
                     "title": "Field Options",
                     "type": "array",
                     "format": "table",
                     "uniqueItems": true,
+                    "minItems": 1,
                     "items": {
                         "title": "Option value",
                         "type": "string"

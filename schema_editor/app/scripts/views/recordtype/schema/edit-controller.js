@@ -57,6 +57,8 @@
             var definition = ctl.recordSchema.schema.definitions[ctl.schemaKey];
             schema.description = definition.description;
             schema.title = definition.title;
+            var initialData = Schemas.schemaFormDataFromDefinition(definition);
+            $log.debug('Initializing form with startval', initialData);
 
             // Configure the json-editor
             ctl.editor = {
@@ -69,7 +71,8 @@
                     disable_array_add: false,
                     theme: 'bootstrap3',
                     show_errors: 'change',
-                    no_additional_properties: true
+                    no_additional_properties: true,
+                    startval: initialData
                     /* jshint camelcase: true */
                 },
                 errors: []
