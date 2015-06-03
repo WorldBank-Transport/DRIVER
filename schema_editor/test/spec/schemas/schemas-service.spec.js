@@ -45,7 +45,7 @@ describe('ase.schemas:Schemas', function () {
             textOptions: 'datetime'
         }];
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
-        expect(dataFormSchemaDef.properties.Text.textOptions).toEqual(schemaFormData[0].textOptions);
+        expect(dataFormSchemaDef.properties.Text.format).toEqual(schemaFormData[0].textOptions);
     });
 
     it('should serialize an isSearchable key', function () {
