@@ -20,11 +20,12 @@
   "smarttabs": true,
   "jasmine": true,
   "globals": {
+    "_": true,
     "angular": false,
     "browser": false,
     "inject": false,
     "jsonSchemaV4": true,
-    "jjv": true
+    "jjv": true,
+    "readJSON": true
   }
 }
-

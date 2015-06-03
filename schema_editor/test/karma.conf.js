@@ -41,6 +41,7 @@ module.exports = function(config) {
       'bower_components/lodash/lodash.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',
+      'bower_components/karma-read-json/karma-read-json.js',
       // endbower
       'app/scripts/config.js',
       'app/scripts/**/*.html',
@@ -64,7 +65,13 @@ module.exports = function(config) {
       'app/scripts/views/recordtype/**.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js',
-      'app/scripts/app.js'
+      'app/scripts/app.js',
+
+      // builder-schemas json files
+      {
+          pattern: 'app/builder-schemas/*.json',
+          included: false
+      }
     ],
 
     // list of files / patterns to exclude

@@ -215,6 +215,11 @@ describe('ase.schemas:Schemas', function () {
         // Transform back and forth a few times
         var output = b(f(b(f(b(f(b(f(b(f(b(f(schemaFormData))))))))))));
         expect(output).toEqual(schemaFormData);
+
+        // Ensure all field types are represented in this test
+        var formDataFields = _.map(schemaFormData, 'fieldType').sort();
+        var schemaFields = _.keys(Schemas.FieldTypes).sort();
+        expect(formDataFields).toEqual(schemaFields);
     });
 
     it('should sort by propertyOrder when deserializing schemas', function () {
