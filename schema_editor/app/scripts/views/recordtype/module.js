@@ -21,6 +21,10 @@
             url: '/edit/:uuid',
             template: '<ase-rt-edit></ase-rt-edit>'
         });
+        $stateProvider.state('rt.preview', {
+            url: '/preview/:uuid',
+            template: '<ase-rt-preview></ase-rt-preview>'
+        });
         $stateProvider.state('rt.related', {
             url: '/related/:uuid',
             template: '<ase-rt-related></ase-rt-related>'

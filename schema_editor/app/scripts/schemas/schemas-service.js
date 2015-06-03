@@ -78,7 +78,7 @@
                     type: 'image/jpeg'
                 };
             } else if (fieldData.fieldType === 'text') {
-                propertyDefinition.textOptions = fieldData.textOptions;
+                propertyDefinition.format = fieldData.textOptions;
             }
 
             // Set the common properties
@@ -152,6 +152,9 @@
                     switch(key) {
                         case 'enum':
                             fieldData.fieldOptions = value;
+                            break;
+                        case 'format':
+                            fieldData.textOptions = value;
                             break;
                         case 'type': // This is the JSON-Schema 'type', which is not used here.
                             break;
