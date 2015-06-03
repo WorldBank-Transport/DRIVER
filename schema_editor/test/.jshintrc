@@ -24,7 +24,7 @@
     "browser": false,
     "inject": false,
     "jsonSchemaV4": true,
-    "jjv": true
+    "jjv": true,
+    "readJSON": true
   }
 }
-
