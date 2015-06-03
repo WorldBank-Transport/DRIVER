@@ -1,0 +1,13 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <div class="form-area-heading">
+            <h2>{{ rtPreview.recordType.label }} input form preview </h2>
+            <div class="content-border"></div>
+        </div>
+        <json-editor editor-id="{{ rtPreview.editor.id }}"
+                     options="rtPreview.editor.options"
+                     on-data-change="rtPreview.onDataChange"
+                     class="form-area-body">
+        </json-editor>
+    </div>
+</div>
