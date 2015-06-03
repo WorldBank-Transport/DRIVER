@@ -36,7 +36,7 @@
         // Called after all prerequesite data has been loaded
         function onSchemaReady() {
             ctl.editor = {
-                id: 'schema-editor',
+                id: 'preview-editor',
                 options: {
                     /* jshint camelcase: false */
                     schema: ctl.recordSchema.schema,
