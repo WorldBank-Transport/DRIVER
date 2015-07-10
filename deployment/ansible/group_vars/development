@@ -24,4 +24,5 @@ csrf_session_key: "seekrit"
 cookie_secret_key: "seekrit"
 
 ## WEB SETTINGS
-js_html5mode: "false"
+web_js_html5mode: "false"
+editor_js_html5mode: "false"

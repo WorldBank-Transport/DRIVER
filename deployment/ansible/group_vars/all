@@ -18,7 +18,9 @@ postgresql_port: 5432
 postgresql_version: "9.4"
 
 ## WEB SETTINGS
-js_html5mode: "true"
-js_html5mode_prefix: "!"
+web_js_html5mode: "true"
+web_js_html5mode_prefix: "!"
+editor_js_html5mode: "true"
+editor_js_html5mode_prefix: "!"
 
 nodejs_npm_version: "2.1.5"

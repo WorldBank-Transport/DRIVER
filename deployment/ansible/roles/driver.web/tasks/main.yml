@@ -18,24 +18,46 @@
   args:
     chdir: "{{ web_dir }}"
 
-- name: Install application javascript dependencies (npm)
+- name: Install web application javascript dependencies (npm)
   command: npm install
   sudo: no
   args:
     chdir: "{{ web_dir }}"
 
-- name: Install application javascript dependencies (bower)
+- name: Install web application javascript dependencies (bower)
   command: bower install
   sudo: no
   args:
     chdir: "{{ web_dir }}"
 
-- name: Copy JS config to scripts dir
-  template: src=config-js.j2 dest="{{ web_scripts_dir}}/config.js"
+- name: Copy web JS config to scripts dir
+  template: src=web-config-js.j2 dest="{{ web_scripts_dir}}/config.js"
   sudo: no
 
-- name: Build production app
+- name: Build production web app
   command: grunt build
   sudo: no
   args:
     chdir: "{{ web_dir }}"
+    
+- name: Install editor application javascript dependencies (npm)
+  command: npm install
+  sudo: no
+  args:
+    chdir: "{{ editor_dir }}"
+
+- name: Install editor application javascript dependencies (bower)
+  command: bower install
+  sudo: no
+  args:
+    chdir: "{{ editor_dir }}"
+
+- name: Copy editor JS config to scripts dir
+  template: src=editor-config-js.j2 dest="{{ editor_scripts_dir}}/config.js"
+  sudo: no
+
+- name: Build production editor app
+  command: grunt build
+  sudo: no
+  args:
+    chdir: "{{ editor_dir }}"

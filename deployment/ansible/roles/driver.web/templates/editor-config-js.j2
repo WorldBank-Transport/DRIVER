@@ -2,7 +2,7 @@
     'use strict';
 
     // WARNING: This file is templated by ansible, any changes will be overridden on next provision
-    // Modify this file in: `deployment/ansible/roles/driver.web/templates/config-js.conf.j2`
+    // Modify this file in: `deployment/ansible/roles/driver.web/templates/editor-config-js.conf.j2`
     //
     // Note: This module is also mocked for Travis. If any changes are made to it, they should also
     // be made in: `schema_editor/test/mock/config.js`
@@ -10,11 +10,11 @@
     var config = {
         debug: {% if developing %}true{% else %}false{% endif %},
         html5Mode: {
-            enabled: {{ js_html5mode }},
-            prefix: '{{ js_html5mode_prefix }}'
+            enabled: {{ editor_js_html5mode }},
+            prefix: '{{ editor_js_html5mode_prefix }}'
         },
         api: {
-            hostname: '{{ js_api_hostname }}'
+            hostname: '{{ editor_js_api_hostname }}'
         }
     };
 

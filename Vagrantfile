@@ -117,12 +117,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     if testing?
         app.vm.synced_folder "./app", "/opt/app"
-        app.vm.synced_folder "./schema_editor", "/opt/web"
+        web.vm.synced_folder "./web", "/opt/web"
+        app.vm.synced_folder "./schema_editor", "/opt/schema"
         #TODO, this probably won't work:
         app.vm.synced_folder "../ashlar", "/opt/ashlar"
     else
-        app.vm.synced_folder "./schema_editor", "/opt/web", :nfs => true
         app.vm.synced_folder "./app", "/opt/app", :nfs => true
+        app.vm.synced_folder "./web", "/opt/web", :nfs => true
+        app.vm.synced_folder "./schema_editor", "/opt/schema", :nfs => true
         app.vm.synced_folder "../ashlar", "/opt/ashlar", :nfs => true
         # Mount options causing some users trouble, disable until necessary (e.g. a grunt/gulp install)
         #app.vm.synced_folder "./app", "/opt/app", :nfs => true, :mount_options => [
@@ -136,10 +138,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     app.vm.network "forwarded_port", guest: 80, host: Integer(ENV.fetch("DRIVER_WEB_PORT_80", 7000))
     # Runserver
     app.vm.network "forwarded_port", guest: 4000, host: Integer(ENV.fetch("DRIVER_DJANGO_PORT_3000", 3000))
-    # Grunt serve
+    # Grunt serve - schema editor
     app.vm.network "forwarded_port", guest: 9000, host: Integer(ENV.fetch("DRIVER_GRUNT_PORT_7001", 7001))
-    # livereload
+    # Grunt serve - web app 
+    app.vm.network "forwarded_port", guest: 9001, host: Integer(ENV.fetch("DRIVER_GRUNT_PORT_7002", 7002))
+    # editor livereload
     app.vm.network "forwarded_port", guest: 35731, host: 35731
+    # web livereload
+    app.vm.network "forwarded_port", guest: 35732, host: 35732
 
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "deployment/ansible/app.yml"
