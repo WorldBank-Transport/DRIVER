@@ -10,7 +10,7 @@ Requires Vagrant 1.5+, Ansible 1.8+ and the following plugins:
 
 Install plugins before `vagrant up` via: `vagrant plugin install <plugin-name>`
 
-App runs on host on port 7000.
+The app runs on localhost on port 7000. The schema editor is available at /editor/.
 
 A default django superuser will be created, but only on a development provision:
   - username: `admin`
@@ -28,13 +28,17 @@ Then run `vagrant up` from the DRIVER repository.
 
 For development, ssh into the app vm with `vagrant ssh app`.
 
-Then, run the development server via:
+Then, the Angular schema editor is located at: `/opt/schema`
+The application Angular frontend is located at: `/opt/web`.
+
+Both Angular apps can be run in development mode via:
 ```
-cd /opt/web
+cd /opt/[web|schema]
 grunt serve
 ```
 
-The app will be available on port 7001 and will reload automatically as changes are made.
+The frontend app will be available on port 7002 and the schema editor will be available on port
+7001. Both will reload automatically as changes are made.
 
 ## Production
 
