@@ -4,6 +4,9 @@ developing_or_testing: "'development' in group_names or 'test' in group_names"
 not_developing: "'development' not in group_names"
 not_testing: "'test' not in group_names"
 
+docker_version: "1.7.0"
+docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+
 app_username: "driver"
 
 python_version: "2.7.*"

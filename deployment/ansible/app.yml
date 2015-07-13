@@ -11,5 +11,6 @@
       apt: update_cache=yes
 
   roles:
-    - { role: "driver.ashlar" }
-    - { role: "driver.app" }
+    - { role: "azavea.docker" }
+    #- { role: "driver.ashlar" }
+    #- { role: "driver.app" }
