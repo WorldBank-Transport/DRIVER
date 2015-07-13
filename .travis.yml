@@ -12,7 +12,11 @@ addons:
     postgresql: "9.4"
 
 env:
-  - DJANGO_SETTINGS_MODULE='driver.settings_travis'
+  global:
+    - DJANGO_SETTINGS_MODULE='driver.settings_travis'
+    - DJANGO_SECRET_KEY='driver'
+    - DJANGO_STATIC_ROOT='/tmp'
+    - DJANGO_MEDIA_ROOT='/tmp'
 
 before_install:
     # Fun race conditions on npm<2.1.1 when installing packages, so upgrade

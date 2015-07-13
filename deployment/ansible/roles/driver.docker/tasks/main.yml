@@ -1,0 +1,5 @@
+---
+- name: Install Docker API client for Python
+  pip: name=docker-py
+       version={{ docker_py_version }}
+       state=present

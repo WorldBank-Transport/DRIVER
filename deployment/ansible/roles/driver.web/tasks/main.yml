@@ -1,63 +1,64 @@
 ---
-- name: Install build essential
-  apt: name=build-essential state=present
-
-- name: Install Sass
-  gem: name=sass
-       version="{{ web_sass_version }}"
-       user_install=no
-       state=present
-
-- name: Install Compass
-  gem: name=compass
-       user_install=no
-       state=present
-
-- name: Install grunt-cli and bower
-  command: npm install -g bower grunt-cli
-  args:
-    chdir: "{{ web_dir }}"
-
-- name: Install web application javascript dependencies (npm)
-  command: npm install
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-
-- name: Install web application javascript dependencies (bower)
-  command: bower install
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-
 - name: Copy web JS config to scripts dir
-  template: src=web-config-js.j2 dest="{{ web_scripts_dir}}/config.js"
+  template: src=web-config-js.j2
+            dest="{{ web_scripts_dir}}/config.js"
   sudo: no
+
+- name: Build web Docker image
+  command: >
+    /usr/bin/docker build
+      -f {{ web_dir }}/Dockerfile
+      -t driver/web:latest
+      {{ web_dir }}
+  when: developing_or_testing
 
 - name: Build production web app
-  command: grunt build
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-    
-- name: Install editor application javascript dependencies (npm)
-  command: npm install
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
-
-- name: Install editor application javascript dependencies (bower)
-  command: bower install
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-web
+      --volume {{ editor_dir }}/app:{{ editor_dir }}/app
+      --volume {{ editor_dir }}/test:{{ editor_dir }}/test
+      --volume {{ web_build_dir }}:{{ web_build_dir }}
+      --volume {{ web_dir }}/app:{{ web_dir }}/app
+      --volume {{ web_dir }}/test:{{ web_dir }}/test
+      --volume {{ web_dir }}/.bowerrc:{{ web_dir }}/.bowerrc
+      --volume {{ web_dir }}/.editorconfig:{{ web_dir }}/.editorconfig
+      --volume {{ web_dir }}/.jshintrc:{{ web_dir }}/.jshintrc
+      --volume {{ web_dir }}/bower.json:{{ web_dir }}/bower.json
+      --volume {{ web_dir }}/Gruntfile.js:{{ web_dir }}/Gruntfile.js
+      --volume {{ web_dir }}/package.json:{{ web_dir }}/package.json
+      --log-driver syslog
+      driver/web:latest
+      build
 
 - name: Copy editor JS config to scripts dir
-  template: src=editor-config-js.j2 dest="{{ editor_scripts_dir}}/config.js"
+  template: src=editor-config-js.j2
+            dest="{{ editor_scripts_dir}}/config.js"
   sudo: no
 
+- name: Build editor Docker image
+  command: >
+    /usr/bin/docker build
+      -f {{ editor_dir }}/Dockerfile
+      -t driver/editor:latest
+      {{ editor_dir }}
+  when: developing_or_testing
+
 - name: Build production editor app
-  command: grunt build
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-editor
+      --volume {{ editor_build_dir }}:{{ editor_build_dir }}
+      --volume {{ editor_dir }}/app:{{ editor_dir }}/app
+      --volume {{ editor_dir }}/test:{{ editor_dir }}/test
+      --volume {{ editor_dir }}/.bowerrc:{{ editor_dir }}/.bowerrc
+      --volume {{ editor_dir }}/.editorconfig:{{ editor_dir }}/.editorconfig
+      --volume {{ editor_dir }}/.jshintrc:{{ editor_dir }}/.jshintrc
+      --volume {{ editor_dir }}/bower.json:{{ editor_dir }}/bower.json
+      --volume {{ editor_dir }}/Gruntfile.js:{{ editor_dir }}/Gruntfile.js
+      --volume {{ editor_dir }}/package.json:{{ editor_dir }}/package.json
+      --log-driver syslog
+      driver/editor:latest
+      build

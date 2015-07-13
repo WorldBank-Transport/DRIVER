@@ -1,17 +1,9 @@
-
-## GUNICORN SETTINGS
-gunicorn_app_dir: "{{ root_app_dir }}"
-gunicorn_app_name: "driver"
-gunicorn_bind: "0.0.0.0:8000"
-gunicorn_errorlog: "/var/log/driver.log"
-gunicorn_loglevel: "debug"
-gunicorn_reload: true
-gunicorn_start_on: "vagrant-mounted"
-gunicorn_user: "{{ app_username }}"
-gunicorn_workers: 4
-gunicorn_wsgi: "driver.wsgi"
+---
+## DOCKER SETTINGS
+docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
 
 ## POSTGRESQL SETTINGS
+postgresql_host: "{{ lookup('env', 'DRIVER_DATABASE_IP') | default('192.168.11.101', true) }}"
 postgresql_listen_addresses: "*"
 postgresql_username: driver
 postgresql_password: driver

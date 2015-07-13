@@ -12,36 +12,17 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import yaml
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-try:
-    with open('/etc/secrets.yaml', 'r') as f:
-        secrets = yaml.safe_load(f)
-except (IOError, NameError):
-    # Only use yaml serializable objects here, like string, int, list.
-    # If you need another type, such as tuple, write like so:
-    # secrets['somesetting'] = tuple(['a', 'b', 'c'])
-    secrets = {
-        'development': True,
-        'driver_db_host': 'localhost',
-        'driver_db_port': 5432,
-        'driver_db_user': 'driver',
-        'driver_db_password': 'driver',
-        'driver_database': 'driver',
-        'driver_static_dir': '/var/www/static',
-        'driver_media_dir': '/var/www/media',
-    }
-
-DEVELOP = True if secrets['development'] else False
+DEVELOP = True if os.environ.get('DJANGO_ENV', 'development') == 'development' else False
 PRODUCTION = not DEVELOP
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '3xm=1k1a)1!l$)h#qlfp0ms$i6*nai$e2dz!0tt*iphoto3vmh'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEVELOP
@@ -107,11 +88,11 @@ WSGI_APPLICATION = 'driver.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': secrets['driver_database'],
-        'HOST': secrets['driver_db_host'],
-        'PORT': secrets['driver_db_port'],
-        'USER': secrets['driver_db_user'],
-        'PASSWORD': secrets['driver_db_password'],
+        'NAME': os.environ.get('DRIVER_DB_NAME', 'postgres'),
+        'HOST': os.environ.get('DRIVER_DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DRIVER_DB_PORT', 5432),
+        'USER': os.environ.get('DRIVER_DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DRIVER_DB_PASSWORD', 'postgres'),
         'CONN_MAX_AGE': 3600,  # in seconds
         'OPTIONS': {
             'sslmode': 'require'
@@ -119,6 +100,9 @@ DATABASES = {
     }
 }
 
+POSTGIS_VERSION = tuple(
+    map(int, os.environ.get('DJANGO_POSTGIS_VERSION', '2.1.3').split("."))
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -138,12 +122,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = secrets['driver_static_dir']
+STATIC_ROOT = os.environ['DJANGO_STATIC_ROOT']
 
 # Media files (uploaded via API)
 # https://docs.djangoproject.com/en/1.8/topics/files/
 
-MEDIA_ROOT = secrets['driver_media_dir']
+MEDIA_ROOT = os.environ['DJANGO_MEDIA_ROOT']
 MEDIA_URL = '/media/'
 
 # Django OAuth Toolkit

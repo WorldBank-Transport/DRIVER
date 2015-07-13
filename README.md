@@ -28,17 +28,29 @@ Then run `vagrant up` from the DRIVER repository.
 
 For development, ssh into the app vm with `vagrant ssh app`.
 
-Then, the Angular schema editor is located at: `/opt/schema`
+Then, the Angular schema editor is located at: `/opt/schema_editor`
 The application Angular frontend is located at: `/opt/web`.
 
 Both Angular apps can be run in development mode via:
 ```
-cd /opt/[web|schema]
-grunt serve
+./scripts/grunt.sh {editor,web} serve
 ```
 
 The frontend app will be available on port 7002 and the schema editor will be available on port
 7001. Both will reload automatically as changes are made.
+
+## Docker
+
+As a shortcut to building the Docker container images contained within the `app`
+virtual machine, use the `Makefile` at the root of the project:
+
+```bash
+export DOCKER_HOST=tcp://127.0.0.1:2375
+make {all,app,editor,web}
+```
+
+This will make use of a Docker client installed on the virtual machine host,
+telling it to communicate with the Docker daemon on the `app` virtual machine.
 
 ## Production
 

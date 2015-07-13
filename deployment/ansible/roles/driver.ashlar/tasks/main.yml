@@ -1,12 +1,4 @@
 ---
-
-- name: Install dev packages
-  apt: name={{ item }}
-  with_items:
-    - libgeos-dev
-    - binutils
-    - libproj-dev
-    - gdal-bin
-
-- name: Install Ashlar from source
-  command: pip install -e /opt/ashlar
+- name: Install Ashlar
+  command: >
+    /usr/bin/docker exec -ti driver-app pip install -e /opt/ashlar
