@@ -80,18 +80,13 @@
         }
 
         function onDataChange(newData, validationErrors) {
-            $log.debug('Schema Entry Form data:', newData, 'Errors:', validationErrors);
-            editorData = newData;
             // Perform custom validation
-            var customErrors = Schemas.validateSchemaFormData(editorData);
+            var customErrors = Schemas.validateSchemaFormData(newData);
             ctl.editor.errors = validationErrors.concat(customErrors);
-            // TODO: Fix Save button disablement
-            // Multiple developers have now attempted to fix the save button disablement, and
-            // it seems to be a very strange issue with scope. Right now, ng-disabled is being
-            // set on the button to "rtSchemaEdit.editor.errors.length > 0". This should work,
-            // but doesn't for some reason and needs further investigation. Multiple other fixes
-            // were attempted, including using a separate variable/object for storing validation,
-            // but in all cases the changes are not reflected in the HTML.
+
+            $log.debug('Schema Entry Form data:', newData,
+                       'Errors:', validationErrors,
+                       'CustomErrors:', customErrors);
         }
 
         function onSaveClicked() {
