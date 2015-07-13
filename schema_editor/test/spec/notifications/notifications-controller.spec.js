@@ -22,7 +22,7 @@ describe('ase.notifications: NotificationsController', function () {
             $scope: $scope
         });
         $scope.$apply();
-        expect(Controller.active).toBe(false);
+        expect(Controller.active).toBe(undefined);
         $rootScope.$broadcast('ase.notifications.show', {});
         expect(Controller.active).toBe(true);
     });
@@ -32,7 +32,7 @@ describe('ase.notifications: NotificationsController', function () {
             $scope: $scope
         });
         $scope.$apply();
-        expect(Controller.active).toBe(false);
+        expect(Controller.active).toBe(undefined);
         Controller.active = true;
         expect(Controller.active).toBe(true);
         $rootScope.$broadcast('ase.notifications.hide', {});
