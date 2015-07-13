@@ -18,6 +18,7 @@
 
     var defaults = {};
 
+    /* ngInject */
     function JsonEditor() {
 
         var module = {
@@ -69,7 +70,8 @@
                 changeRef = editor.on('change', function () {
                     var editorData = editor.getValue();
                     var errors = editor.validate();
-                    scope.onDataChange()(editorData, errors);
+                    // Bring data changes into the angular digest lifecycle
+                    scope.$apply(function() { scope.onDataChange()(editorData, errors); });
                 });
             });
         }
