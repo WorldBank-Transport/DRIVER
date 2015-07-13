@@ -10,6 +10,7 @@
 
         function initialize() {
             ctl.definition = Schemas.JsonObject();
+            ctl.definition = Schemas.addRelatedContentFields(ctl.definition);
             RecordTypes.get({ id: $stateParams.uuid }).$promise.then(function (data) {
                 ctl.recordType = data;
                 /* jshint camelcase:false */
