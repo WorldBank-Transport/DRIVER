@@ -37,6 +37,16 @@
         mode=0775
         state=directory
 
+- name: Docker definition for Driver application
+  docker:
+    name: driver
+    image: driver/app
+    state: started
+    pull: always
+    ports:
+    - "4000:4000"
+    env: envdir_conf
+
 #- name: Copy nginx config
   #template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
   #notify: Restart nginx
