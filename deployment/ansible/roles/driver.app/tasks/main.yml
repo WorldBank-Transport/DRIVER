@@ -1,25 +1,10 @@
 ---
-
-- name: Install python requirements
-  pip: name={{ item.name }} version={{ item.version }}
-  with_items:
-    - { name: 'django-cors-headers', version: '1.0.0' }
-    - { name: 'django-oauth-toolkit', version: '0.8.1' }
-
-- name: Install python dev requirements
-  pip: name={{ item.name }} version={{ item.version }}
-  with_items:
-    - { name: 'ipython', version: '3.0.0' }
-    - { name: 'ipdb', version: '0.8' }
-  when: developing
-  notify: Restart driver
-
-- name: Touch log file if it does not exist
-  command: touch {{ app_log }}
-           creates={{ app_log }}
-
-- name: Set log file permissions
-  file: path={{ app_log }} owner={{ app_username }} group={{ app_username }} mode=0664
+- name: Create service account for application
+  user: name={{ app_username }}
+        system=yes
+        home=/var/lib/{{ app_username }}
+        shell=/bin/false
+        state=present
 
 - name: Create configuration file directory
   file: path={{ root_conf_dir }}
@@ -27,6 +12,16 @@
         group={{ app_username }}
         mode=0750
         state=directory
+
+- name: Configure application
+  copy: content={{ item.value }}
+        dest={{ root_conf_dir }}/{{ item.key }}
+        owner=root
+        group={{ app_username }}
+        mode=0750
+  with_dict: envdir_conf
+  notify:
+    - Restart driver
 
 - name: Create static files directory
   file: path={{ root_static_dir }}
@@ -42,24 +37,16 @@
         mode=0775
         state=directory
 
-# When developing/testing allow the secrets file to be read by all, so we can
-# easily run tests with the default user. But keep it locked down otherwise.
-- name: Copy app configuration
-  template: src=secrets.yaml.j2 dest=/etc/secrets.yaml
-            mode={{ 0664 if developing_or_testing else 0660 }}
-            owner={{ app_username }} group={{ app_username }}
-  notify: Restart driver
+#- name: Copy nginx config
+  #template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
+  #notify: Restart nginx
 
-- name: Copy nginx config
-  template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
-  notify: Restart nginx
+#- name: Run django collectstatic
+  #django_manage: command=collectstatic app_path={{ root_app_dir }}
 
-- name: Run django collectstatic
-  django_manage: command=collectstatic app_path={{ root_app_dir }}
+#- name: Run django migrations
+  #django_manage: command=migrate app_path={{ root_app_dir }}
 
-- name: Run django migrations
-  django_manage: command=migrate app_path={{ root_app_dir }}
-
-- name: Add OAuth2 default application (development only)
-  django_manage: command="create_oauth_app admin" app_path={{ root_app_dir }}
-  when: developing_or_testing
+#- name: Add OAuth2 default application (development only)
+  #django_manage: command="create_oauth_app admin" app_path={{ root_app_dir }}
+  #when: developing_or_testing
