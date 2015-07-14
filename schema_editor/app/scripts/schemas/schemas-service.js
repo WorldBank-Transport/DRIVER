@@ -266,7 +266,11 @@
             return angular.extend(schema, { $schema: 'http://json-schema.org/draft-04/schema#' });
         }
 
-        // TODO Docs
+        /**
+         * Adds a _localId field to a schema's properties that can store a UUID
+         * @param {object} schema Object to which the declaration should be added
+         * @return {object} The schema with a _localId property added
+         */
         function addRelatedContentFields(schema) {
             schema.properties = angular.extend(schema.properties, {
                 _localId: { // A special field allowing relationships between objects within a record
@@ -274,7 +278,9 @@
                     // http://json-schema.org/example2.html
                     type: 'string',
                     pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
-                    hidden: true
+                    options: {
+                        hidden: true
+                    }
                 }
             });
             if (schema.required) {

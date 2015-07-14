@@ -55,8 +55,8 @@
                 _.filter(ctl.recordSchema.schema.definitions, function(definition) {
                     return !!definition.properties._localId;
                 }), 'title');
-            // Modify the relatedBuilderSchema in-place in order to allow selecting a related content type
-            // as the target of an internal reference.
+            // Modify the relatedBuilderSchema in-place in order to allow selecting a related
+            // content type as the target of an internal reference.
             ctl.relatedBuilderSchema.definitions.localReference.properties.referenceTarget.enumSource = [referable];
 
             // Need to call toJSON here in order to strip the additional angular
