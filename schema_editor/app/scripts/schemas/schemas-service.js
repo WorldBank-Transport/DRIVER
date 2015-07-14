@@ -2,7 +2,7 @@
  * Responsible for schema serialization and deserialization
  *
  * In order to add a new FieldType, you need to do the following:
- * 1. Add a key/value pair to the module.FieldTypes object
+ * 1. Add a new type key and toProperty (serialization) function to FieldTypes
  * 2. Add a new field definition object to the json schema (builder-schemas/related.json).
  *    Ensure your newly created object has a matching fieldType attribute, which must be unique.
  *    This is so that when we serialize this object to data and back, we can remember what
@@ -21,21 +21,54 @@
         var module = {
             JsonObject: jsonObject,
             FieldTypes: {
-                'text': {
-                    label: 'Text Field',
-                    jsonType: 'string'
+                'text': { // Text field
+                    toProperty: function(fieldData) {
+                        return {
+                            type: 'string',
+                            format: fieldData.textOptions
+                        };
+                    }
                 },
-                'selectlist': {
-                    label: 'Select List',
-                    jsonType: 'string'
+                'selectlist': { // Select list
+                    toProperty: function(fieldData) {
+                        return {
+                            type: 'string',
+                            enum: fieldData.fieldOptions,
+                            displayType: fieldData.displayType
+                        };
+                    }
                 },
-                'image': {
-                    label: 'Image Uploader',
-                    jsonType: 'string'
+                'image': { // Image uploader
+                    toProperty: function() {
+                        return {
+                            type: 'string',
+                            media: {
+                                binaryEncoding: 'base64',
+                                type: 'image/jpeg'
+                            }
+                        };
+                    }
                 },
-                'reference': {
-                    label: 'Local Reference',
-                    jsonType: 'string'
+                'reference': { // Local reference
+                    toProperty: function(fieldData) {
+                        // TODO: Add autodiscovery of field names so that we can more intelligently
+                        // populate enumSource.title below. This will require making the rest of the
+                        // schema available to the serialization function. Beware of
+                        // self-referential content types; they will need to auto-discover against
+                        // the new definition, rather than any definition which might already exist
+                        // in the schema.
+                        return {
+                            type: 'string',
+                            watch: {
+                                target: fieldData.referenceTarget
+                            },
+                            enumSource: [{
+                                    source: 'target',
+                                    title: fieldData.referenceTarget + ' {{i}}',
+                                    value: '{{item._localId}}'
+                            }]
+                        };
+                    }
                 }
             },
             addVersion4Declaration: addVersion4Declaration,
@@ -74,21 +107,11 @@
          */
         // TODO: This monolithic function isn't great; investigate more modular options
         // (likewise in the deserializing function below)
-        function _propertyFromSchemaFieldData(fieldData, index) {
-            var propertyDefinition = {};
-            propertyDefinition.type = module.FieldTypes[fieldData.fieldType].jsonType;
-
-            if (fieldData.fieldType === 'selectlist') {
-                propertyDefinition.enum = fieldData.fieldOptions;
-                propertyDefinition.displayType = fieldData.displayType;
-            } else if (fieldData.fieldType === 'image') {
-                propertyDefinition.media = {
-                    binaryEncoding: 'base64',
-                    type: 'image/jpeg'
-                };
-            } else if (fieldData.fieldType === 'text') {
-                propertyDefinition.format = fieldData.textOptions;
-            }
+        function _propertyFromSchemaFieldData(fieldData, index, allData) {
+            var propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
+                    index,
+                    allData
+                );
 
             // Set the common properties
             propertyDefinition.isSearchable = fieldData.isSearchable;
@@ -120,10 +143,11 @@
             };
             definition = addRelatedContentFields(definition);
             // properties
-            _.each(formData, function(fieldData, index) {
+            _.each(formData, function(fieldData, index, allData) {
                 definition.properties[fieldData.fieldTitle] = _propertyFromSchemaFieldData(
                     fieldData,
-                    index
+                    index,
+                    allData
                 );
             });
 
@@ -167,6 +191,11 @@
                             case 'type': // This is the JSON-Schema 'type', which is not used here.
                                 break;
                             case 'media': // Also not used
+                                break;
+                            case 'watch':
+                                fieldData.referenceTarget = value.target;
+                                break;
+                            case 'enumSource': // Companion to 'watch', but not used here
                                 break;
                             default:
                                 fieldData[key] = value;

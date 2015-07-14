@@ -8,7 +8,8 @@
         "oneOf": [
             { "$ref": "#/definitions/textField" },
             { "$ref": "#/definitions/selectList" },
-            { "$ref": "#/definitions/imageUploader" }
+            { "$ref": "#/definitions/imageUploader" },
+            { "$ref": "#/definitions/localReference" }
         ]
     },
     "definitions": {
@@ -148,6 +149,33 @@
                     },
                     "type": "string",
                     "enum": ["image"]
+                }
+            }
+        },
+        "localReference": {
+            "allOf": [
+                { "$ref": "#/definitions/abstractBaseField" },
+                { "$ref": "#/definitions/abstractRequirableField" }
+            ],
+            "title": "Local Reference",
+            "properties": {
+                "fieldTitle": {
+                    "title": "Reference Title",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "referenceTarget": {
+                    "title": "Type of related info to reference",
+                    "type": "string",
+                    "format": "select",
+                    "enumSource": [["Choice one", "choice 2", "choice 3"]]
+                },
+                "fieldType": {
+                    "options": {
+                        "hidden": true
+                    },
+                    "type": "string",
+                    "enum": ["reference"]
                 }
             }
         }
