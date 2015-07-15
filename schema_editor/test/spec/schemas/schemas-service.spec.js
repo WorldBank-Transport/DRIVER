@@ -91,10 +91,22 @@ describe('ase.schemas:Schemas', function () {
             fieldTitle: 'Photo'
         }];
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
-        expect(dataFormSchemaDef.properties.Photo.media).toEqual(jasmine.anything());
+        expect(dataFormSchemaDef.properties.Photo.media).toBeDefined();
     });
 
-    it('should set the "required" key when fields have isRequired: true', function () {
+    it('should serialize watch and enumSource keys into reference fields', function () {
+        var schemaFormData = [{
+            fieldType: 'reference',
+            isRequired: false,
+            fieldTitle: 'Reference',
+            referenceTarget: 'Other type'
+        }];
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        expect(dataFormSchemaDef.properties.Reference.watch).toBeDefined();
+        expect(dataFormSchemaDef.properties.Reference.enumSource).toBeDefined();
+    });
+
+    it('should add to the "required" key when fields have isRequired: true', function () {
         var schemaFormData = [{
             fieldType: 'selectlist',
             isRequired: false,
@@ -106,11 +118,11 @@ describe('ase.schemas:Schemas', function () {
             fieldTitle: 'Photo'
         }];
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
-        expect(dataFormSchemaDef.required.length).toEqual(1);
-        expect(dataFormSchemaDef.required[0]).toEqual('Photo');
+        expect(dataFormSchemaDef.required.length).toEqual(2); // Everything has required: ['_localId']
+        expect(dataFormSchemaDef.required).toContain('Photo');
     });
 
-    it('should not set the "required" key when there are no required fields', function () {
+    it('should create a required "_localId" field on all definitions', function () {
         var schemaFormData = [{
             fieldType: 'selectlist',
             isRequired: false,
@@ -122,7 +134,9 @@ describe('ase.schemas:Schemas', function () {
             fieldTitle: 'Photo'
         }];
         var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
-        expect(dataFormSchemaDef.required).toBeUndefined();
+        expect(dataFormSchemaDef.required).toBeDefined();
+        expect(dataFormSchemaDef.required.length).toBe(1);
+        expect(dataFormSchemaDef.required).toContain('_localId');
     });
 
     it('should calculate and set propertyOrder based on the ordering of fields', function () {
@@ -210,6 +224,13 @@ describe('ase.schemas:Schemas', function () {
             fieldTitle: 'Text',
             textOptions: 'datetime',
             propertyOrder: 2
+        },{
+            fieldType: 'reference',
+            isRequired: false,
+            isSearchable: false,
+            fieldTitle: 'Local reference',
+            referenceTarget: 'Other Type',
+            propertyOrder: 3
         }];
 
         // Transform back and forth a few times

@@ -2,7 +2,7 @@
  * Responsible for schema serialization and deserialization
  *
  * In order to add a new FieldType, you need to do the following:
- * 1. Add a key/value pair to the module.FieldTypes object
+ * 1. Add a new type key and toProperty (serialization) function to FieldTypes
  * 2. Add a new field definition object to the json schema (builder-schemas/related.json).
  *    Ensure your newly created object has a matching fieldType attribute, which must be unique.
  *    This is so that when we serialize this object to data and back, we can remember what
@@ -15,23 +15,64 @@
 
     /* ngInject */
     function Schemas() {
+        // Static properties which cannot be changed when editing a schema
+        var systemOnlyProperties = { _localId: true };
+
         var module = {
             JsonObject: jsonObject,
             FieldTypes: {
-                'text': {
-                    label: 'Text Field',
-                    jsonType: 'string'
+                'text': { // Text field
+                    toProperty: function(fieldData) {
+                        return {
+                            type: 'string',
+                            format: fieldData.textOptions
+                        };
+                    }
                 },
-                'selectlist': {
-                    label: 'Select List',
-                    jsonType: 'string'
+                'selectlist': { // Select list
+                    toProperty: function(fieldData) {
+                        return {
+                            type: 'string',
+                            enum: fieldData.fieldOptions,
+                            displayType: fieldData.displayType
+                        };
+                    }
                 },
-                'image': {
-                    label: 'Image Uploader',
-                    jsonType: 'string'
+                'image': { // Image uploader
+                    toProperty: function() {
+                        return {
+                            type: 'string',
+                            media: {
+                                binaryEncoding: 'base64',
+                                type: 'image/jpeg'
+                            }
+                        };
+                    }
+                },
+                'reference': { // Local reference
+                    toProperty: function(fieldData) {
+                        // TODO: Add autodiscovery of field names so that we can more intelligently
+                        // populate enumSource.title below. This will require making the rest of the
+                        // schema available to the serialization function. Beware of
+                        // self-referential content types; they will need to auto-discover against
+                        // the new definition, rather than any definition which might already exist
+                        // in the schema.
+                        return {
+                            type: 'string',
+                            watch: {
+                                target: fieldData.referenceTarget
+                            },
+                            enumSource: [{
+                                    source: 'target',
+                                    title: fieldData.referenceTarget + ' {{i}}',
+                                    value: '{{item._localId}}'
+                            }]
+                        };
+                    }
                 }
             },
             addVersion4Declaration: addVersion4Declaration,
+            addRelatedContentFields: addRelatedContentFields,
             validateSchemaFormData: validateSchemaFormData,
             definitionFromSchemaFormData: definitionFromSchemaFormData,
             schemaFormDataFromDefinition: schemaFormDataFromDefinition,
@@ -47,9 +88,10 @@
          * @return {string} Currently just returns encodeURIComponent(string)
          */
         function encodeJSONPointer(str) {
-            // TODO: Technically, we should be doing this:
+            // TODO: This can probably be switched after upgrading json-editor:
+            // https://github.com/jdorn/json-editor/issues/402
             // return encodeURIComponent(str);
-            // But json-editor doesn't seem to support that properly.
+            // But the current version of json-editor doesn't support this properly.
             return str;
         }
 
@@ -65,21 +107,11 @@
          */
         // TODO: This monolithic function isn't great; investigate more modular options
         // (likewise in the deserializing function below)
-        function _propertyFromSchemaFieldData(fieldData, index) {
-            var propertyDefinition = {};
-            propertyDefinition.type = module.FieldTypes[fieldData.fieldType].jsonType;
-
-            if (fieldData.fieldType === 'selectlist') {
-                propertyDefinition.enum = fieldData.fieldOptions;
-                propertyDefinition.displayType = fieldData.displayType;
-            } else if (fieldData.fieldType === 'image') {
-                propertyDefinition.media = {
-                    binaryEncoding: 'base64',
-                    type: 'image/jpeg'
-                };
-            } else if (fieldData.fieldType === 'text') {
-                propertyDefinition.format = fieldData.textOptions;
-            }
+        function _propertyFromSchemaFieldData(fieldData, index, allData) {
+            var propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
+                    index,
+                    allData
+                );
 
             // Set the common properties
             propertyDefinition.isSearchable = fieldData.isSearchable;
@@ -106,15 +138,16 @@
          */
         function definitionFromSchemaFormData(formData) {
             var definition = {
-                type: 'object',
-                properties: {}
+                properties: {},
+                type: 'object'
             };
-
+            definition = addRelatedContentFields(definition);
             // properties
-            _.each(formData, function(fieldData, index) {
+            _.each(formData, function(fieldData, index, allData) {
                 definition.properties[fieldData.fieldTitle] = _propertyFromSchemaFieldData(
                     fieldData,
-                    index
+                    index,
+                    allData
                 );
             });
 
@@ -125,12 +158,8 @@
                     return fieldData.isRequired;
                 }), 'fieldTitle');
 
-            // The schema doesn't validate on save if required is an empty array:
-            // "Invalid schema: [] is too short"
-            // so only set it if there are required fields.
-            if (required.length) {
-                definition.required = required;
-            }
+            // All definitions start with a required "_localId" property
+            definition.required = definition.required.concat(required);
 
             return definition;
         }
@@ -144,38 +173,47 @@
         function schemaFormDataFromDefinition(definition) {
             var formData = [];
             _.each(definition.properties, function(schemaField, title) {
-                var fieldData = {
-                    fieldTitle: title
-                };
-                // Iterate over schema keys and take the appropriate action
-                _.each(schemaField, function(value, key) {
-                    switch(key) {
-                        case 'enum':
-                            fieldData.fieldOptions = value;
-                            break;
-                        case 'format':
-                            fieldData.textOptions = value;
-                            break;
-                        case 'type': // This is the JSON-Schema 'type', which is not used here.
-                            break;
-                        case 'media': // Also not used
-                            break;
-                        default:
-                            fieldData[key] = value;
-                    }
-                });
-
-                // Handle required fields, which are stored outside the field info
-                var indexInRequired = _.findIndex(definition.required, function(item) {
-                    return item === title;
-                });
-                if (indexInRequired >= 0) { // I.e., found title in required: [...]
-                    fieldData.isRequired = true;
+                if (systemOnlyProperties[title]) {
+                    // Don't include in schema editor form
                 } else {
-                    fieldData.isRequired = false;
-                }
+                    var fieldData = {
+                        fieldTitle: title
+                    };
+                    // Iterate over schema keys and take the appropriate action
+                    _.each(schemaField, function(value, key) {
+                        switch(key) {
+                            case 'enum':
+                                fieldData.fieldOptions = value;
+                                break;
+                            case 'format':
+                                fieldData.textOptions = value;
+                                break;
+                            case 'type': // This is the JSON-Schema 'type', which is not used here.
+                                break;
+                            case 'media': // Also not used
+                                break;
+                            case 'watch':
+                                fieldData.referenceTarget = value.target;
+                                break;
+                            case 'enumSource': // Companion to 'watch', but not used here
+                                break;
+                            default:
+                                fieldData[key] = value;
+                        }
+                    });
 
-                formData.push(fieldData);
+                    // Handle required fields, which are stored outside the field info
+                    var indexInRequired = _.findIndex(definition.required, function(item) {
+                        return item === title;
+                    });
+                    if (indexInRequired >= 0) { // I.e., found title in required: [...]
+                        fieldData.isRequired = true;
+                    } else {
+                        fieldData.isRequired = false;
+                    }
+
+                    formData.push(fieldData);
+                }
             });
             // Order the resulting array by the propertyOrder field so that fields appear in
             // the same order in which they'll appear during data entry. JSON-Editor only applies
@@ -200,6 +238,9 @@
          * be used to determine uniqueness).
          * @param {object} formData The values in a Schema Form
          * @return {array} List of errors, if any
+         *
+         * TODO: JSON-Editor supports custom validators which are applied recursively from the root
+         * -- these should probably be used instead of this function.
          */
         function validateSchemaFormData(formData) {
             var errors = [];
@@ -225,6 +266,36 @@
             return angular.extend(schema, { $schema: 'http://json-schema.org/draft-04/schema#' });
         }
 
+        /**
+         * Adds a _localId field to a schema's properties that can store a UUID
+         * @param {object} schema Object to which the declaration should be added
+         * @return {object} The schema with a _localId property added
+         */
+        function addRelatedContentFields(schema) {
+            schema.properties = angular.extend(schema.properties, {
+                _localId: { // A special field allowing relationships between objects within a record
+                    // A pattern for a UUID field is helpfully supplied at
+                    // http://json-schema.org/example2.html
+                    type: 'string',
+                    pattern: '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$',
+                    options: {
+                        hidden: true
+                    }
+                }
+            });
+            if (schema.required) {
+                schema.required = schema.required.concat(['_localId']);
+            } else {
+                schema.required = ['_localId'];
+            }
+            return schema;
+        }
+
+        /**
+         * Creates a new blank object for use in a JSON-Schema
+         * @param {object} Object to extend; default {}
+         * @return {object} A blank object for use in a JSON-Schema
+         */
         function jsonObject(newObject) {
             newObject = newObject || {};
             return angular.extend({}, {
@@ -238,6 +309,8 @@
                 /* jshint camelcase: true */
             }, newObject);
         }
+
+
     }
 
     angular.module('ase.schemas')

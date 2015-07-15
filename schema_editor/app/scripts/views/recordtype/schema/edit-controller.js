@@ -6,6 +6,7 @@
                                     RecordSchemas, Schemas, Notifications) {
         var ctl = this;
         var editorData = null;
+
         initialize();
 
         function initialize() {
@@ -48,12 +49,21 @@
 
         // Called after all prerequesite data has been loaded
         function onSchemaReady() {
+            // Get a list of the titles of all relatedContentTypes which have '_localId' as
+            // a property.
+            var referable = _.pluck(
+                _.filter(ctl.recordSchema.schema.definitions, function(definition) {
+                    return !!definition.properties._localId;
+                }), 'title');
+            // Modify the relatedBuilderSchema in-place in order to allow selecting a related
+            // content type as the target of an internal reference.
+            ctl.relatedBuilderSchema.definitions.localReference.properties.referenceTarget.enumSource = [referable];
+
             // Need to call toJSON here in order to strip the additional angular
             // resource properties, as they don't play well with json-editor.
             var schema = ctl.relatedBuilderSchema.toJSON();
 
             // Populate saved properties
-            // TODO: Schema deserialization here, probably
             var definition = ctl.recordSchema.schema.definitions[ctl.schemaKey];
             schema.description = definition.description;
             schema.title = definition.title;
