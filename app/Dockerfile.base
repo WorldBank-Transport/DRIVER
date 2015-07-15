@@ -16,3 +16,7 @@ COPY requirements.txt /opt/app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /opt/app
+
+EXPOSE 4000
+
+CMD /usr/local/bin/gunicorn driver.wsgi -w 3 -b :4000 -k gevent

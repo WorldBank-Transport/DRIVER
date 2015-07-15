@@ -1,2 +1,5 @@
 FROM driver/app
+
 RUN pip install --no-cache-dir -r dev-requirements.txt
+
+CMD /usr/local/bin/gunicorn driver.wsgi -w 1 -b :4000 --reload -k gevent

@@ -2,3 +2,4 @@ azavea.postgresql,0.3.3
 azavea.postgresql-support,0.2.1
 azavea.postgis,0.2.1
 azavea.docker,0.1.1
+azavea.pip,0.1.1

@@ -22,7 +22,7 @@ PRODUCTION = not DEVELOP
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = DEVELOP
@@ -88,11 +88,11 @@ WSGI_APPLICATION = 'driver.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': os.environ.get('DATABASE_NAME', 'postgres'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
-        'PORT': os.environ.get('DATABASE_PORT', 5432),
-        'USER': os.environ.get('DATABASE_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', 'postgres'),
+        'NAME': os.environ.get('DRIVER_DB_NAME', 'postgres'),
+        'HOST': os.environ.get('DRIVER_DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DRIVER_DB_PORT', 5432),
+        'USER': os.environ.get('DRIVER_DB_USER', 'postgres'),
+        'PASSWORD': os.environ.get('DRIVER_DB_PASSWORD', 'postgres'),
         'CONN_MAX_AGE': 3600,  # in seconds
         'OPTIONS': {
             'sslmode': 'require'

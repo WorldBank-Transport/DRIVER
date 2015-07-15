@@ -9,6 +9,7 @@ root_media_dir: "{{ root_www_dir }}/media"
 database_host: "database.service.driver.internal"
 
 app_secret_key: "{{ postgresql_password | md5 }}"
+app_postgis_version: 2.1.3
 
 envdir_home: "/etc/driver.d"
 
