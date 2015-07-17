@@ -21,7 +21,7 @@
         mode=0750
   with_dict: envdir_conf
   notify:
-    - Restart driver
+    - Restart driver-app
 
 - name: Create static files directory
   file: path={{ root_static_dir }}
@@ -37,18 +37,15 @@
         mode=0775
         state=directory
 
-- name: Docker definition for Driver application
-  docker:
-    name: driver
-    image: "driver/app:latest"
-    state: started
-    ports:
-      - "4000:4000"
-    env: "{{ envdir_conf }}"
+- name: Configure Driver application service definition
+  template: src=upstart-default.j2 dest=/etc/init/driver-app.conf
+  notify:
+    - Restart driver-app
 
-#- name: Copy nginx config
-  #template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
-  #notify: Restart nginx
+- name: Configure Driver application Nginx service definition
+  template: src=nginx-default.j2 dest=/etc/nginx/conf.d/driver-app.conf
+  notify:
+    - Restart Nginx
 
 #- name: Run django collectstatic
   #django_manage: command=collectstatic app_path={{ root_app_dir }}
