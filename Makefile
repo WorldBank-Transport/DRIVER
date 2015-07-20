@@ -7,9 +7,9 @@ app:
 	docker build -f ./app/Dockerfile.development -t driver/app-dev ./app
 
 schema:
-	docker build -t driver/schema:$(VERSION) ./schema_editor
+	docker build -f ./schema_editor/Dockerfile -t driver/schema ./schema_editor
 
 web:
-	docker build -t driver/web$(VERSION) ./web
+	docker build -f ./web/Dockerfile -t driver/web ./web
 
 .PHONY: all app schema web
