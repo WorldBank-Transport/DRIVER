@@ -1,39 +1,15 @@
 ---
-- name: Create service account for application
-  user: name={{ app_username }}
-        system=yes
-        home=/var/lib/{{ app_username }}
-        shell=/bin/false
-        state=present
-
-- name: Create configuration file directory
-  file: path={{ root_conf_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
-        mode=0750
-        state=directory
-
-- name: Configure application
-  copy: content={{ item.value }}
-        dest={{ root_conf_dir }}/{{ item.key }}
-        owner=root
-        group={{ app_username }}
-        mode=0750
-  with_dict: envdir_conf
-  notify:
-    - Restart driver-app
-
 - name: Create static files directory
   file: path={{ root_static_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
+        owner={{ driver_user }}
+        group={{ driver_user }}
         mode=0775
         state=directory
 
 - name: Create media files directory
   file: path={{ root_media_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
+        owner={{ driver_user }}
+        group={{ driver_user }}
         mode=0775
         state=directory
 

@@ -1,5 +1,3 @@
 ---
-  dependencies:
-    - { role: "azavea.git" }
-    - { role: "azavea.nodejs" }
-    - { role: "azavea.ruby", ruby_development: True }
+dependencies:
+  - { role: "driver.docker" }

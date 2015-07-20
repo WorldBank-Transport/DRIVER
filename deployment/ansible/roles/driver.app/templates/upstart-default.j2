@@ -16,7 +16,7 @@ script
   /usr/bin/docker run \
     --name driver-app \
     --publish 4000:4000 \
-    {% for k,v in envdir_conf.items() -%}
+    {% for k,v in driver_conf.items() -%}
     --env {{ k }}={{ v }} \
     {% endfor -%}
     --log-driver syslog \

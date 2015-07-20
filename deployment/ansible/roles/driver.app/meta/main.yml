@@ -1,5 +1,5 @@
 ---
-  dependencies:
-    - { role: "driver.docker" }
-    - { role: "driver.nginx" }
-    #- { role: "driver.web"}
+dependencies:
+  - { role: "driver.docker" }
+  - { role: "driver.nginx" }
+  - { role: "driver.web"}

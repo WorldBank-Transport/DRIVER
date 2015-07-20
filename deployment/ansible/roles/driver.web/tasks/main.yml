@@ -1,63 +1,24 @@
 ---
-- name: Install build essential
-  apt: name=build-essential state=present
-
-- name: Install Sass
-  gem: name=sass
-       version="{{ web_sass_version }}"
-       user_install=no
-       state=present
-
-- name: Install Compass
-  gem: name=compass
-       user_install=no
-       state=present
-
-- name: Install grunt-cli and bower
-  command: npm install -g bower grunt-cli
-  args:
-    chdir: "{{ web_dir }}"
-
-- name: Install web application javascript dependencies (npm)
-  command: npm install
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-
-- name: Install web application javascript dependencies (bower)
-  command: bower install
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-
-- name: Copy web JS config to scripts dir
-  template: src=web-config-js.j2 dest="{{ web_scripts_dir}}/config.js"
-  sudo: no
+#- name: Copy web JS config to scripts dir
+  #template: src=web-config-js.j2 dest="{{ web_scripts_dir}}/config.js"
+  #sudo: no
 
 - name: Build production web app
-  command: grunt build
-  sudo: no
-  args:
-    chdir: "{{ web_dir }}"
-    
-- name: Install editor application javascript dependencies (npm)
-  command: npm install
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
+  command: >
+    /usr/bin/docker run
+      --name driver-web
+      --log-driver syslog
+      driver/web:latest
+      build
 
-- name: Install editor application javascript dependencies (bower)
-  command: bower install
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
-
-- name: Copy editor JS config to scripts dir
-  template: src=editor-config-js.j2 dest="{{ editor_scripts_dir}}/config.js"
-  sudo: no
+#- name: Copy editor JS config to scripts dir
+  #template: src=editor-config-js.j2 dest="{{ editor_scripts_dir}}/config.js"
+  #sudo: no
 
 - name: Build production editor app
-  command: grunt build
-  sudo: no
-  args:
-    chdir: "{{ editor_dir }}"
+  command: >
+    /usr/bin/docker run
+      --name driver-editor
+      --log-driver syslog
+      driver/editor:latest
+      build
