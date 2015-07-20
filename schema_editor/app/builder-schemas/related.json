@@ -168,7 +168,7 @@
                     "title": "Type of related info to reference",
                     "type": "string",
                     "format": "select",
-                    "enumSource": [["Choice one", "choice 2", "choice 3"]]
+                    "enumSource": []
                 },
                 "fieldType": {
                     "options": {
