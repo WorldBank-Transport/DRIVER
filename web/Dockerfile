@@ -28,10 +28,14 @@ RUN npm install -g \
 RUN mkdir -p /opt/web
 WORKDIR /opt/web
 
-COPY package.json /opt/web
+COPY package.json /opt/web/
 RUN npm install
 
 COPY bower.json /opt/web
 RUN bower install
 
 COPY . /opt/web
+
+VOLUME /opt/web/dist
+
+ENTRYPOINT ["grunt"]

@@ -28,7 +28,11 @@ RUN npm install -g \
 RUN mkdir -p /opt/schema
 WORKDIR /opt/schema
 
-COPY package.json /opt/schema
+COPY package.json /opt/schema/
 RUN npm install
 
 COPY . /opt/schema
+
+VOLUME /opt/schema/dist
+
+ENTRYPOINT ["grunt"]
