@@ -45,10 +45,6 @@ Vagrant.configure("2") do |config|
     exit(1)
   end
 
-  if Vagrant.has_plugin?("vagrant-cachier")
-    config.cache.scope = :machine
-  end
-
   config.vm.define "database" do |database|
     database.vm.hostname = "database"
     database.hostmanager.aliases = %w(database.service.driver.internal)
@@ -106,9 +102,8 @@ Vagrant.configure("2") do |config|
     app.ssh.forward_x11 = true
 
     app.vm.provider :virtualbox do |v|
-      # TODO: Bump once we're actually using this machine
-      v.memory = ENV.fetch("DRIVER_APP_MEM", 1024)
-      v.cpus = ENV.fetch("DRIVER_APP_CPUS", 1)
+      v.memory = ENV.fetch("DRIVER_APP_MEM", 2094)
+      v.cpus = ENV.fetch("DRIVER_APP_CPUS", 2)
     end
   end
 end
