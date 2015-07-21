@@ -8,7 +8,7 @@
     /usr/bin/docker run
       --name driver-web
       --log-driver syslog
-      driver/web:latest
+      driver/web
       build
 
 #- name: Copy editor JS config to scripts dir
@@ -20,5 +20,5 @@
     /usr/bin/docker run
       --name driver-editor
       --log-driver syslog
-      driver/editor:latest
+      driver/editor
       build
