@@ -19,4 +19,5 @@ COPY . /opt/app
 
 EXPOSE 4000
 
-CMD /usr/local/bin/gunicorn driver.wsgi -w 3 -b :4000 -k gevent
+ENTRYPOINT ["/usr/local/bin/gunicorn"]
+CMD ["driver.wsgi", "-w3", "-b:4000", "-kgevent"]
