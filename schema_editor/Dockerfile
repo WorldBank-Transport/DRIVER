@@ -1,38 +1,17 @@
-FROM debian:jessie
+FROM quay.io/azavea/static-core:0.1.0
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  build-essential \
-  ruby \
-  ruby-dev \
-  wget \
-  && rm -rf /var/lib/apt/lists/*
-
-RUN echo 'gem: --no-rdoc --no-ri' >> "$HOME/.gemrc"
-
-RUN gem install \
-  compass \
-  sass
-
-ENV NODE_VERSION 0.10.35
-ENV NPM_VERSION 2.1.18
-
-RUN wget -qO- "http://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz" \
-  | tar -xzC /usr/local --strip-components=1 \
-  && npm install -g npm@"${NPM_VERSION}" \
-  && npm cache clear
-
-RUN npm install -g \
-  bower \
-  grunt-cli
+  git && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/schema
 WORKDIR /opt/schema
 
 COPY package.json /opt/schema/
-RUN npm install
+RUN npm install --unsafe-perm
+
+COPY bower.json /opt/schema/
+RUN bower install --allow-root --config.interactive=false --force
 
 COPY . /opt/schema
-
-VOLUME /opt/schema/dist
 
 ENTRYPOINT ["grunt"]
