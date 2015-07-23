@@ -90,6 +90,9 @@
         }
 
         function onDataChange(newData, validationErrors) {
+            // Update editorData reference: used later during save
+            editorData = newData;
+
             // Perform custom validation
             var customErrors = Schemas.validateSchemaFormData(newData);
             ctl.editor.errors = validationErrors.concat(customErrors);
