@@ -114,7 +114,9 @@
                 return;
             }
             // All is well; serialize the form data into a JSON-Schema snippet.
-            var dataToSave = Schemas.definitionFromSchemaFormData(editorData);
+            var dataToSave = Schemas.definitionFromSchemaFormData(editorData,
+                    ctl.recordSchema.schema,
+                    ctl.schemaKey);
             $log.debug('Serialized schema to save:', dataToSave);
 
             // Extend the definitions with the new data. Need to extend rather than

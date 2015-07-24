@@ -50,13 +50,38 @@
                     }
                 },
                 'reference': { // Local reference
-                    toProperty: function(fieldData) {
-                        // TODO: Add autodiscovery of field names so that we can more intelligently
-                        // populate enumSource.title below. This will require making the rest of the
-                        // schema available to the serialization function. Beware of
-                        // self-referential content types; they will need to auto-discover against
-                        // the new definition, rather than any definition which might already exist
-                        // in the schema.
+                    /** Creates a property that uses the 'watch' feature of JSON-Editor for info
+                     * @param {object} fieldData The schema form field data to convert into this property
+                     * @param {number} index The index of the form data in the form
+                     * @param {object} allData Data from all fields in the schema form
+                     * @param {object} currentSchema The current prior to the changes being generated
+                     * @param {string} definitionName The definition to store this in
+                     * This function is complex because it looks at the current schema to figure out
+                     * the names of fields that exist on the type that is being referred to so that
+                     * the reference dropdown can be auto-populated with meaningful information.
+                     */
+
+                    toProperty: function(fieldData, index, allData, currentSchema, definitionName) {
+                        var displayProperties = [];
+                        // Switch depending on whether fieldData.referenceTarget == definitionName
+                        if (fieldData.referenceTarget === definitionName) { // Self-referential
+                            // Need to use what the data is going to be, not what it was
+                            _.each(allData, function(fieldData) {
+                                if (fieldData.fieldType !== 'reference') {
+                                    displayProperties.push('{{item.' + fieldData.fieldTitle + '}}');
+                                }
+                            });
+                        } else { // Referencing a different related info type
+                            var visibleProperties = _.filter(
+                                _.keys(currentSchema.definitions[fieldData.referenceTarget].properties),
+                                function(propName) { return !systemOnlyProperties[propName]; }
+                            );
+                            visibleProperties.sort();
+                            // Grab at most the first three property names
+                            for (var i = 0; i < 3 && i < visibleProperties.length; i++) {
+                                displayProperties.push('{{item.' + visibleProperties[i] + '}}');
+                            }
+                        }
                         return {
                             type: 'string',
                             watch: {
@@ -64,7 +89,7 @@
                             },
                             enumSource: [{
                                     source: 'target',
-                                    title: fieldData.referenceTarget + ' {{i}}',
+                                    title: displayProperties.join(' '),
                                     value: '{{item._localId}}'
                             }]
                         };
@@ -107,10 +132,13 @@
          */
         // TODO: This monolithic function isn't great; investigate more modular options
         // (likewise in the deserializing function below)
-        function _propertyFromSchemaFieldData(fieldData, index, allData) {
+        function _propertyFromSchemaFieldData(fieldData, index, allData, currentSchema,
+                definitionName) {
             var propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
                     index,
-                    allData
+                    allData,
+                    currentSchema,
+                    definitionName
                 );
 
             // Set the common properties
@@ -134,9 +162,11 @@
          * validation.
          * @param {array} formData The values in the Schema Form, defining the fields in
          *      this Data Form Schema
+         * @param {object} existingSchema The full schema into which this definition will be
+         *      inserted. Used for populating referential data fields.
          * @return {object} The serialized JSON-Schema snippet
          */
-        function definitionFromSchemaFormData(formData) {
+        function definitionFromSchemaFormData(formData, currentSchema, definitionName) {
             var definition = {
                 properties: {},
                 type: 'object'
@@ -147,7 +177,9 @@
                 definition.properties[fieldData.fieldTitle] = _propertyFromSchemaFieldData(
                     fieldData,
                     index,
-                    allData
+                    allData,
+                    currentSchema,
+                    definitionName
                 );
             });
 
