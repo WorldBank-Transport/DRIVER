@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RTSchemaEditController($log, $stateParams, BuilderSchemas, RecordTypes,
-                                    RecordSchemas, Schemas, Notifications) {
+                                    RecordSchemas, Schemas, Notifications, JsonEditorDefaults) {
         var ctl = this;
         var editorData = null;
 
@@ -87,6 +87,8 @@
                 },
                 errors: []
             };
+
+            JsonEditorDefaults.customValidators.push(validateNoSelfReference);
         }
 
         function onDataChange(newData, validationErrors) {
@@ -100,6 +102,25 @@
             $log.debug('Schema Entry Form data:', newData,
                        'Errors:', validationErrors,
                        'CustomErrors:', customErrors);
+        }
+
+        // Make sure that reference fields aren't referring to this type; this causes
+        // an infinite recursion when displaying the edit form.
+        function validateNoSelfReference(schema, value, path) {
+            var errors = [];
+            var pathKey = 'referenceTarget';
+            if (!value || typeof value !== 'object' || !value.referenceTarget) {
+                return errors;
+            }
+
+            if (value.referenceTarget === ctl.schemaKey) {
+                errors.push({
+                    path: path,
+                    property: pathKey,
+                    message: 'Relationship must be to a different related content type'
+                });
+            }
+            return errors;
         }
 
         function onSaveClicked() {

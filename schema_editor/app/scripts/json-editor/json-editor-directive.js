@@ -19,7 +19,7 @@
     var defaults = {};
 
     /* ngInject */
-    function JsonEditor() {
+    function JsonEditor(JsonEditorDefaults) {
 
         var module = {
             restrict: 'E',
@@ -73,6 +73,14 @@
                     // Bring data changes into the angular digest lifecycle
                     scope.$apply(function() { scope.onDataChange()(editorData, errors); });
                 });
+            });
+
+            // TODO: This is hideous, but it's necessary because all custom validators
+            // in JSON-Editor must be placed on the root JSONEditor object. In order to
+            // prevent custom validators from sticking around, we need to ensure that this
+            // gets cleaned up whenever a json-editor element is destroyed.
+            element.on('$destroy', function() {
+                JsonEditorDefaults.customValidators.clear();
             });
         }
     }

@@ -264,15 +264,19 @@
         }
 
         /**
-         * Validate that a Schema Entry Form has valid data; currently validates that there are
-         * no duplicate fieldTitles because this is currently not easily done in native
-         * JSON-Schema (the uniqueItems keyword doesn't allow specifying which fields should
-         * be used to determine uniqueness).
+         * Validate that a Schema Entry Form has valid data; currently validates that there are no
+         * duplicate fieldTitles because this is currently not easily done in native JSON-Schema
+         * (the uniqueItems keyword doesn't allow specifying which fields should be used to
+         * determine uniqueness).
          * @param {object} formData The values in a Schema Form
          * @return {array} List of errors, if any
          *
-         * TODO: JSON-Editor supports custom validators which are applied recursively from the root
-         * -- these should probably be used instead of this function.
+         * NOTE: For field-level validation, JSON-Editor provides a custom_validators hook that
+         * should be used (see json-editor-defaults.js).
+         * TODO: See if we can restructure our code to allow custom validators that need access to
+         * the full form data. This is currently difficult to do because json-editor doesn't provide
+         * access to this information to the validators by default, but it provides better UX
+         * because the errors will be attached to the fields to which they apply.
          */
         function validateSchemaFormData(formData) {
             var errors = [];
