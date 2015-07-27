@@ -94,16 +94,35 @@ describe('ase.schemas:Schemas', function () {
         expect(dataFormSchemaDef.properties.Photo.media).toBeDefined();
     });
 
-    it('should serialize watch and enumSource keys into reference fields', function () {
+    it('should properly serialize watch and enumSource keys into reference fields', function () {
         var schemaFormData = [{
             fieldType: 'reference',
             isRequired: false,
             fieldTitle: 'Reference',
-            referenceTarget: 'Other type'
+            referenceTarget: 'OtherType'
         }];
-        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData);
+        // Stub out only the keys that we need on the existing schema
+        var stubSchema = {
+            definitions: {
+                OtherType: {
+                    properties: {
+                        property1: {},
+                        property2: {},
+                        property3: {}
+                    }
+                }
+            }
+        };
+        var dataFormSchemaDef = Schemas.definitionFromSchemaFormData(schemaFormData,
+            stubSchema,
+            'NotOtherType');
         expect(dataFormSchemaDef.properties.Reference.watch).toBeDefined();
         expect(dataFormSchemaDef.properties.Reference.enumSource).toBeDefined();
+        expect(dataFormSchemaDef.properties.Reference.enumSource).toEqual([{
+            source: 'target',
+            title: '{{item.property1}} {{item.property2}} {{item.property3}}',
+            value: '{{item._localId}}'
+        }]);
     });
 
     it('should add to the "required" key when fields have isRequired: true', function () {
@@ -194,7 +213,22 @@ describe('ase.schemas:Schemas', function () {
     // NOTE: This test must be updated when new field types are added.
     it('should preserve all information when serializing and deserializing schemas', function () {
         // In practice this means that the serialize and deserialize methods are inverses
-        var f = Schemas.definitionFromSchemaFormData;
+        var stubSchema = {
+            definitions: {
+                OtherType: {
+                    properties: {
+                        property1: {},
+                        property2: {},
+                        property3: {}
+                    }
+                }
+            }
+        };
+        // The forward and backward functions have different signatures, so we need to "curry"
+        // the forward function so we can pass the results back and forth directly.
+        var f = function(formData) {
+            return Schemas.definitionFromSchemaFormData(formData, stubSchema, 'NotOtherType');
+        };
         var b = Schemas.schemaFormDataFromDefinition;
 
         var schemaFormData = [{
@@ -229,7 +263,7 @@ describe('ase.schemas:Schemas', function () {
             isRequired: false,
             isSearchable: false,
             fieldTitle: 'Local reference',
-            referenceTarget: 'Other Type',
+            referenceTarget: 'OtherType',
             propertyOrder: 3
         }];
 

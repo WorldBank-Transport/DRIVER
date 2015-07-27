@@ -50,13 +50,45 @@
                     }
                 },
                 'reference': { // Local reference
-                    toProperty: function(fieldData) {
-                        // TODO: Add autodiscovery of field names so that we can more intelligently
-                        // populate enumSource.title below. This will require making the rest of the
-                        // schema available to the serialization function. Beware of
-                        // self-referential content types; they will need to auto-discover against
-                        // the new definition, rather than any definition which might already exist
-                        // in the schema.
+                    /** Creates a property that uses the 'watch' feature of JSON-Editor for info
+                     * @param {object} fieldData The schema form field data to convert into this property
+                     * @param {number} index The index of the form data in the form
+                     * @param {object} allData Data from all fields in the schema form
+                     * @param {object} currentSchema The current prior to the changes being generated
+                     * @param {string} definitionName The definition to store this in
+                     * This function is complex because it looks at the current schema to figure out
+                     * the names of fields that exist on the type that is being referred to so that
+                     * the reference dropdown can be auto-populated with meaningful information.
+                     */
+
+                    toProperty: function(fieldData, index, allData, currentSchema) {
+                        var displayProperties = [];
+                        // Switch depending on whether fieldData.referenceTarget == definitionName
+                        // Note that self-referential targets are disabled via a validation
+                        // function at the moment because they cause JSON-Editor to break. However,
+                        // I didn't realize that until after I wrote this code, so leaving it here
+                        // in a comment in case we need to re-enable this later.
+                        /*
+                        if (fieldData.referenceTarget === definitionName) { // Self-referential
+                            // Need to use what the data is going to be, not what it was
+                            _.each(allData, function(fieldData) {
+                                if (fieldData.fieldType !== 'reference') {
+                                    displayProperties.push('{{item.' + fieldData.fieldTitle + '}}');
+                                }
+                            });
+                            displayProperties = displayProperties.slice(0,3);
+                        */
+                        //} else { // Referencing a different related info type
+                        var visibleProperties = _.filter(
+                            _.keys(currentSchema.definitions[fieldData.referenceTarget].properties),
+                            function(propName) { return !systemOnlyProperties[propName]; }
+                        );
+                        visibleProperties.sort();
+                        // Grab at most the first three property names
+                        for (var i = 0; i < 3 && i < visibleProperties.length; i++) {
+                            displayProperties.push('{{item.' + visibleProperties[i] + '}}');
+                        }
+                        //}
                         return {
                             type: 'string',
                             watch: {
@@ -64,7 +96,7 @@
                             },
                             enumSource: [{
                                     source: 'target',
-                                    title: fieldData.referenceTarget + ' {{i}}',
+                                    title: displayProperties.join(' '),
                                     value: '{{item._localId}}'
                             }]
                         };
@@ -107,10 +139,13 @@
          */
         // TODO: This monolithic function isn't great; investigate more modular options
         // (likewise in the deserializing function below)
-        function _propertyFromSchemaFieldData(fieldData, index, allData) {
+        function _propertyFromSchemaFieldData(fieldData, index, allData, currentSchema,
+                definitionName) {
             var propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
                     index,
-                    allData
+                    allData,
+                    currentSchema,
+                    definitionName
                 );
 
             // Set the common properties
@@ -134,9 +169,11 @@
          * validation.
          * @param {array} formData The values in the Schema Form, defining the fields in
          *      this Data Form Schema
+         * @param {object} existingSchema The full schema into which this definition will be
+         *      inserted. Used for populating referential data fields.
          * @return {object} The serialized JSON-Schema snippet
          */
-        function definitionFromSchemaFormData(formData) {
+        function definitionFromSchemaFormData(formData, currentSchema, definitionName) {
             var definition = {
                 properties: {},
                 type: 'object'
@@ -147,7 +184,9 @@
                 definition.properties[fieldData.fieldTitle] = _propertyFromSchemaFieldData(
                     fieldData,
                     index,
-                    allData
+                    allData,
+                    currentSchema,
+                    definitionName
                 );
             });
 
@@ -232,15 +271,19 @@
         }
 
         /**
-         * Validate that a Schema Entry Form has valid data; currently validates that there are
-         * no duplicate fieldTitles because this is currently not easily done in native
-         * JSON-Schema (the uniqueItems keyword doesn't allow specifying which fields should
-         * be used to determine uniqueness).
+         * Validate that a Schema Entry Form has valid data; currently validates that there are no
+         * duplicate fieldTitles because this is currently not easily done in native JSON-Schema
+         * (the uniqueItems keyword doesn't allow specifying which fields should be used to
+         * determine uniqueness).
          * @param {object} formData The values in a Schema Form
          * @return {array} List of errors, if any
          *
-         * TODO: JSON-Editor supports custom validators which are applied recursively from the root
-         * -- these should probably be used instead of this function.
+         * NOTE: For field-level validation, JSON-Editor provides a custom_validators hook that
+         * should be used (see json-editor-defaults.js).
+         * TODO: See if we can restructure our code to allow custom validators that need access to
+         * the full form data. This is currently difficult to do because json-editor doesn't provide
+         * access to this information to the validators by default, but it provides better UX
+         * because the errors will be attached to the fields to which they apply.
          */
         function validateSchemaFormData(formData) {
             var errors = [];

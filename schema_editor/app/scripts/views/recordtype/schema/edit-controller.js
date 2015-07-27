@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RTSchemaEditController($log, $stateParams, BuilderSchemas, RecordTypes,
-                                    RecordSchemas, Schemas, Notifications) {
+                                    RecordSchemas, Schemas, Notifications, JsonEditorDefaults) {
         var ctl = this;
         var editorData = null;
 
@@ -47,7 +47,7 @@
                 });
         }
 
-        // Called after all prerequesite data has been loaded
+        // Called after all prerequisite data has been loaded
         function onSchemaReady() {
             // Get a list of the titles of all relatedContentTypes which have '_localId' as
             // a property.
@@ -55,6 +55,10 @@
                 _.filter(ctl.recordSchema.schema.definitions, function(definition) {
                     return !!definition.properties._localId;
                 }), 'title');
+            // Don't allow referring to the type currently being edited
+            referable = _.filter(referable, function(targetName) {
+                return targetName !== ctl.schemaKey;
+            });
             // Modify the relatedBuilderSchema in-place in order to allow selecting a related
             // content type as the target of an internal reference.
             ctl.relatedBuilderSchema.definitions.localReference.properties.referenceTarget.enumSource = [referable];
@@ -87,6 +91,8 @@
                 },
                 errors: []
             };
+
+            JsonEditorDefaults.customValidators.push(validateNoSelfReference);
         }
 
         function onDataChange(newData, validationErrors) {
@@ -102,6 +108,25 @@
                        'CustomErrors:', customErrors);
         }
 
+        // Make sure that reference fields aren't referring to this type; this causes
+        // an infinite recursion when displaying the edit form.
+        function validateNoSelfReference(schema, value, path) {
+            var errors = [];
+            var pathKey = 'referenceTarget';
+            if (!value || typeof value !== 'object' || !value.referenceTarget) {
+                return errors;
+            }
+
+            if (value.referenceTarget === ctl.schemaKey) {
+                errors.push({
+                    path: path,
+                    property: pathKey,
+                    message: 'Relationship must be to a different related content type'
+                });
+            }
+            return errors;
+        }
+
         function onSaveClicked() {
             // First we confirm that the form data is valid; then we know we have something which
             // we can transform into a Data Form Schema.
@@ -114,7 +139,9 @@
                 return;
             }
             // All is well; serialize the form data into a JSON-Schema snippet.
-            var dataToSave = Schemas.definitionFromSchemaFormData(editorData);
+            var dataToSave = Schemas.definitionFromSchemaFormData(editorData,
+                    ctl.recordSchema.schema,
+                    ctl.schemaKey);
             $log.debug('Serialized schema to save:', dataToSave);
 
             // Extend the definitions with the new data. Need to extend rather than

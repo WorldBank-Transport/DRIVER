@@ -168,7 +168,7 @@
                     "title": "Type of related info to reference",
                     "type": "string",
                     "format": "select",
-                    "enumSource": []
+                    "enumSource": [["Will be dynamically overwritten"]]
                 },
                 "fieldType": {
                     "options": {
