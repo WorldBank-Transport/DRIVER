@@ -61,9 +61,14 @@
                      * the reference dropdown can be auto-populated with meaningful information.
                      */
 
-                    toProperty: function(fieldData, index, allData, currentSchema, definitionName) {
+                    toProperty: function(fieldData, index, allData, currentSchema) {
                         var displayProperties = [];
                         // Switch depending on whether fieldData.referenceTarget == definitionName
+                        // Note that self-referential targets are disabled via a validation
+                        // function at the moment because they cause JSON-Editor to break. However,
+                        // I didn't realize that until after I wrote this code, so leaving it here
+                        // in a comment in case we need to re-enable this later.
+                        /*
                         if (fieldData.referenceTarget === definitionName) { // Self-referential
                             // Need to use what the data is going to be, not what it was
                             _.each(allData, function(fieldData) {
@@ -71,17 +76,19 @@
                                     displayProperties.push('{{item.' + fieldData.fieldTitle + '}}');
                                 }
                             });
-                        } else { // Referencing a different related info type
-                            var visibleProperties = _.filter(
-                                _.keys(currentSchema.definitions[fieldData.referenceTarget].properties),
-                                function(propName) { return !systemOnlyProperties[propName]; }
-                            );
-                            visibleProperties.sort();
-                            // Grab at most the first three property names
-                            for (var i = 0; i < 3 && i < visibleProperties.length; i++) {
-                                displayProperties.push('{{item.' + visibleProperties[i] + '}}');
-                            }
+                            displayProperties = displayProperties.slice(0,3);
+                        */
+                        //} else { // Referencing a different related info type
+                        var visibleProperties = _.filter(
+                            _.keys(currentSchema.definitions[fieldData.referenceTarget].properties),
+                            function(propName) { return !systemOnlyProperties[propName]; }
+                        );
+                        visibleProperties.sort();
+                        // Grab at most the first three property names
+                        for (var i = 0; i < 3 && i < visibleProperties.length; i++) {
+                            displayProperties.push('{{item.' + visibleProperties[i] + '}}');
                         }
+                        //}
                         return {
                             type: 'string',
                             watch: {

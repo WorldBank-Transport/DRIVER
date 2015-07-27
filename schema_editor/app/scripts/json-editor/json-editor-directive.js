@@ -75,10 +75,13 @@
                 });
             });
 
-            // TODO: This is hideous, but it's necessary because all custom validators
-            // in JSON-Editor must be placed on the root JSONEditor object. In order to
-            // prevent custom validators from sticking around, we need to ensure that this
-            // gets cleaned up whenever a json-editor element is destroyed.
+            // TODO: This is hideous, but it's necessary because all custom validators in
+            // JSON-Editor must be placed on the root JSONEditor object, which is a limitation of
+            // the library. In order to prevent custom validators from sticking around, we need to
+            // ensure that this gets cleaned up whenever a json-editor element is destroyed.  Note
+            // that this means that it is not possible to have two JsonEditor directives using
+            // different custom validators on the same page.  However, it ensures that directives in
+            // different pages don't pollute the global JSONEditor object.
             element.on('$destroy', function() {
                 JsonEditorDefaults.customValidators.clear();
             });
