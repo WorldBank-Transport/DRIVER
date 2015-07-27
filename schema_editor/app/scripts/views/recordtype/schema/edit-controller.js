@@ -47,7 +47,7 @@
                 });
         }
 
-        // Called after all prerequesite data has been loaded
+        // Called after all prerequisite data has been loaded
         function onSchemaReady() {
             // Get a list of the titles of all relatedContentTypes which have '_localId' as
             // a property.
@@ -55,6 +55,10 @@
                 _.filter(ctl.recordSchema.schema.definitions, function(definition) {
                     return !!definition.properties._localId;
                 }), 'title');
+            // Don't allow referring to the type currently being edited
+            referable = _.filter(referable, function(targetName) {
+                return targetName !== ctl.schemaKey;
+            });
             // Modify the relatedBuilderSchema in-place in order to allow selecting a related
             // content type as the target of an internal reference.
             ctl.relatedBuilderSchema.definitions.localReference.properties.referenceTarget.enumSource = [referable];
