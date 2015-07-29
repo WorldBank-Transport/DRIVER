@@ -27,7 +27,8 @@
         'ase.notifications',
         'ase.views.geography',
         'ase.views.recordtype',
-        'ase.resources'
+        'ase.resources',
+        'ui.router'
     ])
     .config(DefaultRoutingConfig)
     .config(LogConfig);
