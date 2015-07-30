@@ -2,23 +2,34 @@
 
 describe('driver.views.home: DriverHome', function () {
 
+    beforeEach(module('ase.mock.resources'));
+    beforeEach(module('ase.resources'));
+    beforeEach(module('driver.views.home'));
+    beforeEach(module('driver.templates'));
+
     var $compile;
     var $httpBackend;
     var $rootScope;
+    var RecordTypes;
+    var ResourcesMock;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
+                                _RecordTypes_, _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
+        RecordTypes = _RecordTypes_;
+        ResourcesMock = _ResourcesMock_;
     }));
 
     it('should load directive', function () {
+        var requestUrl = /\/api\/recordtypes/;
+        $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         var scope = $rootScope.$new();
         var element = $compile('<driver-home></driver-home>')(scope);
         $rootScope.$apply();
 
-        // TODO: this is a placeholder test. The home view doesn't currently
-        // have anything permanent that needs to be tested.
-        expect(1).toEqual(1);
+        expect(element.find('.form-area-body').length).toEqual(1);
     });
 });

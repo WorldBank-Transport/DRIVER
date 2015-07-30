@@ -63,6 +63,7 @@ module.exports = function(config) {
       'app/scripts/views/record/**.js',
       'app/scripts/views/home/module.js',
       'app/scripts/views/home/**.js',
+      'test/ase-mock/**/*.js',
       'test/spec/**/*.js',
       'app/scripts/app.js'
     ],
