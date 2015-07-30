@@ -39,6 +39,9 @@ script:
   - pushd schema_editor
   - grunt travis
   - popd
+  - pushd web
+  - grunt travis
+  - popd
   - pushd app
   - python manage.py test
   - popd
