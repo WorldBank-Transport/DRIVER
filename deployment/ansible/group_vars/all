@@ -4,14 +4,13 @@ developing_or_testing: "'development' in group_names or 'test' in group_names"
 not_developing: "'development' not in group_names"
 not_testing: "'test' not in group_names"
 
-docker_version: "1.7.0"
+docker_version: "1.7.*"
 docker_py_version: "1.2.3"
-docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+docker_options: "--storage-driver=aufs"
 
 python_version: "2.7.*"
 pip_version: "1.*"
 
-postgis_liblwgeom_package_version: "2.1.*"
 postgis_package_version: "2.1.*"
 
 postgresql_package_version: "9.4.*.pgdg14.04+1"
@@ -24,5 +23,3 @@ web_js_html5mode: "true"
 web_js_html5mode_prefix: "!"
 editor_js_html5mode: "true"
 editor_js_html5mode_prefix: "!"
-
-nodejs_npm_version: "2.1.5"

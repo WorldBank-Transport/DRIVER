@@ -13,21 +13,38 @@
         mode=0775
         state=directory
 
+- name: Build application Docker image
+  command: >
+    docker build
+      -f {{ root_app_dir }}/Dockerfile.base
+      -t driver/app:latest
+      {{ root_app_dir }}
+
 - name: Configure Driver application service definition
-  template: src=upstart-default.j2 dest=/etc/init/driver-app.conf
+  template: src=upstart-app.conf.j2 dest=/etc/init/driver-app.conf
   notify:
     - Restart driver-app
 
-- name: Configure Driver application Nginx service definition
-  template: src=nginx-default.j2 dest=/etc/nginx/conf.d/driver-app.conf
+- name: Configure Nginx site
+  template: src=nginx-app.conf.j2
+            dest=/etc/nginx/sites-available/driver-app.conf
   notify:
     - Restart Nginx
 
-#- name: Run django collectstatic
-  #django_manage: command=collectstatic app_path={{ root_app_dir }}
+- name: Enable Nginx site
+  file: src=/etc/nginx/sites-available/driver-app.conf
+        dest=/etc/nginx/sites-enabled/driver-app
+        state=link
+  notify:
+    - Restart Nginx
 
-#- name: Run django migrations
-  #django_manage: command=migrate app_path={{ root_app_dir }}
+- name: Run Django collectstatic
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py collectstatic --noinput
+
+- name: Run Django migrations
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py migrate
 
 #- name: Add OAuth2 default application (development only)
   #django_manage: command="create_oauth_app admin" app_path={{ root_app_dir }}

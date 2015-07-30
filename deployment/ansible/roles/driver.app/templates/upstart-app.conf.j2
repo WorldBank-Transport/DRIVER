@@ -16,6 +16,8 @@ script
   /usr/bin/docker run \
     --name driver-app \
     --publish 4000:4000 \
+    --volume {{ root_static_dir }}:{{ root_static_dir }} \
+    --volume {{ root_media_dir }}:{{ root_media_dir }} \
     {% for k,v in driver_conf.items() -%}
     --env {{ k }}={{ v }} \
     {% endfor -%}

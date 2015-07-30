@@ -1,10 +1,6 @@
 ---
-- name: Create Nginx configuration directory
-  file: path=/etc/nginx/conf.d
-        recurse=yes
-        state=directory
-
-- name: Configure Nginx service definition
-  template: src=nginx.conf.j2 dest=/etc/init/nginx.conf
+- name: Configure Nginx log format
+  template: src=log-format.conf.j2
+            dest=/etc/nginx/conf.d/log-format.conf
   notify:
     - Restart Nginx

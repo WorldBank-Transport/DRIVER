@@ -1,7 +1,5 @@
-FROM driver/app
+FROM driver/app:latest
 
 RUN pip install --no-cache-dir -r dev-requirements.txt
-
-VOLUME /opt/app
 
 CMD ["driver.wsgi", "-w1", "-b:4000", "--reload", "-kgevent"]

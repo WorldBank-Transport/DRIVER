@@ -1,4 +1,7 @@
 ---
+## DOCKER SETTINGS
+docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock"
+
 ## POSTGRESQL SETTINGS
 postgresql_listen_addresses: "*"
 postgresql_username: driver

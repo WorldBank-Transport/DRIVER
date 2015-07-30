@@ -74,9 +74,9 @@ Vagrant.configure("2") do |config|
     # Disable because this will not get used.
     app.vm.synced_folder ".", "/vagrant", disabled: true
 
-    # Mounting $HOME allows the Docker volume mounts to work as if the
-    # Docker service were running natively on the virtual machine host.
-    app.vm.synced_folder ENV["HOME"], ENV["HOME"], type: "nfs"
+    app.vm.synced_folder "./app", "/opt/app", type: "nfs"
+    app.vm.synced_folder "./web", "/opt/web", type: "nfs"
+    app.vm.synced_folder "./schema_editor", "/opt/schema", type: "nfs"
 
     # nginx
     app.vm.network "forwarded_port", guest: 80, host: Integer(ENV.fetch("DRIVER_WEB_PORT_80", 7000))

@@ -1,23 +1,11 @@
-FROM python:2.7-slim
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-  binutils \
-  build-essential \
-  gdal-bin \
-  git \
-  libproj-dev \
-  libgdal1-dev \
-  && rm -rf /var/lib/apt/lists/*
+FROM quay.io/azavea/django:0.1.1
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
-COPY requirements.txt /opt/app/
-RUN pip install --no-cache-dir -r requirements.txt
-
 COPY . /opt/app
+RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 4000
 
-ENTRYPOINT ["/usr/local/bin/gunicorn"]
 CMD ["driver.wsgi", "-w3", "-b:4000", "-kgevent"]
