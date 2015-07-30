@@ -59,11 +59,14 @@ module.exports = function(config) {
       'app/scripts/notifications/module.js',
       'app/scripts/notifications/**.js',
 
+      'app/scripts/resources/module.js',
+      'app/scripts/resources/**.js',
       'app/scripts/views/record/module.js',
       'app/scripts/views/record/**.js',
       'app/scripts/views/home/module.js',
       'app/scripts/views/home/**.js',
       'test/ase-mock/**/*.js',
+      'test/mock/**/*.js',
       'test/spec/**/*.js',
       'app/scripts/app.js'
     ],
