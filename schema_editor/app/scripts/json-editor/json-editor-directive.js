@@ -71,7 +71,7 @@
                     var editorData = editor.getValue();
                     var errors = editor.validate();
                     // Bring data changes into the angular digest lifecycle
-                    scope.$apply(function() { scope.onDataChange()(editorData, errors); });
+                    scope.$apply(function() { scope.onDataChange()(editorData, errors, editor); });
                 });
             });
 
