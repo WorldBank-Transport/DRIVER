@@ -31,6 +31,12 @@ install:
   - npm install
   - bower install
   - popd
+  - pushd web
+  - npm --version
+  - npm install -g bower grunt-cli
+  - npm install
+  - bower install
+  - popd
 
 before_script:
   - psql -U postgres -c "create extension postgis"

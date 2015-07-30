@@ -1,0 +1,21 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>{{ ::ctl.recordType.label }} input form</h2>
+            <div class="content-border"></div>
+        </div>
+        <json-editor editor-id="{{ ctl.editor.id }}"
+                     options="ctl.editor.options"
+                     on-data-change="ctl.onDataChange"
+                     class="form-area-body">
+        </json-editor>
+        <div class="save-area">
+            <button type="button" class="btn btn-default" ng-disabled="ctl.editor.errors.length > 0"
+                    ng-click="ctl.onSaveClicked()">Save</button>
+            <button type="button" class="btn btn-default"
+                    ui-sref="home()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
