@@ -23,13 +23,19 @@ describe('driver.views.record: RecordAdd', function () {
     }));
 
     it('should load directive', function () {
-        var requestUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(requestUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var recordTypeUrl = /\/api\/recordtypes/;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
+
+        var recordSchemaUrl = /\/api\/recordschemas/;
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-record-add></driver-record-add>')(scope);
         $rootScope.$apply();
 
         expect(element.find('json-editor').length).toEqual(1);
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 });

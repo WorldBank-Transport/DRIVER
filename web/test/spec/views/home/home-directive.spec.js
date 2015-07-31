@@ -31,5 +31,8 @@ describe('driver.views.home: DriverHome', function () {
         $rootScope.$apply();
 
         expect(element.find('.form-area-body').length).toEqual(1);
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
     });
 });
