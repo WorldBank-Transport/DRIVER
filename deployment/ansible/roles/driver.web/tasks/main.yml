@@ -17,6 +17,14 @@
       --rm
       --name driver-web
       --volume {{ web_build_dir }}:{{ web_build_dir }}
+      --volume {{ web_dir }}/app:{{ web_dir }}/app
+      --volume {{ web_dir }}/test:{{ web_dir }}/test
+      --volume {{ web_dir }}/.bowerrc:{{ web_dir }}/.bowerrc
+      --volume {{ web_dir }}/.editorconfig:{{ web_dir }}/.editorconfig
+      --volume {{ web_dir }}/.jshintrc:{{ web_dir }}/.jshintrc
+      --volume {{ web_dir }}/bower.json:{{ web_dir }}/bower.json
+      --volume {{ web_dir }}/Gruntfile.js:{{ web_dir }}/Gruntfile.js
+      --volume {{ web_dir }}/package.json:{{ web_dir }}/package.json
       --log-driver syslog
       driver/web:latest
       build
@@ -39,6 +47,14 @@
       --rm
       --name driver-editor
       --volume {{ editor_build_dir }}:{{ editor_build_dir }}
+      --volume {{ editor_dir }}/app:{{ editor_dir }}/app
+      --volume {{ editor_dir }}/test:{{ editor_dir }}/test
+      --volume {{ editor_dir }}/.bowerrc:{{ editor_dir }}/.bowerrc
+      --volume {{ editor_dir }}/.editorconfig:{{ editor_dir }}/.editorconfig
+      --volume {{ editor_dir }}/.jshintrc:{{ editor_dir }}/.jshintrc
+      --volume {{ editor_dir }}/bower.json:{{ editor_dir }}/bower.json
+      --volume {{ editor_dir }}/Gruntfile.js:{{ editor_dir }}/Gruntfile.js
+      --volume {{ editor_dir }}/package.json:{{ editor_dir }}/package.json
       --log-driver syslog
       driver/editor:latest
       build
