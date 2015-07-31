@@ -46,6 +46,6 @@
   command: >
     /usr/bin/docker exec -ti driver-app ./manage.py migrate
 
-#- name: Add OAuth2 default application (development only)
-  #django_manage: command="create_oauth_app admin" app_path={{ root_app_dir }}
-  #when: developing_or_testing
+- name: Add OAuth2 default application
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py create_oauth_app admin
