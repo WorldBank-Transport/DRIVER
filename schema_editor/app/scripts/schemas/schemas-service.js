@@ -23,10 +23,17 @@
             FieldTypes: {
                 'text': { // Text field
                     toProperty: function(fieldData) {
-                        return {
+                        var textProperty = {
                             type: 'string',
                             format: fieldData.textOptions
                         };
+
+                        // Required text fields also need a minLength field for validation
+                        if (fieldData.isRequired) {
+                            textProperty.minLength = 1;
+                        }
+
+                        return textProperty;
                     }
                 },
                 'selectlist': { // Select list
