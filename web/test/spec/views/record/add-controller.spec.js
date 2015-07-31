@@ -47,6 +47,7 @@ describe('driver.views.record: AddController', function () {
             }
         };
         var testUuid = '4cde1cc9-2cd2-487b-983d-ae1de1d6198c';
+        var uuidR = '^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$';
 
         // Send the updated data
         Controller.onDataChange({
@@ -62,7 +63,7 @@ describe('driver.views.record: AddController', function () {
 
         // Empty _localId fields should be filled in with uuids
         expect(editorValue).toEqual(jasmine.any(Object));
-        expect(editorValue.Details._localId.length).toBe(36);
+        expect(editorValue.Details._localId).toMatch(uuidR);
         expect(editorValue.Person[0]._localId).toEqual(testUuid);
 
         $httpBackend.flush();
