@@ -19,6 +19,7 @@
       -f {{ root_app_dir }}/Dockerfile.base
       -t driver/app:latest
       {{ root_app_dir }}
+  when: developing_or_testing
 
 - name: Configure Driver application service definition
   template: src=upstart-app.conf.j2 dest=/etc/init/driver-app.conf
@@ -45,7 +46,9 @@
 - name: Run Django migrations
   command: >
     /usr/bin/docker exec -ti driver-app ./manage.py migrate
+  when: developing_or_testing
 
 - name: Add OAuth2 default application
   command: >
     /usr/bin/docker exec -ti driver-app ./manage.py create_oauth_app admin
+  when: developing_or_testing
