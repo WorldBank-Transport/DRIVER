@@ -17,5 +17,3 @@ root_app_dir: "/opt/app"
 root_www_dir: "/var/www"
 root_static_dir: "{{ root_www_dir }}/static"
 root_media_dir: "{{ root_www_dir }}/media"
-
-database_host: "database.service.driver.internal"
