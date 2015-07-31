@@ -18,6 +18,9 @@ script
     --publish 4000:4000 \
     --volume {{ root_static_dir }}:{{ root_static_dir }} \
     --volume {{ root_media_dir }}:{{ root_media_dir }} \
+    {% if developing -%}
+    --volume {{ root_app_dir }}:{{ root_app_dir }} \
+    {% endif -%}
     {% for k,v in driver_conf.items() -%}
     --env {{ k }}={{ v }} \
     {% endfor -%}
