@@ -15,7 +15,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-DEVELOP = True if os.environ.get('DJANGO_ENV', 'production') == 'development' else False
+DEVELOP = True if os.environ.get('DJANGO_ENV', 'development') == 'development' else False
 PRODUCTION = not DEVELOP
 
 # Quick-start development settings - unsuitable for production
