@@ -100,6 +100,9 @@ DATABASES = {
     }
 }
 
+POSTGIS_VERSION = tuple(
+    map(int, os.environ.get('DJANGO_POSTGIS_VERSION', '2.1.3').split("."))
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
