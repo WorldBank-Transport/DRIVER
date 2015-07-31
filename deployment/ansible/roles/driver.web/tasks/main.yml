@@ -8,8 +8,9 @@
   command: >
     /usr/bin/docker build
       -f {{ web_dir }}/Dockerfile
-      -t driver/app:latest
+      -t driver/web:latest
       {{ web_dir }}
+  when: developing_or_testing
 
 - name: Build production web app
   command: >
@@ -38,8 +39,9 @@
   command: >
     /usr/bin/docker build
       -f {{ editor_dir }}/Dockerfile
-      -t driver/app:latest
+      -t driver/editor:latest
       {{ editor_dir }}
+  when: developing_or_testing
 
 - name: Build production editor app
   command: >
