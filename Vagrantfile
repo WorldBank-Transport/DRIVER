@@ -77,6 +77,7 @@ Vagrant.configure("2") do |config|
     app.vm.synced_folder "./app", "/opt/app", type: "nfs"
     app.vm.synced_folder "./web", "/opt/web", type: "nfs"
     app.vm.synced_folder "./schema_editor", "/opt/schema", type: "nfs"
+    app.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs"
 
     # nginx
     app.vm.network "forwarded_port", guest: 80, host: Integer(ENV.fetch("DRIVER_WEB_PORT_80", 7000))

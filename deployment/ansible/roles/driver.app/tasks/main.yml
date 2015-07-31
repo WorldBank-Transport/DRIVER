@@ -26,6 +26,9 @@
   notify:
     - Restart driver-app
 
+- name: Ensure Driver application is running
+  service: name=driver-app state=started
+
 - name: Configure Nginx site
   template: src=nginx-app.conf.j2
             dest=/etc/nginx/sites-available/driver-app.conf

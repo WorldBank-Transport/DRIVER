@@ -20,6 +20,7 @@ script
     --volume {{ root_media_dir }}:{{ root_media_dir }} \
     {% if developing -%}
     --volume {{ root_app_dir }}:{{ root_app_dir }} \
+    --volume /opt/ashlar:/opt/ashlar \
     {% endif -%}
     {% for k,v in driver_conf.items() -%}
     --env {{ k }}={{ v }} \
