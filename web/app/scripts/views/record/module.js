@@ -12,9 +12,9 @@
             url: '/:rtuuid/add',
             template: '<driver-record-add></driver-record-add>'
         });
-        $stateProvider.state('record.edit', {
-            url: '/:rtuuid/edit/:uuid',
-            template: '<driver-record-edit></driver-record-edit>'
+        $stateProvider.state('record.list', {
+            url: '/:rtuuid/list',
+            template: '<driver-record-list></driver-record-list>'
         });
     }
 

@@ -34,6 +34,22 @@
                         'title': '',
                         'plural_title': '',
                         'definitions': {
+                            'Accident Details': {
+                                'description': 'Details of accident',
+                                'title': 'Accident Details',
+                                'plural_title': 'Accident Details',
+                                'definitions': {},
+                                'type': 'object',
+                                'properties': {
+                                    'Description': {
+                                        'fieldType': 'text',
+                                        'format': 'textarea',
+                                        'isSearchable': true,
+                                        'propertyOrder': 0,
+                                        'type': 'string'
+                                    }
+                                }
+                            },
                             'Firearm': {
                                 'description': 'Guns and other projectiles.',
                                 'title': 'Firearm',
@@ -44,7 +60,14 @@
                             }
                         },
                         'type': 'object',
-                        'properties': {}
+                        'properties': {
+                            'Accident Details': {
+                                '$ref': '#/definitions/Accident Details'
+                            },
+                            'Firearm': {
+                                '$ref': '#/definitions/Firearm'
+                            }
+                        }
                     },
                     'created': '2015-05-13T21:44:28.324760Z',
                     'modified': '2015-05-13T21:44:28.324819Z',
