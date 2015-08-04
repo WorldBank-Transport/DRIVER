@@ -5,6 +5,8 @@ server {
     root {{ web_build_dir }};
     index index.html;
 
+    access_log /var/log/nginx/driver-app.access.log logstash_json;
+
     location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host;
@@ -27,8 +29,8 @@ server {
 
     location /api/ {
         proxy_set_header Host $http_host;
-        proxy_pass http://127.0.0.1:8000;
-        proxy_read_timeout {{ driver_session_timeout_s }}s;
+        proxy_pass http://localhost:4000;
+        proxy_read_timeout 40s;
         proxy_redirect     off;
         proxy_set_header   X-Real-IP        $remote_addr;
         proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
@@ -36,8 +38,8 @@ server {
 
     location /admin/ {
         proxy_set_header Host $http_host;
-        proxy_pass http://127.0.0.1:8000;
-        proxy_read_timeout {{ driver_session_timeout_s }}s;
+        proxy_pass http://localhost:4000;
+        proxy_read_timeout 40s;
         proxy_redirect     off;
         proxy_set_header   X-Real-IP        $remote_addr;
         proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
@@ -45,8 +47,8 @@ server {
 
     location /api-auth/ {
         proxy_set_header Host $http_host;
-        proxy_pass http://127.0.0.1:8000;
-        proxy_read_timeout {{ driver_session_timeout_s }}s;
+        proxy_pass http://localhost:4000;
+        proxy_read_timeout 40s;
         proxy_redirect     off;
         proxy_set_header   X-Real-IP        $remote_addr;
         proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
@@ -54,8 +56,8 @@ server {
 
     location /o/ {
         proxy_set_header Host $http_host;
-        proxy_pass http://127.0.0.1:8000;
-        proxy_read_timeout {{ driver_session_timeout_s }}s;
+        proxy_pass http://localhost:8000;
+        proxy_read_timeout 40s;
         proxy_redirect     off;
         proxy_set_header   X-Real-IP        $remote_addr;
         proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;

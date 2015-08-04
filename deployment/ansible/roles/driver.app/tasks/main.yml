@@ -1,65 +1,57 @@
 ---
-
-- name: Install python requirements
-  pip: name={{ item.name }} version={{ item.version }}
-  with_items:
-    - { name: 'django-cors-headers', version: '1.0.0' }
-    - { name: 'django-oauth-toolkit', version: '0.8.1' }
-
-- name: Install python dev requirements
-  pip: name={{ item.name }} version={{ item.version }}
-  with_items:
-    - { name: 'ipython', version: '3.0.0' }
-    - { name: 'ipdb', version: '0.8' }
-  when: developing
-  notify: Restart driver
-
-- name: Touch log file if it does not exist
-  command: touch {{ app_log }}
-           creates={{ app_log }}
-
-- name: Set log file permissions
-  file: path={{ app_log }} owner={{ app_username }} group={{ app_username }} mode=0664
-
-- name: Create configuration file directory
-  file: path={{ root_conf_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
-        mode=0750
-        state=directory
-
 - name: Create static files directory
   file: path={{ root_static_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
+        owner={{ driver_user }}
+        group={{ driver_user }}
         mode=0775
         state=directory
 
 - name: Create media files directory
   file: path={{ root_media_dir }}
-        owner={{ app_username }}
-        group={{ app_username }}
+        owner={{ driver_user }}
+        group={{ driver_user }}
         mode=0775
         state=directory
 
-# When developing/testing allow the secrets file to be read by all, so we can
-# easily run tests with the default user. But keep it locked down otherwise.
-- name: Copy app configuration
-  template: src=secrets.yaml.j2 dest=/etc/secrets.yaml
-            mode={{ 0664 if developing_or_testing else 0660 }}
-            owner={{ app_username }} group={{ app_username }}
-  notify: Restart driver
+- name: Build application Docker image
+  command: >
+    docker build
+      -f {{ root_app_dir }}/Dockerfile.base
+      -t driver/app:latest
+      {{ root_app_dir }}
+  when: developing_or_testing
 
-- name: Copy nginx config
-  template: src=nginx-default.j2 dest=/etc/nginx/sites-available/default
-  notify: Restart nginx
+- name: Configure Driver application service definition
+  template: src=upstart-app.conf.j2 dest=/etc/init/driver-app.conf
+  notify:
+    - Restart driver-app
 
-- name: Run django collectstatic
-  django_manage: command=collectstatic app_path={{ root_app_dir }}
+- name: Ensure Driver application is running
+  service: name=driver-app state=started
 
-- name: Run django migrations
-  django_manage: command=migrate app_path={{ root_app_dir }}
+- name: Configure Nginx site
+  template: src=nginx-app.conf.j2
+            dest=/etc/nginx/sites-available/driver-app.conf
+  notify:
+    - Restart Nginx
 
-- name: Add OAuth2 default application (development only)
-  django_manage: command="create_oauth_app admin" app_path={{ root_app_dir }}
+- name: Enable Nginx site
+  file: src=/etc/nginx/sites-available/driver-app.conf
+        dest=/etc/nginx/sites-enabled/driver-app
+        state=link
+  notify:
+    - Restart Nginx
+
+- name: Run Django collectstatic
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py collectstatic --noinput
+
+- name: Run Django migrations
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py migrate
+  when: developing_or_testing
+
+- name: Add OAuth2 default application
+  command: >
+    /usr/bin/docker exec -ti driver-app ./manage.py create_oauth_app admin
   when: developing_or_testing

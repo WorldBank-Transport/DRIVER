@@ -1,9 +1,5 @@
 ---
-  dependencies:
-    - { role: "azavea.git" }
-    - { role: "azavea.python", python_development: True }
-    - { role: "azavea.pip" }
-    - { role: "azavea.gunicorn" }
-    - { role: "azavea.nginx", nginx_delete_default_site: False }
-    - { role: "azavea.nodejs" }
-    - { role: "driver.web"}
+dependencies:
+  - { role: "driver.docker" }
+  - { role: "driver.nginx" }
+  - { role: "driver.web"}

@@ -1,6 +1,3 @@
 ---
-- name: Restart driver
-  service: name=driver state=restarted
-
-- name: Restart nginx
-  service: name=nginx state=restarted
+- name: Restart driver-app
+  service: name=driver-app state=restarted

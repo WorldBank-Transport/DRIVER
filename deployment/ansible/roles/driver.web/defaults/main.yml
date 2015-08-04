@@ -1,17 +1,14 @@
 ---
-
 web_dir: "/opt/web"
 web_scripts_dir: "{{ web_dir }}/app/scripts"
 web_build_dir: "{{ web_dir }}/dist"
 
+web_js_html5mode: "false"
+web_js_api_hostname: "http://localhost:7000"
+
 editor_dir: "/opt/schema_editor"
 editor_scripts_dir: "{{ editor_dir }}/app/scripts"
 editor_build_dir: "{{ editor_dir }}/dist"
-
-web_sass_version: 3.4.9
-
-web_js_html5mode: "false"
-web_js_api_hostname: "http://localhost:7000"
 
 editor_js_html5mode: "{{ web_js_html5mode }}"
 editor_js_api_hostname: "{{ web_js_api_hostname }}"

@@ -1,0 +1,11 @@
+FROM quay.io/azavea/django:0.1.1
+
+RUN mkdir -p /opt/app
+WORKDIR /opt/app
+
+COPY . /opt/app
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 4000
+
+CMD ["driver.wsgi", "-w3", "-b:4000", "-kgevent"]
