@@ -22,6 +22,7 @@ case "$1" in
   editor)
     CONTAINER_NAME="driver-editor"
     PUBLISHED_PORT=9000
+    LIVERELOAD_PORT=35731
     VOLUME_ROOT="/opt/schema_editor"
     IMAGE_NAME="driver/editor:latest"
     ;;
@@ -29,6 +30,7 @@ case "$1" in
   web)
     CONTAINER_NAME="driver-web"
     PUBLISHED_PORT=9001
+    LIVERELOAD_PORT=35732
     VOLUME_ROOT="/opt/web"
     IMAGE_NAME="driver/web:latest"
     ;;
@@ -52,6 +54,7 @@ vagrant ssh app -c "sudo docker run \
   --rm \
   --name ${CONTAINER_NAME} \
   --publish ${PUBLISHED_PORT}:${PUBLISHED_PORT} \
+  --publish ${LIVERELOAD_PORT}:${LIVERELOAD_PORT} \
   --volume ${VOLUME_ROOT}/dist:${VOLUME_ROOT}/dist \
   --volume ${SCHEMA_EDITOR_ROOT}/app:${SCHEMA_EDITOR_ROOT}/app \
   --volume ${SCHEMA_EDITOR_ROOT}/test:${SCHEMA_EDITOR_ROOT}/test \
