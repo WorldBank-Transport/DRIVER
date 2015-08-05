@@ -3,14 +3,14 @@
 
     /* ngInject */
     function StateConfig($stateProvider) {
-        $stateProvider.state('home', {
-            url: '/',
-            template: '<driver-home></driver-home>',
-            label: 'Home'
+        $stateProvider.state('map', {
+            url: '/:rtuuid/map',
+            template: '<driver-map></driver-map>',
+            label: 'Map'
         });
     }
 
-    angular.module('driver.views.home', [
+    angular.module('driver.views.map', [
         'ui.router',
         'ui.bootstrap'
     ]).config(StateConfig);

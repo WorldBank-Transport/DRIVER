@@ -10,11 +10,13 @@
         });
         $stateProvider.state('record.add', {
             url: '/:rtuuid/add',
-            template: '<driver-record-add></driver-record-add>'
+            template: '<driver-record-add></driver-record-add>',
+            label: 'Add a Record'
         });
         $stateProvider.state('record.list', {
             url: '/:rtuuid/list',
-            template: '<driver-record-list></driver-record-list>'
+            template: '<driver-record-list></driver-record-list>',
+            label: 'Record List'
         });
     }
 

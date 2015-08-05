@@ -1,11 +1,11 @@
 'use strict';
 
-describe('driver.views.home: Home', function () {
+describe('driver.views.dashboard: Dashboard', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.templates'));
-    beforeEach(module('driver.views.home'));
+    beforeEach(module('driver.views.dashboard'));
 
     var $compile;
     var $httpBackend;
@@ -24,7 +24,7 @@ describe('driver.views.home: Home', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-home></driver-home>')(scope);
+        var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
         $rootScope.$apply();
 
         // placeholder test

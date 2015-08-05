@@ -2,13 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function HomeController($stateParams, RecordTypes) {
-        var ctl = this;
-        initialize();
-
-        function initialize() {
-            ctl.recordTypes = RecordTypes.query({ active: 'True' });
-        }
+    function HomeController() {
     }
 
     angular.module('driver.views.home')

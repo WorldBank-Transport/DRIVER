@@ -113,7 +113,9 @@
                 /* jshint camelcase: true */
             }).$promise.then(function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
-                $state.go('home'); // TODO: perhaps go to the list view once it's implemented
+                $state.go('record.list', {
+                    rtuuid: $stateParams.rtuuid
+                });
             }, function (error) {
                 $log.debug('Error while creating record:', error);
             });

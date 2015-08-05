@@ -1,0 +1,35 @@
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="navbar-header">
+    <a class="navbar-brand" ui-sref="home">Driver</a>
+  </div>
+  <ul class="nav navbar-nav">
+    <li class="nav-dropdown">
+      <div class="btn-group" dropdown>
+        <button id="record-type" type="button" class="btn btn-primary" dropdown-toggle>
+          {{ ctl.selectedRecordType.plural_label }} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="record-type">
+          <li class="nav-rt-item" role="menuitem" ng-repeat="recordType in ctl.recordTypes | orderBy:'label'">
+            <a ng-click="ctl.selectedRecordType = recordType; ctl.updateState()">
+              {{ recordType.plural_label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-dropdown">
+      <div class="btn-group" dropdown>
+        <button id="nav-page" type="button" class="btn btn-primary" dropdown-toggle>
+          {{ ctl.selectedState.label }} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="nav-page">
+          <li class="nav-page-item" role="menuitem" ng-repeat="navState in ctl.availableStates">
+            <a ng-click="ctl.selectedState = navState; ctl.updateState()">
+              {{ navState.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+  </ul>
+</nav>
