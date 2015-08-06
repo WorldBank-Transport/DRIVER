@@ -5,6 +5,10 @@
     function RecordListController($log, $state, $stateParams, uuid4, Notifications,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
+        ctl.currentOffset = 0;
+        ctl.numRecordsPerPage = 10;
+        ctl.getPreviousRecords = getPreviousRecords;
+        ctl.getNextRecords = getNextRecords;
 
         initialize();
 
@@ -33,12 +37,27 @@
                 });
         }
 
-        function loadRecords() {
+        /*
+         * Loads a page of records from the API
+         * @param {int} offset Optional offset value, relative to current offset, used
+         *                     for pulling paginated results. May be positive or negative.
+         * @return {promise} Promise to load records
+         */
+        function loadRecords(offset) {
             /* jshint camelcase: false */
-            return Records.get({ record_type: $stateParams.rtuuid })
+            var params = { record_type: $stateParams.rtuuid };
             /* jshint camelcase: true */
+
+            if (offset) {
+                ctl.currentOffset += offset;
+                if (ctl.currentOffset) {
+                    params.offset = ctl.currentOffset;
+                }
+            }
+
+            return Records.get(params)
                 .$promise.then(function(records) {
-                    ctl.records = records.results;
+                    ctl.records = records;
                 });
         }
 
@@ -46,6 +65,16 @@
             ctl.detailsProperty = ctl.recordType.label + ' Details';
             ctl.propertiesKey = ctl.recordSchema.schema.definitions[ctl.detailsProperty].properties;
             ctl.headerKeys = _.without(_.keys(ctl.propertiesKey), '_localId');
+        }
+
+        // Loads the previous page of paginated record results
+        function getPreviousRecords() {
+            loadRecords(-ctl.numRecordsPerPage);
+        }
+
+        // Loads the next page of paginated record results
+        function getNextRecords() {
+            loadRecords(ctl.numRecordsPerPage);
         }
     }
 
