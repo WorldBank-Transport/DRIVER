@@ -69,4 +69,30 @@ describe('driver.navbar: NavbarController', function () {
         });
         expect(matches.length).toBe(0);
     });
+
+    it('should correctly navigate to state', function () {
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
+        $state.current = $state.get('home');
+
+        Controller = $controller('NavbarController', {
+            $scope: $scope,
+            $stateParams: { rtuuid: recordTypeId }
+        });
+        $scope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+
+        Controller.navigateToStateName('account');
+        $scope.$apply();
+        expect($state.current.name).toBe('account');
+
+        Controller.onStateSelected($state.get('dashboard'));
+        $scope.$apply();
+        expect($state.current.name).toBe('dashboard');
+    });
 });

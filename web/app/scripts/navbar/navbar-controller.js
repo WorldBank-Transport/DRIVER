@@ -6,6 +6,7 @@
         var ctl = this;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
         ctl.onStateSelected = onStateSelected;
+        ctl.navigateToStateName = navigateToStateName;
 
         setRecordTypes();
         setStates();
@@ -65,6 +66,11 @@
         function onStateSelected(navState) {
             ctl.selectedState = navState;
             updateState();
+        }
+
+        // Handler for when a navigation state is selected from the dropdown
+        function navigateToStateName(stateName) {
+            onStateSelected($state.get(stateName));
         }
     }
 
