@@ -3,15 +3,15 @@
 
     /* ngInject */
     function StateConfig($stateProvider) {
-        $stateProvider.state('home', {
-            url: '/',
-            template: '<driver-home></driver-home>',
-            label: 'Home',
+        $stateProvider.state('dashboard', {
+            url: '/:rtuuid/dashboard',
+            template: '<driver-dashboard></driver-dashboard>',
+            label: 'Dashboard',
             showInNavbar: true
         });
     }
 
-    angular.module('driver.views.home', [
+    angular.module('driver.views.dashboard', [
         'ui.router',
         'ui.bootstrap'
     ]).config(StateConfig);

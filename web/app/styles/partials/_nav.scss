@@ -4,6 +4,20 @@
 	width: 100%;
 }
 
+.navbar .nav-dropdown {
+    padding-top: 8px;
+    padding-right: 4px;
+}
+
+.navbar a {
+    cursor: pointer;
+}
+
+.navbar .account {
+    margin-top: 8px;
+    margin-right: 4px;
+}
+
 .content-types {
 	position: fixed;
 	width: 220px;
@@ -18,7 +32,7 @@
 		> li {
 			color: #fff;
 			list-style-type: none;
-			
+
 			border-bottom: 1px solid #777;
 
 			a {
@@ -44,7 +58,7 @@
 
                 a {
                     padding-left: 40px;
-                
+
                     &:hover {
                         background-color: #666;
                     }
