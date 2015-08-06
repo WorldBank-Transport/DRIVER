@@ -40,9 +40,11 @@
         // Sets states that can be navigated to (exclude current state, since we're already there)
         function setStates() {
             ctl.selectedState = $state.current;
-            ctl.availableStates = _.chain(['home', 'dashboard', 'map', 'record.list','record.add'])
+            ctl.availableStates = _.chain($state.get())
                 .map(function(name) { return $state.get(name); })
-                .filter(function(state) { return state.name !== $state.current.name; })
+                .filter(function(state) {
+                    return state.showInNavbar && state.name !== $state.current.name;
+                })
                 .value();
         }
 

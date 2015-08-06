@@ -6,7 +6,8 @@
         $stateProvider.state('map', {
             url: '/:rtuuid/map',
             template: '<driver-map></driver-map>',
-            label: 'Map'
+            label: 'Map',
+            showInNavbar: true
         });
     }
 

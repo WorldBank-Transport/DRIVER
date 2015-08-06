@@ -6,7 +6,8 @@
         $stateProvider.state('dashboard', {
             url: '/:rtuuid/dashboard',
             template: '<driver-dashboard></driver-dashboard>',
-            label: 'Dashboard'
+            label: 'Dashboard',
+            showInNavbar: true
         });
     }
 

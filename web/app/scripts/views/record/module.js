@@ -11,12 +11,16 @@
         $stateProvider.state('record.add', {
             url: '/:rtuuid/add',
             template: '<driver-record-add></driver-record-add>',
-            label: 'Add a Record'
+            label: 'Add a Record',
+            // TODO: set this to false once there is an alternate way
+            // within the ui to navigate to this view.
+            showInNavbar: true
         });
         $stateProvider.state('record.list', {
             url: '/:rtuuid/list',
             template: '<driver-record-list></driver-record-list>',
-            label: 'Record List'
+            label: 'Record List',
+            showInNavbar: true
         });
     }
 

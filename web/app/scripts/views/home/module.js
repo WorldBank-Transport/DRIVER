@@ -6,7 +6,8 @@
         $stateProvider.state('home', {
             url: '/',
             template: '<driver-home></driver-home>',
-            label: 'Home'
+            label: 'Home',
+            showInNavbar: true
         });
     }
 

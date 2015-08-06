@@ -6,7 +6,8 @@
         $stateProvider.state('account', {
             url: '/account',
             template: '<driver-account></driver-account>',
-            label: 'Account'
+            label: 'Account',
+            showInNavbar: false
         });
     }
 
