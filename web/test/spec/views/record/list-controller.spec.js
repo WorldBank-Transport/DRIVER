@@ -37,20 +37,8 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         var recordResponse = DriverResourcesMock.RecordResponse;
-        var recordsByTypeUrl = new RegExp(recordTypeId);
+        var recordsByTypeUrl = new RegExp('api/records/\\?record_type=' + recordTypeId);
         $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
-        /*
-         TODO: can't figure out why this isn't working:
-         var recordsByTypeUrl = new RegExp('api/records/?record_type=' + recordTypeId);
-
-         Tried escaping different things, but the following error always occurs:
-
-         Error: Unexpected request:
-             GET http://localhost:7000/api/records/?record_type=15460346-65d7-4f4d-944d-27324e224691
-
-         Expected
-             GET /api/records/?record_type=15460346-65d7-4f4d-944d-27324e224691/
-        */
 
         Controller = $controller('RecordListController', {
             $scope: $scope,
@@ -62,5 +50,43 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.verifyNoOutstandingRequest();
 
         expect(Controller.headerKeys.length).toBeGreaterThan(0);
+    });
+
+    it('should make offset requests for pagination', function () {
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
+        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
+        var recordResponse = DriverResourcesMock.RecordResponse;
+        var recordsByTypeUrl = new RegExp('api/records/\\?record_type=' + recordTypeId);
+        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
+
+        Controller = $controller('RecordListController', {
+            $scope: $scope,
+            $stateParams: { rtuuid: recordTypeId }
+        });
+        $scope.$apply();
+        $httpBackend.flush();
+
+        var recordOffsetResponse = DriverResourcesMock.RecordResponse;
+        var recordOffsetUrl = new RegExp('api/records/\\?offset=' + Controller.numRecordsPerPage +
+                                         '&record_type=' + recordTypeId);
+        $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
+
+        Controller.getNextRecords();
+        $httpBackend.flush();
+
+        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
+
+        Controller.getPreviousRecords();
+        $httpBackend.flush();
+
+        $httpBackend.verifyNoOutstandingRequest();
     });
 });

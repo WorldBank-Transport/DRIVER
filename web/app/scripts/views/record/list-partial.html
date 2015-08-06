@@ -19,7 +19,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr ng-repeat="record in ctl.records">
+                <tr ng-repeat="record in ctl.records.results">
                   <td class="date">
                     {{ ::record.occurred_to | date:'short' }}
                   </td>
@@ -32,6 +32,24 @@
                 </tr>
               </tbody>
             </table>
+        </div>
+        <div>
+          <button ng-if="ctl.records.next" type="button" class="btn btn-primary pull-right"
+                  ng-click="ctl.getNextRecords()">
+            Next
+          </button>
+          <button ng-if="ctl.records.previous" type="button" class="btn btn-primary"
+                  ng-click="ctl.getPreviousRecords()">
+            Previous
+          </button>
+        </div>
+        <div ng-if="ctl.records.count">
+          <i>
+            Showing results
+            {{ ctl.currentOffset + 1}} -
+            {{ ctl.currentOffset + ctl.records.results.length }} of
+            {{ ctl.records.count }}
+          </i>
         </div>
     </div>
 </div>
