@@ -21,7 +21,7 @@ script
     {% if developing -%}
     --volume {{ root_app_dir }}:{{ root_app_dir }} \
     --volume /opt/ashlar:/opt/ashlar \
-    -e "DJANGO_SETTINGS_MODULE='driver.settings_dev'" \
+    --env "DJANGO_SETTINGS_MODULE=driver.settings_dev" \
     {% endif -%}
     {% for k,v in driver_conf.items() -%}
     --env {{ k }}={{ v }} \
