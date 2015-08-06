@@ -12,29 +12,28 @@
 
         // Sets the list of available record types, and also the active one if provided
         function setRecordTypes() {
-            RecordTypes.query({ active: 'True' })
-                .$promise.then(function(recordTypes) {
-                    ctl.recordTypes = recordTypes;
-                    if (!recordTypes.length) {
-                        $log.warn('No record types returned');
-                    } else {
-                        if ($stateParams.rtuuid) {
-                            var index = _.findIndex(recordTypes, function(rt) {
-                                return rt.uuid === $stateParams.rtuuid;
-                            });
+            RecordTypes.query({ active: 'True' }, function(recordTypes) {
+                ctl.recordTypes = recordTypes;
+                if (!recordTypes.length) {
+                    $log.warn('No record types returned');
+                } else {
+                    if ($stateParams.rtuuid) {
+                        var index = _.findIndex(recordTypes, function(rt) {
+                            return rt.uuid === $stateParams.rtuuid;
+                        });
 
-                            if (index < 0) {
-                                $log.warn('Record type UUID is invalid');
-                            } else {
-                                ctl.selectedRecordType = recordTypes[index];
-                            }
-                        }
-
-                        if (!ctl.selectedRecordType) {
-                            ctl.selectedRecordType = recordTypes[0];
+                        if (index < 0) {
+                            $log.warn('Record type UUID is invalid');
+                        } else {
+                            ctl.selectedRecordType = recordTypes[index];
                         }
                     }
-                });
+
+                    if (!ctl.selectedRecordType) {
+                        ctl.selectedRecordType = recordTypes[0];
+                    }
+                }
+            });
         }
 
         // Sets states that can be navigated to (exclude current state, since we're already there)
