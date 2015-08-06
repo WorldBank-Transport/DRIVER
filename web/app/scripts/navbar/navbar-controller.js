@@ -4,7 +4,8 @@
     /* ngInject */
     function NavbarController($log, $rootScope, $state, $stateParams, RecordTypes) {
         var ctl = this;
-        ctl.updateState = updateState;
+        ctl.onRecordTypeSelected = onRecordTypeSelected;
+        ctl.onStateSelected = onStateSelected;
 
         setRecordTypes();
         setStates();
@@ -52,6 +53,18 @@
             $state.go(ctl.selectedState.name, {
                 rtuuid: ctl.selectedRecordType.uuid
             });
+        }
+
+        // Handler for when a record type is selected from the dropdown
+        function onRecordTypeSelected(recordType) {
+            ctl.selectedRecordType = recordType;
+            updateState();
+        }
+
+        // Handler for when a navigation state is selected from the dropdown
+        function onStateSelected(navState) {
+            ctl.selectedState = navState;
+            updateState();
         }
     }
 

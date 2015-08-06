@@ -10,7 +10,7 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="record-type">
           <li class="nav-rt-item" role="menuitem" ng-repeat="recordType in ctl.recordTypes | orderBy:'label'">
-            <a ng-click="ctl.selectedRecordType = recordType; ctl.updateState()">
+            <a ng-click="ctl.onRecordTypeSelected(recordType)">
               {{ recordType.plural_label }}
             </a>
           </li>
@@ -24,7 +24,7 @@
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="nav-page">
           <li class="nav-page-item" role="menuitem" ng-repeat="navState in ctl.availableStates">
-            <a ng-click="ctl.selectedState = navState; ctl.updateState()">
+            <a ng-click="ctl.onStateSelected(navState)">
               {{ navState.label }}
             </a>
           </li>
