@@ -1,6 +1,10 @@
 description "driver-app"
 
-start on filesystem and started docker
+{% if developing_or_testing -%}
+start on (vagrant-mounted and started docker)
+{% else -%}
+start on (filesystem and started docker)
+{% endif -%}
 stop on stopping docker
 
 kill timeout 20
