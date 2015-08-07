@@ -55,15 +55,6 @@ vagrant ssh app -c "sudo docker run \
   --name ${CONTAINER_NAME} \
   --publish ${PUBLISHED_PORT}:${PUBLISHED_PORT} \
   --publish ${LIVERELOAD_PORT}:${LIVERELOAD_PORT} \
-  --volume ${VOLUME_ROOT}/dist:${VOLUME_ROOT}/dist \
-  --volume ${SCHEMA_EDITOR_ROOT}/app:${SCHEMA_EDITOR_ROOT}/app \
-  --volume ${SCHEMA_EDITOR_ROOT}/test:${SCHEMA_EDITOR_ROOT}/test \
-  --volume ${VOLUME_ROOT}/app:${VOLUME_ROOT}/app \
-  --volume ${VOLUME_ROOT}/test:${VOLUME_ROOT}/test \
-  --volume ${VOLUME_ROOT}/.bowerrc:${VOLUME_ROOT}/.bowerrc \
-  --volume ${VOLUME_ROOT}/.editorconfig:${VOLUME_ROOT}/.editorconfig \
-  --volume ${VOLUME_ROOT}/.jshintrc:${VOLUME_ROOT}/.jshintrc \
-  --volume ${VOLUME_ROOT}/bower.json:${VOLUME_ROOT}/bower.json \
-  --volume ${VOLUME_ROOT}/Gruntfile.js:${VOLUME_ROOT}/Gruntfile.js \
-  --volume ${VOLUME_ROOT}/package.json:${VOLUME_ROOT}/package.json \
+  --volume ${VOLUME_ROOT}:${VOLUME_ROOT} \
+  --volume ${SCHEMA_EDITOR_ROOT}:${SCHEMA_EDITOR_ROOT} \
   ${IMAGE_NAME} ${CMD} ${*:3}"
