@@ -10,15 +10,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN gem install compass
 
-RUN mkdir -p /opt/schema_editor
-WORKDIR /opt/schema_editor
+RUN mkdir -p /opt/schema_editor /npm /bower
 
-COPY package.json /opt/schema_editor/
-RUN npm install --unsafe-perm
+WORKDIR /npm
+COPY package.json /npm/
+RUN npm install
 
-COPY bower.json /opt/schema_editor/
+WORKDIR /bower
+COPY bower.json /bower/
 RUN bower install --allow-root --config.interactive=false --force
 
+WORKDIR /opt/schema_editor
 COPY . /opt/schema_editor
 
 ENTRYPOINT ["grunt"]

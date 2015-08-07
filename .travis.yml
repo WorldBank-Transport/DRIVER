@@ -4,8 +4,6 @@ python:
 
 cache:
   directories:
-    - schema_editor/node_modules
-    - schema_editor/bower_components
     - $HOME/.cache/pip
 
 addons:
@@ -23,6 +21,7 @@ before_install:
     #   https://github.com/npm/npm/issues/6309
   - nvm install 0.12
   - nvm use 0.12
+  - find . -type l -name "bower_components" -delete -o -name "node_modules" -delete
 
 install:
   - gem install -q sass compass
