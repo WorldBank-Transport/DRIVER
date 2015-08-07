@@ -52,6 +52,15 @@ make {all,app,editor,web}
 This will make use of a Docker client installed on the virtual machine host,
 telling it to communicate with the Docker daemon on the `app` virtual machine.
 
+## Testing Data
+
+A CSV of historical data can be downloaded from the project /data folder (accidents_and_sites.csv).
+
+Once the app has been built, this data can be loaded by running
+`python scripts/load_pnp_accidents.py /path/to/accidents_and_sites.csv`.
+Note that the import process will take roughly two hours for the full data set; you can cut down the
+number of records with `head`.
+
 ## Production
 
 TODO: Notes on creating a production superuser and adding a production OAuth2 application
