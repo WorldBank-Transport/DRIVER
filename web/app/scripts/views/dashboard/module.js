@@ -13,7 +13,8 @@
 
     angular.module('driver.views.dashboard', [
         'ui.router',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'driver.toddow'
     ]).config(StateConfig);
 
 })();
