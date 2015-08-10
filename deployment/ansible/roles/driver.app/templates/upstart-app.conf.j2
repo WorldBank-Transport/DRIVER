@@ -16,23 +16,21 @@ pre-start script
   /usr/bin/docker rm driver-app || true
 end script
 
-script
-  /usr/bin/docker run \
-    --name driver-app \
-    --publish 4000:4000 \
-    --volume {{ root_static_dir }}:{{ root_static_dir }} \
-    --volume {{ root_media_dir }}:{{ root_media_dir }} \
-    {% if developing -%}
-    --volume {{ root_app_dir }}:{{ root_app_dir }} \
-    --volume /opt/ashlar:/opt/ashlar \
-    --env "DJANGO_SETTINGS_MODULE=driver.settings_dev" \
-    {% endif -%}
-    {% for k,v in driver_conf.items() -%}
-    --env {{ k }}={{ v }} \
-    {% endfor -%}
-    --log-driver syslog \
-    driver/app:latest
-end script
+exec /usr/bin/docker run \
+  --name driver-app \
+  --publish 4000:4000 \
+  --volume {{ root_static_dir }}:{{ root_static_dir }} \
+  --volume {{ root_media_dir }}:{{ root_media_dir }} \
+  {% if developing -%}
+  --volume {{ root_app_dir }}:{{ root_app_dir }} \
+  --volume /opt/ashlar:/opt/ashlar \
+  --env "DJANGO_SETTINGS_MODULE=driver.settings_dev" \
+  {% endif -%}
+  {% for k,v in driver_conf.items() -%}
+  --env {{ k }}={{ v }} \
+  {% endfor -%}
+  --log-driver syslog \
+  driver/app:latest
 
 post-stop script
   /usr/bin/docker kill driver-app

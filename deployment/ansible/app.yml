@@ -12,4 +12,3 @@
 
   roles:
     - { role: "driver.app" }
-    - { role: "driver.ashlar" }

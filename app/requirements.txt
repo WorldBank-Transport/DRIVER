@@ -3,4 +3,4 @@ djangorestframework-gis==0.9.1
 django-extensions==1.5.5
 django-cors-headers==1.0.0
 django-oauth-toolkit==0.8.1
-git+https://github.com/azavea/ashlar.git@develop
+git+https://github.com/azavea/ashlar.git@develop#egg=ashlar
