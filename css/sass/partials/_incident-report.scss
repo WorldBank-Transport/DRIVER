@@ -1,0 +1,117 @@
+.incident-report {
+    background: rgba(0,0,0,0.5);
+
+    .modal-content {
+        border-radius: 0;
+        border: none;
+        padding: 15px;
+    }
+    .edit {
+        font-size: 14px;
+        font-weight: 700;
+        
+        .glyphicon { font-size: 12px; margin-right: 3px; }
+    }
+    .close {
+        position: absolute;
+        right: -15px;
+        top: -15px;
+        background: white;
+        padding: 8px;
+        opacity: 1;
+        box-shadow: 0 0 5px rgba(0,0,0,0.25);
+        width: 30px;
+        height: 30px;
+        line-height: 0.6;
+        text-align: center;
+        border-radius: 999px;
+        color: #999;
+        transition: 0.5s all;
+
+        &:hover {
+            color: #000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.45);
+        }
+    }
+    .alert {
+        margin: 15px 0 0;
+    }
+
+    .report-header {
+        border-bottom: 1px solid #ddd;
+        margin: 0 -15px 0 -15px;
+        padding: 0 15px 15px;
+
+        h1 {
+            font-size: 30px;
+            font-weight: 300;
+            margin: 0;
+
+            small {
+                margin-left: 5px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #AAA;
+            }
+        }
+    }
+    .report-sections {
+        margin: 0 -15px;
+        background-color: #f1f2f2;
+        padding: 5px 8px 0;
+
+        a { font-weight: 700; }
+    }
+    .report-content {
+        padding-top: 25px;
+
+        h2 {
+            margin: 0 0 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 24px;
+            font-weight: 300;
+
+            .edit {
+                margin-top: 12px;
+            }
+        }
+    }
+
+    .table {
+        .table-head {
+            padding: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #AAA;
+            border-bottom: 4px solid #ddd;
+        }
+        .table-body {
+            .table-body-row {
+                .table-body-row-header {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+                    cursor: pointer;
+
+                    &.open {
+                        background-color: #f1f2f2;
+
+                        & + .table-body-row-content {
+                            max-height: 1000px;
+                            padding: 20px 15px;
+                            border-bottom: 1px solid #ddd;
+                        }
+                    }
+                }
+                .table-body-row-content {
+                    height: auto;
+                    max-height: 0;
+                    overflow: hidden;
+                    padding: 0;
+                    transition: 0.5 all;
+                }
+            }
+        }
+    }
+}

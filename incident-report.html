@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PRS Prototype: Incident Report</title>
+
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+    <div class="incident-report modal fade in" style="display: block;" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="close">&times;</div>
+                <div class="report-header">
+                    <h1>25th Street & 5th Avenue <small>01/01/2015 00:00</small></h1>
+                </div>
+                <div class="report-sections">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="active"><a href="#details" role="tab" data-toggle="tab">Incident Details</a></li>
+                        <li><a href="#vehicles" role="tab" data-toggle="tab">Vehicles</a></li>
+                        <li><a href="#people" role="tab" data-toggle="tab">People</a></li>
+                        <li><a href="#road" role="tab" data-toggle="tab">Road Details</a></li>
+                        <li><a href="#images" role="tab" data-toggle="tab">Images</a></li>
+                    </ul>
+                </div>
+                <div class="report-content tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="details">
+                        <h2>Incident Overview 
+                            <small class="pull-right edit"><a href="javascript:void(0);"><span class="glyphicon glyphicon-pencil"></span> Edit</a></small>
+                        </h2>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label>Incident Time</label>
+                                <div class="value">01/01/2015 00:00</div>
+                                <input class="value form-control hidden" value="01/01/2015 00:00" />
+                            </div>
+                            <div class="col-sm-6">
+                                <label>Report Time</label>
+                                <div class="value">01/01/2015 00:00</div>
+                                <input class="value form-control hidden" value="01/01/2015 00:00" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="vehicles"></div>
+                    <div class="tab-pane" role="tabpanel" id="people">
+                        <div class="table">
+                            <div class="table-head">
+                                <div class="row">
+                                    <div class="col-sm-3">Full Name</div>
+                                    <div class="col-sm-3">Involvement</div>
+                                    <div class="col-sm-3">Vehicle</div>
+                                    <div class="col-sm-3">Injury</div>
+                                </div>
+                            </div>
+                            <div class="table-body">
+                                <div class="table-body-row">
+                                    <div class="table-body-row-header open">
+                                        <div class="row">
+                                            <div class="col-sm-3">Lynnette Perez</div>
+                                            <div class="col-sm-2">Witness</div>
+                                            <div class="col-sm-5">2012 Toyota Corolla #VD45C9</div>
+                                            <div class="col-sm-2">Minor</div>
+                                        </div>
+                                    </div>
+                                    <div class="table-body-row-content">
+                                        <h2>Person Details 
+                                            <small class="pull-right edit"><a href="javascript:void(0);"><span class="glyphicon glyphicon-pencil"></span> Edit</a></small>
+                                        </h2>
+                                        <div class="row">
+                                            <div class="col-sm-3">
+                                                <label>First name</label>
+                                                <div class="value">Lynnette</div>
+                                                <input class="value form-control hidden" value="Lynnette" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>Last name</label>
+                                                <div class="value">Perez</div>
+                                                <input class="value form-control hidden" value="Perez" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>Gender/sex</label>
+                                                <div class="value">Female</div>
+                                                <input class="value form-control hidden" value="Female" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>Date of Birth</label>
+                                                <div class="value">01/01/1982</div>
+                                                <input class="value form-control hidden" value="01/01/1982" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <a href="javascript:void(0);" class="btn btn-default">Add a Person</a>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="road"></div>
+                    <div class="tab-pane" role="tabpanel" id="images"></div>
+                </div>
+                <div class="alert alert-info" role="alert">
+                    Duplicate entries resolved for this record.
+                    <a class="pull-right" href="javascript:void(0);">View duplicate records &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $('.edit').on('click', function(){
+                $('.value').toggleClass('hidden');
+            });
+            $('.table-body-row-header').on('click', function(){
+                $(this).toggleClass('open');
+            });
+        });
+    </script>
+</body>
+</html>

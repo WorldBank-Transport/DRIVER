@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PRS Prototype: Dashboard</title>
+
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default drop-shadow">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Road Incident Data System</a>
+            </div>
+    
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Dashboard <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Map</a></li>
+                            <li><a href="#">Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Metro Manila <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Cebu</a></li>
+                            <li><a href="#">Davao</a></li>
+                            <li><a href="#">Iloilo</a></li>
+                            <li><a href="#">Metro Manila</a></li>
+                            <li><a href="#">San Fernando</a></li>
+                        </ul>
+                    </li>
+                </ul>
+          
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">My Account <span class="glyphicon glyphicon-option-vertical"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Manage Duplicate Records</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="dashboard">
+        <div class="block block-1x2 quick-map">
+            <div class="block-inner">
+                <div class="placeholder" style="top: 10px; bottom: 50px;"></div>
+                <h3>Black Spots by Severity
+                    <a href="javascript:void(0);" class="small pull-right">Analyze & filter &raquo;</a>
+                </h3>
+            </div>
+        </div>
+        <div class="block block-1x2 quick-map">
+            <div class="block-inner">
+                <div class="placeholder" style="top: 10px; bottom: 50px;"></div>
+                <h3>Recent Accidents
+                    <a href="javascript:void(0);" class="small pull-right">View all accidents &raquo;</a>
+                </h3>
+            </div>
+        </div>
+        <div class="block block-1x1 insights">
+            <div class="block-inner">
+                <h1><b>15%</b> of all traffic accidents involved <b>Jeepneys last week</b>.</h1>
+            </div>
+        </div>
+        <div class="block block-1x1 counts">
+            <div class="block-inner">
+                <h1>1350</h1>
+                <h2>Traffic Accidents</h2>
+            </div>
+        </div>
+        <div class="block block-2x1 toddow">
+            <div class="block-inner">
+                <div class="placeholder" style="top: 10px; bottom: 10px;"></div>
+            </div>
+        </div>
+        <div class="block block-2x1 filters">
+            <div class="block-inner">
+                <h3>Saved Filters</h3>
+                <div class="placeholder" style="top: 50px; bottom: 10px;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+</body>
+</html>

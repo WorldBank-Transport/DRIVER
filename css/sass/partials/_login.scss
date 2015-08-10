@@ -1,0 +1,34 @@
+.login-view {
+    background: #f1f2f2;
+    padding: 2.5%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 52px;
+
+    .login-panel {
+        max-width: 600px;
+        background: white;
+        top: 50px;
+        margin: 0 auto;
+        position: relative;
+        
+        > section {
+            display: none;
+            padding: 20px;
+
+            &.active {
+                display: block;
+            }
+        }
+    }
+
+    h6 {
+    
+    }
+    h1 {
+    
+    }
+    
+    
+}

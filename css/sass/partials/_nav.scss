@@ -1,0 +1,30 @@
+nav {
+    margin-bottom: 0 !important;
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 14px;
+        border-right: 1px solid #ddd;
+    }
+    .dropdown-menu {
+        border: none;
+        margin-top: -5px !important;
+        padding: 0;
+        border-radius: 0;
+
+        > li { 
+            border-bottom: 1px solid #f1f2f2;
+            
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            > a {
+                padding: 10px 20px;
+            }
+        }
+    }
+}

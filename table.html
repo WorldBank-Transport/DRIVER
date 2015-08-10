@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PRS Prototype: Table</title>
+
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="css/lib/bootstrap-select.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default drop-shadow">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Road Incident Data System</a>
+            </div>
+    
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Table <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Map</a></li>
+                            <li><a href="#">Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Metro Manila <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Cebu</a></li>
+                            <li><a href="#">Davao</a></li>
+                            <li><a href="#">Iloilo</a></li>
+                            <li><a href="#">Metro Manila</a></li>
+                            <li><a href="#">San Fernando</a></li>
+                        </ul>
+                    </li>
+                </ul>
+          
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">My Account <span class="glyphicon glyphicon-option-vertical"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Manage Duplicate Records</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="table-view">
+        <div class="table-view-container">
+            <div class="filters">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <input type="search" class="form-control" placeholder="Search by name, keyword" /></div>
+                    <div class="col-xs-6">
+                        <select class="selectpicker">
+                            <option>Status</option>
+                        </select>
+                        <select class="selectpicker">
+                            <option>All Records</option>
+                        </select>
+                        <select class="selectpicker">
+                            <option>Last 90 Days</option>
+                        </select>
+                    </div>
+                    <div class="col-xs-3"><a href="javascript:void(0);" class="btn btn-default pull-right">Add New Incident</a></div>
+                </div>
+            </div>
+            <div class="overflow">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ref. ID</th>
+                            <th>Date & Time</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Severity</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                        <tr>
+                            <td>0012345</td>
+                            <td>01/01/2015 00:00</td>
+                            <td>25th Street and 5th Avenue, Global City, Taguig, Metro Manila</td>
+                            <td>Added via app</td>
+                            <td>Fatal</td>
+                            <td><a href="javascript:void(0);">Edit</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/bootstrap-select.min.js"></script>
+    <script>
+        $('.selectpicker').selectpicker({
+            width: 'auto'
+        });
+    </script>
+</body>
+</html>

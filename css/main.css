@@ -1,0 +1,306 @@
+@import url("http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700");
+body {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #AAA;
+  margin-bottom: 5px;
+  display: block; }
+
+.value:not(.form-control) {
+  font-size: 18px;
+  font-weight: 300; }
+
+.btn,
+.form-control {
+  border-radius: 999px; }
+
+.drop-shadow {
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1); }
+
+.placeholder {
+  width: 100%;
+  background: #ddd; }
+
+nav {
+  margin-bottom: 0 !important;
+  position: fixed;
+  z-index: 9;
+  width: 100%; }
+  nav .navbar-brand {
+    font-weight: 700;
+    font-size: 14px;
+    border-right: 1px solid #ddd; }
+  nav .dropdown-menu {
+    border: none;
+    margin-top: -5px !important;
+    padding: 0;
+    border-radius: 0; }
+    nav .dropdown-menu > li {
+      border-bottom: 1px solid #f1f2f2; }
+      nav .dropdown-menu > li:last-of-type {
+        border-bottom: none; }
+      nav .dropdown-menu > li > a {
+        padding: 10px 20px; }
+
+.login-view {
+  background: #f1f2f2;
+  padding: 2.5%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  top: 52px; }
+  .login-view .login-panel {
+    max-width: 600px;
+    background: white;
+    top: 50px;
+    margin: 0 auto;
+    position: relative; }
+    .login-view .login-panel > section {
+      display: none;
+      padding: 20px; }
+      .login-view .login-panel > section.active {
+        display: block; }
+
+.dashboard {
+  background: #f1f2f2;
+  padding: 2.5%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  top: 52px; }
+  .dashboard .block {
+    background: white;
+    box-shadow: none;
+    transition: 0.5s all;
+    position: absolute; }
+    .dashboard .block:hover {
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.2); }
+    .dashboard .block.block-1x2 {
+      width: 40%;
+      height: 44%; }
+      .dashboard .block.block-1x2:nth-child(2n) {
+        top: 52%; }
+    .dashboard .block.block-1x1 {
+      width: 26%;
+      height: 28%;
+      left: 44%; }
+      .dashboard .block.block-1x1:nth-child(2n) {
+        left: 72%; }
+    .dashboard .block.block-2x1 {
+      width: 54%;
+      height: 32%;
+      left: 44%;
+      top: 36%; }
+      .dashboard .block.block-2x1:nth-child(2n) {
+        top: 72%;
+        height: 24%; }
+    .dashboard .block > .block-inner {
+      padding: 10px;
+      height: 100%; }
+      .dashboard .block > .block-inner > .placeholder {
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        width: auto; }
+    .dashboard .block.quick-map h3 {
+      position: absolute;
+      bottom: 0;
+      left: 10px;
+      right: 10px;
+      width: auto;
+      margin: 14px 0;
+      font-size: 21px; }
+      .dashboard .block.quick-map h3 .small {
+        margin-top: 5px; }
+    .dashboard .block.insights h1 {
+      font-size: 30px;
+      font-weight: 300;
+      padding: 25px;
+      margin: 0; }
+      .dashboard .block.insights h1 b {
+        font-weight: 700; }
+    .dashboard .block.counts {
+      text-align: center; }
+      .dashboard .block.counts h1 {
+        font-size: 48px;
+        font-weight: 700;
+        margin: 30px 0 10px; }
+      .dashboard .block.counts h2 {
+        font-size: 21px;
+        font-weight: 300;
+        margin: 0; }
+    .dashboard .block.filters h3 {
+      margin: 6px 0 8px;
+      font-size: 18px; }
+
+.table-view {
+  background: #f1f2f2;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  top: 52px; }
+  .table-view .table-view-container {
+    margin: 25px;
+    background: white;
+    position: absolute;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0; }
+  .table-view .filters {
+    padding: 15px; }
+    .table-view .filters .form-control {
+      padding: 20px 16px; }
+    .table-view .filters .bootstrap-select {
+      margin-right: 10px; }
+    .table-view .filters .btn {
+      padding: 10px 16px; }
+  .table-view .overflow {
+    position: absolute;
+    width: 100%;
+    top: 75px;
+    bottom: 0;
+    overflow: auto; }
+  .table-view .table {
+    margin: 0; }
+    .table-view .table th {
+      background: #ddd;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase; }
+
+.incident-report {
+  background: rgba(0, 0, 0, 0.5); }
+  .incident-report .modal-content {
+    border-radius: 0;
+    border: none;
+    padding: 15px; }
+  .incident-report .edit {
+    font-size: 14px;
+    font-weight: 700; }
+    .incident-report .edit .glyphicon {
+      font-size: 12px;
+      margin-right: 3px; }
+  .incident-report .close {
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    background: white;
+    padding: 8px;
+    opacity: 1;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+    width: 30px;
+    height: 30px;
+    line-height: 0.6;
+    text-align: center;
+    border-radius: 999px;
+    color: #999;
+    transition: 0.5s all; }
+    .incident-report .close:hover {
+      color: #000;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.45); }
+  .incident-report .alert {
+    margin: 15px 0 0; }
+  .incident-report .report-header {
+    border-bottom: 1px solid #ddd;
+    margin: 0 -15px 0 -15px;
+    padding: 0 15px 15px; }
+    .incident-report .report-header h1 {
+      font-size: 30px;
+      font-weight: 300;
+      margin: 0; }
+      .incident-report .report-header h1 small {
+        margin-left: 5px;
+        font-size: 18px;
+        font-weight: 700;
+        color: #AAA; }
+  .incident-report .report-sections {
+    margin: 0 -15px;
+    background-color: #f1f2f2;
+    padding: 5px 8px 0; }
+    .incident-report .report-sections a {
+      font-weight: 700; }
+  .incident-report .report-content {
+    padding-top: 25px; }
+    .incident-report .report-content h2 {
+      margin: 0 0 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #ddd;
+      font-size: 24px;
+      font-weight: 300; }
+      .incident-report .report-content h2 .edit {
+        margin-top: 12px; }
+  .incident-report .table .table-head {
+    padding: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #AAA;
+    border-bottom: 4px solid #ddd; }
+  .incident-report .table .table-body .table-body-row .table-body-row-header {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer; }
+    .incident-report .table .table-body .table-body-row .table-body-row-header.open {
+      background-color: #f1f2f2; }
+      .incident-report .table .table-body .table-body-row .table-body-row-header.open + .table-body-row-content {
+        max-height: 1000px;
+        padding: 20px 15px;
+        border-bottom: 1px solid #ddd; }
+  .incident-report .table .table-body .table-body-row .table-body-row-content {
+    height: auto;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    transition: 0.5 all; }
+
+.print-view {
+  margin: 50px;
+  max-width: 100%; }
+  @media print {
+    .print-view {
+      margin: 0; } }
+  .print-view h1 {
+    margin: 0 0 10px; }
+    @media print {
+      .print-view h1 {
+        font-size: 30px; } }
+  .print-view h2 {
+    margin: 0 0 25px;
+    font-size: 18px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: gray; }
+    @media print {
+      .print-view h2 {
+        font-size: 14px; } }
+  .print-view table {
+    table-layout: fixed; }
+    .print-view table th {
+      font-size: 10px;
+      font-weight: 700;
+      text-align: right;
+      text-transform: uppercase;
+      border-bottom: 4px solid #ddd !important; }
+      .print-view table th:first-of-type {
+        width: 25%;
+        text-align: left; }
+      .print-view table th:nth-child(2n) {
+        background: #f1f2f2; }
+    .print-view table td {
+      font-size: 12px;
+      text-align: right; }
+      .print-view table td:first-of-type {
+        text-align: left; }
+      .print-view table td:nth-child(2n) {
+        background: #f1f2f2; }
+
+@page {
+  size: auto;
+  margin: 10mm; }
+
+/*# sourceMappingURL=main.css.map */

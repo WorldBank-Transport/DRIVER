@@ -1,0 +1,66 @@
+.print-view {
+    margin: 50px;
+    max-width: 100%;
+
+    @media print {
+        margin: 0;
+    }
+
+    h1 {
+        margin: 0 0 10px;
+
+        @media print {
+            font-size: 30px;
+        }
+    }
+    h2 {
+        margin: 0 0 25px;
+        font-size: 18px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: gray;
+
+        @media print {
+            font-size: 14px;
+        }
+    }
+
+    table {
+        table-layout: fixed;
+
+        thead {
+
+        }
+        th {
+            font-size: 10px;
+            font-weight: 700;
+            text-align: right;
+            text-transform: uppercase;
+            border-bottom: 4px solid #ddd !important;
+
+            &:first-of-type {
+                width: 25%;
+                text-align: left;
+            }
+            &:nth-child(2n) {
+                background: #f1f2f2;
+            }
+        }
+        td {
+            font-size: 12px;
+            text-align: right;
+
+            &:first-of-type {
+                text-align: left;
+            }
+            &:nth-child(2n) {
+                background: #f1f2f2;
+            }
+        }
+    }
+}
+
+@page {
+    size: auto;
+    margin: 10mm;
+}

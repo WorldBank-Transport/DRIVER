@@ -1,0 +1,47 @@
+.table-view {
+    background: #f1f2f2;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 52px;
+
+    .table-view-container {
+        margin: 25px;
+        background: white;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+    .filters {
+        padding: 15px;
+
+        .form-control {
+            padding: 20px 16px;
+        }
+        .bootstrap-select {
+            margin-right: 10px;
+        }
+        .btn {
+            padding: 10px 16px;
+        }
+    }
+    .overflow {
+        position: absolute;
+        width: 100%;
+        top: 75px;
+        bottom: 0;
+        overflow: auto;
+    }
+    .table {
+        margin: 0;
+
+        th {
+            background: #ddd;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    }
+}
