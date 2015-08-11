@@ -2,11 +2,11 @@
     'use strict';
 
     /* ngInject */
-    function RecordAdd() {
+    function RecordAddEdit() {
         var module = {
             restrict: 'E',
             templateUrl: 'scripts/views/record/add-edit-partial.html',
-            controller: 'RecordAddController',
+            controller: 'RecordAddEditController',
             controllerAs: 'ctl',
             bindToController: true
         };
@@ -14,6 +14,6 @@
     }
 
     angular.module('driver.views.record')
-    .directive('driverRecordAdd', RecordAdd);
+    .directive('driverRecordAddEdit', RecordAddEdit);
 
 })();

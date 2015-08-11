@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddController($log, $state, $stateParams, uuid4, Notifications,
+    function RecordAddEditController($log, $state, $stateParams, uuid4, Notifications,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
         var editorData = null;
@@ -123,6 +123,6 @@
     }
 
     angular.module('driver.views.record')
-    .controller('RecordAddController', RecordAddController);
+    .controller('RecordAddEditController', RecordAddEditController);
 
 })();

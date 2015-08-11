@@ -10,7 +10,7 @@
         });
         $stateProvider.state('record.add', {
             url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/add',
-            template: '<driver-record-add></driver-record-add>',
+            template: '<driver-record-add-edit></driver-record-add-edit>',
             label: 'Add a Record',
             // TODO: set this to false once there is an alternate way
             // within the ui to navigate to this view.

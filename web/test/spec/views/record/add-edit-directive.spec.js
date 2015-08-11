@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.views.record: RecordAdd', function () {
+describe('driver.views.record: RecordAddEdit', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
@@ -30,7 +30,7 @@ describe('driver.views.record: RecordAdd', function () {
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
 
         var scope = $rootScope.$new();
-        var element = $compile('<driver-record-add></driver-record-add>')(scope);
+        var element = $compile('<driver-record-add-edit></driver-record-add-edit>')(scope);
         $rootScope.$apply();
 
         expect(element.find('json-editor').length).toEqual(1);

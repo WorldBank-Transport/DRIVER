@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.views.record: AddController', function () {
+describe('driver.views.record: AddEditController', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.views.record'));
@@ -33,7 +33,7 @@ describe('driver.views.record: AddController', function () {
         var recordSchemaIdUrl = new RegExp('api\/recordschemas\/' + recordSchemaId);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
-        Controller = $controller('RecordAddController', {
+        Controller = $controller('RecordAddEditController', {
             $scope: $scope,
             $stateParams: { rtuuid: recordTypeId }
         });
