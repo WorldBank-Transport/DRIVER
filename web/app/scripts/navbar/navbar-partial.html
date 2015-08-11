@@ -6,10 +6,10 @@
     <li class="nav-dropdown">
       <div class="btn-group" dropdown>
         <button id="record-type" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.selectedRecordType.plural_label }} <span class="caret"></span>
+          {{ ctl.recordTypeSelected.plural_label }} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="record-type">
-          <li class="nav-rt-item" role="menuitem" ng-repeat="recordType in ctl.recordTypes | orderBy:'label'">
+          <li class="nav-rt-item" role="menuitem" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
             <a ng-click="ctl.onRecordTypeSelected(recordType)">
               {{ recordType.plural_label }}
             </a>
@@ -19,8 +19,36 @@
     </li>
     <li class="nav-dropdown">
       <div class="btn-group" dropdown>
+        <button id="geography" type="button" class="btn btn-primary" dropdown-toggle>
+          {{ ctl.geographySelected.label }} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="geography">
+          <li class="nav-rt-item" role="menuitem" ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
+            <a ng-click="ctl.onGeographySelected(geography)">
+              {{ geography.label }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-dropdown">
+      <div class="btn-group" dropdown>
+        <button id="polygon" type="button" class="btn btn-primary" dropdown-toggle>
+          {{ ctl.getPolygonLabel(ctl.polygonSelected) }} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="polygon">
+          <li class="nav-rt-item" role="menuitem" ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
+            <a ng-click="ctl.onPolygonSelected(polygon)">
+              {{ ctl.getPolygonLabel(polygon) }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="nav-dropdown">
+      <div class="btn-group" dropdown>
         <button id="nav-page" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.selectedState.label }} <span class="caret"></span>
+          {{ ctl.stateSelected.label }} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" role="menu" aria-labelledby="nav-page">
           <li class="nav-page-item" role="menuitem" ng-repeat="navState in ctl.availableStates">

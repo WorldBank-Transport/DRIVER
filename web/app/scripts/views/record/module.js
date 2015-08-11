@@ -9,7 +9,7 @@
             template: '<ui-view></ui-view>'
         });
         $stateProvider.state('record.add', {
-            url: '/:rtuuid/add',
+            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/add',
             template: '<driver-record-add></driver-record-add>',
             label: 'Add a Record',
             // TODO: set this to false once there is an alternate way
@@ -17,7 +17,7 @@
             showInNavbar: true
         });
         $stateProvider.state('record.list', {
-            url: '/:rtuuid/list',
+            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/list',
             template: '<driver-record-list></driver-record-list>',
             label: 'Record List',
             showInNavbar: true

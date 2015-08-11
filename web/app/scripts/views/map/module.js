@@ -4,7 +4,7 @@
     /* ngInject */
     function StateConfig($stateProvider) {
         $stateProvider.state('map', {
-            url: '/:rtuuid/map',
+            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/map',
             template: '<driver-map></driver-map>',
             label: 'Map',
             showInNavbar: true
