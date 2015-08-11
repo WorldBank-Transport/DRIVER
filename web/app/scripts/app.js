@@ -14,6 +14,13 @@
         $logProvider.debugEnabled(Config.debug);
     }
 
+    function LeafletDefaultsConfig(LeafletDefaultsProvider) {
+        LeafletDefaultsProvider.setDefaults({
+            center: [8.00, 120.00], // Sulu Sea
+            zoom: 5,
+        });
+    }
+
     /**
      * @ngdoc overview
      * @name driver
@@ -23,6 +30,7 @@
      * Main module of the application.
      */
     angular.module('driver', [
+        'Leaflet',
         'driver.config',
         'driver.navbar',
         'driver.views.account',
@@ -33,5 +41,6 @@
         'ui.router'
     ])
     .config(DefaultRoutingConfig)
-    .config(LogConfig);
+    .config(LogConfig)
+    .config(LeafletDefaultsConfig);
 })();

@@ -21,6 +21,7 @@
     "_": true,
     "$": true,
     "angular": false,
-    "JSONEditor": true
+    "JSONEditor": true,
+    "L": false
   }
 }

@@ -1,5 +1,10 @@
+html {
+	height: 100%;
+}
+
 body {
 	font-weight: 300;
+	height: 100%;
 }
 
 
@@ -45,6 +50,10 @@ label {
 }
 
 /* MAIN BODY */
+
+main {
+	height: 100%;
+}
 
 .form-area {
 	position: relative;
