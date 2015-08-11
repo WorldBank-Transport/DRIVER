@@ -19,6 +19,13 @@
       -f {{ root_app_dir }}/Dockerfile.base
       -t driver/app:latest
       {{ root_app_dir }}
+
+- name: Build application Docker image
+  command: >
+    docker build
+      -f {{ root_app_dir }}/Dockerfile.development
+      -t driver/app:latest
+      {{ root_app_dir }}
   when: developing_or_testing
 
 - name: Configure Driver application service definition

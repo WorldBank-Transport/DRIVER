@@ -1,4 +1,0 @@
----
-- name: Install Ashlar
-  command: >
-    /usr/bin/docker exec -ti driver-app pip install -e /opt/ashlar
