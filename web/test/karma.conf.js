@@ -65,6 +65,8 @@ module.exports = function(config) {
 
       'app/scripts/navbar/module.js',
       'app/scripts/navbar/**.js',
+      'app/scripts/toddow/module.js',
+      'app/scripts/toddow/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/views/account/module.js',

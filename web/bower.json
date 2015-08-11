@@ -15,7 +15,7 @@
     "angular-bootstrap": "~0.13.0",
     "lodash": "^3.8.0",
     "angular-uuid": "~0.1.0",
-    "leaflet": "~0.7.3"
+    "leaflet": "~0.7.3",
     "angular-uuid": "~0.1.0",
     "d3": "^3.5.6",
     "d3-tip": "^0.6.7",

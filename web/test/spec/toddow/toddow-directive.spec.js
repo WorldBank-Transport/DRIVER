@@ -1,16 +1,10 @@
 'use strict';
 
-describe('driver.navbar: Navbar', function () {
+describe('driver.toddow: ToDDoW', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
-    beforeEach(module('driver.templates'));
-    beforeEach(module('driver.navbar'));
-    beforeEach(module('driver.views.account'));
-    beforeEach(module('driver.views.dashboard'));
-    beforeEach(module('driver.views.home'));
-    beforeEach(module('driver.views.map'));
-    beforeEach(module('driver.views.record'));
+    beforeEach(module('driver.toddow'));
 
     var $compile;
     var $httpBackend;
@@ -28,19 +22,11 @@ describe('driver.navbar: Navbar', function () {
     }));
 
     it('should load directive', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-
         var scope = $rootScope.$new();
         var element = $compile('<div driver-toddow chartData=""></div>')(scope);
         $rootScope.$apply();
 
-        $httpBackend.flush();
-        $httpBackend.verifyNoOutstandingRequest();
-
-        expect(element.find('.hour').length).toBeGreaterThan(6);
-        expect(element.find('.day').length).toBeGreaterThan(167);
+        expect(element.find('.day').length).toBeGreaterThan(6);
+        expect(element.find('.hour').length).toBeGreaterThan(167);
     });
 });

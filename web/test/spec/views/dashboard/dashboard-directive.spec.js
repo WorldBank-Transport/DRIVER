@@ -6,6 +6,7 @@ describe('driver.views.dashboard: Dashboard', function () {
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.templates'));
     beforeEach(module('driver.views.dashboard'));
+    beforeEach(module('driver.toddow'));
 
     var $compile;
     var $httpBackend;
