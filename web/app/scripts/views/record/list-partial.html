@@ -11,7 +11,9 @@
                   <th>Date &amp; Time</th>
 
                   <!-- Detail keys from current schema -->
-                  <th ng-repeat="headerKey in ctl.headerKeys">{{ ::headerKey }}</th>
+                  <th ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
+                    {{ ::headerKey }}
+                  </th>
 
                   <!-- View/Edit links -->
                   <!-- TODO: fill in links when the views are implemented -->
@@ -23,7 +25,7 @@
                   <td class="date">
                     {{ ::record.occurred_to | date:'short' }}
                   </td>
-                  <td class="detail" ng-repeat="headerKey in ctl.headerKeys">
+                  <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
                     {{ ::record.data[ctl.detailsProperty][headerKey] }}
                   </td>
                   <td class="links">

@@ -7,6 +7,7 @@
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
+        ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
 
