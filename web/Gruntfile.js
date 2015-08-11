@@ -179,6 +179,7 @@ module.exports = function (grunt) {
     wiredep: {
       app: {
         src: ['<%= yeoman.app %>/index.html'],
+        exclude: ['bower_components/leaflet/dist/leaflet.js'],
         ignorePath:  /\.\.\//
       },
       test: {

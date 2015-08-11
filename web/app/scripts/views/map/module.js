@@ -13,7 +13,8 @@
 
     angular.module('driver.views.map', [
         'ui.router',
-        'ui.bootstrap'
+        'ui.bootstrap',
+        'Leaflet'
     ]).config(StateConfig);
 
 })();
