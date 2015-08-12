@@ -20,7 +20,6 @@
                   </th>
 
                   <!-- View/Edit links -->
-                  <!-- TODO: fill in links when the views are implemented -->
                   <th></th>
                 </tr>
               </thead>
@@ -33,7 +32,7 @@
                     {{ ::record.data[ctl.detailsProperty][headerKey] }}
                   </td>
                   <td class="links">
-                    <a href="#view">View</a>
+                    <a ui-sref="record.details({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">View</a>
                     /
                     <a ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">Edit</a>
                   </td>

@@ -134,7 +134,7 @@
                 };
             }
 
-            Records[saveMethod](dataToSave).$promise.then(function (record) {
+            Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
                 $state.go('record.list', {
                     rtuuid: $stateParams.rtuuid

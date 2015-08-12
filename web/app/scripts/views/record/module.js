@@ -26,6 +26,12 @@
             label: 'Edit a Record',
             showInNavbar: false
         });
+        $stateProvider.state('record.details', {
+            url: '/record/:recorduuid/details',
+            template: '<driver-record-details></driver-record-details>',
+            label: 'Record Details',
+            showInNavbar: false
+        });
     }
 
     angular.module('driver.views.record', [
