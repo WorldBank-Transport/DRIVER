@@ -5,11 +5,11 @@
     function StateConfig($stateProvider) {
         $stateProvider.state('record', {
             abstract: true,
-            url: '/record',
+            url: '/rt/:rtuuid',
             template: '<ui-view></ui-view>'
         });
         $stateProvider.state('record.add', {
-            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/add',
+            url: '/add',
             template: '<driver-record-add-edit></driver-record-add-edit>',
             label: 'Add a Record',
             // TODO: set this to false once there is an alternate way
@@ -17,10 +17,16 @@
             showInNavbar: true
         });
         $stateProvider.state('record.list', {
-            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/list',
+            url: '/list',
             template: '<driver-record-list></driver-record-list>',
             label: 'Record List',
             showInNavbar: true
+        });
+        $stateProvider.state('record.edit', {
+            url: '/record/:recorduuid/edit',
+            template: '<driver-record-add-edit></driver-record-add-edit>',
+            label: 'Edit a Record',
+            showInNavbar: false
         });
     }
 
