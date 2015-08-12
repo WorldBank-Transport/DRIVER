@@ -40,7 +40,6 @@ module.exports = function(config) {
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/lodash/lodash.js',
       'bower_components/angular-uuid/uuid.min.js',
-      'bower_components/leaflet/dist/leaflet.js',
       'bower_components/leaflet/dist/leaflet-src.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',

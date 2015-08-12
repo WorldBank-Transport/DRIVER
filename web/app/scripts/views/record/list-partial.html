@@ -3,6 +3,10 @@
         <ase-notifications></ase-notifications>
         <div class="form-area-heading">
             <h2>{{ ::ctl.recordType.plural_label }} list</h2>
+            <button type="button" class="btn btn-primary pull-right"
+                    ui-sref="record.add()">
+              Add a new {{ ::ctl.recordType.label }}
+            </button>
             <div class="content-border"></div>
             <table class="table table-hover">
               <thead>
@@ -16,7 +20,6 @@
                   </th>
 
                   <!-- View/Edit links -->
-                  <!-- TODO: fill in links when the views are implemented -->
                   <th></th>
                 </tr>
               </thead>
@@ -29,7 +32,9 @@
                     {{ ::record.data[ctl.detailsProperty][headerKey] }}
                   </td>
                   <td class="links">
-                    <a href="#view">View</a> / <a href="#edit">Edit</a>
+                    <a ui-sref="record.details({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">View</a>
+                    /
+                    <a ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">Edit</a>
                   </td>
                 </tr>
               </tbody>

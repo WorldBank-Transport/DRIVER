@@ -185,6 +185,7 @@ module.exports = function (grunt) {
       test: {
         devDependencies: true,
         src: '<%= karma.unit.configFile %>',
+        exclude: ['bower_components/leaflet/dist/leaflet.js'],
         ignorePath:  /\.\.\//,
         fileTypes:{
           js: {

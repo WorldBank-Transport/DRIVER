@@ -2,20 +2,30 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddController($log, $state, $stateParams, uuid4, Notifications,
+    function RecordAddEditController($log, $state, $stateParams, uuid4, Notifications,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
         var editorData = null;
 
         initialize();
 
+        // Initialize for either adding or editing, depending on recorduuid being supplied
         function initialize() {
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
 
-            loadRecordType()
+            var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
+            (recordPromise ? recordPromise.then(loadRecordType) : loadRecordType())
                 .then(loadRecordSchema)
                 .then(onSchemaReady);
+        }
+
+        // Helper for loading the record -- only used when in edit mode
+        function loadRecord () {
+            return Records.get({ id: $stateParams.recorduuid })
+                .$promise.then(function(record) {
+                    ctl.record = record;
+                });
         }
 
         function loadRecordType () {
@@ -47,7 +57,8 @@
                     disable_array_add: false,
                     theme: 'bootstrap3',
                     show_errors: 'change',
-                    no_additional_properties: true
+                    no_additional_properties: true,
+                    startval: ctl.record ? ctl.record.data : null
                     /* jshint camelcase: true */
                 },
                 errors: []
@@ -98,20 +109,32 @@
                 return;
             }
 
-            Records.create({
-                /* jshint camelcase: false */
-                data: editorData,
-                schema: ctl.recordSchema.uuid,
+            // If there is already a record, set the new editorData and update, else create one
+            var saveMethod = null;
+            var dataToSave = null;
+            if (ctl.record) {
+                saveMethod = 'update';
+                dataToSave = ctl.record;
+                dataToSave.data = editorData;
+            } else {
+                saveMethod = 'create';
+                dataToSave = {
+                    /* jshint camelcase: false */
+                    data: editorData,
+                    schema: ctl.recordSchema.uuid,
 
-                // TODO: the following fields are external to the schema and need to be implemented.
-                // Generating bogus values for now -- to be revisited in a future task.
-                slug: 'testslug', // Note: don't think we need a slug for a record, uuid seems fine
-                label: 'testlabel', // Note: label also seems unnecessarry for a record
-                geom: 'POINT (0 0)', // TODO: we'll need a map with ability to search/drop a point
-                occurred_from: new Date(), // TODO: we'll need date pickers for occured from/to
-                occurred_to: new Date()
-                /* jshint camelcase: true */
-            }).$promise.then(function (record) {
+                    // TODO: the following fields are external to the schema and need implementation
+                    // Generating bogus values for now -- to be revisited in a future task.
+                    slug: 'testslug', // Note: don't think we need a slug for a record, uuid is fine
+                    label: 'testlabel', // Note: label also seems unnecessarry for a record
+                    geom: 'POINT (0 0)', // TODO: we'll need a map with ability to search/drop point
+                    occurred_from: new Date(), // TODO: we'll need date pickers for occured from/to
+                    occurred_to: new Date()
+                    /* jshint camelcase: true */
+                };
+            }
+
+            Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
                 $state.go('record.list', {
                     rtuuid: $stateParams.rtuuid
@@ -123,6 +146,6 @@
     }
 
     angular.module('driver.views.record')
-    .controller('RecordAddController', RecordAddController);
+    .controller('RecordAddEditController', RecordAddEditController);
 
 })();
