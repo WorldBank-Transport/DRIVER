@@ -1,11 +1,9 @@
 'use strict';
 
-describe('driver.views.dashboard: Dashboard', function () {
+describe('driver.toddow: ToDDoW', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
-    beforeEach(module('driver.templates'));
-    beforeEach(module('driver.views.dashboard'));
     beforeEach(module('driver.toddow'));
 
     var $compile;
@@ -25,10 +23,10 @@ describe('driver.views.dashboard: Dashboard', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
+        var element = $compile('<div driver-toddow chartData=""></div>')(scope);
         $rootScope.$apply();
 
-        // placeholder test
-        expect(element.find('.form-area-body').length).toEqual(1);
+        expect(element.find('.day').length).toBeGreaterThan(6);
+        expect(element.find('.hour').length).toBeGreaterThan(167);
     });
 });

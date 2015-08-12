@@ -41,6 +41,9 @@ module.exports = function(config) {
       'bower_components/lodash/lodash.js',
       'bower_components/angular-uuid/uuid.min.js',
       'bower_components/leaflet/dist/leaflet-src.js',
+      'bower_components/d3/d3.js',
+      'bower_components/d3-tip/index.js',
+      'bower_components/moment/moment.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',
       'bower_components/karma-read-json/karma-read-json.js',
@@ -62,6 +65,8 @@ module.exports = function(config) {
 
       'app/scripts/navbar/module.js',
       'app/scripts/navbar/**.js',
+      'app/scripts/toddow/module.js',
+      'app/scripts/toddow/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/views/account/module.js',

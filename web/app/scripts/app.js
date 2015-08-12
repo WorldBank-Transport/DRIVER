@@ -33,6 +33,7 @@
         'Leaflet',
         'driver.config',
         'driver.navbar',
+        'driver.toddow',
         'driver.views.account',
         'driver.views.dashboard',
         'driver.views.home',
