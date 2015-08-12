@@ -1,7 +1,7 @@
 /**
  * This directive creates a ToDDoW calendar for aggregating information event occurrence.
- *  The bound variable `chartData` needs only be a list of objects which contain the property
- *  'occurred_from'.
+ *  The bound variable `chartData` needs only be a list of objects which contain (by default)
+ *  the property 'occurred_from'.
  */
 
 (function () {
@@ -12,10 +12,11 @@
         var module = {
             restrict: 'A',
             scope: {
-              chartData: '='
+              chartData: '=',
+              dateField: '='
             },
             template: '<svg></svg>',
-            link: function(scope, elem, attrs) {
+            link: function(scope, elem) {
                 var d3 = $window.d3;
                 var moment = $window.moment;
                 var rawSvg = elem.find('svg')[0];
@@ -30,11 +31,12 @@
                  */
                 scope.$watch('chartData', function(val) {
                     if (val) {
+                        var dateField = scope.dateField ? scope.dateField : 'occurred_from';
+                        var data = formatData(val, dateField);
                         color = d3.scale.linear()
-                            .domain([0, 4])
+                            .domain([0, d3.max(d3.values(data))])
                             .interpolate(d3.interpolateRgb)
                             .range(['#ffffff', '#355e3b']);
-                        var data = formatData(val);
                         updateChart(data);
                     }
                 });
@@ -48,7 +50,7 @@
                     svg = d3.select(rawSvg)
                         .attr('width', width)
                         .attr('height', height)
-                        .attr('fill', 'grey')
+                        .attr('fill', 'grey');
 
                     svg.append('text')
                         .attr('transform', 'translate(-6,' + cellSize * 3.5 + ')rotate(-90)')
@@ -145,10 +147,10 @@
                 /**
                  * Helper function to gather data together into a format more friendly to D3
                  */
-                function formatData(events) {
+                function formatData(events, dateField) {
                     /* jshint camelcase: false */
                     return d3.nest()
-                        .key(function(d) { return formatHourRange(d.occurred_from); })
+                        .key(function(d) { return formatHourRange(d[dateField]); })
                         .rollup(function(leaves) { return leaves.length; })
                         .map(events);
                     /* jshint camelcase: true */
