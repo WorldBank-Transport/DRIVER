@@ -84,7 +84,7 @@
                             .attr('data-duration', function(d, i) {
                                 var time = (i <= 11) ? 'am' : 'pm';
                                 return theHours[i] + '-' + theHours[i + 1] + time;
-                            })
+                            });
 
                     // Day labels
                     svg.selectAll('.day')

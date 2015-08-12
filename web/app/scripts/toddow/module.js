@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DirectiveConfig($stateProvider) {
+    function DirectiveConfig() {
     }
 
     angular.module('driver.toddow', [
