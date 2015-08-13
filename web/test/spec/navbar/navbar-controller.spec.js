@@ -10,6 +10,9 @@ describe('driver.navbar: NavbarController', function () {
     beforeEach(module('driver.views.home'));
     beforeEach(module('driver.views.map'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('driver.resources.geographystate'));
+    beforeEach(module('driver.resources.polygonstate'));
+    beforeEach(module('driver.resources.recordstate'));
 
     var $controller;
     var $httpBackend;

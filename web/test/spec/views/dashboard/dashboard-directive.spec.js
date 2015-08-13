@@ -7,6 +7,9 @@ describe('driver.views.dashboard: Dashboard', function () {
     beforeEach(module('driver.templates'));
     beforeEach(module('driver.views.dashboard'));
     beforeEach(module('driver.toddow'));
+    beforeEach(module('driver.resources.geographystate'));
+    beforeEach(module('driver.resources.polygonstate'));
+    beforeEach(module('driver.resources.recordstate'));
 
     var $compile;
     var $httpBackend;
