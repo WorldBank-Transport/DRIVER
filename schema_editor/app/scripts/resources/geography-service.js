@@ -4,7 +4,6 @@
     /* ngInject */
     function Geography($resource, $log, Upload, Config) {
         var urlString = Config.api.hostname + '/api/boundaries/';
-
         var res = $resource(urlString + ':uuid/ ', {uuid: '@uuid'}, {
             query: {
                 method: 'GET',
