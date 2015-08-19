@@ -48,7 +48,8 @@
                                         'propertyOrder': 0,
                                         'type': 'string'
                                     }
-                                }
+                                },
+                                'details': true
                             },
                             'Firearm': {
                                 'description': 'Guns and other projectiles.',
@@ -114,7 +115,8 @@
                     title: 'Accident Details',
                     plural_title: 'Accident Details',
                     description: 'Details for Accident',
-                    multiple: false
+                    multiple: false,
+                    details: true
                 }
             }
         });
