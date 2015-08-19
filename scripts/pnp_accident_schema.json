@@ -183,6 +183,7 @@
       "plural_title": "Accident Details",
       "definitions": {},
       "type": "object",
+      "details": true,
       "properties": {
         "Junction type": {
           "enum": [
