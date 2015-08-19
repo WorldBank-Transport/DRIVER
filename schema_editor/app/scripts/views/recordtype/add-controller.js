@@ -31,6 +31,7 @@
             var schema = Schemas.JsonObject();
             schema = Schemas.addVersion4Declaration(schema); // Make root object a "real" JSON-Schema
             var definition = Schemas.JsonObject();
+            definition.details = true; // Flag denoting that this is the 'details' definition
             definition.description = 'Details for ' + recordType.label;
             definition.multiple = false;
             /* jshint camelcase: false */
