@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>PRS Prototype: Incident Report</title>
+
+    <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default drop-shadow">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Road Incident Data System</a>
+            </div>
+    
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Table <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Dashboard</a></li>
+                            <li><a href="#">Map</a></li>
+                            <li><a href="#">Table</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Metro Manila <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Cebu</a></li>
+                            <li><a href="#">Davao</a></li>
+                            <li><a href="#">Iloilo</a></li>
+                            <li><a href="#">Metro Manila</a></li>
+                            <li><a href="#">San Fernando</a></li>
+                        </ul>
+                    </li>
+                </ul>
+          
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">My Account <span class="glyphicon glyphicon-option-vertical"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Manage Duplicate Records</a></li>
+                            <li><a href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="incident-report single">
+        <div class="container">
+            <div class="report-header">
+                <h1>25th Street & 5th Avenue <small>01/01/2015 00:00</small></h1>
+            </div>
+            <div class="report-content">
+                <h2>Incident Overview</h2>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <label>Incident Time</label>
+                        <div class="value">01/01/2015 00:00</div>
+                        <input class="value form-control hidden" value="01/01/2015 00:00" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label>Report Time</label>
+                        <div class="value">01/01/2015 00:00</div>
+                        <input class="value form-control hidden" value="01/01/2015 00:00" />
+                    </div>
+                </div>
+
+                <hr />                
+
+                <h2>People</h2>
+                <div class="table">
+                    <div class="table-head">
+                        <div class="row">
+                            <div class="col-sm-3">Full Name</div>
+                            <div class="col-sm-2">Involvement</div>
+                            <div class="col-sm-5">Vehicle</div>
+                            <div class="col-sm-2">Injury</div>
+                        </div>
+                    </div>
+                    <div class="table-body">
+                        <div class="table-body-row">
+                            <div class="table-body-row-header">
+                                <div class="row">
+                                    <div class="col-sm-3">Lynnette Perez</div>
+                                    <div class="col-sm-2">Witness</div>
+                                    <div class="col-sm-5">2012 Toyota Corolla #VD45C9</div>
+                                    <div class="col-sm-2">Minor</div>
+                                </div>
+                            </div>
+                            <div class="table-body-row-content">
+                                <h2>Person Details</h2>
+                                <div class="row">
+                                    <div class="col-sm-3">
+                                        <label>First name</label>
+                                        <div class="value">Lynnette</div>
+                                        <input class="value form-control hidden" value="Lynnette" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Last name</label>
+                                        <div class="value">Perez</div>
+                                        <input class="value form-control hidden" value="Perez" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Gender/sex</label>
+                                        <div class="value">Female</div>
+                                        <input class="value form-control hidden" value="Female" />
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <label>Date of Birth</label>
+                                        <div class="value">01/01/1982</div>
+                                        <input class="value form-control hidden" value="01/01/1982" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center">
+                    <a href="javascript:void(0);" class="btn btn-default">Add a Person</a>
+                </div>
+            </div>
+            <div class="alert alert-info" role="alert">
+                Duplicate entries resolved for this record.
+                <a class="pull-right" href="javascript:void(0);">View duplicate records &raquo;</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/lib/bootstrap.min.js"></script>
+    <script>
+        $(function(){
+            $('.edit').on('click', function(){
+                $('.value').toggleClass('hidden');
+            });
+            $('.table-body-row-header').on('click', function(){
+                $(this).toggleClass('open');
+            });
+        });
+    </script>
+</body>
+</html>

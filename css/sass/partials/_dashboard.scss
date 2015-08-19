@@ -72,12 +72,20 @@
         }
         &.insights {
             h1 {
-                font-size: 30px;
+                font-size: 24px;
                 font-weight: 300;
+                line-height: 1.4;
                 padding: 25px;
                 margin: 0;
                 
                 b { font-weight: 700; }
+            }
+            .nav-pills > li > a {
+                background: #CCC;
+                padding: 6px;
+            }
+            .nav-pills > li.active > a {
+                background: #337ab7;
             }
         }
         &.counts {
@@ -101,6 +109,32 @@
             h3 {
                 margin: 6px 0 8px;
                 font-size: 18px;
+            }
+            table {
+                margin: 0;
+            }
+            .filters-table {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                overflow: auto;
+            }
+        }
+
+        .nav-pills {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+
+            > li {
+                float: none;
+                display: inline-block;
+            
+                > a {
+                    border-radius: 999px;
+                }
             }
         }
     }

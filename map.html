@@ -8,6 +8,7 @@
     <title>PRS Prototype: Map</title>
 
     <link href="css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="css/lib/bootstrap-select.min.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
@@ -53,10 +54,79 @@
     </nav>
 
     <main class="map-view">
-        
+        <div class="filterbar">
+            <div class="pull-left">
+                <input type="search" class="form-control" placeholder="Geographic code" />
+                <select class="selectpicker" multiple title="Collision Type" data-header="Collision Type" data-selected-text-format="count>0">
+                    <option selected="selected">Head On</option>
+                    <option selected="selected">Rear End</option>
+                    <option selected="selected">Right Angle</option>
+                    <option selected="selected">Side Swipe</option>
+                    <option selected="selected">Overturned Vehicle</option>
+                    <option selected="selected">Hit Object in Road</option>
+                    <option selected="selected">Hit Object off Road</option>
+                    <option selected="selected">Hit Parked Vehicle</option>
+                    <option selected="selected">Hit Pedestrian</option>
+                    <option selected="selected">Hit Animal</option>
+                </select>
+                <select class="selectpicker" multiple title="Vehicle Type" data-header="Vehicle Type" data-selected-text-format="count>0">
+                    <option selected="selected">Bicycle</option>
+                    <option selected="selected">Pedicab</option>
+                    <option selected="selected">Motor Cycle</option>
+                    <option selected="selected">Tricycle</option>
+                    <option selected="selected">Car</option>
+                    <option selected="selected">Jeepney</option>
+                    <option selected="selected">Bus</option>
+                    <option selected="selected">Truck</option>
+                    <option selected="selected">Van</option>
+                    <option selected="selected">Animal</option>
+                </select>
+                <select class="selectpicker" multiple title="Severity" data-header="Severity" data-selected-text-format="count>0">
+                    <option selected="selected">Fatal</option>
+                    <option selected="selected">Severe</option>
+                    <option selected="selected">Minor</option>
+                    <option selected="selected">Property damage</option>
+                    <option selected="selected">Unknown</option>
+                </select>
+                <button class="btn btn-default">All Filters</button>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Saved Filters</button>
+            </div>
+        </div>
+
+        <div id="map"></div>
+        <div class="tools">
+            <div class="tool graphs">
+                <div class="tool-tab"><span class="glyphicon glyphicon-list-alt"></span> Graphs</div>
+                <div class="tool-content"></div>
+            </div>
+            <div class="tool interventions">
+                <div class="tool-tab"><span class="glyphicon glyphicon-map-marker"></span> Interventions</div>
+                <div class="tool-content"></div>
+            </div>
+            <div class="tool enforcers">
+                <div class="tool-tab"><span class="glyphicon glyphicon-alert"></span> Traffic Enforcers</div>
+                <div class="tool-content"></div>
+            </div>
+            <div class="tool export">
+                <div class="tool-tab"><span class="glyphicon glyphicon-share-alt"></span> Export</div>
+                <div class="tool-content"></div>
+            </div>
+        </div>
     </main>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/lib/bootstrap.min.js"></script>
+    <script src="js/lib/bootstrap-select.min.js"></script>
+    <script>
+        $('.selectpicker').selectpicker({
+            width: '160px',
+            container: 'body'
+        });
+        $('.tool-tab').on('click', function(){
+            $(this).parent().toggleClass('open');
+        });
+    </script>
 </body>
 </html>

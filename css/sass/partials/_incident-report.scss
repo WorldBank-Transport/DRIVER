@@ -1,5 +1,58 @@
 .incident-report {
-    background: rgba(0,0,0,0.5);
+
+    &.single {
+        margin: 40px 0 20px;
+
+        @media print {
+            margin: 0;
+
+            label {
+                font-size: 10px;
+            }
+
+            .col-sm-2 {
+                width: 15%;
+                display: inline-block;
+            }
+            .col-sm-3 {
+                width: 24%;
+                display: inline-block;
+            }
+            .col-sm-5 {
+                width: 41%;
+                display: inline-block;
+            }
+            .col-sm-6 {
+                width: 48%;
+                display: inline-block;
+            }
+            .alert,
+            .btn {
+                display: none;
+            }
+        }
+
+        .report-header {
+            margin: 0;
+            padding: 0 0 15px;
+            border-bottom: 5px solid #ddd;
+        }
+        .report-content {
+            padding-top: 0;
+
+            h2 {
+                background: #f1f2f2;
+                padding: 12px 16px;
+
+                @media print {
+                    padding: 10px 0;
+                }
+            }
+        }
+    }
+    &.modal {
+        background: rgba(0,0,0,0.5);
+    }
 
     .modal-content {
         border-radius: 0;
@@ -76,6 +129,13 @@
                 margin-top: 12px;
             }
         }
+        hr {
+            margin: 30px 0;
+
+            @media print {
+                margin: 20px 0;
+            }
+        }
     }
 
     .table {
@@ -86,6 +146,11 @@
             font-size: 12px;
             color: #AAA;
             border-bottom: 4px solid #ddd;
+
+            @media print {
+                font-size: 10px;
+                padding: 10px 0;
+            }
         }
         .table-body {
             .table-body-row {
@@ -94,6 +159,10 @@
                     border-bottom: 1px solid #ddd;
                     cursor: pointer;
 
+                    @media print {
+                        padding: 10px 0;
+                    }
+
                     &.open {
                         background-color: #f1f2f2;
 
@@ -101,6 +170,10 @@
                             max-height: 1000px;
                             padding: 20px 15px;
                             border-bottom: 1px solid #ddd;
+
+                            @media print {
+                                padding: 10px 0;
+                            }
                         }
                     }
                 }
