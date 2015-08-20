@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Windshaft Test</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+  <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
+  <style type="text/css">
+    .map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+
+<div id="mymap" class="map"></div>
+<script>
+  $(document).ready(function() {
+    var map = new L.map('mymap', {
+      center: new L.LatLng(40.423450, -3.702196),
+      zoom: 13,
+    });
+
+    map.addLayer(new L.StamenTileLayer('toner', { detectRetina: true}));
+
+    var windLayer = new L.tileLayer('http://127.0.0.1:5000/database/windshaft_test/table/test_table_2/{z}/{x}/{y}.png', {attribution: 'Foo!'});
+
+    map.addLayer(windLayer, {detectRetina: true});
+  });
+</script>
+</body>
+</html>
