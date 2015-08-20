@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($log, $state, $stateParams, uuid4, Notifications,
+    function DashboardController($stateParams,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
         ctl.currentOffset = 0;

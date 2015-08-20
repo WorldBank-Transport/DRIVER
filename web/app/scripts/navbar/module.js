@@ -2,9 +2,7 @@
     'use strict';
 
     angular.module('driver.navbar', [
-        'driver.resources.recordstate',
-        'driver.resources.polygonstate',
-        'driver.resources.geographystate',
+        'driver.state',
         'ui.bootstrap',
         'ui.router'
     ]);

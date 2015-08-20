@@ -1,17 +1,17 @@
 /**
- * Geography state control - changes to the private vars which define this state
+ * Polygon Type state control - changes to the private vars which define this state
  *  are broadcast to rootscope for use by controllers
  */
 (function () {
     'use strict';
 
     /* ngInject */
-    function GeographyState($window, $log, $rootScope, Geography) {
+    function PolygonState($window, $log, $rootScope, Polygons) {
         var defaultParams, selected, options;
         var _ = $window._;
-        this.updateOptions = updateOptions;
-        this.setSelected = setSelected;
-        var that = this;
+        var svc = this;
+        svc.updateOptions = updateOptions;
+        svc.setSelected = setSelected;
         init();
 
         /**
@@ -20,8 +20,8 @@
         function init() {
           selected = null;
           options = [];
-          defaultParams = {};
-          that.updateOptions();
+          defaultParams = {'active': 'True'};
+          svc.updateOptions();
         }
 
         /**
@@ -31,15 +31,13 @@
          */
         function updateOptions(params) {
             var filterParams = params || defaultParams;
-            return Geography.query(filterParams).$promise.then(function(results) {
+            return Polygons.query(filterParams).$promise.then(function(results) {
                   options = results;
-                  $rootScope.$broadcast('driver.resources.geographystate:options', options);
+                  $rootScope.$broadcast('driver.state.polygonstate:options', options);
                   if (!results.length) {
-                      $log.warn('No geographies returned');
+                      $log.warn('No polygons returned');
                   } else {
-                      if (!_.includes(options, selected)) {
-                          that.setSelected(selected);
-                      }
+                      svc.setSelected(selected);
                   }
             });
         }
@@ -57,10 +55,11 @@
             } else {
                 selected = null;
             }
-            $rootScope.$broadcast('driver.resources.geographystate:selected', selected);
+            $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
         }
+        return svc;
     }
 
-    angular.module('driver.resources.geographystate')
-    .service('GeographyState', GeographyState);
+    angular.module('driver.state')
+    .service('PolygonState', PolygonState);
 })();

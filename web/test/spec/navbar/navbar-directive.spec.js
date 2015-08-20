@@ -19,27 +19,32 @@ describe('driver.navbar: Navbar', function () {
     var DriverResourcesMock;
     var RecordTypes;
     var ResourcesMock;
+    var $state;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _$state_,
                                 _DriverResourcesMock_, _RecordTypes_, _ResourcesMock_) {
+        $state = _$state_;
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         DriverResourcesMock = _DriverResourcesMock_;
         RecordTypes = _RecordTypes_;
         ResourcesMock = _ResourcesMock_;
+
+        spyOn($state, 'go');
     }));
 
     it('should load directive', function () {
         var geographiesUrl = /\/api\/boundaries/;
-        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
-
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var polygonUrl = /.*\/api\/boundarypolygons\/\?active=True/;
 
-        var geographyId = ResourcesMock.GeographyResponse.results[0].uuid;
-        var polygonsUrl = new RegExp('api/boundarypolygons/\\?boundary=' + geographyId);
-        $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-navbar></driver-navbar>')(scope);
@@ -47,6 +52,7 @@ describe('driver.navbar: Navbar', function () {
 
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
+        $rootScope.$apply();
 
         expect(element.find('.nav-rt-item').length).toBeGreaterThan(0);
         expect(element.find('.nav-page-item').length).toBeGreaterThan(0);

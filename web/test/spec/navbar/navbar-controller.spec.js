@@ -5,14 +5,9 @@ describe('driver.navbar: NavbarController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.navbar'));
+    beforeEach(module('driver.views.home'));
     beforeEach(module('driver.views.account'));
     beforeEach(module('driver.views.dashboard'));
-    beforeEach(module('driver.views.home'));
-    beforeEach(module('driver.views.map'));
-    beforeEach(module('driver.views.record'));
-    beforeEach(module('driver.resources.geographystate'));
-    beforeEach(module('driver.resources.polygonstate'));
-    beforeEach(module('driver.resources.recordstate'));
 
     var $controller;
     var $httpBackend;
@@ -32,19 +27,22 @@ describe('driver.navbar: NavbarController', function () {
         $state = _$state_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
+
+        spyOn($state, 'go');
     }));
 
     it('should have record types, polygons, and available states', function () {
-        var geographiesUrl = /\/api\/boundaries/;
-        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
-
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
+        var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var polygonsUrl = /\/api\/boundarypolygons\/\?active=True/;
 
-        var geographyId = ResourcesMock.GeographyResponse.results[0].uuid;
-        var polygonsUrl = new RegExp('api/boundarypolygons/\\?boundary=' + geographyId);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         Controller = $controller('NavbarController', {
@@ -59,20 +57,20 @@ describe('driver.navbar: NavbarController', function () {
         expect(Controller.recordTypeResults.length).toBeGreaterThan(0);
         expect(Controller.geographyResults.length).toBeGreaterThan(0);
         expect(Controller.polygonResults.length).toBeGreaterThan(0);
-        expect(Controller.availableStates.length).toBeGreaterThan(0);
     });
 
     it('should not have current state as an option', function () {
-        var geographiesUrl = /\/api\/boundaries/;
-        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
-
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
+        var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var polygonsUrl = /\/api\/boundarypolygons\/\?active=True/;
 
-        var geographyId = ResourcesMock.GeographyResponse.results[0].uuid;
-        var polygonsUrl = new RegExp('api/boundarypolygons/\\?boundary=' + geographyId);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         $state.current = $state.get('home');
@@ -89,39 +87,35 @@ describe('driver.navbar: NavbarController', function () {
         var matches = _.filter(Controller.availableStates, function(state) {
             return state.name === 'home';
         });
+        expect(Controller.availableStates.length).toBeGreaterThan(0);
         expect(matches.length).toBe(0);
     });
 
     it('should correctly navigate to state', function () {
-        var geographiesUrl = /\/api\/boundaries/;
-        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
-
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
+        var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var polygonsUrl = /\/api\/boundarypolygons\/\?active=True/;
+
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-
-        var geographyId = ResourcesMock.GeographyResponse.results[0].uuid;
-        var polygonsUrl = new RegExp('api/boundarypolygons/\\?boundary=' + geographyId);
         $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
-
-        $state.current = $state.get('home');
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(polygonsUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId }
         });
-        $scope.$apply();
 
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
 
         Controller.navigateToStateName('account');
-        $scope.$apply();
-        expect($state.current.name).toBe('account');
+        expect($state.go).toHaveBeenCalledWith('account', jasmine.any(Object));
 
         Controller.onStateSelected($state.get('dashboard'));
-        $scope.$apply();
-        expect($state.current.name).toBe('dashboard');
+        expect($state.go).toHaveBeenCalledWith('dashboard', jasmine.any(Object));
     });
 });

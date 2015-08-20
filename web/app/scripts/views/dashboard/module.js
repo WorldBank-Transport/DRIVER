@@ -14,6 +14,8 @@
     angular.module('driver.views.dashboard', [
         'ui.router',
         'ui.bootstrap',
+        'ase.resources',
+        'driver.resources',
         'driver.toddow'
     ]).config(StateConfig);
 

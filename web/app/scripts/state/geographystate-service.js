@@ -1,17 +1,17 @@
 /**
- * Record Type state control - changes to the private vars which define this state
+ * Geography state control - changes to the private vars which define this state
  *  are broadcast to rootscope for use by controllers
  */
 (function () {
     'use strict';
 
     /* ngInject */
-    function RecordState($window, $log, $rootScope, RecordTypes) {
+    function GeographyState($window, $log, $rootScope, Geography) {
         var defaultParams, selected, options;
         var _ = $window._;
-        this.updateOptions = updateOptions;
-        this.setSelected = setSelected;
-        var that = this;
+        var svc = this;
+        svc.updateOptions = updateOptions;
+        svc.setSelected = setSelected;
         init();
 
         /**
@@ -20,8 +20,8 @@
         function init() {
           selected = null;
           options = [];
-          defaultParams = {'active': true};
-          that.updateOptions();
+          defaultParams = {};
+          svc.updateOptions();
         }
 
         /**
@@ -31,14 +31,14 @@
          */
         function updateOptions(params) {
             var filterParams = params || defaultParams;
-            return RecordTypes.query(filterParams).$promise.then(function(results) {
+            return Geography.query(filterParams).$promise.then(function(results) {
                   options = results;
-                  $rootScope.$broadcast('driver.resources.recordstate:options', options);
+                  $rootScope.$broadcast('driver.state.geographystate:options', options);
                   if (!results.length) {
-                      $log.warn('No record types returned');
+                      $log.warn('No geographies returned');
                   } else {
                       if (!_.includes(options, selected)) {
-                          that.setSelected(selected);
+                          svc.setSelected(selected);
                       }
                   }
             });
@@ -57,10 +57,13 @@
             } else {
                 selected = null;
             }
-            $rootScope.$broadcast('driver.resources.recordstate:selected', selected);
+            $rootScope.$broadcast('driver.state.geographystate:selected', selected);
         }
+
+        return svc;
+
     }
 
-    angular.module('driver.resources.recordstate')
-    .service('RecordState', RecordState);
+    angular.module('driver.state')
+    .service('GeographyState', GeographyState);
 })();

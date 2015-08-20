@@ -1,12 +1,12 @@
 /**
- * Polygon Type state control - changes to the private vars which define this state
+ * Record Type state control - changes to the private vars which define this state
  *  are broadcast to rootscope for use by controllers
  */
 (function () {
     'use strict';
 
     /* ngInject */
-    function PolygonState($window, $log, $rootScope, Polygons) {
+    function RecordState($window, $log, $rootScope, RecordTypes) {
         var defaultParams, selected, options;
         var _ = $window._;
         this.updateOptions = updateOptions;
@@ -20,7 +20,7 @@
         function init() {
           selected = null;
           options = [];
-          defaultParams = {'active': true};
+          defaultParams = {'active': 'True'};
           that.updateOptions();
         }
 
@@ -31,11 +31,11 @@
          */
         function updateOptions(params) {
             var filterParams = params || defaultParams;
-            return Polygons.query(filterParams).$promise.then(function(results) {
+            return RecordTypes.query(filterParams).$promise.then(function(results) {
                   options = results;
-                  $rootScope.$broadcast('driver.resources.polygonstate:options', options);
+                  $rootScope.$broadcast('driver.state.recordstate:options', options);
                   if (!results.length) {
-                      $log.warn('No polygons returned');
+                      $log.warn('No record types returned');
                   } else {
                       if (!_.includes(options, selected)) {
                           that.setSelected(selected);
@@ -57,10 +57,10 @@
             } else {
                 selected = null;
             }
-            $rootScope.$broadcast('driver.resources.polygonstate:selected', selected);
+            $rootScope.$broadcast('driver.state.recordstate:selected', selected);
         }
     }
 
-    angular.module('driver.resources.polygonstate')
-    .service('PolygonState', PolygonState);
+    angular.module('driver.state')
+    .service('RecordState', RecordState);
 })();
