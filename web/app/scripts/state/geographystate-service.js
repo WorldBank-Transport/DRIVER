@@ -11,7 +11,9 @@
         var _ = $window._;
         var svc = this;
         svc.updateOptions = updateOptions;
+        svc.getOptions = getOptions;
         svc.setSelected = setSelected;
+        svc.getSelected = getSelected;
         init();
 
         /**
@@ -44,6 +46,10 @@
             });
         }
 
+        function getOptions() {
+            return options;
+        }
+
         /**
          * Set the state selection
          *
@@ -53,11 +59,15 @@
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
-                selected = options[0];
+                selected = selected ? selected : options[0];
             } else {
                 selected = null;
             }
             $rootScope.$broadcast('driver.state.geographystate:selected', selected);
+        }
+
+        function getSelected() {
+            return selected;
         }
 
         return svc;
@@ -65,5 +75,5 @@
     }
 
     angular.module('driver.state')
-    .service('GeographyState', GeographyState);
+    .factory('GeographyState', GeographyState);
 })();

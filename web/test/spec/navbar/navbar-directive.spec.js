@@ -42,9 +42,6 @@ describe('driver.navbar: Navbar', function () {
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
-        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-navbar></driver-navbar>')(scope);

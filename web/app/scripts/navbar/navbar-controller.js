@@ -6,17 +6,21 @@
                               GeographyState, RecordState, PolygonState) {
         var ctl = this;
         var _ = $window._;
+        init();
         ctl.onGeographySelected = onGeographySelected;
         ctl.onPolygonSelected = onPolygonSelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
         ctl.onStateSelected = onStateSelected;
         ctl.navigateToStateName = navigateToStateName;
         ctl.getPolygonLabel = getPolygonLabel;
-
-        GeographyState.updateOptions().then(PolygonState.updateOptions);
-        RecordState.updateOptions();
-        setStates();
         $rootScope.$on('$stateChangeSuccess', setStates);
+
+        function init() {
+            ctl.geographyResults = GeographyState.getOptions();
+            ctl.recordTypeResults = RecordState.getOptions();
+            ctl.polygonResults = PolygonState.getOptions();
+            setStates();
+        }
 
         // Record Type selections
         $scope.$on('driver.state.recordstate:options', function(event, options) {
@@ -41,6 +45,10 @@
             ctl.geographyResults = options;
         });
         $scope.$on('driver.state.geographystate:selected', function(event, selected) {
+            // Need to get the new list of polygons for the selected geography
+            PolygonState.updateOptions({'boundary': selected.uuid}).then(function() {
+                PolygonState.setSelected();
+            });
             ctl.geographySelected = selected;
             updateState();
         });
@@ -70,21 +78,11 @@
         // Handler for when a geography is selected from the dropdown
         function onGeographySelected(geography) {
             GeographyState.setSelected(geography);
-
-            // Need to get the new list of polygons for the selected geography
-            $stateParams.polyuuid = null;
-            PolygonState.updateOptions().then(function(polygons) {
-                if (polygons && polygons.length) {
-                    // Default to the first polygon in the list
-                    ctl.polygonSelected = polygons[0];
-                }
-                updateState();
-            });
         }
 
         // Handler for when a polygon is selected from the dropdown
         function onPolygonSelected(polygon) {
-            ctl.polygonSelected = polygon;
+            PolygonState.setSelected(polygon);
         }
 
         // Handler for when a record type is selected from the dropdown

@@ -9,9 +9,11 @@
     function RecordState($window, $log, $rootScope, RecordTypes) {
         var defaultParams, selected, options;
         var _ = $window._;
-        this.updateOptions = updateOptions;
-        this.setSelected = setSelected;
-        var that = this;
+        var svc = this;
+        svc.updateOptions = updateOptions;
+        svc.getOptions = getOptions;
+        svc.setSelected = setSelected;
+        svc.getSelected = getSelected;
         init();
 
         /**
@@ -21,7 +23,7 @@
           selected = null;
           options = [];
           defaultParams = {'active': 'True'};
-          that.updateOptions();
+          svc.updateOptions();
         }
 
         /**
@@ -30,7 +32,7 @@
          * @param {object} params - The query params to use in place of defaultParams
          */
         function updateOptions(params) {
-            var filterParams = params || defaultParams;
+            var filterParams = angular.extend({}, params, defaultParams);
             return RecordTypes.query(filterParams).$promise.then(function(results) {
                   options = results;
                   $rootScope.$broadcast('driver.state.recordstate:options', options);
@@ -38,10 +40,14 @@
                       $log.warn('No record types returned');
                   } else {
                       if (!_.includes(options, selected)) {
-                          that.setSelected(selected);
+                          svc.setSelected(selected);
                       }
                   }
             });
+        }
+
+        function getOptions() {
+            return options;
         }
 
         /**
@@ -59,8 +65,14 @@
             }
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
         }
+
+        function getSelected() {
+            return selected;
+        }
+
+        return svc;
     }
 
     angular.module('driver.state')
-    .service('RecordState', RecordState);
+    .factory('RecordState', RecordState);
 })();

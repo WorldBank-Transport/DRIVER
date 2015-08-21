@@ -11,7 +11,9 @@
         var _ = $window._;
         var svc = this;
         svc.updateOptions = updateOptions;
+        svc.getOptions = getOptions;
         svc.setSelected = setSelected;
+        svc.getSelected = getSelected;
         init();
 
         /**
@@ -21,7 +23,6 @@
           selected = null;
           options = [];
           defaultParams = {'active': 'True'};
-          svc.updateOptions();
         }
 
         /**
@@ -30,7 +31,7 @@
          * @param {object} params - The query params to use in place of defaultParams
          */
         function updateOptions(params) {
-            var filterParams = params || defaultParams;
+            var filterParams = angular.extend({}, defaultParams, params);
             return Polygons.query(filterParams).$promise.then(function(results) {
                   options = results;
                   $rootScope.$broadcast('driver.state.polygonstate:options', options);
@@ -40,6 +41,10 @@
                       svc.setSelected(selected);
                   }
             });
+        }
+
+        function getOptions() {
+            return options;
         }
 
         /**
@@ -57,6 +62,11 @@
             }
             $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
         }
+
+        function getSelected() {
+            return selected;
+        }
+
         return svc;
     }
 
