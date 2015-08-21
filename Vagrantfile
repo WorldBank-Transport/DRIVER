@@ -47,7 +47,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "database" do |database|
     database.vm.hostname = "database"
-    database.hostmanager.aliases = %w(database.service.driver.internal)
+    # installing redis on the database server
+    database.hostmanager.aliases = %w(database.service.driver.internal redis.service.driver.internal)
     database.vm.network "private_network", ip: "192.168.11.101"
 
     database.vm.synced_folder ".", "/vagrant", disabled: true
@@ -76,6 +77,7 @@ Vagrant.configure("2") do |config|
 
     app.vm.synced_folder "./app", "/opt/app", type: "nfs"
     app.vm.synced_folder "./web", "/opt/web", type: "nfs"
+    app.vm.synced_folder "./windshaft", "/opt/windshaft", type: "nfs"
     app.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs"
     app.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs"
 

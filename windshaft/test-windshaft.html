@@ -1,3 +1,7 @@
+<!-- Demo Windshaft. Requires loading test data from here:
+     https://github.com/CartoDB/Windshaft/blob/master/test/fixtures/windshaft.test.sql
+     TODO: remove this file when Windshaft set up with real data.
+-->
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,7 +28,7 @@
 
     map.addLayer(new L.StamenTileLayer('toner', { detectRetina: true}));
 
-    var windLayer = new L.tileLayer('http://127.0.0.1:5000/database/windshaft_test/table/test_table_2/{z}/{x}/{y}.png', {attribution: 'Foo!'});
+    var windLayer = new L.tileLayer('http://127.0.0.1:7000/tiles/database/windshaft_test/table/test_table_2/{z}/{x}/{y}.png', {attribution: 'CartoDB'});
 
     map.addLayer(windLayer, {detectRetina: true});
   });

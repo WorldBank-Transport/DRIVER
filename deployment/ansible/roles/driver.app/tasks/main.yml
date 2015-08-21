@@ -36,6 +36,21 @@
 - name: Ensure Driver application is running
   service: name=driver-app state=started
 
+- name: Build Windshaft Docker image
+  command: >
+    docker build
+      -f {{ root_windshaft_dir }}/Dockerfile
+      -t driver/windshaft:latest
+      {{ root_windshaft_dir }}
+
+- name: Configure Windshaft service definition
+  template: src=upstart-windshaft.conf.j2 dest=/etc/init/windshaft.conf
+  notify:
+    - Restart windshaft
+
+- name: Ensure Windshaft application is running
+  service: name=windshaft state=started
+
 - name: Configure Nginx site
   template: src=nginx-app.conf.j2
             dest=/etc/nginx/sites-available/driver-app.conf

@@ -1,0 +1,31 @@
+description "windshaft"
+
+{% if developing_or_testing -%}
+start on (vagrant-mounted and started docker)
+{% else -%}
+start on (filesystem and started docker)
+{% endif -%}
+stop on stopping docker
+
+kill timeout 20
+kill signal CONT
+respawn
+
+pre-start script
+  /usr/bin/docker kill windshaft || true
+  /usr/bin/docker rm windshaft || true
+end script
+
+exec /usr/bin/docker run \
+  --name windshaft \
+  --publish 5000:5000 \
+  {% for k,v in driver_conf.items() -%}
+  --env {{ k }}={{ v }} \
+  {% endfor -%}
+  --log-driver syslog \
+  driver/windshaft:latest
+
+post-stop script
+  /usr/bin/docker kill windshaft
+  /usr/bin/docker rm windshaft
+end script
