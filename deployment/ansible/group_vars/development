@@ -11,6 +11,9 @@ postgresql_database: driver
 postgresql_hba_mapping:
   - { type: "host", database: "all", user: "all", address: "192.168.11.1/24", method: "md5" }
 
+redis_bind_address: "{{ lookup('env', 'DRIVER_DATABASE_IP') | default('192.168.11.101', true) }}"
+redis_port: 6379
+
 ## APP SETTINGS
 csrf_session_key: "seekrit"
 cookie_secret_key: "seekrit"

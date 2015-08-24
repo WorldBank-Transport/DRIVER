@@ -6,6 +6,8 @@ driver_conf:
   DRIVER_DB_PASSWORD: "{{ postgresql_password }}"
   DRIVER_DB_HOST: "{{ postgresql_host }}"
   DRIVER_DB_PORT: "{{ postgresql_port }}"
+  DRIVER_REDIS_HOST: "{{ redis_bind_address }}"
+  DRIVER_REDIS_PORT: "{{ redis_port }}"
   DJANGO_STATIC_ROOT: "{{ root_static_dir }}"
   DJANGO_MEDIA_ROOT: "{{ root_media_dir }}"
   DJANGO_POSTGIS_VERSION: "{{ driver_postgis_version }}"
@@ -15,5 +17,6 @@ driver_postgis_version: 2.1.3
 
 root_app_dir: "/opt/app"
 root_www_dir: "/var/www"
+root_windshaft_dir: "/opt/windshaft"
 root_static_dir: "{{ root_www_dir }}/static"
 root_media_dir: "{{ root_www_dir }}/media"

@@ -4,3 +4,4 @@ dependencies:
   - { role: "azavea.postgresql" }
   - { role: "azavea.postgresql-support"}
   - { role: "azavea.postgis" }
+  - { role: "azavea.redis" }

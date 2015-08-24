@@ -4,3 +4,4 @@ azavea.postgis,0.2.1
 azavea.nginx,0.2.1
 azavea.docker,1.0.0
 azavea.pip,0.1.1
+azavea.redis,0.1.0
