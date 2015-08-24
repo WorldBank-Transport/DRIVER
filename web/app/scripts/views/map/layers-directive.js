@@ -3,7 +3,7 @@
 
     var stamenTonerAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.';
 
-    function driverBaseLayers() {
+    function driverBaseLayers(Config) {
         var module = {
             restrict: 'A',
             scope: false,
@@ -22,10 +22,9 @@
                                           {attribution: stamenTonerAttribution});
             map.addLayer(streets, {detectRetina: true});
 
-            // TODO: make Windshaft URL a config setting for the web app?
             // Change 'ALL' for a record type UUID to filter layer
-            var windLayer = new L.tileLayer('http://127.0.0.1:7000/tiles/recordtype/ALL/{z}/{x}/{y}.png',
-                                    {attribution: 'PRS'});
+            var windLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/recordtype/ALL/{z}/{x}/{y}.png',
+                                            {attribution: 'PRS'});
             map.addLayer(windLayer, {detectRetina: true});
         }
     }
