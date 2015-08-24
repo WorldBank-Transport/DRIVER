@@ -13,8 +13,10 @@ var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-
 
 var baseQuery = ["(SELECT * FROM ashlar_record WHERE schema_id = ",
                  "(SELECT uuid FROM ashlar_recordschema ",
-                 "WHERE next_version_id IS NULL AND record_type_id = '"
+                 "WHERE next_version_id IS NULL"
                 ].join("");
+var filterQuery =  " AND record_type_id = '";
+var endQuery = ")) AS ashlar_record";
 
 var config = {
         useProfiler: true,
@@ -22,17 +24,23 @@ var config = {
         base_url_notable: '/tiles/recordtype/:recordtype',
         req2params: function(req, callback) {
             try {
-                // check for a valid record type UUID
-                 if (!uuidRegex.test(req.params.recordtype)) {
-                    console.error('invalid record type:');
+                // check for a valid record type UUID (or 'ALL' to match all types)
+                 if (req.params.recordtype !== 'ALL' && !uuidRegex.test(req.params.recordtype)) {
+                    console.error('Invalid record type:');
                     console.error(req.params.recordtype);
                     throw('Invalid recordtype UUID');
                  }
 
                 req.params.dbname = 'driver';
                 req.params.table = 'ashlar_record';
-                req.params.sql = baseQuery + req.params.recordtype + "')) AS ashlar_record";
-                console.log(req.params.sql);
+
+                req.params.sql = baseQuery;
+
+                if (req.params.recordtype !== 'ALL') {
+                    req.params.sql = baseQuery + filterQuery + req.params.recordtype + "'";
+                }
+
+                req.params.sql += endQuery;
 
                 /* TODO: set
                 req.params.style
