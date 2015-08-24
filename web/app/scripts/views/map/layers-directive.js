@@ -1,7 +1,9 @@
 (function () {
     'use strict';
 
-    function driverBaseLayers(Records) {
+    var stamenTonerAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.';
+
+    function driverBaseLayers() {
         var module = {
             restrict: 'A',
             scope: false,
@@ -16,18 +18,16 @@
         }
 
         function setRecordLayers(map) {
-            var streets = new L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png');
+            var streets = new L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
+                                          {attribution: stamenTonerAttribution});
+            map.addLayer(streets, {detectRetina: true});
 
-            map.addLayer(streets);
-            // TODO: Remove; this is just a stub to have something to look at
-            Records.query({}).$promise.then(function(results) {
-                _.forEach(results, function(rec) {
-                    map.addLayer(L.marker([rec.geom.coordinates[1], rec.geom.coordinates[0]],
-                            {clickable: false}));
-                });
-            });
+            // TODO: make Windshaft URL a config setting for the web app?
+            // Change 'ALL' for a record type UUID to filter layer
+            var windLayer = new L.tileLayer('http://127.0.0.1:7000/tiles/recordtype/ALL/{z}/{x}/{y}.png',
+                                    {attribution: 'PRS'});
+            map.addLayer(windLayer, {detectRetina: true});
         }
-
     }
 
     angular.module('driver.views.map')
