@@ -6,7 +6,6 @@ describe('driver.views.dashboard: Dashboard', function () {
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.templates'));
     beforeEach(module('driver.views.dashboard'));
-    beforeEach(module('driver.toddow'));
 
     var $compile;
     var $httpBackend;
@@ -26,6 +25,10 @@ describe('driver.views.dashboard: Dashboard', function () {
     it('should load directive', function () {
         var scope = $rootScope.$new();
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
+
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         $rootScope.$apply();
 
         // placeholder test

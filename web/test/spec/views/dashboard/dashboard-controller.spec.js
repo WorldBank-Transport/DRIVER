@@ -26,6 +26,10 @@ describe('driver.views.dashboard: DashboardController', function () {
 
     it('should pass this placeholder test', function () {
         Controller = $controller('DashboardController', { $scope: $scope });
+
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         $scope.$apply();
     });
 });
