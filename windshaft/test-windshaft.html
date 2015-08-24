@@ -22,13 +22,16 @@
 <script>
   $(document).ready(function() {
     var map = new L.map('mymap', {
-      center: new L.LatLng(40.423450, -3.702196),
-      zoom: 13,
+      center: new L.LatLng(8.00, 120.00),
+      zoom: 5,
     });
 
-    map.addLayer(new L.StamenTileLayer('toner', { detectRetina: true}));
+    map.addLayer(new L.StamenTileLayer('toner-lite', { detectRetina: true}));
 
-    var windLayer = new L.tileLayer('http://127.0.0.1:7000/tiles/database/windshaft_test/table/test_table_2/{z}/{x}/{y}.png', {attribution: 'CartoDB'});
+    var recordType = '1e690224-ca7a-4bed-9bdf-355e8c9eee6b';
+
+    var windLayer = new L.tileLayer('http://127.0.0.1:7000/tiles/recordtype/' + recordType + '/{z}/{x}/{y}.png',
+                                    {attribution: 'CartoDB'});
 
     map.addLayer(windLayer, {detectRetina: true});
   });
