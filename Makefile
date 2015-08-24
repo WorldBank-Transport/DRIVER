@@ -1,4 +1,4 @@
-all: app editor web
+all: app editor web windshaft
 
 app:
 	docker build -f ./app/Dockerfile.base -t driver/app:latest ./app
@@ -10,4 +10,7 @@ editor:
 web:
 	docker build -f ./web/Dockerfile -t driver/web:latest ./web
 
-.PHONY: all app editor web
+windshaft:
+	docker build -f ./windshaft/Dockerfile -t driver/windshaft:latest ./windshaft
+
+.PHONY: all app editor web windshaft
