@@ -22,6 +22,9 @@
                                           {attribution: stamenTonerAttribution});
             map.addLayer(streets, {detectRetina: true});
 
+            console.log('config:');
+            console.log(Config);
+
             // Change 'ALL' for a record type UUID to filter layer
             var windLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/recordtype/ALL/{z}/{x}/{y}.png',
                                             {attribution: 'PRS'});
