@@ -126,7 +126,7 @@
                     // TODO: the following fields are external to the schema and need implementation
                     // Generating bogus values for now -- to be revisited in a future task.
                     slug: 'testslug', // Note: don't think we need a slug for a record, uuid is fine
-                    label: 'testlabel', // Note: label also seems unnecessarry for a record
+                    label: 'testlabel', // Note: label also seems unnecessary for a record
                     geom: 'POINT (0 0)', // TODO: we'll need a map with ability to search/drop point
                     occurred_from: new Date(), // TODO: we'll need date pickers for occured from/to
                     occurred_to: new Date()

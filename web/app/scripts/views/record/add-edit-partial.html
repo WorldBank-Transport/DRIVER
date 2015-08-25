@@ -5,6 +5,54 @@
             <h2>{{ ::ctl.recordType.label }} input form</h2>
             <div class="content-border"></div>
         </div>
+        <div class="constant-fields">
+            <div class="col-md-12">
+                <h3><span>Constant fields</span></h3>
+                <p>These fields exist for every record.</p>
+                <div class="well well-sm">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Slug</label>
+                                <input type="text" class="form-control" name="constant-slug">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Label</label>
+                                <input type="text" class="form-control" name="constant-label">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Location</label>
+                                <input type="text" class="form-control" name="constant-geom">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Occured From</label>
+                                <input type="text" class="form-control" name="constant-occuredFrom">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Occured To</label>
+                                <input type="text" class="form-control" name="constant-occuredTo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <json-editor editor-id="{{ ctl.editor.id }}"
                      options="ctl.editor.options"
                      on-data-change="ctl.onDataChange"
