@@ -57,12 +57,14 @@
         function occuredFromChanged() {
             $log.debug('occured from changed');
             $log.debug(ctl.occuredFrom);
+            // TODO: dynamically set min/max dates
             //ctl.occuredToOptions = {minDate: ctl.occuredFrom};
         }
 
         function occuredToChanged() {
             $log.debug('occured to changed');
             $log.debug(ctl.occuredTo);
+            // TODO: dynamically set min/max dates
             //ctl.occuredFromOptions = {maxDate: ctl.occuredTo};
         }
 
@@ -119,8 +121,24 @@
             ctl.editor.errors = validationErrors;
         }
 
+        function areConstantFieldsValid() {
+            // TODO: validation for constant fields
+            // save to an errors object for display?
+            if (!ctl.slug || !ctl.label || !ctl.occuredFrom || !ctl.occuredTo) {
+                $log.debug('Missing required constant field');
+                return false;
+            }
+
+            if (ctl.occuredFrom > ctl.occuredTo) {
+                $log.debug('Occurred from date cannot be later than occured to date');
+                return false;
+            }
+
+            return true;
+        }
+
         function onSaveClicked() {
-            if (ctl.editor.errors.length > 0) {
+            if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
                 Notifications.show({
                     displayClass: 'alert-danger',
                     text: 'Saving failed: invalid record'
