@@ -14,7 +14,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Slug</label>
-                                <input type="text" class="form-control" name="constant-slug">
+                                <input type="text" class="form-control" ng-model="ctl.slug" name="constant-slug">
                             </div>
                         </div>
                     </div>
@@ -22,7 +22,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Label</label>
-                                <input type="text" class="form-control" name="constant-label">
+                                <input type="text" class="form-control" ng-model="ctl.label" name="constant-label">
                             </div>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Location</label>
-                                <input type="text" class="form-control" name="constant-geom">
+                                <input type="text" class="form-control" ng-model="ctl.geom" name="constant-geom">
                             </div>
                         </div>
                     </div>
@@ -41,7 +41,9 @@
                                 <div class="input-group" id="datetimepicker-From">
                                     <input type="text" class="form-control"
                                         datetimepicker
-                                        ng-model="ctl.dateTimeFrom"
+                                        datetimepicker-options="{{ ctl.occuredFromOptions }}"
+                                        ng-change="ctl.occuredFromChanged()"
+                                        ng-model="ctl.occuredFrom"
                                         placeholder="From"
                                         name="constant-occuredFrom">
                                     <span class="input-group-addon">
@@ -53,10 +55,12 @@
                         <div class="col-md-6 pull-right">
                             <div class="form-group">
                                 <label class="control-label">Occured To</label>
-                                <div class="input-group date" id="datetimepicker-To">
+                                <div class="input-group" id="datetimepicker-To">
                                     <input type="text" class="form-control"
                                         datetimepicker
-                                        ng-model="ctl.dateTimeTo"
+                                        datetimepicker-options="{{ ctl.occuredToOptions }}"
+                                        ng-change="ctl.occuredToChanged()"
+                                        ng-model="ctl.occuredTo"
                                         placeholder="To"
                                         name="constant-occuredTo">
                                     <span class="input-group-addon">

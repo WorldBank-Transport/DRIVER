@@ -7,12 +7,20 @@
         var ctl = this;
         var editorData = null;
 
+        // expected format to save successfully
+        var dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
+
         initialize();
 
         // Initialize for either adding or editing, depending on recorduuid being supplied
         function initialize() {
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
+            ctl.occuredFromChanged = occuredFromChanged;
+            ctl.occuredToChanged = occuredToChanged;
+
+            ctl.occuredFromOptions = {format: dateTimeFormat};
+            ctl.occuredToOptions = {format: dateTimeFormat};
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
             (recordPromise ? recordPromise.then(loadRecordType) : loadRecordType())
@@ -21,14 +29,14 @@
         }
 
         // Helper for loading the record -- only used when in edit mode
-        function loadRecord () {
+        function loadRecord() {
             return Records.get({ id: $stateParams.recorduuid })
                 .$promise.then(function(record) {
                     ctl.record = record;
                 });
         }
 
-        function loadRecordType () {
+        function loadRecordType() {
             return RecordTypes.get({ id: $stateParams.rtuuid })
                 .$promise.then(function(recordType) {
                     ctl.recordType = recordType;
@@ -44,6 +52,18 @@
                 .$promise.then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
+        }
+
+        function occuredFromChanged() {
+            $log.debug('occured from changed');
+            $log.debug(ctl.occuredFrom);
+            //ctl.occuredToOptions = {minDate: ctl.occuredFrom};
+        }
+
+        function occuredToChanged() {
+            $log.debug('occured to changed');
+            $log.debug(ctl.occuredTo);
+            //ctl.occuredFromOptions = {maxDate: ctl.occuredTo};
         }
 
         function onSchemaReady() {
@@ -123,13 +143,13 @@
                     data: editorData,
                     schema: ctl.recordSchema.uuid,
 
-                    // TODO: the following fields are external to the schema and need implementation
-                    // Generating bogus values for now -- to be revisited in a future task.
-                    slug: 'testslug', // Note: don't think we need a slug for a record, uuid is fine
-                    label: 'testlabel', // Note: label also seems unnecessary for a record
-                    geom: 'POINT (0 0)', // TODO: we'll need a map with ability to search/drop point
-                    occurred_from: new Date(), // TODO: we'll need date pickers for occured from/to
-                    occurred_to: new Date()
+                    // constant fields
+                    slug: ctl.slug,
+                    label: ctl.label,
+                    geom: 'POINT(0 0)',
+                    occurred_from: ctl.occuredFrom,
+                    occurred_to: ctl.occuredTo
+
                     /* jshint camelcase: true */
                 };
             }
