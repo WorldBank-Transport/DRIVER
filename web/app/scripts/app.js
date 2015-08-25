@@ -18,6 +18,7 @@
         LeafletDefaultsProvider.setDefaults({
             center: [8.00, 120.00], // Sulu Sea
             zoom: 5,
+            crs: L.CRS.EPSG3857
         });
     }
 

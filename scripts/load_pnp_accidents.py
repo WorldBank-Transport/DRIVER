@@ -121,7 +121,7 @@ def transform(record, schema_id):
     source.ImportFromEPSG(3123)
 
     target = osr.SpatialReference()
-    target.ImportFromEPSG(4326)
+    target.ImportFromEPSG(3857)
 
     transform = osr.CoordinateTransformation(source, target)
 

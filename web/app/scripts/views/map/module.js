@@ -14,7 +14,8 @@
     angular.module('driver.views.map', [
         'ui.router',
         'ui.bootstrap',
-        'Leaflet'
+        'Leaflet',
+        'driver.config'
     ]).config(StateConfig);
 
 })();

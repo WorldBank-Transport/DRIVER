@@ -12,7 +12,7 @@
         var defaults = {
             center: [0,0],
             zoom: 1,
-            crs: L.CRS.EPSG4326
+            crs: L.CRS.EPSG3857
         };
 
         /**

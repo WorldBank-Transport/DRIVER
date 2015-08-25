@@ -5,6 +5,7 @@ web_build_dir: "{{ web_dir }}/dist"
 
 web_js_html5mode: "false"
 web_js_api_hostname: "http://localhost:7000"
+web_js_windshaft_hostname: "http://localhost:7000"
 
 editor_dir: "/opt/schema_editor"
 editor_scripts_dir: "{{ editor_dir }}/app/scripts"
