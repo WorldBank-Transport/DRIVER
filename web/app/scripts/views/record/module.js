@@ -38,6 +38,7 @@
         'ase.notifications',
         'ase.resources',
         'ase.schemas',
+        'datetimepicker',
         'driver.config',
         'driver.resources',
         'json-editor',

@@ -38,8 +38,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="control-label">Occured From</label>
-                                <div class="input-group date" id="datetimepicker-From">
-                                    <input type="text" class="form-control" name="constant-occuredFrom">
+                                <div class="input-group" id="datetimepicker-From">
+                                    <input type="text" class="form-control"
+                                        datetimepicker
+                                        ng-model="ctl.dateTimeFrom"
+                                        placeholder="From"
+                                        name="constant-occuredFrom">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -50,7 +54,11 @@
                             <div class="form-group">
                                 <label class="control-label">Occured To</label>
                                 <div class="input-group date" id="datetimepicker-To">
-                                    <input type="text" class="form-control" name="constant-occuredTo">
+                                    <input type="text" class="form-control"
+                                        datetimepicker
+                                        ng-model="ctl.dateTimeTo"
+                                        placeholder="To"
+                                        name="constant-occuredTo">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
