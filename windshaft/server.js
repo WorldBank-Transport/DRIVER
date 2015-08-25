@@ -37,7 +37,7 @@ var config = {
                 req.params.sql = baseQuery;
 
                 if (req.params.recordtype !== 'ALL') {
-                    req.params.sql = baseQuery + filterQuery + req.params.recordtype + "'";
+                    req.params.sql += filterQuery + req.params.recordtype + "'";
                 }
 
                 req.params.sql += endQuery;
