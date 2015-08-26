@@ -16,16 +16,22 @@
         function initialize() {
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
-            ctl.occuredFromChanged = occuredFromChanged;
-            ctl.occuredToChanged = occuredToChanged;
+            ctl.occurredFromChanged = occurredFromChanged;
+            ctl.occurredToChanged = occurredToChanged;
+            ctl.onGeomChanged = onGeomChanged;
 
-            ctl.occuredFromOptions = {format: dateTimeFormat};
-            ctl.occuredToOptions = {format: dateTimeFormat};
+            ctl.occurredFromOptions = {format: dateTimeFormat};
+            ctl.occurredToOptions = {format: dateTimeFormat};
+
+            ctl.geom = {
+                lat: null,
+                lng: null
+            };
 
             $scope.$on('Map:LocationSelected', function(event, data) {
-                ctl.geom = data[0] + ", " + data[1];
-                $log.debug('got location:');
-                $log.debug(ctl.geom);
+                // update location when map marker set
+                ctl.geom.lat = data[0];
+                ctl.geom.lng = data[1];
                 $scope.$apply();
             });
 
@@ -35,11 +41,25 @@
                 .then(onSchemaReady);
         }
 
+        // tell embed-map-directive to update marker location
+        function onGeomChanged() {
+            if (ctl.geom.lat && ctl.geom.lng) {
+                $scope.$emit('Record:LocationSelected', ctl.geom);
+            }
+        }
+
         // Helper for loading the record -- only used when in edit mode
         function loadRecord() {
             return Records.get({ id: $stateParams.recorduuid })
                 .$promise.then(function(record) {
                     ctl.record = record;
+
+                    // set lat/lng array into bind-able object
+                    ctl.geom.lat = ctl.record.geom.coordinates[0];
+                    ctl.geom.lng = ctl.record.geom.coordinates[1];
+
+                    // notify map
+                    onGeomChanged();
                 });
         }
 
@@ -61,18 +81,22 @@
                 });
         }
 
-        function occuredFromChanged() {
-            $log.debug('occured from changed');
-            $log.debug(ctl.occuredFrom);
+        function occurredFromChanged() {
+            $log.debug('occurred from changed');
+            /* jshint camelcase: false */
+            $log.debug(ctl.record.occurred_from);
             // TODO: dynamically set min/max dates
-            //ctl.occuredToOptions = {minDate: ctl.occuredFrom};
+            //ctl.occurredToOptions = {minDate: ctl.record.occurred_from};
+            /* jshint camelcase: true */
         }
 
-        function occuredToChanged() {
-            $log.debug('occured to changed');
-            $log.debug(ctl.occuredTo);
+        function occurredToChanged() {
+            $log.debug('occurred to changed');
+            /* jshint camelcase: false */
+            $log.debug(ctl.record.occurred_to);
             // TODO: dynamically set min/max dates
-            //ctl.occuredFromOptions = {maxDate: ctl.occuredTo};
+            //ctl.occurredFromOptions = {maxDate: ctl.record.occurred_to};
+            /* jshint camelcase: true */
         }
 
         function onSchemaReady() {
@@ -129,22 +153,30 @@
         }
 
         function areConstantFieldsValid() {
-            // TODO: validation for constant fields
-            // save to an errors object for display?
-            if (!ctl.slug || !ctl.label || !ctl.occuredFrom || !ctl.occuredTo) {
+            /* jshint camelcase: false */
+
+            // basic validation for constant fields
+            if (!ctl.record.slug || !ctl.record.label || !ctl.record.geom ||
+                !ctl.record.geom.coordinates || ctl.record.geom.coordinates.length < 2 ||
+                !ctl.record.occurred_from || !ctl.record.occurred_to) {
+
                 $log.debug('Missing required constant field');
                 return false;
             }
 
-            if (ctl.occuredFrom > ctl.occuredTo) {
-                $log.debug('Occurred from date cannot be later than occured to date');
+            if (ctl.record.occurred_from > ctl.record.occurred_to) {
+                $log.debug('occurred from date cannot be later than occurred to date');
                 return false;
             }
+            /* jshint camelcase: true */
 
             return true;
         }
 
         function onSaveClicked() {
+            // set geom array back on record
+            ctl.record.geom.coordinates = [ctl.geom.lat, ctl.geom.lng];
+
             if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
                 Notifications.show({
                     displayClass: 'alert-danger',
@@ -171,10 +203,9 @@
                     // constant fields
                     slug: ctl.slug,
                     label: ctl.label,
-                    geom: 'POINT(0 0)',
-                    occurred_from: ctl.occuredFrom,
-                    occurred_to: ctl.occuredTo
-
+                    geom: 'POINT(' + ctl.geom.lat + ' ' + ctl.geom.lng + ')',
+                    occurred_from: ctl.record.occurred_from,
+                    occurred_to: ctl.record.occurred_to
                     /* jshint camelcase: true */
                 };
             }
@@ -188,6 +219,11 @@
                 $log.debug('Error while creating record:', error);
             });
         }
+
+        $scope.$on('$destroy', function() {
+            // let map know to destroy its state
+            $scope.$emit('Record:Close');
+        });
     }
 
     angular.module('driver.views.record')

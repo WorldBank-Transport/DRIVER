@@ -5,6 +5,7 @@
 
     function driverEmbedMap() {
 
+        var map = null;
         var locationMarker = null;
         var scope = null;
 
@@ -20,30 +21,46 @@
         function link(linkScope, element, attrs, controller) {
             scope = linkScope;
             controller.getMap().then(setUpMap);
+
+            scope.$on('Record:LocationSelected', function(event, data) {
+                setMarker(L.latLng(data.lat, data.lng));
+            });
+
+            // destroy map state when record is closed
+            scope.$on('Record:Close', function() {
+                map = null;
+                locationMarker = null;
+            });
         }
 
-        function broadcastCoordinates(latlng) {
-            scope.$parent.$broadcast('Map:LocationSelected', [latlng.lat, latlng.lng]);
-        }
-
-        function setUpMap(map) {
+        // initialize map with baselayer and listen for click events
+        function setUpMap(leafletMap) {
+            map = leafletMap;
             var streets = new L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
                                           {attribution: stamenTonerAttribution});
             map.addLayer(streets, {detectRetina: true});
 
             map.on('click', function(e) {
-
                 broadcastCoordinates(e.latlng);
-
-                if (locationMarker) {
-                    locationMarker.setLatLng(e.latlng);
-                } else {
-                    locationMarker = new L.marker(e.latlng, {draggable: true}).addTo(map);
-                    locationMarker.on('dragend', function() {
-                        broadcastCoordinates(locationMarker.getLatLng());
-                    });
-                }
+                setMarker(e.latlng);
             });
+        }
+
+        // set marker location, or create marker at location if it does not exist yet
+        function setMarker(latlng) {
+            if (locationMarker) {
+                locationMarker.setLatLng(latlng);
+            } else {
+                locationMarker = new L.marker(latlng, {draggable: true}).addTo(map);
+                locationMarker.on('dragend', function() {
+                    broadcastCoordinates(locationMarker.getLatLng());
+                });
+            }
+        }
+
+        // tell add-edit-controller.js when marker point set
+        function broadcastCoordinates(latlng) {
+            scope.$parent.$broadcast('Map:LocationSelected', [latlng.lat, latlng.lng]);
         }
     }
 
