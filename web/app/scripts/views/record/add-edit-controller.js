@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $state, $stateParams, uuid4, Notifications,
+    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4, Notifications,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
         var editorData = null;
@@ -21,6 +21,13 @@
 
             ctl.occuredFromOptions = {format: dateTimeFormat};
             ctl.occuredToOptions = {format: dateTimeFormat};
+
+            $scope.$on('Map:LocationSelected', function(event, data) {
+                ctl.geom = data[0] + ", " + data[1];
+                $log.debug('got location:');
+                $log.debug(ctl.geom);
+                $scope.$apply();
+            });
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
             (recordPromise ? recordPromise.then(loadRecordType) : loadRecordType())
