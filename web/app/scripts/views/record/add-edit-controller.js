@@ -156,11 +156,11 @@
             /* jshint camelcase: false */
 
             // basic validation for constant fields
-            if (!ctl.record.slug || !ctl.record.label || !ctl.record.geom ||
-                !ctl.record.geom.coordinates || ctl.record.geom.coordinates.length < 2 ||
+            if (!ctl.record || !ctl.record.slug || !ctl.record.label ||
+                !ctl.geom.lat|| !ctl.geom.lng ||
                 !ctl.record.occurred_from || !ctl.record.occurred_to) {
 
-                $log.debug('Missing required constant field');
+                $log.debug('Missing required constant field(s)');
                 return false;
             }
 
@@ -174,8 +174,6 @@
         }
 
         function onSaveClicked() {
-            // set geom array back on record
-            ctl.record.geom.coordinates = [ctl.geom.lat, ctl.geom.lng];
 
             if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
                 Notifications.show({
@@ -189,7 +187,9 @@
             // If there is already a record, set the new editorData and update, else create one
             var saveMethod = null;
             var dataToSave = null;
-            if (ctl.record) {
+            if (ctl.record.geom) {
+                // set back coordinates
+                ctl.record.geom.coordinates = [ctl.geom.lat, ctl.geom.lng];
                 saveMethod = 'update';
                 dataToSave = ctl.record;
                 dataToSave.data = editorData;
@@ -201,8 +201,8 @@
                     schema: ctl.recordSchema.uuid,
 
                     // constant fields
-                    slug: ctl.slug,
-                    label: ctl.label,
+                    slug: ctl.record.slug,
+                    label: ctl.record.label,
                     geom: 'POINT(' + ctl.geom.lat + ' ' + ctl.geom.lng + ')',
                     occurred_from: ctl.record.occurred_from,
                     occurred_to: ctl.record.occurred_to
