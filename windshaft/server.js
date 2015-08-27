@@ -1,5 +1,6 @@
-var Windshaft = require('windshaft');
+var Windshaft   = require('windshaft');
 var healthCheck = require('./healthCheck');
+var driver      = require('./driver.js');
 
 var dbUser = process.env.DRIVER_DB_USER;
 var dbHost = process.env.DRIVER_DB_HOST;
@@ -8,51 +9,17 @@ var dbPassword = process.env.DRIVER_DB_PASSWORD;
 var redisHost = process.env.DRIVER_REDIS_HOST;
 var redisPort = process.env.DRIVER_REDIS_PORT;
 
-// RFC4122. See: http://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
-var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-var baseFilterQuery = ["(SELECT * FROM ashlar_record WHERE schema_id = ",
-                       "(SELECT uuid FROM ashlar_recordschema ",
-                       "WHERE next_version_id IS NULL",
-                       " AND record_type_id = '"
-                      ].join("");
-
-var queryAll = ["(SELECT * FROM ashlar_record WHERE schema_id IN ",
-                "(SELECT uuid FROM ashlar_recordschema ",
-                "WHERE next_version_id IS NULL"
-               ].join("");
-
-var endQuery = ")) AS ashlar_record";
-
 var config = {
         useProfiler: true,
-        base_url: '/tiles/recordtype/:recordtype',
-        base_url_notable: '/tiles/recordtype/:recordtype',
+        // :recordtype parameter can be:
+        // GEO to get the user-uploaded boundary polygon;
+        // ALL to get record points of all record types; or,
+        // a UUID of a particular record type (returns record points of that type)
+        base_url: '/tiles/:recordtype',
+        base_url_notable: '/tiles/:recordtype',
         req2params: function(req, callback) {
             try {
-                // check for a valid record type UUID (or 'ALL' to match all types)
-                 if (req.params.recordtype !== 'ALL' && !uuidRegex.test(req.params.recordtype)) {
-                    console.error('Invalid record type:');
-                    console.error(req.params.recordtype);
-                    throw('Invalid recordtype UUID');
-                 }
-
-                req.params.dbname = 'driver';
-                req.params.table = 'ashlar_record';
-
-                if (req.params.recordtype === 'ALL') {
-                    req.params.sql = queryAll;
-                } else {
-                    req.params.sql = baseFilterQuery + req.params.recordtype + "'";
-                }
-
-                req.params.sql += endQuery;
-
-                /* TODO: set
-                req.params.style
-                req.params.interactivity
-                */
-
+                req.params = driver.getRequestParameters(req.params);
                 callback(null, req);
             } catch(err) {
                 console.error('req2params error: ');

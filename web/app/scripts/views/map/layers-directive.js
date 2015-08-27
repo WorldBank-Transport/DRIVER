@@ -23,7 +23,7 @@
             map.addLayer(streets, {detectRetina: true});
 
             // Change 'ALL' for a record type UUID to filter layer
-            var windLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/recordtype/ALL/{z}/{x}/{y}.png',
+            var windLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/ALL/{z}/{x}/{y}.png',
                                             {attribution: 'PRS'});
             map.addLayer(windLayer, {detectRetina: true});
         }
