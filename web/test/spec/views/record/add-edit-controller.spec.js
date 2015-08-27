@@ -104,4 +104,40 @@ describe('driver.views.record: AddEditController', function () {
 
         $httpBackend.verifyNoOutstandingRequest();
     });
+
+    it('should allow adding a new record', function () {
+        var records = DriverResourcesMock.RecordResponse;
+        var record = records.results[0];
+
+        // set coordinate as happens for a new record
+        $scope.geom = {
+            lat: record.geom.coordinates[0],
+            lng: record.geom.coordinates[1]
+        };
+        delete record.geom;
+
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
+        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
+        Controller = $controller('RecordAddEditController', {
+            $scope: $scope,
+            $stateParams: { rtuuid: recordTypeId  }
+        });
+        $scope.$apply();
+        $httpBackend.flush();
+
+        // Should submit a PUT request to record endpoint
+        var recordEndpoint = new RegExp('api/records/');
+        $httpBackend.expectPUT(recordEndpoint).respond(200);
+        Controller.onSaveClicked();
+
+        $httpBackend.verifyNoOutstandingRequest();
+    });
 });
