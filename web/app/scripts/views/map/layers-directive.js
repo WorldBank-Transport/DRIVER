@@ -23,9 +23,14 @@
             map.addLayer(streets, {detectRetina: true});
 
             // Change 'ALL' for a record type UUID to filter layer
-            var windLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/ALL/{z}/{x}/{y}.png',
-                                            {attribution: 'PRS'});
-            map.addLayer(windLayer, {detectRetina: true});
+            var recordsLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/ALL/{z}/{x}/{y}.png',
+                                               {attribution: 'PRS'});
+            map.addLayer(recordsLayer, {detectRetina: true});
+
+            // user-uploaded boundary layer
+            var boundaryLayer = new L.tileLayer(Config.windshaft.hostname + '/tiles/GEO/{z}/{x}/{y}.png',
+                                                {attribution: 'PRS'});
+            map.addLayer(boundaryLayer, {detectRetina: true});
         }
     }
 
