@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var stamenTonerAttribution = 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.';
+    var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
     function driverBaseLayers(Config) {
         var module = {
@@ -18,8 +18,8 @@
         }
 
         function setRecordLayers(map) {
-            var streets = new L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png',
-                                          {attribution: stamenTonerAttribution});
+            var streets = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                                          {attribution: cartoDBAttribution});
             map.addLayer(streets, {detectRetina: true});
 
             // Change 'ALL' for a record type UUID to filter layer
