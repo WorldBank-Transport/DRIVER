@@ -16,7 +16,7 @@
 
     function LeafletDefaultsConfig(LeafletDefaultsProvider) {
         LeafletDefaultsProvider.setDefaults({
-            center: [8.00, 120.00], // Sulu Sea
+            center: [12.375, 121.5], // geographic center of Philippines
             zoom: 5,
             crs: L.CRS.EPSG3857
         });
