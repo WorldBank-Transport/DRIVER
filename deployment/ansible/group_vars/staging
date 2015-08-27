@@ -1,0 +1,24 @@
+---
+## POSTGRESQL SETTINGS
+postgresql_host: "{{ hostvars['database']['ansible_ec2_local_ipv4'] }}"
+postgresql_listen_addresses: "{{ hostvars['database']['ansible_ec2_local_ipv4'] }}"
+postgresql_username: driver
+postgresql_password: "{{ lookup('env', 'DRIVER_DB_PASSWORD') | default('driver', true) }}"
+postgresql_database: driver
+postgresql_hba_mapping:
+  - { type: "host", database: "all", user: "all", address: "172.30.2.1/24", method: "md5" }
+
+## REDIS SETTINGS
+redis_bind_address: "{{ hostvars['database']['ansible_ec2_local_ipv4'] }}"
+
+## APP SETTINGS
+csrf_session_key: "{{ lookup('env', 'DRIVER_CSRF_KEY') | default('seekrit', true) }}"
+cookie_secret_key: "{{ lookup('env', 'DRIVER_COOKIE_KEY') | default('seekrit', true) }}"
+
+## WEB SETTINGS
+web_js_html5mode: "false"
+web_js_api_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4'] }}"
+web_js_windshaft_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4'] }}"
+
+editor_js_html5mode: "false"
+editor_js_api_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4'] }}"

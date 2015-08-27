@@ -1,0 +1,41 @@
+---
+- name: Pull editor Docker image
+  command: /usr/bin/docker pull quay.io/azavea/driver-editor:latest
+
+- name: Build production editor app
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-editor
+      --volume {{ editor_scripts_dir }}/config.js:{{ editor_scripts_dir }}/config.js
+      --volume {{ editor_build_dir }}:{{ editor_build_dir }}
+      --log-driver syslog
+      quay.io/azavea/driver-editor:latest
+      build
+
+- name: Create editor data container
+  command: >
+    /usr/bin/docker create
+      --volume {{ editor_dir }}
+      --name driver-editor
+    quay.io/azavea/driver-editor:latest
+
+- name: Pull web Docker image
+  command: /usr/bin/docker pull quay.io/azavea/driver-web:latest
+
+- name: Build production web app
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-web
+      --volumes-from driver-editor
+      --volume {{ editor_scripts_dir }}/config.js:{{ editor_scripts_dir }}/config.js
+      --volume {{ web_scripts_dir }}/config.js:{{ web_scripts_dir }}/config.js
+      --volume {{ web_build_dir }}:{{ web_build_dir }}
+      --log-driver syslog
+      quay.io/azavea/driver-web:latest
+      build
+
+- name: Remove editor data container
+  command: >
+    /usr/bin/docker rm --volumes --force driver-editor
