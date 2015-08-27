@@ -58,7 +58,8 @@ describe('ase.views.recordtype: AddController', function () {
                         description: 'Details for Accident',
                         multiple: false,
                         properties: {},
-                        definitions: {}
+                        definitions: {},
+                        details: true
                     }
                 }
             }
