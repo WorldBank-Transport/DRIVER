@@ -28,6 +28,28 @@
                                                {attribution: 'PRS'});
             map.addLayer(recordsLayer, {detectRetina: true});
 
+            // interactivity for record layer
+            var utfGridRecordsLayer = new L.UtfGrid(Config.windshaft.hostname +
+                                                    '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json',
+                                                    {useJsonP: false});
+            map.addLayer(utfGridRecordsLayer, {detectRetina: true});
+
+            utfGridRecordsLayer.on('mouseover', function(e) {
+
+                // arbitrary fields
+                var data = JSON.parse(e.data.data);
+
+                map.closePopup();
+                var popup = new L.popup()
+                    .setLatLng(e.latlng)
+                    .setContent(e.data.label + ' ' + e.data.occurred_from)
+                    .openOn(map);
+            });
+
+            utfGridRecordsLayer.on('mouseout', function() {
+                map.closePopup();
+            });
+
             // user-uploaded boundary layer(s)
             var boundaryLayer = new L.tileLayer(Config.windshaft.hostname +
                                                 '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png',

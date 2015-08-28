@@ -44,6 +44,7 @@ module.exports = function(config) {
       'bower_components/lodash/lodash.js',
       'bower_components/angular-uuid/uuid.min.js',
       'bower_components/leaflet/dist/leaflet-src.js',
+      'bower_components/Leaflet.utfgrid/dist/leaflet.utfgrid.js',
       'bower_components/d3/d3.js',
       'bower_components/d3-tip/index.js',
       'bower_components/angular-mocks/angular-mocks.js',

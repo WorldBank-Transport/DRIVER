@@ -49,7 +49,9 @@ var config = {
         redis: {
             host: redisHost,
             port: redisPort
-        }
+        },
+        // necessary for UTFGrid to function on localhost
+        enable_cors: true
     };
 
 // Initialize tile server
