@@ -11,12 +11,13 @@ var redisPort = process.env.DRIVER_REDIS_PORT;
 
 var config = {
         useProfiler: true,
-        // :recordtype parameter can be:
-        // GEO to get the user-uploaded boundary polygon;
-        // ALL to get record points of all record types; or,
-        // a UUID of a particular record type (returns record points of that type)
-        base_url: '/tiles/:recordtype',
-        base_url_notable: '/tiles/:recordtype',
+        // :tablename parameter can be:
+        // ashlar_boundary to get the user-uploaded boundary polygon, or
+        // ashlar_record to get records points.
+        // :id parameter can be either ALL to get all boundary polygons/record points, or
+        // a UUID of a particular record type or boundary shapefile.
+        base_url: '/tiles/table/:tablename/id/:id',
+        base_url_notable: '/tiles/table/:tablename',
         req2params: function(req, callback) {
             try {
                 req.params = driver.getRequestParameters(req.params);
