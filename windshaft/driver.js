@@ -52,7 +52,6 @@ function getRequestParameters(params) {
 
     if (params.tablename === 'ashlar_record') {
 
-        // for UTFGrid interactivity; must be string columns
         params.interactivity = 'uuid,occurred_from,label,slug,data';
 
         // build query for record points
@@ -64,7 +63,6 @@ function getRequestParameters(params) {
         params.sql += endRecordQuery;
     } else {
 
-        // for UTFGrid
         params.interactivity = 'label';
 
         // TODO: use color column for styling?

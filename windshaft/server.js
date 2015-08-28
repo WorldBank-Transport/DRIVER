@@ -50,7 +50,6 @@ var config = {
             host: redisHost,
             port: redisPort
         },
-        // necessary for UTFGrid to function on localhost
         enable_cors: true
     };
 
