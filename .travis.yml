@@ -1,56 +1,23 @@
-language: python
-python:
-  - "2.7"
+sudo: required
 
-cache:
-  directories:
-    - $HOME/.cache/pip
+language: bash
 
-addons:
-    postgresql: "9.4"
-
-env:
-  global:
-    - DJANGO_SETTINGS_MODULE='driver.settings_travis'
-    - DJANGO_SECRET_KEY='driver'
-    - DJANGO_STATIC_ROOT='/tmp'
-    - DJANGO_MEDIA_ROOT='/tmp'
-
-before_install:
-    # Fun race conditions on npm<2.1.1 when installing packages, so upgrade
-    #   https://github.com/npm/npm/issues/6309
-  - nvm install 0.12
-  - nvm use 0.12
-  - find . -type l -name "bower_components" -delete -o -name "node_modules" -delete
+services:
+  - docker
 
 install:
-  - gem install -q sass compass
-  - pip install "git+https://github.com/azavea/ashlar.git@develop"
-  - pip install django-cors-headers
-  - pip install oauth2_provider
-  - pushd schema_editor
-  - npm --version
-  - npm install -g bower grunt-cli
-  - npm install
-  - bower install
-  - popd
-  - pushd web
-  - npm --version
-  - npm install -g bower grunt-cli
-  - npm install
-  - bower install
-  - popd
+  - docker build -f ./app/Dockerfile.base -t "quay.io/azavea/driver-app:${TRAVIS_COMMIT:0:7}" ./app
+  - docker build -f ./schema_editor/Dockerfile -t "quay.io/azavea/driver-editor:${TRAVIS_COMMIT:0:7}" ./schema_editor
+  - docker build -f ./web/Dockerfile -t "quay.io/azavea/driver-web:${TRAVIS_COMMIT:0:7}" ./web
 
-before_script:
-  - psql -U postgres -c "create extension postgis"
+script: .travis/script.sh
 
-script:
-  - pushd schema_editor
-  - grunt travis
-  - popd
-  - pushd web
-  - grunt travis
-  - popd
-  - pushd app
-  - python manage.py test
-  - popd
+before_deploy:
+  - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+
+deploy:
+  provider: script
+  script: .travis/deploy.sh
+  on:
+    repo: WorldBank-Transport/DRIVER
+    branch: develop

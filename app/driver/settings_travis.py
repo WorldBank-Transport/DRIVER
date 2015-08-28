@@ -15,11 +15,11 @@ from driver.settings import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'prs',
+        'HOST': 'database',
         'PORT': 5432,
-        'USER': 'postgres',
-        'PASSWORD': '',
+        'USER': 'prs',
+        'PASSWORD': 'prs',
         'CONN_MAX_AGE': 3600,  # in seconds
     }
 }
