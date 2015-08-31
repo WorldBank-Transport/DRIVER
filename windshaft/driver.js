@@ -33,7 +33,7 @@ var heatmapStyle = [
     'image-filters: colorize-alpha(blue, cyan, lightgreen, yellow , orange, red);',
     'comp-op:darken;',
     'marker-allow-overlap: true;',
-    'marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);',
+    'marker-file: url(alphamarker.png);',
     'marker-fill-opacity: 0.2;',
     'marker-width: 10;',
     '[zoom < 7] { marker-width: 5; }',
