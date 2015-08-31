@@ -37,6 +37,7 @@ var heatmapStyle = [
     'marker-fill-opacity: 0.2;',
     'marker-width: 10;',
     '[zoom < 7] { marker-width: 5; }',
+    '[zoom > 9] { marker-width: 15; }',
 '}'].join('');
 
 
@@ -44,13 +45,6 @@ var heatmapStyle = [
 function getRequestParameters(request) {
 
     var params = request.params;
-
-    console.log('query:');
-    console.log(request.query);
-
-    // TODO: set params.style
-    console.log('default style is:');
-    console.log(params.style);
 
     params.dbname = 'driver';
 
@@ -77,7 +71,7 @@ function getRequestParameters(request) {
         if (params.id !== 'ALL') {
             params.sql += filterRecordQuery + params.id + "'";
         } else if (request.query.heatmap) {
-            console.log('making heatmap');
+            // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
         }
 
