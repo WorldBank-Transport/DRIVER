@@ -28,11 +28,44 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
 var filterBoundaryQuery = " WHERE b.uuid ='"
 var endBoundaryQuery = ") AS ashlar_boundary";
 
+var heatmapStyle = ['#ashlar_record {',
+  'first/marker-fill: #0011cc;',
+  'first/marker-opacity: 0.01;',
+  'first/marker-width: 80;',
+  'first/marker-line-width: 0;',
+  'first/marker-placement: point;',
+  'first/marker-allow-overlap: true;',
+  'first/marker-comp-op: lighten;',
 
-// takes the Windshaft req.params and returns new parameters with the query set
-function getRequestParameters(params) {
+  'second/marker-fill: #00cc11;',
+  'second/marker-opacity: 0.02;',
+  'second/marker-width:50;',
+  'second/marker-line-width: 0;',
+  'second/marker-placement: point;',
+  'second/marker-allow-overlap: true;',
+  'second/marker-comp-op: lighten ;',
+
+  'third/marker-fill: #00ff00;',
+  'third/marker-opacity: 0.04;',
+  'third/marker-width:20;',
+  'third/marker-line-width: 0;',
+  'third/marker-placement: point;',
+  'third/marker-allow-overlap: true;',
+  'third/marker-comp-op: lighten;',
+'}'].join('');
+
+
+// takes the Windshaft request and returns new parameters with the query set
+function getRequestParameters(request) {
+
+    var params = request.params;
+
+    console.log('query:');
+    console.log(request.query);
 
     // TODO: set params.style
+    console.log('default style is:');
+    console.log(params.style);
 
     params.dbname = 'driver';
 
@@ -58,6 +91,9 @@ function getRequestParameters(params) {
         params.sql = baseRecordQuery;
         if (params.id !== 'ALL') {
             params.sql += filterRecordQuery + params.id + "'";
+        } else if (request.query.heatmap) {
+            console.log('making heatmap');
+            params.style = heatmapStyle;
         }
 
         params.sql += endRecordQuery;

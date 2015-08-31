@@ -20,7 +20,7 @@ var config = {
         base_url_notable: '/tiles/table/:tablename',
         req2params: function(req, callback) {
             try {
-                req.params = driver.getRequestParameters(req.params);
+                req.params = driver.getRequestParameters(req);
                 callback(null, req);
             } catch(err) {
                 console.error('req2params error: ');
