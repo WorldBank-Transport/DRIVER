@@ -29,11 +29,11 @@ describe('driver.views.map: Map', function () {
     it('should load directive', function () {
         var requestUrl = /\/api\/records/;
         $httpBackend.whenGET(requestUrl).respond(DriverResourcesMock.RecordResponse);
-        var scope = $rootScope.$new();
-        var element = $compile('<driver-map></driver-map>')(scope);
+        var $scope = $rootScope.$new();
+        var element = $compile('<div leaflet-map driver-map></div>')($scope);
         $rootScope.$apply();
 
-        // placeholder test
-        expect(element.find('.records-map').length).toEqual(1);
+        expect(element.find('.leaflet-tile-pane').length).toEqual(1);
+        expect(element.hasClass('records-map').length);
     });
 });
