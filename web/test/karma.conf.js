@@ -70,6 +70,8 @@ module.exports = function(config) {
       'app/scripts/navbar/**.js',
       'app/scripts/toddow/module.js',
       'app/scripts/toddow/**.js',
+      'app/scripts/stepwise/module.js',
+      'app/scripts/stepwise/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/resources/**/*.js',
