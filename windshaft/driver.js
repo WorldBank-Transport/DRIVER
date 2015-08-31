@@ -28,30 +28,15 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
 var filterBoundaryQuery = " WHERE b.uuid ='"
 var endBoundaryQuery = ") AS ashlar_boundary";
 
-var heatmapStyle = ['#ashlar_record {',
-  'first/marker-fill: #0011cc;',
-  'first/marker-opacity: 0.01;',
-  'first/marker-width: 80;',
-  'first/marker-line-width: 0;',
-  'first/marker-placement: point;',
-  'first/marker-allow-overlap: true;',
-  'first/marker-comp-op: lighten;',
-
-  'second/marker-fill: #00cc11;',
-  'second/marker-opacity: 0.02;',
-  'second/marker-width:50;',
-  'second/marker-line-width: 0;',
-  'second/marker-placement: point;',
-  'second/marker-allow-overlap: true;',
-  'second/marker-comp-op: lighten ;',
-
-  'third/marker-fill: #00ff00;',
-  'third/marker-opacity: 0.04;',
-  'third/marker-width:20;',
-  'third/marker-line-width: 0;',
-  'third/marker-placement: point;',
-  'third/marker-allow-overlap: true;',
-  'third/marker-comp-op: lighten;',
+var heatmapStyle = [
+    '#ashlar_record {',
+    'image-filters: colorize-alpha(blue, cyan, lightgreen, yellow , orange, red);',
+    'comp-op:darken;',
+    'marker-allow-overlap: true;',
+    'marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);',
+    'marker-fill-opacity: 0.2;',
+    'marker-width: 10;',
+    '[zoom < 7] { marker-width: 5; }',
 '}'].join('');
 
 
