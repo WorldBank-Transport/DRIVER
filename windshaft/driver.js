@@ -28,11 +28,23 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
 var filterBoundaryQuery = " WHERE b.uuid ='"
 var endBoundaryQuery = ") AS ashlar_boundary";
 
+var heatmapStyle = [
+    '#ashlar_record {',
+    'image-filters: colorize-alpha(blue, cyan, lightgreen, yellow , orange, red);',
+    'comp-op:darken;',
+    'marker-allow-overlap: true;',
+    'marker-file: url(alphamarker.png);',
+    'marker-fill-opacity: 0.2;',
+    'marker-width: 10;',
+    '[zoom < 7] { marker-width: 5; }',
+    '[zoom > 9] { marker-width: 15; }',
+'}'].join('');
 
-// takes the Windshaft req.params and returns new parameters with the query set
-function getRequestParameters(params) {
 
-    // TODO: set params.style
+// takes the Windshaft request and returns new parameters with the query set
+function getRequestParameters(request) {
+
+    var params = request.params;
 
     params.dbname = 'driver';
 
@@ -58,6 +70,9 @@ function getRequestParameters(params) {
         params.sql = baseRecordQuery;
         if (params.id !== 'ALL') {
             params.sql += filterRecordQuery + params.id + "'";
+        } else if (request.query.heatmap) {
+            // make a heatmap if optional parameter for that was sent in
+            params.style = heatmapStyle;
         }
 
         params.sql += endRecordQuery;

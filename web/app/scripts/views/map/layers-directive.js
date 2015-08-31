@@ -22,7 +22,13 @@
                                           {attribution: cartoDBAttribution});
             map.addLayer(streets, {detectRetina: true});
 
-            // Change 'ALL' for a record type UUID to filter layer
+            // layer with heatmap of events
+            var heatmapLayer = new L.tileLayer(Config.windshaft.hostname +
+                                               '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png?heatmap=true',
+                                               {attribution: 'PRS'});
+            map.addLayer(heatmapLayer, {detectRetina: true});
+
+            // Event record points. Change 'ALL' for a record type UUID to filter layer
             var recordsLayer = new L.tileLayer(Config.windshaft.hostname +
                                                '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png',
                                                {attribution: 'PRS'});
@@ -54,6 +60,19 @@
                                                 '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png',
                                                 {attribution: 'PRS'});
             map.addLayer(boundaryLayer, {detectRetina: true});
+
+            var baseMaps = {
+                'CartoDB Positron': streets
+            };
+
+            var overlays = {
+                'Heatmap': heatmapLayer,
+                'Events': recordsLayer,
+                'Boundaries': boundaryLayer
+            };
+
+            // layer switcher control
+            L.control.layers(baseMaps, overlays).addTo(map);
         }
 
         /**
