@@ -43,7 +43,7 @@
                     autoPanPadding: [5, 5]
                 };
 
-                var popup = new L.popup(popupOptions)
+                new L.popup(popupOptions)
                     .setLatLng(e.latlng)
                     .setContent(buildRecordPopup(e.data))
                     .openOn(map);
@@ -67,9 +67,11 @@
             var data = JSON.parse(record.data);
 
             // add header with the label and event date constant fields
+            /* jshint camelcase: false */
             var str = '<div class="record-popup">';
             str += '<h3>' + record.label + '</h3><div>';
             str += '<p>Occurred on: ' + record.occurred_from + '</p>';
+            /* jshint camelcase: true */
 
             // build HTML for popup from the record object
             function strFromObj(obj) {
