@@ -49,7 +49,8 @@ var config = {
         redis: {
             host: redisHost,
             port: redisPort
-        }
+        },
+        enable_cors: true
     };
 
 // Initialize tile server

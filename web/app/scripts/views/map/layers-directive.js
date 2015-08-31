@@ -28,11 +28,68 @@
                                                {attribution: 'PRS'});
             map.addLayer(recordsLayer, {detectRetina: true});
 
+            // interactivity for record layer
+            var utfGridRecordsLayer = new L.UtfGrid(Config.windshaft.hostname +
+                                                    '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json',
+                                                    {useJsonP: false});
+            map.addLayer(utfGridRecordsLayer, {detectRetina: true});
+
+            utfGridRecordsLayer.on('click', function(e) {
+                var popupOptions = {
+                    maxWidth: 400,
+                    maxHeight: 300,
+                    autoPan: true,
+                    closeButton: true,
+                    autoPanPadding: [5, 5]
+                };
+
+                var popup = new L.popup(popupOptions)
+                    .setLatLng(e.latlng)
+                    .setContent(buildRecordPopup(e.data))
+                    .openOn(map);
+            });
+
             // user-uploaded boundary layer(s)
             var boundaryLayer = new L.tileLayer(Config.windshaft.hostname +
                                                 '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png',
                                                 {attribution: 'PRS'});
             map.addLayer(boundaryLayer, {detectRetina: true});
+        }
+
+        /**
+         * Build popup content from arbitrary record data.
+         *
+         * @param {Object} UTFGrid interactivity data from interaction event object
+         * @returns {String} HTML snippet for a Leaflet popup.
+         */
+        function buildRecordPopup(record) {
+            // read arbitrary record fields object
+            var data = JSON.parse(record.data);
+
+            // add header with the label and event date constant fields
+            var str = '<div class="record-popup">';
+            str += '<h3>' + record.label + '</h3><div>';
+            str += '<p>Occurred on: ' + record.occurred_from + '</p>';
+
+            // build HTML for popup from the record object
+            function strFromObj(obj) {
+                angular.forEach(obj, function(value, key) {
+                    if (typeof value === 'object') {
+                        str += '<h4>' + key + '</h4><div style="margin:15px;">';
+                        // recursively add child things, indented
+                        strFromObj(value);
+                        str += '</div>';
+                    } else {
+                        // have a simple value; display it
+                        str += '<p>' + key + ': ' + value + '</p>';
+                    }
+                });
+            }
+
+            strFromObj(data);
+
+            str += '</div></div>';
+            return str;
         }
     }
 

@@ -17,6 +17,7 @@
     "lodash": "^3.8.0",
     "angular-uuid": "~0.1.0",
     "leaflet": "~0.7.3",
+    "Leaflet.utfgrid": "danzel/Leaflet.utfgrid",
     "angular-uuid": "~0.1.0",
     "d3": "3.5.5",
     "d3-tip": "^0.6.7",

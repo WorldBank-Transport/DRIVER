@@ -5,7 +5,11 @@
 // RFC4122. See: http://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
 var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
-var baseRecordQuery = ["(SELECT * FROM ashlar_record WHERE schema_id IN ",
+
+// NB: interactivity only works with string columns
+var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
+                       "occurred_to::varchar, label, slug ",
+                       "FROM ashlar_record WHERE schema_id IN ",
                        "(SELECT uuid FROM ashlar_recordschema ",
                        "WHERE next_version_id IS NULL"
                        ].join("");
@@ -28,10 +32,7 @@ var endBoundaryQuery = ") AS ashlar_boundary";
 // takes the Windshaft req.params and returns new parameters with the query set
 function getRequestParameters(params) {
 
-    /* TODO: set
-    params.style
-    params.interactivity
-    */
+    // TODO: set params.style
 
     params.dbname = 'driver';
 
@@ -50,6 +51,9 @@ function getRequestParameters(params) {
     params.table = params.tablename;
 
     if (params.tablename === 'ashlar_record') {
+
+        params.interactivity = 'uuid,occurred_from,label,slug,data';
+
         // build query for record points
         params.sql = baseRecordQuery;
         if (params.id !== 'ALL') {
@@ -58,7 +62,7 @@ function getRequestParameters(params) {
 
         params.sql += endRecordQuery;
     } else {
-        // use label column in UTFGrid interactivity
+
         params.interactivity = 'label';
 
         // TODO: use color column for styling?
