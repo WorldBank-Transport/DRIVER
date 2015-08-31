@@ -8,9 +8,9 @@
   command: >
     /usr/bin/docker build
       -f {{ web_dir }}/Dockerfile
-      -t driver/web:latest
+      -t quay.io/azavea/driver-web:latest
       {{ web_dir }}
-  when: developing_or_testing
+  when: developing
 
 - name: Build production web app
   command: >
@@ -20,7 +20,7 @@
       --volume {{ editor_dir }}:{{ editor_dir }}
       --volume {{ web_dir }}:{{ web_dir }}
       --log-driver syslog
-      driver/web:latest
+      quay.io/azavea/driver-web:latest
       build
 
 - name: Copy editor JS config to scripts dir
@@ -32,9 +32,9 @@
   command: >
     /usr/bin/docker build
       -f {{ editor_dir }}/Dockerfile
-      -t driver/editor:latest
+      -t quay.io/azavea/driver-editor:latest
       {{ editor_dir }}
-  when: developing_or_testing
+  when: developing
 
 - name: Build production editor app
   command: >
@@ -43,5 +43,5 @@
       --name driver-editor
       --volume {{ editor_dir }}:{{ editor_dir }}
       --log-driver syslog
-      driver/editor:latest
+      quay.io/azavea/driver-editor:latest
       build
