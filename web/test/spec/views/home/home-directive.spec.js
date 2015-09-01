@@ -28,6 +28,6 @@ describe('driver.views.home: Home', function () {
         $rootScope.$apply();
 
         // placeholder test
-        expect(element.find('.form-area-body').length).toEqual(1);
+        expect(element.find('.form-area-heading').length).toEqual(1);
     });
 });
