@@ -46,6 +46,13 @@
         function link(scope, element, attrs, controller) {
             var defaults = LeafletDefaults.get();
             var map = new L.map(element[0], defaults);
+
+            // tell Leaflet where to find its images, or else it complains in production
+            // see: https://github.com/Leaflet/Leaflet/issues/766
+            if (!L.Icon.Default.imagePath) {
+                L.Icon.Default.imagePath = 'styles/images';
+            }
+
             controller.setMap(map);
         }
     }
