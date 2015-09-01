@@ -3,7 +3,8 @@
 
     angular.module('driver.state', [
         'ase.resources',
-        'driver.resources'
+        'driver.resources',
+        'ui.router'
     ]);
 
 })();

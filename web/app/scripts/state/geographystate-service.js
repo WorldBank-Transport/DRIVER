@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function GeographyState($window, $log, $rootScope, Geography) {
+    function GeographyState($window, $log, $rootScope, $stateParams, Geography) {
         var defaultParams, selected, options;
         var _ = $window._;
         var svc = this;
@@ -59,7 +59,8 @@
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
-                selected = selected ? selected : options[0];
+                var fromUrl = _.findWhere(options, { uuid: $stateParams.geouuid });
+                selected = fromUrl || options[0];
             } else {
                 selected = null;
             }
