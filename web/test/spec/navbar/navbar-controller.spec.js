@@ -14,17 +14,19 @@ describe('driver.navbar: NavbarController', function () {
     var $rootScope;
     var $scope;
     var $state;
+    var $stateParams;
     var Controller;
     var DriverResourcesMock;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$state_,
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$state_, _$stateParams_,
                                 _DriverResourcesMock_, _ResourcesMock_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $state = _$state_;
+        $stateParams = _$stateParams_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
 

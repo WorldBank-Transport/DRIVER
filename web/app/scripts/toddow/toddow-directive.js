@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function ToDDoW($window) {
+    function ToDDoW() {
         var module = {
             restrict: 'A',
             scope: {
@@ -17,8 +17,6 @@
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
-                var d3 = $window.d3;
-                var moment = $window.moment;
                 var rawSvg = elem.find('svg')[0];
                 var cellSize = 30,
                     height = 475,
@@ -57,7 +55,7 @@
                         .style('text-anchor', 'middle')
                         .text(function(d) { return d; });
 
-                    var theDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+                    var theDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                     var theHours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
                                     '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
                                     '12'];

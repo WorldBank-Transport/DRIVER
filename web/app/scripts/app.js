@@ -35,6 +35,7 @@
         'driver.config',
         'driver.navbar',
         'driver.toddow',
+        'driver.stepwise',
         'driver.views.account',
         'driver.views.dashboard',
         'driver.views.home',

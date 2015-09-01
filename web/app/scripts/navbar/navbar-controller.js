@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function NavbarController($log, $window, $rootScope, $scope, $state, $stateParams,
+    function NavbarController($log, $window, $rootScope, $scope, $state,
                               GeographyState, RecordState, PolygonState) {
         var ctl = this;
         var _ = $window._;
