@@ -1,62 +1,76 @@
-<div class="form-area">
-    <div class="col-sm-8 col-sm-offset-3">
-        <ase-notifications></ase-notifications>
-        <div class="form-area-heading">
-            <h2>{{ ::ctl.recordType.plural_label }} list</h2>
-            <button type="button" class="btn btn-primary pull-right"
-                    ui-sref="record.add()">
-              Add a new {{ ::ctl.recordType.label }}
-            </button>
-            <div class="content-border"></div>
-            <table class="table table-hover">
-              <thead>
-                <tr>
-                  <!-- Base record properties -->
-                  <th>Date &amp; Time</th>
+<div class="table-view">
+    <div class="table-view-container">
+        <div class="filters">
+            <div class="row">
+                <div class="col-xs-3">
+                    <input type="search" class="form-control" placeholder="Search by name, keyword" /></div>
+                <div class="col-xs-6">
+                    <select class="selectpicker">
+                        <option>Status</option>
+                    </select>
+                    <select class="selectpicker">
+                        <option>All Records</option>
+                    </select>
+                    <select class="selectpicker">
+                        <option>Last 90 Days</option>
+                    </select>
+                </div>
+                <div class="col-xs-3">
+                    <a class="btn btn-default pull-right" ui-sref="record.add()">
+                        Add New {{ ::ctl.recordType.label }}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="overflow">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Date &amp; Time</th>
 
-                  <!-- Detail keys from current schema -->
-                  <th ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
-                    {{ ::headerKey }}
-                  </th>
+                        <th ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
+                            {{ ::headerKey }}
+                        </th>
 
-                  <!-- View/Edit links -->
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr ng-repeat="record in ctl.records.results">
-                  <td class="date">
-                    {{ ::record.occurred_to | date:'short' }}
-                  </td>
-                  <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
-                    {{ ::record.data[ctl.detailsProperty][headerKey] }}
-                  </td>
-                  <td class="links">
-                    <a ui-sref="record.details({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">View</a>
-                    /
-                    <a ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">Edit</a>
-                  </td>
-                </tr>
-              </tbody>
+                        <!-- View/Edit links -->
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="record in ctl.records.results">
+                        <td class="date">
+                            {{ ::record.occurred_to | date:'short' }}
+                        </td>
+                        <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
+                            {{ ::record.data[ctl.detailsProperty][headerKey] }}
+                        </td>
+
+                        <td class="links">
+                            <a ui-sref="record.details({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">View</a>
+                            /
+                            <a ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">Edit</a>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
-        </div>
-        <div>
-          <button ng-if="ctl.records.next" type="button" class="btn btn-primary pull-right"
-                  ng-click="ctl.getNextRecords()">
-            Next
-          </button>
-          <button ng-if="ctl.records.previous" type="button" class="btn btn-primary"
-                  ng-click="ctl.getPreviousRecords()">
-            Previous
-          </button>
-        </div>
-        <div ng-if="ctl.records.count">
-          <i>
-            Showing results
-            {{ ctl.currentOffset + 1}} -
-            {{ ctl.currentOffset + ctl.records.results.length }} of
-            {{ ctl.records.count }}
-          </i>
+            <div>
+                <button ng-if="ctl.records.next" type="button" class="btn btn-primary pull-right"
+                        ng-click="ctl.getNextRecords()">
+                    Next
+                </button>
+                <button ng-if="ctl.records.previous" type="button" class="btn btn-primary"
+                        ng-click="ctl.getPreviousRecords()">
+                    Previous
+                </button>
+            </div>
+            <div ng-if="ctl.records.count">
+                <i>
+                    Showing results
+                    {{ ctl.currentOffset + 1}} -
+                    {{ ctl.currentOffset + ctl.records.results.length }} of
+                    {{ ctl.records.count }}
+                </i>
+            </div>
         </div>
     </div>
 </div>
