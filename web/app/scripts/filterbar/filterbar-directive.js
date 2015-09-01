@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DriverFilterbar(RecordSchemas, RecordState) {
+    function DriverFilterbar() {
         var module = {
             restrict: 'E',
             templateUrl: 'scripts/filterbar/filterbar.html',

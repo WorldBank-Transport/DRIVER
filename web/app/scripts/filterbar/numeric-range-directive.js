@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function NumericRangeField(RecordSchemas, RecordState) {
+    function NumericRangeField() {
         var module = {
             restrict: 'A',
             require: '^driver-filterbar',

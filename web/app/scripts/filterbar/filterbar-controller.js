@@ -21,7 +21,9 @@
          */
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             if (selected) {
+                /* jshint ignore:start */
                 RecordSchemas.get({ id: selected.current_schema }).$promise.then(function(data) {
+                /* jshint ignore:end */
                     var definitions = data.schema.definitions;
                     $scope.filterables = _(definitions)
                       .map(function(d) { return d.properties; })
