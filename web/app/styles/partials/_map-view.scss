@@ -1,0 +1,78 @@
+.map-view {
+    position: absolute;
+    top: 52px;
+    bottom: 0;
+    width: 100%;
+
+    #map { 
+        background: #f1f2f2;
+        position: absolute;
+        top: 52px;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .tools {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .tool {
+            position: relative;
+            margin-left: 10px;
+            display: inline-block;
+            
+            &:first-of-type {
+                margin-left: 20px;
+            }
+
+            &.open {
+                .tool-tab {
+                    bottom: 4px;
+                }
+                .tool-content {
+                    max-height: 300px;
+                }
+            }
+            &.graphs {
+                .tool-content {
+                    width: 600px;
+                }
+            }
+            &.interventions {
+                .tool-content {
+                    width: 300px;
+                }
+            }
+            &.enforcers {
+                .tool-content {
+                    width: 300px;
+                }
+            }
+            &.export {
+                .tool-content {
+                    width: 220px;
+                }
+            }
+
+            .tool-tab {
+                background: white;
+                padding: 12px 20px 16px;
+                position: relative;
+                bottom: -2px;
+                transition: 0.5s all;
+            }
+            .tool-content {
+                width: 600px;
+                background: white;
+                max-height: 0;
+                height: 300px;
+                bottom: 50px;
+                overflow: hidden;
+                position: absolute;
+                transition: 0.5s all;
+            }
+        }
+    }
+}
