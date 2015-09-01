@@ -1,0 +1,10 @@
+<div class="navbar navbar-inverse">
+    <div class="pull-left form-inline nav navbar=nav">
+        <div class="navbar-header">
+            <input type="search" class="form-control" placeholder="Geographic code"></input>
+        </div>
+        <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
+            <li ng-if="value.format=='number'" numeric-range-field label="key" data="value"></li>
+        </ul>
+    </div>
+</div>

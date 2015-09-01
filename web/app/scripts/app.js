@@ -34,6 +34,7 @@
         'Leaflet',
         'driver.config',
         'driver.navbar',
+        'driver.filterbar',
         'driver.toddow',
         'driver.stepwise',
         'driver.views.account',
