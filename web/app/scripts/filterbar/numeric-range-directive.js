@@ -14,6 +14,18 @@
             link: function(scope, elem, attrs, filterCtl) {
                 init();
 
+                function init() {
+                    scope.filter = {};
+                    scope.error = {};
+                }
+
+                /**
+                 * A simple wrapper around driver-filterbar's updateFilter function;
+                 *  filters should only be updated when data validates
+                 *
+                 * @param filterLabel {string} label of which field to filter
+                 * @param filterObj {object} filter data
+                 */
                 scope.updateFilter = function(fLabel, fObj) {
                     if (scope.isMinMaxValid()) {
                         filterCtl.updateFilter(fLabel, fObj);
@@ -24,11 +36,9 @@
                     event.stopPropagation();
                 });
 
-                function init() {
-                    scope.filter = {};
-                    scope.error = {};
-                }
-
+                /**
+                 * When called, evaluate filter.min and filter.max to ensure they're valid
+                 */
                 scope.isMinMaxValid = function() {
                     if (typeof scope.filter.min === 'number' &&  typeof scope.filter.max === 'number') {
                         var minMaxValid = scope.filter.min <= scope.filter.max;

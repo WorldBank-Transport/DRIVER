@@ -6,11 +6,19 @@
         var ctl = this;
         ctl.filters = {};
 
+        /**
+         * A simple function to add/update a filter
+         *
+         * @param filterLabel {string} label of which field to filter
+         * @param filterObj {object} filter data
+         */
         ctl.updateFilter = function(filterLabel, filterObj) {
             ctl.filters[filterLabel] = angular.copy(filterObj);
-            console.log(ctl.filters);
         };
 
+        /**
+         * When the record type changes, request the new schema
+         */
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             if (selected) {
                 RecordSchemas.get({ id: selected.current_schema }).$promise.then(function(data) {
