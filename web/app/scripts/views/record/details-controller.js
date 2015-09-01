@@ -5,14 +5,12 @@
     function RecordDetailsController($log, $state, $stateParams, uuid4, Notifications,
                                  Records, RecordSchemas, RecordTypes) {
         var ctl = this;
-
         initialize();
 
         function initialize() {
             loadRecord()
                 .then(loadRecordType)
-                .then(loadRecordSchema)
-                .then(onDataReady);
+                .then(loadRecordSchema);
         }
 
         function loadRecord () {
@@ -38,10 +36,6 @@
                 .$promise.then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
-        }
-
-        function onDataReady() {
-            // TODO: display the record nicely
         }
     }
 

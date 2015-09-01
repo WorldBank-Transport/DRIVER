@@ -40,6 +40,7 @@
         'ase.schemas',
         'datetimepicker',
         'driver.config',
+        'driver.details',
         'Leaflet',
         'driver.resources',
         'json-editor',

@@ -4,10 +4,11 @@
         <div class="form-area-heading">
             <h2>{{ ::ctl.recordType.label }} details</h2>
             <div class="content-border"></div>
-            <div>
-              Placeholder for details <br/>
-              {{ ctl.record }}
-            </div>
+            <driver-details-tabs
+                 record-schema="ctl.recordSchema"
+                 record="ctl.record"
+                 ng-if="ctl.record && ctl.recordSchema">
+            </driver-details-tabs>
         </div>
     </div>
 </div>

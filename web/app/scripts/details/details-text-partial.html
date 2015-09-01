@@ -1,0 +1,25 @@
+<div class="col-sm-6">
+    <label>
+        {{ ::ctl.property.propertyName }}
+    </label>
+
+    <div ng-switch on="ctl.property.format">
+        <div ng-switch-when="color" class="value color">
+            <svg width="200" height="100">
+                <rect rx="20" ry="20" width="200" height="100" style="fill:{{ ::ctl.data }};" />
+            </svg>
+        </div>
+
+        <div ng-switch-when="textarea" class="value textarea">
+            <pre>{{ ::ctl.data }}</pre>
+        </div>
+
+        <div ng-switch-when="url" class="value url">
+            <a href="{{ ctl.data }}">{{ ::ctl.data }}</a>
+        </div>
+
+        <div ng-switch-default class="value text">
+            {{ ::ctl.data }}
+        </div>
+    </div>
+</div>
