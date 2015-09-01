@@ -19,3 +19,8 @@ label {
 .form-control {
     border-radius: 999px;
 }
+
+.textarea pre {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
