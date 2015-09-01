@@ -9,7 +9,7 @@
 
     /* ngInject */
     function BuilderSchemas($resource) {
-        return $resource('/builder-schemas/:name.json', { name: '@name' }, {
+        return $resource('builder-schemas/:name.json', { name: '@name' }, {
             get: {
                 method: 'GET'
             }
