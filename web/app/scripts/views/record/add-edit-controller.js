@@ -30,8 +30,8 @@
 
             $scope.$on('Map:LocationSelected', function(event, data) {
                 // update location when map marker set
-                ctl.geom.lat = data[0];
-                ctl.geom.lng = data[1];
+                ctl.geom.lat = data[1];
+                ctl.geom.lng = data[0];
                 $scope.$apply();
             });
 
@@ -55,8 +55,8 @@
                     ctl.record = record;
 
                     // set lat/lng array into bind-able object
-                    ctl.geom.lat = ctl.record.geom.coordinates[0];
-                    ctl.geom.lng = ctl.record.geom.coordinates[1];
+                    ctl.geom.lat = ctl.record.geom.coordinates[1];
+                    ctl.geom.lng = ctl.record.geom.coordinates[0];
 
                     // notify map
                     onGeomChanged();
@@ -189,7 +189,7 @@
             var dataToSave = null;
             if (ctl.record.geom) {
                 // set back coordinates
-                ctl.record.geom.coordinates = [ctl.geom.lat, ctl.geom.lng];
+                ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 saveMethod = 'update';
                 dataToSave = ctl.record;
                 dataToSave.data = editorData;
@@ -203,7 +203,7 @@
                     // constant fields
                     slug: ctl.record.slug,
                     label: ctl.record.label,
-                    geom: 'POINT(' + ctl.geom.lat + ' ' + ctl.geom.lng + ')',
+                    geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
                     occurred_from: ctl.record.occurred_from,
                     occurred_to: ctl.record.occurred_to
                     /* jshint camelcase: true */

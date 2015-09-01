@@ -162,7 +162,7 @@ ASHLAR = {
     # It is suggested to change this if you know that your data will be limited to
     # a certain part of the world, for example to a UTM Grid projection or a state
     # plane.
-    'SRID': 3857,
+    'SRID': 4326,
 }
 
 ## Tweak settings depending on deployment target

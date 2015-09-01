@@ -41,6 +41,11 @@
             map.addLayer(utfGridRecordsLayer, {detectRetina: true});
 
             utfGridRecordsLayer.on('click', function(e) {
+                // ignore clicks where there is no event record
+                if (!e.data) {
+                    return;
+                }
+
                 var popupOptions = {
                     maxWidth: 400,
                     maxHeight: 300,

@@ -36,7 +36,7 @@ var config = {
             port: dbPort,
             geometry_field: 'geom',
             // this must match the ashlar SRID set in app/driver/settings.py
-            srid: 3857
+            srid: 4326
           }
         }, //see grainstore npm for other options
         renderCache: {
