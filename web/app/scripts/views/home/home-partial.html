@@ -2,26 +2,7 @@
     <div class="form-area">
         <div class="col-sm-8 col-sm-offset-3">
             <div class="form-area-heading">
-                <h2>Home page placeholder:</h2>
-            </div>
-            <div class="form-area-body">
-                <hr/>
-                <div ng-repeat="recordType in ctl.recordTypes | orderBy:'label'" class="row">
-                    <div class="type">
-                        <a ui-sref="record.add({ rtuuid: recordType.uuid })" class="btn btn-default">
-                            Add new {{ recordType.label }}
-                        </a>
-                    </div>
-                </div>
-                <hr/>
-                <div ng-repeat="recordType in ctl.recordTypes | orderBy:'label'" class="row">
-                    <div class="type">
-                        <a ui-sref="record.list({ rtuuid: recordType.uuid })" class="btn btn-default">
-                            List {{ recordType.plural_label }}
-                        </a>
-                    </div>
-                </div>
-                <hr/>
+                <h2>Home page placeholder</h2>
             </div>
         </div>
     </div>

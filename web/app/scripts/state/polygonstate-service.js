@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function PolygonState($window, $log, $rootScope, Polygons) {
+    function PolygonState($window, $log, $rootScope, $stateParams, Polygons) {
         var defaultParams, selected, options;
         var _ = $window._;
         var svc = this;
@@ -56,7 +56,8 @@
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
-                selected = options[0];
+                var fromUrl = _.findWhere(options, { id: $stateParams.polyuuid });
+                selected = fromUrl || options[0];
             } else {
                 selected = null;
             }

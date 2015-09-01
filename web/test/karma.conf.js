@@ -87,6 +87,8 @@ module.exports = function(config) {
       'app/scripts/views/record/**.js',
       'app/scripts/leaflet/module.js',
       'app/scripts/leaflet/**.js',
+      'app/scripts/details/module.js',
+      'app/scripts/details/**.js',
       'test/ase-mock/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js',

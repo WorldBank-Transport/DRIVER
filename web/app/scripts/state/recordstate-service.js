@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($window, $log, $rootScope, RecordTypes) {
+    function RecordState($window, $log, $rootScope, $stateParams, RecordTypes) {
         var defaultParams, selected, options;
         var _ = $window._;
         var svc = this;
@@ -59,7 +59,8 @@
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
-                selected = options[0];
+                var fromUrl = _.findWhere(options, { uuid: $stateParams.rtuuid });
+                selected = fromUrl || options[0];
             } else {
                 selected = null;
             }

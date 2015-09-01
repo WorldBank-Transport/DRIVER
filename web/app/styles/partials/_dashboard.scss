@@ -1,0 +1,141 @@
+.dashboard {
+    background: #f1f2f2;
+    padding: 2.5%;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 52px;
+
+    .block {
+        background: white;
+        box-shadow: none;
+        transition: 0.5s all;
+        position: absolute;
+
+        &:hover {
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        }
+        
+        &.block-1x2 {
+            width: 40%;
+            height: 44%;
+
+            &:nth-child(2n) {
+                top: 52%;
+            }
+        }
+        &.block-1x1 {
+            width: 26%;
+            height: 28%;
+            left: 44%;
+            
+            &:nth-child(2n) {
+                left: 72%;
+            }
+        }
+        &.block-2x1 {
+            width: 54%;
+            height: 32%;
+            left: 44%;
+            top: 36%;
+            
+            &:nth-child(2n) {
+                top: 72%;
+                height: 24%;
+            }
+        }
+
+        > .block-inner {
+            padding: 10px;
+            height: 100%;
+
+            > .placeholder {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+        }
+
+        &.quick-map {
+            h3 {
+                position: absolute;
+                bottom: 0;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                margin: 14px 0;
+                font-size: 21px;
+
+                .small { margin-top: 5px; }
+            }
+        }
+        &.insights {
+            h1 {
+                font-size: 24px;
+                font-weight: 300;
+                line-height: 1.4;
+                padding: 25px;
+                margin: 0;
+                
+                b { font-weight: 700; }
+            }
+            .nav-pills > li > a {
+                background: #CCC;
+                padding: 6px;
+            }
+            .nav-pills > li.active > a {
+                background: #337ab7;
+            }
+        }
+        &.counts {
+            text-align: center;
+
+            h1 {
+                font-size: 48px;
+                font-weight: 700;
+                margin: 30px 0 10px;
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 300;
+                margin: 0;
+            }
+        }
+        &.toddow {
+
+        }
+        &.filters {
+            h3 {
+                margin: 6px 0 8px;
+                font-size: 18px;
+            }
+            table {
+                margin: 0;
+            }
+            .filters-table {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                overflow: auto;
+            }
+        }
+
+        .nav-pills {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+
+            > li {
+                float: none;
+                display: inline-block;
+            
+                > a {
+                    border-radius: 999px;
+                }
+            }
+        }
+    }
+}

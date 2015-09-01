@@ -1,0 +1,25 @@
+<div ng-repeat="property in ctl.properties">
+    <div ng-switch on="property.fieldType"
+        ng-init="data = ctl.data[property.propertyName]">
+
+        <driver-details-image
+           ng-switch-when="image" property="property" data="data">
+        </driver-details-image>
+
+        <driver-details-reference
+           ng-switch-when="reference" property="property" data="data" record="ctl.record">
+        </driver-details-reference>
+
+        <driver-details-selectlist
+           ng-switch-when="selectlist" property="property" data="data">
+        </driver-details-selectlist>
+
+        <driver-details-text
+           ng-switch-when="text" property="property" data="data">
+        </driver-details-text>
+
+        <div ng-switch-default>
+          No renderer defined for field type: {{ ::property.fieldType }}
+        </div>
+    </div>
+</div>

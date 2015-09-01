@@ -63,9 +63,10 @@
         }
 
         function onRecordsLoaded() {
-            ctl.detailsProperty = ctl.recordType.label + ' Details';
-            ctl.propertiesKey = ctl.recordSchema.schema.definitions[ctl.detailsProperty].properties;
+            var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions, 'details');
+            ctl.propertiesKey = detailsDefinitions[0].properties;
             ctl.headerKeys = _.without(_.keys(ctl.propertiesKey), '_localId');
+            ctl.detailsProperty = detailsDefinitions[0].title;
         }
 
         // Loads the previous page of paginated record results
