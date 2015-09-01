@@ -7,6 +7,8 @@ server {
 
     access_log /var/log/nginx/driver-app.access.log logstash_json;
 
+    client_max_body_size 10m;
+
     location / {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-Host $host;
