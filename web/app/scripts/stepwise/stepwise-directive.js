@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function Stepwise($window) {
+    function Stepwise() {
         var module = {
             restrict: 'A',
             scope: {
@@ -16,10 +16,6 @@
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
-                var d3 = $window.d3;
-                var _ = $window._;
-                var moment = $window.moment;
-
                 var margin = {top: 20, right: 20, bottom: 30, left: 50},
                     width = 752 - margin.left - margin.right,
                     height = 475 - margin.top - margin.bottom;

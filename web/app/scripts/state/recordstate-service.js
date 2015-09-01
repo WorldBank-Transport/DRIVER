@@ -6,9 +6,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($window, $log, $rootScope, $stateParams, RecordTypes) {
+    function RecordState($log, $rootScope, RecordTypes) {
         var defaultParams, selected, options;
-        var _ = $window._;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;

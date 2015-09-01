@@ -6,9 +6,8 @@
     'use strict';
 
     /* ngInject */
-    function PolygonState($window, $log, $rootScope, $stateParams, Polygons) {
+    function PolygonState($log, $rootScope, Polygons) {
         var defaultParams, selected, options;
-        var _ = $window._;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;

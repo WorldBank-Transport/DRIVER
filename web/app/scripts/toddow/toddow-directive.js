@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function ToDDoW($window) {
+    function ToDDoW() {
         var module = {
             restrict: 'A',
             scope: {
@@ -17,8 +17,6 @@
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
-                var d3 = $window.d3;
-                var moment = $window.moment;
                 var rawSvg = elem.find('svg')[0];
                 var cellSize = 30,
                     height = 475,
