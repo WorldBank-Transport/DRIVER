@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, RecordTypes) {
+    function RecordState($log, $rootScope, $stateParams, RecordTypes) {
         var defaultParams, selected, options;
         var svc = this;
         svc.updateOptions = updateOptions;

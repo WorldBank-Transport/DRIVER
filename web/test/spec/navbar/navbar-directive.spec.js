@@ -20,10 +20,12 @@ describe('driver.navbar: Navbar', function () {
     var RecordTypes;
     var ResourcesMock;
     var $state;
+    var $stateParams;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _$state_,
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _$state_, _$stateParams_,
                                 _DriverResourcesMock_, _RecordTypes_, _ResourcesMock_) {
         $state = _$state_;
+        $stateParams = _$stateParams_;
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
