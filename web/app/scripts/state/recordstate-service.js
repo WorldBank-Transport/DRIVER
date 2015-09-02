@@ -6,13 +6,14 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $stateParams, RecordTypes) {
+    function RecordState($log, $rootScope, RecordTypes) {
         var defaultParams, selected, options;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
         svc.setSelected = setSelected;
         svc.getSelected = getSelected;
+        svc.resolution = resolution;
         init();
 
         /**
@@ -58,8 +59,7 @@
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
-                var fromUrl = _.findWhere(options, { uuid: $stateParams.rtuuid });
-                selected = fromUrl || options[0];
+                selected = options[0];
             } else {
                 selected = null;
             }
@@ -67,6 +67,13 @@
         }
 
         function getSelected() {
+            return selected;
+        }
+
+        function resolution() {
+            if (!selected) {
+                updateOptions();
+            }
             return selected;
         }
 

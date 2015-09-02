@@ -3,19 +3,19 @@
 
     /* ngInject */
     function DashboardController($stateParams,
-                                 Records, RecordSchemas, RecordTypes) {
+                                 Records, RecordSchemas, RecordTypes, recordResolution) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
+        ctl.recordType =  recordResolution;
 
         initialize();
 
         function initialize() {
-            loadRecordType()
-                .then(loadRecordSchema)
+            loadRecordSchema()
                 .then(loadRecords)
                 .then(onRecordsLoaded);
         }
@@ -31,6 +31,7 @@
             /* jshint camelcase: false */
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
+            debugger;
 
             return RecordSchemas.get({ id: currentSchemaId })
                 .$promise.then(function(recordSchema) {

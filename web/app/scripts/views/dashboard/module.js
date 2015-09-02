@@ -4,7 +4,15 @@
     /* ngInject */
     function StateConfig($stateProvider) {
         $stateProvider.state('dashboard', {
-            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/dashboard',
+            url: '/dashboard',
+            resolve: {
+                /* ngInject */
+                geographyResolution: function(GeographyState) { return GeographyState.resolution(); },
+                /* ngInject */
+                polygonResolution: function(PolygonState) { return PolygonState.resolution(); },
+                /* ngInject */
+                recordResolution: function(RecordState) { return RecordState.resolution(); }
+            },
             template: '<driver-dashboard></driver-dashboard>',
             label: 'Dashboard',
             showInNavbar: true
