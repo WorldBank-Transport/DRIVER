@@ -1,0 +1,20 @@
+---
+- name: Synchronize Windshaft configuration
+  synchronize: archive=no
+               checksum=yes
+               compress=no
+               links=yes
+               recursive=yes
+               copy_links=no
+               src="../../windshaft/"
+               dest="/opt/windshaft"
+  sudo: False
+  when: staging
+
+- name: Configure Windshaft service definition
+  template: src=upstart-windshaft.conf.j2 dest=/etc/init/windshaft.conf
+  notify:
+    - Restart windshaft
+
+- name: Ensure Windshaft application is running
+  service: name=windshaft state=started

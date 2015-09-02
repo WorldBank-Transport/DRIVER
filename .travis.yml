@@ -1,5 +1,11 @@
 sudo: required
 
+env:
+  global:
+  - secure: oxvGUv2yST/hlrbnRqbmQdRBCXZUm+71wXXBv4LgyB6lgI92VcGMeNn+3rJEsNCONbpzAtpRCdwkKcf6HG2Cvrb4DiUTj5mAho5lUxkjEj3NQR7K9XsbJ4lUFLhfrCbGCjDcSlPMB/6I4/N9KmKCEB9R76QxETddaKOhHzZB3Yk=
+  - secure: ZhkaH7vzI3bpj8LvJv6rmCd4VmInxqT2b30HsvKRYDCC8PhkXqvLadEaBH3bNBQJsRYjLwf0ueaEclxiEwOElaspJkQdzb7tfRtqvNJEzY8jatVgIwc04uG2Wa+ZYGhjYHbQUbQGxwhMnh6C1XrtDtBi5BD9wIUhTle1ciELt5A=
+  - secure: TQY7zkefoGIjIvcH6MqMTL9vZMJM7ZmbeyXr4scoB85LhxgRs50WhFAfFqKW4karZ9/iwZa86LniAIgc24OSJ62S0H0QuLjHzMlyyNDK0fTimPs9nkCNcQGIiNhgMftrAoA+U6fTdRHk4Nwg+GbRkPzZOm+QwJEtWe4cp5hrtf8=
+
 language: bash
 
 services:
@@ -14,10 +20,16 @@ script: .travis/script.sh
 
 before_deploy:
   - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+  - sudo pip install ansible==1.9.2
+  - openssl aes-256-cbc -K "${encrypted_71b51a189c16_key}" -iv "${encrypted_71b51a189c16_iv}" -in deployment/driver.pem.enc -out deployment/driver.pem -d
 
 deploy:
   provider: script
   script: .travis/deploy.sh
+  skip_cleanup: true
   on:
     repo: WorldBank-Transport/DRIVER
     branch: develop
+
+after_deploy:
+  - rm deployment/driver.pem

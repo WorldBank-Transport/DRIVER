@@ -1,0 +1,35 @@
+---
+- name: Build editor Docker image
+  command: >
+    /usr/bin/docker build
+      -f {{ editor_dir }}/Dockerfile
+      -t quay.io/azavea/driver-editor:latest
+      {{ editor_dir }}
+
+- name: Build production editor app
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-editor
+      --volume {{ editor_dir }}:{{ editor_dir }}
+      --log-driver syslog
+      quay.io/azavea/driver-editor:latest
+      build
+
+- name: Build web Docker image
+  command: >
+    /usr/bin/docker build
+      -f {{ web_dir }}/Dockerfile
+      -t quay.io/azavea/driver-web:latest
+      {{ web_dir }}
+
+- name: Build production web app
+  command: >
+    /usr/bin/docker run
+      --rm
+      --name driver-web
+      --volume {{ editor_dir }}:{{ editor_dir }}
+      --volume {{ web_dir }}:{{ web_dir }}
+      --log-driver syslog
+      quay.io/azavea/driver-web:latest
+      build

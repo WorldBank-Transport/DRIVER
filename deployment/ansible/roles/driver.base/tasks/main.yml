@@ -1,0 +1,11 @@
+---
+- name: Ensure that source directories exist
+  file: path="{{ item }}"
+        owner="{{ ansible_ssh_user }}"
+        mode=0755
+        recurse=yes
+        state=directory
+  with_items:
+    - "{{ web_scripts_dir }}"
+    - "{{ editor_scripts_dir }}"
+    - "{{ root_windshaft_dir }}"

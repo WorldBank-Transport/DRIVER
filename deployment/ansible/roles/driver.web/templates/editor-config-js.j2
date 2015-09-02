@@ -8,7 +8,7 @@
     // be made in: `schema_editor/test/mock/config.js`
 
     var config = {
-        debug: {% if developing %}true{% else %}false{% endif %},
+        debug: {% if 'development' in group_names %}true{% else %}false{% endif %},
         html5Mode: {
             enabled: {{ editor_js_html5mode }},
             prefix: '{{ editor_js_html5mode_prefix }}'

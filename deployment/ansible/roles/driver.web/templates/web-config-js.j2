@@ -9,7 +9,7 @@
     // be made in: `web/test/mock/config.js`
 
     var config = {
-        debug: {% if developing %}true{% else %}false{% endif %},
+        debug: {% if 'development' in group_names %}true{% else %}false{% endif %},
         html5Mode: {
             enabled: {{ web_js_html5mode }},
             prefix: '{{ web_js_html5mode_prefix }}'

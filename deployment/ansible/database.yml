@@ -2,6 +2,12 @@
 
 # Installs packages/dependencies for database servers
 
+- hosts: all
+
+  pre_tasks:
+    - name: Gather EC2 facts
+      action: ec2_facts
+
 - hosts: database-servers
 
   sudo: yes

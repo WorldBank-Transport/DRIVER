@@ -1,6 +1,6 @@
 description "driver-app"
 
-{% if developing_or_testing -%}
+{% if 'development' in group_names -%}
 start on (vagrant-mounted and started docker)
 {% else -%}
 start on (filesystem and started docker)
@@ -14,6 +14,10 @@ respawn
 pre-start script
   /usr/bin/docker kill driver-app || true
   /usr/bin/docker rm driver-app || true
+
+  {% if 'staging' in group_names -%}
+  /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  {% endif %}
 end script
 
 exec /usr/bin/docker run \
@@ -21,10 +25,10 @@ exec /usr/bin/docker run \
   --publish 4000:4000 \
   --volume {{ root_static_dir }}:{{ root_static_dir }} \
   --volume {{ root_media_dir }}:{{ root_media_dir }} \
-  {% if developing -%}
+  {% if 'development' in group_names -%}
   --volume {{ root_app_dir }}:{{ root_app_dir }} \
   --volume /opt/ashlar:/opt/ashlar \
-  --env "DJANGO_SETTINGS_MODULE=driver.settings_dev" \
+  --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
   {% endif -%}
   {% for k,v in driver_conf.items() -%}
   --env {{ k }}={{ v }} \
