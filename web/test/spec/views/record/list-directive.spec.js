@@ -5,7 +5,7 @@ describe('driver.views.record: RecordList', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.mock.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.record'));
 
     var $compile;

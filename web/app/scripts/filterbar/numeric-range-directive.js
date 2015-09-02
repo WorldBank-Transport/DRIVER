@@ -5,13 +5,14 @@
     function NumericRangeField() {
         var module = {
             restrict: 'A',
-            require: '^driver-filterbar',
+            require: ['^driver-filterbar', 'numeric-range-field'],
             templateUrl: 'scripts/filterbar/numeric-range.html',
+            controller: 'numericRangeController',
             scope: {
                 data: '=',
                 label: '='
             },
-            link: function(scope, elem, attrs, filterCtl) {
+            link: function(scope, elem, attrs, ctlArray) {
                 init();
 
                 function init() {
@@ -26,34 +27,20 @@
                  * @param filterLabel {string} label of which field to filter
                  * @param filterObj {object} filter data
                  */
-                scope.updateFilter = function(fLabel, fObj) {
+                scope.updateFilter = function(filterLabel, filterObj) {
                     if (scope.isMinMaxValid()) {
-                        filterCtl.updateFilter(fLabel, fObj);
+                        ctlArray[0].updateFilter(filterLabel, filterObj);
                     }
                 };
 
-                $('div.dropdown.numrange ul.dropdown-menu').on('click', function (event) {
-                    event.stopPropagation();
-                });
-
                 /**
-                 * When called, evaluate filter.min and filter.max to ensure they're valid
+                 * When called, evaluate filter.min and filter.max to ensure they're valid;
+                 * set classes properly by copying controller's `error` value to this scope
                  */
                 scope.isMinMaxValid = function() {
-                    if (typeof scope.filter.min === 'number' &&  typeof scope.filter.max === 'number') {
-                        var minMaxValid = scope.filter.min <= scope.filter.max;
-                        if (!minMaxValid) {
-                            scope.error.classes = 'alert-danger';
-                            scope.error.btnClasses = 'btn-danger';
-                        } else {
-                            scope.error.classes = '';
-                            scope.error.btnClasses = 'btn-primary';
-                        }
-                        return minMaxValid;
-                    }
-                    scope.error.classes = '';
-                    scope.error.btnClasses = 'btn-primary';
-                    return true;
+                    var validity = ctlArray[1].isMinMaxValid(scope.filter.min, scope.filter.max);
+                    scope.error = ctlArray[1].error;
+                    return validity;
                 };
             }
         };

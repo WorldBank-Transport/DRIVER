@@ -6,7 +6,7 @@ describe('driver.views.record: Embedded Map', function () {
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.record'));
 
     var $compile;

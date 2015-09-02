@@ -128,10 +128,10 @@ module.exports = function(config) {
     ],
 
     // Load all templates into $templateCache. They can be imported with:
-    //   beforeEach(module('driver.templates'));
+    //   beforeEach(module('ase.templates'));
     ngHtml2JsPreprocessor: {
       stripPrefix: 'app/',
-      moduleName: 'driver.templates'
+      moduleName: 'ase.templates'
     },
 
     // Continuous Integration mode

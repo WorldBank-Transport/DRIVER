@@ -2,6 +2,7 @@
 
 describe('driver.filterbar: Numeric Range', function () {
 
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
 
@@ -16,7 +17,8 @@ describe('driver.filterbar: Numeric Range', function () {
 
     it('should throw an error if required controller is not its parent', function () {
         var scope = $rootScope.$new();
-        $compile('<driver-filterbar></driver-filterbar>')(scope);
+        $compile('<div numeric-range-field></div>')(scope);
         expect($rootScope.$apply).toThrow();
     });
+
 });

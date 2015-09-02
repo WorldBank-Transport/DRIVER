@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $window, $rootScope, $scope, RecordSchemas) {
+    function FilterbarController($scope, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
 
@@ -21,11 +21,13 @@
          */
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             if (selected) {
-                /* jshint ignore:start */
-                RecordSchemas.get({ id: selected.current_schema }).$promise.then(function(data) {
-                /* jshint ignore:end */
+                RecordSchemas.get({
+                  /* jshint ignore:start */
+                  id: selected.current_schema
+                  /* jshint ignore:end */
+                }).$promise.then(function(data) {
                     var definitions = data.schema.definitions;
-                    $scope.filterables = _(definitions)
+                    ctl.filterables = _(definitions)
                       .map(function(d) { return d.properties; })
                       .filter(function(d) { return !d.isSearchable || d.format === 'number'; })
                       .value();

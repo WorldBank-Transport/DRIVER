@@ -4,7 +4,7 @@ describe('driver.views.home: Home', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.home'));
 
     var $compile;

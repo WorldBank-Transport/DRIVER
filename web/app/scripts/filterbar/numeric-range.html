@@ -8,7 +8,11 @@
             aria-expanded="true">
       {{ label }} <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu alert" ng-class="error.classes" role="menu" aria-labelledby="record-type">
+    <ul class="dropdown-menu alert"
+        ng-class="error.classes"
+        role="menu"
+        aria-labelledby="record-type"
+        ng-click="$event.stopPropagation()">
         <li class="nav-rt-item ng-scope" role="menuitem">
             <span ng-show="isMinMaxValid()">Filter according to minimum and maximum values</span>
             <span ng-hide="isMinMaxValid()">Maximum must be at least as large as minimum value</span>
@@ -18,12 +22,16 @@
                            name="minimum"
                            placeholder="Minimum"
                            class="form-control"
+                           min="{{ data.minimum }}"
+                           max="{{ data.maximum }}"
                            ng-model="filter.min"
                            ng-change="updateFilter(label, filter)">
                     <input type="number"
                            name="maximum"
                            placeholder="Maximum"
                            class="form-control"
+                           min="{{ data.minimum }}"
+                           max="{{ data.maximum }}"
                            ng-model="filter.max"
                            ng-change="updateFilter(label, filter)">
                 </div>
