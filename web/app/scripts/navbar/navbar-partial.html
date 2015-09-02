@@ -1,67 +1,72 @@
-<nav class="navbar navbar-inverse" role="navigation">
-  <div class="navbar-header">
-    <a class="navbar-brand" ui-sref="home">Driver</a>
-  </div>
-  <ul class="nav navbar-nav">
-    <li class="nav-dropdown">
-      <div class="btn-group" dropdown>
-        <button id="record-type" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.recordTypeSelected.plural_label }} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="record-type">
-          <li class="nav-rt-item" role="menuitem" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
-            <a ng-click="ctl.onRecordTypeSelected(recordType)">
-              {{ recordType.plural_label }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-dropdown">
-      <div class="btn-group" dropdown>
-        <button id="geography" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.geographySelected.label }} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="geography">
-          <li class="nav-rt-item" role="menuitem" ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
-            <a ng-click="ctl.onGeographySelected(geography)">
-              {{ geography.label }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-dropdown">
-      <div class="btn-group" dropdown>
-        <button id="polygon" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.getPolygonLabel(ctl.polygonSelected) }} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="polygon">
-          <li class="nav-rt-item" role="menuitem" ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
-            <a ng-click="ctl.onPolygonSelected(polygon)">
-              {{ ctl.getPolygonLabel(polygon) }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </li>
-    <li class="nav-dropdown">
-      <div class="btn-group" dropdown>
-        <button id="nav-page" type="button" class="btn btn-primary" dropdown-toggle>
-          {{ ctl.stateSelected.label }} <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" role="menu" aria-labelledby="nav-page">
-          <li class="nav-page-item" role="menuitem" ng-repeat="navState in ctl.availableStates">
-            <a ng-click="ctl.onStateSelected(navState)">
-              {{ navState.label }}
-            </a>
-          </li>
-        </ul>
-      </div>
-    </li>
-  </ul>
-  <button type="button" class="btn btn-primary pull-right account"
-          ng-click="ctl.navigateToStateName('account')">
-    My Account
-  </button>
+<nav class="navbar navbar-default drop-shadow">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="home">Road Incident Data System</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.stateSelected.label }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="navState in ctl.availableStates">
+                            <a ng-click="ctl.onStateSelected(navState)">
+                                {{ navState.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.recordTypeSelected.plural_label }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
+                            <a ng-click="ctl.onRecordTypeSelected(recordType)">
+                                {{ recordType.plural_label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.geographySelected.label }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
+                            <a ng-click="ctl.onGeographySelected(geography)">
+                                {{ geography.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.getPolygonLabel(ctl.polygonSelected) }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
+                            <a ng-click="ctl.onPolygonSelected(polygon)">
+                                {{ ctl.getPolygonLabel(polygon) }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">My Account <span class="glyphicon glyphicon-option-vertical"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a ng-click="ctl.navigateToStateName('account')">My Account</a></li>
+                        <li><a href="#">Manage Duplicate Records</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>
