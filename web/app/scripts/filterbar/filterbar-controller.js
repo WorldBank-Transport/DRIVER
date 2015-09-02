@@ -37,7 +37,7 @@
                         });
                     });
 
-                    var conditions = function(val) { return val.format === 'number'; };
+                    var conditions = function(val) { return val.isSearchable; };
                     var filterable = {};
                     _.forEach(namespaced, function(d, i) {
                         if (conditions(d)) {
