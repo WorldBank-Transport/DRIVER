@@ -1,4 +1,4 @@
-app ansible_ssh_host=52.20.10.108 ansible_ssh_user=ubuntu
+app ansible_ssh_host=52.2.95.168 ansible_ssh_user=ubuntu
 database ansible_ssh_host=52.22.46.89 ansible_ssh_user=ubuntu
 
 [app-servers]
