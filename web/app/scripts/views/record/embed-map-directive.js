@@ -60,7 +60,7 @@
 
         // tell add-edit-controller.js when marker point set
         function broadcastCoordinates(latlng) {
-            scope.$parent.$broadcast('Map:LocationSelected', [latlng.lat, latlng.lng]);
+            scope.$parent.$broadcast('Map:LocationSelected', [latlng.lng, latlng.lat]);
         }
     }
 
