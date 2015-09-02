@@ -38,14 +38,12 @@
                     });
 
                     var conditions = function(val) { return val.isSearchable; };
-                    var filterable = {};
+                    ctl.filterables = {};
                     _.forEach(namespaced, function(d, i) {
                         if (conditions(d)) {
-                            filterable[i] = d;
+                            ctl.filterables[i] = d;
                         }
                     });
-                    ctl.filterables = {'Accident Details#Number with minor injuries': filterable['Accident Details#Number with minor injuries']};
-
                 });
             }
         });
