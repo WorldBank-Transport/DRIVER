@@ -13,14 +13,20 @@
             restrict: 'A',
             scope: false,
             replace: false,
-            require: 'leafletMap',
+            controller: 'embedMapController',
+            require: ['leafletMap', 'driver-embed-map'],
             link: link
         };
         return module;
 
-        function link(linkScope, element, attrs, controller) {
+        function link(linkScope, element, attrs, controllers) {
             scope = linkScope;
-            controller.getMap().then(setUpMap);
+
+            var leafletController = controllers[0];
+            var controller = controllers[1];
+
+            // first controller is for leaflet
+            leafletController.getMap().then(setUpMap);
 
             scope.$on('Record:LocationSelected', function(event, data) {
                 setMarker(L.latLng(data.lat, data.lng));
@@ -31,6 +37,9 @@
                 map = null;
                 locationMarker = null;
             });
+
+            // test embed map controller
+            controller.here();
         }
 
         // initialize map with baselayer and listen for click events
