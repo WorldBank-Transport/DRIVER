@@ -34,6 +34,9 @@
                 locationMarker.on('dragend', function() {
                     broadcastCoordinates(locationMarker.getLatLng());
                 });
+
+                // pan/zoom to marker on add
+                map.setView(latlng, 9, {animate: true});
             }
         }
 
