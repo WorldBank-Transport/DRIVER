@@ -16,7 +16,7 @@
       "type": "object",
       "properties": {
         "ID": {
-          "isSearchable": false,
+          "isSearchable": true,
           "propertyOrder": 0,
           "type": "string",
           "fieldType": "text",
@@ -76,7 +76,7 @@
           "format": "textarea"
         },
         "X coordinate (as entered)": {
-          "isSearchable": false,
+          "isSearchable": true,
           "propertyOrder": 2,
           "type": "string",
           "fieldType": "text",
@@ -125,7 +125,7 @@
           "format": "text"
         },
         "Y coordinate (as entered)": {
-          "isSearchable": false,
+          "isSearchable": true,
           "propertyOrder": 3,
           "type": "string",
           "fieldType": "text",
@@ -251,7 +251,7 @@
           "format": "number"
         },
         "Police station number": {
-          "isSearchable": false,
+          "isSearchable": true,
           "propertyOrder": 2,
           "type": "string",
           "fieldType": "text",
@@ -265,7 +265,7 @@
           "format": "text"
         },
         "Number seriously injured": {
-          "isSearchable": false,
+          "isSearchable": true,
           "propertyOrder": 15,
           "type": "string",
           "fieldType": "text",

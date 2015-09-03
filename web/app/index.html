@@ -10,6 +10,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="bower_components/angular-spinkit/build/angular-spinkit.min.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css" />
     <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
     <!-- endbower -->
     <!-- endbuild -->
@@ -23,6 +24,7 @@
     <![endif]-->
 
     <driver-navbar></driver-navbar>
+    <div class="navbreak"></div>
     <main ui-view></main>
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -42,6 +44,8 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/bootstrap-select/dist/js/bootstrap-select.js"></script>
+    <script src="bower_components/angular-bootstrap-select/build/angular-bootstrap-select.js"></script>
     <script src="bower_components/lodash/lodash.js"></script>
     <script src="bower_components/angular-uuid/uuid.min.js"></script>
     <script src="bower_components/leaflet/dist/leaflet-src.js"></script>
@@ -75,6 +79,12 @@
     <script src="scripts/navbar/module.js"></script>
     <script src="scripts/navbar/navbar-controller.js"></script>
     <script src="scripts/navbar/navbar-directive.js"></script>
+
+    <script src="scripts/filterbar/module.js"></script>
+    <script src="scripts/filterbar/filterbar-directive.js"></script>
+    <script src="scripts/filterbar/filterbar-controller.js"></script>
+    <script src="scripts/filterbar/numeric-range-directive.js"></script>
+    <script src="scripts/filterbar/numeric-range-controller.js"></script>
 
     <script src="scripts/resources/module.js"></script>
     <script src="scripts/resources/polygons-service.js"></script>

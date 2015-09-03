@@ -20,7 +20,7 @@ module.exports = function(config) {
     ],
 
     preprocessors: {
-      '**/*.html': 'ng-html2js'
+      'app/scripts/**/*.html': ['ng-html2js']
     },
 
     // list of files / patterns to load in the browser

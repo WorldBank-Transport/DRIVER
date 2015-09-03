@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Loads accidents from a PNP Accidents database dump"""
 import argparse
 import csv

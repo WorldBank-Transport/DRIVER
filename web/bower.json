@@ -14,6 +14,8 @@
     "angular-ui-router": "~0.2.14",
     "json-editor": "0.7.18",
     "angular-bootstrap": "~0.13.0",
+    "bootstrap-select": "1.7.3",
+    "angular-bootstrap-select": "0.0.5",
     "lodash": "^3.8.0",
     "angular-uuid": "~0.1.0",
     "leaflet": "~0.7.3",

@@ -5,7 +5,7 @@ describe('driver.navbar: Navbar', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.mock.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.navbar'));
     beforeEach(module('driver.views.account'));
     beforeEach(module('driver.views.dashboard'));

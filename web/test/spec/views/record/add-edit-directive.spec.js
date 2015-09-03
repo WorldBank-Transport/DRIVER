@@ -5,7 +5,7 @@ describe('driver.views.record: RecordAddEdit', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.views.record'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
 
     var $compile;
     var $httpBackend;

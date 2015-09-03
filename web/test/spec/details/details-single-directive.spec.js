@@ -2,7 +2,7 @@
 
 describe('driver.details: DetailsSingle', function () {
 
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.details'));
 
     var $compile;

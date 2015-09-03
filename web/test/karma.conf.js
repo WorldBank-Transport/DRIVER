@@ -41,6 +41,8 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/json-editor/dist/jsoneditor.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'bower_components/bootstrap-select/dist/js/bootstrap-select.js',
+      'bower_components/angular-bootstrap-select/build/angular-bootstrap-select.js',
       'bower_components/lodash/lodash.js',
       'bower_components/angular-uuid/uuid.min.js',
       'bower_components/leaflet/dist/leaflet-src.js',
@@ -68,6 +70,8 @@ module.exports = function(config) {
 
       'app/scripts/navbar/module.js',
       'app/scripts/navbar/**.js',
+      'app/scripts/filterbar/module.js',
+      'app/scripts/filterbar/**.js',
       'app/scripts/toddow/module.js',
       'app/scripts/toddow/**.js',
       'app/scripts/stepwise/module.js',
@@ -124,10 +128,10 @@ module.exports = function(config) {
     ],
 
     // Load all templates into $templateCache. They can be imported with:
-    //   beforeEach(module('driver.templates'));
+    //   beforeEach(module('ase.templates'));
     ngHtml2JsPreprocessor: {
       stripPrefix: 'app/',
-      moduleName: 'driver.templates'
+      moduleName: 'ase.templates'
     },
 
     // Continuous Integration mode

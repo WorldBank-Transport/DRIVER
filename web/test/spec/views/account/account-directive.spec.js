@@ -4,7 +4,7 @@ describe('driver.views.account: Account', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.account'));
 
     var $compile;

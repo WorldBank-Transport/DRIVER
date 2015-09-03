@@ -4,7 +4,7 @@ describe('driver.details: DetailsTabs', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
-    beforeEach(module('driver.templates'));
+    beforeEach(module('ase.templates'));
     beforeEach(module('driver.details'));
 
     var $compile;
