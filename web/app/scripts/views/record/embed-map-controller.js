@@ -39,15 +39,15 @@
 
         // tell add-edit-controller.js when marker point set
         function broadcastCoordinates(latlng) {
-            $rootScope.$broadcast('Map:LocationSelected', [latlng.lng, latlng.lat]);
+            $rootScope.$broadcast('driver.views.record:marker-moved', [latlng.lng, latlng.lat]);
         }
 
-        $scope.$on('Record:LocationSelected', function(event, data) {
+        $scope.$on('driver.views.record:location-selected', function(event, data) {
             setMarker(L.latLng(data.lat, data.lng));
         });
 
         // destroy map state when record is closed
-        $scope.$on('Record:Close', function() {
+        $scope.$on('driver.views.record:close', function() {
             map = null;
             locationMarker = null;
         });

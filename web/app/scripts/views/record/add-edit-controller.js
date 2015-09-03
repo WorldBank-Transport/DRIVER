@@ -28,7 +28,7 @@
                 lng: null
             };
 
-            $scope.$on('Map:LocationSelected', function(event, data) {
+            $scope.$on('driver.views.record:marker-moved', function(event, data) {
                 // update location when map marker set
                 ctl.geom.lat = data[1];
                 ctl.geom.lng = data[0];
@@ -44,7 +44,7 @@
         // tell embed-map-directive to update marker location
         function onGeomChanged() {
             if (ctl.geom.lat && ctl.geom.lng) {
-                $scope.$emit('Record:LocationSelected', ctl.geom);
+                $scope.$emit('driver.views.record:location-selected', ctl.geom);
             }
         }
 
@@ -222,7 +222,7 @@
 
         $scope.$on('$destroy', function() {
             // let map know to destroy its state
-            $scope.$emit('Record:Close');
+            $scope.$emit('driver.views.record:close');
         });
     }
 
