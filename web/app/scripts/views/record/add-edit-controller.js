@@ -99,7 +99,39 @@
             /* jshint camelcase: true */
         }
 
+        /*
+         * Ensures each object in the record contains all appropriate properties available
+         * from the schema. This is a workaround for a problem with json-editor. When it
+         * saves an item it removes any properties that aren't set, and then when the
+         * item is loaded into the editor again, any properties that aren't set aren't
+         * rendered even though they exist within the schema. Thus, in the course of
+         * editing, if anything is ever removed, or an enum is set to empty, it will never
+         * be able to be selected again. This works around those problems.
+         */
+        function fixEmptyFields() {
+            if (!ctl.record) {
+                return;
+            }
+
+            _.forEach(ctl.recordSchema.schema.definitions, function(definition, defKey) {
+                _.forEach(definition.properties, function(property, propKey) {
+                    if (!ctl.record.data.hasOwnProperty(defKey)) {
+                        ctl.record.data[defKey] = null;
+                    }
+                    var data = ctl.record.data[defKey];
+
+                    _.forEach(definition.multiple ? data : [data], function(item) {
+                        if (item && !item.hasOwnProperty(propKey)) {
+                            item[propKey] = null;
+                        }
+                    });
+                });
+            });
+        }
+
         function onSchemaReady() {
+            fixEmptyFields();
+
             /* jshint camelcase: false */
             ctl.editor = {
                 id: 'new-record-editor',
