@@ -1,0 +1,96 @@
+{
+    "description": "",
+    "title": "",
+    "plural_title": "",
+    "definitions": {
+        "Accident Details": {
+            "multiple": false,
+            "description": "Details for Accident",
+            "title": "Accident Details",
+            "required": [
+                "_localId",
+                "Severity"
+            ],
+            "plural_title": "Accident Details",
+            "details": true,
+            "definitions": {},
+            "type": "object",
+            "properties": {
+                "Description": {
+                    "isSearchable": false,
+                    "propertyOrder": 1,
+                    "type": "string",
+                    "fieldType": "text",
+                    "format": "textarea"
+                },
+                "Severity": {
+                    "enum": [
+                        "Fatal",
+                        "Injury",
+                        "Property"
+                    ],
+                    "displayType": "select",
+                    "propertyOrder": 0,
+                    "fieldType": "selectlist",
+                    "isSearchable": true,
+                    "type": "string"
+                },
+                "_localId": {
+                    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                    "type": "string",
+                    "options": {
+                        "hidden": true
+                    }
+                }
+            }
+        },
+        "Vehicle": {
+            "multiple": true,
+            "description": "Vehicles for test database",
+            "title": "Vehicle",
+            "required": [
+                "_localId"
+            ],
+            "plural_title": "Vehicles",
+            "definitions": {},
+            "type": "object",
+            "properties": {
+                "Type": {
+                    "enum": [
+                        "Car",
+                        "Motorcycle",
+                        "Bus",
+                        "Jeepney",
+                        "Bicycle",
+                        "Pedestrian"
+                    ],
+                    "displayType": "select",
+                    "propertyOrder": 0,
+                    "fieldType": "selectlist",
+                    "isSearchable": true,
+                    "type": "string"
+                },
+                "_localId": {
+                    "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                    "type": "string",
+                    "options": {
+                        "hidden": true
+                    }
+                }
+            }
+        }
+    },
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "properties": {
+        "Accident Details": {
+            "$ref": "#/definitions/Accident Details"
+        },
+        "Vehicle": {
+            "items": {
+                "$ref": "#/definitions/Vehicle"
+            },
+            "type": "array"
+        }
+    }
+}
