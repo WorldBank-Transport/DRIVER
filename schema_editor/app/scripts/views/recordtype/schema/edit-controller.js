@@ -59,9 +59,26 @@
             referable = _.filter(referable, function(targetName) {
                 return targetName !== ctl.schemaKey;
             });
+            // Map referable to objects -- needed in newer versions of json-editor
+            referable = _.map(referable, function(name) {
+                return {
+                    value: name,
+                    title: name
+                };
+            });
+
             // Modify the relatedBuilderSchema in-place in order to allow selecting a related
             // content type as the target of an internal reference.
-            ctl.relatedBuilderSchema.definitions.localReference.properties.referenceTarget.enumSource = [referable];
+            ctl.relatedBuilderSchema
+                .definitions
+                .localReference
+                .properties
+                .referenceTarget
+                .enumSource = [{
+                    source: referable,
+                    title: '{{item.title}}',
+                    value: '{{item.value}}'
+                }];
 
             // Need to call toJSON here in order to strip the additional angular
             // resource properties, as they don't play well with json-editor.
