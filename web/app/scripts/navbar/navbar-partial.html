@@ -11,7 +11,7 @@
                         {{ ctl.stateSelected.label }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="navState in ctl.availableStates">
+                        <li class="nav-page-item" ng-repeat="navState in ctl.availableStates">
                             <a ng-click="ctl.onStateSelected(navState)">
                                 {{ navState.label }}
                             </a>
@@ -23,7 +23,7 @@
                         {{ ctl.recordTypeSelected.plural_label }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
+                        <li class="nav-rt-item" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
                             <a ng-click="ctl.onRecordTypeSelected(recordType)">
                                 {{ recordType.plural_label }}
                             </a>
@@ -35,7 +35,7 @@
                         {{ ctl.geographySelected.label }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
+                        <li class="nav-rt-item" ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
                             <a ng-click="ctl.onGeographySelected(geography)">
                                 {{ geography.label }}
                             </a>
@@ -47,7 +47,7 @@
                         {{ ctl.getPolygonLabel(ctl.polygonSelected) }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
+                        <li class="nav-rt-item" ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
                             <a ng-click="ctl.onPolygonSelected(polygon)">
                                 {{ ctl.getPolygonLabel(polygon) }}
                             </a>
