@@ -100,10 +100,10 @@
         }
 
         function onSchemaReady() {
+            /* jshint camelcase: false */
             ctl.editor = {
                 id: 'new-record-editor',
                 options: {
-                    /* jshint camelcase: false */
                     schema: ctl.recordSchema.schema,
                     disable_edit_json: true,
                     disable_properties: true,
@@ -112,10 +112,10 @@
                     show_errors: 'change',
                     no_additional_properties: true,
                     startval: ctl.record ? ctl.record.data : null
-                    /* jshint camelcase: true */
                 },
                 errors: []
             };
+            /* jshint camelcase: true */
         }
 
         /*

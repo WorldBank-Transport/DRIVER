@@ -75,10 +75,10 @@
             $log.debug('Initializing form with startval', initialData);
 
             // Configure the json-editor
+            /* jshint camelcase: false */
             ctl.editor = {
                 id: 'schema-editor',
                 options: {
-                    /* jshint camelcase: false */
                     schema: schema,
                     disable_edit_json: true,
                     disable_properties: true,
@@ -87,10 +87,10 @@
                     show_errors: 'change',
                     no_additional_properties: true,
                     startval: initialData
-                    /* jshint camelcase: true */
                 },
                 errors: []
             };
+            /* jshint camelcase: true */
 
             JsonEditorDefaults.customValidators.push(validateNoSelfReference);
         }
