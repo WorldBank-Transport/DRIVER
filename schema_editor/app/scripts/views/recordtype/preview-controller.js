@@ -35,10 +35,10 @@
 
         // Called after all prerequesite data has been loaded
         function onSchemaReady() {
+            /* jshint camelcase: false */
             ctl.editor = {
                 id: 'preview-editor',
                 options: {
-                    /* jshint camelcase: false */
                     schema: ctl.recordSchema.schema,
                     disable_edit_json: true,
                     disable_properties: true,
@@ -46,10 +46,10 @@
                     theme: 'bootstrap3',
                     show_errors: 'change',
                     no_additional_properties: true
-                    /* jshint camelcase: true */
                 },
                 errors: []
             };
+            /* jshint camelcase: true */
         }
     }
 
