@@ -29,7 +29,7 @@
                     setMarker(e.latlng);
                 });
             }
-        }
+        };
 
         // set marker location, or create marker at location if it does not exist yet
         function setMarker(latlng) {
