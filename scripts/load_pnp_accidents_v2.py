@@ -35,7 +35,7 @@ def transform(record, schema_id):
     obj = {
         'data': {
             'Accident Details': dict(),
-            'Vehicle': dict(),
+            'Vehicle': [],
         },
         'schema': str(schema_id),
         'slug': 'removeme',  # TODO: Remove when removed from Record class.
