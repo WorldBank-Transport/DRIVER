@@ -5,6 +5,7 @@
 // RFC4122. See: http://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
 var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+// queries
 
 // NB: interactivity only works with string columns
 var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
@@ -16,10 +17,6 @@ var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_fro
 var filterRecordQuery = " AND record_type_id = '";
 var endRecordQuery = ")) AS ashlar_record";
 
-
-// SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, b.label, b.color
-// FROM ashlar_boundarypolygon p INNER JOIN ashlar_boundary b ON (p.boundary_id=b.uuid);
-
 var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, ",
                          "b.label, b.color, p.geom ",
                          "FROM ashlar_boundarypolygon p INNER JOIN ashlar_boundary b ",
@@ -27,6 +24,8 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
                         ].join("");
 var filterBoundaryQuery = " WHERE b.uuid ='"
 var endBoundaryQuery = ") AS ashlar_boundary";
+
+// styling
 
 var heatmapStyle = [
     '#ashlar_record {',
@@ -38,6 +37,27 @@ var heatmapStyle = [
     'marker-width: 10;',
     '[zoom < 7] { marker-width: 5; }',
     '[zoom > 9] { marker-width: 15; }',
+'}'].join('');
+
+var eventsStyle = [
+    '#ashlar_record {',
+    'marker-fill-opacity: 0.5;',
+    'marker-fill: #0040ff;',
+    'marker-line-color: #FFF;',
+    'marker-line-width: 0;',
+    'marker-line-opacity: 1;',
+    'marker-placement: point;',
+    'marker-type: ellipse;',
+    'marker-width: 4;',
+    'marker-allow-overlap: true;',
+'}'].join('');
+
+var boundaryStyle = [
+    '#ashlar_boundary {',
+    'line-width: 2;',
+    'line-color: #04b431;',
+    'polygon-opacity: 0;',
+    'line-opacity: 0.7',
 '}'].join('');
 
 
@@ -65,6 +85,7 @@ function getRequestParameters(request) {
     if (params.tablename === 'ashlar_record') {
 
         params.interactivity = 'uuid,occurred_from,label,slug,data';
+        params.style = eventsStyle;
 
         // build query for record points
         params.sql = baseRecordQuery;
@@ -77,8 +98,8 @@ function getRequestParameters(request) {
 
         params.sql += endRecordQuery;
     } else {
-
         params.interactivity = 'label';
+        params.style = boundaryStyle;
 
         // TODO: use color column for styling?
         // how to set polygon-fill so that differs per column?
