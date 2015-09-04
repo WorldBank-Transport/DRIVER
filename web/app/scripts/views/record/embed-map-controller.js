@@ -7,19 +7,20 @@
     function EmbedMapController($log, $scope, $rootScope) {
         var ctl = this;
 
-        var map = null;
+        ctl.map = null;
+
         var locationMarker = null;
 
         /*
          * Initialize map with baselayer and listen for click events
          */
         ctl.setUpMap = function(leafletMap) {
-            map = leafletMap;
+            ctl.map = leafletMap;
             var streets = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
                                           {attribution: cartoDBAttribution});
-            map.addLayer(streets, {detectRetina: true});
+            ctl.map.addLayer(streets, {detectRetina: true});
 
-            map.on('click', function(e) {
+            ctl.map.on('click', function(e) {
                 broadcastCoordinates(e.latlng);
                 setMarker(e.latlng);
             });
@@ -30,13 +31,13 @@
             if (locationMarker) {
                 locationMarker.setLatLng(latlng);
             } else {
-                locationMarker = new L.marker(latlng, {draggable: true}).addTo(map);
+                locationMarker = new L.marker(latlng, {draggable: true}).addTo(ctl.map);
                 locationMarker.on('dragend', function() {
                     broadcastCoordinates(locationMarker.getLatLng());
                 });
 
                 // pan/zoom to marker on add
-                map.setView(latlng, 9, {animate: true});
+                ctl.map.setView(latlng, 9, {animate: true});
             }
         }
 
@@ -51,7 +52,7 @@
 
         // destroy map state when record is closed
         $scope.$on('driver.views.record:close', function() {
-            map = null;
+            ctl.map = null;
             locationMarker = null;
         });
 

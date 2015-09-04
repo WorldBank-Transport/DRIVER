@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.views.record: Embedded Map', function () {
+describe('driver.views.record: Embedded Map Directive', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
@@ -13,6 +13,7 @@ describe('driver.views.record: Embedded Map', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
+    var Controller;
     var Element;
     var RecordTypes;
     var ResourcesMock;
