@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordTypes) {
+                                 Records, RecordSchemas, RecordState) {
         var ctl = this;
         var editorData = null;
 
@@ -64,8 +64,8 @@
         }
 
         function loadRecordType() {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
+            return RecordState.getSelected()
+                .then(function(recordType) {
                     ctl.recordType = recordType;
                 });
         }
@@ -244,9 +244,7 @@
 
             Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
-                $state.go('record.list', {
-                    rtuuid: $stateParams.rtuuid
-                });
+                $state.go('record.list');
             }, function (error) {
                 $log.debug('Error while creating record:', error);
             });

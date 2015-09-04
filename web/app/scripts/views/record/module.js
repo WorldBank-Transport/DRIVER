@@ -5,7 +5,7 @@
     function StateConfig($stateProvider) {
         $stateProvider.state('record', {
             abstract: true,
-            url: '/rt/:rtuuid',
+            url: '',
             template: '<ui-view></ui-view>'
         });
         $stateProvider.state('record.add', {

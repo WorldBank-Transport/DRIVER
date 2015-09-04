@@ -39,7 +39,6 @@
         'driver.stepwise',
         'driver.views.account',
         'driver.views.dashboard',
-        'driver.views.home',
         'driver.views.map',
         'driver.views.record',
         'ui.router'

@@ -16,9 +16,9 @@
         $rootScope.$on('$stateChangeSuccess', setStates);
 
         function init() {
-            ctl.geographyResults = GeographyState.getOptions();
-            ctl.recordTypeResults = RecordState.getOptions();
-            ctl.polygonResults = PolygonState.getOptions();
+            GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
+            RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
+            PolygonState.getOptions().then(function(opts) { ctl.polygonResults = opts; });
             setStates();
         }
 

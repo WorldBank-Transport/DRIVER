@@ -2,36 +2,27 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($stateParams,
-                                 Records, RecordSchemas, RecordTypes, recordResolution) {
+    function DashboardController(Records, RecordSchemas, RecordState) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
-        ctl.recordType =  recordResolution;
 
         initialize();
 
         function initialize() {
-            loadRecordSchema()
+            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+                .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
-        }
-
-        function loadRecordType () {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
-                    ctl.recordType = recordType;
-                });
         }
 
         function loadRecordSchema() {
             /* jshint camelcase: false */
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
-            debugger;
 
             return RecordSchemas.get({ id: currentSchemaId })
                 .$promise.then(function(recordSchema) {
@@ -47,7 +38,7 @@
          */
         function loadRecords(offset) {
             /* jshint camelcase: false */
-            var params = { record_type: $stateParams.rtuuid };
+            var params = { record_type: ctl.recordType.uuid };
             /* jshint camelcase: true */
 
             if (offset) {

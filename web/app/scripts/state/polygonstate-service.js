@@ -6,14 +6,13 @@
     'use strict';
 
     /* ngInject */
-    function PolygonState($log, $rootScope, Polygons) {
+    function PolygonState($log, $rootScope, $q, Polygons) {
         var defaultParams, selected, options;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
         svc.setSelected = setSelected;
         svc.getSelected = getSelected;
-        svc.resolution = resolution;
         init();
 
         /**
@@ -44,7 +43,12 @@
         }
 
         function getOptions() {
-            return options;
+            var deferred = $q.defer();
+            if (!options) {
+                updateOptions().then(function() { deferred.resolve(options); });
+            }
+            deferred.resolve(options);
+            return deferred.promise;
         }
 
         /**
@@ -64,14 +68,13 @@
         }
 
         function getSelected() {
-            return selected;
-        }
-
-        function resolution() {
+            var deferred = $q.defer();
             if (!selected) {
-                updateOptions();
+                updateOptions().then(function() { deferred.resolve(selected); });
+            } else {
+                deferred.resolve(selected);
             }
-            return selected;
+            return deferred.promise;
         }
 
         return svc;
