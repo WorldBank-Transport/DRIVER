@@ -18,7 +18,9 @@
             var leafletController = controllers[0];
             var controller = controllers[1];
 
-            leafletController.getMap().then(controller.setUpMap);
+            leafletController.getMap().then(function(map) {
+                controller.setUpMap(map, attrs.editable);
+            });
         }
     }
 

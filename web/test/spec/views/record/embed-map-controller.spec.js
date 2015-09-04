@@ -19,7 +19,7 @@ describe('driver.views.record: Embedded Map Controller', function () {
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
 
-        Element = $compile('<div class="map" leaflet-map driver-embed-map></div>')($scope);
+        Element = $compile('<div class="map" leaflet-map driver-embed-map editable="true"></div>')($scope);
         $rootScope.$apply();
 
         // find the controller by name
@@ -28,6 +28,10 @@ describe('driver.views.record: Embedded Map Controller', function () {
 
     it('should have a map on the controller', function() {
         expect(Controller.map).toBeDefined();
+    });
+
+    it('should be editable', function() {
+        expect(Controller.isEditable).toBeTruthy();
     });
 
     it('should broadcast map click coordinates as [lng, lat]', function() {
