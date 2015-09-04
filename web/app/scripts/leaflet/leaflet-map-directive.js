@@ -3,7 +3,7 @@
 
     /** Provides access to the leaflet map object instantiated by the directive */
     /* ngInject */
-    function LeafletController($q) {
+    function LeafletController($timeout, $q) {
         var ctl = this;
         var _map = null;
         initialize();
@@ -28,6 +28,12 @@
          */
         function setMap(map) {
             _map.resolve(map);
+
+            // This helps in some situations where the map isn't initially rendered correctly due
+            // to the container size being changed.
+            $timeout(function() {
+                map.invalidateSize();
+            }, 0);
         }
     }
 
