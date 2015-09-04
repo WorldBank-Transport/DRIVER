@@ -28,7 +28,6 @@
 
             // layer with heatmap of events
             var heatmapLayer = new L.tileLayer(heatmapUrl, {attribution: 'PRS'});
-            map.addLayer(heatmapLayer, {detectRetina: true});
 
             // Event record points. Change 'ALL' for a record type UUID to filter layer
             var recordsLayer = new L.tileLayer(recordsUrl, {attribution: 'PRS'});
@@ -62,7 +61,6 @@
             var boundaryLayer = new L.tileLayer(Config.windshaft.hostname +
                                                 '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png',
                                                 {attribution: 'PRS'});
-            map.addLayer(boundaryLayer, {detectRetina: true});
 
             var baseMaps = {
                 'CartoDB Positron': streets
