@@ -42,4 +42,14 @@ describe('driver.views.record: Embedded Map Controller', function () {
         expect($rootScope.$broadcast).toHaveBeenCalledWith('driver.views.record:marker-moved',
                                                            [lng, lat]);
     });
+
+    it('should destroy map on record close event', function() {
+        // should have a map to start with
+        expect(Controller.map).toBeDefined();
+
+        $rootScope.$broadcast('driver.views.record:close');
+
+        // should have no map after record close event
+        expect(Controller.map).toBeNull();
+    });
 });
