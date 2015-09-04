@@ -1,3 +1,7 @@
+<driver-details-constants
+     ng-if="ctl.definition.details" record="ctl.record">
+</driver-details-constants>
+
 <div ng-repeat="property in ctl.properties">
     <div ng-switch on="property.fieldType"
         ng-init="data = ctl.data[property.propertyName]">

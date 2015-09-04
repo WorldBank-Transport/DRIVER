@@ -3,7 +3,8 @@
 
     angular.module('driver.details', [
         'ui.bootstrap',
-        'ui.router'
+        'ui.router',
+        'Leaflet'
     ]);
 
 })();
