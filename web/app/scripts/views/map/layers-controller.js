@@ -10,11 +10,13 @@
         var heatmapUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png?heatmap=true';
         var recordsUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png';
         var recordsUtfgridUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json';
+        var boundaryUrl = '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png';
 
         // prepend hostname to URLs
         heatmapUrl = Config.windshaft.hostname + heatmapUrl;
         recordsUrl = Config.windshaft.hostname + recordsUrl;
         recordsUtfgridUrl = Config.windshaft.hostname + recordsUtfgridUrl;
+        boundaryUrl = Config.windshaft.hostname + boundaryUrl;
 
         /**
          * Adds the map layers and sets up the layer switcher control.
@@ -22,20 +24,32 @@
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
         ctl.setRecordLayers = function(map) {
-            var streets = new L.tileLayer(streetsUrl,
-                                          {attribution: cartoDBAttribution});
-            map.addLayer(streets, {detectRetina: true});
+
+            var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
+
+            // base layer
+            var streetsOptions = {
+                attribution: cartoDBAttribution,
+                detectRetina: true,
+                zIndex: 1
+            };
+            var streets = new L.tileLayer(streetsUrl, streetsOptions);
+            map.addLayer(streets);
+
+            // Event record points. Change 'ALL' in URL for a record type UUID to filter layer
+            var recordsLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 3});
+            var recordsLayer = new L.tileLayer(recordsUrl, recordsLayerOptions);
+            // show by default
+            map.addLayer(recordsLayer);
 
             // layer with heatmap of events
-            var heatmapLayer = new L.tileLayer(heatmapUrl, {attribution: 'PRS'});
-
-            // Event record points. Change 'ALL' for a record type UUID to filter layer
-            var recordsLayer = new L.tileLayer(recordsUrl, {attribution: 'PRS'});
-            map.addLayer(recordsLayer, {detectRetina: true});
+            var heatmapOptions = angular.extend(defaultLayerOptions, {zIndex: 4});
+            var heatmapLayer = new L.tileLayer(heatmapUrl, heatmapOptions);
 
             // interactivity for record layer
-            var utfGridRecordsLayer = new L.UtfGrid(recordsUtfgridUrl, {useJsonP: false});
-            map.addLayer(utfGridRecordsLayer, {detectRetina: true});
+            var utfGridRecordsLayer = new L.UtfGrid(recordsUtfgridUrl, {useJsonP: false, zIndex: 5});
+            // show by default.
+            map.addLayer(utfGridRecordsLayer);
 
             utfGridRecordsLayer.on('click', function(e) {
                 // ignore clicks where there is no event record
@@ -58,22 +72,22 @@
             });
 
             // user-uploaded boundary layer(s)
-            var boundaryLayer = new L.tileLayer(Config.windshaft.hostname +
-                                                '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png',
-                                                {attribution: 'PRS'});
+            var boundaryLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 2});
+            var boundaryLayer = new L.tileLayer(boundaryUrl, boundaryLayerOptions);
 
             var baseMaps = {
                 'CartoDB Positron': streets
             };
 
             var overlays = {
-                'Heatmap': heatmapLayer,
+                'Boundaries': boundaryLayer,
                 'Events': recordsLayer,
-                'Boundaries': boundaryLayer
+                'Events Interactivity': utfGridRecordsLayer,
+                'Heatmap': heatmapLayer
             };
 
-            // layer switcher control
-            L.control.layers(baseMaps, overlays).addTo(map);
+            // layer switcher control; expect to have layer zIndex already set
+            L.control.layers(baseMaps, overlays, {autoZIndex: false}).addTo(map);
         };
 
         /**
