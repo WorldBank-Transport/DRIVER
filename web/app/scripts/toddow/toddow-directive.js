@@ -18,9 +18,9 @@
             template: '<svg></svg>',
             link: function(scope, elem) {
                 var rawSvg = elem.find('svg')[0];
-                var cellSize = 30,
-                    height = 475,
-                    width = 752;
+                var cellSize = 26,
+                    height = 210,
+                    width = 660;
                 var rect, color, svg, tooltip;  // GLOBAL
                 init();
 

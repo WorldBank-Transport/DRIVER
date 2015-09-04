@@ -6,8 +6,9 @@
     'use strict';
 
     /* ngInject */
-    function PolygonState($log, $rootScope, $q, Polygons) {
+    function PolygonState($log, $rootScope, $q, localStorageService, Polygons) {
         var defaultParams, selected, options;
+        var initialized = false;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
@@ -57,6 +58,11 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
+            if (!selected && !initialized) {
+                selected = localStorageService.get('polygon.selected');
+                initialized = true;
+            }
+
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
@@ -64,6 +70,7 @@
             } else {
                 selected = null;
             }
+            localStorageService.set('geography.selected', selected);
             $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
         }
 

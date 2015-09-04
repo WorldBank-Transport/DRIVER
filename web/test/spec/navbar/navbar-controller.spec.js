@@ -5,7 +5,6 @@ describe('driver.navbar: NavbarController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.navbar'));
-    beforeEach(module('driver.views.home'));
     beforeEach(module('driver.views.account'));
     beforeEach(module('driver.views.dashboard'));
 
@@ -69,7 +68,7 @@ describe('driver.navbar: NavbarController', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
-        $state.current = $state.get('home');
+        $state.current = $state.get('dashboard');
 
         Controller = $controller('NavbarController', {
             $scope: $scope,
@@ -81,7 +80,7 @@ describe('driver.navbar: NavbarController', function () {
         $httpBackend.verifyNoOutstandingRequest();
 
         var matches = _.filter(Controller.availableStates, function(state) {
-            return state.name === 'home';
+            return state.name === 'dashboard';
         });
         expect(Controller.availableStates.length).toBeGreaterThan(0);
         expect(matches.length).toBe(0);

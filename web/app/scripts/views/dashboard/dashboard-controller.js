@@ -38,7 +38,8 @@
          */
         function loadRecords(offset) {
             /* jshint camelcase: false */
-            var params = { record_type: ctl.recordType.uuid };
+            var params = { record_type: ctl.recordType.uuid,
+                           limit: 50 };
             /* jshint camelcase: true */
 
             if (offset) {

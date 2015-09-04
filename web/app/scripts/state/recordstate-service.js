@@ -6,8 +6,9 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $q, RecordTypes) {
+    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes) {
         var defaultParams, selected, options;
+        var initialized = false;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
@@ -60,6 +61,11 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
+            if (!selected && !initialized) {
+                selected = localStorageService.get('geography.selected');
+                initialized = true;
+            }
+
             if (_.includes(options, selection)) {
                 selected = selection;
             } else if (options.length) {
@@ -67,6 +73,7 @@
             } else {
                 selected = null;
             }
+            localStorageService.set('recordtype.selected', selected);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
         }
 

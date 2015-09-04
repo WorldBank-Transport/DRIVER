@@ -16,9 +16,9 @@
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
-                var margin = {top: 20, right: 20, bottom: 30, left: 50},
-                    width = 752 - margin.left - margin.right,
-                    height = 475 - margin.top - margin.bottom;
+                var margin = {top: 20, right: 20, bottom: 30, left: 30},
+                    width = 475 - margin.left - margin.right,
+                    height = 275 - margin.top - margin.bottom;
 
                 // GLOBALS
                 var t0, svg, line, xAxis, yAxis;  // GLOBAL
@@ -75,7 +75,7 @@
 
                     svg.append('g')
                       .attr('class', 'x axis')
-                      .call(xAxis)
+                      //.call(xAxis)
                       .attr('text-anchor', 'middle')
                       .attr('transform', 'translate(0,' + height + ')');
 
