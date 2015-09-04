@@ -47,7 +47,10 @@ label {
 /* MAIN BODY */
 
 main {
-	height: 100%;
+  position: fixed;
+  top: 104px;
+	height: auto;
+  width: 100%;
 }
 
 .form-area {

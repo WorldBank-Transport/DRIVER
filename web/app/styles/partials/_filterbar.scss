@@ -2,9 +2,8 @@
     padding: 9px 15px;
     background: white;
     width: 100%;
-    z-index: 10;
-    height: 52px;
-    position: absolute;
+    height: 50px;
+    position: fixed;
     box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
@@ -13,4 +12,9 @@
         float: left;
         margin-right: 5px;
     }
+}
+
+div.navbar-default.filterbar {
+    z-index: 8;
+    top: 57px;
 }

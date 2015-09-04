@@ -1,7 +1,3 @@
-.navbreak {
-  margin-bottom: 20px;
-}
-
 .navbar {
   margin-bottom: 0;
 }
@@ -10,6 +6,7 @@
        position: fixed;
        z-index: 10;
        width: 100%;
+       top: 0px;
 }
 
 .navbar .nav-dropdown {
@@ -45,6 +42,7 @@ nav {
 
         > li {
             border-bottom: 1px solid #f1f2f2;
+            z-index: 10;
 
             &:last-of-type {
                 border-bottom: none;
