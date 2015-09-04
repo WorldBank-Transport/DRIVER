@@ -19,7 +19,7 @@
             var controller = controllers[1];
 
             leafletController.getMap().then(function(map) {
-                controller.setUpMap(map, attrs.editable);
+                controller.setUpMap(map, attrs.editable, attrs.lat, attrs.lng);
             });
         }
     }

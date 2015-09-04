@@ -44,6 +44,11 @@ describe('driver.views.record: Embedded Map Directive', function () {
         expect(controller.isEditable).toBeFalsy();
     });
 
+    it('should not have location marker set if no initial coordinates provided', function() {
+        var controller = Element.controller('driverEmbedMap');
+        expect(controller.locationMarker).toBeNull();
+    });
+
     it('should not listen to click events unless editable', function() {
         var controller = Element.controller('driverEmbedMap');
 

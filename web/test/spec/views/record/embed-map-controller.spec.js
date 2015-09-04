@@ -12,6 +12,9 @@ describe('driver.views.record: Embedded Map Controller', function () {
 
     var Controller;
 
+    var snippet = ['<div class="map" leaflet-map driver-embed-map ',
+                   'editable="true" lat=11.1 lng=121.8></div>'].join('');
+
     beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_) {
         $compile = _$compile_;
         $controller = _$controller_;
@@ -19,7 +22,7 @@ describe('driver.views.record: Embedded Map Controller', function () {
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
 
-        Element = $compile('<div class="map" leaflet-map driver-embed-map editable="true"></div>')($scope);
+        Element = $compile(snippet)($scope);
         $rootScope.$apply();
 
         // find the controller by name
@@ -32,6 +35,11 @@ describe('driver.views.record: Embedded Map Controller', function () {
 
     it('should be editable', function() {
         expect(Controller.isEditable).toBeTruthy();
+    });
+
+    it('should initialize marker with attribute coordinates', function() {
+        expect(Controller.locationMarker).toBeDefined();
+        expect(Controller.locationMarker.getLatLng()).toEqual({lat: 11.1, lng: 121.8});
     });
 
     it('should broadcast map click coordinates as [lng, lat]', function() {
@@ -47,13 +55,14 @@ describe('driver.views.record: Embedded Map Controller', function () {
                                                            [lng, lat]);
     });
 
-    it('should destroy map on record close event', function() {
+    it('should destroy map and marker on record close event', function() {
         // should have a map to start with
         expect(Controller.map).toBeDefined();
 
         $rootScope.$broadcast('driver.views.record:close');
 
-        // should have no map after record close event
+        // should have no map or marker after record close event
         expect(Controller.map).toBeNull();
+        expect(Controller.locationMarker).toBeNull();
     });
 });
