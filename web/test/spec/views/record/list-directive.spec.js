@@ -27,7 +27,8 @@ describe('driver.views.record: RecordList', function () {
 
     it('should load directive', function () {
         var recordTypeUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var recordSchemaUrl = /\/api\/recordschemas/;
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);

@@ -29,6 +29,7 @@ describe('driver.views.dashboard: DashboardController', function () {
 
         var recordTypeUrl = /\/api\/recordtypes\//;
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         $scope.$apply();
     });

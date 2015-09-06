@@ -115,22 +115,25 @@
                                 }
                             })
                             .attr('y', 10);
+
+                    tooltip = d3.tip()
+                    rect.attr('data-hour', function(d) { return formatHourRange(d); })
+                        .datum(formatHourRange)
+                        .on('mouseover', tooltip.show)
+                        .on('mouseout', tooltip.hide);
+
                 }
 
                 /**
                  * Update all fields of chart with new information and draw in cells with events
                  */
                 function updateChart(data) {
-                    tooltip = d3.tip().html(function(d) {
+                    tooltip.html(function(d) {
                       var tooltipText = data[d] ? data[d] : '0';
                       return 'Event count: ' + tooltipText;
                     });
                     svg.call(tooltip);
-                    rect.attr('data-hour', function(d) { return formatHourRange(d); })
-                        .datum(formatHourRange)
-                        .on('mouseover', tooltip.show)
-                        .on('mouseout', tooltip.hide);
-
+                    rect.attr('fill', 'white');
                     rect.filter(function(d) { return d in data; })
                         .attr('fill', function(d) { return color(data[d]); });
                 }

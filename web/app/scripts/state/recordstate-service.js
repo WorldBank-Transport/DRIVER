@@ -39,7 +39,9 @@
                   if (!results.length) {
                       $log.warn('No record types returned');
                   } else {
-                      if (!_.includes(options, selected)) {
+                      if (!selected) {
+                          selected = options[0];
+                      } else if (!_.includes(options, selected)) {
                           svc.setSelected(selected);
                       }
                   }
@@ -75,12 +77,15 @@
             }
             localStorageService.set('recordtype.selected', selected);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
+            return selected;
         }
 
         function getSelected() {
             var deferred = $q.defer();
-            if (!selected) {
+            if (!selected && !options.length) {
                 updateOptions().then(function() { deferred.resolve(selected); });
+            } else if (!selected) {
+                deferred.resolve(setSelected());
             } else {
                 deferred.resolve(selected);
             }
