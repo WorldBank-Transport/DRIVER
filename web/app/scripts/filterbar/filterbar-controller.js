@@ -40,11 +40,6 @@
                     _.forEach(namespaced, function(d, i) {
 
                         if (conditions(d)) {
-                            console.log('filterable!');
-                            console.log(d);
-                            console.log('i is:');
-                            console.log(i);
-
                             ctl.filterables[i] = d;
                         }
                     });

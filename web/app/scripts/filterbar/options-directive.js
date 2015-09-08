@@ -16,7 +16,7 @@
                 init();
 
                 var filterbarController = ctlArray[0];
-                var controller = ctlArray[1]; // optionsController
+                // var controller = ctlArray[1]; // optionsController
 
                 function init() {
                     scope.currentSelection = null; // TODO: set existing selection?
@@ -30,11 +30,7 @@
                  * @param filterObj {object} filter data
                  */
                 scope.updateFilter = function(filterLabel, filterObj) {
-                    if (controller.selectionChanged(filterObj)) {
-                        filterbarController.updateFilter(filterLabel, filterObj);
-                    } else {
-                        console.log('nothing changed'); /////////////////////////////
-                    }
+                    filterbarController.updateFilter(filterLabel, filterObj);
                 };
             }
         };

@@ -1,7 +1,7 @@
 <div class="btn-group dropdown options open" dropdown="">
-    <select class="form-control"
+    <select data-ng-options="val for val in data.enum" class="form-control"
             name="options"
-            ng-model="options.optionList"
-            ng-change="someFunction(label, foo)">
+            ng-model="currentSelection"
+            ng-change="updateFilter(label, data)">
     </select>
 </div>
