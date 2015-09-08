@@ -17,4 +17,8 @@
 div.navbar-default.filterbar {
     z-index: 8;
     top: 57px;
+
+    .form-inline {
+        width: 100%;
+    }
 }
