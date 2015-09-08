@@ -27,10 +27,6 @@
                   /* jshint ignore:end */
                 }).$promise.then(function(data) {
                     var definitions = data.schema.definitions;
-                    ctl.filterables = _(definitions)
-                      .map(function(d) { return d.properties; })
-                      .filter(function(d) { return !d.isSearchable || d.format === 'number'; })
-                      .value();
 
                     var namespaced = {};
                     _.forEach(definitions, function(schema, i) {
@@ -42,7 +38,13 @@
                     var conditions = function(val) { return val.isSearchable; };
                     ctl.filterables = {};
                     _.forEach(namespaced, function(d, i) {
+
                         if (conditions(d)) {
+                            console.log('filterable!');
+                            console.log(d);
+                            console.log('i is:');
+                            console.log(i);
+
                             ctl.filterables[i] = d;
                         }
                     });

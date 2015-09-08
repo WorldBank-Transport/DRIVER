@@ -6,6 +6,7 @@
         <ul class="nav filterbar-nav">
             <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
                 <li ng-if="value.format=='number'" numeric-range-field label="key" data="value"></li>
+                <li ng-if="value.fieldType=='selectlist'" options-field label="key" data="value"></li>
             </ul>
         </ul>
     </div>
