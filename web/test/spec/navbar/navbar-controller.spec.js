@@ -13,19 +13,17 @@ describe('driver.navbar: NavbarController', function () {
     var $rootScope;
     var $scope;
     var $state;
-    var $stateParams;
     var Controller;
     var DriverResourcesMock;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$state_, _$stateParams_,
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$state_,
                                 _DriverResourcesMock_, _ResourcesMock_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         $state = _$state_;
-        $stateParams = _$stateParams_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
 
@@ -44,8 +42,7 @@ describe('driver.navbar: NavbarController', function () {
         $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         Controller = $controller('NavbarController', {
-            $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId }
+            $scope: $scope
         });
         $scope.$apply();
 
@@ -71,8 +68,7 @@ describe('driver.navbar: NavbarController', function () {
         $state.current = $state.get('dashboard');
 
         Controller = $controller('NavbarController', {
-            $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId }
+            $scope: $scope
         });
         $scope.$apply();
 

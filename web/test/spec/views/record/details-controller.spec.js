@@ -26,24 +26,23 @@ describe('driver.views.record: DetailsController', function () {
     }));
 
     it('should load the record', function () {
-        var records = DriverResourcesMock.RecordResponse;
-        var record = records.results[0];
-        var recordUrl = new RegExp('api/records/' + record.uuid);
-        $httpBackend.expectGET(recordUrl).respond(200, record);
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordUrl = /\/api\/records/;
 
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
         var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
-        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
 
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaId = recordSchema.uuid;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         Controller = $controller('RecordDetailsController', {
-            $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId, recorduuid: record.uuid  }
+            $scope: $scope
         });
         $scope.$apply();
         $httpBackend.flush();

@@ -11,29 +11,32 @@ describe('driver.views.record: RecordList', function () {
     var $compile;
     var $httpBackend;
     var $rootScope;
-    var RecordTypes;
+    var localStorageService;
+    var recordState;
     var DriverResourcesMock;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _RecordTypes_,
-                                _DriverResourcesMock_, _ResourcesMock_) {
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _localStorageService_,
+                                _RecordState_, _DriverResourcesMock_, _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
-        RecordTypes = _RecordTypes_;
+        localStorageService = _localStorageService_;
+        recordState = _RecordState_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
+
+        spyOn(localStorageService, 'get');
     }));
 
     it('should load directive', function () {
-        var recordTypeUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-
-        var recordSchemaUrl = /\/api\/recordschemas/;
-        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
-
         var recordsUrl = /\/api\/records/;
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordSchemaUrl = /\/api\/recordschemas/;
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
 
         var scope = $rootScope.$new();

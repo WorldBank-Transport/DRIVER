@@ -7,7 +7,13 @@
 
     /* ngInject */
     function RecordState($log, $rootScope, $q, localStorageService, RecordTypes) {
-        var defaultParams, selected, options;
+        var defaultParams,
+            selected,
+            options,
+            gettingSelected,
+            selectedPromise,
+            gettingOptions,
+            optionPromise;
         var initialized = false;
         var svc = this;
         svc.updateOptions = updateOptions;
@@ -21,6 +27,8 @@
          */
         function init() {
           selected = null;
+          gettingSelected = false;
+          gettingOptions = false;
           options = [];
           defaultParams = {'active': 'True'};
           svc.updateOptions();
@@ -49,12 +57,17 @@
         }
 
         function getOptions() {
-            var deferred = $q.defer();
-            if (!options) {
-                updateOptions().then(function() { deferred.resolve(options); });
+            if (!gettingOptions) {
+                gettingOptions = true;
+                var deferred = $q.defer();
+                if (!options) {
+                    updateOptions().then(function() { deferred.resolve(options); });
+                }
+                deferred.resolve(options);
+                optionPromise = deferred.promise;
             }
-            deferred.resolve(options);
-            return deferred.promise;
+            optionPromise.then(function() { gettingOptions = false; });
+            return optionPromise;
         }
 
         /**
@@ -64,10 +77,13 @@
          */
         function setSelected(selection) {
             if (!initialized) {
-                selection = _.find(options, function(d) {
-                    return d.uuid === localStorageService.get('recordtype.selected').uuid;
-                });
-                initialized = true;
+                var oldRecordType = localStorageService.get('recordtype.selected');
+                if (oldRecordType) {
+                    selection = _.find(options, function(d) {
+                        return d.uuid === oldRecordType.uuid;
+                    });
+                    initialized = true;
+                }
             }
             if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;
@@ -82,15 +98,20 @@
         }
 
         function getSelected() {
-            var deferred = $q.defer();
-            if (!selected && !options.length) {
-                updateOptions().then(function() { deferred.resolve(selected); });
-            } else if (!selected) {
-                deferred.resolve(setSelected());
-            } else {
-                deferred.resolve(selected);
+            if (!gettingSelected) {
+                gettingSelected = true;
+                var deferred = $q.defer();
+                if (!selected && !options.length) {
+                    updateOptions().then(function() { deferred.resolve(selected); });
+                } else if (!selected) {
+                    deferred.resolve(setSelected());
+                } else {
+                    deferred.resolve(selected);
+                }
+                selectedPromise = deferred.promise;
             }
-            return deferred.promise;
+            selectedPromise.then(function() { gettingSelected = false; });
+            return selectedPromise;
         }
 
         return svc;

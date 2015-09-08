@@ -13,18 +13,22 @@
 
         initialize();
 
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
-            ctl.recordType = selected;
-            loadRecordSchema()
-                .then(loadRecords)
-                .then(onRecordsLoaded);
-        });
 
         function initialize() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords)
-                .then(onRecordsLoaded);
+                .then(onRecordsLoaded)
+                .then(function() {
+                    $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+                        if (ctl.recordType !== selected) {
+                            ctl.recordType = selected;
+                            loadRecordSchema()
+                                .then(loadRecords)
+                                .then(onRecordsLoaded);
+                        }
+                    });
+                });
         }
 
         function loadRecordSchema() {

@@ -27,12 +27,11 @@ describe('driver.views.record: RecordDetails', function () {
 
     it('should load directive', function () {
         var recordUrl = /\/api\/records/;
-        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse);
-
-        var recordTypeUrl = /\/api\/recordtypes/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
-
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var recordSchemaUrl = /\/api\/recordschemas/;
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
 
         var scope = $rootScope.$new();
