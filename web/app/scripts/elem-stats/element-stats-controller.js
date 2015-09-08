@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function ElementStatsController($scope, RecordSchemas) {
+    function ElementStatsController() {
         var ctl = this;
 
         return ctl;

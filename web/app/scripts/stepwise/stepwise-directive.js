@@ -21,8 +21,7 @@
                     function() { return elemStat.height; },
                     function() { return elemStat.width; }],
                     function(oldVal, newVal) {
-                        console.log('old', oldVal, 'new', newVal);
-                        console.log(elemStat.height, elemStat.width);
+                        console.log(oldVal, newVal); // Here to ease future development
                     }
                 );
 

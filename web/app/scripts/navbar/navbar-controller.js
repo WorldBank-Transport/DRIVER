@@ -19,6 +19,7 @@
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             PolygonState.getOptions().then(function(opts) { ctl.polygonResults = opts; });
+            console.log('zog');
             setStates();
         }
 
@@ -54,11 +55,12 @@
 
         // Sets states that can be navigated to (exclude current state, since we're already there)
         function setStates() {
+            console.log('zogin');
             ctl.stateSelected = $state.current;
             ctl.availableStates = _.chain($state.get())
                 .map(function(name) { return $state.get(name); })
                 .filter(function(state) {
-                    return state.showInNavbar && state.name !== $state.current.name;
+                    return state.showInNavbar && state.name !== $state.get().name;
                 })
                 .value();
         }

@@ -30,9 +30,10 @@
 
             $scope.$on('driver.views.record:marker-moved', function(event, data) {
                 // update location when map marker set
-                ctl.geom.lat = data[1];
-                ctl.geom.lng = data[0];
-                $scope.$apply();
+                $scope.$apply(function() {
+                    ctl.geom.lat = data[1];
+                    ctl.geom.lng = data[0];
+                });
             });
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
@@ -206,7 +207,6 @@
         }
 
         function onSaveClicked() {
-
             if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
                 Notifications.show({
                     displayClass: 'alert-danger',

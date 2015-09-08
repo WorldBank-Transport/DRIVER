@@ -27,6 +27,7 @@ describe('driver.views.record: RecordAddEdit', function () {
         var recordSchemaUrl = /\/api\/recordschemas/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordType);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
 
         var scope = $rootScope.$new();
