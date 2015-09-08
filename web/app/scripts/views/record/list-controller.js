@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($log, $state, uuid4, Notifications,
+    function RecordListController($scope, $log, $state, uuid4, Notifications,
                                  Records, RecordSchemas, RecordState) {
         var ctl = this;
         ctl.currentOffset = 0;
@@ -12,6 +12,13 @@
         ctl.getNextRecords = getNextRecords;
 
         initialize();
+
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+            ctl.recordType = selected;
+            loadRecordSchema()
+                .then(loadRecords)
+                .then(onRecordsLoaded);
+        });
 
         function initialize() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })

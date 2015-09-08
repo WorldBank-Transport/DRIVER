@@ -10,12 +10,22 @@
     /* ngInject */
     function Stepwise() {
         var module = {
-            restrict: 'A',
+            restrict: 'E',
+            require: '^element-stats',
             scope: {
               chartData: '='
             },
             template: '<svg></svg>',
-            link: function(scope, elem) {
+            link: function(scope, elem, attrs, elemStat) {
+                scope.$watchGroup([
+                    function() { return elemStat.height; },
+                    function() { return elemStat.width; }],
+                    function(oldVal, newVal) {
+                        console.log('old', oldVal, 'new', newVal);
+                        console.log(elemStat.height, elemStat.width);
+                    }
+                );
+
                 var margin = {top: 20, right: 20, bottom: 30, left: 30},
                     width = 475 - margin.left - margin.right,
                     height = 275 - margin.top - margin.bottom;

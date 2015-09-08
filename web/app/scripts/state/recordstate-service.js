@@ -39,8 +39,8 @@
                   if (!results.length) {
                       $log.warn('No record types returned');
                   } else {
-                      if (!selected) {
-                          selected = options[0];
+                      if (!selected && options[0]) {
+                          selected = svc.setSelected(options[0]);
                       } else if (!_.includes(options, selected)) {
                           svc.setSelected(selected);
                       }
@@ -63,12 +63,13 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
-            if (!selected && !initialized) {
-                selected = localStorageService.get('geography.selected');
+            if (!initialized) {
+                selection = _.find(options, function(d) {
+                    return d.uuid === localStorageService.get('recordtype.selected').uuid;
+                });
                 initialized = true;
             }
-
-            if (_.includes(options, selection)) {
+            if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;
             } else if (options.length) {
                 selected = options[0];

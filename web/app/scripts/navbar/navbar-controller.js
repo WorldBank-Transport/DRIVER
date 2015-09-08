@@ -46,11 +46,10 @@
         });
         $scope.$on('driver.state.geographystate:selected', function(event, selected) {
             // Need to get the new list of polygons for the selected geography
-            PolygonState.updateOptions({'boundary': selected.uuid}).then(function() {
-                PolygonState.setSelected();
-            });
             ctl.geographySelected = selected;
-            updateState();
+            PolygonState.updateOptions({'boundary': selected.uuid}).then(function() {
+                updateState();
+            });
         });
 
         // Sets states that can be navigated to (exclude current state, since we're already there)

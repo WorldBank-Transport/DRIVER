@@ -40,7 +40,11 @@
                 if (!results.length) {
                     $log.warn('No geographies returned');
                 } else {
-                    svc.setSelected(selected);
+                      if (!selected && options[0]) {
+                          selected = svc.setSelected(options[0]);
+                      } else if (!_.includes(options, selected)) {
+                          svc.setSelected(selected);
+                      }
                 }
             });
         }
@@ -60,12 +64,18 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
-            if (!selected && !initialized) {
-                selected = localStorageService.get('geography.selected');
+            if (!initialized) {
+                selection = _.find(options, function(d) {
+                    var oldGeo = localStorageService.get('geography.selected');
+                    if (!oldGeo) {
+                        return {'uuid': ''};
+                    }
+                    return d.uuid === oldGeo.uuid;
+                });
                 initialized = true;
             }
 
-            if (_.includes(options, selection)) {
+            if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;
             } else if (options.length) {
                 selected = options[0];
@@ -74,6 +84,7 @@
             }
             localStorageService.set('geography.selected', selected);
             $rootScope.$broadcast('driver.state.geographystate:selected', selected);
+            return selected;
         }
 
         function getSelected() {

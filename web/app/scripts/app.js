@@ -39,6 +39,7 @@
         'driver.config',
         'driver.navbar',
         'driver.filterbar',
+        'driver.elemstat',
         'driver.toddow',
         'driver.stepwise',
         'driver.views.account',

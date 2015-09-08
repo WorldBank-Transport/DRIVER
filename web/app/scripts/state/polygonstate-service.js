@@ -38,7 +38,11 @@
                   if (!results.length) {
                       $log.warn('No polygons returned');
                   } else {
-                      svc.setSelected(selected);
+                      if (!selected && options[0]) {
+                          selected = svc.setSelected(options[0]);
+                      } else if (!_.includes(options, selected)) {
+                          svc.setSelected(selected);
+                      }
                   }
             });
         }
@@ -58,20 +62,30 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
-            if (!selected && !initialized) {
-                selected = localStorageService.get('polygon.selected');
+            if (!initialized) {
+                selection = _.find(options, function(d) {
+                    var oldPoly = localStorageService.get('polygon.selected');
+                    if (!oldPoly) {
+                        return {'id': ''};
+                    }
+                    return d.id === oldPoly.id;
+                });
                 initialized = true;
             }
 
-            if (_.includes(options, selection)) {
+            if (_.find(options, function(d) {
+                if (!selection) { return false; }
+                return d.id === selection.id;
+            })) {
                 selected = selection;
             } else if (options.length) {
                 selected = options[0];
             } else {
                 selected = null;
             }
-            localStorageService.set('geography.selected', selected);
+            localStorageService.set('polygon.selected', selected);
             $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
+            return selected;
         }
 
         function getSelected() {
