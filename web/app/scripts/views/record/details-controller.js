@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordDetailsController($log, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordTypes) {
+    function RecordDetailsController($stateParams,
+                                     Records, RecordSchemas, RecordState) {
         var ctl = this;
         initialize();
 
@@ -21,8 +21,8 @@
         }
 
         function loadRecordType () {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
+            return RecordState.getSelected()
+                .then(function(recordType) {
                     ctl.recordType = recordType;
                 });
         }

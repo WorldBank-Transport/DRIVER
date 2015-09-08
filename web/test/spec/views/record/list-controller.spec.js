@@ -26,23 +26,26 @@ describe('driver.views.record: ListController', function () {
     }));
 
     it('should have header keys', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
-        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaId = recordSchema.uuid;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
 
         var recordResponse = DriverResourcesMock.RecordResponse;
         var recordsByTypeUrl = new RegExp('api/records/\\?record_type=' + recordTypeId);
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
         $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
 
         Controller = $controller('RecordListController', {
-            $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId }
+            $scope: $scope
         });
         $scope.$apply();
 
@@ -53,23 +56,26 @@ describe('driver.views.record: ListController', function () {
     });
 
     it('should make offset requests for pagination', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
-        $httpBackend.expectGET(recordTypeIdUrl).respond(200, recordType);
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaId = recordSchema.uuid;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
+        var recordTypeIdUrl = new RegExp('api/recordtypes/' + recordTypeId);
 
         var recordResponse = DriverResourcesMock.RecordResponse;
         var recordsByTypeUrl = new RegExp('api/records/\\?record_type=' + recordTypeId);
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
         $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
 
         Controller = $controller('RecordListController', {
-            $scope: $scope,
-            $stateParams: { rtuuid: recordTypeId }
+            $scope: $scope
         });
         $scope.$apply();
         $httpBackend.flush();

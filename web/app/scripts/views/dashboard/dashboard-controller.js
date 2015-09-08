@@ -2,29 +2,21 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($stateParams,
-                                 Records, RecordSchemas, RecordTypes) {
+    function DashboardController($scope, Records, RecordSchemas, RecordState) {
         var ctl = this;
-        ctl.currentOffset = 0;
-        ctl.numRecordsPerPage = 10;
-        ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
-        ctl.getPreviousRecords = getPreviousRecords;
-        ctl.getNextRecords = getNextRecords;
 
         initialize();
 
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+            ctl.recordType = selected;
+            loadRecords();
+        });
+
         function initialize() {
-            loadRecordType()
+            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
-        }
-
-        function loadRecordType () {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
-                    ctl.recordType = recordType;
-                });
         }
 
         function loadRecordSchema() {
@@ -40,25 +32,17 @@
 
         /*
          * Loads a page of records from the API
-         * @param {int} offset Optional offset value, relative to current offset, used
-         *                     for pulling paginated results. May be positive or negative.
          * @return {promise} Promise to load records
          */
-        function loadRecords(offset) {
+        function loadRecords() {
             /* jshint camelcase: false */
-            var params = { record_type: $stateParams.rtuuid };
+            var params = { record_type: ctl.recordType.uuid,
+                           limit: 50 };
             /* jshint camelcase: true */
-
-            if (offset) {
-                ctl.currentOffset += offset;
-                if (ctl.currentOffset) {
-                    params.offset = ctl.currentOffset;
-                }
-            }
 
             return Records.get(params)
                 .$promise.then(function(records) {
-                    ctl.records = records;
+                    ctl.records = records.results;
                 });
         }
 
@@ -67,16 +51,6 @@
             ctl.propertiesKey = detailsDefinitions[0].properties;
             ctl.headerKeys = _.without(_.keys(ctl.propertiesKey), '_localId');
             ctl.detailsProperty = detailsDefinitions[0].title;
-        }
-
-        // Loads the previous page of paginated record results
-        function getPreviousRecords() {
-            loadRecords(-ctl.numRecordsPerPage);
-        }
-
-        // Loads the next page of paginated record results
-        function getNextRecords() {
-            loadRecords(ctl.numRecordsPerPage);
         }
     }
 

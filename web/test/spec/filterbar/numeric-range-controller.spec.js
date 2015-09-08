@@ -28,7 +28,6 @@ describe('driver.filterbar: NumericRangeController', function () {
     it('should return false if min is less than max and set classes to "danger"', function () {
         var validity = Controller.isMinMaxValid(1, 0);
         expect(validity).toBe(false);
-        console.log(Controller.error);
         expect(_.isEqual(Controller.error, {'classes': 'alert-danger', 'btnClasses': 'btn-danger'})).toBe(true);
     });
 

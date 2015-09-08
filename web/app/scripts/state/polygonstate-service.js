@@ -6,8 +6,9 @@
     'use strict';
 
     /* ngInject */
-    function PolygonState($log, $rootScope, $stateParams, Polygons) {
+    function PolygonState($log, $rootScope, $q, localStorageService, Polygons) {
         var defaultParams, selected, options;
+        var initialized = false;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
@@ -37,13 +38,22 @@
                   if (!results.length) {
                       $log.warn('No polygons returned');
                   } else {
-                      svc.setSelected(selected);
+                      if (!selected && options[0]) {
+                          selected = svc.setSelected(options[0]);
+                      } else if (!_.includes(options, selected)) {
+                          svc.setSelected(selected);
+                      }
                   }
             });
         }
 
         function getOptions() {
-            return options;
+            var deferred = $q.defer();
+            if (!options) {
+                updateOptions().then(function() { deferred.resolve(options); });
+            }
+            deferred.resolve(options);
+            return deferred.promise;
         }
 
         /**
@@ -52,19 +62,40 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
-            if (_.includes(options, selection)) {
+            if (!initialized) {
+                selection = _.find(options, function(d) {
+                    var oldPoly = localStorageService.get('polygon.selected');
+                    if (!oldPoly) {
+                        return {'id': ''};
+                    }
+                    return d.id === oldPoly.id;
+                });
+                initialized = true;
+            }
+
+            if (_.find(options, function(d) {
+                if (!selection) { return false; }
+                return d.id === selection.id;
+            })) {
                 selected = selection;
             } else if (options.length) {
-                var fromUrl = _.findWhere(options, { id: $stateParams.polyuuid });
-                selected = fromUrl || options[0];
+                selected = options[0];
             } else {
                 selected = null;
             }
+            localStorageService.set('polygon.selected', selected);
             $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
+            return selected;
         }
 
         function getSelected() {
-            return selected;
+            var deferred = $q.defer();
+            if (!selected) {
+                updateOptions().then(function() { deferred.resolve(selected); });
+            } else {
+                deferred.resolve(selected);
+            }
+            return deferred.promise;
         }
 
         return svc;

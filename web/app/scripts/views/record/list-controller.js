@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($log, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordTypes) {
+    function RecordListController($scope, $log, $state, uuid4, Notifications,
+                                 Records, RecordSchemas, RecordState) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
@@ -13,17 +13,21 @@
 
         initialize();
 
+
         function initialize() {
-            loadRecordType()
+            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords)
-                .then(onRecordsLoaded);
-        }
-
-        function loadRecordType () {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
-                    ctl.recordType = recordType;
+                .then(onRecordsLoaded)
+                .then(function() {
+                    $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+                        if (ctl.recordType !== selected) {
+                            ctl.recordType = selected;
+                            loadRecordSchema()
+                                .then(loadRecords)
+                                .then(onRecordsLoaded);
+                        }
+                    });
                 });
         }
 
@@ -46,7 +50,7 @@
          */
         function loadRecords(offset) {
             /* jshint camelcase: false */
-            var params = { record_type: $stateParams.rtuuid };
+            var params = { record_type: ctl.recordType.uuid };
             /* jshint camelcase: true */
 
             if (offset) {

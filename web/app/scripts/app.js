@@ -22,6 +22,10 @@
         });
     }
 
+    function LocalStorageConfig(localStorageServiceProvider) {
+        localStorageServiceProvider.setPrefix('DRIVER');
+    }
+
     /**
      * @ngdoc overview
      * @name driver
@@ -35,16 +39,18 @@
         'driver.config',
         'driver.navbar',
         'driver.filterbar',
+        'driver.elemstat',
         'driver.toddow',
         'driver.stepwise',
         'driver.views.account',
         'driver.views.dashboard',
-        'driver.views.home',
         'driver.views.map',
         'driver.views.record',
-        'ui.router'
+        'ui.router',
+        'LocalStorageModule'
     ])
     .config(DefaultRoutingConfig)
     .config(LogConfig)
-    .config(LeafletDefaultsConfig);
+    .config(LeafletDefaultsConfig)
+    .config(LocalStorageConfig);
 })();

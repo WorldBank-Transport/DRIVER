@@ -26,12 +26,14 @@ describe('driver.views.dashboard: Dashboard', function () {
         var scope = $rootScope.$new();
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
 
-        var recordTypeUrl = /\/api\/recordtypes\//;
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         $rootScope.$apply();
 
         // placeholder test
-        expect(element.find('.form-area-body').length).toEqual(1);
+        expect(element.find('driver-stepwise').length).toEqual(1);
     });
 });

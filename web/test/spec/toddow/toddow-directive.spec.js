@@ -5,6 +5,7 @@ describe('driver.toddow: ToDDoW', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.toddow'));
+    beforeEach(module('driver.elemstat'));
 
     var $compile;
     var $httpBackend;
@@ -23,7 +24,7 @@ describe('driver.toddow: ToDDoW', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<div driver-toddow chartData=""></div>')(scope);
+        var element = $compile('<div element-stats><driver-toddow chartData=""></driver-toddow></div>')(scope);
         $rootScope.$apply();
 
         expect(element.find('.day').length).toBeGreaterThan(6);

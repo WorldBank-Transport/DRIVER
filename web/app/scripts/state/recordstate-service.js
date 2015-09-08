@@ -6,8 +6,15 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $stateParams, RecordTypes) {
-        var defaultParams, selected, options;
+    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes) {
+        var defaultParams,
+            selected,
+            options,
+            gettingSelected,
+            selectedPromise,
+            gettingOptions,
+            optionPromise;
+        var initialized = false;
         var svc = this;
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
@@ -20,6 +27,8 @@
          */
         function init() {
           selected = null;
+          gettingSelected = false;
+          gettingOptions = false;
           options = [];
           defaultParams = {'active': 'True'};
           svc.updateOptions();
@@ -38,7 +47,9 @@
                   if (!results.length) {
                       $log.warn('No record types returned');
                   } else {
-                      if (!_.includes(options, selected)) {
+                      if (!selected && options[0]) {
+                          selected = svc.setSelected(options[0]);
+                      } else if (!_.includes(options, selected)) {
                           svc.setSelected(selected);
                       }
                   }
@@ -46,7 +57,17 @@
         }
 
         function getOptions() {
-            return options;
+            if (!gettingOptions) {
+                gettingOptions = true;
+                var deferred = $q.defer();
+                if (!options) {
+                    updateOptions().then(function() { deferred.resolve(options); });
+                }
+                deferred.resolve(options);
+                optionPromise = deferred.promise;
+            }
+            optionPromise.then(function() { gettingOptions = false; });
+            return optionPromise;
         }
 
         /**
@@ -55,19 +76,42 @@
          * @param {object} selection - The selection among available options
          */
         function setSelected(selection) {
-            if (_.includes(options, selection)) {
+            if (!initialized) {
+                var oldRecordType = localStorageService.get('recordtype.selected');
+                if (oldRecordType) {
+                    selection = _.find(options, function(d) {
+                        return d.uuid === oldRecordType.uuid;
+                    });
+                    initialized = true;
+                }
+            }
+            if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;
             } else if (options.length) {
-                var fromUrl = _.findWhere(options, { uuid: $stateParams.rtuuid });
-                selected = fromUrl || options[0];
+                selected = options[0];
             } else {
                 selected = null;
             }
+            localStorageService.set('recordtype.selected', selected);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
+            return selected;
         }
 
         function getSelected() {
-            return selected;
+            if (!gettingSelected) {
+                gettingSelected = true;
+                var deferred = $q.defer();
+                if (!selected && !options.length) {
+                    updateOptions().then(function() { deferred.resolve(selected); });
+                } else if (!selected) {
+                    deferred.resolve(setSelected());
+                } else {
+                    deferred.resolve(selected);
+                }
+                selectedPromise = deferred.promise;
+            }
+            selectedPromise.then(function() { gettingSelected = false; });
+            return selectedPromise;
         }
 
         return svc;

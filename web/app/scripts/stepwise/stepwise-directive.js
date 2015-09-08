@@ -10,21 +10,30 @@
     /* ngInject */
     function Stepwise() {
         var module = {
-            restrict: 'A',
+            restrict: 'E',
+            require: '^element-stats',
             scope: {
               chartData: '='
             },
             template: '<svg></svg>',
-            link: function(scope, elem) {
-                var margin = {top: 20, right: 20, bottom: 30, left: 50},
-                    width = 752 - margin.left - margin.right,
-                    height = 475 - margin.top - margin.bottom;
+            link: function(scope, elem, attrs, elemStat) {
+                scope.$watchGroup([
+                    function() { return elemStat.height; },
+                    function() { return elemStat.width; }],
+                    function(oldVal, newVal) {
+                        console.log(oldVal, newVal); // Here to ease future development
+                    }
+                );
+
+                var margin = {top: 20, right: 20, bottom: 30, left: 30},
+                    width = 475 - margin.left - margin.right,
+                    height = 275 - margin.top - margin.bottom;
 
                 // GLOBALS
                 var t0, svg, line, xAxis, yAxis;  // GLOBAL
                 // scales
-                var x = d3.scale.linear().range([10, width]);
-                var y = d3.scale.linear().range([height - 10, 0]);
+                var x = d3.scale.linear().domain([0, 0]).range([10, width]);
+                var y = d3.scale.linear().domain([0,100]).range([height - 10, 0]);
 
                 init();
 
@@ -52,6 +61,34 @@
                         .append('g')
                         .attr('class', 'outer')
                         .attr('transform', 'translate(' + margin.left + ',' + margin.top +')');
+
+                    svg.append('path')
+                        .attr('class', 'line')
+                        .attr('stroke', 'black');
+
+                    xAxis = d3.svg.axis()
+                        .scale(x)
+                        .orient('bottom')
+                        .tickSize(1);
+
+                    yAxis = d3.svg.axis()
+                        .scale(y)
+                        .orient('left')
+                        .tickSize(1);
+
+                    svg.append('g')
+                      .attr('class', 'xAxis')
+                      //.call(xAxis)  // TODO: uncomment after worldbank demo
+                      .attr('text-anchor', 'middle')
+                      .attr('transform', 'translate(0,' + height + ')');
+
+                    svg.append('g')
+                      .attr('class', 'yAxis')
+                      .call(yAxis)
+                      .selectAll('text')
+                        .attr('text-anchor', 'right')
+                        .attr('x', 4)
+                        .attr('dy', -4);
                 }
 
                 /**
@@ -61,43 +98,27 @@
                  */
                 function updateChart(data) {
                     y.domain([0, d3.max(data, function(d) { return d.count; })]);
-                    xAxis = d3.svg.axis()
-                        .scale(x)
-                        .tickFormat(xAxisTextFormat)
-                        .orient('bottom')
-                        .tickSize(1);
+                    yAxis.scale(y)
+                        .ticks(Math.min(10, _.max(_.map(data, function(d) { return d.count; }))));
+                    xAxis.scale(x)
+                        .tickFormat(xAxisTextFormat);
 
-                    yAxis = d3.svg.axis()
-                        .scale(y)
-                        .orient('left')
-                        .ticks(Math.min(10, _.max(_.map(data, function(d) { return d.count; }))))
-                        .tickSize(1);
-
-                    svg.append('g')
-                      .attr('class', 'x axis')
-                      .call(xAxis)
-                      .attr('text-anchor', 'middle')
-                      .attr('transform', 'translate(0,' + height + ')');
-
-                    svg.append('g')
-                      .attr('class', 'y axis')
-                      .call(yAxis)
-                      .selectAll('text')
-                        .attr('text-anchor', 'right')
-                        .attr('x', 4)
-                        .attr('dy', -4);
-
+                    svg.select('.xAxis').transition().call(xAxis);  // TODO: uncomment
+                    svg.select('.yAxis').transition().call(yAxis);
 
                     line = d3.svg.area()
                         .x(function(d) { return x(d.week); })
                         .y(function(d) { return y(d.count); })
                         .interpolate('step-after');
 
-                    svg.append('path')
+                    svg.select('path')
                         .datum(data)
-                        .attr('class', 'line')
-                        .attr('d', line)
-                        .attr('stroke', 'black');
+                        .transition()
+                        .ease('cubic')
+                        .attr('d', line);
+
+                    svg.selectAll('circle')
+                        .remove();
 
                     svg.append('g')
                         .attr('class', 'points')

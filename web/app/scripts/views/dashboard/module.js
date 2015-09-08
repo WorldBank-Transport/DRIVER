@@ -4,7 +4,7 @@
     /* ngInject */
     function StateConfig($stateProvider) {
         $stateProvider.state('dashboard', {
-            url: '/rt/:rtuuid/geo/:geouuid/poly/:polyuuid/dashboard',
+            url: '/',
             template: '<driver-dashboard></driver-dashboard>',
             label: 'Dashboard',
             showInNavbar: true
@@ -16,7 +16,10 @@
         'ui.bootstrap',
         'ase.resources',
         'driver.resources',
-        'driver.toddow'
+        'driver.toddow',
+        'driver.stepwise',
+        'driver.elemstat',
+        'driver.state'
     ]).config(StateConfig);
 
 })();

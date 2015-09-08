@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordTypes) {
+                                 Records, RecordSchemas, RecordState) {
         var ctl = this;
         var editorData = null;
 
@@ -30,9 +30,10 @@
 
             $scope.$on('driver.views.record:marker-moved', function(event, data) {
                 // update location when map marker set
-                ctl.geom.lat = data[1];
-                ctl.geom.lng = data[0];
-                $scope.$apply();
+                $scope.$apply(function() {
+                    ctl.geom.lat = data[1];
+                    ctl.geom.lng = data[0];
+                });
             });
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
@@ -64,8 +65,8 @@
         }
 
         function loadRecordType() {
-            return RecordTypes.get({ id: $stateParams.rtuuid })
-                .$promise.then(function(recordType) {
+            return RecordState.getSelected()
+                .then(function(recordType) {
                     ctl.recordType = recordType;
                 });
         }
@@ -206,7 +207,6 @@
         }
 
         function onSaveClicked() {
-
             if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
                 Notifications.show({
                     displayClass: 'alert-danger',
@@ -244,9 +244,7 @@
 
             Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
-                $state.go('record.list', {
-                    rtuuid: $stateParams.rtuuid
-                });
+                $state.go('record.list');
             }, function (error) {
                 $log.debug('Error while creating record:', error);
             });
