@@ -33,3 +33,7 @@ deploy:
 
 after_deploy:
   - rm deployment/driver.pem
+
+notifications:
+  slack:
+    secure: RVtR2f3Q+hyW+JeXXsf6TyS1f5OQi7HW35jW+Auu/ET1VxOtQ/Swheiil26a8h6XtEC51YL+SiUhhiAxeKCMz31O33LZ3AsWjOC3ercIjDXDBPVYiYCsSpKoMGPm1/+FXjHnMzEPvIrOo2vA9hLk0QGr8fEiDZ/pHcUxmtVOmWc=
