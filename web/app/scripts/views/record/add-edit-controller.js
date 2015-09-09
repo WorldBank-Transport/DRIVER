@@ -17,7 +17,6 @@
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
             ctl.occurredFromChanged = occurredFromChanged;
-            ctl.occurredToChanged = occurredToChanged;
             ctl.onGeomChanged = onGeomChanged;
 
             ctl.occurredFromOptions = {format: dateTimeFormat};
@@ -86,17 +85,6 @@
             $log.debug('occurred from changed');
             /* jshint camelcase: false */
             $log.debug(ctl.record.occurred_from);
-            // TODO: dynamically set min/max dates
-            //ctl.occurredToOptions = {minDate: ctl.record.occurred_from};
-            /* jshint camelcase: true */
-        }
-
-        function occurredToChanged() {
-            $log.debug('occurred to changed');
-            /* jshint camelcase: false */
-            $log.debug(ctl.record.occurred_to);
-            // TODO: dynamically set min/max dates
-            //ctl.occurredFromOptions = {maxDate: ctl.record.occurred_to};
             /* jshint camelcase: true */
         }
 
@@ -190,17 +178,12 @@
 
             // basic validation for constant fields
             if (!ctl.record || !ctl.record.slug || !ctl.record.label ||
-                !ctl.geom.lat|| !ctl.geom.lng ||
-                !ctl.record.occurred_from || !ctl.record.occurred_to) {
+                !ctl.geom.lat|| !ctl.geom.lng || !ctl.record.occurred_from) {
 
                 $log.debug('Missing required constant field(s)');
                 return false;
             }
 
-            if (ctl.record.occurred_from > ctl.record.occurred_to) {
-                $log.debug('occurred from date cannot be later than occurred to date');
-                return false;
-            }
             /* jshint camelcase: true */
 
             return true;
@@ -219,16 +202,19 @@
             // If there is already a record, set the new editorData and update, else create one
             var saveMethod = null;
             var dataToSave = null;
+
+            /* jshint camelcase: false */
             if (ctl.record.geom) {
                 // set back coordinates
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 saveMethod = 'update';
+                // set `to` date to match `from` date
+                ctl.record.occurred_to = ctl.record.occurred_from;
                 dataToSave = ctl.record;
                 dataToSave.data = editorData;
             } else {
                 saveMethod = 'create';
                 dataToSave = {
-                    /* jshint camelcase: false */
                     data: editorData,
                     schema: ctl.recordSchema.uuid,
 
@@ -237,10 +223,11 @@
                     label: ctl.record.label,
                     geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
                     occurred_from: ctl.record.occurred_from,
-                    occurred_to: ctl.record.occurred_to
-                    /* jshint camelcase: true */
+                    // set `to` date to match `from` date
+                    occurred_to: ctl.record.occurred_from
                 };
             }
+            /* jshint camelcase: true */
 
             Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
