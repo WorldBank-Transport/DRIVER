@@ -190,8 +190,7 @@
 
             // basic validation for constant fields
             if (!ctl.record || !ctl.record.slug || !ctl.record.label ||
-                !ctl.geom.lat|| !ctl.geom.lng ||
-                !ctl.record.occurred_from || !ctl.record.occurred_to) {
+                !ctl.geom.lat|| !ctl.geom.lng || !ctl.record.occurred_from) {
 
                 $log.debug('Missing required constant field(s)');
                 return false;
@@ -223,6 +222,8 @@
                 // set back coordinates
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 saveMethod = 'update';
+                // set `to` date to match `from` date
+                ctl.record.occurred_to = ctl.record.occurred_from;
                 dataToSave = ctl.record;
                 dataToSave.data = editorData;
             } else {
@@ -237,7 +238,8 @@
                     label: ctl.record.label,
                     geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
                     occurred_from: ctl.record.occurred_from,
-                    occurred_to: ctl.record.occurred_to
+                    // set `to` date to match `from` date
+                    occurred_to: ctl.record.occurred_from
                     /* jshint camelcase: true */
                 };
             }
