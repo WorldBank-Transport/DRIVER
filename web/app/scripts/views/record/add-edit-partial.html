@@ -48,7 +48,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="control-label">occurred From</label>
+                                <label class="control-label">Occurred</label>
                                 <div class="input-group" id="datetimepicker-From">
                                     <input type="text" class="form-control"
                                         datetimepicker
@@ -56,22 +56,6 @@
                                         ng-change="ctl.occurredFromChanged()"
                                         ng-model="ctl.record.occurred_from"
                                         placeholder="From">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6 pull-right">
-                            <div class="form-group">
-                                <label class="control-label">occurred To</label>
-                                <div class="input-group" id="datetimepicker-To">
-                                    <input type="text" class="form-control"
-                                        datetimepicker
-                                        datetimepicker-options="{{ ctl.occurredToOptions }}"
-                                        ng-change="ctl.occurredToChanged()"
-                                        ng-model="ctl.record.occurred_to"
-                                        placeholder="To">
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
