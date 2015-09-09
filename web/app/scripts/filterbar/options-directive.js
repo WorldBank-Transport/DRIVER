@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function OptionsField($log) {
+    function OptionsField() {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'options-field'],
