@@ -10,11 +10,13 @@
                dest="/opt/windshaft"
   sudo: False
   when: staging
+  notify:
+    - Restart Windshaft
 
 - name: Configure Windshaft service definition
   template: src=upstart-windshaft.conf.j2 dest=/etc/init/windshaft.conf
   notify:
-    - Restart windshaft
+    - Restart Windshaft
 
 - name: Ensure Windshaft application is running
   service: name=windshaft state=started

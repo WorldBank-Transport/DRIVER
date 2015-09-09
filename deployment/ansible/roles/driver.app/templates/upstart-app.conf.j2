@@ -1,10 +1,6 @@
 description "driver-app"
 
-{% if 'development' in group_names -%}
-start on (vagrant-mounted and started docker)
-{% else -%}
 start on (filesystem and started docker)
-{% endif -%}
 stop on stopping docker
 
 kill timeout 20
@@ -12,6 +8,10 @@ kill signal CONT
 respawn
 
 pre-start script
+  {% if 'development' in group_names -%}
+  until mountpoint -q {{ root_app_dir }}; do sleep 1; done
+  {% endif %}
+
   /usr/bin/docker kill driver-app || true
   /usr/bin/docker rm driver-app || true
 
