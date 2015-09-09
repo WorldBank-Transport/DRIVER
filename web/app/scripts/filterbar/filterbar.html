@@ -1,7 +1,12 @@
 <div class="navbar navbar-default drop-shadow filterbar">
     <div class="pull-left form-inline nav navbar=nav">
         <div class="navbar-header">
-            <input type="search" class="form-control" placeholder="Geographic code"></input>
+            <input ng-model="filterbar.search"
+                   ng-change="filterbar.onSearchChange()"
+                   type="search"
+                   class="form-control"
+                   placeholder="Search">
+            </input>
         </div>
         <ul class="nav filterbar-nav">
             <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">

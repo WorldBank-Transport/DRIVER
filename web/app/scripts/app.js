@@ -46,6 +46,7 @@
         'driver.views.dashboard',
         'driver.views.map',
         'driver.views.record',
+        'driver.params',
         'ui.router',
         'LocalStorageModule'
     ])
