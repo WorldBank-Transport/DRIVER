@@ -2,5 +2,5 @@
 - name: Restart driver-app
   service: name=driver-app state=restarted
 
-- name: Restart windshaft
+- name: Restart Windshaft
   service: name=windshaft state=restarted
