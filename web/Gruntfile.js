@@ -321,6 +321,19 @@ module.exports = function (grunt) {
       }
     },
 
+    ngtemplates: {
+      dist: {
+        options: {
+          htmlmin: '<%= htmlmin.dist.options %>',
+          module: 'driver',
+          usemin: '<%= yeoman.dist %>/scripts/scripts.js'
+        },
+        cwd: '<%= yeoman.app %>',
+        src: ['scripts/**/*.html', 'scripts/views/**/*.html'],
+        dest: '<%= yeoman.dist %>/scripts/templates.js'
+      }
+    },
+
     // ng-annotate tries to make the code safe for minification automatically
     // by using the Angular long form for dependency injection.
     ngAnnotate: {
@@ -352,9 +365,7 @@ module.exports = function (grunt) {
           src: [
             '**/*.{ico,png,txt}',
             '.htaccess',
-            '**/*.html',
-            'scripts/**/*.html',
-            'scripts/views/**.*.html',
+            '*.html',
             'images/**/*.{webp}',
             'styles/fonts/**/*.*'
           ]
@@ -446,11 +457,13 @@ module.exports = function (grunt) {
     'clean:dist',
     'wiredep',
     'useminPrepare',
+    'ngtemplates',
     'concurrent:dist',
     'autoprefixer',
     'concat',
     'ngAnnotate',
     'copy:dist',
+    'cdnify',
     'cssmin',
     'uglify',
     'filerev',
