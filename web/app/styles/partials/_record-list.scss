@@ -1,6 +1,8 @@
-driver-record-list {
+driver-record-list, driver-record-details {
 	position: fixed;
   top: 112px;
   width: 100%;
   bottom: 0;
+  overflow: scroll;
 }
+
