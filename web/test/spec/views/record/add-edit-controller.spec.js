@@ -112,6 +112,7 @@ describe('driver.views.record: AddEditController', function () {
             lng: record.geom.coordinates[1]
         };
         delete record.geom;
+        delete record.occurred_to;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var recordUrl = /\/api\/records/;
 
