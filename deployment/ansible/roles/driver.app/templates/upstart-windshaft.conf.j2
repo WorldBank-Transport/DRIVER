@@ -1,10 +1,6 @@
 description "windshaft"
 
-{% if 'development' in group_names -%}
-start on (vagrant-mounted and started docker)
-{% else -%}
 start on (filesystem and started docker)
-{% endif -%}
 stop on stopping docker
 
 kill timeout 20
@@ -12,8 +8,16 @@ kill signal CONT
 respawn
 
 pre-start script
+  {% if 'development' in group_names -%}
+  until mountpoint -q {{ root_windshaft_dir }}; do sleep 1; done
+  {% endif %}
+
   /usr/bin/docker kill windshaft || true
   /usr/bin/docker rm windshaft || true
+
+  {% if 'staging' in group_names -%}
+  /usr/bin/docker pull quay.io/azavea/windshaft:0.1.0
+  {% endif %}
 end script
 
 exec /usr/bin/docker run \
