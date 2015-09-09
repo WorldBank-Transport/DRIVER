@@ -1,9 +1,9 @@
 <div class="btn-group dropdown options open" dropdown="">
     <div class="form-group">
-        <label>{{ label }}</label>
+        <label>{{label | labelFormatter}}</label>
         <select data-ng-options="val for val in data.enum" class="form-control"
                 name="options"
-                ng-model="currentSelection"
+                ng-model="selection"
                 ng-change="updateFilter(label, data)">
         </select>
     </div>

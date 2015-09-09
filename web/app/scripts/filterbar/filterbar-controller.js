@@ -38,7 +38,6 @@
                     var conditions = function(val) { return val.isSearchable; };
                     ctl.filterables = {};
                     _.forEach(namespaced, function(d, i) {
-
                         if (conditions(d)) {
                             ctl.filterables[i] = d;
                         }

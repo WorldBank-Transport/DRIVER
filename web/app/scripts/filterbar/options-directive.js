@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function OptionsField() {
+    function OptionsField($log) {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'options-field'],
@@ -13,13 +13,16 @@
                 label: '='
             },
             link: function(scope, elem, attrs, ctlArray) {
-                init();
 
                 var filterbarController = ctlArray[0];
-                // var controller = ctlArray[1]; // optionsController
+                var controller = ctlArray[1];
+
+                init();
 
                 function init() {
-                    scope.currentSelection = null; // TODO: set existing selection?
+
+                    // TODO: get/set existing selection in localStorage using 'state' module
+                    controller.selection = null;
                 }
 
                 /**
