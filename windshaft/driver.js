@@ -9,7 +9,7 @@ var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-
 
 // NB: interactivity only works with string columns
 var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
-                       "occurred_to::varchar, label, slug ",
+                       "occurred_to::varchar ",
                        "FROM ashlar_record WHERE schema_id IN ",
                        "(SELECT uuid FROM ashlar_recordschema ",
                        "WHERE next_version_id IS NULL"
@@ -84,7 +84,7 @@ function getRequestParameters(request) {
 
     if (params.tablename === 'ashlar_record') {
 
-        params.interactivity = 'uuid,occurred_from,label,slug,data';
+        params.interactivity = 'uuid,occurred_from,data';
         params.style = eventsStyle;
 
         // build query for record points
