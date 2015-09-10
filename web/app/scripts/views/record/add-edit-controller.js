@@ -177,9 +177,7 @@
             /* jshint camelcase: false */
 
             // basic validation for constant fields
-            if (!ctl.record || !ctl.record.slug || !ctl.record.label ||
-                !ctl.geom.lat|| !ctl.geom.lng || !ctl.record.occurred_from) {
-
+            if (!ctl.record || !ctl.geom.lat|| !ctl.geom.lng || !ctl.record.occurred_from) {
                 $log.debug('Missing required constant field(s)');
                 return false;
             }
@@ -219,8 +217,6 @@
                     schema: ctl.recordSchema.uuid,
 
                     // constant fields
-                    slug: ctl.record.slug,
-                    label: ctl.record.label,
                     geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
                     occurred_from: ctl.record.occurred_from,
                     // set `to` date to match `from` date

@@ -100,11 +100,10 @@
             // read arbitrary record fields object
             var data = JSON.parse(record.data);
 
-            // add header with the label and event date constant fields
+            // add header with event date constant field
             /* jshint camelcase: false */
             var str = '<div class="record-popup">';
-            str += '<h3>' + record.label + '</h3><div>';
-            str += '<p>Occurred on: ' + record.occurred_from + '</p>';
+            str += '<div><h3>Occurred on: ' + record.occurred_from + '</h3>';
             /* jshint camelcase: true */
 
             // build HTML for popup from the record object
