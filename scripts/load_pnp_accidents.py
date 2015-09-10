@@ -80,8 +80,6 @@ def transform(record, schema_id):
             'Accident Details': dict(),
         },
         'schema': str(schema_id),
-        'slug': 'removeme',  # TODO: Remove when removed from Record class.
-        'label': 'removeme',
         'occurred_from': 'None',
         'occurred_to': 'None',
         'geom': 'POINT (0 0)'
