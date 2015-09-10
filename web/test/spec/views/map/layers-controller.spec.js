@@ -25,20 +25,30 @@ describe('driver.views.map: Layers Controller', function () {
 
     var Controller;
     var Element;
+    var ResourcesMock;
     var DriverResourcesMock;
+    var RecordState;
 
     beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_,
-                                _DriverResourcesMock_) {
+                                _ResourcesMock_, _DriverResourcesMock_, _RecordState_) {
         $compile = _$compile_;
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
         DriverResourcesMock = _DriverResourcesMock_;
+        ResourcesMock = _ResourcesMock_;
+        RecordState = _RecordState_;
+
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
         Controller = Element.controller('driverMapLayers');
         $rootScope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
     }));
 
     it('should have a controller', function () {
@@ -68,10 +78,8 @@ describe('driver.views.map: Layers Controller', function () {
     });
 
     it('should listen for record type change', function() {
-        var eventName = 'driver.state.recordstate:selected';
-
         spyOn(Controller, 'setRecordLayers');
-        $rootScope.$broadcast(eventName);
+        RecordState.setSelected({uuid: 'foo'});
         expect(Controller.setRecordLayers).toHaveBeenCalled();
     });
 

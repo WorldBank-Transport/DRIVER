@@ -21,18 +21,26 @@ describe('driver.views.map: Layers Directive', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
+    var ResourcesMock;
 
     var Controller;
     var Element;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
+        ResourcesMock = _ResourcesMock_;
+
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($rootScope);
         $rootScope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
     }));
 
     it('should load directive', function () {
