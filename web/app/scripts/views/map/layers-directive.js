@@ -16,7 +16,7 @@
             var leafletController = controllers[0];
             var controller = controllers[1];
 
-            leafletController.getMap().then(controller.setRecordLayers);
+            leafletController.getMap().then(controller.initLayers);
         }
     }
 

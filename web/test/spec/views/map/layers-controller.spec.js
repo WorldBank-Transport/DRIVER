@@ -25,20 +25,30 @@ describe('driver.views.map: Layers Controller', function () {
 
     var Controller;
     var Element;
+    var ResourcesMock;
     var DriverResourcesMock;
+    var RecordState;
 
     beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_,
-                                _DriverResourcesMock_) {
+                                _ResourcesMock_, _DriverResourcesMock_, _RecordState_) {
         $compile = _$compile_;
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
         DriverResourcesMock = _DriverResourcesMock_;
+        ResourcesMock = _ResourcesMock_;
+        RecordState = _RecordState_;
+
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
         Controller = Element.controller('driverMapLayers');
         $rootScope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
     }));
 
     it('should have a controller', function () {
@@ -56,6 +66,21 @@ describe('driver.views.map: Layers Controller', function () {
 
         var popup = Controller.buildRecordPopup(record);
         expect(popup).toEqual(expected);
+    });
+
+    it('should filter URLs', function () {
+        var interactivityUrl = 'http://localhost:7000/tiles/table/ashlar_record/id/ALL/5/26/15.grid.json';
+
+        Controller.recordType = 'b4e49ec6-32f2-46db-9b27-d0f6ba5c9406';
+        var resultUrl = Controller.getFilteredUrl(interactivityUrl);
+
+        expect(resultUrl).toBe('http://localhost:7000/tiles/table/ashlar_record/id/b4e49ec6-32f2-46db-9b27-d0f6ba5c9406/5/26/15.grid.json');
+    });
+
+    it('should listen for record type change', function() {
+        spyOn(Controller, 'setRecordLayers');
+        RecordState.setSelected({uuid: 'foo'});
+        expect(Controller.setRecordLayers).toHaveBeenCalled();
     });
 
 });

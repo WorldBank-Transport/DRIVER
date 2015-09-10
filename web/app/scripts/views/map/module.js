@@ -15,7 +15,8 @@
         'ui.router',
         'ui.bootstrap',
         'Leaflet',
-        'driver.config'
+        'driver.config',
+        'driver.state'
     ]).config(StateConfig);
 
 })();

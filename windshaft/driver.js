@@ -10,10 +10,11 @@ var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-
 // NB: interactivity only works with string columns
 var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
                        "occurred_to::varchar ",
-                       "FROM ashlar_record"
+                       "FROM ashlar_record WHERE schema_id IN ",
+                       "(SELECT uuid FROM ashlar_recordschema "
                        ].join("");
-var filterRecordQuery = " AND record_type_id = '";
-var endRecordQuery = ") AS ashlar_record";
+var filterRecordQuery = " WHERE record_type_id = '";
+var endRecordQuery = ")) AS ashlar_record";
 
 var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, ",
                          "b.label, b.color, p.geom ",
@@ -89,7 +90,9 @@ function getRequestParameters(request) {
         params.sql = baseRecordQuery;
         if (params.id !== 'ALL') {
             params.sql += filterRecordQuery + params.id + "'";
-        } else if (request.query.heatmap) {
+        }
+
+        if (request.query.heatmap) {
             // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
         }
