@@ -10,12 +10,10 @@ var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-
 // NB: interactivity only works with string columns
 var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
                        "occurred_to::varchar ",
-                       "FROM ashlar_record WHERE schema_id IN ",
-                       "(SELECT uuid FROM ashlar_recordschema ",
-                       "WHERE next_version_id IS NULL"
+                       "FROM ashlar_record"
                        ].join("");
 var filterRecordQuery = " AND record_type_id = '";
-var endRecordQuery = ")) AS ashlar_record";
+var endRecordQuery = ") AS ashlar_record";
 
 var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, ",
                          "b.label, b.color, p.geom ",
