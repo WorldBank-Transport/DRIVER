@@ -58,4 +58,21 @@ describe('driver.views.map: Layers Controller', function () {
         expect(popup).toEqual(expected);
     });
 
+    it('should filter URLs', function () {
+        var interactivityUrl = 'http://localhost:7000/tiles/table/ashlar_record/id/ALL/5/26/15.grid.json';
+
+        Controller.recordType = 'b4e49ec6-32f2-46db-9b27-d0f6ba5c9406';
+        var resultUrl = Controller.getFilteredUrl(interactivityUrl);
+
+        expect(resultUrl).toBe('http://localhost:7000/tiles/table/ashlar_record/id/b4e49ec6-32f2-46db-9b27-d0f6ba5c9406/5/26/15.grid.json');
+    });
+
+    it('should listen for record type change', function() {
+        var eventName = 'driver.state.recordstate:selected';
+
+        spyOn(Controller, 'setRecordLayers');
+        $rootScope.$broadcast(eventName);
+        expect(Controller.setRecordLayers).toHaveBeenCalled();
+    });
+
 });
