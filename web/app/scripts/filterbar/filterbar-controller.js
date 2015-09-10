@@ -27,10 +27,6 @@
                   /* jshint ignore:end */
                 }).$promise.then(function(data) {
                     var definitions = data.schema.definitions;
-                    ctl.filterables = _(definitions)
-                      .map(function(d) { return d.properties; })
-                      .filter(function(d) { return !d.isSearchable || d.format === 'number'; })
-                      .value();
 
                     var namespaced = {};
                     _.forEach(definitions, function(schema, i) {
