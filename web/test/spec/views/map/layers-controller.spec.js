@@ -52,7 +52,7 @@ describe('driver.views.map: Layers Controller', function () {
         // JSONB from record is returned as string from UTFGrid
         record.data = JSON.stringify(record.data);
 
-        var expected = '<div class="record-popup"><h3>testlabel</h3><div><p>Occurred on: 2015-07-30T17:36:29.263000Z</p><h4>Person</h4><div style="margin:15px;"></div><h4>Crime Details</h4><div style="margin:15px;"><p>County: Philadelphia</p><p>Description: First test</p><p>District: 13</p><p>_localId: e116f30b-e493-4d57-9797-a901abddf7d5</p></div><h4>Vehicle</h4><div style="margin:15px;"></div></div></div>';
+        var expected = '<div class="record-popup"><div><h3>Occurred on: 2015-07-30T17:36:29.263000Z</h3><h4>Person</h4><div style="margin:15px;"></div><h4>Crime Details</h4><div style="margin:15px;"><p>County: Philadelphia</p><p>Description: First test</p><p>District: 13</p><p>_localId: e116f30b-e493-4d57-9797-a901abddf7d5</p></div><h4>Vehicle</h4><div style="margin:15px;"></div></div></div>';
 
         var popup = Controller.buildRecordPopup(record);
         expect(popup).toEqual(expected);

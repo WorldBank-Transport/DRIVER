@@ -24,8 +24,6 @@
                     'modified': '2015-07-30T17:36:29.483206Z',
                     'occurred_from': '2015-07-30T17:36:29.263000Z',
                     'occurred_to': '2015-07-30T17:36:29.263000Z',
-                    'label': 'testlabel',
-                    'slug': 'testslug',
                     'geom': {
                         'type': 'Point',
                         'coordinates': [
@@ -64,8 +62,6 @@
                     'modified': '2015-07-30T18:02:30.979305Z',
                     'occurred_from': '2015-07-30T18:02:30.944000Z',
                     'occurred_to': '2015-07-30T18:02:30.944000Z',
-                    'label': 'testlabel',
-                    'slug': 'testslug',
                     'geom': {
                         'type': 'Point',
                         'coordinates': [
