@@ -26,6 +26,12 @@
         localStorageServiceProvider.setPrefix('DRIVER');
     }
 
+    /* ngInject */
+    function HttpConfig($httpProvider) {
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    }
+
     /**
      * @ngdoc overview
      * @name driver
@@ -52,5 +58,6 @@
     .config(DefaultRoutingConfig)
     .config(LogConfig)
     .config(LeafletDefaultsConfig)
-    .config(LocalStorageConfig);
+    .config(LocalStorageConfig)
+    .config(HttpConfig);
 })();

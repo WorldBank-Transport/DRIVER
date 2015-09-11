@@ -14,6 +14,12 @@
         $logProvider.debugEnabled(Config.debug);
     }
 
+    /* ngInject */
+    function HttpConfig($httpProvider) {
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    }
+
     /**
      * @ngdoc overview
      * @name ase
@@ -31,5 +37,6 @@
         'ui.router'
     ])
     .config(DefaultRoutingConfig)
+    .config(HttpConfig)
     .config(LogConfig);
 })();
