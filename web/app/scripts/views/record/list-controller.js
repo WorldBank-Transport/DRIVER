@@ -2,12 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($scope, $log, $state, uuid4, Notifications,
+    function RecordListController($scope, $rootScope, $log, $state, uuid4, Notifications,
                                  Records, RecordSchemas, RecordState) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
+        ctl.filterParams = {};
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
 
@@ -60,11 +61,20 @@
                 }
             }
 
+            _.extend(params, ctl.filterParams);
+
             return Records.get(params)
                 .$promise.then(function(records) {
                     ctl.records = records;
                 });
         }
+
+        $rootScope.$on('driver.filterbar:changed', function(event, data) {
+            // reset list when filters change
+            ctl.currentOffset = 0;
+            ctl.filterParams = data;
+            loadRecords().then(onRecordsLoaded);
+        });
 
         function onRecordsLoaded() {
             var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions, 'details');
