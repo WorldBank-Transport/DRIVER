@@ -20,7 +20,14 @@
         }
     }
 
+    function LeafletDefaultsConfig(LeafletDefaultsProvider) {
+        LeafletDefaultsProvider.setDefaults({
+            drawControl: true
+        });
+    }
+
     angular.module('driver.views.map')
-        .directive('driverMapLayers', driverMapLayers);
+        .directive('driverMapLayers', driverMapLayers)
+        .config(LeafletDefaultsConfig);
 
 })();
