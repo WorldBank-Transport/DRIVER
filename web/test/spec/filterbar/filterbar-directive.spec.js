@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.filterbar: Filterbar', function () {
+describe('driver.filterbar: FilterbarDirective', function () {
 
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
