@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, RecordSchemas) {
+    function FilterbarController($scope, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
 
@@ -13,7 +13,12 @@
          * @param filterObj {object} filter data
          */
         ctl.updateFilter = function(filterLabel, filterObj) {
-            ctl.filters[filterLabel] = angular.copy(filterObj);
+            if (filterObj) {
+                ctl.filters[filterLabel] = angular.copy(filterObj);
+            } else {
+                //unset
+                delete ctl.filters[filterLabel];
+            }
             ctl.sendFilter();
         };
 
