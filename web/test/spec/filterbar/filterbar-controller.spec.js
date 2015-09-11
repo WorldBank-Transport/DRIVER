@@ -81,4 +81,46 @@ describe('driver.filterbar: FilterbarController', function () {
         expect($controller.sendFilter).toHaveBeenCalled();
         expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: {}});
     });
+
+    it('should handle sibling filters', function () {
+
+        var expectedFilter = {
+            baz: {
+                foo: '1',
+                bar: '2'
+            }
+        };
+
+        $controller.updateFilter('baz#foo', '1');
+
+        spyOn($controller, 'sendFilter').and.callThrough();
+        spyOn($scope, '$emit').and.callThrough();
+
+        $controller.updateFilter('baz#bar', '2');
+
+        expect($controller.sendFilter).toHaveBeenCalled();
+        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: expectedFilter});
+    });
+
+    it('should handle nested filters', function () {
+
+        var expectedFilter = {
+            baz: {
+                frisbee: 'yes',
+                foo: {
+                    bar: '1'
+                }
+            }
+        };
+
+        $controller.updateFilter('baz#frisbee', 'yes');
+
+        spyOn($controller, 'sendFilter').and.callThrough();
+        spyOn($scope, '$emit').and.callThrough();
+
+        $controller.updateFilter('baz#foo#bar', '1');
+
+        expect($controller.sendFilter).toHaveBeenCalled();
+        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: expectedFilter});
+    });
 });

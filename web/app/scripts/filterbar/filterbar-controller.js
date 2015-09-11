@@ -43,7 +43,7 @@
                     filterParam = obj;
                 });
 
-                _.extend(params, filterParam);
+                _.merge(params, filterParam);
             });
 
             $scope.$emit('driver.filterbar:changed', {jcontains: params});
