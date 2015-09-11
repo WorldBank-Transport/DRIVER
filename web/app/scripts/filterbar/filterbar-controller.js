@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($scope, RecordSchemas) {
+    function FilterbarController($log, $scope, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
 
@@ -14,6 +14,13 @@
          */
         ctl.updateFilter = function(filterLabel, filterObj) {
             ctl.filters[filterLabel] = angular.copy(filterObj);
+
+            ////////////////////////////////
+            $log.debug('filters are:');
+            $log.debug(ctl.filters);
+
+            // TODO: listen on root and update query
+            $scope.$emit('driver.filterbar:changed');
         };
 
         /**

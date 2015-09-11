@@ -10,31 +10,31 @@
             controller: 'optionsController',
             scope: {
                 data: '=',
-                label: '='
+                label: '=',
+                selection: '='
             },
             link: function(scope, elem, attrs, ctlArray) {
 
                 var filterbarController = ctlArray[0];
-                var controller = ctlArray[1];
+
+                // TODO: use controller?
+                //var controller = ctlArray[1];
 
                 init();
 
                 function init() {
 
                     // TODO: get/set existing selection in localStorage using 'state' module
-                    controller.selection = null;
-                }
 
-                /**
-                 * A simple wrapper around driver-filterbar's updateFilter function;
-                 *  filters should only be updated when data validates
-                 *
-                 * @param filterLabel {string} label of which field to filter
-                 * @param filterObj {object} filter data
-                 */
-                scope.updateFilter = function(filterLabel, filterObj) {
-                    filterbarController.updateFilter(filterLabel, filterObj);
-                };
+                    /**
+                     * A simple wrapper around driver-filterbar's updateFilter function.
+                     *
+                     * @param filterLabel {string} label of which field to filter
+                     */
+                    scope.updateFilter = function(filterLabel, selection) {
+                        filterbarController.updateFilter(filterLabel, selection);
+                    };
+                }
             }
         };
         return module;
