@@ -4,6 +4,7 @@
     /* ngInject */
     function FilterbarController($scope, RecordSchemas) {
         var ctl = this;
+        ctl.search = '';
         ctl.filters = {};
 
         /**
@@ -15,6 +16,10 @@
         ctl.updateFilter = function(filterLabel, filterObj) {
             ctl.filters[filterLabel] = angular.copy(filterObj);
         };
+
+        ctl.onSearchChange = _.throttle(function() {
+            console.log(ctl.search);  // TODO: fill this in with logic
+        }, 1000);
 
         /**
          * When the record type changes, request the new schema
