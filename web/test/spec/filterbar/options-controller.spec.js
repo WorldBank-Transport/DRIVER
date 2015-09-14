@@ -19,7 +19,7 @@ describe('driver.filterbar: OptionsController', function () {
         $scope.$apply();
     }));
 
-    it('should initially have a null selection', function () {
-        expect(Controller.selection).toBeNull();
+    it('should initially have an empty selection', function () {
+        expect(Controller.selection).toBeFalsy();
     });
 });

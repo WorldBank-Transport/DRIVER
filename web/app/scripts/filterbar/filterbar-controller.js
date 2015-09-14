@@ -13,7 +13,40 @@
          * @param filterObj {object} filter data
          */
         ctl.updateFilter = function(filterLabel, filterObj) {
-            ctl.filters[filterLabel] = angular.copy(filterObj);
+            if (filterObj) {
+                ctl.filters[filterLabel] = angular.copy(filterObj);
+            } else {
+                //unset
+                delete ctl.filters[filterLabel];
+            }
+            ctl.sendFilter();
+        };
+
+        /**
+         * Transform filter label-value pairs into parameters to send to API,
+         * then emit event with the query parameters built.
+         */
+        ctl.sendFilter = function() {
+            var params = {};
+            angular.forEach(ctl.filters, function(value, key) {
+                // extract the object hierarchy from the label
+                var parents = key.split('#').reverse();
+                var immediateParent = parents.shift();
+
+                // Build out query object for this filter, which has nested structure like:
+                // {outerParent: {innerParent: value}}
+                var filterParam = {};
+                filterParam[immediateParent] = value;
+                _.each(parents, function(parent) {
+                    var obj = {};
+                    obj[parent] = filterParam;
+                    filterParam = obj;
+                });
+
+                _.merge(params, filterParam);
+            });
+
+            $scope.$emit('driver.filterbar:changed', {jcontains: params});
         };
 
         /**

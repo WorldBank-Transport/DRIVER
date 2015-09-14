@@ -5,8 +5,6 @@
     function OptionsController() {
         var ctl = this;
 
-        ctl.selection = null;
-
         return ctl;
     }
 
