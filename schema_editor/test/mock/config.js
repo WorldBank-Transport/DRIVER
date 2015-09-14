@@ -9,12 +9,9 @@
         },
         api: {
             hostname: 'http://localhost:7000'
-        },
-        windshaft: {
-            hostname: 'http://localhost:7000'
         }
     };
 
     angular.module('ase.config', [])
-    .constant('Config', config);
+    .constant('ASEConfig', config);
 })();

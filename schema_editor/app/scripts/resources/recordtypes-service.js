@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordTypes($resource, Config) {
-        return $resource(Config.api.hostname + '/api/recordtypes/:id/', {id: '@uuid'}, {
+    function RecordTypes($resource, ASEConfig) {
+        return $resource(ASEConfig.api.hostname + '/api/recordtypes/:id/', {id: '@uuid'}, {
             create: {
                 method: 'POST'
             },

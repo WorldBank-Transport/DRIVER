@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function Geography($resource, $log, Upload, Config) {
-        var urlString = Config.api.hostname + '/api/boundaries/';
+    function Geography($resource, $log, Upload, ASEConfig) {
+        var urlString = ASEConfig.api.hostname + '/api/boundaries/';
         var res = $resource(urlString + ':uuid/ ', {uuid: '@uuid'}, {
             query: {
                 method: 'GET',
