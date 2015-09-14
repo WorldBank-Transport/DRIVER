@@ -7,9 +7,11 @@
 
         ctl.recordType = 'ALL';
         ctl.layerSwitcher = null;
+        ctl.drawControl = null;
         ctl.map = null;
         ctl.overlays = null;
         ctl.baseMaps = null;
+        ctl.editLayers = null;
 
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var streetsUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
@@ -57,8 +59,85 @@
 
                 // add overlays
                 ctl.setRecordLayers();
+
+                // add polygon draw control and layer to edit on
+                ctl.editLayers = new L.FeatureGroup();
+                ctl.map.addLayer(ctl.editLayers);
+
+                ctl.drawControl = new L.Control.Draw({
+                    draw: {
+                        // TODO: figure out a good way to export circles.
+                        // Calling toGeoJSON on the Leaflet feature layer
+                        // returns a point with no radius set in the properties.
+                        circle: false,
+                        marker: false,
+                        polyline: false,
+                        polygon: {
+                            allowIntersection: false,
+                            showArea: true,
+                            drawError: {
+                                color: '#e1e100', // Color the shape will turn when intersects
+                                message: '<strong>Filter area cannot intersect itself.</strong>'
+                            },
+                            shapeOptions: {
+                                color: '#bdda55'
+                            }
+                        },
+                        edit: {
+                            FeatureGroup: ctl.editLayers,
+                            // TODO: why aren't the edit and remove toolbar buttons showing?
+                            edit: true,
+                            remove: true
+                        }
+                    }
+                });
+
+                ctl.map.addControl(ctl.drawControl);
+
+                // handle map draw events
+                ctl.map.on('draw:created', function(e) {
+                    filterShapeCreated(e);
+                });
+
+                ctl.map.on('draw:editstop', function(e) {
+                    filterShapeCreated(e);
+                });
+
+                // only allow one filter shape at a time
+                ctl.map.on('draw:drawstart', function() {
+                    ctl.editLayers.clearLayers();
+                });
+
+                ctl.map.on('draw:deleted', function() {
+                    ctl.editLayers.clearLayers();
+                });
+
+
             });
         };
+
+        function filterShapeCreated(event) {
+            var type = event.layerType;
+            var layer = event.layer;
+
+            $log.debug('shape type: ' + type);
+            $log.debug('drew layer:');
+            $log.debug(layer);
+
+            ctl.editLayers.clearLayers();
+            ctl.editLayers.addLayer(layer);
+
+            // TODO: send exported shape to filter.
+            $log.debug(ctl.editLayers.toGeoJSON());
+
+            // TODO: use an interaction event to remove the drawn filter area?
+            /*
+            layer.on('click', function(e) {
+                $log.debug('draw layer clicked!');
+                $log.debug(e);
+            });
+            */
+        }
 
         /**
          * Adds the map layers. Removes them first if they already exist.

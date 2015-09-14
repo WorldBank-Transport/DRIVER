@@ -20,6 +20,7 @@
     "bootstrap-select": "1.7.3",
     "lodash": "^3.8.0",
     "leaflet": "~0.7.3",
+    "leaflet-draw": "^0.2.4",
     "Leaflet.utfgrid": "danzel/Leaflet.utfgrid",
     "d3": "3.5.5",
     "d3-tip": "^0.6.7",

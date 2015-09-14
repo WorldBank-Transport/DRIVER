@@ -48,6 +48,7 @@ module.exports = function(config) {
       'bower_components/json-editor/dist/jsoneditor.js',
       'bower_components/lodash/lodash.js',
       'bower_components/leaflet/dist/leaflet-src.js',
+      'bower_components/leaflet-draw/dist/leaflet.draw-src.js',
       'bower_components/Leaflet.utfgrid/dist/leaflet.utfgrid.js',
       'bower_components/d3/d3.js',
       'bower_components/d3-tip/index.js',
