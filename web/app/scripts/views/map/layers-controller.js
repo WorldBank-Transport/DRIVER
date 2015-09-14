@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope, Config, RecordState) {
+    function DriverLayersController($log, $scope, $rootScope, WebConfig, RecordState) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -19,10 +19,10 @@
         var boundaryUrl = '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png';
 
         // prepend hostname to URLs
-        heatmapUrl = Config.windshaft.hostname + heatmapUrl;
-        recordsUrl = Config.windshaft.hostname + recordsUrl;
-        recordsUtfgridUrl = Config.windshaft.hostname + recordsUtfgridUrl;
-        boundaryUrl = Config.windshaft.hostname + boundaryUrl;
+        heatmapUrl = WebConfig.windshaft.hostname + heatmapUrl;
+        recordsUrl = WebConfig.windshaft.hostname + recordsUrl;
+        recordsUtfgridUrl = WebConfig.windshaft.hostname + recordsUtfgridUrl;
+        boundaryUrl = WebConfig.windshaft.hostname + boundaryUrl;
 
         /**
          * Initialize layers on map.

@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function Records($resource, Config) {
-        return $resource(Config.api.hostname + '/api/records/:id/', {id: '@uuid'}, {
+    function Records($resource, WebConfig) {
+        return $resource(WebConfig.api.hostname + '/api/records/:id/', {id: '@uuid'}, {
             create: {
                 method: 'POST'
             },
