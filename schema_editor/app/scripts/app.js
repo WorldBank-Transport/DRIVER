@@ -2,16 +2,16 @@
     'use strict';
 
     /* ngInject */
-    function DefaultRoutingConfig($locationProvider, $urlRouterProvider, Config) {
-        $locationProvider.html5Mode(Config.html5Mode.enabled);
-        $locationProvider.hashPrefix(Config.html5Mode.prefix);
+    function DefaultRoutingConfig($locationProvider, $urlRouterProvider, ASEConfig) {
+        $locationProvider.html5Mode(ASEConfig.html5Mode.enabled);
+        $locationProvider.hashPrefix(ASEConfig.html5Mode.prefix);
 
         $urlRouterProvider.otherwise('/recordtype');
     }
 
     /* ngInject */
-    function LogConfig($logProvider, Config) {
-        $logProvider.debugEnabled(Config.debug);
+    function LogConfig($logProvider, ASEConfig) {
+        $logProvider.debugEnabled(ASEConfig.debug);
     }
 
     /* ngInject */

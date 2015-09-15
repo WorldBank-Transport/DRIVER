@@ -6,6 +6,9 @@
     //
     // Note: This module is also mocked for Travis. If any changes are made to it, they should also
     // be made in: `schema_editor/test/mock/config.js`
+    //
+    // The web project loads the resources for this project, which includes this config.
+    // The web app has its own config.js constant, which is why these are namespaced.
 
     var config = {
         debug: {% if 'development' in group_names %}true{% else %}false{% endif %},
@@ -15,12 +18,9 @@
         },
         api: {
             hostname: '{{ editor_js_api_hostname }}'
-        },
-        windshaft: {
-            hostname: '{{ web_js_windshaft_hostname }}'
         }
     };
 
     angular.module('ase.config', [])
-    .constant('Config', config);
+    .constant('ASEConfig', config);
 })();

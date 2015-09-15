@@ -16,5 +16,5 @@
     };
 
     angular.module('driver.config', [])
-    .constant('Config', config);
+    .constant('WebConfig', config);
 })();

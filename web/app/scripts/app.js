@@ -2,16 +2,16 @@
     'use strict';
 
     /* ngInject */
-    function DefaultRoutingConfig($locationProvider, $urlRouterProvider, Config) {
-        $locationProvider.html5Mode(Config.html5Mode.enabled);
-        $locationProvider.hashPrefix(Config.html5Mode.prefix);
+    function DefaultRoutingConfig($locationProvider, $urlRouterProvider, WebConfig) {
+        $locationProvider.html5Mode(WebConfig.html5Mode.enabled);
+        $locationProvider.hashPrefix(WebConfig.html5Mode.prefix);
 
         $urlRouterProvider.otherwise('/');
     }
 
     /* ngInject */
-    function LogConfig($logProvider, Config) {
-        $logProvider.debugEnabled(Config.debug);
+    function LogConfig($logProvider, WebConfig) {
+        $logProvider.debugEnabled(WebConfig.debug);
     }
 
     function LeafletDefaultsConfig(LeafletDefaultsProvider) {

@@ -7,6 +7,9 @@
     //
     // Note: This module is also mocked for Travis. If any changes are made to it, they should also
     // be made in: `web/test/mock/config.js`
+    //
+    // The schema editor project resources loaded by this project also include
+    // a config constant, which is why these are namespaced.
 
     var config = {
         debug: {% if 'development' in group_names %}true{% else %}false{% endif %},
@@ -23,5 +26,5 @@
     };
 
     angular.module('driver.config', [])
-    .constant('Config', config);
+    .constant('WebConfig', config);
 })();

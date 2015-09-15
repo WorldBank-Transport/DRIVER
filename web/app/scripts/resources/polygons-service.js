@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function Polygons($resource, Config) {
-        return $resource(Config.api.hostname + '/api/boundarypolygons/:id/', {id: '@uuid'}, {
+    function Polygons($resource, WebConfig) {
+        return $resource(WebConfig.api.hostname + '/api/boundarypolygons/:id/', {id: '@uuid'}, {
             create: {
                 method: 'POST'
             },

@@ -3,8 +3,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordSchemas($resource, Config) {
-        return $resource(Config.api.hostname + '/api/recordschemas/:id/', {id: '@uuid'}, {
+    function RecordSchemas($resource, ASEConfig) {
+        return $resource(ASEConfig.api.hostname + '/api/recordschemas/:id/', {id: '@uuid'}, {
             create: {
                 method: 'POST'
             },
