@@ -23,9 +23,6 @@
                 init();
 
                 function init() {
-
-                    // TODO: get/set existing selection in localStorage using 'state' module
-
                     /**
                      * A simple wrapper around driver-filterbar's updateFilter function.
                      *
@@ -34,6 +31,13 @@
                     scope.updateFilter = function(filterLabel, selection) {
                         filterbarController.updateFilter(filterLabel, selection);
                     };
+
+                    // restore previously set filter selection on page reload
+                    scope.$on('driver.filterbar:restored', function(event, filter) {
+                        if (filter.label === scope.label) {
+                            scope.selection = filter.value;
+                        }
+                    });
                 }
             }
         };
