@@ -2,31 +2,38 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($scope, RecordSchemas) {
+    function FilterbarController($log, $scope, FilterState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
 
         /**
          * A simple function to add/update a filter
+         r
          *
          * @param filterLabel {string} label of which field to filter
          * @param filterObj {object} filter data
          */
         ctl.updateFilter = function(filterLabel, filterObj) {
+            // TODO: modify condition for checking if filter should be unset?
+            // Something falsy might be a valid filter value, such as zero for a number filter.
+            // An empty string indicates an option field should be unset.
             if (filterObj) {
                 ctl.filters[filterLabel] = angular.copy(filterObj);
             } else {
                 //unset
                 delete ctl.filters[filterLabel];
             }
+
+            FilterState.saveFilters(ctl.filters);
             ctl.sendFilter();
         };
 
         /**
-         * Transform filter label-value pairs into parameters to send to API,
-         * then emit event with the query parameters built.
+         * Transform filter label-value pairs into parameters to send to API.
+         *
+         * @returns {Object} Filter query params object ready to send off to API endpoint
          */
-        ctl.sendFilter = function() {
+        ctl.buildFilter = function() {
             var params = {};
             angular.forEach(ctl.filters, function(value, key) {
                 // extract the object hierarchy from the label
@@ -46,7 +53,14 @@
                 _.merge(params, filterParam);
             });
 
-            $scope.$emit('driver.filterbar:changed', {jcontains: params});
+            return {jcontains: params};
+        };
+
+        /**
+         * Emit event with the built query parameters.
+         */
+        ctl.sendFilter = function() {
+            $scope.$emit('driver.filterbar:changed', ctl.buildFilter());
         };
 
         /**
@@ -79,10 +93,21 @@
             }
         });
 
+        $scope.$on('driver.filterbar:restore', function(event, filters) {
+            ctl.filters = filters;
+            _.each(filters, function(value, label) {
+                $log.debug('restored filter ' + label + ' has val ' + value);
+                // TODO: listen for this in filter widget controllers to set value if label matches
+                $scope.$broadcast('driver.filterbar:restored', {label: label, value: value});
+            });
+
+            ctl.sendFilter();
+        });
+
         return ctl;
     }
 
     angular.module('driver.filterbar')
-    .controller('filterbarController', FilterbarController);
+    .controller('FilterbarController', FilterbarController);
 
 })();
