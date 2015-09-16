@@ -8,16 +8,12 @@
 
         /**
          * A simple function to add/update a filter
-         r
          *
          * @param filterLabel {string} label of which field to filter
          * @param filterObj {object} filter data
          */
         ctl.updateFilter = function(filterLabel, filterObj) {
-            // TODO: modify condition for checking if filter should be unset?
-            // Something falsy might be a valid filter value, such as zero for a number filter.
-            // An empty string indicates an option field should be unset.
-            if (filterObj) {
+            if (filterObj || filterObj === 0) {
                 ctl.filters[filterLabel] = angular.copy(filterObj);
             } else {
                 //unset
