@@ -18,6 +18,14 @@
                 function init() {
                     scope.filter = {};
                     scope.error = {};
+
+                    // restore previously set filter selection on page reload
+                    scope.$on('driver.filterbar:restored', function(event, filter) {
+                        if (filter.label === scope.label) {
+                            scope.filter = filter.value;
+                            scope.isMinMaxValid();
+                        }
+                    });
                 }
 
                 /**
