@@ -25,7 +25,7 @@
          */
         svc.restoreFilters = function() {
             var filterString = localStorageService.get(storageName);
-            var filterObj = JSON.parse(filterString);
+            var filterObj = !!filterString ? JSON.parse(filterString) : {};
 
             // if no filters, should set empty object (not null)
             if (!filterObj) {
