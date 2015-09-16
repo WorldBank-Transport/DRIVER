@@ -5,6 +5,7 @@
     function FilterbarController($log, $scope, FilterState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
+        ctl.filterables = {};
 
         /**
          * A simple function to add/update a filter
