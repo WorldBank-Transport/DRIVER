@@ -62,8 +62,9 @@
                 var deferred = $q.defer();
                 if (!options) {
                     updateOptions().then(function() { deferred.resolve(options); });
+                } else {
+                    deferred.resolve(options);
                 }
-                deferred.resolve(options);
                 optionPromise = deferred.promise;
             }
             optionPromise.then(function() { gettingOptions = false; });

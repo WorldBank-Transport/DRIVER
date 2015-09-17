@@ -6,7 +6,7 @@
         var module = {
             restrict: 'E',
             templateUrl: 'scripts/filterbar/filterbar.html',
-            controller: 'filterbarController',
+            controller: 'FilterbarController',
             controllerAs: 'filterbar'
         };
         return module;

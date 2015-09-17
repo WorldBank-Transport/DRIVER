@@ -14,6 +14,7 @@
         $logProvider.debugEnabled(WebConfig.debug);
     }
 
+    /* ngInject */
     function LeafletDefaultsConfig(LeafletDefaultsProvider) {
         LeafletDefaultsProvider.setDefaults({
             center: [12.375, 121.5], // geographic center of Philippines
@@ -22,8 +23,10 @@
         });
     }
 
+    /* ngInject */
     function LocalStorageConfig(localStorageServiceProvider) {
-        localStorageServiceProvider.setPrefix('DRIVER');
+        localStorageServiceProvider.setPrefix('DRIVER.web')
+                                   .setStorageType('sessionStorage');
     }
 
     /* ngInject */

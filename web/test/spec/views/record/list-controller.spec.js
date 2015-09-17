@@ -42,13 +42,17 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
 
+        $rootScope.$broadcast('driver.filterbar:changed', {});
         Controller = $controller('RecordListController', {
-            $scope: $scope
+            $scope: $scope,
+            $rootScope: $rootScope
         });
         $scope.$apply();
 
+        $httpBackend.flush();
+        $rootScope.$broadcast('driver.filterbar:changed', {});
+        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
 
@@ -72,12 +76,15 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
 
         Controller = $controller('RecordListController', {
             $scope: $scope
         });
         $scope.$apply();
+        $httpBackend.flush();
+
+        $rootScope.$broadcast('driver.filterbar:changed', {});
+        $httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
         $httpBackend.flush();
 
         var recordOffsetResponse = DriverResourcesMock.RecordResponse;

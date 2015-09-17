@@ -37,12 +37,15 @@ describe('driver.views.record: RecordList', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
-        $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-record-list></driver-record-list>')(scope);
         $rootScope.$apply();
 
+        $httpBackend.flush();
+
+        $rootScope.$broadcast('driver.filterbar:changed', {});
+        $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
 

@@ -381,6 +381,11 @@ module.exports = function (grunt) {
           dest: '<%= yeoman.dist %>'
         }, {
           expand: true,
+          cwd: './bower_components/Leaflet.draw/dist/images/',
+          src: '*',
+          dest: '<%= yeoman.dist %>/styles/images'
+        }, {
+          expand: true,
           cwd: './bower_components/leaflet/dist/images/',
           src: '*',
           dest: '<%= yeoman.dist %>/styles/images'

@@ -15,6 +15,12 @@
     }
 
     /* ngInject */
+    function LocalStorageConfig(localStorageServiceProvider) {
+        localStorageServiceProvider.setPrefix('DRIVER.ASE')
+                                   .setStorageType('sessionStorage');
+    }
+
+    /* ngInject */
     function HttpConfig($httpProvider) {
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -34,9 +40,11 @@
         'ase.views.geography',
         'ase.views.recordtype',
         'ase.resources',
-        'ui.router'
+        'ui.router',
+        'LocalStorageModule'
     ])
     .config(DefaultRoutingConfig)
     .config(HttpConfig)
+    .config(LocalStorageConfig)
     .config(LogConfig);
 })();
