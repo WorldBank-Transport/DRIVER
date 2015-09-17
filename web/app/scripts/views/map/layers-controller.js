@@ -127,6 +127,9 @@
             ctl.editLayers.clearLayers();
             ctl.editLayers.addLayer(layer);
 
+            // pan/zoom to selected area
+            ctl.map.fitBounds(layer.getBounds());
+
             // TODO: send exported shape to filter.
             $log.debug(ctl.editLayers.toGeoJSON());
 
