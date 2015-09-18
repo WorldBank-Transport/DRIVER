@@ -86,18 +86,20 @@ function getRequestParameters(request) {
         params.interactivity = 'uuid,occurred_from,data';
         params.style = eventsStyle;
 
-        // build query for record points
-        params.sql = baseRecordQuery;
-        if (params.id !== 'ALL') {
-            params.sql += filterRecordQuery + params.id + "'";
+        // build query for record points if do not already have a query
+        if (request.query.sql) {
+            params.sql = request.query.sql;
+        } else {
+            params.sql = baseRecordQuery;
+            if (params.id !== 'ALL') {
+                params.sql += filterRecordQuery + params.id + "'" + endRecordQuery;
+            }
         }
 
         if (request.query.heatmap) {
             // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
         }
-
-        params.sql += endRecordQuery;
     } else {
         params.interactivity = 'label';
         params.style = boundaryStyle;

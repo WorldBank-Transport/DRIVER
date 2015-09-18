@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope, WebConfig, RecordState) {
+    function DriverLayersController($log, $scope, $rootScope, WebConfig, RecordState, Records) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -12,6 +12,7 @@
         ctl.overlays = null;
         ctl.baseMaps = null;
         ctl.editLayers = null;
+        ctl.filterSql = null;
 
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var streetsUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
@@ -76,11 +77,12 @@
                             allowIntersection: false,
                             showArea: true,
                             drawError: {
-                                color: '#e1e100', // Color the shape will turn when intersects
+                                // TODO: pick a custom color to set, or remove option
+                                //color: '#e1e100', // Color the shape will turn when intersects
                                 message: '<strong>Filter area cannot intersect itself.</strong>'
                             },
                             shapeOptions: {
-                                color: '#bdda55'
+                                //color: '#bdda55'
                             }
                         },
                         edit: {
@@ -104,12 +106,17 @@
                 });
 
                 // only allow one filter shape at a time
+                // TODO: temporarily remove interactivity layer while editing
                 ctl.map.on('draw:drawstart', function() {
                     ctl.editLayers.clearLayers();
+                    ctl.filterSql = null;
+                    ctl.setRecordLayers();
                 });
 
                 ctl.map.on('draw:deleted', function() {
                     ctl.editLayers.clearLayers();
+                    ctl.filterSql = null;
+                    ctl.setRecordLayers();
                 });
 
 
@@ -117,21 +124,33 @@
         };
 
         function filterShapeCreated(event) {
-            var type = event.layerType;
+            // TODO: is the shape type useful info?
+            //var type = event.layerType;
+
             var layer = event.layer;
 
-            $log.debug('shape type: ' + type);
-            $log.debug('drew layer:');
-            $log.debug(layer);
-
             ctl.editLayers.clearLayers();
+            ctl.filterSql = null;
             ctl.editLayers.addLayer(layer);
 
             // pan/zoom to selected area
             ctl.map.fitBounds(layer.getBounds());
 
-            // TODO: send exported shape to filter.
-            $log.debug(ctl.editLayers.toGeoJSON());
+            // send exported shape to filter.
+            var geojson = ctl.editLayers.toGeoJSON();
+
+            // GEOSGeometry only wants the `geometry` part of the geojson object
+            if (geojson && geojson.features && geojson.features.length) {
+                var geom = geojson.features[0].geometry;
+
+                // get the raw SQL for the filter to send along to Windshaft
+                var params = {query: true, polygon: geom};
+                Records.get(params)
+                .$promise.then(function(sql) {
+                    ctl.filterSql = sql.query;
+                    ctl.setRecordLayers();
+                });
+            }
 
             // TODO: use an interaction event to remove the drawn filter area?
             /*
@@ -233,6 +252,7 @@
         ctl.buildRecordPopup = function(record) {
             // read arbitrary record fields object
             var data = JSON.parse(record.data);
+            var startingUnderscoreRegex = /^_/;
 
             // add header with event date constant field
             /* jshint camelcase: false */
@@ -243,14 +263,19 @@
             // build HTML for popup from the record object
             function strFromObj(obj) {
                 angular.forEach(obj, function(value, key) {
-                    if (typeof value === 'object') {
-                        str += '<h4>' + key + '</h4><div style="margin:15px;">';
-                        // recursively add child things, indented
-                        strFromObj(value);
-                        str += '</div>';
-                    } else {
-                        // have a simple value; display it
-                        str += '<p>' + key + ': ' + value + '</p>';
+                    // Skip _localId hashes, any other presumably private values
+                    // starting with an underscore, and their children.
+                    // Checking type because some keys are numeric.
+                    if (typeof key === 'string' && !key.match(startingUnderscoreRegex)) {
+                        if (typeof value === 'object') {
+                            str += '<h4>' + key + '</h4><div style="margin:15px;">';
+                            // recursively add child things, indented
+                            strFromObj(value);
+                            str += '</div>';
+                        } else {
+                            // have a simple value; display it
+                            str += '<p>' + key + ': ' + value + '</p>';
+                        }
                     }
                 });
             }
@@ -268,11 +293,18 @@
          * @returns {String} The baseUrl with the record type parameter set to the selected type.
          */
         ctl.getFilteredUrl = function(baseUrl) {
+            var url = baseUrl;
             if (ctl.recordType && ctl.recordType !== 'ALL') {
-                return baseUrl.replace(/ALL/, ctl.recordType);
-            } else {
-                return baseUrl;
+                url = url.replace(/ALL/, ctl.recordType);
             }
+
+            if (ctl.filterSql) {
+                // TODO: find a less hacky way to handle building URLs for Windshaft
+                url += url.match(/\?/) ? '&sql=' : '?sql=';
+                url += encodeURIComponent(ctl.filterSql);
+            }
+
+            return url;
         };
 
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {

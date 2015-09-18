@@ -105,7 +105,7 @@ Vagrant.configure("2") do |config|
     app.ssh.forward_x11 = true
 
     app.vm.provider :virtualbox do |v|
-      v.memory = ENV.fetch("DRIVER_APP_MEM", 2094)
+      v.memory = ENV.fetch("DRIVER_APP_MEM", 3072)
       v.cpus = ENV.fetch("DRIVER_APP_CPUS", 2)
     end
   end
