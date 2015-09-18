@@ -3,22 +3,22 @@
 
     /* ngInject */
     function NavbarController($log, $window, $rootScope, $scope, $state,
-                              GeographyState, RecordState, PolygonState) {
+                              GeographyState, RecordState, BoundaryState) {
         var ctl = this;
         var _ = $window._;
         init();
         ctl.onGeographySelected = onGeographySelected;
-        ctl.onPolygonSelected = onPolygonSelected;
+        ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
         ctl.onStateSelected = onStateSelected;
         ctl.navigateToStateName = navigateToStateName;
-        ctl.getPolygonLabel = getPolygonLabel;
+        ctl.getBoundaryLabel = getBoundaryLabel;
         $rootScope.$on('$stateChangeSuccess', setStates);
 
         function init() {
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
-            PolygonState.getOptions().then(function(opts) { ctl.polygonResults = opts; });
+            BoundaryState.getOptions().then(function(opts) { ctl.boundaryResults = opts; });
             setStates();
         }
 
@@ -31,12 +31,12 @@
             updateState();
         });
 
-        // Polygon selections
-        $scope.$on('driver.state.polygonstate:options', function(event, options) {
-            ctl.polygonResults = options;
+        // Boundary selections
+        $scope.$on('driver.state.boundarystate:options', function(event, options) {
+            ctl.boundaryResults = options;
         });
-        $scope.$on('driver.state.polygonstate:selected', function(event, selected) {
-            ctl.polygonSelected = selected;
+        $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+            ctl.boundarySelected = selected;
             updateState();
         });
 
@@ -45,9 +45,9 @@
             ctl.geographyResults = options;
         });
         $scope.$on('driver.state.geographystate:selected', function(event, selected) {
-            // Need to get the new list of polygons for the selected geography
+            // Need to get the new list of boundaries for the selected geography
             ctl.geographySelected = selected;
-            PolygonState.updateOptions({'boundary': selected.uuid}).then(function() {
+            BoundaryState.updateOptions({'boundary': selected.uuid}).then(function() {
                 updateState();
             });
         });
@@ -65,11 +65,11 @@
 
         // Updates the ui router state based on selected navigation parameters
         function updateState() {
-            if (ctl.stateSelected && ctl.geographySelected && ctl.polygonSelected) {
+            if (ctl.stateSelected && ctl.geographySelected && ctl.boundarySelected) {
                 $state.go(ctl.stateSelected.name, {
                     rtuuid: ctl.recordTypeSelected.uuid,
                     geouuid: ctl.geographySelected.uuid,
-                    polyuuid: ctl.polygonSelected.id
+                    polyuuid: ctl.boundarySelected.id
                 });
             }
         }
@@ -79,9 +79,9 @@
             GeographyState.setSelected(geography);
         }
 
-        // Handler for when a polygon is selected from the dropdown
-        function onPolygonSelected(polygon) {
-            PolygonState.setSelected(polygon);
+        // Handler for when a boundary is selected from the dropdown
+        function onBoundarySelected(boundary) {
+            BoundaryState.setSelected(boundary);
         }
 
         // Handler for when a record type is selected from the dropdown
@@ -100,14 +100,14 @@
             onStateSelected($state.get(stateName));
         }
 
-        // Returns the label for a polygon, based on the currently selected geography
+        // Returns the label for a boundary, based on the currently selected geography
         // TODO: this should eventually be moved to an angular filter if needed elsewhere
-        function getPolygonLabel(polygon) {
-            if (!polygon || !polygon.properties || !polygon.properties.data || !ctl.geographySelected) {
+        function getBoundaryLabel(boundary) {
+            if (!boundary || !boundary.properties || !boundary.properties.data || !ctl.geographySelected) {
                 return '';
             }
             /* jshint camelcase: false */
-            return polygon.properties.data[ctl.geographySelected.display_field];
+            return boundary.properties.data[ctl.geographySelected.display_field];
             /* jshint camelcase: true */
         }
     }

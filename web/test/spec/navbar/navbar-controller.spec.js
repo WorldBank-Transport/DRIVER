@@ -32,16 +32,16 @@ describe('driver.navbar: NavbarController', function () {
         spyOn($state, 'go');
     }));
 
-    it('should have record types, polygons, and available states', function () {
+    it('should have record types, boundaries, and available states', function () {
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var polygonUrl = /\/api\/boundarypolygons\/\?active=True/;
+        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope
@@ -53,7 +53,7 @@ describe('driver.navbar: NavbarController', function () {
 
         expect(Controller.recordTypeResults.length).toBeGreaterThan(0);
         expect(Controller.geographyResults.length).toBeGreaterThan(0);
-        expect(Controller.polygonResults.length).toBeGreaterThan(0);
+        expect(Controller.boundaryResults.length).toBeGreaterThan(0);
     });
 
     it('should not have current state as an option', function () {
@@ -61,11 +61,11 @@ describe('driver.navbar: NavbarController', function () {
         var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var polygonUrl = /\/api\/boundarypolygons\/\?active=True/;
+        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
 
         $state.current = $state.get('dashboard');
 
@@ -89,11 +89,11 @@ describe('driver.navbar: NavbarController', function () {
         var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var polygonUrl = /\/api\/boundarypolygons\/\?active=True/;
+        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope,

@@ -44,12 +44,12 @@
                 </li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        {{ ctl.getPolygonLabel(ctl.polygonSelected) }}
+                        {{ ctl.getBoundaryLabel(ctl.boundarySelected) }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="nav-rt-item" ng-repeat="polygon in ctl.polygonResults | orderBy:'label'">
-                            <a ng-click="ctl.onPolygonSelected(polygon)">
-                                {{ ctl.getPolygonLabel(polygon) }}
+                        <li class="nav-rt-item" ng-repeat="boundary in ctl.boundaryResults | orderBy:'label'">
+                            <a ng-click="ctl.onBoundarySelected(boundary)">
+                                {{ ctl.getBoundaryLabel(boundary) }}
                             </a>
                         </li>
                     </ul>

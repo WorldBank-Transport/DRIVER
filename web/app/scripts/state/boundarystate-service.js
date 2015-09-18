@@ -1,12 +1,12 @@
 /**
- * Polygon Type state control - changes to the private vars which define this state
+ * Boundary Type state control - changes to the private vars which define this state
  *  are broadcast to rootscope for use by controllers
  */
 (function () {
     'use strict';
 
     /* ngInject */
-    function PolygonState($log, $rootScope, $q, localStorageService, Polygons) {
+    function BoundaryState($log, $rootScope, $q, localStorageService, Boundaries) {
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;
@@ -32,11 +32,11 @@
          */
         function updateOptions(params) {
             var filterParams = angular.extend({}, defaultParams, params);
-            return Polygons.query(filterParams).$promise.then(function(results) {
+            return Boundaries.query(filterParams).$promise.then(function(results) {
                   options = results;
-                  $rootScope.$broadcast('driver.state.polygonstate:options', options);
+                  $rootScope.$broadcast('driver.state.boundarystate:options', options);
                   if (!results.length) {
-                      $log.warn('No polygons returned');
+                      $log.warn('No boundaries returned');
                   } else {
                       if (!selected && options[0]) {
                           selected = svc.setSelected(options[0]);
@@ -64,7 +64,7 @@
         function setSelected(selection) {
             if (!initialized) {
                 selection = _.find(options, function(d) {
-                    var oldPoly = localStorageService.get('polygon.selected');
+                    var oldPoly = localStorageService.get('boundary.selected');
                     if (!oldPoly) {
                         return {'id': ''};
                     }
@@ -83,8 +83,8 @@
             } else {
                 selected = null;
             }
-            localStorageService.set('polygon.selected', selected);
-            $rootScope.$broadcast('driver.state.polygonstate:selected', selected);
+            localStorageService.set('boundary.selected', selected);
+            $rootScope.$broadcast('driver.state.boundarystate:selected', selected);
             return selected;
         }
 
@@ -102,5 +102,5 @@
     }
 
     angular.module('driver.state')
-    .service('PolygonState', PolygonState);
+    .service('BoundaryState', BoundaryState);
 })();

@@ -74,6 +74,97 @@
             ]
         };
 
+        var BoundaryResponse = {
+            "count": 1,
+            "next": null,
+            "previous": null,
+            "results": [
+                {
+                    "uuid": "ce9b10ef-1cec-46e9-8a0b-4c7d9c0881ab",
+                    "label": "admin zero",
+                    "color": "#fffff",
+                    "display_field": "",
+                    "data_fields": [
+                        "GADMID",
+                        "ISO",
+                        "NAME_ENGLI",
+                        "NAME_ISO",
+                        "NAME_FAO",
+                        "NAME_LOCAL",
+                        "NAME_OBSOL",
+                        "NAME_VARIA",
+                        "NAME_NONLA",
+                        "NAME_FRENC",
+                        "NAME_SPANI",
+                        "NAME_RUSSI",
+                        "NAME_ARABI",
+                        "NAME_CHINE",
+                        "WASPARTOF",
+                        "CONTAINS",
+                        "SOVEREIGN",
+                        "ISO2",
+                        "WWW",
+                        "FIPS",
+                        "ISON",
+                        "VALIDFR",
+                        "VALIDTO",
+                        "AndyID",
+                        "POP2000",
+                        "SQKM",
+                        "POPSQKM",
+                        "UNREGION1",
+                        "UNREGION2",
+                        "DEVELOPING",
+                        "CIS",
+                        "Transition",
+                        "OECD",
+                        "WBREGION",
+                        "WBINCOME",
+                        "WBDEBT",
+                        "WBOTHER",
+                        "CEEAC",
+                        "CEMAC",
+                        "CEPLG",
+                        "COMESA",
+                        "EAC",
+                        "ECOWAS",
+                        "IGAD",
+                        "IOC",
+                        "MRU",
+                        "SACU",
+                        "UEMOA",
+                        "UMA",
+                        "PALOP",
+                        "PARTA",
+                        "CACM",
+                        "EurAsEC",
+                        "Agadir",
+                        "SAARC",
+                        "ASEAN",
+                        "NAFTA",
+                        "GCC",
+                        "CSN",
+                        "CARICOM",
+                        "EU",
+                        "CAN",
+                        "ACP",
+                        "Landlocked",
+                        "AOSIS",
+                        "SIDS",
+                        "Islands",
+                        "LDC",
+                        "Shape_Leng",
+                        "Shape_Area"
+                    ],
+                    "errors": null,
+                    "created": "2015-09-11T15:07:54.893439Z",
+                    "modified": "2015-09-11T15:07:56.876548Z",
+                    "status": "COMPLETE",
+                    "source_file": "http://localhost:7000/media/boundaries/2015/09/11/PHL_adm0.zip"
+                }
+            ]
+        };
+
         var PolygonResponse = {
             'count': 3,
             'next': null,
@@ -149,6 +240,7 @@
         };
 
         return {
+            BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
             RecordResponse: RecordResponse
         };
