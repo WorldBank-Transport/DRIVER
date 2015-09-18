@@ -124,12 +124,10 @@
         };
 
         function filterShapeCreated(event) {
-            var type = event.layerType;
-            var layer = event.layer;
+            // TODO: is the shape type useful info?
+            //var type = event.layerType;
 
-            $log.debug('shape type: ' + type);
-            $log.debug('drew layer:');
-            $log.debug(layer);
+            var layer = event.layer;
 
             ctl.editLayers.clearLayers();
             ctl.filterSql = null;
@@ -254,6 +252,7 @@
         ctl.buildRecordPopup = function(record) {
             // read arbitrary record fields object
             var data = JSON.parse(record.data);
+            var startingUnderscoreRegex = /^_/;
 
             // add header with event date constant field
             /* jshint camelcase: false */
@@ -264,14 +263,19 @@
             // build HTML for popup from the record object
             function strFromObj(obj) {
                 angular.forEach(obj, function(value, key) {
-                    if (typeof value === 'object') {
-                        str += '<h4>' + key + '</h4><div style="margin:15px;">';
-                        // recursively add child things, indented
-                        strFromObj(value);
-                        str += '</div>';
-                    } else {
-                        // have a simple value; display it
-                        str += '<p>' + key + ': ' + value + '</p>';
+                    // Skip _localId hashes, any other presumably private values
+                    // starting with an underscore, and their children.
+                    // Checking type because some keys are numeric.
+                    if (typeof key === 'string' && !key.match(startingUnderscoreRegex)) {
+                        if (typeof value === 'object') {
+                            str += '<h4>' + key + '</h4><div style="margin:15px;">';
+                            // recursively add child things, indented
+                            strFromObj(value);
+                            str += '</div>';
+                        } else {
+                            // have a simple value; display it
+                            str += '<p>' + key + ': ' + value + '</p>';
+                        }
                     }
                 });
             }
