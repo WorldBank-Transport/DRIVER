@@ -19,6 +19,14 @@ postgresql_host: "database.service.driver.internal"
 postgresql_port: 5432
 postgresql_version: "9.4"
 
+## TABLES USED BY WINDSHAFT
+windshaft_tables:
+    - ashlar_record
+    - ashlar_boundary
+    - ashlar_boundarypolygon
+    - ashlar_recordschema
+    - ashlar_recordtype
+
 redis_bind_address: "redis.service.driver.internal"
 redis_port: 6379
 

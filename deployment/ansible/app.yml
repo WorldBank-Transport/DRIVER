@@ -19,3 +19,10 @@
 
   roles:
     - { role: "driver.app" }
+
+- hosts: database-servers
+
+  sudo: True
+
+  roles:
+    - { role: "driver.access" }

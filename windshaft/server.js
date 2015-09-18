@@ -2,10 +2,10 @@ var Windshaft   = require('windshaft');
 var healthCheck = require('./healthCheck');
 var driver      = require('./driver.js');
 
-var dbUser = process.env.DRIVER_DB_USER;
+var dbUser = process.env.WINDSHAFT_DB_USER;
 var dbHost = process.env.DRIVER_DB_HOST;
 var dbPort = process.env.DRIVER_DB_PORT;
-var dbPassword = process.env.DRIVER_DB_PASSWORD;
+var dbPassword = process.env.WINDSHAFT_DB_PASSWORD;
 var redisHost = process.env.DRIVER_REDIS_HOST;
 var redisPort = process.env.DRIVER_REDIS_PORT;
 
