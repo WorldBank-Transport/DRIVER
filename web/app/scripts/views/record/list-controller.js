@@ -100,8 +100,17 @@
                 return;
             }
 
-            ctl.propertiesKey = detailsDefinitions[0].properties;
-            ctl.headerKeys = _.without(_.keys(ctl.propertiesKey), '_localId');
+            // Get the property names -- sorted by propertyOrder
+            ctl.headerKeys = _(detailsDefinitions[0].properties)
+                .omit('_localId')
+                .map(function(obj, propertyName) {
+                    obj.propertyName = propertyName;
+                    return obj;
+                })
+                .sortBy('propertyOrder')
+                .map('propertyName')
+                .value();
+
             ctl.detailsProperty = detailsDefinitions[0].title;
         }
 

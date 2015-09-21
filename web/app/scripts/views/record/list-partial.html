@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-xs-3">
                     <a class="btn btn-default pull-right" ui-sref="record.add()">
-                        Add New {{ ::ctl.recordType.label }}
+                        Add New {{ ctl.recordType.label }}
                     </a>
                 </div>
             </div>
@@ -42,7 +42,12 @@
                             {{ ::record.occurred_to | date:'short' }}
                         </td>
                         <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
-                            {{ ::record.data[ctl.detailsProperty][headerKey] }}
+                            <driver-details-field
+                                compact="true"
+                                data="::record.data[ctl.detailsProperty][headerKey]"
+                                record="::record"
+                                property="::ctl.recordSchema.schema.definitions[ctl.detailsProperty].properties[headerKey]">
+                            </driver-details-field>
                         </td>
 
                         <td class="links">

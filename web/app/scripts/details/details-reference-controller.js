@@ -17,8 +17,12 @@
             if (references.length) {
                 var reference = references[0];
                 var keys = _.without(_.keys(reference), '_localId', '$$hashKey');
+                var maxKeyLength = 12;
                 ctl.referenceDisplay = _.map(keys.slice(0, 3), function(key) {
-                    return reference[key];
+                    if (reference[key].length < maxKeyLength) {
+                        return reference[key];
+                    }
+                    return reference[key].substring(0, maxKeyLength) + '...';
                 }).join(' ');
             }
         }
