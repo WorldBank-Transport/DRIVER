@@ -8,15 +8,12 @@
     /* ngInject */
     function FilterState($log, $rootScope, localStorageService) {
         var svc = this;
-        var oldFilters;
-
-        // API
-        svc.restoreFilters = restoreFilters;
-        svc.saveFilters = saveFilters;
-        svc.get = get;
-        svc.clear = clear;
 
         var storageName = 'filterbar.filters';
+
+        svc.restoreFilters = restoreFilters;
+        svc.saveFilters = saveFilters;
+        svc.clear = clear;
 
         /**
          * Store current filters, in case of page reload.
@@ -27,32 +24,22 @@
             localStorageService.set(storageName, filters);
         }
 
-
-        /**
-         * A simple method for returning only the relevant portion of oldFilters
-         */
-        function get(key) {
-            return oldFilters[key] || {};
-        }
-
-
+        // TODO: currently unused
         function clear() {
             localStorageService.remove(storageName);
         }
-
 
         /**
          * Broadcast event to trigger setting previously stored filters back on the filter bar.
          */
         function restoreFilters() {
-            var filterString = localStorageService.get(storageName);
-            var filterObj = !!filterString ? filterString : {};
+            var filterObj = localStorageService.get(storageName);
+            filterObj = !!filterObj ? filterObj : {};
 
             // if no filters, should set empty object (not null)
             if (!filterObj) {
                 filterObj = {};
             }
-            oldFilters = filterObj;
 
             $log.debug('Restoring filters:');
             $log.debug(filterObj);
