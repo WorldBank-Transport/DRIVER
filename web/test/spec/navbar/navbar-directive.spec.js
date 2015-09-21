@@ -39,11 +39,11 @@ describe('driver.navbar: Navbar', function () {
     it('should load directive', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var polygonUrl = /.*\/api\/boundarypolygons\/\?active=True/;
+        var boundaryUrl = /.*\/api\/boundaries\/\?active=True/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(polygonUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-navbar></driver-navbar>')(scope);
