@@ -10,6 +10,7 @@
         var svc = this;
 
         var storageName = 'filterbar.filters';
+        var geoStorageName = 'filterbar.geofilter';
 
         svc.restoreFilters = restoreFilters;
         svc.saveFilters = saveFilters;
@@ -19,14 +20,17 @@
          * Store current filters, in case of page reload.
          *
          * @param {Object} filters FilterBar's filters object to restore on load.
+         * @param {Object} filterGeom GeoJSON boundary to filter by.
          */
-        function saveFilters(filters) {
+        function saveFilters(filters, filterGeom) {
             localStorageService.set(storageName, filters);
+            localStorageService.set(geoStorageName, filterGeom);
         }
 
         // TODO: currently unused
         function clear() {
             localStorageService.remove(storageName);
+            localStorageService.remove(geoStorageName);
         }
 
         /**
@@ -36,16 +40,14 @@
             var filterObj = localStorageService.get(storageName);
             filterObj = !!filterObj ? filterObj : {};
 
-            // if no filters, should set empty object (not null)
-            if (!filterObj) {
-                filterObj = {};
-            }
+            var geoFilterObj = localStorageService.get(geoFilterObj);
+            geoFilterObj = !!geoFilterObj ? geoFilterObj : null;
 
             $log.debug('Restoring filters:');
-            $log.debug(filterObj);
+            $log.debug([filterObj, geoFilterObj]);
 
             // tell the filterbar to set the filters back
-            $rootScope.$broadcast('driver.filterbar:restore', filterObj);
+            $rootScope.$broadcast('driver.filterbar:restore', [filterObj, geoFilterObj]);
         }
 
         return svc;

@@ -5,6 +5,7 @@
     function FilterbarController($log, $scope, FilterState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
+        ctl.filterPolygon = null;
         ctl.filterables = {};
 
         /**
@@ -24,6 +25,17 @@
             FilterState.saveFilters(ctl.filters);
             ctl.sendFilter();
         };
+
+        /**
+         * Set the bounding polygon for the filtering region.
+         *
+         * @param {Object} polygon GeoJSON polygon to filter by.
+         */
+         ctl.setFilterPolygon = function(polygon) {
+            ctl.filterPolygon = !!polygon ? polygon : null;
+            FilterState.saveFilters(ctl.filters, ctl.filterPolygon);
+            ctl.sendFilter();
+         };
 
         /**
          * Transform filter label-value pairs into parameters to send to API.
@@ -50,7 +62,19 @@
                 _.merge(params, filterParam);
             });
 
-            return {jcontains: params};
+            params = {jcontains: params};
+
+            // GEOSGeometry only wants the `geometry` part of the GeoJSON object
+            if (ctl.filterPolygon && ctl.filterPolygon.features &&
+                ctl.filterPolygon.features.length) {
+
+                var geom = ctl.filterPolygon.features[0].geometry;
+                params.polygon = geom;
+            } else {
+                ctl.filterPolygon = null;
+            }
+
+            return params;
         };
 
         /**
@@ -91,14 +115,24 @@
         });
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
-            ctl.filters = filters;
-            _.each(filters, function(value, label) {
+            ctl.filters = filters[0];
+            ctl.filterPolygon = filters[1];
+            _.each(ctl.filters, function(value, label) {
                 $log.debug('restored filter ' + label + ' has val ' + value);
-                // TODO: listen for this in filter widget controllers to set value if label matches
+                // listen for this in filter widget controllers to set value if label matches
                 $scope.$broadcast('driver.filterbar:restored', {label: label, value: value});
             });
 
+            ////////////////////////////////////////////////////////////////////////
+            // TODO: Listen to this on map and draw back polygon somehow?
+            // Also, listen to this in filter bar and draw some sort of indicator with clear button
+            // to show there is a geo filter in place?
+            $scope.$broadcast('driver.filterbar:polygonrestored', ctl.filterPolygon);
             ctl.sendFilter();
+        });
+
+        $scope.$on('driver.views.map:filterdrawn', function(event, polygon) {
+            ctl.setFilterPolygon(polygon);
         });
 
         return ctl;

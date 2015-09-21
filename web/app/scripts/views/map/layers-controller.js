@@ -136,21 +136,9 @@
             // pan/zoom to selected area
             ctl.map.fitBounds(layer.getBounds());
 
-            // send exported shape to filter.
+            // Send exported shape to filterbar, which will send `changed` event with filters.
             var geojson = ctl.editLayers.toGeoJSON();
-
-            // GEOSGeometry only wants the `geometry` part of the geojson object
-            if (geojson && geojson.features && geojson.features.length) {
-                var geom = geojson.features[0].geometry;
-
-                // get the raw SQL for the filter to send along to Windshaft
-                var params = {query: true, polygon: geom};
-                Records.get(params)
-                .$promise.then(function(sql) {
-                    ctl.filterSql = sql.query;
-                    ctl.setRecordLayers();
-                });
-            }
+            $rootScope.$broadcast('driver.views.map:filterdrawn', geojson);
 
             // TODO: use an interaction event to remove the drawn filter area?
             /*
@@ -313,6 +301,19 @@
                 // re-add the layers to refresh with filtered content
                 ctl.setRecordLayers();
             }
+        });
+
+        /**
+         * Update map when filters change
+         */
+        $rootScope.$on('driver.filterbar:changed', function(event, params) {
+            // get the raw SQL for the filter to send along to Windshaft
+            params.query = true;
+            Records.get(params)
+            .$promise.then(function(sql) {
+                ctl.filterSql = sql.query;
+                ctl.setRecordLayers();
+            });
         });
 
         return ctl;
