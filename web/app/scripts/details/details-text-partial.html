@@ -1,17 +1,20 @@
-<div class="col-sm-6">
-    <label>
+<div ng-class="{ 'compact': ctl.compact, 'col-sm-6': !ctl.compact }">
+    <label ng-if="!ctl.compact">
         {{ ::ctl.property.propertyName }}
     </label>
 
     <div ng-switch on="ctl.property.format">
         <div ng-switch-when="color" class="value color">
-            <svg width="200" height="100">
-                <rect rx="20" ry="20" width="200" height="100" style="fill:{{ ::ctl.data }};" />
+            <svg>
+                <rect class="rectangle" rx="20" ry="20" style="fill:{{ ::ctl.data }};" />
             </svg>
         </div>
 
         <div ng-switch-when="textarea" class="value textarea">
-            <pre>{{ ::ctl.data }}</pre>
+            <pre ng-if="!ctl.compact">{{ ::ctl.data }}</pre>
+            <span ng-if="ctl.compact">
+              {{ ::ctl.data | limitTo: ctl.maxLength }}{{ ::ctl.data.length > ctl.maxLength ? '...' : ''}}
+            </span>
         </div>
 
         <div ng-switch-when="url" class="value url">

@@ -1,0 +1,21 @@
+<div ng-switch on="ctl.property.fieldType">
+    <driver-details-image ng-switch-when="image"
+        property="ctl.property" data="ctl.data" compact="ctl.compact">
+    </driver-details-image>
+
+    <driver-details-reference ng-switch-when="reference"
+        property="ctl.property" data="ctl.data" record="ctl.record" compact="ctl.compact">
+    </driver-details-reference>
+
+    <driver-details-selectlist ng-switch-when="selectlist"
+        property="ctl.property" data="ctl.data" compact="ctl.compact">
+    </driver-details-selectlist>
+
+    <driver-details-text ng-switch-when="text"
+        property="ctl.property" data="ctl.data" compact="ctl.compact">
+    </driver-details-text>
+
+    <div ng-switch-default>
+        No renderer defined for field type: {{ ::property.fieldType }}
+    </div>
+</div>

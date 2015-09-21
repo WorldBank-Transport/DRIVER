@@ -1,5 +1,5 @@
-<div class="col-sm-6">
-    <label>
+<div ng-class="{ 'compact': ctl.compact, 'col-sm-6': !ctl.compact }">
+    <label ng-if="!ctl.compact">
         {{ ::ctl.property.propertyName }}
     </label>
 

@@ -12,7 +12,12 @@
                 <div class="table-body-row-header" ng-click="item.open = !item.open" ng-class="{'open': item.open}">
                     <div class="row">
                         <div class="col-sm-3" ng-repeat="property in ctl.properties | limitTo : ctl.maxDataColumns">
-                            {{ ::item[property.propertyName] }}
+                             <driver-details-field
+                                  compact="true"
+                                  data="::item[property.propertyName]"
+                                  record="::ctl.record"
+                                  property="::property">
+                              </driver-details-field>
                         </div>
                     </div>
                 </div>

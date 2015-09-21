@@ -7,7 +7,8 @@
             restrict: 'AE',
             scope: {
                 property: '=',
-                data: '='
+                data: '=',
+                compact: '='
             },
             templateUrl: 'scripts/details/details-image-partial.html',
             bindToController: true,

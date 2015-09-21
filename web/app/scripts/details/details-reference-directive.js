@@ -8,7 +8,8 @@
             scope: {
                 data: '=',
                 property: '=',
-                record: '='
+                record: '=',
+                compact: '='
             },
             templateUrl: 'scripts/details/details-reference-partial.html',
             bindToController: true,

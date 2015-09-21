@@ -46,6 +46,10 @@ describe('driver.details: DetailsMultiple', function () {
                                '</driver-details-multiple>')(scope);
         $rootScope.$apply();
 
-        expect(element.find('.value.text').length).toEqual(4);
+        // Four compact text fields (from the list view)
+        expect(element.find('.compact .value.text').length).toEqual(4);
+
+        // Eight total text fields (4 compact + 4 non-compact)
+        expect(element.find('.value.text').length).toEqual(8);
     });
 });

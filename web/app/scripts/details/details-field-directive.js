@@ -2,23 +2,24 @@
     'use strict';
 
     /* ngInject */
-    function DetailsText() {
+    function DetailsField() {
         var module = {
             restrict: 'AE',
             scope: {
-              property: '=',
+              compact: '=',
               data: '=',
-              compact: '='
+              property: '=',
+              record: '='
             },
-            templateUrl: 'scripts/details/details-text-partial.html',
+            templateUrl: 'scripts/details/details-field-partial.html',
             bindToController: true,
-            controller: 'DetailsTextController',
+            controller: 'DetailsFieldController',
             controllerAs: 'ctl'
         };
         return module;
     }
 
     angular.module('driver.details')
-    .directive('driverDetailsText', DetailsText);
+    .directive('driverDetailsField', DetailsField);
 
 })();
