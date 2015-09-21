@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function NumericRangeField(FilterState) {
+    function NumericRangeField() {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'numeric-range-field'],
@@ -26,7 +26,6 @@
                 function init() {
                     scope.filter = {};
                     scope.error = {};
-                    scope.filter = FilterState.get(scope.label);
                 }
 
                 /**
