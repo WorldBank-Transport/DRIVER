@@ -14,15 +14,15 @@
                 var minMaxValid = min <= max;
                 if (!minMaxValid) {
                     ctl.error.classes = 'alert-danger';
-                    ctl.error.btnClasses = 'btn-danger';
+                    ctl.error.btnClasses = '';
                 } else {
                     ctl.error.classes = '';
-                    ctl.error.btnClasses = 'btn-primary';
+                    ctl.error.btnClasses = '';
                 }
                 return minMaxValid;
             }
             ctl.error.classes = '';
-            ctl.error.btnClasses = 'btn-primary';
+            ctl.error.btnClasses = '';
             return true;
         };
 
