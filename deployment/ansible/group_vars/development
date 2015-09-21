@@ -7,6 +7,8 @@ postgresql_host: "{{ lookup('env', 'DRIVER_DATABASE_IP') | default('192.168.11.1
 postgresql_listen_addresses: "*"
 postgresql_username: driver
 postgresql_password: driver
+windshaft_db_username: windshaft
+windshaft_db_password: windshaft
 postgresql_database: driver
 postgresql_hba_mapping:
   - { type: "host", database: "all", user: "all", address: "192.168.11.1/24", method: "md5" }

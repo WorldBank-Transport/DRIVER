@@ -99,6 +99,7 @@ Vagrant.configure("2") do |config|
     app.vm.provision "ansible" do |ansible|
       ansible.playbook = "deployment/ansible/app.yml"
       ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
+      ansible.limit = "all"
       ansible.raw_arguments = ["--timeout=60"]
     end
 

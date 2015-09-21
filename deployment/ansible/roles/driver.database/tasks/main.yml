@@ -19,3 +19,11 @@
   failed_when: >
     psql_result.rc != 0 and ("already exists" not in psql_result.stderr)
   changed_when: "psql_result.rc == 0"
+
+- name: Create PostgreSQL user for Windshaft
+  sudo_user: postgres
+  postgresql_user: name="{{ windshaft_db_username }}"
+                   password="{{ windshaft_db_password }}"
+                   role_attr_flags=LOGIN
+                   db="{{ postgresql_database }}"
+                   state=present
