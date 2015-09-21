@@ -61,8 +61,6 @@
             $rootScope.$broadcast('driver.filterbar:restore', filterObj);
         }
 
-        svc.restoreFilters();
-
         return svc;
     }
 
