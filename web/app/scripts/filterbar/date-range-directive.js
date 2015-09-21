@@ -2,31 +2,34 @@
     'use strict';
 
     /* ngInject */
-    function NumericRangeField() {
+    function DateRangeField() {
         var module = {
             restrict: 'A',
-            require: ['^driver-filterbar', 'numeric-range-field'],
-            templateUrl: 'scripts/filterbar/numeric-range.html',
-            controller: 'numericRangeController',
-            scope: {
-                data: '=',
-                label: '='
-            },
+            require: ['^driver-filterbar', 'date-range-field'],
+            templateUrl: 'scripts/filterbar/date-range.html',
+            controller: 'dateRangeController',
             link: function(scope, elem, attrs, ctlArray) {
+                var filterLabel = '__dateRange';
                 var filterBarCtl = ctlArray[0];
-                var numericRangeCtl = ctlArray[1];
+                var dateRangeCtl = ctlArray[1];
                 init();
+                scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
-                    if (filter.label === scope.label) {
-                        scope.filter = filter.value;
+                    if (filter.label === filterLabel) {
+                        scope.dtMin = filter.value.min;
+                        scope.dtMax = filter.value.max;
                         scope.isMinMaxValid();
                     }
                 });
 
+                // On change of DT value
+                scope.onDtRangeChange = function() {
+                    scope.updateFilter(filterLabel, {'min': scope.dtMin, 'max': scope.dtMax});
+                };
+
                 function init() {
-                    scope.filter = {};
                     scope.error = {};
                 }
 
@@ -48,16 +51,17 @@
                  * set classes properly by copying controller's `error` value to this scope
                  */
                 scope.isMinMaxValid = function() {
-                    var validity = numericRangeCtl.isMinMaxValid(scope.filter.min, scope.filter.max);
-                    scope.error = numericRangeCtl.error;
+                    var validity = dateRangeCtl.isMinMaxValid({'min': scope.dtMin, 'max': scope.Max});
+                    scope.error = dateRangeCtl.error;
                     return validity;
                 };
+
             }
         };
         return module;
     }
 
     angular.module('driver.filterbar')
-    .directive('numericRangeField', NumericRangeField);
+    .directive('dateRangeField', DateRangeField);
 
 })();

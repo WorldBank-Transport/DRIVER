@@ -1,12 +1,15 @@
-<div class="navbar navbar-default drop-shadow filterbar">
+<div class="navbar navbar-default drop-shadow filterbar collapse navbar-collapse">
     <div class="pull-left form-inline nav navbar=nav">
         <div class="navbar-header">
             <input type="search" class="form-control" placeholder="Geographic code"></input>
         </div>
         <ul class="nav filterbar-nav">
+            <ul class="nav navbar-nav">
+                <li date-range-field class="dropdown"></li>
+            </ul>
             <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
-                <li ng-if="value.format=='number'" numeric-range-field label="key" data="value"></li>
-                <li ng-if="value.fieldType=='selectlist'" options-field label="key" data="value"></li>
+                <li ng-if="value.format=='number'" numeric-range-field label="key" data="value" class="dropdown"></li>
+                <li ng-if="value.fieldType=='selectlist'" options-field label="key" data="value" class="dropdown"></li>
             </ul>
         </ul>
     </div>

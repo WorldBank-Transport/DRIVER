@@ -23,7 +23,7 @@ describe('driver.state: Records', function () {
     it('should load back saved filters', function () {
         var filter = {'foo#bar': 'baz', 'amplifier': 11};
         FilterState.saveFilters(filter);
-        expect(LocalStorageService.get('filterbar.filters')).toEqual(JSON.stringify(filter));
+        expect(LocalStorageService.get('filterbar.filters')).toEqual(filter);
         FilterState.restoreFilters();
         expect($rootScope.$broadcast).toHaveBeenCalledWith('driver.filterbar:restore', filter);
     });
