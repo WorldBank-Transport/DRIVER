@@ -18,16 +18,6 @@ describe('driver.filterbar: Date Range', function () {
         $rootScope.$apply();
         var filterbarController = Element.controller('driverFilterbar');
 
-        // set the list of filterable things on the parent controller with an option filter
-        var testFilterables = {'my#amplifier': {
-            format: 'number',
-            fieldType: 'text',
-            isSearchable: true,
-            propertyOrder: 0,
-            type: 'string'
-        }};
-
-        filterbarController.filterables = testFilterables;
         $rootScope.$apply();
     }));
 
@@ -35,11 +25,11 @@ describe('driver.filterbar: Date Range', function () {
         // should have no maximum set yet
         expect(Element.find("input[type='text'][name='maximum']").val()).toEqual('');
 
-        // mine goes to eleven
-        $rootScope.$broadcast('driver.filterbar:restore', {'my#amplifier': {min: 0, max: 11}});
+        var date = new Date();
+        $rootScope.$broadcast('driver.filterbar:restore', {'__dateRange': {max: date.toString()}});
         $rootScope.$digest();
 
-        expect(Element.find("input[type='text'][name='maximum']").val()).toEqual('11');
+        expect(Element.find("input[type='text'][name='maximum']").val()).toEqual(date.toString());
     });
 
 });

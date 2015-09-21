@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DateRangeField(FilterState, $timeout) {
+    function DateRangeField(FilterState) {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'date-range-field'],
@@ -15,6 +15,7 @@
 
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
+                    console.log(filter);
                     if (filter.label === filterLabel) {
                         scope.dtMin = filter.value.min;
                         scope.dtMax = filter.value.max;
