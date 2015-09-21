@@ -13,6 +13,8 @@
                 label: '='
             },
             link: function(scope, elem, attrs, ctlArray) {
+                var filterBarCtl = ctlArray[0];
+                var numericRangeCtl = ctlArray[1];
                 init();
 
                 // restore previously set filter selection on page reload
@@ -37,7 +39,7 @@
                  */
                 scope.updateFilter = function(filterLabel, filterObj) {
                     if (scope.isMinMaxValid()) {
-                        ctlArray[0].updateFilter(filterLabel, filterObj);
+                        filterBarCtl.updateFilter(filterLabel, filterObj);
                     }
                 };
 
@@ -46,8 +48,8 @@
                  * set classes properly by copying controller's `error` value to this scope
                  */
                 scope.isMinMaxValid = function() {
-                    var validity = ctlArray[1].isMinMaxValid(scope.filter.min, scope.filter.max);
-                    scope.error = ctlArray[1].error;
+                    var validity = numericRangeCtl.isMinMaxValid(scope.filter.min, scope.filter.max);
+                    scope.error = numericRangeCtl.error;
                     return validity;
                 };
             }

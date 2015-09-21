@@ -62,6 +62,5 @@
     .config(LogConfig)
     .config(LeafletDefaultsConfig)
     .config(LocalStorageConfig)
-    .config(HttpConfig)
-    .run(function(FilterState) { FilterState.restoreFilters(); });
+    .config(HttpConfig);
 })();

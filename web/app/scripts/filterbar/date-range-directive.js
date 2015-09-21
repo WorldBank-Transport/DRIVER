@@ -10,8 +10,10 @@
             controller: 'dateRangeController',
             link: function(scope, elem, attrs, ctlArray) {
                 var filterLabel = '__dateRange';
+                var filterBarCtl = ctlArray[0];
+                var dateRangeCtl = ctlArray[1];
                 init();
-                scope.calendarOptions = {'format': ctlArray[1].dateTimeFormat};
+                scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
@@ -40,7 +42,7 @@
                  */
                 scope.updateFilter = function(filterLabel, filterObj) {
                     if (scope.isMinMaxValid()) {
-                        ctlArray[0].updateFilter(filterLabel, filterObj);
+                        filterBarCtl.updateFilter(filterLabel, filterObj);
                     }
                 };
 
@@ -49,8 +51,8 @@
                  * set classes properly by copying controller's `error` value to this scope
                  */
                 scope.isMinMaxValid = function() {
-                    var validity = ctlArray[1].isMinMaxValid({'min': scope.dtMin, 'max': scope.Max});
-                    scope.error = ctlArray[1].error;
+                    var validity = dateRangeCtl.isMinMaxValid({'min': scope.dtMin, 'max': scope.Max});
+                    scope.error = dateRangeCtl.error;
                     return validity;
                 };
 
