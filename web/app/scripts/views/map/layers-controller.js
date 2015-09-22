@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope, WebConfig, RecordState, Records) {
+    function DriverLayersController($log, $scope, $rootScope,
+                                    WebConfig, FilterState, RecordState, Records) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -58,8 +59,9 @@
                     'CartoDB Positron': streets
                 };
 
-                // add overlays
-                ctl.setRecordLayers();
+                // add filtered overlays
+                // this will trigger `driver.filterbar:changed` when complete
+                FilterState.restoreFilters();
 
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();

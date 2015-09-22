@@ -41,7 +41,7 @@
          */
         function restoreFilters() {
             // this will trigger `driver.filterbar:changed` when complete
-            FilterState.getFilters();
+            FilterState.restoreFilters();
         }
 
         /*
@@ -64,17 +64,8 @@
 
             _.extend(params, ctl.filterParams);
 
-            $log.debug('loading records with params:');
-            $log.debug(params);
-
             return Records.get(params)
                 .$promise.then(function(records) {
-
-                    // TODO: remove me
-                    ////////////////////////////////////////////
-                    $log.debug('got ' + records.count + ' records');
-                    /////////////////////////////////////////////
-
                     ctl.records = records;
                 });
         }
