@@ -109,14 +109,12 @@
                 // TODO: temporarily remove interactivity layer while editing
                 ctl.map.on('draw:drawstart', function() {
                     ctl.editLayers.clearLayers();
-                    ctl.filterSql = null;
-                    ctl.setRecordLayers();
+                    $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
                 ctl.map.on('draw:deleted', function() {
                     ctl.editLayers.clearLayers();
-                    ctl.filterSql = null;
-                    ctl.setRecordLayers();
+                    $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
 
@@ -130,7 +128,7 @@
             var layer = event.layer;
 
             ctl.editLayers.clearLayers();
-            ctl.filterSql = null;
+            $rootScope.$broadcast('driver.views.map:filterdrawn', null);
             ctl.editLayers.addLayer(layer);
 
             // pan/zoom to selected area
@@ -306,15 +304,20 @@
         /**
          * Update map when filters change
          */
-        $rootScope.$on('driver.filterbar:changed', function(event, params) {
+        var filterHandler = $rootScope.$on('driver.filterbar:changed', function(event, filters) {
             // get the raw SQL for the filter to send along to Windshaft
-            params.query = true;
+            var params = {query: true};
+            _.extend(params, filters);
+
             Records.get(params)
             .$promise.then(function(sql) {
                 ctl.filterSql = sql.query;
                 ctl.setRecordLayers();
             });
         });
+
+        // $rootScope listeners must be manually unbound when the $scope is destroyed
+        $scope.$on('$destroy', filterHandler);
 
         return ctl;
     }

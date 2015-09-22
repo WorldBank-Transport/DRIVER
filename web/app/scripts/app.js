@@ -35,6 +35,12 @@
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     }
 
+    /* ngInject */
+    function restoreFilters(FilterState) {
+        // this will trigger `driver.filterbar:changed` when complete
+        FilterState.restoreFilters();
+    }
+
     /**
      * @ngdoc overview
      * @name driver
@@ -50,6 +56,7 @@
         'driver.filterbar',
         'driver.elemstat',
         'driver.toddow',
+        'driver.state',
         'driver.stepwise',
         'driver.views.account',
         'driver.views.dashboard',
@@ -62,5 +69,6 @@
     .config(LogConfig)
     .config(LeafletDefaultsConfig)
     .config(LocalStorageConfig)
-    .config(HttpConfig);
+    .config(HttpConfig)
+    .run(restoreFilters);
 })();

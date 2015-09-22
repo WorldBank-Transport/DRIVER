@@ -12,6 +12,7 @@
         var storageName = 'filterbar.filters';
         var geoStorageName = 'filterbar.geofilter';
 
+        svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
         svc.saveFilters = saveFilters;
         svc.clear = clear;
@@ -31,6 +32,13 @@
         function clear() {
             localStorageService.remove(storageName);
             localStorageService.remove(geoStorageName);
+        }
+
+        /**
+         * Ask filter bar to send the currently set filters.
+         */
+        function getFilters() {
+            $rootScope.$broadcast('driver.filterbar:send');
         }
 
         /**

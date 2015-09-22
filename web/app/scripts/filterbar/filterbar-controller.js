@@ -23,6 +23,7 @@
             }
 
             FilterState.saveFilters(ctl.filters);
+            $log.debug('updateFilter');
             ctl.sendFilter();
         };
 
@@ -34,6 +35,7 @@
          ctl.setFilterPolygon = function(polygon) {
             ctl.filterPolygon = !!polygon ? polygon : null;
             FilterState.saveFilters(ctl.filters, ctl.filterPolygon);
+            $log.debug('setFilterPolygon');
             ctl.sendFilter();
          };
 
@@ -81,8 +83,17 @@
          * Emit event with the built query parameters.
          */
         ctl.sendFilter = function() {
+            $log.debug('in sendFilter, going to send filterbar:changed');
             $scope.$emit('driver.filterbar:changed', ctl.buildFilter());
         };
+
+        /**
+         * Emit the currently set filters when asked (loading a view; no filter change.)
+         */
+        $scope.$on('driver.filterbar:send', function() {
+            $log.debug('driver.filterbar:send received');
+            ctl.sendFilter();
+        });
 
         /**
          * When the record type changes, request the new schema
@@ -128,6 +139,7 @@
             // Also, listen to this in filter bar and draw some sort of indicator with clear button
             // to show there is a geo filter in place?
             $scope.$broadcast('driver.filterbar:polygonrestored', ctl.filterPolygon);
+            $log.debug('polygonrestored');
             ctl.sendFilter();
         });
 
