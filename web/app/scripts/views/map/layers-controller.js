@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope,
+    function DriverLayersController($log, $scope, $rootScope, $timeout,
                                     WebConfig, FilterState, RecordState, Records) {
         var ctl = this;
 
@@ -58,10 +58,6 @@
                 ctl.baseMaps = {
                     'CartoDB Positron': streets
                 };
-
-                // add filtered overlays
-                // this will trigger `driver.filterbar:changed` when complete
-                FilterState.restoreFilters();
 
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
@@ -119,7 +115,11 @@
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
-
+                // TODO: Find a better way to ensure this doesn't happen until filterbar ready
+                // (without timeout, filterbar components aren't ready to listen yet)
+                // add filtered overlays
+                // this will trigger `driver.filterbar:changed` when complete
+                $timeout(FilterState.restoreFilters, 1000);
             });
         };
 
@@ -239,6 +239,7 @@
          */
         ctl.buildRecordPopup = function(record) {
             // read arbitrary record fields object
+
             var data = JSON.parse(record.data);
             var startingUnderscoreRegex = /^_/;
 
