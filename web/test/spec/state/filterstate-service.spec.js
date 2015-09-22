@@ -22,10 +22,11 @@ describe('driver.state: Records', function () {
 
     it('should load back saved filters', function () {
         var filter = {'foo#bar': 'baz', 'amplifier': 11};
-        FilterState.saveFilters(filter);
+        var geoFilter = null;
+        FilterState.saveFilters(filter, geoFilter);
         expect(LocalStorageService.get('filterbar.filters')).toEqual(filter);
         FilterState.restoreFilters();
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('driver.filterbar:restore', filter);
+        expect($rootScope.$broadcast).toHaveBeenCalledWith('driver.filterbar:restore', [filter, geoFilter]);
     });
 
 });
