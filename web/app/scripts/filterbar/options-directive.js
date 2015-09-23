@@ -14,11 +14,7 @@
                 selection: '='
             },
             link: function(scope, elem, attrs, ctlArray) {
-
                 var filterbarController = ctlArray[0];
-
-                // TODO: use controller?
-                //var controller = ctlArray[1];
 
                 init();
 
