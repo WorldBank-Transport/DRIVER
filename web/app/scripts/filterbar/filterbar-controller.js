@@ -6,7 +6,6 @@
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
-        ctl.filterables = {};
 
         /**
          * A simple function to add/update a filter
@@ -44,7 +43,7 @@
          */
         ctl.buildFilter = function() {
             var params = {};
-            angular.forEach(ctl.filters, function(value, key) {
+            angular.forEach(_.omit(ctl.filters, '__dateRange'), function(value, key) {
                 // extract the object hierarchy from the label
                 var parents = key.split('#').reverse();
                 var immediateParent = parents.shift();
