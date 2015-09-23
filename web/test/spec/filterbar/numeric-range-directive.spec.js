@@ -36,7 +36,7 @@ describe('driver.filterbar: Numeric Range', function () {
         expect(Element.find("input[type='number'][name='maximum']").val()).toEqual('');
 
         // mine goes to eleven
-        $rootScope.$broadcast('driver.filterbar:restore', {'my#amplifier': {min: 0, max: 11}});
+        $rootScope.$broadcast('driver.filterbar:restore', [{'my#amplifier': {min: 0, max: 11}}, null]);
         $rootScope.$digest();
 
         expect(Element.find("input[type='number'][name='maximum']").val()).toEqual('11');

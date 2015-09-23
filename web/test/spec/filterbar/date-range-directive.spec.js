@@ -26,7 +26,7 @@ describe('driver.filterbar: Date Range', function () {
         expect(Element.find("input[type='text'][name='maximum']").val()).toEqual('');
 
         var date = new Date();
-        $rootScope.$broadcast('driver.filterbar:restore', {'__dateRange': {max: date.toString()}});
+        $rootScope.$broadcast('driver.filterbar:restore', [{'__dateRange': {max: date.toString()}}, null]);
         $rootScope.$digest();
 
         expect(Element.find("input[type='text'][name='maximum']").val()).toEqual(date.toString());

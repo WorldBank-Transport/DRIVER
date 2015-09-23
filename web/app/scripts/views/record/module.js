@@ -43,10 +43,10 @@
         'driver.details',
         'Leaflet',
         'driver.resources',
+        'driver.state',
         'json-editor',
         'ui.bootstrap',
         'ui.router',
-        'driver.state',
         'uuid'
     ]).config(StateConfig);
 

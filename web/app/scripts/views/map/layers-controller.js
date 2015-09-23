@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope, WebConfig, RecordState, Records) {
+    function DriverLayersController($log, $scope, $rootScope, $timeout,
+                                    WebConfig, FilterState, RecordState, Records) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -58,9 +59,6 @@
                     'CartoDB Positron': streets
                 };
 
-                // add overlays
-                ctl.setRecordLayers();
-
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
                 ctl.map.addLayer(ctl.editLayers);
@@ -109,17 +107,19 @@
                 // TODO: temporarily remove interactivity layer while editing
                 ctl.map.on('draw:drawstart', function() {
                     ctl.editLayers.clearLayers();
-                    ctl.filterSql = null;
-                    ctl.setRecordLayers();
+                    $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
                 ctl.map.on('draw:deleted', function() {
                     ctl.editLayers.clearLayers();
-                    ctl.filterSql = null;
-                    ctl.setRecordLayers();
+                    $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
-
+                // TODO: Find a better way to ensure this doesn't happen until filterbar ready
+                // (without timeout, filterbar components aren't ready to listen yet)
+                // add filtered overlays
+                // this will trigger `driver.filterbar:changed` when complete
+                $timeout(FilterState.restoreFilters, 1000);
             });
         };
 
@@ -130,27 +130,15 @@
             var layer = event.layer;
 
             ctl.editLayers.clearLayers();
-            ctl.filterSql = null;
+            $rootScope.$broadcast('driver.views.map:filterdrawn', null);
             ctl.editLayers.addLayer(layer);
 
             // pan/zoom to selected area
             ctl.map.fitBounds(layer.getBounds());
 
-            // send exported shape to filter.
+            // Send exported shape to filterbar, which will send `changed` event with filters.
             var geojson = ctl.editLayers.toGeoJSON();
-
-            // GEOSGeometry only wants the `geometry` part of the geojson object
-            if (geojson && geojson.features && geojson.features.length) {
-                var geom = geojson.features[0].geometry;
-
-                // get the raw SQL for the filter to send along to Windshaft
-                var params = {query: true, polygon: geom};
-                Records.get(params)
-                .$promise.then(function(sql) {
-                    ctl.filterSql = sql.query;
-                    ctl.setRecordLayers();
-                });
-            }
+            $rootScope.$broadcast('driver.views.map:filterdrawn', geojson);
 
             // TODO: use an interaction event to remove the drawn filter area?
             /*
@@ -251,6 +239,7 @@
          */
         ctl.buildRecordPopup = function(record) {
             // read arbitrary record fields object
+
             var data = JSON.parse(record.data);
             var startingUnderscoreRegex = /^_/;
 
@@ -314,6 +303,24 @@
                 ctl.setRecordLayers();
             }
         });
+
+        /**
+         * Update map when filters change
+         */
+        var filterHandler = $rootScope.$on('driver.filterbar:changed', function(event, filters) {
+            // get the raw SQL for the filter to send along to Windshaft
+            var params = {query: true};
+            _.extend(params, filters);
+
+            Records.get(params)
+            .$promise.then(function(sql) {
+                ctl.filterSql = sql.query;
+                ctl.setRecordLayers();
+            });
+        });
+
+        // $rootScope listeners must be manually unbound when the $scope is destroyed
+        $scope.$on('$destroy', filterHandler);
 
         return ctl;
     }

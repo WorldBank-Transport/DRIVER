@@ -50,6 +50,7 @@
         'driver.filterbar',
         'driver.elemstat',
         'driver.toddow',
+        'driver.state',
         'driver.stepwise',
         'driver.views.account',
         'driver.views.dashboard',

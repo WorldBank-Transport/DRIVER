@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($scope, $rootScope, $log, $state, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordState, FilterState) {
+    function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
+                                  Notifications, Records, RecordSchemas, RecordState) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
@@ -12,11 +12,13 @@
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
         ctl.restoreFilters = restoreFilters;
+        ctl.isInitialized = false;
 
         initialize();
 
 
         function initialize() {
+            ctl.isInitialized = false;
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(restoreFilters);
@@ -38,31 +40,6 @@
          * then load records once the filters are set.
          */
         function restoreFilters() {
-            // listen for event when filterbar is set
-            $rootScope.$on('driver.filterbar:changed', function(event, data) {
-                // initialize filters before loading records
-                ctl.filterParams = data;
-                loadRecords()
-                .then(onRecordsLoaded)
-                .then(function() {
-                    $scope.$on('driver.state.recordstate:selected', function(event, selected) {
-                        if (ctl.recordType !== selected) {
-                            ctl.recordType = selected;
-                            loadRecordSchema()
-                                .then(loadRecords)
-                                .then(onRecordsLoaded);
-                        }
-                    });
-
-                    // now set event listener to reset list when filters change
-                    $rootScope.$on('driver.filterbar:changed', function(event, data) {
-                        ctl.currentOffset = 0;
-                        ctl.filterParams = data;
-                        loadRecords().then(onRecordsLoaded);
-                    });
-                });
-            });
-
             // this will trigger `driver.filterbar:changed` when complete
             FilterState.restoreFilters();
         }
@@ -123,6 +100,40 @@
         function getNextRecords() {
             loadRecords(ctl.numRecordsPerPage);
         }
+
+        // listen for event when filterbar is set
+        var filterbarHandler = $rootScope.$on('driver.filterbar:changed', function(event, data) {
+            // initialize filters before loading records
+            ctl.filterParams = data;
+
+            if (ctl.isInitialized) {
+                ctl.currentOffset = 0;
+            }
+
+            loadRecords()
+            .then(onRecordsLoaded)
+            .then(function() {
+                ctl.isInitialized = true;
+            });
+        });
+
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+            // Only reload records in this handler after initialization is done.
+            // This handler is for when the user changes the record type selection.
+            if (!ctl.isInitialized) {
+                return;
+            }
+
+            if (ctl.recordType !== selected) {
+                ctl.recordType = selected;
+                loadRecordSchema()
+                    .then(loadRecords)
+                    .then(onRecordsLoaded);
+            }
+        });
+
+        // $rootScope listeners must be manually unbound when the $scope is destroyed
+        $scope.$on('$destroy', filterbarHandler);
     }
 
     angular.module('driver.views.record')
