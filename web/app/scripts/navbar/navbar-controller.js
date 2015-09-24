@@ -23,7 +23,7 @@
             setStates();
         }
 
-        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+        $rootScope.$on('$stateChangeSuccess', function(event, toState) {
             setFilters(toState);
         });
 
