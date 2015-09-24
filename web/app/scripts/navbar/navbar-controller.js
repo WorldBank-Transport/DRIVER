@@ -16,11 +16,16 @@
         $rootScope.$on('$stateChangeSuccess', setStates);
 
         function init() {
+            setFilters($state.current);
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             BoundaryState.getOptions().then(function(opts) { ctl.boundaryResults = opts; });
             setStates();
         }
+
+        $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+            setFilters(toState);
+        });
 
         // Record Type selections
         $scope.$on('driver.state.recordstate:options', function(event, options) {
@@ -51,6 +56,13 @@
                 updateState();
             });
         });
+
+        // A function to set properties related to whether or not the filterbar should be instantiated for a given page
+        function setFilters(state) {
+            var filterPages = ['Map', 'Record List'];
+            var isFilterPage = _.contains(filterPages, state.label);
+            ctl.isFilterPage = isFilterPage;
+        }
 
         // Sets states that can be navigated to (exclude current state, since we're already there)
         function setStates() {
