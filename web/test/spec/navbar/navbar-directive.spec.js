@@ -39,7 +39,7 @@ describe('driver.navbar: Navbar', function () {
     it('should load directive', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var boundaryUrl = /.*\/api\/boundaries\/\?active=True/;
+        var boundaryUrl = /\/api\/boundarypolygons/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);

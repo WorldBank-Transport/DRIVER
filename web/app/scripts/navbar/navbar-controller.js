@@ -18,7 +18,6 @@
         function init() {
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
-            BoundaryState.getOptions().then(function(opts) { ctl.boundaryResults = opts; });
             setStates();
         }
 
