@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function BoundaryState($log, $rootScope, $q, localStorageService, Boundaries) {
+    function BoundaryState($log, $rootScope, $q, localStorageService, Polygons) {
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;
@@ -32,14 +32,14 @@
          */
         function updateOptions(params) {
             var filterParams = angular.extend({}, defaultParams, params);
-            return Boundaries.query(filterParams).$promise.then(function(results) {
+            return Polygons.query(filterParams).$promise.then(function(results) {
                   options = results;
                   $rootScope.$broadcast('driver.state.boundarystate:options', options);
                   if (!results.length) {
                       $log.warn('No boundaries returned');
                   } else {
                       if (!selected && options[0]) {
-                          selected = svc.setSelected(options[0]);
+                          svc.setSelected(options[0]);
                       } else if (!_.includes(options, selected)) {
                           svc.setSelected(selected);
                       }

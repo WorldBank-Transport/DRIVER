@@ -33,15 +33,13 @@ describe('driver.navbar: NavbarController', function () {
     }));
 
     it('should have record types, boundaries, and available states', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
+        var boundaryUrl = /\/api\/boundarypolygons/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope
@@ -57,15 +55,13 @@ describe('driver.navbar: NavbarController', function () {
     });
 
     it('should not have current state as an option', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
+        var boundaryUrl = /\/api\/boundarypolygons/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         $state.current = $state.get('dashboard');
 
@@ -85,15 +81,13 @@ describe('driver.navbar: NavbarController', function () {
     });
 
     it('should correctly navigate to state', function () {
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var boundaryUrl = /\/api\/boundaries\/\?active=True/;
+        var boundaryUrl = /\/api\/boundarypolygons/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope,
