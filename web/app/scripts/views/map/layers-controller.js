@@ -150,6 +150,31 @@
         }
 
         /**
+         * Cast the fields in the SELECT clause to strings, for interactivity to work.
+         *
+         * @param {String} sql The full query to convert
+         * @returns {String} Full query, with the SELECTed fields cast to strings
+         */
+        function castQueryToStrings(sql) {
+            var fromIdx = sql.indexOf(' FROM');
+            var select = sql.substr(0, fromIdx);
+            var theRest = sql.substr(fromIdx);
+            var fields = select.split(', ');
+
+            var geomRegex = /geom/;
+
+            var castSelect = _.map(fields, function(field) {
+                if (field.match(geomRegex)) {
+                    return field; // do not cast geom field
+                } else {
+                    return field + '::varchar';
+                }
+            }).join(', ');
+
+            return castSelect + theRest;
+        }
+
+        /**
          * Adds the map layers. Removes them first if they already exist.
          *
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
@@ -314,7 +339,7 @@
 
             Records.get(params)
             .$promise.then(function(sql) {
-                ctl.filterSql = sql.query;
+                ctl.filterSql = castQueryToStrings(sql.query);
                 ctl.setRecordLayers();
             });
         });
