@@ -2,8 +2,9 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordState) {
+    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4,
+                                     Nominatim, Notifications, Records, RecordSchemas,
+                                     RecordState) {
         var ctl = this;
         var editorData = null;
 
@@ -22,6 +23,8 @@
             ctl.occurredFromOptions = {format: dateTimeFormat};
             ctl.occurredToOptions = {format: dateTimeFormat};
 
+            ctl.reverseGeocoder = '';
+
             ctl.geom = {
                 lat: null,
                 lng: null
@@ -32,6 +35,12 @@
                 $scope.$apply(function() {
                     ctl.geom.lat = data[1];
                     ctl.geom.lng = data[0];
+                });
+            });
+
+            $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
+                Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
+                    ctl.reverseGeocoder = displayName;
                 });
             });
 

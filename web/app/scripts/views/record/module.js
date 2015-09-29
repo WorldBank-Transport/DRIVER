@@ -44,6 +44,7 @@
         'Leaflet',
         'driver.resources',
         'driver.state',
+        'driver.nominatim',
         'json-editor',
         'ui.bootstrap',
         'ui.router',
