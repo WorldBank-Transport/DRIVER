@@ -8,6 +8,9 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
 Requires Vagrant 1.5+, Ansible 1.8+ and the following plugins:
   - `vagrant-hostmanager`
 
+Copy `development/ansible/group_vars/all.example` to `development/ansible/group_vars/all`
+and add the API key for pickpoint under `web_js_nominatim_key`.
+
 Install plugins before `vagrant up` via: `vagrant plugin install <plugin-name>`
 
 The app runs on localhost on port 7000. The schema editor is available at /editor/.
