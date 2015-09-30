@@ -21,8 +21,8 @@ describe('driver.resources: QueryBuilder', function () {
         ResourcesMock = _ResourcesMock_;
     }));
 
-    it('should assemble parameters with filters for normal djangoQueries', function () {
-        var recordsUrl = /\/api\/records/;
+    it('should result in a call out to determine the selected RecordType', function () {
+        var recordsUrl = /\/api\/records\/\?record_type=15460346-65d7-4f4d-944d-27324e224691/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
         QueryBuilder.djangoQuery();
