@@ -3,7 +3,7 @@
 
     /* ngInject */
     function DriverLayersController($log, $scope, $rootScope, $timeout,
-                                    WebConfig, FilterState, RecordState, Records) {
+                                    WebConfig, FilterState, RecordState, Records, QueryBuilder) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -312,9 +312,8 @@
             var params = {query: true};
             _.extend(params, filters);
 
-            Records.get(params)
-            .$promise.then(function(sql) {
-                ctl.filterSql = sql.query;
+            QueryBuilder.djangoQuery().then(function(records) {
+                ctl.filterSql = records.query;
                 ctl.setRecordLayers();
             });
         });

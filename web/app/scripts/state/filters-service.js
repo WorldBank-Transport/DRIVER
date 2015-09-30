@@ -16,6 +16,7 @@
         svc.restoreFilters = restoreFilters;
         svc.saveFilters = saveFilters;
         svc.clear = clear;
+        svc.filters = {};
 
         /**
          * Store current filters, in case of page reload.
@@ -24,6 +25,7 @@
          * @param {Object} filterGeom GeoJSON boundary to filter by.
          */
         function saveFilters(filters, filterGeom) {
+            svc.filters = filters;
             localStorageService.set(storageName, filters);
             localStorageService.set(geoStorageName, filterGeom);
         }
@@ -56,6 +58,7 @@
 
             // tell the filterbar to set the filters back
             $rootScope.$broadcast('driver.filterbar:restore', [filterObj, geoFilterObj]);
+            svc.filters = filterObj;
         }
 
         return svc;
