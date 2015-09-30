@@ -7,6 +7,7 @@
                                      RecordState) {
         var ctl = this;
         var editorData = null;
+        var bbox = null;
 
         // expected format to save successfully
         var dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
@@ -19,6 +20,8 @@
             ctl.onSaveClicked = onSaveClicked;
             ctl.occurredFromChanged = occurredFromChanged;
             ctl.onGeomChanged = onGeomChanged;
+            ctl.geocode = geocode;
+            ctl.geocodeSelect = geocodeSelect;
 
             ctl.occurredFromOptions = {format: dateTimeFormat};
             ctl.occurredToOptions = {format: dateTimeFormat};
@@ -36,6 +39,10 @@
                     ctl.geom.lat = data[1];
                     ctl.geom.lng = data[0];
                 });
+            });
+
+            $scope.$on('driver.views.record:map-moved', function(event, data) {
+                bbox = data;
             });
 
             $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
@@ -125,6 +132,18 @@
                     });
                 });
             });
+        }
+
+        function geocode(text) {
+            return Nominatim.forward(text, bbox);
+        }
+
+        function geocodeSelect(item) {
+            ctl.geom.lat = parseFloat(item.lat);
+            ctl.geom.lng = parseFloat(item.lon);
+
+            // notify map
+            onGeomChanged();
         }
 
         function onSchemaReady() {

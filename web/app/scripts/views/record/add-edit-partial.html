@@ -25,7 +25,12 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        {{ ctl.reverseGeocoder }}
+                        <div class="form-group">
+                            <input type="text" class="form-control"
+                                typeahead="result.display_name for result in ctl.geocode($viewValue)"
+                                typeahead-on-select="ctl.geocodeSelect($item)"
+                                ng-model="ctl.reverseGeocoder">
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <div class="map" leaflet-map driver-embed-map editable="true"></div>

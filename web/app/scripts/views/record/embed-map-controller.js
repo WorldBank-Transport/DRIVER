@@ -32,6 +32,9 @@
                     broadcastCoordinates(e.latlng);
                     setMarker(e.latlng);
                 });
+                ctl.map.on('moveend', function(e) {
+                    broadcastBBox(e.target.getBounds());
+                });
             }
 
             if (lat && lng) {
@@ -58,6 +61,15 @@
                 // pan/zoom to marker on add
                 ctl.map.setView(latlng, 11, {animate: true});
             }
+        }
+
+        /** Tell add-edit-controller.js about bbox
+         *
+         * @param {Object} bbox Leaflet LatLngBounds object with map's bounds
+         */
+        function broadcastBBox(bbox) {
+            $rootScope.$broadcast('driver.views.record:map-moved', [bbox.getWest(), bbox.getNorth(),
+                                                                    bbox.getEast(), bbox.getSouth()]);
         }
 
         /** Tell add-edit-controller.js when marker point set.
