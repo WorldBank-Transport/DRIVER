@@ -64,7 +64,7 @@
                         var minDate = new Date(FilterState.filters.__dateRange.min);
                         paramObj.occurred_min = minDate.toISOString();
                     }
-                    if (FilterState.filters.__dateRange.hasOwnProperty('min')) {
+                    if (FilterState.filters.__dateRange.hasOwnProperty('max')) {
                         var maxDate = new Date(FilterState.filters.__dateRange.max);
                         paramObj.occurred_max = maxDate.toISOString();
                     }
