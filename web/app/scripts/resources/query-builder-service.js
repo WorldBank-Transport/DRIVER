@@ -18,6 +18,13 @@
         svc.assembleParams = assembleParams;
 
 
+        /**
+         * This function takes two (optional) arguments, compiles a query, and carries out the
+         *  corresponding request for filtering django records.
+         *
+         * @param {number} offset The page in django's pagination to return
+         * @param {bool} doFilter If true: filter results
+         */
         function djangoQuery(offset, doFilter) {
             var deferred = $q.defer();
             doFilter = doFilter !== undefined ? doFilter : true;
@@ -29,11 +36,21 @@
             return deferred.promise;
         }
 
+        /**
+         * This function takes two (optional) arguments, compiles a query, and carries out the
+         *  corresponding request for filtering windshaft results.
+         *
+         * @param {bool} doFilter If true: filter results
+         */
         function windshaftQuery(doFilter) {
+            var deferred = $q.defer();
             doFilter = doFilter !== undefined ? doFilter : true;
             assembleParams(doFilter).then(function(params) {
-                Records.get(params);
+                Records.get(params).$promise.then(function(records) {
+                    deferred.resolve(records);
+                });
             });
+            return deferred.promise;
         }
 
         function assembleParams(doFilter, offset) {
@@ -41,12 +58,13 @@
             var paramObj = {};
             /* jshint camelcase: false */
             if (doFilter) {
-                if ('__dateRange' in FilterState.filters) {
-                    if ('min' in FilterState.filters.__dateRange) {
+                // An exceptional case for date ranges (not part of the JsonB we filter over)
+                if (FilterState.filters.hasOwnProperty('__dateRange')) {
+                    if (FilterState.filters.__dateRange.hasOwnProperty('min')) {
                         var minDate = new Date(FilterState.filters.__dateRange.min);
                         paramObj.occurred_min = minDate.toISOString();
                     }
-                    if ('max' in FilterState.filters.__dateRange) {
+                    if (FilterState.filters.__dateRange.hasOwnProperty('min')) {
                         var maxDate = new Date(FilterState.filters.__dateRange.max);
                         paramObj.occurred_max = maxDate.toISOString();
                     }
@@ -58,7 +76,7 @@
                 paramObj.offset = offset;
             }
 
-            // Record Type and offset
+            // Record Type
             RecordState.getSelected().then(function(selected) {
                 paramObj.record_type = selected.uuid;
                 deferred.resolve(paramObj);
