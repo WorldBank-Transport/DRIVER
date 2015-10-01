@@ -8,7 +8,8 @@
 
     angular.module('driver.resources', [
         'ngResource',
-        'driver.config'
+        'driver.config',
+        'driver.state'
     ]).config(ResourceConfig);
 
 })();

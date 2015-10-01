@@ -12,6 +12,7 @@
                 var filterLabel = '__dateRange';
                 var filterBarCtl = ctlArray[0];
                 var dateRangeCtl = ctlArray[1];
+                var dtRange = {};
                 init();
                 scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
@@ -25,8 +26,9 @@
                 });
 
                 // On change of DT value
-                scope.onDtRangeChange = function() {
-                    scope.updateFilter(filterLabel, {'min': scope.dtMin, 'max': scope.dtMax});
+                scope.onDtRangeChange = function(minOrMax, value) {
+                    dtRange[minOrMax] = value;
+                    scope.updateFilter(filterLabel, dtRange);
                 };
 
                 function init() {

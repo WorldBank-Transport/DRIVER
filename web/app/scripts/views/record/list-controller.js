@@ -3,12 +3,11 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, Records, RecordSchemas, RecordState) {
+                                  Notifications, RecordSchemas, RecordState, QueryBuilder) {
         var ctl = this;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = 10;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
-        ctl.filterParams = {};
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
         ctl.restoreFilters = restoreFilters;
@@ -51,23 +50,16 @@
          * @return {promise} Promise to load records
          */
         function loadRecords(offset) {
-            /* jshint camelcase: false */
-            var params = { record_type: ctl.recordType.uuid };
-            /* jshint camelcase: true */
-
+            var paramsOffset;
             if (offset) {
                 ctl.currentOffset += offset;
                 if (ctl.currentOffset) {
-                    params.offset = ctl.currentOffset;
+                    paramsOffset = ctl.currentOffset;
                 }
             }
-
-            _.extend(params, ctl.filterParams);
-
-            return Records.get(params)
-                .$promise.then(function(records) {
-                    ctl.records = records;
-                });
+            return QueryBuilder.djangoQuery(paramsOffset).then(function(records) {
+              ctl.records = records;
+            });
         }
 
         function onRecordsLoaded() {
@@ -102,19 +94,16 @@
         }
 
         // listen for event when filterbar is set
-        var filterbarHandler = $rootScope.$on('driver.filterbar:changed', function(event, data) {
-            // initialize filters before loading records
-            ctl.filterParams = data;
-
+        var filterbarHandler = $rootScope.$on('driver.filterbar:changed', function() {
             if (ctl.isInitialized) {
                 ctl.currentOffset = 0;
             }
 
             loadRecords()
-            .then(onRecordsLoaded)
-            .then(function() {
-                ctl.isInitialized = true;
-            });
+              .then(onRecordsLoaded)
+              .then(function() {
+                  ctl.isInitialized = true;
+              });
         });
 
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
