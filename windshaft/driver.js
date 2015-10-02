@@ -21,13 +21,12 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
                          "FROM ashlar_boundarypolygon p INNER JOIN ashlar_boundary b ",
                          "ON (p.boundary_id=b.uuid)"
                         ].join("");
-var filterBoundaryQuery = " WHERE b.uuid ='"
+var filterBoundaryQuery = " WHERE b.uuid ='";
 var endBoundaryQuery = ") AS ashlar_boundary";
 
 // styling
 
-var heatmapStyle = [
-    '#ashlar_record {',
+var heatmapRules = [
     'image-filters: colorize-alpha(blue, cyan, lightgreen, yellow , orange, red);',
     'comp-op:darken;',
     'marker-allow-overlap: true;',
@@ -36,10 +35,10 @@ var heatmapStyle = [
     'marker-width: 10;',
     '[zoom < 7] { marker-width: 5; }',
     '[zoom > 9] { marker-width: 15; }',
-'}'].join('');
+];
+var heatmapStyle = constructCartoStyle('#ashlar_record', heatmapRules);
 
-var eventsStyle = [
-    '#ashlar_record {',
+var eventsRules = [
     'marker-fill-opacity: 0.5;',
     'marker-fill: #0040ff;',
     'marker-line-color: #FFF;',
@@ -49,16 +48,22 @@ var eventsStyle = [
     'marker-type: ellipse;',
     'marker-width: 4;',
     'marker-allow-overlap: true;',
-'}'].join('');
+];
+var eventsStyle = constructCartoStyle('#ashlar_record', eventsRules);
 
-var boundaryStyle = [
-    '#ashlar_boundary {',
+var boundaryRules = [
     'line-width: 2;',
-    'line-color: #04b431;',
     'polygon-opacity: 0;',
-    'line-opacity: 0.7',
-'}'].join('');
+    'line-opacity: 0.7;', // line-color will be set on a per-request basis
+];
 
+/** Construct a CartoCSS style string that applies to class, containing rules
+ * @param {String} layer The #-prefixed layer name
+ * @param {Array} rules The styling rules to apply to this layer
+ */
+function constructCartoStyle(layer, rules) {
+    return layer + ' {' + rules.join('') + '}';
+}
 
 // takes the Windshaft request and returns new parameters with the query set
 function getRequestParameters(request) {
@@ -92,8 +97,9 @@ function getRequestParameters(request) {
         } else {
             params.sql = baseRecordQuery;
             if (params.id !== 'ALL') {
-                params.sql += filterRecordQuery + params.id + "'" + endRecordQuery;
+                params.sql += filterRecordQuery + params.id + "'";
             }
+            params.sql += endRecordQuery;
         }
 
         if (request.query.heatmap) {
@@ -102,11 +108,9 @@ function getRequestParameters(request) {
         }
     } else {
         params.interactivity = 'label';
-        params.style = boundaryStyle;
-
-        // TODO: use color column for styling?
-        // how to set polygon-fill so that differs per column?
-        // does not seem to be allowed by CartoCSS
+        var boundaryColor = request.query.color || '#f4b431';
+        var colorStyle = 'line-color: ' + boundaryColor + ';';
+        params.style = constructCartoStyle('#ashlar_boundary', boundaryRules.concat([colorStyle]));
 
         // build query for bounding polygon
         if (params.id === 'ALL') {

@@ -2,8 +2,9 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($log, $scope, $rootScope, $timeout,
-                                    WebConfig, FilterState, RecordState, Records, QueryBuilder) {
+    function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
+                                    WebConfig, FilterState, RecordState, GeographyState,
+                                    Records, QueryBuilder) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -172,14 +173,14 @@
 
             // Event record points. Use 'ALL' or record type UUID to filter layer
             var recordsLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 3});
-            var recordsLayer = new L.tileLayer(ctl.getFilteredUrl(recordsUrl), recordsLayerOptions);
+            var recordsLayer = new L.tileLayer(ctl.getFilteredRecordUrl(recordsUrl), recordsLayerOptions);
 
             // layer with heatmap of events
             var heatmapOptions = angular.extend(defaultLayerOptions, {zIndex: 4});
-            var heatmapLayer = new L.tileLayer(ctl.getFilteredUrl(heatmapUrl), heatmapOptions);
+            var heatmapLayer = new L.tileLayer(ctl.getFilteredRecordUrl(heatmapUrl), heatmapOptions);
 
             // interactivity for record layer
-            var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilteredUrl(recordsUtfgridUrl),
+            var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilteredRecordUrl(recordsUtfgridUrl),
                                                     {useJsonP: false, zIndex: 5});
 
             utfGridRecordsLayer.on('click', function(e) {
@@ -203,8 +204,18 @@
             });
 
             // user-uploaded boundary layer(s)
-            var boundaryLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 2});
-            var boundaryLayer = new L.tileLayer(boundaryUrl, boundaryLayerOptions);
+            var availableBoundaries = $q.defer();
+            GeographyState.getOptions().then(function(boundaries) {
+                var boundaryLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 2});
+                var boundaryLabelLayer = boundaries.map(function(boundary) {
+                    var url = (ctl.getFilteredUrl(boundaryUrl, boundary.uuid) +
+                        '?color=' +
+                        encodeURIComponent(boundary.color));
+                    var boundaryLayer = new L.tileLayer(url, boundaryLayerOptions);
+                    return [boundary.label, boundaryLayer];
+                });
+                availableBoundaries.resolve(_.zipObject(boundaryLabelLayer));
+            });
 
             // TODO: find a reasonable way to get the current layers selected, to add those back
             // when switching record type, so selected layers does not change with filter change.
@@ -214,21 +225,24 @@
             ctl.map.addLayer(recordsLayer);
             ctl.map.addLayer(utfGridRecordsLayer);
 
-            ctl.overlays = {
-                'Boundaries': boundaryLayer,
+            var recordsOverlays = {
                 'Events': recordsLayer,
                 'Events Interactivity': utfGridRecordsLayer,
                 'Heatmap': heatmapLayer
             };
 
-            // add layer switcher control; expects to have layer zIndex already set
+            availableBoundaries.promise.then(function(boundaryOverlays) {
+                ctl.overlays = angular.extend({}, boundaryOverlays, recordsOverlays);
 
-            // If layer switcher already initialized, must re-initialize it.
-            if (ctl.layerSwitcher) {
-                ctl.layerSwitcher.removeFrom(ctl.map);
-            }
-            ctl.layerSwitcher = L.control.layers(ctl.baseMaps, ctl.overlays, {autoZIndex: false});
-            ctl.layerSwitcher.addTo(ctl.map);
+                // add layer switcher control; expects to have layer zIndex already set
+
+                // If layer switcher already initialized, must re-initialize it.
+                if (ctl.layerSwitcher) {
+                    ctl.layerSwitcher.removeFrom(ctl.map);
+                }
+                ctl.layerSwitcher = L.control.layers(ctl.baseMaps, ctl.overlays, {autoZIndex: false});
+                ctl.layerSwitcher.addTo(ctl.map);
+            });
         };
 
         /**
@@ -276,23 +290,46 @@
         };
 
         /**
-         * Helper function to get map layers URL with record type set.
+         * Helper function to get map layers URL with resource ID set.
          *
-         * @param {String} baseUrl Map layer url with record type parameter set to 'ALL'
+         * @param {String} baseUrl Map layer url with resource parameter set to 'ALL'
+         * @param {String} resourceId Resource ID to put into the URL.
          * @returns {String} The baseUrl with the record type parameter set to the selected type.
          */
-        ctl.getFilteredUrl = function(baseUrl) {
+        ctl.getFilteredUrl = function(baseUrl, resourceId) {
             var url = baseUrl;
-            if (ctl.recordType && ctl.recordType !== 'ALL') {
-                url = url.replace(/ALL/, ctl.recordType);
+            if (resourceId && resourceId !== 'ALL') {
+                url = url.replace(/ALL/, resourceId);
             }
+            return url;
+        };
 
-            if (ctl.filterSql) {
+        /**
+         * Helper function to add a SQL filter parameter to the windshaft URL
+         *
+         * @param {String} baseUrl Map layer URL
+         * @param {String} sql SQL to append to the request URL
+         * @returns {String} The baseUrl with the record type parameter set to the selected type.
+         */
+        ctl.addFilterSql = function(baseUrl, sql) {
+            var url = baseUrl;
+            if (sql) {
                 // TODO: find a less hacky way to handle building URLs for Windshaft
                 url += url.match(/\?/) ? '&sql=' : '?sql=';
-                url += encodeURIComponent(ctl.filterSql);
+                url += encodeURIComponent(sql);
             }
+            return url;
+        };
 
+        /**
+         * Helper function to completely construct a records URL (dots / heatmap / utfGrid)
+         * @param {String} baseUrl Map layer URL
+         * @returns {String} The baseUrl with the record type parameter set and sql parameter set.
+         */
+        ctl.getFilteredRecordUrl = function(baseUrl) {
+            var url = baseUrl;
+            url = ctl.getFilteredUrl(url, ctl.recordType);
+            url = ctl.addFilterSql(url, ctl.filterSql);
             return url;
         };
 
