@@ -23,7 +23,6 @@ describe('driver.views.map: Layers Directive', function () {
     var $scope;
     var ResourcesMock;
 
-    var Controller;
     var Element;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _ResourcesMock_) {
@@ -35,6 +34,8 @@ describe('driver.views.map: Layers Directive', function () {
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var boundaryUrl = /\/api\/boundaries\//;
+        $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($rootScope);
         $rootScope.$apply();

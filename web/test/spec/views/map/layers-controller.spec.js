@@ -42,6 +42,8 @@ describe('driver.views.map: Layers Controller', function () {
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var boundaryUrl = /\/api\/boundaries\//;
+        $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
         Controller = Element.controller('driverMapLayers');
@@ -72,7 +74,7 @@ describe('driver.views.map: Layers Controller', function () {
         var interactivityUrl = 'http://localhost:7000/tiles/table/ashlar_record/id/ALL/5/26/15.grid.json';
 
         Controller.recordType = 'b4e49ec6-32f2-46db-9b27-d0f6ba5c9406';
-        var resultUrl = Controller.getFilteredUrl(interactivityUrl);
+        var resultUrl = Controller.getFilteredRecordUrl(interactivityUrl);
 
         expect(resultUrl).toBe('http://localhost:7000/tiles/table/ashlar_record/id/b4e49ec6-32f2-46db-9b27-d0f6ba5c9406/5/26/15.grid.json');
     });
