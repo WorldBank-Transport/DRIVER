@@ -2,48 +2,46 @@
     <div class="col-sm-8 col-sm-offset-3">
         <ase-notifications></ase-notifications>
         <div class="form-area-heading">
-            <h2>{{ ::ctl.recordType.label }} input form</h2>
+            <h2>{{ ::ctl.recordType.label }} Input Form</h2>
             <div class="content-border"></div>
         </div>
         <div class="constant-fields">
-            <div class="col-md-12">
-                <h3><span>Constant fields</span></h3>
-                <p>These fields exist for every record.</p>
-                <div class="well well-sm">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Latitude</label>
-                                <input type="number" class="form-control"
-                                    ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lat">
-                            </div>
-                        </div>
-                        <div class="col-md-6 pull-right">
-                            <div class="form-group">
-                                <label class="control-label">Longitude</label>
-                                <input type="number" class="form-control"
-                                    ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lng">
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="map" leaflet-map driver-embed-map editable="true"></div>
+            <h3><span>Constant fields</span></h3>
+            <p>These fields exist for every record.</p>
+            <div class="well">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Latitude</label>
+                            <input type="number" class="form-control"
+                                ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lat">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Occurred</label>
-                                <div class="input-group" id="datetimepicker-From">
-                                    <input type="text" class="form-control"
-                                        datetimepicker
-                                        datetimepicker-options="{{ ctl.occurredFromOptions }}"
-                                        ng-change="ctl.occurredFromChanged()"
-                                        ng-model="ctl.record.occurred_from"
-                                        placeholder="From">
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
+                    <div class="col-md-6 pull-right">
+                        <div class="form-group">
+                            <label class="control-label">Longitude</label>
+                            <input type="number" class="form-control"
+                                ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lng">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="map" leaflet-map driver-embed-map editable="true"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">Occurred</label>
+                            <div class="input-group" id="datetimepicker-From">
+                                <input type="text" class="form-control"
+                                    datetimepicker
+                                    datetimepicker-options="{{ ctl.occurredFromOptions }}"
+                                    ng-change="ctl.occurredFromChanged()"
+                                    ng-model="ctl.record.occurred_from"
+                                    placeholder="From">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
                         </div>
                     </div>
