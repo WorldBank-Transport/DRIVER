@@ -13,6 +13,18 @@
         top: 0;
         left: 0;
         right: 0;
+
+        .links {
+            font-weight: 700;
+            
+            span {
+                margin-right: 5px;
+            }
+            .links-separator {
+                padding: 0 10px;
+                color: #CCC;
+            }
+        }
     }
     .overflow {
         position: absolute;
