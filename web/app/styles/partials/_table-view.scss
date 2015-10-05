@@ -20,6 +20,11 @@
         top: 0;
         bottom: 0;
         overflow: auto;
+
+        nav {
+            position: relative;
+            padding: 0 20px;
+        }
     }
     .table {
         margin: 0;
