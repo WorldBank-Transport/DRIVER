@@ -37,50 +37,10 @@
          };
 
         /**
-         * Transform filter label-value pairs into parameters to send to API.
-         *
-         * @returns {Object} Filter query params object ready to send off to API endpoint
-         */
-        ctl.buildFilter = function() {
-            var params = {};
-            angular.forEach(_.omit(ctl.filters, '__dateRange'), function(value, key) {
-                // extract the object hierarchy from the label
-                var parents = key.split('#').reverse();
-                var immediateParent = parents.shift();
-
-                // Build out query object for this filter, which has nested structure like:
-                // {outerParent: {innerParent: value}}
-                var filterParam = {};
-                filterParam[immediateParent] = value;
-                _.each(parents, function(parent) {
-                    var obj = {};
-                    obj[parent] = filterParam;
-                    filterParam = obj;
-                });
-
-                _.merge(params, filterParam);
-            });
-
-            params = {jcontains: params};
-
-            // GEOSGeometry only wants the `geometry` part of the GeoJSON object
-            if (ctl.filterPolygon && ctl.filterPolygon.features &&
-                ctl.filterPolygon.features.length) {
-
-                var geom = ctl.filterPolygon.features[0].geometry;
-                params.polygon = geom;
-            } else {
-                ctl.filterPolygon = null;
-            }
-
-            return params;
-        };
-
-        /**
          * Emit event with the built query parameters.
          */
         ctl.sendFilter = function() {
-            $scope.$emit('driver.filterbar:changed', ctl.buildFilter());
+            $scope.$emit('driver.filterbar:changed');
         };
 
         /**

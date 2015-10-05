@@ -12,9 +12,11 @@
     function QueryBuilder($q, FilterState, RecordState, Records) {
         var svc = this;
         svc.djangoQuery = djangoQuery;
-        svc.unfilteredDjangoQuery = function(offset) { return djangoQuery(offset, false); };
+        svc.unfilteredDjangoQuery = function(extraParams, offset) {
+            return djangoQuery(extraParams, offset, false);
+        };
         svc.windshaftQuery = windshaftQuery;
-        svc.unfilteredWindshaftQuery = function() { return windshaftQuery(false); };
+        svc.unfilteredWindshaftQuery = function() { return windshaftQuery({}, false); };
         svc.assembleParams = assembleParams;
 
 
@@ -25,11 +27,12 @@
          * @param {number} offset The page in django's pagination to return
          * @param {bool} doFilter If true: filter results
          */
-        function djangoQuery(offset, doFilter) {
+        function djangoQuery(extraParams, offset, doFilter) {
             var deferred = $q.defer();
-            doFilter = doFilter !== undefined ? doFilter : true;
+            extraParams = extraParams || {};
+            doFilter = doFilter || true;
             assembleParams(doFilter, offset).then(function(params) {
-                Records.get(params).$promise.then(function(records) {
+                Records.get(_.extend(params, extraParams)).$promise.then(function(records) {
                     deferred.resolve(records);
                 });
             });
@@ -42,9 +45,10 @@
          *
          * @param {bool} doFilter If true: filter results
          */
-        function windshaftQuery(doFilter) {
+        function windshaftQuery(extraParams, doFilter) {
             var deferred = $q.defer();
-            doFilter = doFilter !== undefined ? doFilter : true;
+            extraParams = extraParams || {};
+            doFilter = doFilter || true;
             assembleParams(doFilter).then(function(params) {
                 Records.get(params).$promise.then(function(records) {
                     deferred.resolve(records);
@@ -57,6 +61,7 @@
             var deferred = $q.defer();
             var paramObj = {};
             /* jshint camelcase: false */
+            console.log(FilterState.filters);
             if (doFilter) {
                 // An exceptional case for date ranges (not part of the JsonB we filter over)
                 if (FilterState.filters.hasOwnProperty('__dateRange')) {
@@ -69,6 +74,16 @@
                         paramObj.occurred_max = maxDate.toISOString();
                     }
                 }
+
+                var jsonFilters = {};
+                _.each(_.omit(FilterState.filters, '__dateRange'), function(filter, path) {
+                    jsonFilters = _.merge(jsonFilters, expandFilter(path.split('#'), filter));
+                });
+
+                // Handle cases where no json filters are set
+                if (!_.isEmpty(jsonFilters)) {
+                    paramObj = _.extend(paramObj, {'jsonb': jsonFilters});
+                }
             }
 
             // Pagination offset
@@ -76,6 +91,7 @@
                 paramObj.offset = offset;
             }
 
+            console.log(paramObj);
             // Record Type
             RecordState.getSelected().then(function(selected) {
                 paramObj.record_type = selected.uuid;
@@ -84,6 +100,19 @@
             /* jshint camelcase: true */
             return deferred.promise;
         }
+
+        function expandFilter(path, filter, memo) {
+            memo = memo || {};
+            if (path.length === 1) {
+                memo[path[0]] = filter;
+                return memo;
+            }
+
+            memo[path[0]] = expandFilter(_.tail(path), filter);
+            return memo;
+
+        }
+
 
         return svc;
     }

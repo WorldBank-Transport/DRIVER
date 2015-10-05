@@ -19,8 +19,8 @@
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === filterLabel) {
-                        scope.dtMin = filter.value.min;
-                        scope.dtMax = filter.value.max;
+                        scope.dtMin = filter.min;
+                        scope.dtMax = filter.max;
                         scope.isMinMaxValid();
                     }
                 });
