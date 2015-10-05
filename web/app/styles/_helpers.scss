@@ -5,3 +5,23 @@
     width: 100%;
     background: #ddd;
 }
+.n {
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: black;
+    background-color: rgba(0,0,0,0.9);
+    color: white;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        width: 0; 
+        height: 0; 
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid rgba(0,0,0,0.9);
+    }
+}
