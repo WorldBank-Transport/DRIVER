@@ -3,7 +3,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    top: 52px;
+    top: 0;
 
     .table-view-container {
         margin: 25px;
@@ -13,26 +13,30 @@
         top: 0;
         left: 0;
         right: 0;
-    }
-    .filters {
-        padding: 15px;
 
-        .form-control {
-            padding: 20px 16px;
-        }
-        .bootstrap-select {
-            margin-right: 10px;
-        }
-        .btn {
-            padding: 10px 16px;
+        .links {
+            font-weight: 700;
+            
+            span {
+                margin-right: 5px;
+            }
+            .links-separator {
+                padding: 0 10px;
+                color: #CCC;
+            }
         }
     }
     .overflow {
         position: absolute;
         width: 100%;
-        top: 75px;
+        top: 0;
         bottom: 0;
         overflow: auto;
+
+        nav {
+            position: relative;
+            padding: 0 20px;
+        }
     }
     .table {
         margin: 0;

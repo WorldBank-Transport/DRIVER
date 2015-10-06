@@ -1,6 +1,29 @@
 .records-map, driver-map {
 	position: fixed;
-  top: 112px;
-  width: 100%;
-  bottom: 0;
+    top: 112px;
+    width: 100%;
+    bottom: 0;
+}
+
+.leaflet-control-layers-expanded {
+    
+    label {
+        margin-top: 4px;
+    }
+
+    .leaflet-control-layers-base label {
+        margin-top: 0;
+    }
+    .leaflet-control-layers-list {
+        background: none;
+        padding: 5px 5px 10px;
+    }
+    .leaflet-control-layers-separator {
+        margin: 5px -15px 10px -11px;
+    }
+
+    input[type=checkbox], input[type=radio] {
+        margin-right: 5px;
+        top: -1px;
+    }
 }
