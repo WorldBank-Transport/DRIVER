@@ -48,79 +48,8 @@ describe('driver.filterbar: FilterbarController', function () {
         spyOn($scope, '$emit').and.callThrough();
 
         $controller.updateFilter('foo', '1');
-        var fooFilter = {foo: '1'};
-        var expectedFilter = {jcontains: fooFilter};
 
         expect($controller.sendFilter).toHaveBeenCalled();
-        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', expectedFilter);
-
-        // reset jasmine tracking
-        $controller.sendFilter.calls.reset();
-        $scope.$emit.calls.reset();
-
-        $controller.updateFilter('bar#baz', '2');
-        var barFilter = {baz: '2'};
-        expectedFilter = {foo: '1'};
-        expectedFilter.bar = barFilter;
-        expectedFilter = {jcontains: expectedFilter};
-
-        expect($controller.sendFilter).toHaveBeenCalled();
-        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', expectedFilter);
-    });
-
-    it('should unset filters', function () {
-
-        // set a filter
-        $controller.updateFilter('foo', '1');
-
-        spyOn($controller, 'sendFilter').and.callThrough();
-        spyOn($scope, '$emit').and.callThrough();
-
-        // unset the filter
-        $controller.updateFilter('foo', '');
-        expect($controller.sendFilter).toHaveBeenCalled();
-        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: {}});
-    });
-
-    it('should handle sibling filters', function () {
-
-        var expectedFilter = {
-            baz: {
-                foo: '1',
-                bar: '2'
-            }
-        };
-
-        $controller.updateFilter('baz#foo', '1');
-
-        spyOn($controller, 'sendFilter').and.callThrough();
-        spyOn($scope, '$emit').and.callThrough();
-
-        $controller.updateFilter('baz#bar', '2');
-
-        expect($controller.sendFilter).toHaveBeenCalled();
-        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: expectedFilter});
-    });
-
-    it('should handle nested filters', function () {
-
-        var expectedFilter = {
-            baz: {
-                frisbee: 'yes',
-                foo: {
-                    bar: '1'
-                }
-            }
-        };
-
-        $controller.updateFilter('baz#frisbee', 'yes');
-
-        spyOn($controller, 'sendFilter').and.callThrough();
-        spyOn($scope, '$emit').and.callThrough();
-
-        $controller.updateFilter('baz#foo#bar', '1');
-
-        expect($controller.sendFilter).toHaveBeenCalled();
-        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed', {jcontains: expectedFilter});
+        expect($scope.$emit).toHaveBeenCalledWith('driver.filterbar:changed');
     });
 });

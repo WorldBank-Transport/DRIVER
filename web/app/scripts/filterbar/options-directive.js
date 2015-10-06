@@ -24,7 +24,9 @@
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === scope.label) {
-                        scope.filter = filter.value;
+                        var tempFilter = filter.value;
+                        tempFilter.contains = tempFilter.contains[0];
+                        scope.filter = tempFilter;
                     }
                 });
 

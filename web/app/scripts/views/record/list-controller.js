@@ -56,8 +56,11 @@
                 if (ctl.currentOffset) {
                     paramsOffset = ctl.currentOffset;
                 }
+            } else {
+                ctl.currentOffset = 0;
+                paramsOffset = 0;
             }
-            return QueryBuilder.djangoQuery(paramsOffset).then(function(records) {
+            return QueryBuilder.djangoQuery({}, paramsOffset).then(function(records) {
               ctl.records = records;
             });
         }
@@ -99,7 +102,7 @@
                 ctl.currentOffset = 0;
             }
 
-            loadRecords()
+            loadRecords(ctl.numRecordsPerPage)
               .then(onRecordsLoaded)
               .then(function() {
                   ctl.isInitialized = true;

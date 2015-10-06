@@ -17,7 +17,9 @@
         };
         svc.windshaftQuery = windshaftQuery;
         svc.unfilteredWindshaftQuery = function() { return windshaftQuery({}, false); };
+        // KEEP THESE AVAILABLE FOR TESTING
         svc.assembleParams = assembleParams;
+        svc.assembleJsonFilterParams = assembleJsonFilterParams;
 
 
         /**
@@ -57,11 +59,18 @@
             return deferred.promise;
         }
 
+        function assembleJsonFilterParams(filters) {
+            var filterParams = {};
+            _.each(filters, function(filter, path) {
+                filterParams = _.merge(filterParams, expandFilter(path.split('#'), filter));
+            });
+            return filterParams;
+        }
+
         function assembleParams(doFilter, offset) {
             var deferred = $q.defer();
             var paramObj = {};
             /* jshint camelcase: false */
-            console.log(FilterState.filters);
             if (doFilter) {
                 // An exceptional case for date ranges (not part of the JsonB we filter over)
                 if (FilterState.filters.hasOwnProperty('__dateRange')) {
@@ -75,10 +84,7 @@
                     }
                 }
 
-                var jsonFilters = {};
-                _.each(_.omit(FilterState.filters, '__dateRange'), function(filter, path) {
-                    jsonFilters = _.merge(jsonFilters, expandFilter(path.split('#'), filter));
-                });
+                var jsonFilters = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange'));
 
                 // Handle cases where no json filters are set
                 if (!_.isEmpty(jsonFilters)) {
@@ -91,7 +97,6 @@
                 paramObj.offset = offset;
             }
 
-            console.log(paramObj);
             // Record Type
             RecordState.getSelected().then(function(selected) {
                 paramObj.record_type = selected.uuid;
