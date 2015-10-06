@@ -29,7 +29,7 @@
         };
 
         function initialize() {
-            ctl.colors = ['Red', 'Blue', 'Green'];
+            ctl.colors = ['red', 'blue', 'green'];
             ctl.workingGeo = Geography.get({ uuid: $stateParams.uuid });
         }
     }

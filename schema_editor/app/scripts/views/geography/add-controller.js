@@ -90,7 +90,7 @@
                                       'select a primary field for display',
                                 displayClass: 'alert-info'});
             ctl.files = [];
-            ctl.colors = ['Red', 'Blue', 'Green'];
+            ctl.colors = ['red', 'blue', 'green'];
         }
     }
 
