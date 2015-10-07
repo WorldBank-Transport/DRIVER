@@ -18,7 +18,6 @@
                 init();
 
                 function init() {
-                    scope.filter = {'_rule_type': 'containment', 'contains': ''};
                 }
 
                 // restore previously set filter selection on page reload
@@ -40,7 +39,7 @@
                     // instead of this annoying hack
                     var filter = angular.copy(scope.filter);
                     filter.contains = [filter.contains];
-                    filterbarController.updateFilter(filterLabel, filter);
+                    filterbarController.updateFilter(filterLabel, _.merge({'_rule_type': 'containment'}, filter));
                 };
 
             }

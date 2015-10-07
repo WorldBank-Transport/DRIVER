@@ -26,7 +26,7 @@
                 });
 
                 function init() {
-                    scope.filter = {'_rule_type': 'intRange'};
+                    scope.filter = {'_rule_type': 'intrange'};
                     scope.error = {};
                 }
 
