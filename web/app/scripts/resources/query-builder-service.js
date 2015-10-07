@@ -10,16 +10,18 @@
 
     /* ngInject */
     function QueryBuilder($q, FilterState, RecordState, Records) {
-        var svc = this;
-        svc.djangoQuery = djangoQuery;
-        svc.unfilteredDjangoQuery = function(extraParams, offset) {
-            return djangoQuery(extraParams, offset, false);
+        var svc = {
+            djangoQuery: djangoQuery,
+            unfilteredDjangoQuery: function(extraParams, offset) {
+                return djangoQuery(extraParams, offset, false);
+            },
+            windshaftQuery: windshaftQuery,
+            unfilteredWindshaftQuery: function() { return windshaftQuery({}, false); },
+            // KEEP THESE AVAILABLE FOR TESTING
+            assembleParams: assembleParams,
+            assembleJsonFilterParams: assembleJsonFilterParams
         };
-        svc.windshaftQuery = windshaftQuery;
-        svc.unfilteredWindshaftQuery = function() { return windshaftQuery({}, false); };
-        // KEEP THESE AVAILABLE FOR TESTING
-        svc.assembleParams = assembleParams;
-        svc.assembleJsonFilterParams = assembleJsonFilterParams;
+        return svc;
 
 
         /**
@@ -122,20 +124,25 @@
             return deferred.promise;
         }
 
-        function expandFilter(path, filter, memo) {
-            memo = memo || {};
+        /**
+         * Recurses through a list of edge names and constructs an object graph which corresponds
+         *  to that list.
+         *  E.G. (['a', 'b', 'c'], <filter>) would be {'a': {'b': {'c': <filter> }}}
+         *
+         * @param {array} path A list of edge names
+         * @param {object} filter The filter that should sit at the endnode of the constructed graph
+         */
+        function expandFilter(path, filter) {
+            var expanded = {};
             if (path.length === 1) {
-                memo[path[0]] = filter;
-                return memo;
+                expanded[path[0]] = filter;
+                return expanded;
             }
 
-            memo[path[0]] = expandFilter(_.tail(path), filter);
-            return memo;
+            expanded[path[0]] = expandFilter(_.tail(path), filter);
+            return expanded;
 
         }
-
-
-        return svc;
     }
 
     angular.module('driver.resources')
