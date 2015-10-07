@@ -60,7 +60,7 @@
                 ctl.currentOffset = 0;
                 paramsOffset = 0;
             }
-            return QueryBuilder.djangoQuery({}, paramsOffset).then(function(records) {
+            return QueryBuilder.djangoQuery(true, paramsOffset).then(function(records) {
               ctl.records = records;
             });
         }

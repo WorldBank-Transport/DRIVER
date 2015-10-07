@@ -89,7 +89,6 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.flush();
 
         $rootScope.$broadcast('driver.filterbar:changed', {});
-        //$httpBackend.expectGET(recordsByTypeUrl).respond(200, recordResponse);
         var recordOffsetUrl = new RegExp('api/records/\\?offset=10' +
                                          '&record_type=' + recordTypeId);
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);

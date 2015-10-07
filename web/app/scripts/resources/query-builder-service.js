@@ -26,10 +26,12 @@
          * This function takes two (optional) arguments, compiles a query, and carries out the
          *  corresponding request for filtering django records.
          *
-         * @param {number} offset The page in django's pagination to return
          * @param {bool} doFilter If true: filter results
+         * @param {number} offset The page in django's pagination to return
+         * @param {object} extraParams an object whose properties are extra parameters
+         *                             not otherwise configured
          */
-        function djangoQuery(extraParams, offset, doFilter) {
+        function djangoQuery(doFilter, offset, extraParams) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
             doFilter = doFilter || true;
@@ -47,7 +49,7 @@
          *
          * @param {bool} doFilter If true: filter results
          */
-        function windshaftQuery(extraParams, doFilter) {
+        function windshaftQuery(doFilter, extraParams) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
             doFilter = doFilter || true;
@@ -59,6 +61,12 @@
             return deferred.promise;
         }
 
+        /**
+         * A utility function for constructing a single object for jsonb query filtering
+         *
+         * @param {object} filters The filters as stored inside DRIVER logic and, in particular,
+         *                         by the filter service - transformed to produce a query string
+         */
         function assembleJsonFilterParams(filters) {
             var filterParams = {};
             _.each(filters, function(filter, path) {
@@ -67,6 +75,14 @@
             return filterParams;
         }
 
+        /**
+         * Assemble all query parameters into a single query parameters object for the Record resource
+         *
+         * @param {bool} doFilter Whether or not to include filters in this query at all (still do
+         *                        offsets and record_type filtering, however)
+         * @param {number} offset The offset to use for pagination of results
+         *
+         */
         function assembleParams(doFilter, offset) {
             var deferred = $q.defer();
             var paramObj = {};

@@ -346,7 +346,7 @@
          */
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
             // get the raw SQL for the filter to send along to Windshaft
-            QueryBuilder.djangoQuery({query: true}).then(function(records) {
+            QueryBuilder.djangoQuery(true, 0, {query: true}).then(function(records) {
                 ctl.filterSql = records.query;
                 ctl.setRecordLayers();
             });
