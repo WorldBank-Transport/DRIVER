@@ -344,12 +344,9 @@
         /**
          * Update map when filters change
          */
-        var filterHandler = $rootScope.$on('driver.filterbar:changed', function(event, filters) {
+        var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
             // get the raw SQL for the filter to send along to Windshaft
-            var params = {query: true};
-            _.extend(params, filters);
-
-            QueryBuilder.djangoQuery().then(function(records) {
+            QueryBuilder.djangoQuery(true, 0, {query: true}).then(function(records) {
                 ctl.filterSql = records.query;
                 ctl.setRecordLayers();
             });

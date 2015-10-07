@@ -27,7 +27,9 @@
         function saveFilters(filters, filterGeom) {
             svc.filters = filters;
             localStorageService.set(storageName, filters);
-            localStorageService.set(geoStorageName, filterGeom);
+            if (filterGeom) {
+                localStorageService.set(geoStorageName, filterGeom);
+            }
         }
 
         // TODO: currently unused

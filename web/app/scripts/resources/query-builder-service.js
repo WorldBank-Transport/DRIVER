@@ -10,26 +10,35 @@
 
     /* ngInject */
     function QueryBuilder($q, FilterState, RecordState, Records) {
-        var svc = this;
-        svc.djangoQuery = djangoQuery;
-        svc.unfilteredDjangoQuery = function(offset) { return djangoQuery(offset, false); };
-        svc.windshaftQuery = windshaftQuery;
-        svc.unfilteredWindshaftQuery = function() { return windshaftQuery(false); };
-        svc.assembleParams = assembleParams;
+        var svc = {
+            djangoQuery: djangoQuery,
+            unfilteredDjangoQuery: function(extraParams, offset) {
+                return djangoQuery(extraParams, offset, false);
+            },
+            windshaftQuery: windshaftQuery,
+            unfilteredWindshaftQuery: function() { return windshaftQuery({}, false); },
+            // KEEP THESE AVAILABLE FOR TESTING
+            assembleParams: assembleParams,
+            assembleJsonFilterParams: assembleJsonFilterParams
+        };
+        return svc;
 
 
         /**
          * This function takes two (optional) arguments, compiles a query, and carries out the
          *  corresponding request for filtering django records.
          *
-         * @param {number} offset The page in django's pagination to return
          * @param {bool} doFilter If true: filter results
+         * @param {number} offset The page in django's pagination to return
+         * @param {object} extraParams an object whose properties are extra parameters
+         *                             not otherwise configured
          */
-        function djangoQuery(offset, doFilter) {
+        function djangoQuery(doFilter, offset, extraParams) {
             var deferred = $q.defer();
-            doFilter = doFilter !== undefined ? doFilter : true;
+            extraParams = extraParams || {};
+            doFilter = doFilter || true;
             assembleParams(doFilter, offset).then(function(params) {
-                Records.get(params).$promise.then(function(records) {
+                Records.get(_.extend(params, extraParams)).$promise.then(function(records) {
                     deferred.resolve(records);
                 });
             });
@@ -42,9 +51,10 @@
          *
          * @param {bool} doFilter If true: filter results
          */
-        function windshaftQuery(doFilter) {
+        function windshaftQuery(doFilter, extraParams) {
             var deferred = $q.defer();
-            doFilter = doFilter !== undefined ? doFilter : true;
+            extraParams = extraParams || {};
+            doFilter = doFilter || true;
             assembleParams(doFilter).then(function(params) {
                 Records.get(params).$promise.then(function(records) {
                     deferred.resolve(records);
@@ -53,6 +63,28 @@
             return deferred.promise;
         }
 
+        /**
+         * A utility function for constructing a single object for jsonb query filtering
+         *
+         * @param {object} filters The filters as stored inside DRIVER logic and, in particular,
+         *                         by the filter service - transformed to produce a query string
+         */
+        function assembleJsonFilterParams(filters) {
+            var filterParams = {};
+            _.each(filters, function(filter, path) {
+                filterParams = _.merge(filterParams, expandFilter(path.split('#'), filter));
+            });
+            return filterParams;
+        }
+
+        /**
+         * Assemble all query parameters into a single query parameters object for the Record resource
+         *
+         * @param {bool} doFilter Whether or not to include filters in this query at all (still do
+         *                        offsets and record_type filtering, however)
+         * @param {number} offset The offset to use for pagination of results
+         *
+         */
         function assembleParams(doFilter, offset) {
             var deferred = $q.defer();
             var paramObj = {};
@@ -68,6 +100,13 @@
                         var maxDate = new Date(FilterState.filters.__dateRange.max);
                         paramObj.occurred_max = maxDate.toISOString();
                     }
+                }
+
+                var jsonFilters = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange'));
+
+                // Handle cases where no json filters are set
+                if (!_.isEmpty(jsonFilters)) {
+                    paramObj = _.extend(paramObj, {'jsonb': jsonFilters});
                 }
             }
 
@@ -85,7 +124,25 @@
             return deferred.promise;
         }
 
-        return svc;
+        /**
+         * Recurses through a list of edge names and constructs an object graph which corresponds
+         *  to that list.
+         *  E.G. (['a', 'b', 'c'], <filter>) would be {'a': {'b': {'c': <filter> }}}
+         *
+         * @param {array} path A list of edge names
+         * @param {object} filter The filter that should sit at the endnode of the constructed graph
+         */
+        function expandFilter(path, filter) {
+            var expanded = {};
+            if (path.length === 1) {
+                expanded[path[0]] = filter;
+                return expanded;
+            }
+
+            expanded[path[0]] = expandFilter(_.tail(path), filter);
+            return expanded;
+
+        }
     }
 
     angular.module('driver.resources')

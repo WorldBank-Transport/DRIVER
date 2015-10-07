@@ -3,8 +3,8 @@
         <label>{{label | labelFormatter}}</label>
         <select data-ng-options="val for val in data.enum" class="form-control"
                 name="options"
-                ng-model="selection"
-                ng-change="updateFilter(label, selection)">
+                ng-model="filter.contains"
+                ng-change="updateFilter(label)">
                 <option value ="">-- select --</option>
         </select>
     </div>

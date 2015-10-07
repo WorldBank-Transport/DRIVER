@@ -14,14 +14,16 @@ describe('driver.resources: QueryBuilder', function () {
     var $httpBackend;
     var DriverResourcesMock;
     var ResourcesMock;
+    var FilterState;
 
     beforeEach(inject(function (_$rootScope_, _$httpBackend_,
-                                _QueryBuilder_, _DriverResourcesMock_, _ResourcesMock_) {
+                                _QueryBuilder_, _DriverResourcesMock_, _ResourcesMock_, _FilterState_) {
         $httpBackend = _$httpBackend_;
         QueryBuilder = _QueryBuilder_;
         $rootScope = _$rootScope_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
+        FilterState = _FilterState_
     }));
 
     it('should result in a call out to determine the selected RecordType and use the date filtering on FilterState', function () {
@@ -37,5 +39,12 @@ describe('driver.resources: QueryBuilder', function () {
         $rootScope.$apply();
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should deduplicate redundant information when provided a flattened representation of multiple nodes', function() {
+        expect(QueryBuilder.assembleJsonFilterParams({'a#b': {'_rule_type': 'containment', 'contains': [1,2,3]},
+                                                       'a#c': {'_rule_type': 'intrange', 'min': 1, 'max': 5}}))
+          .toEqual({'a': {'b': {'_rule_type': 'containment', 'contains': [1,2,3]},
+                          'c': {'_rule_type': 'intrange', 'min': 1, 'max': 5}}});
     });
 });

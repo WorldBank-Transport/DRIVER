@@ -36,7 +36,7 @@ describe('driver.filterbar: Options', function () {
     it('should handle restoring filter selection', function () {
         // should have no selection yet
         expect(Element.find('select').val()).toEqual('');
-        $rootScope.$broadcast('driver.filterbar:restore', [{'foo#bar': 'baz'}, null]);
+        $rootScope.$broadcast('driver.filterbar:restore', [{'foo#bar': {'_rule_type': 'containment', 'contains': ['baz']}}, null]);
         $rootScope.$digest();
         // should have baz selected now
         expect(Element.find('select').val()).toEqual('string:baz');
