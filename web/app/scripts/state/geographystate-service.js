@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function GeographyState($log, $rootScope, $q, localStorageService, Geography, MapState) {
+    function GeographyState($log, $rootScope, $q, localStorageService, Geography) {
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;

@@ -28,9 +28,11 @@ describe('driver.views.map: Layers Controller', function () {
     var ResourcesMock;
     var DriverResourcesMock;
     var RecordState;
+    var MapState;
 
     beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_,
-                                _ResourcesMock_, _DriverResourcesMock_, _RecordState_) {
+                                _ResourcesMock_, _DriverResourcesMock_,
+                                _RecordState_, _MapState_) {
         $compile = _$compile_;
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
@@ -39,6 +41,11 @@ describe('driver.views.map: Layers Controller', function () {
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
         RecordState = _RecordState_;
+        MapState = _MapState_;
+
+        // Set these for testing persistence
+        MapState.setLocation({lat: 123, lng: 234});
+        MapState.setZoom(7);
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
@@ -83,6 +90,11 @@ describe('driver.views.map: Layers Controller', function () {
         spyOn(Controller, 'setRecordLayers');
         RecordState.setSelected({uuid: 'foo'});
         expect(Controller.setRecordLayers).toHaveBeenCalled();
+    });
+
+    it('should restore state when certain props are set on MapState', function() {
+        expect(Controller.map.getCenter()).toEqual({lat: 123, lng: 234});
+        expect(Controller.map.getZoom()).toEqual(7);
     });
 
 });
