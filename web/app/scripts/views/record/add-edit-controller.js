@@ -46,9 +46,11 @@
             });
 
             $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
-                Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
-                    ctl.reverseGeocoder = displayName;
-                });
+                if (newVal && newVal.lat && newVal.lng) {
+                    Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
+                        ctl.reverseGeocoder = displayName;
+                    });
+                }
             });
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
