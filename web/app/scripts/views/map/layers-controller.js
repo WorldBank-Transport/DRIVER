@@ -4,7 +4,7 @@
     /* ngInject */
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
                                     WebConfig, FilterState, RecordState, GeographyState,
-                                    Records, QueryBuilder) {
+                                    Records, QueryBuilder, MapState) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -22,6 +22,11 @@
         var recordsUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png';
         var recordsUtfgridUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json';
         var boundaryUrl = '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png';
+        var filterStyle = {
+            color: '#f357a1',
+            fillColor: '#f357a1',
+            fill: true
+        };
 
         // prepend hostname to URLs
         heatmapUrl = WebConfig.windshaft.hostname + heatmapUrl;
@@ -97,11 +102,11 @@
 
                 // handle map draw events
                 ctl.map.on('draw:created', function(e) {
-                    filterShapeCreated(e);
+                    filterShapeCreated(e.layer);
                 });
 
                 ctl.map.on('draw:editstop', function(e) {
-                    filterShapeCreated(e);
+                    filterShapeCreated(e.layer);
                 });
 
                 // only allow one filter shape at a time
@@ -116,25 +121,47 @@
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
+                ctl.map.on('zoomend', function() {
+                    MapState.setZoom(ctl.map.getZoom());
+                });
+
+                ctl.map.on('moveend', function() {
+                    MapState.setLocation(ctl.map.getCenter());
+                });
+
                 // TODO: Find a better way to ensure this doesn't happen until filterbar ready
                 // (without timeout, filterbar components aren't ready to listen yet)
                 // add filtered overlays
                 // this will trigger `driver.filterbar:changed` when complete
                 $timeout(FilterState.restoreFilters, 1000);
+            }).then(function() {
+                if (MapState.getLocation() && MapState.getZoom()) {
+                    ctl.map.setView(MapState.getLocation(), MapState.getZoom());
+                }
+
+                if (MapState.getFilterGeoJSON()) {
+                    var layer =  L.geoJson(MapState.getFilterGeoJSON());
+                    layer.setStyle(filterStyle);
+                    ctl.editLayers.addLayer(layer);
+                }
             });
         };
 
-        function filterShapeCreated(event) {
+        function filterShapeCreated(layer) {
             // TODO: is the shape type useful info?
             //var type = event.layerType;
-
-            var layer = event.layer;
-
             ctl.editLayers.clearLayers();
-            $rootScope.$broadcast('driver.views.map:filterdrawn', null);
+
+            layer.setStyle(filterStyle);
             ctl.editLayers.addLayer(layer);
+            $rootScope.$broadcast('driver.views.map:filterdrawn');
+
+            // Use GeoJSON instead of a normal layer - theres a strange bug likely stemming from
+            //  race conditions on the Leaflet Map object otherwise
+            MapState.setFilterGeoJSON(layer.toGeoJSON());
 
             // pan/zoom to selected area
+
             ctl.map.fitBounds(layer.getBounds());
 
             // Send exported shape to filterbar, which will send `changed` event with filters.
