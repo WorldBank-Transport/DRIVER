@@ -18,8 +18,11 @@
         'driver.resources',
         'driver.toddow',
         'driver.stepwise',
-        'driver.state',
         'driver.map-layers.recent-events'
+        'driver.elemstat',
+        'driver.recentCounts',
+        'driver.elemstat',
+        'driver.state'
     ]).config(StateConfig);
 
 })();
