@@ -1,0 +1,17 @@
+<div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="insight01">
+        <h1><b>{{ recent.proportions[0].proportion }}</b> of all traffic accidents involved <b>{{ recent.proportions[0].label }} last week</b>.</h1>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="insight02">
+        <h1><b>{{ recent.proportions[1].proportion }}</b> of all traffic accidents involved <b>{{ recent.proportions[1].label }} last week</b>.</h1>
+    </div>
+    <div role="tabpanel" class="tab-pane" id="insight03">
+        <h1><b>{{ recent.proportions[2].proportion }}</b> of all traffic accidents involved <b>{{ recent.proportions[2].label }} last week</b>.</h1>
+    </div>
+</div>
+
+<ul class="nav nav-pills" role="tablist">
+    <li role="presentation" class="active"><a href="#insight01" role="tab" data-toggle="tab"></a></li>
+    <li role="presentation"><a href="#insight02" role="tab" data-toggle="tab"></a></li>
+    <li role="presentation"><a href="#insight03" role="tab" data-toggle="tab"></a></li>
+</ul>

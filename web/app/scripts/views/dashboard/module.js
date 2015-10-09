@@ -21,6 +21,7 @@
         'driver.map-layers.recent-events'
         'driver.elemstat',
         'driver.recentCounts',
+        'driver.recentProportions',
         'driver.elemstat',
         'driver.state'
     ]).config(StateConfig);
