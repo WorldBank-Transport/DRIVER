@@ -25,7 +25,6 @@
         function setFilterGeoJSON(geojson) {
             $log.debug('Setting drawn layer');
             filterGeoJSON = geojson;
-            return;
         }
 
         /**
@@ -60,7 +59,6 @@
         function setLocation(mapLocation) {
             $log.debug('Setting location to: ' + JSON.stringify(mapLocation));
             location = mapLocation;
-            return;
         }
 
         /**

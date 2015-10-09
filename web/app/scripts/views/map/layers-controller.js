@@ -23,9 +23,9 @@
         var recordsUtfgridUrl = '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json';
         var boundaryUrl = '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png';
         var filterStyle = {
-            'color': '#f357a1',
-            'fillColor': '#f357a1',
-            'fill': true,
+            color: '#f357a1',
+            fillColor: '#f357a1',
+            fill: true
         };
 
         // prepend hostname to URLs
