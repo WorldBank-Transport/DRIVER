@@ -55,9 +55,12 @@
                  */
                 function init() {
                     var rawSvg = elem.find('svg')[0];
+                    var bufferedWidth = width + margin.left + margin.right;
+                    var bufferedHeight = height + margin.top + margin.bottom;
+
                     svg = d3.select(rawSvg)
-                        .attr('width', width + margin.left + margin.right)
-                        .attr('height', height + margin.top + margin.bottom)
+                        .attr('viewBox', '0 0 ' + bufferedWidth + ' ' + bufferedHeight)
+                        .attr('preserveAspectRatio', 'xMinYMin')
                         .append('g')
                         .attr('class', 'outer')
                         .attr('transform', 'translate(' + margin.left + ',' + margin.top +')');

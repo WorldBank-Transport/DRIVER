@@ -55,8 +55,8 @@
                  */
                 function init() {
                     svg = d3.select(rawSvg)
-                        .attr('width', width)
-                        .attr('height', height)
+                        .attr('viewBox', '0 0 ' + width + ' ' + height)
+                        .attr('preserveAspectRatio', 'xMinYMin')
                         .attr('fill', 'grey');
 
                     svg.append('text')
