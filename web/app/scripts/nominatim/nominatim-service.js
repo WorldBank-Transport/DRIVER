@@ -36,7 +36,9 @@
                     lon: x
                 }
             }).then(function (result) {
+                /*jshint camelcase: false */
                 return result.data.display_name;
+                /*jshint camelcase: true */
             });
         }
     }
