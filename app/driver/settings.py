@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
 
     'django_extensions',
+    'djangooidc',
 
     'ashlar',
 
@@ -134,6 +135,56 @@ STATIC_ROOT = os.environ['DJANGO_STATIC_ROOT']
 MEDIA_ROOT = os.environ['DJANGO_MEDIA_ROOT']
 MEDIA_URL = '/media/'
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'ashlar': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'oic': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'djangooidc': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
+
+# Django OAuth Toolkit
+# https://github.com/evonove/django-oauth-toolkit
+
+OAUTH2_PROVIDER = {
+    # Some default sensible scopes, could change later if more fine-grained scopes are necessary
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
+}
+
 # user and group settings
 DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azavea.com')
 DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
@@ -148,7 +199,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -191,39 +241,94 @@ ASHLAR = {
     'SRID': 4326,
 }
 
-#######################################################################
-# django-oidc settings
+## Tweak settings depending on deployment target
+if DEVELOP:
+    # Disable on production, this is for the browseable API only
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
+
+## django-oidc settings
+
+# TODO: set these during provisioning
+HOST_URL = os.environ['HOST_URL']
+GOOGLE_OAUTH_CLIENT_ID = os.environ['GOOGLE_OAUTH_CLIENT_ID']
+GOOGLE_OAUTH_CLIENT_SECRET = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
+
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                           'djangooidc.backends.OpenIdConnectBackend')
 
 LOGIN_URL = 'openid'
 
-OIDC_ALLOW_DYNAMIC_OP = True
+OIDC_ALLOW_DYNAMIC_OP = False
+OIDC_CREATE_UNKNOWN_USER = True
+OIDC_VERIFY_SSL = True
 
 # Information used when registering the client, this may be the same for all OPs
 # Ignored if auto registration is not used.
 OIDC_DYNAMIC_CLIENT_REGISTRATION_DATA = {
     "application_type": "web",
-    "contacts": ["systems+driver@azavea.com"],
-    "redirect_uris": ["http://localhost/openid/callback/login/", ],
-    "post_logout_redirect_uris": ["http://localhost/openid/callback/logout/", ]
+    "contacts": ["kkillebrew@azavea.com"],
+    "redirect_uris": [HOST_URL + "/openid/callback/login/", ],
+    "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/", ]
 }
 
 # Default is using the 'code' workflow, which requires direct connectivity from your website to the OP.
 OIDC_DEFAULT_BEHAVIOUR = {
     "response_type": "code",
-    "scope": ["openid", "profile", "email", "address", "phone"],
+    "scope": ["openid", "email"],
 }
 
 OIDC_PROVIDERS = {
-    "Azure Active Directory": {
-        "srv_discovery_url": "https://sts.windows.net/aaaaaaaa-aaaa-1111-aaaa-xxxxxxxxxxxxx/",
+    # see: https://developers.google.com/identity/protocols/OpenIDConnect?hl=en
+    # example config towards bottom of page
+    "google.com": {
+        "provider_info": {
+            "issuer": "https://accounts.google.com",
+            "authorization_endpoint": "https://accounts.google.com/o/oauth2/v2/auth",
+            "token_endpoint": "https://www.googleapis.com/oauth2/v4/token",
+            "userinfo_endpoint": "https://www.googleapis.com/oauth2/v3/userinfo",
+            "revocation_endpoint": "https://accounts.google.com/o/oauth2/revoke",
+            "jwks_uri": "https://www.googleapis.com/oauth2/v3/certs",
+            "response_types_supported": [
+                "code",
+                "token",
+                "id_token",
+                "code token",
+                "code id_token",
+                "token id_token",
+                "code token id_token",
+                "none"
+            ], "subject_types_supported": [
+                "public"
+            ], "id_token_signing_alg_values_supported": [
+                "RS256"
+            ], "scopes_supported": [
+                "openid",
+                "email",
+                "profile"
+            ], "token_endpoint_auth_methods_supported": [
+                "client_secret_post",
+                "client_secret_basic"
+            ], "claims_supported": [
+                "aud",
+                "email",
+                "email_verified",
+                "exp",
+                "family_name",
+                "given_name",
+                "iat",
+                "iss",
+                "locale",
+                "name",
+                "picture",
+                "sub"
+            ]
+        },
         "behaviour": OIDC_DEFAULT_BEHAVIOUR,
         "client_registration": {
-            "client_id": "your_client_id",
-            "client_secret": "your_client_secret",
-            "redirect_uris": ["http://localhost:8000/openid/callback/login/"],
-            "post_logout_redirect_uris": ["http://localhost:8000/openid/callback/logout/"],
+            "client_id": GOOGLE_OAUTH_CLIENT_ID,
+            "client_secret": GOOGLE_OAUTH_CLIENT_SECRET,
+            "redirect_uris": [HOST_URL + "/openid/callback/login/"],
+            "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/"],
         }
     }
 }
@@ -235,3 +340,8 @@ OIDC_PROVIDERS = {}
 if DEVELOP:
     # Disable on production, this is for the browseable API only
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
+
+if PRODUCTION:
+    # Enabled on production? This allows locking write permissions on views
+    # to users that request tokens with write scope
+    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] += ('oauth2_provider.ext.rest_framework.TokenHasReadWriteScope',)
