@@ -34,6 +34,6 @@ describe('driver.views.dashboard: Dashboard', function () {
         $rootScope.$apply();
 
         // placeholder test
-        expect(element.find('driver-stepwise').length).toEqual(1);
+        expect(element.find('driver-toddow').length).toEqual(1);
     });
 });
