@@ -235,6 +235,9 @@
             var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilteredRecordUrl(recordsUtfgridUrl),
                                                     {useJsonP: false, zIndex: 5});
 
+            // combination of records and UTF grid layers, so they can be toggled as a group
+            var recordsLayerGroup = new L.layerGroup([recordsLayer, utfGridRecordsLayer]);
+
             utfGridRecordsLayer.on('click', function(e) {
                 // ignore clicks where there is no event record
                 if (!e.data) {
@@ -274,12 +277,10 @@
 
             // Add layers to show by default.
             // Layers added to map will automatically be selected in the layer switcher.
-            ctl.map.addLayer(recordsLayer);
-            ctl.map.addLayer(utfGridRecordsLayer);
+            ctl.map.addLayer(recordsLayerGroup);
 
             var recordsOverlays = {
-                'Events': recordsLayer,
-                'Events Interactivity': utfGridRecordsLayer,
+                'Events': recordsLayerGroup,
                 'Heatmap': heatmapLayer
             };
 
