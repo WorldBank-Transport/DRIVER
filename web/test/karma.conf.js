@@ -96,6 +96,8 @@ module.exports = function(config) {
       'app/scripts/views/record/**.js',
       'app/scripts/leaflet/module.js',
       'app/scripts/leaflet/**.js',
+      'app/scripts/map-layers/module.js',
+      'app/scripts/map-layers/**/*.js',
       'app/scripts/details/module.js',
       'app/scripts/details/**.js',
       'test/ase-mock/**/*.js',

@@ -46,7 +46,7 @@
                 detectRetina: true,
                 zIndex: 1
             };
-            TileUrlService.positronUrl().then(function(url) {
+            TileUrlService.baseLayerUrl().then(function(url) {
                 var streets = new L.tileLayer(url, streetsOptions);
                 newMap.addLayer(streets);
             });

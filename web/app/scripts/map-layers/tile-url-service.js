@@ -15,7 +15,7 @@
             allRecTilesUrl: recordsTilesUrlForAll,
             recUtfGridTilesUrl: recordsUtfGridTilesUrlForType,
             allRecUtfGridTilesUrl: recordsUtfGridTilesUrlForAll,
-            positronUrl: getPositronUrl
+            baseLayerUrl: getBaseLayerUrl
         };
         return module;
 
@@ -36,7 +36,7 @@
             return _makePromise((allRecordsUtfGridUrl.replace(/ALL/, typeUuid)));
         }
 
-        function getPositronUrl() {
+        function getBaseLayerUrl() {
             return _makePromise(positronUrl);
         }
 
