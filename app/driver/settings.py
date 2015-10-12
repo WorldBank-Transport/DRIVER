@@ -165,6 +165,46 @@ ASHLAR = {
     'SRID': 4326,
 }
 
+#######################################################################
+# django-oidc settings
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
+                          'djangooidc.backends.OpenIdConnectBackend')
+
+LOGIN_URL = 'openid'
+
+OIDC_ALLOW_DYNAMIC_OP = True
+
+# Information used when registering the client, this may be the same for all OPs
+# Ignored if auto registration is not used.
+OIDC_DYNAMIC_CLIENT_REGISTRATION_DATA = {
+    "application_type": "web",
+    "contacts": ["systems+driver@azavea.com"],
+    "redirect_uris": ["http://localhost/openid/callback/login/", ],
+    "post_logout_redirect_uris": ["http://localhost/openid/callback/logout/", ]
+}
+
+# Default is using the 'code' workflow, which requires direct connectivity from your website to the OP.
+OIDC_DEFAULT_BEHAVIOUR = {
+    "response_type": "code",
+    "scope": ["openid", "profile", "email", "address", "phone"],
+}
+
+OIDC_PROVIDERS = {
+    "Azure Active Directory": {
+        "srv_discovery_url": "https://sts.windows.net/aaaaaaaa-aaaa-1111-aaaa-xxxxxxxxxxxxx/",
+        "behaviour": OIDC_DEFAULT_BEHAVIOUR,
+        "client_registration": {
+            "client_id": "your_client_id",
+            "client_secret": "your_client_secret",
+            "redirect_uris": ["http://localhost:8000/openid/callback/login/"],
+            "post_logout_redirect_uris": ["http://localhost:8000/openid/callback/logout/"],
+        }
+    }
+}
+
+OIDC_PROVIDERS = {}
+#######################################################################
+
 ## Tweak settings depending on deployment target
 if DEVELOP:
     # Disable on production, this is for the browseable API only
