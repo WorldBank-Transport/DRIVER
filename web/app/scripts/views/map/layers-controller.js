@@ -88,13 +88,10 @@
                             shapeOptions: {
                                 //color: '#bdda55'
                             }
-                        },
-                        edit: {
-                            FeatureGroup: ctl.editLayers,
-                            // TODO: why aren't the edit and remove toolbar buttons showing?
-                            edit: true,
-                            remove: true
                         }
+                    },
+                    edit: {
+                        featureGroup: ctl.editLayers
                     }
                 });
 
@@ -105,8 +102,10 @@
                     filterShapeCreated(e.layer);
                 });
 
-                ctl.map.on('draw:editstop', function(e) {
-                    filterShapeCreated(e.layer);
+                ctl.map.on('draw:edited', function(e) {
+                    e.layers.eachLayer(function(layer) {
+                        filterShapeCreated(layer);
+                    });
                 });
 
                 // only allow one filter shape at a time
