@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecentProportionsController($log) {
+    function RecentProportionsController() {
         var ctl = this;
 
         ctl.proportions = [

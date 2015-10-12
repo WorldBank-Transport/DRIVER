@@ -7,10 +7,7 @@
             restrict: 'EA',
             templateUrl: 'scripts/recent-counts/recent-counts.html',
             controller: 'RecentCountsController',
-            controllerAs: 'recent',
-            scope: {
-                recordType: '='
-            },
+            controllerAs: 'recent'
         };
         return module;
     }

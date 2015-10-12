@@ -1,9 +1,5 @@
 /**
- * This Service provides a centralized location to handle construction of queries that involve
- *  the many (sometimes complex) filters that DRIVER requires for dates, spaces, and jsonb.
- *  At root, there are two functions: `djangoQuery` and `windshaftQuery`. Each of these share
- *  a function, `assembleParams` which is a promise-based function in which all of the relevant
- *  information for making a query is gathered together into a flattened object.
+ * This Service provides a centralized location to handle aggregate data - sums, percentages, etc.
  */
 (function () {
     'use strict';

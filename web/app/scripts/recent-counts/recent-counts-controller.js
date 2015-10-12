@@ -2,12 +2,11 @@
     'use strict';
 
     /* ngInject */
-    function RecentCountsController($log, $scope, RecordAggregates) {
+    function RecentCountsController($scope, RecordAggregates) {
         var ctl = this;
         init();
         $scope.$on('driver.state.recordstate:selected', init);
         return ctl;
-
 
         function init() {
             /* jshint camelcase: false */
@@ -22,6 +21,6 @@
     }
 
     angular.module('driver.recentCounts')
-    .controller('RecentCountsController', RecentCountsController);
+      .controller('RecentCountsController', RecentCountsController);
 
 })();
