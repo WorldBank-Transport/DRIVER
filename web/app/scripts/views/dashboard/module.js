@@ -18,11 +18,9 @@
         'driver.resources',
         'driver.toddow',
         'driver.stepwise',
-        'driver.map-layers.recent-events'
-        'driver.elemstat',
+        'driver.map-layers.recent-events',
         'driver.recentCounts',
         'driver.recentProportions',
-        'driver.elemstat',
         'driver.state'
     ]).config(StateConfig);
 
