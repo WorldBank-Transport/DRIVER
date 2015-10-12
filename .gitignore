@@ -71,3 +71,5 @@ docs/_build/
 # PyBuilder
 target/
 
+# group_vars config
+deployment/ansible/group_vars/all

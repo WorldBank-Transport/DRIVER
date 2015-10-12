@@ -32,6 +32,9 @@
                     broadcastCoordinates(e.latlng);
                     setMarker(e.latlng);
                 });
+                ctl.map.on('moveend', function(e) {
+                    broadcastBBox(e.target.getBounds());
+                });
             }
 
             if (lat && lng) {
@@ -60,6 +63,15 @@
             }
         }
 
+        /** Tell add-edit-controller.js about bbox
+         *
+         * @param {Object} bbox Leaflet LatLngBounds object with map's bounds
+         */
+        function broadcastBBox(bbox) {
+            $rootScope.$broadcast('driver.views.record:map-moved', [bbox.getWest(), bbox.getNorth(),
+                                                                    bbox.getEast(), bbox.getSouth()]);
+        }
+
         /** Tell add-edit-controller.js when marker point set.
          *
          * @param {Object} latlng Leaflet LatLng object with marker's coordinates
@@ -72,8 +84,12 @@
             $rootScope.$broadcast('driver.views.record:marker-moved', [latlng.lng, latlng.lat]);
         }
 
-        $scope.$on('driver.views.record:location-selected', function(event, data) {
-            setMarker(L.latLng(data.lat, data.lng));
+        $scope.$on('driver.views.record:location-selected', function(event, data, recenter) {
+            var latlng = L.latLng(data.lat, data.lng);
+            setMarker(latlng);
+            if (recenter) {
+                ctl.map.setView(latlng, 11, {animate: true});
+            }
         });
 
         // destroy map state when record is closed

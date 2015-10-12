@@ -80,6 +80,8 @@ module.exports = function(config) {
       'app/scripts/resources/**/*.js',
       'app/scripts/state/module.js',
       'app/scripts/state/*.js',
+      'app/scripts/nominatim/module.js',
+      'app/scripts/nominatim/*.js',
       'app/scripts/filterbar/module.js',
       'app/scripts/filterbar/**.js',
       'app/scripts/toddow/module.js',

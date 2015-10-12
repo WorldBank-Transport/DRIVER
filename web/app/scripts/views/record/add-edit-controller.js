@@ -2,10 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4, Notifications,
-                                 Records, RecordSchemas, RecordState) {
+    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4,
+                                     Nominatim, Notifications, Records, RecordSchemas,
+                                     RecordState) {
         var ctl = this;
         var editorData = null;
+        var bbox = null;
+        var suppressReverseNominatim = false;
 
         // expected format to save successfully
         var dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
@@ -18,9 +21,13 @@
             ctl.onSaveClicked = onSaveClicked;
             ctl.occurredFromChanged = occurredFromChanged;
             ctl.onGeomChanged = onGeomChanged;
+            ctl.nominatimLookup = nominatimLookup;
+            ctl.nominatimSelect = nominatimSelect;
 
             ctl.occurredFromOptions = {format: dateTimeFormat};
             ctl.occurredToOptions = {format: dateTimeFormat};
+
+            ctl.nominatimValue = '';
 
             ctl.geom = {
                 lat: null,
@@ -35,6 +42,22 @@
                 });
             });
 
+            $scope.$on('driver.views.record:map-moved', function(event, data) {
+                bbox = data;
+            });
+
+            $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
+                if (newVal && newVal.lat && newVal.lng) {
+                    if(!suppressReverseNominatim) {
+                        Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
+                            ctl.nominatimValue = displayName;
+                        });
+                    } else {
+                        suppressReverseNominatim = false;
+                    }
+                }
+            });
+
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
             (recordPromise ? recordPromise.then(loadRecordType) : loadRecordType())
                 .then(loadRecordSchema)
@@ -42,9 +65,9 @@
         }
 
         // tell embed-map-directive to update marker location
-        function onGeomChanged() {
+        function onGeomChanged(recenter) {
             if (ctl.geom.lat && ctl.geom.lng) {
-                $scope.$emit('driver.views.record:location-selected', ctl.geom);
+                $scope.$emit('driver.views.record:location-selected', ctl.geom, recenter);
             }
         }
 
@@ -59,7 +82,7 @@
                     ctl.geom.lng = ctl.record.geom.coordinates[0];
 
                     // notify map
-                    onGeomChanged();
+                    onGeomChanged(false);
                 });
         }
 
@@ -116,6 +139,24 @@
                     });
                 });
             });
+        }
+
+        function nominatimLookup(text) {
+            return Nominatim.forward(text, bbox);
+        }
+
+        function nominatimSelect(item) {
+            // a change to ctl.geom will trigger a reverse nominatim lookup,
+            // so supress it
+            suppressReverseNominatim = true;
+            // if the same location is looked up twice, the suppress flag won't be
+            // reset and the next reverse lookup will be ignored, so reset it after 500ms
+            _.delay(function () { suppressReverseNominatim = false; }, 500);
+            ctl.geom.lat = parseFloat(item.lat);
+            ctl.geom.lng = parseFloat(item.lon);
+
+            // notify map
+            onGeomChanged(true);
         }
 
         function onSchemaReady() {

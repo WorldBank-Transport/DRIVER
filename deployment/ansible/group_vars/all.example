@@ -31,6 +31,7 @@ redis_bind_address: "redis.service.driver.internal"
 redis_port: 6379
 
 ## WEB SETTINGS
+web_js_nominatim_key: ""
 web_js_html5mode: "true"
 web_js_html5mode_prefix: "!"
 editor_js_html5mode: "true"

@@ -12,6 +12,9 @@
         },
         windshaft: {
             hostname: 'http://localhost:7000'
+        },
+        nominatim: {
+            key: 'abc123'
         }
     };
 
