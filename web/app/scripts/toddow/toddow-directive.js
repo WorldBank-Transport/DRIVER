@@ -11,21 +11,12 @@
     function ToDDoW() {
         var module = {
             restrict: 'E',
-            require: '^element-stats',
             scope: {
               chartData: '=',
               dateField: '='
             },
             template: '<svg></svg>',
-            link: function(scope, elem, attrs, elemStat) {
-                scope.$watchGroup([
-                    function() { return elemStat.height; },
-                    function() { return elemStat.width; }],
-                    function(oldVal, newVal) {
-                        console.log(oldVal, newVal); // Here to ease future development
-                    }
-                );
-
+            link: function(scope, elem) {
                 var rawSvg = elem.find('svg')[0];
                 var cellSize = 26,
                     height = 210,

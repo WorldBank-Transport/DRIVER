@@ -18,7 +18,6 @@
         'driver.resources',
         'driver.toddow',
         'driver.stepwise',
-        'driver.elemstat',
         'driver.state'
     ]).config(StateConfig);
 
