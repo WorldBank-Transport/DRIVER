@@ -1,5 +1,5 @@
 <div class="navbar navbar-default drop-shadow filterbar collapse navbar-collapse">
-    <div class="pull-left form-inline nav navbar=nav">
+    <div class="navbar-left form-inline nav navbar=nav">
         <div class="navbar-header">
             <input type="search" class="form-control" placeholder="Geographic code"></input>
         </div>
@@ -10,6 +10,12 @@
             <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
                 <li ng-if="value.format=='number'" numeric-range-field label="key" data="value" class="dropdown"></li>
                 <li ng-if="value.fieldType=='selectlist'" options-field label="key" data="value" class="dropdown"></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <!-- TODO: this is a temporary location for the Add Record button which has been removed -->
+                <a class="btn btn-default" ui-sref="record.add()">
+                    Add New {{ ctl.recordType.label }}
+                </a>
             </ul>
         </ul>
     </div>
