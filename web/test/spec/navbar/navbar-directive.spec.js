@@ -11,7 +11,6 @@ describe('driver.navbar: Navbar', function () {
     beforeEach(module('driver.views.dashboard'));
     beforeEach(module('driver.views.map'));
     beforeEach(module('driver.views.record'));
-    beforeEach(module('driver.elemstat'));
 
     var $compile;
     var $httpBackend;

@@ -5,7 +5,6 @@ describe('driver.stepwise: Stepwise graph directive', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.stepwise'));
-    beforeEach(module('driver.elemstat'));
 
     var $compile;
     var $httpBackend;
@@ -24,7 +23,7 @@ describe('driver.stepwise: Stepwise graph directive', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<div element-stats><driver-stepwise chartData=""></driver-stepwise></div>')(scope);
+        var element = $compile('<driver-stepwise chartData=""></driver-stepwise>')(scope);
         $rootScope.$apply();
 
         expect(element.find('g.outer').length).toBe(1);
