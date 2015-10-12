@@ -30,6 +30,7 @@
                             <input type="text" class="form-control"
                                 typeahead="result.display_name for result in ctl.nominatimLookup($viewValue)"
                                 typeahead-on-select="ctl.nominatimSelect($item)"
+                                typeahead-wait-ms="250"
                                 ng-model="ctl.nominatimValue">
                         </div>
                     </div>
