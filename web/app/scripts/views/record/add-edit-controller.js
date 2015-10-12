@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, uuid4,
+    function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
                                      Nominatim, Notifications, Records, RecordSchemas,
                                      RecordState) {
         var ctl = this;
@@ -17,6 +17,7 @@
 
         // Initialize for either adding or editing, depending on recorduuid being supplied
         function initialize() {
+            ctl.goBack = goBack;
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
             ctl.occurredFromChanged = occurredFromChanged;
@@ -226,6 +227,10 @@
             /* jshint camelcase: true */
 
             return true;
+        }
+
+        function goBack() {
+            $window.history.back();
         }
 
         function onSaveClicked() {
