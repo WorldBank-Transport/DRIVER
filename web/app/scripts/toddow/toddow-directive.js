@@ -9,6 +9,9 @@
 
     /* ngInject */
     function ToDDoW() {
+        // The color ramp to use
+        var rampValues = ['#ffffff', '#f6edb1', '#f7da22', '#ecbe1d', '#e77124',
+                          '#d54927', '#cf3a27', '#a33936', '#7f182a', '#68101a'];
         var module = {
             restrict: 'E',
             scope: {
@@ -31,10 +34,9 @@
                     if (val) {
                         var dateField = scope.dateField ? scope.dateField : 'occurred_from';
                         var data = formatData(val, dateField);
-                        color = d3.scale.linear()
+                        color = d3.scale.quantile()
                             .domain([0, d3.max(d3.values(data))])
-                            .interpolate(d3.interpolateRgb)
-                            .range(['#ffffff', '#355e3b']);
+                            .range(rampValues);
                         updateChart(data);
                     }
                 });
@@ -56,10 +58,10 @@
                         .text(function(d) { return d; });
 
                     var theDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                    var theHours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
-                                    '12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11',
-                                    '12'];
-
+                    var theHours = ['0', '1', '2', '3', '4', '5',
+                                    '6', '7', '8', '9', '10', '11',
+                                    '12', '13', '14', '15', '16', '17',
+                                    '18', '19', '20', '21', '22', '23', '24'];
                     rect = svg.selectAll('.day')
                         .data(theDays)
                             .enter().append('g')
@@ -78,11 +80,7 @@
                             .attr('width', cellSize)
                             .attr('height', cellSize)
                             .attr('x', function(d, i) { return cellSize * i + 30; })
-                            .attr('y', function(d, i, j) { return j * cellSize + 20; })
-                            .attr('data-duration', function(d, i) {
-                                var time = (i <= 11) ? 'am' : 'pm';
-                                return theHours[i] + '-' + theHours[i + 1] + time;
-                            });
+                            .attr('y', function(d, i, j) { return j * cellSize + 20; });
 
                     // Day labels
                     svg.selectAll('.day')
@@ -95,24 +93,12 @@
                     svg.select('.day').selectAll('g')
                         .append('text')
                             .text(function(d, i) {
-                                if(i === 0) {
-                                    return theHours[i] + 'am';
-                                } else if (i === 12) {
-                                    return theHours[i] + 'pm';
-                                } else if (i === 24) {
-                                    return theHours[i] + 'am';
-                                } else {
                                     return theHours[i];
-                                }
                             })
                             .attr('class', 'label hours')
+                            // TODO: Actually center these in each cell
                             .attr('x', function(d, i) {
-                                var labelVal = theHours[i];
-                                if(typeof labelVal === 'number') {
-                                    return i * cellSize + 27;
-                                } else {
-                                    return i * cellSize + 22;
-                                }
+                                    return i * cellSize + 37;
                             })
                             .attr('y', 10);
 
@@ -133,7 +119,7 @@
                       return 'Event count: ' + tooltipText;
                     });
                     svg.call(tooltip);
-                    rect.attr('fill', 'white');
+                    rect.attr('fill', '#f1f2f2');
                     rect.filter(function(d) { return d in data; })
                         .attr('fill', function(d) { return color(data[d]); });
                 }
