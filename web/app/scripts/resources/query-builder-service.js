@@ -12,8 +12,8 @@
     function QueryBuilder($q, FilterState, RecordState, Records) {
         var svc = {
             djangoQuery: djangoQuery,
-            unfilteredDjangoQuery: function(extraParams, offset) {
-                return djangoQuery(extraParams, offset, false);
+            unfilteredDjangoQuery: function(offset, extraParams) {
+                return djangoQuery(false, offset, extraParams);
             },
             windshaftQuery: windshaftQuery,
             unfilteredWindshaftQuery: function() { return windshaftQuery({}, false); },
@@ -28,10 +28,12 @@
          * This function takes two (optional) arguments, compiles a query, and carries out the
          *  corresponding request for filtering django records.
          *
-         * @param {bool} doFilter If true: filter results
+         * @param {bool} doFilter If true: Generate a filter from FilterState service.
          * @param {number} offset The page in django's pagination to return
          * @param {object} extraParams an object whose properties are extra parameters
-         *                             not otherwise configured
+         *                             not otherwise configured. Can include extra filters here
+         *                             that will be included along with those from FilterState,
+         *                             or used independently if doFilter is false.
          */
         function djangoQuery(doFilter, offset, extraParams) {
             var deferred = $q.defer();

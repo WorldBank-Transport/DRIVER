@@ -19,7 +19,8 @@
         'driver.toddow',
         'driver.stepwise',
         'driver.elemstat',
-        'driver.state'
+        'driver.state',
+        'driver.map-layers.recent-events'
     ]).config(StateConfig);
 
 })();
