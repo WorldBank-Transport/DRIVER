@@ -84,8 +84,12 @@
             $rootScope.$broadcast('driver.views.record:marker-moved', [latlng.lng, latlng.lat]);
         }
 
-        $scope.$on('driver.views.record:location-selected', function(event, data) {
-            setMarker(L.latLng(data.lat, data.lng));
+        $scope.$on('driver.views.record:location-selected', function(event, data, recenter) {
+            var latlng = L.latLng(data.lat, data.lng);
+            setMarker(latlng);
+            if (recenter) {
+                ctl.map.setView(latlng, 11, {animate: true});
+            }
         });
 
         // destroy map state when record is closed

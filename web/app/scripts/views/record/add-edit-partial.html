@@ -14,22 +14,22 @@
                         <div class="form-group">
                             <label class="control-label">Latitude</label>
                             <input type="number" class="form-control"
-                                ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lat">
+                                ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
                         </div>
                     </div>
                     <div class="col-md-6 pull-right">
                         <div class="form-group">
                             <label class="control-label">Longitude</label>
                             <input type="number" class="form-control"
-                                ng-change="ctl.onGeomChanged()" ng-model="ctl.geom.lng">
+                                ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <input type="text" class="form-control"
-                                typeahead="result.display_name for result in ctl.geocode($viewValue)"
-                                typeahead-on-select="ctl.geocodeSelect($item)"
-                                ng-model="ctl.reverseGeocoder">
+                                typeahead="result.display_name for result in ctl.nominatimLookup($viewValue)"
+                                typeahead-on-select="ctl.nominatimSelect($item)"
+                                ng-model="ctl.nominatimValue">
                         </div>
                     </div>
                     <div class="col-md-12">
