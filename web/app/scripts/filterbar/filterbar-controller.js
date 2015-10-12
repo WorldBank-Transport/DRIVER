@@ -6,6 +6,7 @@
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
+        ctl.recordLabel = '';
 
         /**
          * A simple function to add/update a filter
@@ -55,6 +56,10 @@
          */
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             if (selected) {
+
+                // get label for add record button
+                ctl.recordLabel = selected.label;
+
                 RecordSchemas.get({
                   /* jshint ignore:start */
                   id: selected.current_schema
