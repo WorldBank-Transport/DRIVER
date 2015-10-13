@@ -73,6 +73,10 @@ module.exports = function(config) {
 
       'app/scripts/navbar/module.js',
       'app/scripts/navbar/**.js',
+      'app/scripts/recent-counts/module.js',
+      'app/scripts/recent-counts/**.js',
+      'app/scripts/recent-proportions/module.js',
+      'app/scripts/recent-proportions/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/resources/**/*.js',
