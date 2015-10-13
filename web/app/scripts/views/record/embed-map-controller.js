@@ -4,7 +4,7 @@
     var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
     /* ngInject */
-    function EmbedMapController($log, $scope, $rootScope) {
+    function EmbedMapController($log, $scope, $rootScope, TileUrlService) {
         var ctl = this;
 
         ctl.isEditable = false;
@@ -23,9 +23,10 @@
             ctl.map = leafletMap;
             ctl.isEditable = !!isEditable;
 
-            var streets = new L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
-                                          {attribution: cartoDBAttribution});
-            ctl.map.addLayer(streets, {detectRetina: true});
+            TileUrlService.baseLayerUrl().then(function(streetsUrl) {
+                var streets = new L.tileLayer(streetsUrl, {attribution: cartoDBAttribution});
+                ctl.map.addLayer(streets, {detectRetina: true});
+            });
 
             if (ctl.isEditable) {
                 ctl.map.on('click', function(e) {
