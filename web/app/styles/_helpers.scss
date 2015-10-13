@@ -18,10 +18,16 @@
         position: absolute;
         left: 50%;
         margin-left: -5px;
-        width: 0; 
-        height: 0; 
+        width: 0;
+        height: 0;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
         border-top: 10px solid rgba(0,0,0,0.9);
     }
+}
+
+.dropdown-menu {
+    height: auto;
+    max-height: 500px;
+    overflow-x: auto;
 }

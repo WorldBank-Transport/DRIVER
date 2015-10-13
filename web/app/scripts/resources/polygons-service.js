@@ -3,7 +3,8 @@
 
     /* ngInject */
     function Polygons($resource, WebConfig) {
-        return $resource(WebConfig.api.hostname + '/api/boundarypolygons/:id/', {id: '@uuid'}, {
+        return $resource(WebConfig.api.hostname + '/api/boundarypolygons/:id/',
+                         {id: '@uuid', limit: 'all'}, {
             create: {
                 method: 'POST'
             },

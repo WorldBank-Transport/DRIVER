@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordTypes($resource, ASEConfig) {
         var url = ASEConfig.api.hostname + '/api/recordtypes/:id/';
-        return $resource(url, {id: '@uuid'}, {
+        return $resource(url, {id: '@uuid', limit: 'all'}, {
             create: {
                 method: 'POST'
             },
