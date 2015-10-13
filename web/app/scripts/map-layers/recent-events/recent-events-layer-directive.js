@@ -43,7 +43,7 @@
             // add base layer
             var streetsOptions = {
                 attribution: cartoDBAttribution,
-                detectRetina: true,
+                detectRetina: false,
                 zIndex: 1
             };
             TileUrlService.baseLayerUrl().then(function(url) {

@@ -40,6 +40,7 @@
         'ase.schemas',
         'datetimepicker',
         'driver.config',
+        'driver.map-layers',
         'driver.details',
         'Leaflet',
         'driver.resources',

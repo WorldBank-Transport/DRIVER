@@ -11,21 +11,7 @@ describe('driver:map-layers TileUrlService', function () {
         $rootScope = _$rootScope_;
     }));
 
-    it('should provide URLs to access PNG tiles of all records', function () {
-        TileUrlService.allRecTilesUrl().then(function(url) {
-            expect(url).toEqual(jasmine.stringMatching(/\.png/));
-        });
-        $rootScope.$apply();
-    });
-
-    it('should provide URLs to access UTF Grid tiles of all records', function () {
-        TileUrlService.allRecUtfGridTilesUrl().then(function(url) {
-            expect(url).toEqual(jasmine.stringMatching((/\.grid\.json/)));
-        });
-        $rootScope.$apply();
-    });
-
-    it('should provide URLs to access PNG tiles per record type', function () {
+    it('should provide URLs to access PNG tiles', function () {
         TileUrlService.recTilesUrl('notarealuuid').then(function(url) {
             expect(url).toEqual(jasmine.stringMatching(/\.png/));
             expect(url).toEqual(jasmine.stringMatching(/notarealuuid/));
@@ -33,9 +19,25 @@ describe('driver:map-layers TileUrlService', function () {
         $rootScope.$apply();
     });
 
-    it('should provide URLs to access UTF Grid tiles per record type', function () {
+    it('should provide URLs to access UTF Grid tiles', function () {
         TileUrlService.recUtfGridTilesUrl('notarealuuid').then(function(url) {
-            expect(url).toEqual(jasmine.stringMatching(/\.grid\.json/));
+            expect(url).toEqual(jasmine.stringMatching((/\.grid\.json/)));
+            expect(url).toEqual(jasmine.stringMatching(/notarealuuid/));
+        });
+        $rootScope.$apply();
+    });
+
+    it('should provide URLs to access boundary tiles', function () {
+        TileUrlService.boundaryTilesUrl('notarealuuid').then(function(url) {
+            expect(url).toEqual(jasmine.stringMatching(/\.png/));
+            expect(url).toEqual(jasmine.stringMatching(/notarealuuid/));
+        });
+        $rootScope.$apply();
+    });
+
+    it('should provide URLs to access boundary tiles', function () {
+        TileUrlService.recHeatmapUrl('notarealuuid').then(function(url) {
+            expect(url).toEqual(jasmine.stringMatching(/\.png/));
             expect(url).toEqual(jasmine.stringMatching(/notarealuuid/));
         });
         $rootScope.$apply();
