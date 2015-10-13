@@ -25,7 +25,7 @@
 
             TileUrlService.baseLayerUrl().then(function(streetsUrl) {
                 var streets = new L.tileLayer(streetsUrl, {attribution: cartoDBAttribution});
-                ctl.map.addLayer(streets, {detectRetina: true});
+                ctl.map.addLayer(streets, {detectRetina: false});
             });
 
             if (ctl.isEditable) {

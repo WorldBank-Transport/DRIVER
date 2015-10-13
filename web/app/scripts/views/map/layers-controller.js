@@ -46,7 +46,7 @@
                 ctl.baseMaps = baseMaps.promise;
                 var streetsOptions = {
                     attribution: cartoDBAttribution,
-                    detectRetina: true,
+                    detectRetina: false,
                     zIndex: 1
                 };
                 TileUrlService.baseLayerUrl().then(function(streetsUrl) {
