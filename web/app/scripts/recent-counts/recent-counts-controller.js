@@ -11,7 +11,7 @@
         function init() {
             /* jshint camelcase: false */
             RecordAggregates.recentCounts().then(function(aggregate) {
-                ctl.record_type_plural = aggregate.plural;
+                ctl.recordTypePlural = aggregate.plural;
                 ctl.year = aggregate.year;
                 ctl.quarter = aggregate.quarter;
                 ctl.month = aggregate.month;

@@ -6,9 +6,9 @@
         var ctl = this;
 
         ctl.proportions = [
-          { proportion: 'About half', label: 'birds' },
-          { proportion: 'Some', label: 'frozen waffles' },
-          { proportion: '1.2%', label: 'covers of \'Freebird\'' }
+          { proportion: 6.9, label: 'Jeepneys' },
+          { proportion: '23.8', label: 'Motorcycles' },
+          { proportion: '55', label: 'Cars' }
         ];
         return ctl;
     }
