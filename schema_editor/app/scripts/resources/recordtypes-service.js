@@ -3,7 +3,9 @@
 
     /* ngInject */
     function RecordTypes($resource, ASEConfig) {
-        return $resource(ASEConfig.api.hostname + '/api/recordtypes/:id/', {id: '@uuid'}, {
+        return $resource(ASEConfig.api.hostname + '/api/recordtypes/:id/',
+                         {id: '@uuid', limit: 'all'}, {
+
             create: {
                 method: 'POST'
             },
