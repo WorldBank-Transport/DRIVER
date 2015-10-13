@@ -101,16 +101,20 @@
         function getSelected() {
             if (!gettingSelected) {
                 gettingSelected = true;
-                var deferred = $q.defer();
-                if (!selected && !options.length) {
-                    updateOptions().then(function() { deferred.resolve(selected); });
-                } else if (!selected) {
-                    deferred.resolve(setSelected());
-                } else {
-                    deferred.resolve(selected);
-                }
-                selectedPromise = deferred.promise;
+            } else {
+                return selectedPromise;
             }
+
+            var deferred = $q.defer();
+            if (!selected && !options.length) {
+                updateOptions().then(function() { deferred.resolve(selected); });
+            } else if (!selected) {
+                deferred.resolve(setSelected());
+            } else {
+                deferred.resolve(selected);
+            }
+            selectedPromise = deferred.promise;
+
             selectedPromise.then(function() { gettingSelected = false; });
             return selectedPromise;
         }

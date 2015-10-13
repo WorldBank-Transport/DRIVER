@@ -2,21 +2,23 @@
     'use strict';
 
     /* ngInject */
-    function RecentCountsController($scope, RecordAggregates) {
+    function RecentCountsController($scope, RecordAggregates, RecordState) {
         var ctl = this;
         init();
         $scope.$on('driver.state.recordstate:selected', init);
         return ctl;
 
         function init() {
-            /* jshint camelcase: false */
-            RecordAggregates.recentCounts().then(function(aggregate) {
-                ctl.recordTypePlural = aggregate.plural;
-                ctl.year = aggregate.year;
-                ctl.quarter = aggregate.quarter;
-                ctl.month = aggregate.month;
+            RecordState.getSelected().then(function(recordType) {
+                /* jshint camelcase: false */
+                ctl.recordTypePlural = recordType.plural_label;
+                RecordAggregates.recentCounts().then(function(aggregate) {
+                    ctl.year = aggregate.year;
+                    ctl.quarter = aggregate.quarter;
+                    ctl.month = aggregate.month;
+                });
+                /* jshint camelcase: true */
             });
-            /* jshint camelcase: true */
         }
     }
 

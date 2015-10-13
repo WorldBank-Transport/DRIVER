@@ -14,19 +14,26 @@ describe('driver.recent-counts: Recent Counts Widget', function () {
     var $httpBackend;
     var $q;
     var ResourcesMock;
+    var RecordState;
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$q_,
-                                _RecordAggregates_, _ResourcesMock_) {
+                                _RecordAggregates_, _ResourcesMock_, _RecordState_) {
         $compile = _$compile_;
         $q = _$q_;
         $httpBackend = _$httpBackend_;
         RecordAggregates = _RecordAggregates_;
         $rootScope = _$rootScope_;
         ResourcesMock = _ResourcesMock_;
+        RecordState = _RecordState_;
+        spyOn(RecordState, 'getSelected').and.callFake(function() {
+            var deferred = $q.defer();
+            deferred.resolve({uuid: 'a-uuid', plural_label: 'cthulus'});
+            return deferred.promise;
+        });
         spyOn(RecordAggregates, 'recentCounts').and.callFake(function() {
-          var deferred = $q.defer();
-          deferred.resolve({plural: 'cthulus', year: 100, quarter: 10, month: 1});
-          return deferred.promise;
+            var deferred = $q.defer();
+            deferred.resolve({plural: 'cthulus', year: 100, quarter: 10, month: 1});
+            return deferred.promise;
         });
     }));
 
