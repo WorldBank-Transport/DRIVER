@@ -4,7 +4,9 @@
 
     /* ngInject */
     function RecordSchemas($resource, ASEConfig) {
-        return $resource(ASEConfig.api.hostname + '/api/recordschemas/:id/', {id: '@uuid'}, {
+        return $resource(ASEConfig.api.hostname + '/api/recordschemas/:id/',
+                         {id: '@uuid', limit: 'all'}, {
+
             create: {
                 method: 'POST'
             },
