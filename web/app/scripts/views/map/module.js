@@ -16,6 +16,7 @@
         'ui.bootstrap',
         'Leaflet',
         'driver.config',
+        'driver.map-layers',
         'driver.state'
     ]).config(StateConfig);
 
