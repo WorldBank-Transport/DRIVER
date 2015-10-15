@@ -33,9 +33,11 @@ describe('driver.views.record: RecordList', function () {
         var recordsUrl = /\/api\/records/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var recordSchemaUrl = /\/api\/recordschemas/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons\/\?active=True&limit=all&nogeom=true/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
 
         var scope = $rootScope.$new();

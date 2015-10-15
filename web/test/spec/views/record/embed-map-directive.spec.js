@@ -13,7 +13,6 @@ describe('driver.views.record: Embedded Map Directive', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
-    var Controller;
     var Element;
     var RecordTypes;
     var ResourcesMock;

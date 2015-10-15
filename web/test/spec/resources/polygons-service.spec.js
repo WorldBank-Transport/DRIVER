@@ -2,27 +2,27 @@
 
 describe('driver.resources: Polygons', function () {
 
-    beforeEach(module('driver.mock.resources'));
+    beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.resources'));
 
     var $httpBackend;
     var Polygons;
-    var DriverResourcesMock;
+    var ResourcesMock;
 
-    beforeEach(inject(function (_$httpBackend_, _Polygons_, _DriverResourcesMock_) {
+    beforeEach(inject(function (_$httpBackend_, _Polygons_, _ResourcesMock_) {
         $httpBackend = _$httpBackend_;
         Polygons = _Polygons_;
-        DriverResourcesMock = _DriverResourcesMock_;
+        ResourcesMock = _ResourcesMock_;
     }));
 
     it('should extract polygons from paginated response', function () {
         var requestUrl = /\/api\/boundarypolygons/;
-        $httpBackend.whenGET(requestUrl).respond(DriverResourcesMock.PolygonResponse);
+        $httpBackend.whenGET(requestUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         Polygons.query({ active: 'True' }).$promise.then(function (data) {
-            expect(data.length).toBe(3);
+            expect(data.length).toBe(1);
 
             var polygon = data[0];
-            expect(polygon.properties.data.name).toEqual(jasmine.any(String));
+            expect(polygon.data.REGION).toEqual(jasmine.any(String));
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
