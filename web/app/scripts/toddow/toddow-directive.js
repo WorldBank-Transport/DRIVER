@@ -147,6 +147,6 @@
     }
 
     angular.module('driver.toddow')
-      .directive('driverToddow', ToDDoW);
+    .directive('driverToddow', ToDDoW);
 
 })();
