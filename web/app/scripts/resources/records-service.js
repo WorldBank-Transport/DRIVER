@@ -10,6 +10,11 @@
             get: {
                 method: 'GET'
             },
+            toddow: {
+                url: WebConfig.api.hostname + '/api/records/toddow/',
+                method: 'GET',
+                isArray: true
+            },
             query: {
                 method: 'GET',
                 transformResponse: function(data) { return angular.fromJson(data).results; },

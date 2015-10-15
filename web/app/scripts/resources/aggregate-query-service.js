@@ -5,11 +5,27 @@
     'use strict';
 
     /* ngInject */
-    function RecordAggregates($q, RecordTypes, RecordState) {
+    function RecordAggregates($q, RecordTypes, RecordState, Records, QueryBuilder) {
         var svc = {
             recentCounts: recentCounts,
+            toddow: toddow
         };
         return svc;
+
+        /**
+         * Retrieve TODDOW data - API mirroring the query builder service
+         */
+        function toddow(doFilter, extraParams) {
+            var deferred = $q.defer();
+            extraParams = extraParams || {};
+            doFilter = doFilter || true;
+            QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
+                Records.toddow(_.extend(params, extraParams)).$promise.then(function(toddowData) {
+                    deferred.resolve(toddowData);
+                });
+            });
+            return deferred.promise;
+        }
 
         /**
          * Request the most recent 30, 90, 365 day counts for the currently selected record type
