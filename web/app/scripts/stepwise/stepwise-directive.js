@@ -16,9 +16,9 @@
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
-                var margin = {top: 20, right: 20, bottom: 30, left: 30},
+                var margin = {top: 6, right: 20, bottom: 58, left: 30},
                     width = 660 - margin.left - margin.right,
-                    height = 210 - margin.top - margin.bottom;
+                    height = 230 - margin.top - margin.bottom;
 
                 // GLOBALS
                 var t0, svg, line, xAxis, yAxis;  // GLOBAL
@@ -26,6 +26,7 @@
                 var x = d3.scale.linear().domain([0, 0]).range([10, width]);
                 var y = d3.scale.linear().domain([0,100]).range([height - 10, 0]);
 
+                var tooltip = d3.tip();
                 init();
 
                 /**
@@ -62,7 +63,6 @@
 
                     xAxis = d3.svg.axis()
                         .scale(x)
-                        .orient('bottom')
                         .tickSize(1);
 
                     yAxis = d3.svg.axis()
@@ -72,8 +72,6 @@
 
                     svg.append('g')
                       .attr('class', 'xAxis')
-                      //.call(xAxis)  // TODO: uncomment after worldbank demo
-                      .attr('text-anchor', 'middle')
                       .attr('transform', 'translate(0,' + height + ')');
 
                     svg.append('g')
@@ -91,13 +89,29 @@
                  * @param data {array} the data to change our chart with
                  */
                 function updateChart(data) {
+                    svg.call(tooltip);
+                    tooltip.html(function(d) {
+                        var text = d.count || '0';
+                        return 'Event count: ' + text;
+                    });
+
                     y.domain([0, d3.max(data, function(d) { return d.count; })]);
                     yAxis.scale(y)
                         .ticks(Math.min(10, _.max(_.map(data, function(d) { return d.count; }))));
                     xAxis.scale(x)
                         .tickFormat(xAxisTextFormat);
 
-                    svg.select('.xAxis').transition().call(xAxis);  // TODO: uncomment
+                    svg.select('.xAxis')
+                        .transition()
+                        .call(xAxis)
+                        .selectAll('text')
+                            .attr('text-anchor', 'end')
+                            .attr('x', 8)
+                            .attr('y', 0)
+                            .attr('dx', '-3em')
+                            .attr('dy', '.4em')
+                            .attr('transform', 'rotate(-65)');
+
                     svg.select('.yAxis').transition().call(yAxis);
 
                     line = d3.svg.area()
@@ -125,9 +139,10 @@
                         .attr('data-count', function(d) { return d.count; })
                         .attr('data-date', function(d) { return d.date; })
                         .attr('stroke-width', 'none')
-                        .attr('fill', 'blue')
-                        .attr('r', 5);
-
+                        .attr('fill-opacity', '0.4')
+                        .attr('r', 6)
+                        .on('mouseover', function(d) { try { tooltip.show(d); } catch(e) {} })
+                        .on('mouseout', tooltip.hide);
                 }
 
                 function getWeek(datetimeISO) {
@@ -140,7 +155,7 @@
                  * @param week {int} the week index for the data point in question
                  */
                 function xAxisTextFormat(week) {
-                    return moment(getWeek(t0.clone().add(week, 'week'))).format('DD-MM-YY');
+                    return moment(getWeek(t0.clone().add(week, 'week'))).format('MM-DD-YY');
                 }
 
                 /**
