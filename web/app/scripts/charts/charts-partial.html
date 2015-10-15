@@ -19,10 +19,12 @@
         </div>
         <hr />
         <div class="graph-content">
-            <driver-toddow chart-data="ctl.records" ng-show="activeChart === 'toddow'">
+            <driver-toddow chart-data="ctl.toddow"
+                           ng-show="activeChart === 'toddow'">
             </driver-toddow>
 
-            <driver-stepwise chart-data="ctl.records" ng-show="activeChart === 'stepwise'">
+            <driver-stepwise chart-data="ctl.records"
+                             ng-show="activeChart === 'stepwise'">
             </driver-stepwise>
         </div>
     </div>

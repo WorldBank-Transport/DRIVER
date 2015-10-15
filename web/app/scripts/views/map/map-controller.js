@@ -37,6 +37,10 @@
                            limit: 50 };
             /* jshint camelcase: true */
 
+            Records.toddow().$promise.then(function(toddowData) {
+                ctl.toddow = toddowData;
+            });
+
             return Records.get(params)
                 .$promise.then(function(records) {
                     ctl.records = records.results;

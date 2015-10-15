@@ -6,7 +6,8 @@
         var module = {
             restrict: 'AE',
             scope: {
-                records: '='
+                records: '=',
+                toddow: '='
             },
             templateUrl: 'scripts/charts/charts-partial.html',
             bindToController: true,
