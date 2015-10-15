@@ -10,7 +10,7 @@
             controllerAs: 'recent',
             scope: {
                 recordType: '='
-            },
+            }
         };
         return module;
     }
