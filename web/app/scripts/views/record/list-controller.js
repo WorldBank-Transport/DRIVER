@@ -3,8 +3,10 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, RecordSchemas, RecordState, QueryBuilder, WebConfig) {
+                                  Notifications, RecordSchemas, RecordState, BoundaryState,
+                                  QueryBuilder, WebConfig) {
         var ctl = this;
+        ctl.boundaryId = null;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = WebConfig.record.limit;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
@@ -19,6 +21,9 @@
         function initialize() {
             ctl.isInitialized = false;
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+                .then(BoundaryState.getSelected().then(function(selected) {
+                    ctl.boundaryId = selected.uuid;
+                }))
                 .then(loadRecordSchema)
                 .then(restoreFilters);
         }
@@ -60,8 +65,11 @@
                 ctl.currentOffset = 0;
                 paramsOffset = 0;
             }
-            return QueryBuilder.djangoQuery(true, paramsOffset).then(function(records) {
-              ctl.records = records;
+            /* jshint camelcase: false */
+            return QueryBuilder.djangoQuery(true, paramsOffset, {polygon_id: ctl.boundaryId})
+            /* jshint camelcase: true */
+            .then(function(records) {
+                ctl.records = records;
             });
         }
 
@@ -122,6 +130,15 @@
                     .then(loadRecords)
                     .then(onRecordsLoaded);
             }
+        });
+
+        $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+            if (!ctl.isInitialized) {
+                return;
+            }
+            ctl.boundaryId = selected.uuid;
+
+            loadRecords().then(onRecordsLoaded);
         });
 
         // $rootScope listeners must be manually unbound when the $scope is destroyed
