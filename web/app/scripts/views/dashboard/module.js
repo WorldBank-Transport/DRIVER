@@ -15,13 +15,14 @@
         'ui.router',
         'ui.bootstrap',
         'ase.resources',
-        'driver.blackSpots',
         'driver.resources',
         'driver.toddow',
         'driver.stepwise',
         'driver.map-layers.recent-events',
         'driver.recentCounts',
         'driver.recentProportions',
+        'driver.blackSpots',
+        'driver.savedFilters',
         'driver.state'
     ]).config(StateConfig);
 

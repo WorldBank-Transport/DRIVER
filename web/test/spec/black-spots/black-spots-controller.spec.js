@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.details: BlackSpotsController', function () {
+describe('driver.blackSpots: BlackSpotsController', function () {
 
     beforeEach(module('driver.blackSpots'));
 

@@ -1,8 +1,8 @@
 'use strict';
 
-describe('driver.recentProportions: RecentProportionsController', function () {
+describe('driver.savedFilters: SavedFiltersController', function () {
 
-    beforeEach(module('driver.recentProportions'));
+    beforeEach(module('driver.savedFilters'));
 
     var $controller;
     var $rootScope;
@@ -16,7 +16,7 @@ describe('driver.recentProportions: RecentProportionsController', function () {
     }));
 
     it('should pass this placeholder test', function () {
-        Controller = $controller('RecentProportionsController', { $scope: $scope });
+        Controller = $controller('SavedFiltersController', { $scope: $scope });
         $scope.$apply();
     });
 });

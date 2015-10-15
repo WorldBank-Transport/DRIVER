@@ -79,6 +79,8 @@ module.exports = function(config) {
       'app/scripts/recent-proportions/**.js',
       'app/scripts/black-spots/module.js',
       'app/scripts/black-spots/**.js',
+      'app/scripts/saved-filters/module.js',
+      'app/scripts/saved-filters/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/resources/**/*.js',

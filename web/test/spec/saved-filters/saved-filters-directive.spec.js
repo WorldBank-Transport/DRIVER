@@ -1,9 +1,9 @@
 'use strict';
 
-describe('driver.blackSpots: BlackSpots', function () {
+describe('driver.savedFilters: SavedFilters', function () {
 
     beforeEach(module('ase.templates'));
-    beforeEach(module('driver.blackSpots'));
+    beforeEach(module('driver.savedFilters'));
 
     var $compile;
     var $rootScope;
@@ -15,7 +15,9 @@ describe('driver.blackSpots: BlackSpots', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-black-spots></driver-black-spots>')(scope);
+        var element = $compile('<driver-saved-filters></driver-saved-filters>')(scope);
         $rootScope.$apply();
+
+        expect(element.find('tr').length).toEqual(5);
     });
 });
