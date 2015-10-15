@@ -20,18 +20,12 @@
             extraParams = extraParams || {};
             doFilter = doFilter || true;
             QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
-                Records.toddow(_.extend(params, extraParams)).$promise.then(function(stufffff) {
-                    deferred.resolve(stufffff);
+                Records.toddow(_.extend(params, extraParams)).$promise.then(function(toddowData) {
+                    deferred.resolve(toddowData);
                 });
             });
             return deferred.promise;
         }
-
-            // Record Type
-            RecordState.getSelected().then(function(selected) {
-                paramObj.record_type = selected.uuid;
-                deferred.resolve(paramObj);
-            });
 
         /**
          * Request the most recent 30, 90, 365 day counts for the currently selected record type
