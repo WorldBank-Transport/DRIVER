@@ -77,14 +77,20 @@
                 return TileUrlService.recTilesUrl(selected.uuid);
             // Construct Windshaft URL
             }).then(function(baseUrl) {
-                // TODO: Change whenever we figure out a better Windshaft query strategy
-                return QueryBuilder.unfilteredDjangoQuery(0,
-                    {query: true,
-/* jshint camelcase: false */ occurred_min: occurredMin.toISOString()} /* jshint camelcase: true */
-                ).then(function(result) {
-                        var queryParam = baseUrl.match(/\?/) ? '&sql=' : '?sql=';
-                        var sql = encodeURIComponent(result.query);
-                        return baseUrl + queryParam + sql;
+                // TODO: Change and uncomment boundary filtering whenever Windshaft filtering is fixed.
+                return BoundaryState.getSelected().then(function(/*boundary*/) {
+                    return QueryBuilder.unfilteredDjangoQuery(0,
+                        {query: true,
+                         /* jshint camelcase: false */
+                         occurred_min: occurredMin.toISOString(),
+                         //polygon_id: boundary.uuid
+                         /* jshint camelcase: true */
+                        }
+                    ).then(function(result) {
+                            var queryParam = baseUrl.match(/\?/) ? '&sql=' : '?sql=';
+                            var sql = encodeURIComponent(result.query);
+                            return baseUrl + queryParam + sql;
+                    });
                 });
             // Swap layers
             }).then(function(fullUrl) {
