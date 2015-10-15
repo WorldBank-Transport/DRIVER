@@ -26,6 +26,7 @@
                 var x = d3.scale.linear().domain([0, 0]).range([10, width]);
                 var y = d3.scale.linear().domain([0,100]).range([height - 10, 0]);
 
+                var tooltip = d3.tip();
                 init();
 
                 /**
@@ -88,6 +89,12 @@
                  * @param data {array} the data to change our chart with
                  */
                 function updateChart(data) {
+                    svg.call(tooltip);
+                    tooltip.html(function(d) {
+                        var text = d.count || '0';
+                        return 'Event count: ' + text;
+                    });
+
                     y.domain([0, d3.max(data, function(d) { return d.count; })]);
                     yAxis.scale(y)
                         .ticks(Math.min(10, _.max(_.map(data, function(d) { return d.count; }))));
@@ -117,6 +124,25 @@
                         .transition()
                         .ease('cubic')
                         .attr('d', line);
+
+                    svg.selectAll('circle')
+                        .remove();
+
+                    svg.append('g')
+                        .attr('class', 'points')
+                        .selectAll('circle')
+                        .data(data)
+                        .enter().append('svg:circle')
+                        .attr('cx', function(d) { return x(d.week); })
+                        .attr('cy', function(d) { return y(d.count); })
+                        .attr('data-index', function(d) { return d.week; })
+                        .attr('data-count', function(d) { return d.count; })
+                        .attr('data-date', function(d) { return d.date; })
+                        .attr('stroke-width', 'none')
+                        .attr('fill-opacity', '0.4')
+                        .attr('r', 6)
+                        .on('mouseover', function(d) { try { tooltip.show(d); } catch(e) {} })
+                        .on('mouseout', tooltip.hide);
                 }
 
                 function getWeek(datetimeISO) {
