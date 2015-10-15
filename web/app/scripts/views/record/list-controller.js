@@ -3,10 +3,10 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, RecordSchemas, RecordState, QueryBuilder) {
+                                  Notifications, RecordSchemas, RecordState, QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.currentOffset = 0;
-        ctl.numRecordsPerPage = 10;
+        ctl.numRecordsPerPage = WebConfig.record.limit;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
@@ -102,7 +102,7 @@
                 ctl.currentOffset = 0;
             }
 
-            loadRecords(ctl.numRecordsPerPage)
+            loadRecords()
               .then(onRecordsLoaded)
               .then(function() {
                   ctl.isInitialized = true;

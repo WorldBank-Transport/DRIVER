@@ -9,7 +9,7 @@
     'use strict';
 
     /* ngInject */
-    function QueryBuilder($q, FilterState, RecordState, Records) {
+    function QueryBuilder($q, FilterState, RecordState, Records, WebConfig) {
         var svc = {
             djangoQuery: djangoQuery,
             unfilteredDjangoQuery: function(offset, extraParams) {
@@ -116,6 +116,7 @@
             if (offset) {
                 paramObj.offset = offset;
             }
+            paramObj.limit = WebConfig.record.limit;
 
             // Record Type
             RecordState.getSelected().then(function(selected) {
