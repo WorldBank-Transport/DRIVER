@@ -16,6 +16,6 @@
     }
 
     angular.module('driver.recentProportions')
-    .directive('recentProportions', RecentProportions);
+    .directive('driverRecentProportions', RecentProportions);
 
 })();

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('driver.recent-counts: Recent Counts Widget', function () {
+describe('driver.recentCounts: RecentCounts', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.resources'));
@@ -45,7 +45,7 @@ describe('driver.recent-counts: Recent Counts Widget', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var scope = $rootScope.$new();
-        var element = $compile('<div recent-counts></div>')(scope);
+        var element = $compile('<driver-recent-counts></driver-recent-counts>')(scope);
         $rootScope.$apply();
 
         $httpBackend.flush();

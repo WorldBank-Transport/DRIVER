@@ -13,6 +13,6 @@
     }
 
     angular.module('driver.recentCounts')
-    .directive('recentCounts', RecentCounts);
+    .directive('driverRecentCounts', RecentCounts);
 
 })();
