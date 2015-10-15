@@ -90,6 +90,8 @@ module.exports = function(config) {
       'app/scripts/toddow/**.js',
       'app/scripts/stepwise/module.js',
       'app/scripts/stepwise/**.js',
+      'app/scripts/charts/module.js',
+      'app/scripts/charts/**.js',
       'app/scripts/views/account/module.js',
       'app/scripts/views/account/**.js',
       'app/scripts/views/dashboard/module.js',

@@ -26,6 +26,11 @@ describe('driver.views.map: MapController', function () {
 
     it('should pass this placeholder test', function () {
         Controller = $controller('MapController', { $scope: $scope });
+
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         $scope.$apply();
     });
 });
