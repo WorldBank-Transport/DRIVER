@@ -15,6 +15,9 @@
         },
         nominatim: {
             key: 'abc123'
+        },
+        record: {
+            limit: 50
         }
     };
 
