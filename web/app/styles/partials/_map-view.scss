@@ -62,6 +62,7 @@
                 position: relative;
                 bottom: -2px;
                 transition: 0.5s all;
+                cursor: pointer;
             }
             .tool-content {
                 width: 600px;
@@ -72,6 +73,20 @@
                 overflow: hidden;
                 position: absolute;
                 transition: 0.5s all;
+            }
+            .graph-header {
+                margin: 20px 15px 0 15px;
+            }
+            .graph-content {
+                margin: 25px 15px 0 15px;
+            }
+            .graph-selector {
+                cursor: pointer;
+                color: lightgrey;
+
+                &.active {
+                    color: black;
+                }
             }
         }
     }

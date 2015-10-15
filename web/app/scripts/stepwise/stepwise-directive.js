@@ -17,8 +17,8 @@
             template: '<svg></svg>',
             link: function(scope, elem) {
                 var margin = {top: 20, right: 20, bottom: 30, left: 30},
-                    width = 475 - margin.left - margin.right,
-                    height = 275 - margin.top - margin.bottom;
+                    width = 660 - margin.left - margin.right,
+                    height = 210 - margin.top - margin.bottom;
 
                 // GLOBALS
                 var t0, svg, line, xAxis, yAxis;  // GLOBAL

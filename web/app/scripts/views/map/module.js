@@ -15,6 +15,7 @@
         'ui.router',
         'ui.bootstrap',
         'Leaflet',
+        'driver.charts',
         'driver.config',
         'driver.map-layers',
         'driver.state'
