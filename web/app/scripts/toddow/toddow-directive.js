@@ -15,8 +15,7 @@
         var module = {
             restrict: 'E',
             scope: {
-              chartData: '=',
-              dateField: '='
+              chartData: '='
             },
             template: '<svg></svg>',
             link: function(scope, elem) {
@@ -24,7 +23,8 @@
                 var cellSize = 26,
                     height = 210,
                     width = 660;
-                var rect, color, svg, tooltip;  // GLOBAL
+                var rect, color, svg;  // GLOBAL
+                var tooltip = d3.tip();
                 init();
 
                 /**
@@ -32,10 +32,9 @@
                  */
                 scope.$watch('chartData', function(val) {
                     if (val) {
-                        var dateField = scope.dateField ? scope.dateField : 'occurred_from';
-                        var data = formatData(val, dateField);
+                        var data = formatData(val);
                         color = d3.scale.quantile()
-                            .domain([0, d3.max(d3.values(data))])
+                            .domain([0, _.max(val, function(x) { return x.count; }).count])
                             .range(rampValues);
                         updateChart(data);
                     }
@@ -102,11 +101,12 @@
                             })
                             .attr('y', 10);
 
-                    tooltip = d3.tip();
-                    rect.attr('data-hour', function(d) { return formatHourRange(d); })
+                    // Use try/catch pattern here to prevent unecessary logging before data loads
+                    rect.attr('data-hour', function(d) { formatHourRange(d); })
                         .datum(formatHourRange)
-                        .on('mouseover', tooltip.show)
+                        .on('mouseover', function(d) { try { tooltip.show(d); } catch(e) {} })
                         .on('mouseout', tooltip.hide);
+
 
                 }
 
@@ -114,13 +114,13 @@
                  * Update all fields of chart with new information and draw in cells with events
                  */
                 function updateChart(data) {
+                    svg.call(tooltip);
                     tooltip.html(function(d) {
-                      var tooltipText = data[d] ? data[d] : '0';
+                      var tooltipText = data[d] || '0';
                       return 'Event count: ' + tooltipText;
                     });
-                    svg.call(tooltip);
                     rect.attr('fill', '#f1f2f2');
-                    rect.filter(function(d) { return d in data; })
+                    rect.filter(function(d) { return data.hasOwnProperty(d); })
                         .attr('fill', function(d) { return color(data[d]); });
                 }
 
@@ -128,19 +128,18 @@
                  * Helper function to format datetime strings
                  */
                 function formatHourRange(time) {
-                    return moment(time).format('e:H') + '-' + (+moment(time).format('H') + 1);
+                    return moment(time).format('H') + ':' + (+moment(time).format('e') + 1);
                 }
 
                 /**
                  * Helper function to gather data together into a format more friendly to D3
                  */
-                function formatData(events, dateField) {
-                    /* jshint camelcase: false */
-                    return d3.nest()
-                        .key(function(d) { return formatHourRange(d[dateField]); })
-                        .rollup(function(leaves) { return leaves.length; })
-                        .map(events);
-                    /* jshint camelcase: true */
+                function formatData(events) {
+                    var holder = {};
+                    _.each(events, function(val) {
+                        holder[val.tod + ':' + val.dow] = val.count;
+                    });
+                    return holder;
                 }
             }
         };
@@ -148,6 +147,6 @@
     }
 
     angular.module('driver.toddow')
-    .directive('driverToddow', ToDDoW);
+      .directive('driverToddow', ToDDoW);
 
 })();
