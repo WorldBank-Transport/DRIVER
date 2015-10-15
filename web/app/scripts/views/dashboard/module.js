@@ -15,6 +15,7 @@
         'ui.router',
         'ui.bootstrap',
         'ase.resources',
+        'driver.blackSpots',
         'driver.resources',
         'driver.toddow',
         'driver.stepwise',

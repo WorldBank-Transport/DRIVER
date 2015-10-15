@@ -77,6 +77,8 @@ module.exports = function(config) {
       'app/scripts/recent-counts/**.js',
       'app/scripts/recent-proportions/module.js',
       'app/scripts/recent-proportions/**.js',
+      'app/scripts/black-spots/module.js',
+      'app/scripts/black-spots/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/resources/**/*.js',
