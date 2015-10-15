@@ -26,6 +26,8 @@
                 var x = d3.scale.linear().domain([0, 0]).range([10, width]);
                 var y = d3.scale.linear().domain([0,100]).range([height - 10, 0]);
 
+                var isWeekly = true; // monthly if false
+
                 var tooltip = d3.tip();
                 init();
 
@@ -99,7 +101,10 @@
                     yAxis.scale(y)
                         .ticks(Math.min(10, _.max(_.map(data, function(d) { return d.count; }))));
                     xAxis.scale(x)
-                        .tickFormat(xAxisTextFormat);
+                        .tickFormat(xAxisTextFormat)
+                        // explicitly match number of labels on x axis to match number of values
+                        // displayed, to avoid duplicate tick labels showing up in between points
+                        .tickValues(d3.range(xAxis.scale().domain()[0], xAxis.scale().domain()[1] + 1));
 
                     svg.select('.xAxis')
                         .transition()
@@ -115,7 +120,7 @@
                     svg.select('.yAxis').transition().call(yAxis);
 
                     line = d3.svg.area()
-                        .x(function(d) { return x(d.week); })
+                        .x(function(d) { return x(d.period); })
                         .y(function(d) { return y(d.count); })
                         .interpolate('step-after');
 
@@ -133,9 +138,9 @@
                         .selectAll('circle')
                         .data(data)
                         .enter().append('svg:circle')
-                        .attr('cx', function(d) { return x(d.week); })
+                        .attr('cx', function(d) { return x(d.period); })
                         .attr('cy', function(d) { return y(d.count); })
-                        .attr('data-index', function(d) { return d.week; })
+                        .attr('data-index', function(d) { return d.period; })
                         .attr('data-count', function(d) { return d.count; })
                         .attr('data-date', function(d) { return d.date; })
                         .attr('stroke-width', 'none')
@@ -149,13 +154,39 @@
                     return d3.time.week(new Date(datetimeISO));
                 }
 
+                function getMonth(datetimeISO) {
+                    return d3.time.month(new Date(datetimeISO));
+                }
+
+                /**
+                 * Helper function to pick a function to create x axis label text
+                 *
+                 * @param period {int} the period index for the data point in question
+                 */
+                function xAxisTextFormat(period) {
+                    if (isWeekly) {
+                        return xAxisTextFormatWeek(period);
+                    } else {
+                        return xAxisTextFormatMonth(period);
+                    }
+                }
+
                 /**
                  * Helper function to create x axis label text
                  *
                  * @param week {int} the week index for the data point in question
                  */
-                function xAxisTextFormat(week) {
+                function xAxisTextFormatWeek(week) {
                     return moment(getWeek(t0.clone().add(week, 'week'))).format('MM-DD-YY');
+                }
+
+                /**
+                 * Helper function to create x axis label text
+                 *
+                 * @param month {int} the month index for the data point in question
+                 */
+                function xAxisTextFormatMonth(month) {
+                    return moment(getMonth(t0.clone().add(month, 'month'))).format('MM-DD-YY');
                 }
 
                 /**
@@ -163,32 +194,65 @@
                  */
                 function formatData(events, dateField) {
                     // group elements by week-belonged-to
-                    var weeklyEvents = _(events)
+                    isWeekly = true;
+                    var groupedEvents = _(events)
                       .groupBy(function(d) { return getWeek(d[dateField]); })
                       .map(function(d) {
                           return {'date': getWeek(d[0][dateField])};
                       }).value();
 
                     // set t0 (the first week)
-                    t0 = moment(_.min(weeklyEvents, function(d) { return d.date; }).date);
-                    var tFinal = moment(_.max(weeklyEvents, function(d) { return d.date; }).date);
+                    t0 = moment(_.min(groupedEvents, function(d) { return d.date; }).date);
+                    var tFinal = moment(_.max(groupedEvents, function(d) { return d.date; }).date);
                     var tDiff = tFinal.clone().diff(t0.clone(), 'weeks');
                     var tRange = _.range(tDiff + 1);
+
+                    // display as monthly instead of weekly if have more than 12 weeks
+                    // TODO: find better way to check date range extent before computing so much
+                    /*
+                    if (tDiff > 12) {
+                        console.log('have >12 weeks');
+                        //////////////////////
+
+                        isWeekly = false;
+
+                        groupedEvents = _(events)
+                          .groupBy(function(d) { return getMonth(d[dateField]); })
+                          .map(function(d) {
+                              return {'date': getMonth(d[0][dateField])};
+                          }).value();
+
+                        // set t0 (the first month)
+                        t0 = moment(_.min(groupedEvents, function(d) { return d.date; }).date);
+                        tFinal = moment(_.max(groupedEvents, function(d) { return d.date; }).date);
+                        tDiff = tFinal.clone().diff(t0.clone(), 'months');
+                        tRange = _.range(tDiff + 1);
+                    }
+                    */
 
                     // Set the domain for our X scale
                     x.domain([0,tDiff]);
 
                     // Produce the base array of objects
                     var dates = _.map(tRange, function(date) {
+
+                        var periodDate;
+                        if (isWeekly) {
+                            periodDate = getWeek(t0.clone().add(date, 'week').toISOString());
+                        } else {
+                            periodDate = getMonth(t0.clone().add(date, 'month').toISOString());
+                        }
                         return {
-                            'date': getWeek(t0.clone().add(date, 'week').toISOString()),
-                            'week': date,
+                            'date': periodDate,
+                            'period': date,
                             'count': 0
                         };
                     });
-                    // Loop over base array, applying changes based on `weeklyEvents` data
+                    // Loop over base array, applying changes based on `groupedEvents` data
+                    // TODO: this looks buggy; seems it only returns 1 or 0
+                    // probably should be checking date range instead of exact date
                     _.forEach(dates, function(d, i) {
-                        var match = _.filter(weeklyEvents, function(ev) {
+                        var match = _.filter(groupedEvents, function(ev) {
                             return d.date.getTime() === ev.date.getTime();
                         });
                         if (match) {
