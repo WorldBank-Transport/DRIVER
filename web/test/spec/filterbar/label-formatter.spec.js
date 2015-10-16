@@ -16,6 +16,6 @@ describe('driver.filterbar: LabelFormatter', function () {
 
     it('should return a prettified label', function () {
         var result = $filter('labelFormatter')('parent#child');
-        expect(result).toBe('parent: child');
+        expect(result).toBe('child');
     });
 });
