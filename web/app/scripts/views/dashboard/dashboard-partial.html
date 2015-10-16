@@ -1,97 +1,36 @@
 <main class="dashboard no-filterbar">
     <div class="block block-1x2 quick-map">
         <div class="block-inner">
-            <div class="placeholder" style="top: 10px; bottom: 50px;"></div>
-                <h3>Black Spots by Severity
-                    <a href="javascript:void(0);" class="small pull-right">Analyze &amp; filter »</a>
-                </h3>
-            </div>
+            <driver-black-spots></driver-black-spots>
+            <h3>Black Spots by Severity
+                <a ui-sref="map" class="small pull-right">
+                    Analyze &amp; filter »
+                </a>
+            </h3>
         </div>
-        <div class="block block-1x2 quick-map">
-            <div class="block-inner">
-                <div class="map" leaflet-map recent-events></div>
-            </div>
-                <h3>{{ ctl.recordType.plural_label }} during the past two weeks
-                  <a ui-sref="map" class="small pull-right">View all {{ ctl.recordType.plural_label | lowercase }} »</a>
-                </h3>
-            </div>
+    </div>
+    <div class="block block-1x2 quick-map">
+        <div class="block-inner">
+            <div class="map" leaflet-map recent-events></div>
         </div>
-        <div class="block block-1x1 insights">
-            <div recent-proportions class="block-inner">
-            </div>
+        <h3>{{ ctl.recordType.plural_label }} during the past two weeks
+            <a ui-sref="map" class="small pull-right">
+                View all {{ ctl.recordType.plural_label | lowercase }} »
+            </a>
+        </h3>
+    </div>
+    <div class="block block-1x1 insights">
+        <driver-recent-proportions class="block-inner"></driver-recent-proportions>
+    </div>
+    <div class="block block-1x1 counts">
+        <driver-recent-counts class="block-inner"></driver-recent-counts>
+    </div>
+    <div class="block block-2x1 toddow">
+        <div class="block-inner">
+            <driver-toddow chart-data="ctl.toddow"></driver-toddow>
         </div>
-        <div class="block block-1x1 counts">
-            <div recent-counts class="block-inner"></div>
-        </div>
-        <div class="block block-2x1 toddow">
-            <div class="block-inner">
-                <driver-toddow chart-data="ctl.toddow"></driver-toddow>
-            </div>
-        </div>
-        <div class="block block-2x1 filters">
-            <div class="block-inner">
-                <h3>Saved Filters</h3>
-                <div class="filters-table" style="top: 50px; bottom: 10px;">
-                    <table class="table table-hover">
-                    <tbody>
-                    <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                    <u>Age</u>: 16-25
-                    <span class="divider"></span>
-                    <u>Sex</u>: Male
-                    <span class="divider"></span>
-                    <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                    </tr>
-                    <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                    <u>Age</u>: 16-25
-                    <span class="divider"></span>
-                    <u>Sex</u>: Male
-                    <span class="divider"></span>
-                    <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                    </tr>
-                    <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                    <u>Age</u>: 16-25
-                    <span class="divider"></span>
-                    <u>Sex</u>: Male
-                    <span class="divider"></span>
-                    <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                    </tr>
-                    <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                    <u>Age</u>: 16-25
-                    <span class="divider"></span>
-                    <u>Sex</u>: Male
-                    <span class="divider"></span>
-                    <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                    </tr>
-                    <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                    <u>Age</u>: 16-25
-                    <span class="divider"></span>
-                    <u>Sex</u>: Male
-                    <span class="divider"></span>
-                    <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                    </tr>
-                    </tbody>
-                    </table>
-            </div>
-        </div>
+    </div>
+    <div class="block block-2x1 filters">
+        <driver-saved-filters></driver-saved-filters>
     </div>
 </main>

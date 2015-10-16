@@ -21,6 +21,8 @@
         'driver.map-layers.recent-events',
         'driver.recentCounts',
         'driver.recentProportions',
+        'driver.blackSpots',
+        'driver.savedFilters',
         'driver.state'
     ]).config(StateConfig);
 
