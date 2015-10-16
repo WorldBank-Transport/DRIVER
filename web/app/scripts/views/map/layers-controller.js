@@ -52,9 +52,7 @@
                     }
                 });
             }).then(function () {
-                /* jshint camelcase: false */
-                return QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: ctl.boundaryId*/})
-                /* jshint camelcase: true */
+                return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                 });
@@ -395,9 +393,7 @@
         $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
             if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
                 ctl.boundaryId = selected.uuid;
-                /* jshint camelcase: false */
-                QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: selected.uuid*/})
-                /* jshint camelcase: true */
+                QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                     ctl.setRecordLayers();
@@ -405,14 +401,33 @@
             }
         });
 
+        // Gets the additional parameters to be sent in the request to Django
+        function getAdditionalParams() {
+            var params = { query: true };
+            if (ctl.editLayers) {
+                var geoJson = ctl.editLayers.toGeoJSON();
+                if (geoJson.features.length) {
+                    params.polygon = geoJson.features[0].geometry;
+                }
+            }
+
+            // TODO: uncomment and test as Windshaft changes are being made
+            // if (ctl.boundaryId) {
+            //     /* jshint camelcase: false */
+            //     params.polygon_id = ctl.boundaryId;
+            //     /* jshint camelcase: true */
+            // }
+
+            return params;
+        }
+
         /**
          * Update map when filters change
          */
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
+
             // get the raw SQL for the filter to send along to Windshaft
-            /* jshint camelcase: false */
-            QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: ctl.boundaryId*/}).then(function(records) {
-            /* jshint camelcase: true */
+            QueryBuilder.djangoQuery(true, 0, getAdditionalParams()).then(function(records) {
                 ctl.filterSql = castQueryToStrings(records.query);
                 ctl.setRecordLayers();
             });
