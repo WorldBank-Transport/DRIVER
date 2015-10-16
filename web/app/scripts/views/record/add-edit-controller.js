@@ -8,7 +8,7 @@
         var ctl = this;
         var editorData = null;
         var bbox = null;
-        var suppressReverseNominatim = false;
+        var suppressReverseNominatim = true;
 
         // expected format to save successfully
         var dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
@@ -46,7 +46,7 @@
             $scope.$on('driver.views.record:map-moved', function(event, data) {
                 bbox = data;
             });
-
+            
             $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
                 if (newVal && newVal.lat && newVal.lng) {
                     if(!suppressReverseNominatim) {
@@ -77,10 +77,12 @@
             return Records.get({ id: $stateParams.recorduuid })
                 .$promise.then(function(record) {
                     ctl.record = record;
-
+                    /* jshint camelcase: false */
                     // set lat/lng array into bind-able object
                     ctl.geom.lat = ctl.record.geom.coordinates[1];
                     ctl.geom.lng = ctl.record.geom.coordinates[0];
+                    ctl.nominatimValue = ctl.record.location_text;
+                    /* jshint camelcase: true */
 
                     // notify map
                     onGeomChanged(false);
@@ -111,6 +113,7 @@
             $log.debug(ctl.record.occurred_from);
             /* jshint camelcase: true */
         }
+        
 
         /*
          * Ensures each object in the record contains all appropriate properties available
@@ -249,8 +252,9 @@
 
             /* jshint camelcase: false */
             if (ctl.record.geom) {
-                // set back coordinates
+                // set back coordinates and location
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
+                ctl.record.location_text = ctl.nominatimValue;
                 saveMethod = 'update';
                 // set `to` date to match `from` date
                 ctl.record.occurred_to = ctl.record.occurred_from;
@@ -264,6 +268,7 @@
 
                     // constant fields
                     geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
+                    location_text: ctl.nominatimValue,
                     occurred_from: ctl.record.occurred_from,
                     // set `to` date to match `from` date
                     occurred_to: ctl.record.occurred_from
