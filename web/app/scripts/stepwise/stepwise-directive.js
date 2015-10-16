@@ -93,8 +93,9 @@
                 function updateChart(data) {
                     svg.call(tooltip);
                     tooltip.html(function(d) {
-                        var text = d.count || '0';
-                        return 'Event count: ' + text;
+                        var text = xAxisTextFormat(d.period) + ': ' + (d.count || '0');
+                        text += d.count === 1 ? ' event' : ' events';
+                        return text;
                     });
 
                     y.domain([0, d3.max(data, function(d) { return d.count; })]);
@@ -193,42 +194,32 @@
                  * Helper function to gather data together into a format more friendly to D3
                  */
                 function formatData(events, dateField) {
-                    // group elements by week-belonged-to
-                    isWeekly = true;
-                    var groupedEvents = _(events)
-                      .groupBy(function(d) { return getWeek(d[dateField]); })
-                      .map(function(d) {
-                          return {'date': getWeek(d[0][dateField])};
-                      }).value();
 
-                    // set t0 (the first week)
-                    t0 = moment(_.min(groupedEvents, function(d) { return d.date; }).date);
-                    var tFinal = moment(_.max(groupedEvents, function(d) { return d.date; }).date);
-                    var tDiff = tFinal.clone().diff(t0.clone(), 'weeks');
-                    var tRange = _.range(tDiff + 1);
+                    var groupedEvents, tFinal, tDiff, tRange = null;
 
-                    // display as monthly instead of weekly if have more than 12 weeks
-                    // TODO: find better way to check date range extent before computing so much
-                    /*
-                    if (tDiff > 12) {
-                        console.log('have >12 weeks');
-                        //////////////////////
-
-                        isWeekly = false;
-
+                    // helper closure to build out weekly/monthly range, setting vars above
+                    function discoverRange(getPeriod, periodString) {
                         groupedEvents = _(events)
-                          .groupBy(function(d) { return getMonth(d[dateField]); })
                           .map(function(d) {
-                              return {'date': getMonth(d[0][dateField])};
+                              return {'date': getPeriod(d[dateField])};
                           }).value();
 
                         // set t0 (the first month)
                         t0 = moment(_.min(groupedEvents, function(d) { return d.date; }).date);
                         tFinal = moment(_.max(groupedEvents, function(d) { return d.date; }).date);
-                        tDiff = tFinal.clone().diff(t0.clone(), 'months');
+                        tDiff = tFinal.clone().diff(t0.clone(), periodString);
                         tRange = _.range(tDiff + 1);
                     }
-                    */
+
+                    // group elements by week-belonged-to
+                    isWeekly = true;
+                    discoverRange(getWeek, 'week');
+
+                    // display as monthly instead of weekly if have more than 12 weeks
+                    if (tDiff > 12) {
+                        isWeekly = false;
+                        discoverRange(getMonth, 'month');
+                    }
 
                     // Set the domain for our X scale
                     x.domain([0,tDiff]);
@@ -238,9 +229,9 @@
 
                         var periodDate;
                         if (isWeekly) {
-                            periodDate = getWeek(t0.clone().add(date, 'week').toISOString());
+                            periodDate = getWeek(t0.clone().add(date, 'week'));
                         } else {
-                            periodDate = getMonth(t0.clone().add(date, 'month').toISOString());
+                            periodDate = getMonth(t0.clone().add(date, 'month'));
                         }
                         return {
                             'date': periodDate,
@@ -249,8 +240,6 @@
                         };
                     });
                     // Loop over base array, applying changes based on `groupedEvents` data
-                    // TODO: this looks buggy; seems it only returns 1 or 0
-                    // probably should be checking date range instead of exact date
                     _.forEach(dates, function(d, i) {
                         var match = _.filter(groupedEvents, function(ev) {
                             return d.date.getTime() === ev.date.getTime();
@@ -259,6 +248,7 @@
                             dates[i].count = match.length;
                         }
                     });
+
                     return dates;
                 }
             }
