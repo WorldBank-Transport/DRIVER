@@ -70,7 +70,8 @@
                     var namespaced = {};
                     _.forEach(definitions, function(schema, i) {
                         _.forEach(schema.properties, function(property, j) {
-                            namespaced[i + '#' + j] = property;
+                            // merge in `multiple` to keep track of the type of containment
+                            namespaced[i + '#' + j] = _.merge(property, {multiple: schema.multiple});
                         });
                     });
 
