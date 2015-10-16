@@ -1,11 +1,12 @@
 <div class="btn-group dropdown options open" dropdown="">
     <div class="form-group">
-        <label>{{label | labelFormatter}}</label>
-        <select data-ng-options="val for val in data.enum" class="form-control"
-                name="options"
+        <select data-ng-options="val for val in data.enum"
+                data-header="{{ label | labelFormatter }}"
+                class="selectpicker form-control"
+                multiple
+                name="options[]"
                 ng-model="filter.contains"
                 ng-change="updateFilter(label)">
-                <option value ="">-- select --</option>
         </select>
     </div>
 </div>

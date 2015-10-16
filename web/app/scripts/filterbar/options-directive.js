@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function OptionsField() {
+    function OptionsField($timeout) {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'options-field'],
@@ -13,6 +13,7 @@
                 label: '='
             },
             link: function(scope, elem, attrs, ctlArray) {
+                scope.filter = {};
                 var filterbarController = ctlArray[0];
 
                 init();
@@ -20,12 +21,14 @@
                 function init() {
                 }
 
+                // use `%timeout` to ensure that the template is rendered before selectpicker logic
+                $timeout(function() { $('.selectpicker').selectpicker(); });
+
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === scope.label) {
                         var tempFilter = filter.value;
-                        tempFilter.contains = tempFilter.contains[0];
-                        scope.filter = tempFilter;
+                        scope.filter.contains = tempFilter.contains;
                     }
                 });
 
@@ -35,11 +38,22 @@
                  * @param filterLabel {string} label of which field to filter
                  */
                 scope.updateFilter = function(filterLabel) {
-                    // TODO: Make this directive create an array of vals to check for containment
-                    // instead of this annoying hack
-                    var filter = angular.copy(scope.filter);
-                    filter.contains = [filter.contains];
-                    filterbarController.updateFilter(filterLabel, _.merge({'_rule_type': 'containment'}, filter));
+                    // only include filters that actually do something
+                    if (scope.filter.contains.length) {
+                        // handle syntactic differences necessitated by having related objects
+                        if (scope.data.multiple) {
+                            // TODO: Implement a filter for related containment in djsonb
+                            filterbarController.updateFilter(filterLabel,
+                                                             _.merge({'_rule_type': 'related_containment'},
+                                                                     scope.filter));
+                        } else {
+                            filterbarController.updateFilter(filterLabel,
+                                                             _.merge({'_rule_type': 'containment'},
+                                                                     scope.filter));
+                        }
+                    } else {
+                        filterbarController.updateFilter(filterLabel);  // Delete filter from cache
+                    }
                 };
 
             }

@@ -71,13 +71,22 @@
          * @param {object} filters The filters as stored inside DRIVER logic and, in particular,
          *                         by the filter service - transformed to produce a query string
          */
-        function assembleJsonFilterParams(filters) {
-            var filterParams = {};
+        function assembleJsonFilterParams(filterSpecs) {
+            // Remove unused filters
+            var filters = _.cloneDeep(filterSpecs);
+            var toRemove = [];
             _.each(filters, function(filter, path) {
-                filterParams = _.merge(filterParams, expandFilter(path.split('#'), filter));
+                if (filter.contains && !filter.contains.length) { toRemove.push(path); }
             });
+            _.each(toRemove, function(v){ delete filters[v]; });
+
+            var filterParams = {};
+            _(filters).each(function(filter, path) {
+                filterParams = _.merge(filterParams, expandFilter(path.split('#'), filter));
+            }).value();
             return filterParams;
         }
+
 
         /**
          * Assemble all query parameters into a single query parameters object for the Record resource
