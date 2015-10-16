@@ -21,11 +21,8 @@
                 function init() {
                 }
 
-                $timeout(function() {
-                    $('.selectpicker').selectpicker();
-                });
-
-                scope.$watch(scope.filter, function(v) { console.log(v); });
+                // use `%timeout` to ensure that the template is rendered before selectpicker logic
+                $timeout(function() { $('.selectpicker').selectpicker(); });
 
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
