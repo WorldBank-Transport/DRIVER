@@ -38,7 +38,7 @@ describe('driver.navbar: NavbarController', function () {
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope
@@ -60,7 +60,7 @@ describe('driver.navbar: NavbarController', function () {
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $state.current = $state.get('dashboard');
 
@@ -86,7 +86,7 @@ describe('driver.navbar: NavbarController', function () {
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.PolygonResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope,

@@ -21,6 +21,33 @@
             }]
         };
 
+        var BoundaryNoGeomResponse = {
+            'count': 1,
+            'next': null,
+            'previous': null,
+            'results': [{
+                'uuid': '7c2acfe7-ccf0-4245-9799-f4fa7d80bd9d',
+                'data': {
+                    'PROVINCE': '',
+                    'REGION': 'R2',
+                    'REG_DESC': 'CAGAYAN VALLEY REGION'
+                },
+                'bbox': [
+                    {
+                        'lat': 19.949404944931022,
+                        'lon': 122.1424120222916
+                    },
+                    {
+                        'lat': 19.967709174247037,
+                        'lon': 122.16365427955863
+                    }
+                ],
+                'created': '2015-10-02T13:59:15.210040Z',
+                'modified': '2015-10-02T13:59:15.210084Z',
+                'boundary': '80c10057-2cfc-4a32-8e3c-0573e8bf853f'
+            }]
+        };
+
         var RecordSchemaResponse = {
             'count': 1,
             'next': null,
@@ -123,6 +150,7 @@
 
         var module = {
             GeographyResponse: GeographyResponse,
+            BoundaryNoGeomResponse: BoundaryNoGeomResponse,
             RecordSchema: RecordSchemaResponse.results[0],
             RecordSchemaResponse: RecordSchemaResponse,
             RecordSchemaRequest: RecordSchemaRequest,

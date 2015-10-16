@@ -4,7 +4,8 @@
     /* ngInject */
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
                                     WebConfig, FilterState, RecordState, GeographyState,
-                                    Records, QueryBuilder, MapState, TileUrlService) {
+                                    BoundaryState, Records, QueryBuilder, MapState,
+                                    TileUrlService) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -29,6 +30,10 @@
          *
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
+        // TODO: Split into smaller directives to encapsulate related functionality and simplify
+        // this function.
+        // TODO: Enable polygon filtering whenever Windshaft boundary filtering is fixed (currently,
+        // all but the simplest boundaries result in a 414 URI Too Long
         ctl.initLayers = function(map) {
 
             ctl.map = map;
@@ -40,6 +45,19 @@
                 } else {
                     ctl.recordType = 'ALL';
                 }
+            }).then(function () {
+                return BoundaryState.getSelected().then(function(selected) {
+                    if (selected && selected.uuid) {
+                        ctl.boundaryId = selected.uuid;
+                    }
+                });
+            }).then(function () {
+                /* jshint camelcase: false */
+                return QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: ctl.boundaryId*/})
+                /* jshint camelcase: true */
+                .then(function(records) {
+                    ctl.filterSql = castQueryToStrings(records.query);
+                });
             }).then(function () {
                 // add base layer
                 var baseMaps = $q.defer();
@@ -195,7 +213,6 @@
         /**
          * Adds the map layers. Removes them first if they already exist.
          *
-         * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
         ctl.setRecordLayers = function() {
 
@@ -221,15 +238,16 @@
 
                 // Event record points. Use 'ALL' or record type UUID to filter layer
                 var recordsLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 3});
-                var recordsLayer = new L.tileLayer(ctl.addFilterSql(baseRecordsUrl),
+                var recordsLayer = new L.tileLayer(ctl.addFilterSql(baseRecordsUrl, ctl.filterSql),
                                                    recordsLayerOptions);
 
                 // layer with heatmap of events
                 var heatmapOptions = angular.extend(defaultLayerOptions, {zIndex: 4});
-                var heatmapLayer = new L.tileLayer(ctl.addFilterSql(baseHeatmapUrl), heatmapOptions);
+                var heatmapLayer = new L.tileLayer(ctl.addFilterSql(baseHeatmapUrl, ctl.filterSql),
+                                                   heatmapOptions);
 
                 // interactivity for record layer
-                var utfGridRecordsLayer = new L.UtfGrid(ctl.addFilterSql(baseUtfGridUrl),
+                var utfGridRecordsLayer = new L.UtfGrid(ctl.addFilterSql(baseUtfGridUrl, ctl.filterSql),
                                                         {useJsonP: false, zIndex: 5});
 
                 // combination of records and UTF grid layers, so they can be toggled as a group
@@ -374,12 +392,27 @@
             }
         });
 
+        $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+            if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
+                ctl.boundaryId = selected.uuid;
+                /* jshint camelcase: false */
+                QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: selected.uuid*/})
+                /* jshint camelcase: true */
+                .then(function(records) {
+                    ctl.filterSql = castQueryToStrings(records.query);
+                    ctl.setRecordLayers();
+                });
+            }
+        });
+
         /**
          * Update map when filters change
          */
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
             // get the raw SQL for the filter to send along to Windshaft
-            QueryBuilder.djangoQuery(true, 0, {query: true}).then(function(records) {
+            /* jshint camelcase: false */
+            QueryBuilder.djangoQuery(true, 0, {query: true/*, polygon_id: ctl.boundaryId*/}).then(function(records) {
+            /* jshint camelcase: true */
                 ctl.filterSql = castQueryToStrings(records.query);
                 ctl.setRecordLayers();
             });

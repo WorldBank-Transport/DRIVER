@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function recentEventsMapLayers(RecordState, TileUrlService, QueryBuilder) {
+    function recentEventsMapLayers($q, RecordState, BoundaryState, TileUrlService, QueryBuilder) {
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
         var recencyCutoffDays = 14;
@@ -22,6 +22,14 @@
             var leafletController = controllers[0];
 
             leafletController.getMap().then(addBaseLayers).then(updateLayers);
+            // Zoom to selected boundary on initialization
+            // This will happen asynchronously with the updateLayers call above
+            $q.all([leafletController.getMap(), BoundaryState.getSelected()])
+                .then(function(results) {
+                    var map = results[0];
+                    var bounds = results[1];
+                    map.fitBounds(bounds.bbox);
+                });
 
             // Update when boundary is changed (currently a no-op, but that will change once we add
             // boundary filtering). Function parameters commented out to show what's available.
@@ -69,14 +77,20 @@
                 return TileUrlService.recTilesUrl(selected.uuid);
             // Construct Windshaft URL
             }).then(function(baseUrl) {
-                // TODO: Change whenever we figure out a better Windshaft query strategy
-                return QueryBuilder.unfilteredDjangoQuery(0,
-                    {query: true,
-/* jshint camelcase: false */ occurred_min: occurredMin.toISOString()} /* jshint camelcase: true */
-                ).then(function(result) {
-                        var queryParam = baseUrl.match(/\?/) ? '&sql=' : '?sql=';
-                        var sql = encodeURIComponent(result.query);
-                        return baseUrl + queryParam + sql;
+                // TODO: Change and uncomment boundary filtering whenever Windshaft filtering is fixed.
+                return BoundaryState.getSelected().then(function(/*boundary*/) {
+                    return QueryBuilder.unfilteredDjangoQuery(0,
+                        {query: true,
+                         /* jshint camelcase: false */
+                         occurred_min: occurredMin.toISOString(),
+                         //polygon_id: boundary.uuid
+                         /* jshint camelcase: true */
+                        }
+                    ).then(function(result) {
+                            var queryParam = baseUrl.match(/\?/) ? '&sql=' : '?sql=';
+                            var sql = encodeURIComponent(result.query);
+                            return baseUrl + queryParam + sql;
+                    });
                 });
             // Swap layers
             }).then(function(fullUrl) {

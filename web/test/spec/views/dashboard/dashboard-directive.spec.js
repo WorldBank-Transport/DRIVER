@@ -27,9 +27,11 @@ describe('driver.views.dashboard: Dashboard', function () {
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $rootScope.$apply();
 

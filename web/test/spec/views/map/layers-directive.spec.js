@@ -36,6 +36,11 @@ describe('driver.views.map: Layers Directive', function () {
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var boundaryUrl = /\/api\/boundaries\//;
         $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
+        $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        var recordsUrl = new RegExp('api/records/\\?limit=50&query=true&record_type=' + 
+                                    ResourcesMock.RecordTypeResponse.results[0].uuid);
+        $httpBackend.whenGET(recordsUrl).respond(200, '{"query": "SELECT * FROM ashlar_records"}');
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($rootScope);
         $rootScope.$apply();

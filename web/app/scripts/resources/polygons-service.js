@@ -9,14 +9,16 @@
                 method: 'POST'
             },
             get: {
-                method: 'GET'
+                method: 'GET',
+                params: { nogeom: true }
             },
             query: {
                 method: 'GET',
                 transformResponse: function(data) {
-                    return angular.fromJson(data).results.features;
+                    return angular.fromJson(data).results;
                 },
-                isArray: true
+                isArray: true,
+                params: { nogeom: true }
             },
             update: {
                 method: 'PATCH'

@@ -114,11 +114,11 @@
         // Returns the label for a boundary, based on the currently selected geography
         // TODO: this should eventually be moved to an angular filter if needed elsewhere
         function getBoundaryLabel(boundary) {
-            if (!boundary || !boundary.properties || !boundary.properties.data || !ctl.geographySelected) {
+            if (!boundary || !boundary.data || !ctl.geographySelected) {
                 return '';
             }
             /* jshint camelcase: false */
-            return boundary.properties.data[ctl.geographySelected.display_field];
+            return boundary.data[ctl.geographySelected.display_field];
             /* jshint camelcase: true */
         }
     }
