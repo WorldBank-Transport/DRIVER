@@ -118,12 +118,12 @@
                 // only allow one filter shape at a time
                 // TODO: temporarily remove interactivity layer while editing
                 ctl.map.on('draw:drawstart', function() {
-                    clearLayers();
+                    clearEditLayers();
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
                 ctl.map.on('draw:deleted', function() {
-                    clearLayers();
+                    clearEditLayers();
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
@@ -154,7 +154,7 @@
         };
 
         // Clears editLayers and informs the map state service
-        function clearLayers() {
+        function clearEditLayers() {
             ctl.editLayers.clearLayers();
             MapState.setFilterGeoJSON(null);
         }
@@ -162,7 +162,7 @@
         function filterShapeCreated(layer) {
             // TODO: is the shape type useful info?
             //var type = event.layerType;
-            clearLayers();
+            clearEditLayers();
 
             layer.setStyle(filterStyle);
             ctl.editLayers.addLayer(layer);
