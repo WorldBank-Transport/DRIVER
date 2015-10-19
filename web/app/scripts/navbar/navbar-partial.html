@@ -23,7 +23,7 @@
                         {{ ctl.recordTypeSelected.plural_label }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="nav-rt-item" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'label'">
+                        <li class="nav-rt-item" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'plural_label'">
                             <a ng-click="ctl.onRecordTypeSelected(recordType)">
                                 {{ recordType.plural_label }}
                             </a>
@@ -47,7 +47,7 @@
                         {{ ctl.getBoundaryLabel(ctl.boundarySelected) }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="nav-rt-item" ng-repeat="boundary in ctl.boundaryResults | orderBy:'label'">
+                        <li class="nav-rt-item" ng-repeat="boundary in ctl.boundaryResults | orderBy:ctl.getBoundaryLabel">
                             <a ng-click="ctl.onBoundarySelected(boundary)">
                                 {{ ctl.getBoundaryLabel(boundary) }}
                             </a>
