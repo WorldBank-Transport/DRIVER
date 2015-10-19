@@ -25,3 +25,7 @@ div.navbar-default.filterbar {
 .no-filterbar {
     top: 50px;
 }
+
+.active .filter-option {
+    text-decoration: underline;
+}
