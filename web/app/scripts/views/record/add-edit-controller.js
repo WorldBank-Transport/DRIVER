@@ -46,10 +46,10 @@
             $scope.$on('driver.views.record:map-moved', function(event, data) {
                 bbox = data;
             });
-            
+
             $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
                 if (newVal && newVal.lat && newVal.lng) {
-                    if(!suppressReverseNominatim) {
+                    if(!ctl.nominatimValue || !suppressReverseNominatim) {
                         Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
                             ctl.nominatimValue = displayName;
                         });
