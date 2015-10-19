@@ -30,4 +30,9 @@
     height: auto;
     max-height: 500px;
     overflow-x: auto;
+
+    /* Needed so the datepicker widgets don't get confined to a small window */
+    &.date-range {
+        overflow-x: initial;
+    }
 }
