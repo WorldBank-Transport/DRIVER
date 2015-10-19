@@ -3,6 +3,7 @@
         <select data-ng-options="val for val in data.enum"
                 data-header="{{ label | labelFormatter }}"
                 class="selectpicker form-control"
+                id="{{ domID }}"
                 multiple
                 name="options[]"
                 ng-model="filter.contains"

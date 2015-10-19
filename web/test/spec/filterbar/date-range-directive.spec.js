@@ -18,6 +18,7 @@ describe('driver.filterbar: Date Range', function () {
         $rootScope.$apply();
         var filterbarController = Element.controller('driverFilterbar');
 
+        spyOn(filterbarController, 'init');
         $rootScope.$apply();
     }));
 
