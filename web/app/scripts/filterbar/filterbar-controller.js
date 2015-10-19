@@ -2,11 +2,18 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, FilterState, RecordSchemas) {
+    function FilterbarController($log, $scope, FilterState, RecordState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
         ctl.recordLabel = '';
+        init();
+
+        function init() {
+            RecordState.getSelected().then(function(selected) {
+                onRecordSelected(selected);
+            });
+        }
 
         /**
          * A simple function to add/update a filter
@@ -54,9 +61,11 @@
         /**
          * When the record type changes, request the new schema
          */
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
-            if (selected) {
+        $scope.$on('driver.state.recordstate:selected',
+                   function(event, selected) { onRecordSelected(selected); });
 
+        function onRecordSelected(selected) {
+            if (selected) {
                 // get label for add record button
                 ctl.recordLabel = selected.label;
 
@@ -84,7 +93,7 @@
                     });
                 });
             }
-        });
+        }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
 
