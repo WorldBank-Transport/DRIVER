@@ -118,12 +118,12 @@
                 // only allow one filter shape at a time
                 // TODO: temporarily remove interactivity layer while editing
                 ctl.map.on('draw:drawstart', function() {
-                    ctl.editLayers.clearLayers();
+                    clearLayers();
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
                 ctl.map.on('draw:deleted', function() {
-                    ctl.editLayers.clearLayers();
+                    clearLayers();
                     $rootScope.$broadcast('driver.views.map:filterdrawn', null);
                 });
 
@@ -146,17 +146,23 @@
                 }
 
                 if (MapState.getFilterGeoJSON()) {
-                    var layer =  L.geoJson(MapState.getFilterGeoJSON());
+                    var layer = L.geoJson(MapState.getFilterGeoJSON());
                     layer.setStyle(filterStyle);
                     ctl.editLayers.addLayer(layer);
                 }
             });
         };
 
+        // Clears editLayers and informs the map state service
+        function clearLayers() {
+            ctl.editLayers.clearLayers();
+            MapState.setFilterGeoJSON(null);
+        }
+
         function filterShapeCreated(layer) {
             // TODO: is the shape type useful info?
             //var type = event.layerType;
-            ctl.editLayers.clearLayers();
+            clearLayers();
 
             layer.setStyle(filterStyle);
             ctl.editLayers.addLayer(layer);
@@ -164,14 +170,14 @@
 
             // Use GeoJSON instead of a normal layer - theres a strange bug likely stemming from
             //  race conditions on the Leaflet Map object otherwise
-            MapState.setFilterGeoJSON(layer.toGeoJSON());
+            MapState.setFilterGeoJSON(getPolygonFromLayer(ctl.editLayers));
 
             // pan/zoom to selected area
 
             ctl.map.fitBounds(layer.getBounds());
 
             // Send exported shape to filterbar, which will send `changed` event with filters.
-            var geojson = ctl.editLayers.toGeoJSON();
+            var geojson = getPolygonFromLayer(ctl.editLayers);
             $rootScope.$broadcast('driver.views.map:filterdrawn', geojson);
 
             // TODO: use an interaction event to remove the drawn filter area?
@@ -401,14 +407,45 @@
             }
         });
 
+        // Gets a polygon object from a FeatureCollection
+        // A FeatureCollection may contain a FeatureCollection, so recurse
+        function getPolygonFromFeatureCollection(featureCollection) {
+            if (!featureCollection.features || !featureCollection.features.length) {
+                return null;
+            }
+
+            var feature = featureCollection.features[0];
+            switch (feature.geometry.type) {
+                case 'FeatureCollection':
+                    return getPolygonFromFeatureCollection(feature.geometry);
+                case 'Polygon':
+                    return feature.geometry;
+                default:
+                    $log.warn('Unexpected feature type: ', feature.geometry.type);
+                    return null;
+            }
+        }
+
+        // Gets the polygon object from a layer
+        function getPolygonFromLayer(layer) {
+            if (!layer) {
+                return null;
+            }
+
+            var geojson = layer.toGeoJSON();
+            if (!geojson || !geojson.features) {
+                return null;
+            }
+
+            return getPolygonFromFeatureCollection(geojson);
+        }
+
         // Gets the additional parameters to be sent in the request to Django
         function getAdditionalParams() {
             var params = { query: true };
-            if (ctl.editLayers) {
-                var geoJson = ctl.editLayers.toGeoJSON();
-                if (geoJson.features.length) {
-                    params.polygon = geoJson.features[0].geometry;
-                }
+            var geojson = getPolygonFromLayer(ctl.editLayers);
+            if (geojson) {
+                params.polygon = geojson;
             }
 
             // TODO: uncomment and test as Windshaft changes are being made
