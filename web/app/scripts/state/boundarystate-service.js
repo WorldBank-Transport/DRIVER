@@ -33,17 +33,17 @@
         function updateOptions(params) {
             var filterParams = angular.extend({}, defaultParams, params);
             return Polygons.query(filterParams).$promise.then(function(results) {
-                  options = results;
-                  $rootScope.$broadcast('driver.state.boundarystate:options', options);
-                  if (!results.length) {
-                      $log.warn('No boundaries returned');
-                  } else {
-                      if (!selected && options[0]) {
-                          svc.setSelected(options[0]);
-                      } else if (!_.includes(options, selected)) {
-                          svc.setSelected(selected);
-                      }
-                  }
+                options = results;
+                $rootScope.$broadcast('driver.state.boundarystate:options', options);
+                if (!results.length) {
+                    $log.warn('No boundaries returned');
+                } else {
+                    if (!selected && options[0]) {
+                        svc.setSelected(options[0]);
+                    } else if (!_.includes(options, selected)) {
+                        svc.setSelected(selected);
+                    }
+                }
             });
         }
 
@@ -66,16 +66,16 @@
                 selection = _.find(options, function(d) {
                     var oldPoly = localStorageService.get('boundary.selected');
                     if (!oldPoly) {
-                        return {'id': ''};
+                        return {'uuid': ''};
                     }
-                    return d.id === oldPoly.id;
+                    return d.uuid === oldPoly.uuid;
                 });
                 initialized = true;
             }
 
             if (_.find(options, function(d) {
                 if (!selection) { return false; }
-                return d.id === selection.id;
+                return d.uuid === selection.uuid;
             })) {
                 selected = selection;
             } else if (options.length) {
