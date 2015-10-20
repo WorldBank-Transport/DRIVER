@@ -5,7 +5,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordAggregates($q, RecordTypes, RecordState, Records, QueryBuilder) {
+    function RecordAggregates($q, RecordTypes, RecordTypeState, Records, QueryBuilder) {
         var svc = {
             recentCounts: recentCounts,
             toddow: toddow
@@ -33,7 +33,7 @@
         function recentCounts() {
             var deferred = $q.defer();
             // Record Type
-            RecordState.getSelected().then(function(selected) {
+            RecordTypeState.getSelected().then(function(selected) {
                 var uuid = selected.uuid;
                 RecordTypes.recentCounts({id: uuid}).$promise.then(function(counts) {
                     deferred.resolve(counts);

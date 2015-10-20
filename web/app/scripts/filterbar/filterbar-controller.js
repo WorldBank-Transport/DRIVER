@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, FilterState, RecordState, RecordSchemas) {
+    function FilterbarController($log, $scope, FilterState, RecordTypeState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
@@ -10,7 +10,7 @@
         init();
 
         function init() {
-            RecordState.getSelected().then(function(selected) {
+            RecordTypeState.getSelected().then(function(selected) {
                 onRecordSelected(selected);
             });
         }
@@ -61,7 +61,7 @@
         /**
          * When the record type changes, request the new schema
          */
-        $scope.$on('driver.state.recordstate:selected',
+        $scope.$on('driver.state.recordtypestate:selected',
                    function(event, selected) { onRecordSelected(selected); });
 
         function onRecordSelected(selected) {

@@ -9,7 +9,7 @@
     'use strict';
 
     /* ngInject */
-    function QueryBuilder($q, FilterState, RecordState, Records, WebConfig) {
+    function QueryBuilder($q, FilterState, RecordTypeState, Records, WebConfig) {
         var svc = {
             djangoQuery: djangoQuery,
             unfilteredDjangoQuery: function(offset, extraParams) {
@@ -128,7 +128,7 @@
             paramObj.limit = WebConfig.record.limit;
 
             // Record Type
-            RecordState.getSelected().then(function(selected) {
+            RecordTypeState.getSelected().then(function(selected) {
                 paramObj.record_type = selected.uuid;
                 deferred.resolve(paramObj);
             });

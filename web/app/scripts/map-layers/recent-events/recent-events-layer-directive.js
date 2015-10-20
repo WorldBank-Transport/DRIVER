@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function recentEventsMapLayers($q, RecordState, BoundaryState, TileUrlService, QueryBuilder) {
+    function recentEventsMapLayers($q, RecordTypeState, BoundaryState, TileUrlService, QueryBuilder) {
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
         var recencyCutoffDays = 14;
@@ -38,7 +38,7 @@
             });
 
             // TODO: Remove when the record type picker is removed.
-            scope.$on('driver.state.recordstate:selected', function() {
+            scope.$on('driver.state.recordtypestate:selected', function() {
                 leafletController.getMap().then(updateLayers);
             });
         }
@@ -73,7 +73,7 @@
             occurredMin.setDate(occurredMin.getDate() - recencyCutoffDays);
             // TODO: Boundary filtering somewhere in here.
             // TODO: Since RecordType selection is going away, this may have to change
-            RecordState.getSelected().then(function(selected) {
+            RecordTypeState.getSelected().then(function(selected) {
                 return TileUrlService.recTilesUrl(selected.uuid);
             // Construct Windshaft URL
             }).then(function(baseUrl) {

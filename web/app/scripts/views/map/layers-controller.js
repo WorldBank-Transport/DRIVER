@@ -3,7 +3,7 @@
 
     /* ngInject */
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
-                                    WebConfig, FilterState, RecordState, GeographyState,
+                                    WebConfig, FilterState, RecordTypeState, GeographyState,
                                     BoundaryState, Records, QueryBuilder, MapState,
                                     TileUrlService) {
         var ctl = this;
@@ -39,7 +39,7 @@
             ctl.map = map;
 
             // get the current record type selection for filtering
-            RecordState.getSelected().then(function(selected) {
+            RecordTypeState.getSelected().then(function(selected) {
                 if (selected && selected.uuid) {
                     ctl.recordType = selected.uuid;
                 } else {
@@ -388,7 +388,7 @@
             return url;
         };
 
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
             if (ctl.recordType !== selected && selected && selected.uuid) {
                 ctl.recordType = selected.uuid;
                 // re-add the layers to refresh with filtered content

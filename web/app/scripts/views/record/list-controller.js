@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, RecordSchemas, RecordState, BoundaryState,
+                                  Notifications, RecordSchemas, RecordTypeState, BoundaryState,
                                   QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
@@ -20,7 +20,7 @@
 
         function initialize() {
             ctl.isInitialized = false;
-            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+            RecordTypeState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(BoundaryState.getSelected().then(function(selected) {
                     ctl.boundaryId = selected.uuid;
                 }))
@@ -117,7 +117,7 @@
               });
         });
 
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
             // Only reload records in this handler after initialization is done.
             // This handler is for when the user changes the record type selection.
             if (!ctl.isInitialized) {

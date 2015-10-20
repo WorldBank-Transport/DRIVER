@@ -9,15 +9,15 @@ describe('driver.filterbar: Date Range', function () {
 
     var $compile;
     var $rootScope;
-    var RecordState;
+    var RecordTypeState;
     var $httpBackend;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _RecordState_, _$httpBackend_, _ResourcesMock_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _RecordTypeState_, _$httpBackend_, _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
-        RecordState = _RecordState_;
+        RecordTypeState = _RecordTypeState_;
         ResourcesMock = _ResourcesMock_;
     }));
 

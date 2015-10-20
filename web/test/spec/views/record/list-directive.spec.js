@@ -12,17 +12,15 @@ describe('driver.views.record: RecordList', function () {
     var $httpBackend;
     var $rootScope;
     var localStorageService;
-    var recordState;
     var DriverResourcesMock;
     var ResourcesMock;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _localStorageService_,
-                                _RecordState_, _DriverResourcesMock_, _ResourcesMock_) {
+                                _DriverResourcesMock_, _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         localStorageService = _localStorageService_;
-        recordState = _RecordState_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
 
