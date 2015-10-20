@@ -2,6 +2,7 @@
 
 describe('driver.filterbar: Options', function () {
 
+    beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
@@ -9,13 +10,27 @@ describe('driver.filterbar: Options', function () {
     var $compile;
     var $rootScope;
     var Element;
+    var ResourcesMock;
+    var $httpBackend;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _ResourcesMock_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
-        var $filterbarScope = $rootScope.$new();
+        $httpBackend = _$httpBackend_;
+        ResourcesMock = _ResourcesMock_;
+    }));
 
-        Element = $compile('<driver-filterbar><options-field></options-field></driver-filterbar>')($filterbarScope);
+    it('should handle restoring filter selection', function () {
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+
+        var $filterbarScope = $rootScope.$new();
+        Element = $compile('<driver-filterbar></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();
         var filterbarController = Element.controller('driverFilterbar');
 
@@ -31,9 +46,7 @@ describe('driver.filterbar: Options', function () {
 
         filterbarController.filterables = testFilterables;
         $rootScope.$apply();
-    }));
 
-    it('should handle restoring filter selection', function () {
         // should have no selection yet
         expect(Element.find('select').val()).toEqual(null);
         $rootScope.$broadcast('driver.filterbar:restore', [{'foo#bar': {'_rule_type': 'containment', 'contains': ['baz']}}, null]);

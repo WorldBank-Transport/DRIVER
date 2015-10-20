@@ -2,18 +2,29 @@
 
 describe('driver.filterbar: Numeric Range', function () {
 
+    beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
 
     var $compile;
     var $rootScope;
+    var ResourcesMock;
+    var $httpBackend;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _ResourcesMock_, _$httpBackend_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
-        var $filterbarScope = $rootScope.$new();
+        ResourcesMock = _ResourcesMock_;
+        $httpBackend = _$httpBackend_;
+    }));
 
+    it('should handle restoring filter selection', function () {
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
+        var $filterbarScope = $rootScope.$new();
         Element = $compile('<driver-filterbar><numeric-range-field></numeric-range-field></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();
         var filterbarController = Element.controller('driverFilterbar');
@@ -29,9 +40,6 @@ describe('driver.filterbar: Numeric Range', function () {
 
         filterbarController.filterables = testFilterables;
         $rootScope.$apply();
-    }));
-
-    it('should handle restoring filter selection', function () {
         // should have no maximum set yet
         expect(Element.find("input[type='number'][name='maximum']").val()).toEqual('');
 

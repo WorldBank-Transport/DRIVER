@@ -33,6 +33,11 @@ describe('driver.filterbar: FilterbarController', function () {
         ResourcesMock = _ResourcesMock_;
 
         var element = $compile('<driver-filterbar></driver-filterbar>')($scope);
+
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         $rootScope.$apply();
         $controller = element.controller('driverFilterbar');
 

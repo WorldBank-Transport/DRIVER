@@ -31,10 +31,22 @@ describe('driver.filterbar: FilterbarDirective', function () {
     }));
 
     it('should load directive', function () {
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+
         var scope = $rootScope.$new();
         var element = $compile('<driver-filterbar></driver-filterbar>')(scope);
         $rootScope.$apply();
 
+        $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
         $rootScope.$apply();
 
