@@ -39,9 +39,9 @@
          * @param {Object} polygon GeoJSON polygon to filter by.
          */
          ctl.setFilterPolygon = function(polygon) {
-            ctl.filterPolygon = !!polygon ? polygon : null;
-            FilterState.saveFilters(ctl.filters, ctl.filterPolygon);
-            ctl.sendFilter();
+             ctl.filterPolygon = !!polygon ? polygon : null;
+             FilterState.saveFilters(ctl.filters, ctl.filterPolygon);
+             ctl.sendFilter();
          };
 
         /**
