@@ -3,8 +3,8 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, RecordSchemas, RecordState, BoundaryState,
-                                  QueryBuilder, WebConfig) {
+                                  Notifications, RecordSchemas, RecordTypeState, BoundaryState,
+                                  RecordState, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
         ctl.currentOffset = 0;
@@ -20,7 +20,7 @@
 
         function initialize() {
             ctl.isInitialized = false;
-            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+            RecordTypeState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(BoundaryState.getSelected().then(function(selected) {
                     ctl.boundaryId = selected.uuid;
                 }))
@@ -66,7 +66,7 @@
                 paramsOffset = 0;
             }
             /* jshint camelcase: false */
-            return QueryBuilder.djangoQuery(true, paramsOffset, {polygon_id: ctl.boundaryId})
+            return RecordState.getRecords(true, paramsOffset, {polygon_id: ctl.boundaryId})
             /* jshint camelcase: true */
             .then(function(records) {
                 ctl.records = records;
@@ -117,7 +117,7 @@
               });
         });
 
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
             // Only reload records in this handler after initialization is done.
             // This handler is for when the user changes the record type selection.
             if (!ctl.isInitialized) {

@@ -2,14 +2,14 @@
     'use strict';
 
     /* ngInject */
-    function RecentCountsController($scope, RecordAggregates, RecordState) {
+    function RecentCountsController($scope, RecordAggregates, RecordTypeState) {
         var ctl = this;
         init();
-        $scope.$on('driver.state.recordstate:selected', init);
+        $scope.$on('driver.state.recordtypestate:selected', init);
         return ctl;
 
         function init() {
-            RecordState.getSelected().then(function(recordType) {
+            RecordTypeState.getSelected().then(function(recordType) {
                 /* jshint camelcase: false */
                 ctl.recordTypePlural = recordType.plural_label;
                 RecordAggregates.recentCounts().then(function(aggregate) {

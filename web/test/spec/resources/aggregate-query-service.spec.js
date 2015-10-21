@@ -11,17 +11,17 @@ describe('driver.resources: Aggregate Queries', function () {
     var $httpBackend;
     var $q;
     var ResourcesMock;
-    var RecordState;
+    var RecordTypeState;
 
     beforeEach(inject(function (_$rootScope_, _$httpBackend_, _$q_,
-                                _RecordAggregates_, _RecordState_, _ResourcesMock_) {
+                                _RecordAggregates_, _RecordTypeState_, _ResourcesMock_) {
         $q = _$q_;
         $httpBackend = _$httpBackend_;
         RecordAggregates = _RecordAggregates_;
         $rootScope = _$rootScope_;
         ResourcesMock = _ResourcesMock_;
-        RecordState = _RecordState_;
-        spyOn(RecordState, 'getSelected').and.callFake(function() {
+        RecordTypeState = _RecordTypeState_;
+        spyOn(RecordTypeState, 'getSelected').and.callFake(function() {
           var deferred = $q.defer();
           deferred.resolve({uuid: 'a-very-weird-uuid'});
           return deferred.promise;

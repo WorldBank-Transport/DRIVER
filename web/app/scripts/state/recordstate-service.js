@@ -6,120 +6,47 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes) {
-        var defaultParams,
-            selected,
-            options,
-            gettingSelected,
-            selectedPromise,
-            gettingOptions,
-            optionPromise;
-        var initialized = false;
-        var svc = this;
-        svc.updateOptions = updateOptions;
-        svc.getOptions = getOptions;
-        svc.setSelected = setSelected;
-        svc.getSelected = getSelected;
-        init();
+    function RecordState($log, $rootScope, $q, QueryBuilder) {
+        var records,
+            lastDoFilter,
+            lastOffset,
+            lastExtraParams;
 
-        /**
-         * initialization
-         */
-        function init() {
-          selected = null;
-          gettingSelected = false;
-          gettingOptions = false;
-          options = [];
-          defaultParams = {'active': 'True'};
-          svc.updateOptions();
-        }
-
-        /**
-         * Query the backend for the available options
-         *
-         * @param {object} params - The query params to use in place of defaultParams
-         */
-        function updateOptions(params) {
-            var filterParams = angular.extend({}, params, defaultParams);
-            return RecordTypes.query(filterParams).$promise.then(function(results) {
-                  options = results;
-                  $rootScope.$broadcast('driver.state.recordstate:options', options);
-                  if (!results.length) {
-                      $log.warn('No record types returned');
-                  } else {
-                      if (!selected && options[0]) {
-                          selected = svc.setSelected(options[0]);
-                      } else if (!_.includes(options, selected)) {
-                          svc.setSelected(selected);
-                      }
-                  }
-            });
-        }
-
-        function getOptions() {
-            if (!gettingOptions) {
-                gettingOptions = true;
-                var deferred = $q.defer();
-                if (!options) {
-                    updateOptions().then(function() { deferred.resolve(options); });
-                } else {
-                    deferred.resolve(options);
-                }
-                optionPromise = deferred.promise;
-            }
-            optionPromise.then(function() { gettingOptions = false; });
-            return optionPromise;
-        }
-
-        /**
-         * Set the state selection
-         *
-         * @param {object} selection - The selection among available options
-         */
-        function setSelected(selection) {
-            if (!initialized) {
-                var oldRecordType = localStorageService.get('recordtype.selected');
-                if (oldRecordType) {
-                    selection = _.find(options, function(d) {
-                        return d.uuid === oldRecordType.uuid;
-                    });
-                    initialized = true;
-                }
-            }
-            if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
-                selected = selection;
-            } else if (options.length) {
-                selected = options[0];
-            } else {
-                selected = null;
-            }
-            localStorageService.set('recordtype.selected', selected);
-            $rootScope.$broadcast('driver.state.recordstate:selected', selected);
-            return selected;
-        }
-
-        function getSelected() {
-            if (!gettingSelected) {
-                gettingSelected = true;
-            } else {
-                return selectedPromise;
-            }
-
-            var deferred = $q.defer();
-            if (!selected && !options.length) {
-                updateOptions().then(function() { deferred.resolve(selected); });
-            } else if (!selected) {
-                deferred.resolve(setSelected());
-            } else {
-                deferred.resolve(selected);
-            }
-            selectedPromise = deferred.promise;
-
-            selectedPromise.then(function() { gettingSelected = false; });
-            return selectedPromise;
-        }
-
+        var svc = {
+            getRecords: getRecords
+        };
         return svc;
+
+        /**
+         * Take a series of parameters (the params consumed by the QueryBuilder that this function
+         *  wraps) and do a little work to ensure that duplicate requests aren't getting sent out
+         */
+        function getRecords(doFilter, offset, extraParams, force) {
+            // Standardize to avoid js equality checking weirdness
+            doFilter = doFilter || false;
+            offset = offset || 0;
+            extraParams = extraParams || {};
+
+            // Fresh request if `force`
+            if (force) { records = null; }
+
+            if (records) { // If we have records already
+                // If parameters differ from the last call
+                if (doFilter !== lastDoFilter || offset !== lastOffset || !_.isEqual(extraParams, lastExtraParams)) {
+                    records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
+                } else { // If parameters do not differ
+                    $log.debug('Saved a `Record` request');
+                }
+            } else { // If no records found
+                records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
+            }
+
+            // Store current parameters to check if a new request is necessary in a future request
+            lastDoFilter = doFilter;
+            lastOffset = offset;
+            lastExtraParams = extraParams;
+            return records;
+        }
     }
 
     angular.module('driver.state')

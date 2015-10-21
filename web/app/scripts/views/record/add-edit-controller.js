@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
                                      Nominatim, Notifications, Records, RecordSchemas,
-                                     RecordState) {
+                                     RecordTypeState) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -88,7 +88,7 @@
         }
 
         function loadRecordType() {
-            return RecordState.getSelected()
+            return RecordTypeState.getSelected()
                 .then(function(recordType) {
                     ctl.recordType = recordType;
                 });
