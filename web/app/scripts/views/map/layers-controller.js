@@ -4,7 +4,7 @@
     /* ngInject */
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
                                     WebConfig, FilterState, RecordTypeState, GeographyState,
-                                    BoundaryState, Records, QueryBuilder, MapState,
+                                    BoundaryState, Records, RecordState, MapState,
                                     TileUrlService) {
         var ctl = this;
 
@@ -52,7 +52,7 @@
                     }
                 });
             }).then(function () {
-                return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
+                return RecordState.getRecords(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                 });
@@ -399,7 +399,7 @@
         $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
             if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
                 ctl.boundaryId = selected.uuid;
-                QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
+                RecordState.getRecords(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                     ctl.setRecordLayers();
@@ -464,7 +464,7 @@
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
 
             // get the raw SQL for the filter to send along to Windshaft
-            QueryBuilder.djangoQuery(true, 0, getAdditionalParams()).then(function(records) {
+            RecordState.getRecords(true, 0, getAdditionalParams()).then(function(records) {
                 ctl.filterSql = castQueryToStrings(records.query);
                 ctl.setRecordLayers();
             });

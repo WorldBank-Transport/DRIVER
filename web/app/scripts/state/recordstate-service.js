@@ -39,8 +39,8 @@
                 // If parameters differ from the last call
                 if (doFilter !== lastDoFilter || offset !== lastOffset || !_.isEqual(extraParams, lastExtraParams)) {
                     records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
-                } else { // If parameters do not differ 
-                    $log.debug('saved a request');
+                } else { // If parameters do not differ
+                    $log.debug('Saved a `Record` request');
                 }
             } else { // If no records found
                 records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);

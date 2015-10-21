@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
                                   Notifications, RecordSchemas, RecordTypeState, BoundaryState,
-                                  QueryBuilder, WebConfig) {
+                                  RecordState, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
         ctl.currentOffset = 0;
@@ -66,7 +66,7 @@
                 paramsOffset = 0;
             }
             /* jshint camelcase: false */
-            return QueryBuilder.djangoQuery(true, paramsOffset, {polygon_id: ctl.boundaryId})
+            return RecordState.getRecords(true, paramsOffset, {polygon_id: ctl.boundaryId})
             /* jshint camelcase: true */
             .then(function(records) {
                 ctl.records = records;
