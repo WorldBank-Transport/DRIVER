@@ -27,11 +27,6 @@
             offset = offset || 0;
             extraParams = extraParams || {};
 
-            // Store current parameters to check if a new request is necessary in a future request
-            lastDoFilter = doFilter;
-            lastOffset = offset;
-            lastExtraParams = extraParams;
-
             // Fresh request if `force`
             if (force) { records = null; }
 
@@ -46,6 +41,10 @@
                 records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
             }
 
+            // Store current parameters to check if a new request is necessary in a future request
+            lastDoFilter = doFilter;
+            lastOffset = offset;
+            lastExtraParams = extraParams;
             return records;
         }
     }
