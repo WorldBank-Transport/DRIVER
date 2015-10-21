@@ -17,15 +17,31 @@
         };
         return svc;
 
+        /**
+         * Take a series of parameters (the params consumed by the QueryBuilder that this function
+         *  wraps) and do a little work to ensure that duplicate requests aren't getting sent out
+         */
         function getRecords(doFilter, offset, extraParams, force) {
+            // Standardize to avoid js equality checking weirdness
+            doFilter = doFilter || false;
+            offset = offset || 0;
+            extraParams = extraParams || {};
+
+            // Store current parameters to check if a new request is necessary in a future request
+            lastDoFilter = doFilter;
+            lastOffset = offset;
+            lastExtraParams = extraParams;
+
             // Fresh request if `force`
             if (force) { records = null; }
 
             if (records) { // If we have records already
-                if (doFilter !== lastDoFilter || offset !== lastOffset || extraParams !== lastExtraParams) {
+                // If parameters differ from the last call
+                if (doFilter !== lastDoFilter || offset !== lastOffset || !_.isEqual(extraParams, lastExtraParams)) {
                     records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
-                } // If parameters differ from the last call
-                $log.debug('saved a request');
+                } else { // If parameters do not differ 
+                    $log.debug('saved a request');
+                }
             } else { // If no records found
                 records = QueryBuilder.djangoQuery(doFilter, offset, extraParams);
             }
