@@ -3,8 +3,8 @@
 
     /* ngInject */
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
-                                    WebConfig, FilterState, RecordTypeState, GeographyState,
-                                    BoundaryState, Records, RecordState, MapState,
+                                    WebConfig, FilterState, RecordState, GeographyState,
+                                    BoundaryState, Records, QueryBuilder, MapState,
                                     TileUrlService) {
         var ctl = this;
 
@@ -39,7 +39,7 @@
             ctl.map = map;
 
             // get the current record type selection for filtering
-            RecordTypeState.getSelected().then(function(selected) {
+            RecordState.getSelected().then(function(selected) {
                 if (selected && selected.uuid) {
                     ctl.recordType = selected.uuid;
                 } else {
@@ -52,7 +52,7 @@
                     }
                 });
             }).then(function () {
-                return RecordState.getRecords(true, 0, getAdditionalParams())
+                return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                 });
@@ -388,7 +388,7 @@
             return url;
         };
 
-        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             if (ctl.recordType !== selected && selected && selected.uuid) {
                 ctl.recordType = selected.uuid;
                 // re-add the layers to refresh with filtered content
@@ -399,7 +399,7 @@
         $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
             if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
                 ctl.boundaryId = selected.uuid;
-                RecordState.getRecords(true, 0, getAdditionalParams())
+                QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                 .then(function(records) {
                     ctl.filterSql = castQueryToStrings(records.query);
                     ctl.setRecordLayers();
@@ -464,7 +464,7 @@
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
 
             // get the raw SQL for the filter to send along to Windshaft
-            RecordState.getRecords(true, 0, getAdditionalParams()).then(function(records) {
+            QueryBuilder.djangoQuery(true, 0, getAdditionalParams()).then(function(records) {
                 ctl.filterSql = castQueryToStrings(records.query);
                 ctl.setRecordLayers();
             });

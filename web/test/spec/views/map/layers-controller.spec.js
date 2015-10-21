@@ -27,12 +27,12 @@ describe('driver.views.map: Layers Controller', function () {
     var Element;
     var ResourcesMock;
     var DriverResourcesMock;
-    var RecordTypeState;
+    var RecordState;
     var MapState;
 
     beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_,
                                 _ResourcesMock_, _DriverResourcesMock_,
-                                _RecordTypeState_, _MapState_) {
+                                _RecordState_, _MapState_) {
         $compile = _$compile_;
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
@@ -40,7 +40,7 @@ describe('driver.views.map: Layers Controller', function () {
         $rootScope = _$rootScope_;
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
-        RecordTypeState = _RecordTypeState_;
+        RecordState = _RecordState_;
         MapState = _MapState_;
 
         // Set these for testing persistence
@@ -84,7 +84,7 @@ describe('driver.views.map: Layers Controller', function () {
 
     it('should listen for record type change', function() {
         spyOn(Controller, 'setRecordLayers');
-        RecordTypeState.setSelected({uuid: 'foo'});
+        RecordState.setSelected({uuid: 'foo'});
         expect(Controller.setRecordLayers).toHaveBeenCalled();
     });
 
