@@ -57,7 +57,7 @@
                         if (scope.data.multiple) {
                             // TODO: Implement a filter for related containment in djsonb
                             filterbarController.updateFilter(filterLabel,
-                                                             _.merge({'_rule_type': 'related_containment'},
+                                                             _.merge({'_rule_type': 'containment_multiple'},
                                                                      scope.filter));
                         } else {
                             filterbarController.updateFilter(filterLabel,
