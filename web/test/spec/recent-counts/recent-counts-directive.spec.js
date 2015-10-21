@@ -14,18 +14,18 @@ describe('driver.recentCounts: RecentCounts', function () {
     var $httpBackend;
     var $q;
     var ResourcesMock;
-    var RecordTypeState;
+    var RecordState;
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$q_,
-                                _RecordAggregates_, _ResourcesMock_, _RecordTypeState_) {
+                                _RecordAggregates_, _ResourcesMock_, _RecordState_) {
         $compile = _$compile_;
         $q = _$q_;
         $httpBackend = _$httpBackend_;
         RecordAggregates = _RecordAggregates_;
         $rootScope = _$rootScope_;
         ResourcesMock = _ResourcesMock_;
-        RecordTypeState = _RecordTypeState_;
-        spyOn(RecordTypeState, 'getSelected').and.callFake(function() {
+        RecordState = _RecordState_;
+        spyOn(RecordState, 'getSelected').and.callFake(function() {
             var deferred = $q.defer();
             deferred.resolve({uuid: 'a-uuid', plural_label: 'cthulus'});
             return deferred.promise;

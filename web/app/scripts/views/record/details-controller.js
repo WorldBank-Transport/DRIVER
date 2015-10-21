@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordDetailsController($stateParams,
-                                     Records, RecordSchemas, RecordTypeState) {
+                                     Records, RecordSchemas, RecordState) {
         var ctl = this;
         initialize();
 
@@ -21,7 +21,7 @@
         }
 
         function loadRecordType () {
-            return RecordTypeState.getSelected()
+            return RecordState.getSelected()
                 .then(function(recordType) {
                     ctl.recordType = recordType;
                 });

@@ -3,7 +3,7 @@
 
     /* ngInject */
     function NavbarController($log, $window, $rootScope, $scope, $state,
-                              GeographyState, RecordTypeState, BoundaryState) {
+                              GeographyState, RecordState, BoundaryState) {
         var ctl = this;
         var _ = $window._;
         init();
@@ -18,7 +18,7 @@
         function init() {
             setFilters($state.current);
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
-            RecordTypeState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
+            RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             setStates();
         }
 
@@ -27,10 +27,10 @@
         });
 
         // Record Type selections
-        $scope.$on('driver.state.recordtypestate:options', function(event, options) {
+        $scope.$on('driver.state.recordstate:options', function(event, options) {
             ctl.recordTypeResults = options;
         });
-        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             ctl.recordTypeSelected = selected;
             updateState();
         });
@@ -97,7 +97,7 @@
 
         // Handler for when a record type is selected from the dropdown
         function onRecordTypeSelected(recordType) {
-            RecordTypeState.setSelected(recordType);
+            RecordState.setSelected(recordType);
         }
 
         // Handler for when a navigation state is selected from the dropdown

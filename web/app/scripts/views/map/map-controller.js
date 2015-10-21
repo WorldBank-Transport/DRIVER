@@ -2,20 +2,20 @@
     'use strict';
 
     /* ngInject */
-    function MapController($scope, Records, RecordSchemas, RecordTypeState) {
+    function MapController($scope, Records, RecordSchemas, RecordState) {
         var ctl = this;
 
         initialize();
 
         // TODO: This also needs to listen for changing filters, both from the filterbar and map.
         // This hasn't been done here, because of a couple related, in-progress tasks.
-        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             ctl.recordType = selected;
             loadRecords();
         });
 
         function initialize() {
-            RecordTypeState.getSelected().then(function(selected) { ctl.recordType = selected; })
+            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords);
         }

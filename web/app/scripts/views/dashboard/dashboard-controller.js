@@ -2,19 +2,18 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, Records, RecordSchemas, RecordAggregates,
-                                 RecordTypeState, RecordState) {
+    function DashboardController($scope, Records, RecordSchemas, RecordState, RecordAggregates) {
         var ctl = this;
 
         initialize();
 
-        $scope.$on('driver.state.recordtypestate:selected', function(event, selected) {
+        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             ctl.recordType = selected;
             loadRecords();
         });
 
         function initialize() {
-            RecordTypeState.getSelected().then(function(selected) { ctl.recordType = selected; })
+            RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
@@ -47,8 +46,8 @@
                 ctl.toddow = toddowData;
             });
 
-            return RecordState.getRecords(false, 0, params)
-                .then(function(records) {
+            return Records.get(params)
+                .$promise.then(function(records) {
                     ctl.records = records.results;
                 });
         }
