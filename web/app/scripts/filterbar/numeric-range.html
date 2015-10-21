@@ -5,7 +5,7 @@
    data-toggle="dropdown"
    aria-haspopup="true"
    aria-expanded="true">
-  {{ label }} <span class="caret"></span>
+  {{ label | labelFormatter }} <span class="caret"></span>
 </a>
 <ul class="dropdown-menu alert"
     ng-class="error.classes"
