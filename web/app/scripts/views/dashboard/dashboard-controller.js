@@ -17,8 +17,6 @@
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
-
-            RecordAggregates.toddow();
         }
 
         function loadRecordSchema() {
@@ -38,11 +36,10 @@
          */
         function loadRecords() {
             /* jshint camelcase: false */
-            var params = { record_type: ctl.recordType.uuid,
-                           limit: 50 };
+            var params = { limit: 50 };
             /* jshint camelcase: true */
 
-            Records.toddow().$promise.then(function(toddowData) {
+            RecordAggregates.toddow(false).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
 

@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function MapController($scope, Records, RecordSchemas, RecordState) {
+    function MapController($rootScope, $scope, Records, RecordSchemas, RecordState, RecordAggregates) {
         var ctl = this;
 
         initialize();
@@ -11,6 +11,10 @@
         // This hasn't been done here, because of a couple related, in-progress tasks.
         $scope.$on('driver.state.recordstate:selected', function(event, selected) {
             ctl.recordType = selected;
+            loadRecords();
+        });
+
+        var filterbarHandler = $rootScope.$on('driver.filterbar:changed', function() {
             loadRecords();
         });
 
@@ -37,7 +41,7 @@
                            limit: 50 };
             /* jshint camelcase: true */
 
-            Records.toddow().$promise.then(function(toddowData) {
+            RecordAggregates.toddow().then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
 
