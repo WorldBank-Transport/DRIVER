@@ -113,7 +113,7 @@
             $log.debug(ctl.record.occurred_from);
             /* jshint camelcase: true */
         }
-        
+
 
         /*
          * Ensures each object in the record contains all appropriate properties available
@@ -207,6 +207,7 @@
         }
 
         function onDataChange(newData, validationErrors, editor) {
+
             // Fill in all empty _localId fields
             if (setLocalIds(newData)) {
                 editor.setValue(newData);

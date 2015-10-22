@@ -34,6 +34,7 @@
             definition.details = true; // Flag denoting that this is the 'details' definition
             definition.description = 'Details for ' + recordType.label;
             definition.multiple = false;
+            definition.propertyOrder = 0; // make details section first; others default to 1,000
             /* jshint camelcase: false */
             definition.title = definition.plural_title = recordType.label + ' Details';
             /* jshint camelcase: true */
