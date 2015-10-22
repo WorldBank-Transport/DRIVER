@@ -14,6 +14,14 @@
         {{ ::ctl.record.created | date: ctl.dateFormat }}
     </div>
 </div>
+<div class="col-sm-12">
+    <label>
+        Location
+    </label>
+    <div class="value constant">
+        {{ ::ctl.record.location_text }}
+    </div>
+</div>
 <div class="col-md-12">
     <div class="map" leaflet-map driver-embed-map
         lat="{{ ::ctl.record.geom.coordinates[1] }}"
@@ -25,7 +33,7 @@
         Latitude
     </label>
     <div class="value constant float latitude">
-        {{ ::ctl.record.geom.coordinates[1] | number:5}}
+        {{ ::ctl.record.geom.coordinates[1] | number:5 }}
     </div>
 </div>
 <div class="col-sm-6">
@@ -33,7 +41,7 @@
         Longitude
     </label>
     <div class="value constant float longitude">
-        {{ ::ctl.record.geom.coordinates[0] | number:5}}
+        {{ ::ctl.record.geom.coordinates[0] | number:5 }}
     </div>
 </div>
 
