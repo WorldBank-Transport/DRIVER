@@ -158,6 +158,31 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10,
 }
 
+# django-redis cache configuration
+# https://niwinz.github.io/django-redis/latest/
+# https://docs.djangoproject.com/en/1.8/topics/cache/#cache-arguments
+
+REDIS_HOST = os.environ.get('DRIVER_REDIS_HOST', '127.0.0.1')
+REDIS_PORT = os.environ.get('DRIVER_REDIS_PORT', '6379')
+
+CACHES = {
+    "default": {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/1',
+        'TIMEOUT': None, # never expire
+        'KEY_PREFIX': 'DJANGO',
+        'VERSION': 1,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': 5, # seconds
+            'SOCKET_TIMEOUT': 5, # seconds
+            'MAX_ENTRIES': 900, # defaults to 300
+            'CULL_FREQUENCY': 4, # fraction culled when max reached (1 / CULL_FREQ); default: 3
+            # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
+        }
+    }
+}
+
 ASHLAR = {
     # It is suggested to change this if you know that your data will be limited to
     # a certain part of the world, for example to a UTM Grid projection or a state
