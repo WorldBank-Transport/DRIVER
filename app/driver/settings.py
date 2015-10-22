@@ -46,7 +46,9 @@ INSTALLED_APPS = (
 
     'django_extensions',
 
-    'ashlar'
+    'ashlar',
+
+    'data',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,7 +63,7 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
 )
 
-ROOT_URLCONF = 'ashlar.urls'
+ROOT_URLCONF = 'driver.urls'
 
 TEMPLATES = [
     {
