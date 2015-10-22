@@ -14,7 +14,7 @@
             loadRecords();
         });
 
-        var filterbarHandler = $rootScope.$on('driver.filterbar:changed', function() {
+        $rootScope.$on('driver.filterbar:changed', function() {
             loadRecords();
         });
 
