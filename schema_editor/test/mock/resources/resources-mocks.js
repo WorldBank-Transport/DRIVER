@@ -143,6 +143,7 @@
                     plural_title: 'Accident Details',
                     description: 'Details for Accident',
                     multiple: false,
+                    propertyOrder: 0,
                     details: true
                 }
             }
