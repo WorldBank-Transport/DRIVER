@@ -62,9 +62,9 @@ telling it to communicate with the Docker daemon on the `app` virtual machine.
 A CSV of historical data can be downloaded from the project /data folder (accidents_and_sites.csv).
 
 Once the app has been built, this data can be loaded by running
-`python scripts/load_pnp_accidents.py /path/to/accidents_and_sites.csv`.
+`python scripts/load_accidents_v3.py /path/to/accident_csvs`.
 Note that the import process will take roughly two hours for the full data set; you can cut down the
-number of records with `head`.
+number of records with `head` on the individual CSVs.
 
 ## Production
 
