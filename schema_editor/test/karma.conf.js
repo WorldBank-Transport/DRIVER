@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/ng-file-upload/ng-file-upload.js',
       'bower_components/angular-spinkit/build/angular-spinkit.js',
       'bower_components/angular-resource/angular-resource.js',
+      'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/json-editor/dist/jsoneditor.js',
       'bower_components/angular-local-storage/dist/angular-local-storage.js',

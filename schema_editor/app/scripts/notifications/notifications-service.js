@@ -46,6 +46,7 @@
             var defaults = {
                 timeout: 0,
                 closeButton: true,
+                html: '',
                 text: '',
                 imageClass: 'glyphicon-warning-sign',
                 displayClass: 'alert-info'
