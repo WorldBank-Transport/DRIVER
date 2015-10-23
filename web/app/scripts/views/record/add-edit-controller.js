@@ -30,6 +30,7 @@
 
             ctl.nominatimValue = '';
 
+            ctl.missingConstantField = true;
             ctl.geom = {
                 lat: null,
                 lng: null
@@ -41,6 +42,9 @@
                     ctl.geom.lat = data[1];
                     ctl.geom.lng = data[0];
                 });
+
+                // update whether we have all constant fields or not
+                constantFieldsValidationErrors();
             });
 
             $scope.$on('driver.views.record:map-moved', function(event, data) {
@@ -70,6 +74,9 @@
             if (ctl.geom.lat && ctl.geom.lng) {
                 $scope.$emit('driver.views.record:location-selected', ctl.geom, recenter);
             }
+
+            // update whether all constant fields are present
+            constantFieldsValidationErrors();
         }
 
         // Helper for loading the record -- only used when in edit mode
@@ -108,10 +115,8 @@
         }
 
         function occurredFromChanged() {
-            $log.debug('occurred from changed');
-            /* jshint camelcase: false */
-            $log.debug(ctl.record.occurred_from);
-            /* jshint camelcase: true */
+            // update whether all constant fields are present
+            constantFieldsValidationErrors();
         }
 
 
@@ -235,10 +240,13 @@
             var errorMessage = '';
             angular.forEach(required, function(value, fieldName) {
                 if (!value) {
-                    errorMessage += '<p>Missing required field: ' + fieldName + '</p>';
+                    // message formatted to match errors from json-editor
+                    errorMessage += '<p>' + fieldName + ': Value required</p>';
                 }
             });
 
+            // let controller know if we have all the constant fields or not
+            ctl.missingConstantField = !!errorMessage;
             return errorMessage;
         }
 
@@ -251,14 +259,27 @@
             var validationErrorMessage = constantFieldsValidationErrors();
 
             if (ctl.editor.errors.length > 0) {
-                //////////////////////////////////////
-                //showValidationError(ctl.editor.errors);
-                $log.debug('json-editor validation errors on save:', ctl.editor.errors);
+                $log.debug('json-editor errors on save:', ctl.editor.errors);
+                // Errors array has objects each with message, path, and property,
+                // where path looks like 'root.Thing Details.Stuff',
+                // property like 'minLength'
+                // and message like 'Value required'.
+                // Show error as 'Stuff: Value required'
+                ctl.editor.errors.forEach(function(err) {
+                    // strip the field name from the end of the path
+                    var fieldName = err.path.substring(err.path.lastIndexOf('.') + 1);
+                    validationErrorMessage += ['<p>',
+                        fieldName,
+                        ': ',
+                        err.message,
+                        '</p>'
+                    ].join('');
+                });
+                showErrorNotification(validationErrorMessage);
                 return;
-            }
-
-            if (validationErrorMessage.length > 0) {
-                showValidationError(validationErrorMessage);
+            } else if (validationErrorMessage.length > 0) {
+                // have constant field errors only
+                showErrorNotification(validationErrorMessage);
                 return;
             }
 
@@ -296,15 +317,18 @@
                 $log.debug('Saved record with uuid: ', record.uuid);
                 $state.go('record.list');
             }, function (error) {
-                // TODO: display notification
                 $log.debug('Error while creating record:', error);
+                showErrorNotification(['<p>Error creating record</p><p>',
+                   error.status,
+                   ': ',
+                   error.statusText,
+                   '</p>'
+                ].join(''));
             });
         }
 
         // helper to display errors when form fails to save
-        function showValidationError(message) {
-            $log.debug('going to show error message: ' + message);
-
+        function showErrorNotification(message) {
             Notifications.show({
                 displayClass: 'alert-danger',
                 header: 'Record Not Saved',
