@@ -57,6 +57,7 @@ describe('ase.views.recordtype: AddController', function () {
                         plural_title: 'Accident Details',
                         description: 'Details for Accident',
                         multiple: false,
+                        propertyOrder: 0,
                         properties: {},
                         definitions: {},
                         details: true
