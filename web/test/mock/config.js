@@ -18,6 +18,11 @@
         },
         record: {
             limit: 50
+        },
+        recordType: {
+            visible: false,
+            primaryLabel: 'Accident',
+            secondaryLabel: 'Intervention'
         }
     };
 
