@@ -3,7 +3,7 @@
 
     /* ngInject */
     function NavbarController($log, $window, $rootScope, $scope, $state,
-                              GeographyState, RecordState, BoundaryState) {
+                              GeographyState, RecordState, BoundaryState, WebConfig) {
         var ctl = this;
         var _ = $window._;
         init();
@@ -13,6 +13,7 @@
         ctl.onStateSelected = onStateSelected;
         ctl.navigateToStateName = navigateToStateName;
         ctl.getBoundaryLabel = getBoundaryLabel;
+        ctl.recordTypesVisible = WebConfig.recordType.visible;
         $rootScope.$on('$stateChangeSuccess', setStates);
 
         function init() {

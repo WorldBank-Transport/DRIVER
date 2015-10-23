@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes) {
+    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes, WebConfig) {
         var defaultParams,
             selected,
             options,
@@ -78,13 +78,21 @@
          */
         function setSelected(selection) {
             if (!initialized) {
-                var oldRecordType = localStorageService.get('recordtype.selected');
-                if (oldRecordType) {
+                // If the record type is not configured as visible, always use the primary.
+                // The primary is obtained by finding a record type label matching the primaryLabel.
+                if (!WebConfig.recordType.visible) {
                     selection = _.find(options, function(d) {
-                        return d.uuid === oldRecordType.uuid;
+                        return d.label === WebConfig.recordType.primaryLabel;
                     });
-                    initialized = true;
+                } else {
+                    var oldRecordType = localStorageService.get('recordtype.selected');
+                    if (oldRecordType) {
+                        selection = _.find(options, function(d) {
+                            return d.uuid === oldRecordType.uuid;
+                        });
+                    }
                 }
+                initialized = true;
             }
             if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;

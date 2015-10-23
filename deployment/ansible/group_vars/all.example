@@ -34,5 +34,8 @@ redis_port: 6379
 web_js_nominatim_key: ""
 web_js_html5mode: "true"
 web_js_html5mode_prefix: "!"
+web_js_record_type_visible: "false"
+web_js_record_type_primary_label: "Accident"
+web_js_record_type_secondary_label: "Intervention"
 editor_js_html5mode: "true"
 editor_js_html5mode_prefix: "!"
