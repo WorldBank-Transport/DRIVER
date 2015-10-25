@@ -1,24 +1,24 @@
 .filterbar {
     width: 100%;
-    height: 50px;
     position: fixed;
-    box-shadow: 0 5px 0 rgba(0, 0, 0, 0.1);
+    z-index: 8;
+    top: 52px;
+    height: 50px !important;
+    padding: 8px 14px !important;
 
     input[type="search"] {
         width: 240px;
         float: left;
         margin-right: 5px;
     }
-}
-
-div.navbar-default.filterbar {
-    z-index: 8;
-    top: 57px;
-    height: 80px; // TODO: figure out how to set this properly
 
     .form-inline {
         width: 100%;
         height: 100%;
+    }
+    .dropdown-menu {
+        padding: 15px;
+        border-radius: 4px;
     }
 }
 

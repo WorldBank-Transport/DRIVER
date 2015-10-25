@@ -1,7 +1,8 @@
 <button id="record-type"
    role="button"
    ng-class="error.btnClasses"
-   class="ng-binding btn btn-default dropdown-toggle"
+   class="ng-binding dropdown-toggle btn btn-default"
+   style="padding: 6px 12px;"
    data-toggle="dropdown"
    aria-haspopup="true"
    aria-expanded="true">
@@ -15,11 +16,13 @@
     <li class="nav-rt-item ng-scope" role="menuitem">
         <span ng-show="isMinMaxValid()">Filter according to minimum and maximum values</span>
         <span ng-hide="isMinMaxValid()">Maximum must be at least as large as minimum value</span>
-        <div class="ng-binding form-inline pull-right" style="padding:3px 20px">
+        <div class="ng-binding form-inline pull-right">
             <div class="input-group">
                 <input type="number"
                        name="minimum"
-                       placeholder="Min"
+                       placeholder="Minimum"
+                       class="form-control"
+                       style="width:50%;border-right:0;"
                        min="{{ data.minimum }}"
                        max="{{ data.maximum }}"
                        ng-model="filter.min"
@@ -28,7 +31,9 @@
                 <span class="input-group-addon">to</span>
                 <input type="number"
                        name="maximum"
-                       placeholder="Max"
+                       placeholder="Maximum"
+                       style="width:50%;"
+                       class="form-control"
                        min="{{ data.minimum }}"
                        max="{{ data.maximum }}"
                        ng-model="filter.max"

@@ -1,37 +1,27 @@
-<div class="navbar navbar-default drop-shadow filterbar collapse navbar-collapse">
-    <div class="navbar-left form-inline nav navbar=nav">
-        <!-- TODO: add this back in when text search is implemented
-        <div class="navbar-header">
-            <input type="search" class="form-control" placeholder="Geographic code"></input>
-        </div>
-        -->
-        <ul class="nav filterbar-nav">
-            <ul class="nav navbar-nav">
-                <li date-range-field class="dropdown"></li>
-            </ul>
-            <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
-                <li ng-if="value.format === 'number'"
-                    numeric-range-field
-                    label="key"
-                    data="value"
-                    class="dropdown"></li>
-                <li ng-if="value.fieldType === 'selectlist'"
-                    options-field
-                    label="key"
-                    data="value"
-                    class="dropdown">
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <a class="btn btn-default" ui-sref="record.add()">
-                    Add New {{ filterbar.recordLabel }}
-                </a>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <a class="btn btn-default" ng-click="filterbar.reset()">
-                    Reset Filters
-                </a>
-            </ul>
+<div class="filterbar">
+    <div class="pull-left">
+        <input type="search" class="form-control" placeholder="Geographic code"></input>
+        <ul class="nav navbar-nav">
+            <li date-range-field class="dropdown"></li>
         </ul>
+        <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
+            <li ng-if="value.format === 'number'"
+                numeric-range-field
+                label="key"
+                data="value"
+                class="dropdown"></li>
+            <li ng-if="value.fieldType === 'selectlist'"
+                options-field
+                label="key"
+                data="value"
+                class="dropdown">
+            </li>
+        </ul>
+    </div>
+    <div class="pull-right">
+        <a class="btn btn-default"><span class="glyphicon glyphicon-star"></span> Saved Filters</a>
+        <a class="btn btn-default" ui-sref="record.add()">
+            Add New {{ filterbar.recordLabel }}
+        </a>
     </div>
 </div>
