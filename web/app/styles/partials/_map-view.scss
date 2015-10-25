@@ -29,7 +29,8 @@
 
             &.open {
                 .tool-tab {
-                    bottom: 4px;
+                    bottom: -2px;
+                    padding-top: 16px;
                 }
                 .tool-content {
                     max-height: 300px;
@@ -83,9 +84,14 @@
             .graph-selector {
                 cursor: pointer;
                 color: lightgrey;
+                border: 2px solid #d3d3d3;
+                border-radius: 99px;
+                padding: 8px;
+                top: -8px;
 
                 &.active {
                     color: black;
+                    border-color: #000;
                 }
             }
         }
