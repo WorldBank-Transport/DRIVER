@@ -78,6 +78,14 @@
 
                 .small { margin-top: 5px; }
             }
+
+            .map {
+                top: 10px;
+                bottom: 50px;
+                position: absolute!important;
+                left: 10px;
+                right: 10px;
+            }
         }
         &.insights {
             h1 {
