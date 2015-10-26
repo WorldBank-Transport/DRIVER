@@ -26,26 +26,31 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group" ng-class="!ctl.geom.lat ? 'has-error' : ''">
-                            <label class="control-label">Latitude</label>
+                        <div class="form-group"
+                            ng-class="ctl.constantFieldErrors.latitude ? 'has-error' : ''">
+                            <label class="control-label required">Latitude</label>
                             <input type="number" class="form-control"
                                 ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
-                            <p ng-if="!ctl.geom.lat" class="help-block errormsg">Value required.</p>
+                            <p ng-if="ctl.constantFieldErrors.latitude"
+                                class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group" ng-class="!ctl.geom.lng ? 'has-error' : ''">
-                            <label class="control-label">Longitude</label>
+                        <div class="form-group"
+                            ng-class="ctl.constantFieldErrors.longitude ? 'has-error' : ''">
+                            <label class="control-label required">Longitude</label>
                             <input type="number" class="form-control"
                                 ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
-                            <p ng-if="!ctl.geom.lng" class="help-block errormsg">Value required.</p>
+                            <p ng-if="ctl.constantFieldErrors.longitude"
+                                class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
 				</div>
 				<div class= "row">
                     <div class="col-md-6">
-                        <div class="form-group" ng-class="!ctl.record.occurred_from ? 'has-error' : ''">
-                            <label class="control-label">Occurred</label>
+                        <div class="form-group"
+                            ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
+                            <label class="control-label required">Occurred</label>
                             <div class="input-group" id="datetimepicker-From">
                                 <input type="text" class="form-control"
                                     datetimepicker
@@ -57,7 +62,7 @@
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
-                            <p ng-if="!ctl.record.occurred_from"
+                            <p ng-if="ctl.constantFieldErrors.occurred"
                                 class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
@@ -71,7 +76,7 @@
         </json-editor>
         <div class="save-area">
             <button type="button" class="btn btn-default"
-                    ng-disabled="ctl.editor.errors.length > 0 || ctl.missingConstantField"
+                    ng-disabled="ctl.editor.errors.length > 0 || ctl.constantFieldErrors"
                     ng-click="ctl.onSaveClicked()">Save</button>
             <button type="button" class="btn btn-default"
                     ng-click="ctl.goBack()">Cancel</button>
