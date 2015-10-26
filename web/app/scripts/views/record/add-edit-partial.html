@@ -26,23 +26,25 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="!ctl.geom.lat ? 'has-error' : ''">
                             <label class="control-label">Latitude</label>
                             <input type="number" class="form-control"
                                 ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
+                            <p ng-if="!ctl.geom.lat" class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="!ctl.geom.lng ? 'has-error' : ''">
                             <label class="control-label">Longitude</label>
                             <input type="number" class="form-control"
                                 ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
+                            <p ng-if="!ctl.geom.lng" class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
 				</div>
 				<div class= "row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group" ng-class="!ctl.record.occurred_from ? 'has-error' : ''">
                             <label class="control-label">Occurred</label>
                             <div class="input-group" id="datetimepicker-From">
                                 <input type="text" class="form-control"
@@ -55,6 +57,8 @@
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
+                            <p ng-if="!ctl.record.occurred_from"
+                                class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
                 </div>
