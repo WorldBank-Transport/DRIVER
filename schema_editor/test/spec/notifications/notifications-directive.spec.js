@@ -12,12 +12,26 @@ describe('ase.notifications: Directive', function () {
         $rootScope = _$rootScope_;
     }));
 
-    it('should load directive', function () {
+    it('should load directive with text message', function () {
         var scope = $rootScope.$new();
         var element = $compile('<ase-notifications></ase-notifications>')(scope);
         $rootScope.$apply();
 
+        $rootScope.$broadcast('ase.notifications.show', {text: 'Danger, Will Robinson!'});
+        $rootScope.$apply();
+
         expect(element.find('table').length).toEqual(1);
+    });
+
+    it('should load directive with HTML message', function () {
+        var scope = $rootScope.$new();
+        var element = $compile('<ase-notifications></ase-notifications>')(scope);
+        $rootScope.$apply();
+
+        $rootScope.$broadcast('ase.notifications.show', {html: '<p>Danger, Will Robinson!</p>'});
+        $rootScope.$apply();
+
+        expect(element.find('div[ng-bind-html]').length).toEqual(1);
     });
 
 });

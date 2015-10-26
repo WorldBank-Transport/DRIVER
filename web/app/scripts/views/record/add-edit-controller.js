@@ -30,6 +30,7 @@
 
             ctl.nominatimValue = '';
 
+            ctl.missingConstantField = true;
             ctl.geom = {
                 lat: null,
                 lng: null
@@ -41,6 +42,9 @@
                     ctl.geom.lat = data[1];
                     ctl.geom.lng = data[0];
                 });
+
+                // update whether we have all constant fields or not
+                constantFieldsValidationErrors();
             });
 
             $scope.$on('driver.views.record:map-moved', function(event, data) {
@@ -70,6 +74,9 @@
             if (ctl.geom.lat && ctl.geom.lng) {
                 $scope.$emit('driver.views.record:location-selected', ctl.geom, recenter);
             }
+
+            // update whether all constant fields are present
+            constantFieldsValidationErrors();
         }
 
         // Helper for loading the record -- only used when in edit mode
@@ -108,10 +115,8 @@
         }
 
         function occurredFromChanged() {
-            $log.debug('occurred from changed');
-            /* jshint camelcase: false */
-            $log.debug(ctl.record.occurred_from);
-            /* jshint camelcase: true */
+            // update whether all constant fields are present
+            constantFieldsValidationErrors();
         }
 
 
@@ -219,18 +224,30 @@
             ctl.editor.errors = validationErrors;
         }
 
-        function areConstantFieldsValid() {
+        /* Validate the constant value fields, which are not handled by json-editor.
+         *
+         * @returns {String} error message, which is empty if there are no errors
+         */
+        function constantFieldsValidationErrors() {
             /* jshint camelcase: false */
-
-            // basic validation for constant fields
-            if (!ctl.record || !ctl.geom.lat|| !ctl.geom.lng || !ctl.record.occurred_from) {
-                $log.debug('Missing required constant field(s)');
-                return false;
-            }
-
+            var required = {
+                'latitude': ctl.geom.lat,
+                'longitude': ctl.geom.lng,
+                'occurred': (ctl.record ? ctl.record.occurred_from : null)
+            };
             /* jshint camelcase: true */
 
-            return true;
+            var errorMessage = '';
+            angular.forEach(required, function(value, fieldName) {
+                if (!value) {
+                    // message formatted to match errors from json-editor
+                    errorMessage += '<p>' + fieldName + ': Value required</p>';
+                }
+            });
+
+            // let controller know if we have all the constant fields or not
+            ctl.missingConstantField = !!errorMessage;
+            return errorMessage;
         }
 
         function goBack() {
@@ -238,12 +255,31 @@
         }
 
         function onSaveClicked() {
-            if (ctl.editor.errors.length > 0 || !areConstantFieldsValid()) {
-                Notifications.show({
-                    displayClass: 'alert-danger',
-                    text: 'Saving failed: invalid record'
+
+            var validationErrorMessage = constantFieldsValidationErrors();
+
+            if (ctl.editor.errors.length > 0) {
+                $log.debug('json-editor errors on save:', ctl.editor.errors);
+                // Errors array has objects each with message, path, and property,
+                // where path looks like 'root.Thing Details.Stuff',
+                // property like 'minLength'
+                // and message like 'Value required'.
+                // Show error as 'Stuff: Value required'
+                ctl.editor.errors.forEach(function(err) {
+                    // strip the field name from the end of the path
+                    var fieldName = err.path.substring(err.path.lastIndexOf('.') + 1);
+                    validationErrorMessage += ['<p>',
+                        fieldName,
+                        ': ',
+                        err.message,
+                        '</p>'
+                    ].join('');
                 });
-                $log.debug('Validation errors on save:', ctl.editor.errors);
+                showErrorNotification(validationErrorMessage);
+                return;
+            } else if (validationErrorMessage.length > 0) {
+                // have constant field errors only
+                showErrorNotification(validationErrorMessage);
                 return;
             }
 
@@ -282,6 +318,21 @@
                 $state.go('record.list');
             }, function (error) {
                 $log.debug('Error while creating record:', error);
+                showErrorNotification(['<p>Error creating record</p><p>',
+                   error.status,
+                   ': ',
+                   error.statusText,
+                   '</p>'
+                ].join(''));
+            });
+        }
+
+        // helper to display errors when form fails to save
+        function showErrorNotification(message) {
+            Notifications.show({
+                displayClass: 'alert-danger',
+                header: 'Record Not Saved',
+                html: message
             });
         }
 

@@ -1,5 +1,5 @@
 (function () {
     'use strict';
 
-    angular.module('ase.notifications', []);
+    angular.module('ase.notifications', ['ngSanitize']);
 })();
