@@ -6,7 +6,8 @@
     'use strict';
 
     /* ngInject */
-    function BoundaryState($log, $rootScope, $q, localStorageService, Polygons) {
+    function BoundaryState($log, $rootScope, $q, localStorageService,
+                           GeographyState, InitialState, Polygons) {
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;
@@ -22,7 +23,12 @@
         function init() {
           selected = null;
           options = [];
-          defaultParams = {'active': 'True'};
+          defaultParams = { active: 'True' };
+
+          GeographyState.getSelected().then(function(geography) {
+              var params = geography ? { boundary: geography.uuid } : {};
+              svc.updateOptions(params);
+          });
         }
 
         /**
@@ -71,6 +77,7 @@
                     return d.uuid === oldPoly.uuid;
                 });
                 initialized = true;
+                InitialState.setBoundaryInitialized();
             }
 
             if (_.find(options, function(d) {

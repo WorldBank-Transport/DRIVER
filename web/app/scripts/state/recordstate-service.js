@@ -6,7 +6,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordState($log, $rootScope, $q, localStorageService, RecordTypes, WebConfig) {
+    function RecordState($log, $rootScope, $q, localStorageService,
+                         InitialState, RecordTypes, WebConfig) {
         var defaultParams,
             selected,
             options,
@@ -93,6 +94,7 @@
                     }
                 }
                 initialized = true;
+                InitialState.setRecordTypeInitialized();
             }
             if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;

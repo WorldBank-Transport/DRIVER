@@ -6,7 +6,8 @@
     'use strict';
 
     /* ngInject */
-    function GeographyState($log, $rootScope, $q, localStorageService, Geography) {
+    function GeographyState($log, $rootScope, $q, localStorageService,
+                            InitialState, Geography) {
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;
@@ -23,7 +24,6 @@
           selected = null;
           options = [];
           defaultParams = {};
-          svc.updateOptions();
         }
 
         /**
@@ -65,14 +65,18 @@
          */
         function setSelected(selection) {
             if (!initialized) {
-                selection = _.find(options, function(d) {
+                var oldSelection = _.find(options, function(d) {
                     var oldGeo = localStorageService.get('geography.selected');
                     if (!oldGeo) {
                         return {'uuid': ''};
                     }
                     return d.uuid === oldGeo.uuid;
                 });
+                if (oldSelection) {
+                    selection = oldSelection;
+                }
                 initialized = true;
+                InitialState.setGeographyInitialized();
             }
 
             if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {

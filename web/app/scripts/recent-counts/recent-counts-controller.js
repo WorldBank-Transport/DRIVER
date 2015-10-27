@@ -2,10 +2,9 @@
     'use strict';
 
     /* ngInject */
-    function RecentCountsController($scope, RecordAggregates, RecordState) {
+    function RecentCountsController($scope, InitialState, RecordAggregates, RecordState) {
         var ctl = this;
-        init();
-        $scope.$on('driver.state.recordstate:selected', init);
+        InitialState.ready().then(init);
         return ctl;
 
         function init() {

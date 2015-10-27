@@ -26,12 +26,12 @@ describe('driver.views.dashboard: Dashboard', function () {
         var scope = $rootScope.$new();
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
 
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var boundaryPolygonsUrl = /api\/boundarypolygons/;
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(/\/api\/boundaries/)
+            .respond(ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(/\/api\/recordtypes\//)
+            .respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.whenGET(/api\/boundarypolygons/)
+            .respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $rootScope.$apply();
 

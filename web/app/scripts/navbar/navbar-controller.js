@@ -3,10 +3,12 @@
 
     /* ngInject */
     function NavbarController($log, $window, $rootScope, $scope, $state,
-                              GeographyState, RecordState, BoundaryState, WebConfig) {
+                              BoundaryState, GeographyState, InitialState,
+                              RecordState, WebConfig) {
         var ctl = this;
-        var _ = $window._;
-        init();
+        var initialized = false;
+
+        InitialState.ready().then(init);
         ctl.onGeographySelected = onGeographySelected;
         ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
@@ -21,6 +23,7 @@
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             setStates();
+            initialized = true;
         }
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState) {
@@ -50,11 +53,15 @@
             ctl.geographyResults = options;
         });
         $scope.$on('driver.state.geographystate:selected', function(event, selected) {
-            // Need to get the new list of boundaries for the selected geography
             ctl.geographySelected = selected;
-            BoundaryState.updateOptions({'boundary': selected.uuid}).then(function() {
-                updateState();
-            });
+
+            // Need to get the new list of boundaries for the selected geography.
+            // Only do this after initializing: otherwise an unneeded request is sent.
+            if (initialized) {
+                BoundaryState.updateOptions({boundary: selected.uuid}).then(function() {
+                    updateState();
+                });
+            }
         });
 
         // A function to set properties related to whether or not the filterbar should be instantiated for a given page

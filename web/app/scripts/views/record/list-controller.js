@@ -3,8 +3,8 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
-                                  Notifications, RecordSchemas, RecordState, BoundaryState,
-                                  QueryBuilder, WebConfig) {
+                                  InitialState, Notifications, RecordSchemas, RecordState,
+                                  BoundaryState, QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
         ctl.currentOffset = 0;
@@ -15,10 +15,9 @@
         ctl.restoreFilters = restoreFilters;
         ctl.isInitialized = false;
 
-        initialize();
+        InitialState.ready().then(init);
 
-
-        function initialize() {
+        function init() {
             ctl.isInitialized = false;
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(BoundaryState.getSelected().then(function(selected) {

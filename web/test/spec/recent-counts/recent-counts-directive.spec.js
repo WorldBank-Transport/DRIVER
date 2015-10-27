@@ -15,8 +15,9 @@ describe('driver.recentCounts: RecentCounts', function () {
     var $q;
     var ResourcesMock;
     var RecordState;
+    var InitialState;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$q_,
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$q_, _InitialState_,
                                 _RecordAggregates_, _ResourcesMock_, _RecordState_) {
         $compile = _$compile_;
         $q = _$q_;
@@ -35,6 +36,10 @@ describe('driver.recentCounts: RecentCounts', function () {
             deferred.resolve({plural: 'cthulus', year: 100, quarter: 10, month: 1});
             return deferred.promise;
         });
+
+        InitialState = _InitialState_;
+        InitialState.setBoundaryInitialized();
+        InitialState.setGeographyInitialized();
     }));
 
     it('It should construct the dom when given the appropriate object', function () {
