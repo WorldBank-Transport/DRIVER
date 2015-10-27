@@ -13,38 +13,25 @@
     aria-labelledby="record-type"
     ng-click="$event.stopPropagation()">
     <li class="nav-rt-item ng-scope" role="menuitem">
-        <span ng-show="isMinMaxValid()">Filter according to earliest and latest occurence.</span>
+        <span ng-show="isMinMaxValid()">Filter events by date of occurence.</span>
         <span ng-hide="isMinMaxValid()">Maximum must be at least as large as minimum value</span>
         <div class="ng-binding pull-right form-inline" style="padding:3px 20px">
-            <div class="input-group">
-                <input datetimepicker
-                       datetimepicker-options="{{ calendarOptions }}"
-                       name="minimum"
+            <div class="input-group input-daterange">
+                <input name="minimum"
                        id="dtMinField"
                        ng-model="dtMin"
-                       ng-change="onDtRangeChange('min', dtMin)"
+                       ng-change="onDtRangeChange()"
                        style="width:180px;"
                        type="text"
-                       class="form-control"
-                       placeholder="Earliest">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-            <div class="input-group">
-                <input datetimepicker
-                       datetimepicker-options="{{ calendarOptions }}"
-                       name="maximum"
+                       class="form-control">
+                <span class="input-group-addon">to</span>
+                <input name="maximum"
                        id="dtMaxField"
                        ng-model="dtMax"
-                       ng-change="onDtRangeChange('max', dtMax)"
+                       ng-change="onDtRangeChange()"
                        style="width:180px;"
                        type="text"
-                       class="form-control"
-                       placeholder="Latest">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+                       class="form-control">
             </div>
         </div>
     </li>
