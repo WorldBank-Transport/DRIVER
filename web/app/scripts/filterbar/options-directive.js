@@ -69,7 +69,7 @@
                     }
                 }
 
-                // Highly optimized elper function to generate UUIDs; taken from:
+                // A helper function to generate UUIDs; taken from:
                 // http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
                 function guid() {
                     function s4() {

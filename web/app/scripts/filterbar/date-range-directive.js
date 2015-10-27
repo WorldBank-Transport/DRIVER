@@ -24,14 +24,37 @@
                         scope.isMinMaxValid();
                     }
                 });
+                scope.$watch('dtMin', function(newMin) {
+                    $('#dtMinField').datepicker('update', newMin);
+                    dtRange.min = scope.dtMin;
+                    if (scope.isMinMaxValid()) {
+                        scope.updateFilter(filterLabel, dtRange);
+                    }
+                });
+                scope.$watch('dtMax', function(newMax) {
+                    $('#dtMaxField').datepicker('update', newMax);
+                    if (scope.isMinMaxValid()) {
+                        dtRange.max = scope.dtMax;
+                    }
+                    scope.updateFilter(filterLabel, dtRange);
+                });
 
                 // On change of DT value
-                scope.onDtRangeChange = function(minOrMax, value) {
-                    dtRange[minOrMax] = value;
+                scope.onDtRangeChange = function() {
+                    dtRange.min = scope.dtMin;
+                    dtRange.max = scope.dtMax;
                     scope.updateFilter(filterLabel, dtRange);
                 };
 
                 function init() {
+                    // Today
+                    var defaultMax = new Date();
+                    // 90 days ago
+                    var defaultMin = new Date(moment(defaultMax) - moment.duration({days:90}));
+                    dtRange.min = defaultMin;
+                    dtRange.max = defaultMax;
+                    $('#dtMaxField').datepicker('update', defaultMax);
+                    $('#dtMinField').datepicker('update', defaultMin);
                     scope.error = {};
                 }
 
