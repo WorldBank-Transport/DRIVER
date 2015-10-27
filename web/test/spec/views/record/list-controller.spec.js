@@ -38,10 +38,11 @@ describe('driver.views.record: ListController', function () {
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
 
+        var boundariesUrl = /api\/boundaries/;
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
@@ -74,10 +75,11 @@ describe('driver.views.record: ListController', function () {
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
 
+        var boundariesUrl = /api\/boundaries/;
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 

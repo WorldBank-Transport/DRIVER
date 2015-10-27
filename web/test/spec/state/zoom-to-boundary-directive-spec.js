@@ -19,6 +19,8 @@ describe('driver.state: Zoom to Boundary Directive', function () {
         ResourcesMock = _ResourcesMock_;
         $scope = $rootScope.$new();
         Element = $compile('<div class="map" leaflet-map zoom-to-boundary></div>')($scope);
+        $httpBackend.expectGET(/\/api\/boundaries/)
+            .respond(ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(/\/api\/boundarypolygons/)
             .respond(ResourcesMock.BoundaryNoGeomResponse);
         $rootScope.$apply();

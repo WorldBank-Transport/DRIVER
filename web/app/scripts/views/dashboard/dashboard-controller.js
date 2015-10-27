@@ -2,21 +2,22 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, Records, RecordSchemas, RecordState, RecordAggregates) {
+    function DashboardController($scope, InitialState, Records, RecordSchemas,
+                                 RecordState, RecordAggregates) {
         var ctl = this;
 
-        initialize();
+        InitialState.ready().then(init);
 
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
-            ctl.recordType = selected;
-            loadRecords();
-        });
-
-        function initialize() {
+        function init() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
+
+            $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+                ctl.recordType = selected;
+                loadRecords();
+            });
         }
 
         function loadRecordSchema() {

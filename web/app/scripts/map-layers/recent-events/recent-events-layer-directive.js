@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function recentEventsMapLayers($q, RecordState, BoundaryState, TileUrlService, QueryBuilder) {
+    function recentEventsMapLayers($q, BoundaryState, InitialState,
+                                   RecordState, TileUrlService, QueryBuilder) {
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
         var recencyCutoffDays = 14;
@@ -19,27 +20,29 @@
         return module;
 
         function link(scope, element, attrs, controllers) {
-            var leafletController = controllers[0];
+            InitialState.ready().then(function() {
+                var leafletController = controllers[0];
 
-            leafletController.getMap().then(addBaseLayers).then(updateLayers);
-            // Zoom to selected boundary on initialization
-            // This will happen asynchronously with the updateLayers call above
-            $q.all([leafletController.getMap(), BoundaryState.getSelected()])
-                .then(function(results) {
-                    var map = results[0];
-                    var bounds = results[1];
-                    map.fitBounds(bounds.bbox);
+                leafletController.getMap().then(addBaseLayers).then(updateLayers);
+                // Zoom to selected boundary on initialization
+                // This will happen asynchronously with the updateLayers call above
+                $q.all([leafletController.getMap(), BoundaryState.getSelected()])
+                    .then(function(results) {
+                        var map = results[0];
+                        var bounds = results[1];
+                        map.fitBounds(bounds.bbox);
+                    });
+
+                // Update when boundary is changed (currently a no-op, but that will change once we add
+                // boundary filtering). Function parameters commented out to show what's available.
+                scope.$on('driver.state.boundarystate:selected', function(/*event, selected*/) {
+                    leafletController.getMap().then(updateLayers);
                 });
 
-            // Update when boundary is changed (currently a no-op, but that will change once we add
-            // boundary filtering). Function parameters commented out to show what's available.
-            scope.$on('driver.state.boundarystate:selected', function(/*event, selected*/) {
-                leafletController.getMap().then(updateLayers);
-            });
-
-            // TODO: Remove when the record type picker is removed.
-            scope.$on('driver.state.recordstate:selected', function() {
-                leafletController.getMap().then(updateLayers);
+                // TODO: Remove when the record type picker is removed.
+                scope.$on('driver.state.recordstate:selected', function() {
+                    leafletController.getMap().then(updateLayers);
+                });
             });
         }
         /**

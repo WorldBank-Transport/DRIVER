@@ -11,27 +11,30 @@ describe('driver.recentCounts: RecentCountsController', function () {
     var $rootScope;
     var $scope;
     var Controller;
+    var InitialState;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _ResourcesMock_) {
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
+                                _InitialState_, _ResourcesMock_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         ResourcesMock = _ResourcesMock_;
+
+        InitialState = _InitialState_;
+        InitialState.setBoundaryInitialized();
+        InitialState.setGeographyInitialized();
     }));
 
     it('should make requests to recent_counts', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True&limit=all/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var recordType = ResourcesMock.RecordType;
         var recordTypeId = recordType.uuid;
         var countsUrl = new RegExp('api/recordtypes/' + recordTypeId +
                                    '/recent_counts/\\?limit=all');
-        $httpBackend.expectGET(countsUrl).respond(200);
-        $httpBackend.expectGET(countsUrl).respond(200);
         $httpBackend.expectGET(countsUrl).respond(200);
 
         Controller = $controller('RecentCountsController', { $scope: $scope });
