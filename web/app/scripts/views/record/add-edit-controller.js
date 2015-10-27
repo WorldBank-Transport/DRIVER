@@ -30,7 +30,7 @@
 
             ctl.nominatimValue = '';
 
-            ctl.missingConstantField = true;
+            ctl.constantFieldErrors = null;
             ctl.geom = {
                 lat: null,
                 lng: null
@@ -237,16 +237,21 @@
             };
             /* jshint camelcase: true */
 
+            ctl.constantFieldErrors = {};
             var errorMessage = '';
             angular.forEach(required, function(value, fieldName) {
                 if (!value) {
                     // message formatted to match errors from json-editor
                     errorMessage += '<p>' + fieldName + ': Value required</p>';
+                    ctl.constantFieldErrors[fieldName] = true;
                 }
             });
 
-            // let controller know if we have all the constant fields or not
-            ctl.missingConstantField = !!errorMessage;
+            // make field errors falsy if empty, for partial to check easily
+            if (Object.keys(ctl.constantFieldErrors).length === 0) {
+                ctl.constantFieldErrors = null;
+            }
+
             return errorMessage;
         }
 
