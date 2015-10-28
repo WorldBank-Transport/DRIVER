@@ -1,3 +1,4 @@
+var Redis = require('windshaft/node_modules/redis-mpool/node_modules/redis');
 var Windshaft   = require('windshaft');
 var healthCheck = require('./healthCheck');
 var driver      = require('./driver.js');
@@ -8,6 +9,15 @@ var dbPort = process.env.DRIVER_DB_PORT;
 var dbPassword = process.env.WINDSHAFT_DB_PASSWORD;
 var redisHost = process.env.DRIVER_REDIS_HOST;
 var redisPort = process.env.DRIVER_REDIS_PORT;
+var redisConfig = {
+    host: redisHost,
+    port: redisPort
+};
+
+// Create a connection to the redis client (db #1) for tilekey lookups
+console.log('Creating redis client');
+var redisClient = Redis.createClient(redisConfig.port, redisConfig.host);
+redisClient.select(1);
 
 var config = {
         useProfiler: true,
@@ -20,8 +30,7 @@ var config = {
         base_url_notable: '/tiles/table/:tablename',
         req2params: function(req, callback) {
             try {
-                req.params = driver.getRequestParameters(req);
-                callback(null, req);
+                driver.setRequestParameters(req, callback, redisClient);
             } catch(err) {
                 console.error('req2params error: ');
                 console.error(err);
@@ -40,16 +49,13 @@ var config = {
           }
         }, //see grainstore npm for other options
         renderCache: {
-          ttl: 60000, // seconds
+          ttl: 60000 // seconds
         },
         mapnik: {
           metatile: 4,
           bufferSize: 64
         },
-        redis: {
-            host: redisHost,
-            port: redisPort
-        },
+        redis: redisConfig,
         enable_cors: true
     };
 

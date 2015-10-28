@@ -5,7 +5,7 @@
     function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
                                     WebConfig, FilterState, RecordState, GeographyState,
                                     BoundaryState, Records, QueryBuilder, MapState,
-                                    TileUrlService) {
+                                    TileUrlService, InitialState) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
@@ -15,13 +15,20 @@
         ctl.overlays = null;
         ctl.baseMaps = null;
         ctl.editLayers = null;
-        ctl.filterSql = null;
+        ctl.tilekey = null;
 
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var filterStyle = {
             color: '#f357a1',
             fillColor: '#f357a1',
             fill: true
+        };
+
+        // Ensure initial state is ready before initializing layers
+        ctl.initLayers = function(map) {
+            InitialState.ready().then(function() {
+                ctl.init(map);
+            });
         };
 
         /**
@@ -34,7 +41,7 @@
         // this function.
         // TODO: Enable polygon filtering whenever Windshaft boundary filtering is fixed (currently,
         // all but the simplest boundaries result in a 414 URI Too Long
-        ctl.initLayers = function(map) {
+        ctl.init = function(map) {
 
             ctl.map = map;
 
@@ -54,7 +61,7 @@
             }).then(function () {
                 return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                 .then(function(records) {
-                    ctl.filterSql = castQueryToStrings(records.query);
+                    ctl.tilekey = records.tilekey;
                 });
             }).then(function () {
                 // add base layer
@@ -151,6 +158,27 @@
                     ctl.editLayers.addLayer(layer);
                 }
             });
+
+            $scope.$on('driver.state.recordstate:selected', function(event, selected) {
+                if (ctl.recordType !== selected && selected && selected.uuid) {
+                    ctl.recordType = selected.uuid;
+                    // re-add the layers to refresh with filtered content
+                    ctl.setRecordLayers();
+                }
+            });
+
+            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+                if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
+                    ctl.boundaryId = selected.uuid;
+                    QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
+                        .then(function(records) {
+                            ctl.tilekey = records.tilekey;
+                            ctl.setRecordLayers();
+                        });
+                }
+            });
+
+
         };
 
         // Clears editLayers and informs the map state service
@@ -190,31 +218,6 @@
         }
 
         /**
-         * Cast the fields in the SELECT clause to strings, for interactivity to work.
-         *
-         * @param {String} sql The full query to convert
-         * @returns {String} Full query, with the SELECTed fields cast to strings
-         */
-        function castQueryToStrings(sql) {
-            var fromIdx = sql.indexOf(' FROM');
-            var select = sql.substr(0, fromIdx);
-            var theRest = sql.substr(fromIdx);
-            var fields = select.split(', ');
-
-            var geomRegex = /geom/;
-
-            var castSelect = _.map(fields, function(field) {
-                if (field.match(geomRegex)) {
-                    return field; // do not cast geom field
-                } else {
-                    return field + '::varchar';
-                }
-            }).join(', ');
-
-            return castSelect + theRest;
-        }
-
-        /**
          * Adds the map layers. Removes them first if they already exist.
          *
          */
@@ -242,16 +245,16 @@
 
                 // Event record points. Use 'ALL' or record type UUID to filter layer
                 var recordsLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 3});
-                var recordsLayer = new L.tileLayer(ctl.addFilterSql(baseRecordsUrl, ctl.filterSql),
+                var recordsLayer = new L.tileLayer(ctl.getFilterQuery(baseRecordsUrl, ctl.tilekey),
                                                    recordsLayerOptions);
 
                 // layer with heatmap of events
                 var heatmapOptions = angular.extend(defaultLayerOptions, {zIndex: 4});
-                var heatmapLayer = new L.tileLayer(ctl.addFilterSql(baseHeatmapUrl, ctl.filterSql),
+                var heatmapLayer = new L.tileLayer(ctl.getFilterQuery(baseHeatmapUrl, ctl.tilekey),
                                                    heatmapOptions);
 
                 // interactivity for record layer
-                var utfGridRecordsLayer = new L.UtfGrid(ctl.addFilterSql(baseUtfGridUrl, ctl.filterSql),
+                var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey),
                                                         {useJsonP: false, zIndex: 5});
 
                 // combination of records and UTF grid layers, so they can be toggled as a group
@@ -372,40 +375,21 @@
 
 
         /**
-         * Helper function to add a SQL filter parameter to the windshaft URL
+         * Helper function to add a tilekey parameter to the windshaft URL
          *
          * @param {String} baseUrl Map layer URL
-         * @param {String} sql SQL to append to the request URL
+         * @param {String} tilekey tilekey parameter to append to the request URL
          * @returns {String} The baseUrl with the record type parameter set to the selected type.
          */
-        ctl.addFilterSql = function(baseUrl, sql) {
+        ctl.getFilterQuery = function(baseUrl, tilekey) {
             var url = baseUrl;
-            if (sql) {
+            if (tilekey) {
                 // TODO: find a less hacky way to handle building URLs for Windshaft
-                url += url.match(/\?/) ? '&sql=' : '?sql=';
-                url += encodeURIComponent(sql);
+                url += (url.match(/\?/) ? '&' : '?') + 'tilekey=';
+                url += tilekey;
             }
             return url;
         };
-
-        $scope.$on('driver.state.recordstate:selected', function(event, selected) {
-            if (ctl.recordType !== selected && selected && selected.uuid) {
-                ctl.recordType = selected.uuid;
-                // re-add the layers to refresh with filtered content
-                ctl.setRecordLayers();
-            }
-        });
-
-        $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
-            if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
-                ctl.boundaryId = selected.uuid;
-                QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
-                .then(function(records) {
-                    ctl.filterSql = castQueryToStrings(records.query);
-                    ctl.setRecordLayers();
-                });
-            }
-        });
 
         // Gets a polygon object from a FeatureCollection
         // A FeatureCollection may contain a FeatureCollection, so recurse
@@ -442,18 +426,16 @@
 
         // Gets the additional parameters to be sent in the request to Django
         function getAdditionalParams() {
-            var params = { query: true };
+            var params = { tilekey: true };
             var geojson = getPolygonFromLayer(ctl.editLayers);
             if (geojson) {
                 params.polygon = geojson;
             }
-
-            // TODO: uncomment and test as Windshaft changes are being made
-            // if (ctl.boundaryId) {
-            //     /* jshint camelcase: false */
-            //     params.polygon_id = ctl.boundaryId;
-            //     /* jshint camelcase: true */
-            // }
+            if (ctl.boundaryId) {
+                /* jshint camelcase: false */
+                params.polygon_id = ctl.boundaryId;
+                /* jshint camelcase: true */
+            }
 
             return params;
         }
@@ -465,7 +447,7 @@
 
             // get the raw SQL for the filter to send along to Windshaft
             QueryBuilder.djangoQuery(true, 0, getAdditionalParams()).then(function(records) {
-                ctl.filterSql = castQueryToStrings(records.query);
+                ctl.tilekey = records.tilekey;
                 ctl.setRecordLayers();
             });
         });
