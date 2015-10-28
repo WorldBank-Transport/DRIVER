@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import json
+import uuid
 
 import mock
 import pytz
@@ -69,3 +70,21 @@ class DriverRecordViewTestCase(APITestCase):
                            dtmax=self.afterNow.isoformat())
         response_data2 = json.loads(self.client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
+
+    def test_tilekey_param(self):
+        """Ensure that the tilekey param stores a SQL query in Redis and returns an access token"""
+        # Since the call to store in redis won't have access to a real Redis instance under test,
+        # just ensure that it gets called when the correct query parameter is passed in.
+        with mock.patch.object(DriverRecordViewSet, '_cache_tile_sql') as mocked_redis:
+            factory = APIRequestFactory()
+            view = DriverRecordViewSet.as_view({'get': 'list'})
+            request = factory.get('/api/records/', {'tilekey': 'true'})
+            response = view(request)
+            self.assertEqual(mocked_redis.call_count, 1)
+            self.assertIn('tilekey', response.data)
+            # Since we're dealing with unserialized responses, this returns a UUID object.
+            self.assertEqual(type(response.data['tilekey']), type(uuid.uuid4()))
+            # Shouldn't be called again if 'tilekey' parameter is missing
+            request = factory.get('/api/records/')
+            response = view(request)
+            self.assertEqual(mocked_redis.call_count, 1)
