@@ -38,9 +38,8 @@
                 "Severity":{
                     "enum":[
                         "Fatal",
-                        "Serious injury",
-                        "Minor injury",
-                        "Property damage only"
+                        "Injury",
+                        "Property"
                     ],
                     "displayType":"select",
                     "propertyOrder":0,
