@@ -9,7 +9,8 @@
         var allRecordsUtfGridUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json');
         var positronUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
-        var allBoundariesUrl = '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png';
+        var allBoundariesUrl = (WebConfig.windshaft.hostname +
+            '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png');
         var heatmapUrl = allRecordsUrl + '?heatmap=true';
 
         var module = {
