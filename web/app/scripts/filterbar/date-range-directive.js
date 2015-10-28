@@ -66,9 +66,9 @@
                  * @param filterObj {object} filter data
                  */
                 scope.updateFilter = function() {
-                    var day = moment.duration({days: 1});
+                    var dayish = moment.duration({days: 1, milliseconds: -1});
                     var inclusiveRange = _.clone(dtRange);
-                    inclusiveRange.max = new Date(moment(new Date(inclusiveRange.max)) + day);
+                    inclusiveRange.max = new Date(moment(new Date(inclusiveRange.max)) + dayish);
                     if (scope.isMinMaxValid()) {
                         filterBarCtl.updateFilter(filterLabel, inclusiveRange);
                     }
