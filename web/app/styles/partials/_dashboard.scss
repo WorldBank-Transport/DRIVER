@@ -35,13 +35,13 @@
         }
         &.block-2x1 {
             width: 54%;
-            height: 32%;
+            height: 34%;
             left: 44%;
             top: 36%;
 
             &:nth-child(2n) {
-                top: 72%;
-                height: 24%;
+                top: 74%;
+                height: 22%;
             }
         }
 
@@ -85,6 +85,7 @@
                 position: absolute!important;
                 left: 10px;
                 right: 10px;
+                height: auto;
             }
         }
         &.insights {
