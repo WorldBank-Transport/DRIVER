@@ -28,7 +28,7 @@
                     $('#dtMinField').datepicker('update', newMin);
                     dtRange.min = scope.dtMin;
                     if (scope.isMinMaxValid()) {
-                        scope.updateFilter(filterLabel, dtRange);
+                        scope.updateFilter();
                     }
                 });
                 scope.$watch('dtMax', function(newMax) {
@@ -36,14 +36,14 @@
                     if (scope.isMinMaxValid()) {
                         dtRange.max = scope.dtMax;
                     }
-                    scope.updateFilter(filterLabel, dtRange);
+                    scope.updateFilter();
                 });
 
                 // On change of DT value
                 scope.onDtRangeChange = function() {
                     dtRange.min = scope.dtMin;
                     dtRange.max = scope.dtMax;
-                    scope.updateFilter(filterLabel, dtRange);
+                    scope.updateFilter();
                 };
 
                 function init() {
@@ -65,9 +65,12 @@
                  * @param filterLabel {string} label of which field to filter
                  * @param filterObj {object} filter data
                  */
-                scope.updateFilter = function(filterLabel, filterObj) {
+                scope.updateFilter = function() {
+                    var day = moment.duration({days: 1});
+                    var inclusiveRange = _.clone(dtRange);
+                    inclusiveRange.max = new Date(moment(new Date(inclusiveRange.max)) + day);
                     if (scope.isMinMaxValid()) {
-                        filterBarCtl.updateFilter(filterLabel, filterObj);
+                        filterBarCtl.updateFilter(filterLabel, inclusiveRange);
                     }
                 };
 
