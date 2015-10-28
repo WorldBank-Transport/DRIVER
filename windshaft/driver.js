@@ -2,20 +2,12 @@
  * Windshaft configuration for DRIVER SQL queries and CartoCSS styling.
  */
 
+var _ = require('windshaft/node_modules/underscore');
+
 // RFC4122. See: http://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
 var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 // queries
-
-// NB: interactivity only works with string columns
-var baseRecordQuery = ["(SELECT geom, uuid::varchar, data::varchar, occurred_from::varchar, ",
-                       "occurred_to::varchar ",
-                       "FROM ashlar_record WHERE schema_id IN ",
-                       "(SELECT uuid FROM ashlar_recordschema "
-                       ].join("");
-var filterRecordQuery = " WHERE record_type_id = '";
-var endRecordQuery = ")) AS ashlar_record";
-
 var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, ",
                          "b.label, b.color, p.geom ",
                          "FROM ashlar_boundarypolygon p INNER JOIN ashlar_boundary b ",
@@ -65,8 +57,8 @@ function constructCartoStyle(layer, rules) {
     return layer + ' {' + rules.join('') + '}';
 }
 
-// takes the Windshaft request and returns new parameters with the query set
-function getRequestParameters(request) {
+// takes the Windshaft request, sets the filter params, and calls the callback
+function setRequestParameters(request, callback, redisClient) {
 
     var params = request.params;
 
@@ -88,23 +80,42 @@ function getRequestParameters(request) {
 
     if (params.tablename === 'ashlar_record') {
 
-        params.interactivity = 'uuid,occurred_from,data';
-        params.style = eventsStyle;
-
-        // build query for record points if do not already have a query
-        if (request.query.sql) {
-            params.sql = request.query.sql;
-        } else {
-            params.sql = baseRecordQuery;
-            if (params.id !== 'ALL') {
-                params.sql += filterRecordQuery + params.id + "'";
-            }
-            params.sql += endRecordQuery;
-        }
-
         if (request.query.heatmap) {
             // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
+        }
+
+        params.interactivity = 'uuid,occurred_from,data';
+        params.style = eventsStyle;
+
+        // retrieve stored query for record points
+        var tilekey = request.query.tilekey;
+        if (!tilekey) {
+            throw('Parameter: `tilekey` must be specified');
+        } else {
+            redisClient.get(tilekey, function(err, sql) {
+                if (!sql) {
+                    callback('Error getting tilekey', null);
+                    return;
+                }
+
+                // cast string columns for interactivity
+                var fromIdx = sql.indexOf(' FROM');
+                var select = sql.substr(0, fromIdx);
+                var theRest = sql.substr(fromIdx);
+                var fields = select.split(', ');
+                var geomRegex = /geom/;
+                var castSelect = _.map(fields, function(field) {
+                    if (field.match(geomRegex)) {
+                        return field; // do not cast geom field
+                    } else {
+                        return field + '::varchar';
+                    }
+                }).join(', ');
+
+                params.sql = '(' + castSelect + theRest + ') as ashlar_record' ;
+                callback(null, request);
+            });
         }
     } else {
         params.interactivity = 'label';
@@ -117,11 +128,12 @@ function getRequestParameters(request) {
             params.sql = baseBoundaryQuery + endBoundaryQuery;
         } else {
             // filter for a specific bounding polygon UUID
-            params.sql = baseBoundaryQuery + filterBoundaryQuery + params.id + "'" + endBoundaryQuery;
+            params.sql = baseBoundaryQuery + filterBoundaryQuery + params.id + "'"
+                + endBoundaryQuery;
         }
-    }
 
-    return params;
+        callback(null, request);
+    }
 }
 
-exports.getRequestParameters = getRequestParameters;
+exports.setRequestParameters = setRequestParameters;
