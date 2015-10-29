@@ -47,7 +47,12 @@
                         {{ ctl.getBoundaryLabel(ctl.boundarySelected) }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li class="nav-rt-item" ng-repeat="boundary in ctl.boundaryResults | orderBy:ctl.getBoundaryLabel">
+                        <li class="nav-rt-item">
+                            <a ng-click="ctl.onBoundarySelected({ uuid: '' })">All</a>
+                        </li>
+                        <li class="nav-rt-item"
+                            ng-repeat="boundary in ctl.boundaryResults | orderBy:ctl.getBoundaryLabel"
+                            ng-if="ctl.getBoundaryLabel(boundary)">
                             <a ng-click="ctl.onBoundarySelected(boundary)">
                                 {{ ctl.getBoundaryLabel(boundary) }}
                             </a>

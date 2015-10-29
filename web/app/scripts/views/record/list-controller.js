@@ -64,9 +64,12 @@
                 ctl.currentOffset = 0;
                 paramsOffset = 0;
             }
+
             /* jshint camelcase: false */
-            return QueryBuilder.djangoQuery(true, paramsOffset, {polygon_id: ctl.boundaryId})
+            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
+
+            return QueryBuilder.djangoQuery(true, paramsOffset, params)
             .then(function(records) {
                 ctl.records = records;
             });

@@ -89,16 +89,16 @@ describe('driver.navbar: NavbarController', function () {
         $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         Controller = $controller('NavbarController', {
-            $scope: $scope,
+            $scope: $scope
         });
 
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
 
         Controller.navigateToStateName('account');
-        expect($state.go).toHaveBeenCalledWith('account', jasmine.any(Object));
+        expect($state.go).toHaveBeenCalledWith('account');
 
         Controller.onStateSelected($state.get('dashboard'));
-        expect($state.go).toHaveBeenCalledWith('dashboard', jasmine.any(Object));
+        expect($state.go).toHaveBeenCalledWith('dashboard');
     });
 });
