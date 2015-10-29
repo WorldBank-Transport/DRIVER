@@ -168,7 +168,7 @@
             });
 
             $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
-                if (selected && selected.uuid && selected.uuid !== ctl.boundaryId) {
+                if (selected && selected.uuid !== ctl.boundaryId) {
                     ctl.boundaryId = selected.uuid;
                     QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
                         .then(function(records) {
@@ -177,8 +177,6 @@
                         });
                 }
             });
-
-
         };
 
         // Clears editLayers and informs the map state service

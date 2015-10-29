@@ -84,12 +84,8 @@
 
         // Updates the ui router state based on selected navigation parameters
         function updateState() {
-            if (ctl.stateSelected && ctl.geographySelected && ctl.boundarySelected) {
-                $state.go(ctl.stateSelected.name, {
-                    rtuuid: ctl.recordTypeSelected.uuid,
-                    geouuid: ctl.geographySelected.uuid,
-                    polyuuid: ctl.boundarySelected.id
-                });
+            if (ctl.stateSelected) {
+                $state.go(ctl.stateSelected.name);
             }
         }
 
@@ -123,7 +119,7 @@
         // TODO: this should eventually be moved to an angular filter if needed elsewhere
         function getBoundaryLabel(boundary) {
             if (!boundary || !boundary.data || !ctl.geographySelected) {
-                return '';
+                return 'All';
             }
             /* jshint camelcase: false */
             return boundary.data[ctl.geographySelected.display_field];

@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function zoomToBoundary(BoundaryState) {
+    function zoomToBoundary(BoundaryState, LeafletDefaults) {
         var module = {
             restrict: 'A',
             scope: false,
@@ -11,6 +11,7 @@
             require: 'leafletMap',
             link: link
         };
+        var mapDefaults = LeafletDefaults.get();
         return module;
 
         function link(scope, element, attrs, controller) {
@@ -22,7 +23,12 @@
 
         function zoomToSelected(map) {
             BoundaryState.getSelected().then(function(selected) {
-                map.fitBounds(selected.bbox);
+                if (!selected.bbox) {
+                    map.setZoom(mapDefaults.zoom);
+                    map.panTo(mapDefaults.center);
+                } else {
+                    map.fitBounds(selected.bbox);
+                }
             });
         }
     }

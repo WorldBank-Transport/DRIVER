@@ -30,7 +30,9 @@
                     .then(function(results) {
                         var map = results[0];
                         var bounds = results[1];
-                        map.fitBounds(bounds.bbox);
+                        if (bounds.bbox) {
+                            map.fitBounds(bounds.bbox);
+                        }
                     });
 
                 // Update when boundary is changed (currently a no-op, but that will change once we add
@@ -78,13 +80,17 @@
             // Construct Windshaft URL
             }).then(function(baseUrl) {
                 return BoundaryState.getSelected().then(function(boundary) {
-                    return QueryBuilder.unfilteredDjangoQuery(0, {
+                    /* jshint camelcase: false */
+                    var params = {
                         tilekey: true,
-                        /* jshint camelcase: false */
-                        occurred_min: occurredMin.toISOString(),
-                        polygon_id: boundary.uuid
-                        /* jshint camelcase: true */
-                    }).then(function(result) {
+                        occurred_min: occurredMin.toISOString()
+                    };
+                    if (boundary.uuid) {
+                        params.polygon_id = boundary.uuid;
+                    }
+                    /* jshint camelcase: true */
+
+                    return QueryBuilder.unfilteredDjangoQuery(0, params).then(function(result) {
                         var tilekeyParam = (baseUrl.match(/\?/) ? '&' : '?') + 'tilekey=';
                         return baseUrl + tilekeyParam + result.tilekey;
                     });

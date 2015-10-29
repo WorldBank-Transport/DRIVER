@@ -11,6 +11,7 @@
         var defaultParams, selected, options;
         var initialized = false;
         var svc = this;
+        var nullBounds = { uuid: '' };
         svc.updateOptions = updateOptions;
         svc.getOptions = getOptions;
         svc.setSelected = setSelected;
@@ -21,7 +22,7 @@
          * initialization
          */
         function init() {
-          selected = null;
+          selected = nullBounds;
           options = [];
           defaultParams = { active: 'True' };
 
@@ -85,10 +86,8 @@
                 return d.uuid === selection.uuid;
             })) {
                 selected = selection;
-            } else if (options.length) {
-                selected = options[0];
             } else {
-                selected = null;
+                selected = nullBounds;
             }
             localStorageService.set('boundary.selected', selected);
             $rootScope.$broadcast('driver.state.boundarystate:selected', selected);

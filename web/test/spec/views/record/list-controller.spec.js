@@ -56,7 +56,6 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.flush();
         $rootScope.$broadcast('driver.filterbar:changed', {});
         var recordOffsetUrl = new RegExp('api/records/\\?limit=50' +
-            '&polygon_id=' + ResourcesMock.BoundaryNoGeomResponse.results[0].uuid +
             '&record_type=' + recordTypeId);
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
@@ -91,21 +90,18 @@ describe('driver.views.record: ListController', function () {
 
         $rootScope.$broadcast('driver.filterbar:changed', {});
         var recordOffsetUrl = new RegExp('api/records/\\?limit=50' +
-            '&polygon_id=' + ResourcesMock.BoundaryNoGeomResponse.results[0].uuid +
             '&record_type=' + recordTypeId);
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 
         Controller.getNextRecords();
         recordOffsetUrl = new RegExp('api/records/\\?limit=50&offset=50' +
-            '&polygon_id=' + ResourcesMock.BoundaryNoGeomResponse.results[0].uuid +
             '&record_type=' + recordTypeId);
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 
         Controller.getPreviousRecords();
         recordOffsetUrl = new RegExp('api/records/\\?limit=50' +
-            '&polygon_id=' + ResourcesMock.BoundaryNoGeomResponse.results[0].uuid +
             '&record_type=' + recordTypeId);
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();

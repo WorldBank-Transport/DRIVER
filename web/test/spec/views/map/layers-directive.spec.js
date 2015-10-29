@@ -46,9 +46,7 @@ describe('driver.views.map: Layers Directive', function () {
         $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
         $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
-        var recordsUrl = new RegExp('api/records/\\?limit=50&polygon_id=' +
-                                    ResourcesMock.BoundaryNoGeomResponse.results[0].uuid +
-                                    '&record_type=' +
+        var recordsUrl = new RegExp('api/records/\\?limit=50&record_type=' +
                                     ResourcesMock.RecordTypeResponse.results[0].uuid +
                                     '&tilekey=true');
         $httpBackend.whenGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
