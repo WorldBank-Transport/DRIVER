@@ -80,13 +80,13 @@ function setRequestParameters(request, callback, redisClient) {
 
     if (params.tablename === 'ashlar_record') {
 
+        params.interactivity = 'uuid,occurred_from,data';
+        params.style = eventsStyle;
+
         if (request.query.heatmap) {
             // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
         }
-
-        params.interactivity = 'uuid,occurred_from,data';
-        params.style = eventsStyle;
 
         // retrieve stored query for record points
         var tilekey = request.query.tilekey;
