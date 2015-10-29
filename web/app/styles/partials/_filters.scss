@@ -1,0 +1,10 @@
+.form-inline .input-group > .form-control {
+
+    &.num-range-style {
+        width: 80px;
+    }
+
+    &.date-range-style{
+        width: 180px;
+    }
+}
