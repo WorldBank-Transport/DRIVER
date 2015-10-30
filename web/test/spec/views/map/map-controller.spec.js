@@ -28,6 +28,8 @@ describe('driver.views.map: MapController', function () {
         Controller = $controller('MapController', { $scope: $scope });
 
         var recordTypeUrl = /\/api\/recordtypes\//;
+        var boundaryUrl = /\/api\/boundaries\//;
+        $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 

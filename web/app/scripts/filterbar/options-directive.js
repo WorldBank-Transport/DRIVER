@@ -40,6 +40,7 @@
                         if (!restored && filter) {
                             restored = true;
                             scope.filter.contains = filter.value.contains;
+                            $timeout(function() { updateFilter(scope.label); });
                         }
                     }
                 });
@@ -49,7 +50,10 @@
 
                 function onContainsChange(contains) {
                     $('#' + scope.domID).val(contains);
-                    $timeout(function() { $('#' + scope.domID).selectpicker('refresh'); });
+                    $timeout(function() {
+                        $('#' + scope.domID).selectpicker('refresh');
+                        updateFilter(scope.label);
+                    });
                 }
 
                 /**
@@ -62,7 +66,6 @@
                     if (scope.filter.contains.length) {
                         // handle syntactic differences necessitated by having related objects
                         if (scope.data.multiple) {
-                            // TODO: Implement a filter for related containment in djsonb
                             filterbarController.updateFilter(filterLabel,
                                                              _.merge({'_rule_type': 'containment_multiple'},
                                                                      scope.filter));

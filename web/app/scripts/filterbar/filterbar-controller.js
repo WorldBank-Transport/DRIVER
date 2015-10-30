@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($timeout, $log, $scope, FilterState, RecordState, RecordSchemas) {
+    function FilterbarController($log, $scope, $timeout, debounce,
+                                 FilterState, RecordState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
@@ -47,10 +48,12 @@
 
         /**
          * Emit event with the built query parameters.
+         * This function is debounced in order to prevent many requests for records
+         * as filters are being rapidly changed (e.g. as multiple items are being checked).
          */
-        ctl.sendFilter = function() {
+        ctl.sendFilter = debounce(function() {
             $scope.$emit('driver.filterbar:changed');
-        };
+        }, 500);
 
         /**
          * Emit the currently set filters when asked (loading a view; no filter change.)
@@ -92,6 +95,11 @@
                             ctl.filterables[i] = d;
                         }
                     });
+
+                    //
+                    $timeout(function() {
+                        FilterState.restoreFilters();
+                    });
                 });
             }
         }
@@ -106,12 +114,11 @@
         }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
-
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
 
             _.each(ctl.filters, function(value, label) {
-                $log.debug('restored filter ' + label + ' has val ' + value.toString());
+                $log.debug('restored filter ' + label + ' has val: ', value);
                 // listen for this in filter widget controllers to set value if label matches
                 $scope.$broadcast('driver.filterbar:restored', {label: label, value: value});
             });

@@ -54,16 +54,16 @@ describe('driver.views.map: Layers Controller', function () {
         MapState.setLocation({lat: 123, lng: 234});
         MapState.setZoom(7);
 
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var recordTypeUrl = /\/api\/recordtypes\//;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var boundaryUrl = /\/api\/boundaries\//;
-        $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
-        $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
-        var recordsUrl = new RegExp('api/records/\\?limit=50&record_type=' +
-                                    ResourcesMock.RecordTypeResponse.results[0].uuid +
-                                    '&tilekey=true');
-        $httpBackend.whenGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        var recordsUrl = /\/api\/records\//;
+        $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
         Controller = Element.controller('driverMapLayers');

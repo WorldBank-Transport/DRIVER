@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function MapController($rootScope, $scope, InitialState, FilterState,
+    function MapController($rootScope, $scope, BoundaryState, InitialState, FilterState,
                            Records, RecordSchemas, RecordState, RecordAggregates) {
         var ctl = this;
 
@@ -10,6 +10,9 @@
 
         function init() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+                .then(BoundaryState.getSelected().then(function(selected) {
+                    ctl.boundaryId = selected.uuid;
+                }))
                 .then(loadRecordSchema)
                 .then(loadRecords);
 
@@ -21,6 +24,11 @@
             });
 
             $rootScope.$on('driver.filterbar:changed', function() {
+                loadRecords();
+            });
+
+            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+                ctl.boundaryId = selected.uuid;
                 loadRecords();
             });
         }
@@ -38,18 +46,12 @@
 
         function loadRecords() {
             /* jshint camelcase: false */
-            var params = { record_type: ctl.recordType.uuid,
-                           limit: 50 };
+            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
 
-            RecordAggregates.toddow().then(function(toddowData) {
+            RecordAggregates.toddow(true, params).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
-
-            return Records.get(params)
-                .$promise.then(function(records) {
-                    ctl.records = records.results;
-                });
         }
     }
 

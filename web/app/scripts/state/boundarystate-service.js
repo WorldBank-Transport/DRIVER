@@ -45,8 +45,8 @@
                 if (!results.length) {
                     $log.warn('No boundaries returned');
                 } else {
-                    if (!selected && options[0]) {
-                        svc.setSelected(options[0]);
+                    if (!selected || !selected.uuid) {
+                        svc.setSelected(nullBounds);
                     } else if (!_.includes(options, selected)) {
                         svc.setSelected(selected);
                     }
@@ -70,11 +70,8 @@
          */
         function setSelected(selection) {
             if (!initialized) {
-                selection = _.find(options, function(d) {
-                    var oldPoly = localStorageService.get('boundary.selected');
-                    if (!oldPoly) {
-                        return {'uuid': ''};
-                    }
+                var oldPoly = localStorageService.get('boundary.selected');
+                selection = !oldPoly ? nullBounds : _.find(options, function(d) {
                     return d.uuid === oldPoly.uuid;
                 });
                 initialized = true;

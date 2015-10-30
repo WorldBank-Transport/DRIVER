@@ -18,9 +18,15 @@
         function toddow(doFilter, extraParams) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doFilter = doFilter || true;
+            doFilter = doFilter === undefined ? true : doFilter;
             QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
-                Records.toddow(_.extend(params, extraParams)).$promise.then(function(toddowData) {
+                // toddow should never use a limit
+                params = _.extend(params, extraParams);
+                if (params.limit) {
+                    delete params.limit;
+                }
+
+                Records.toddow(params).$promise.then(function(toddowData) {
                     deferred.resolve(toddowData);
                 });
             });
@@ -30,16 +36,22 @@
         /**
          * Request the most recent 30, 90, 365 day counts for the currently selected record type
          */
-        function recentCounts() {
+        function recentCounts(boundaryId) {
             var deferred = $q.defer();
             // Record Type
             RecordState.getSelected().then(function(selected) {
                 var uuid = selected.uuid;
-                RecordTypes.recentCounts({id: uuid}).$promise.then(function(counts) {
+                var params = { id: uuid };
+                if (boundaryId) {
+                    /* jshint camelcase: false */
+                    params.polygon_id = boundaryId;
+                    /* jshint camelcase: true */
+                }
+
+                RecordTypes.recentCounts(params).$promise.then(function(counts) {
                     deferred.resolve(counts);
                 });
             });
-            /* jshint camelcase: true */
             return deferred.promise;
         }
     }

@@ -48,6 +48,7 @@ module.exports = function(config) {
       'bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js',
       'bower_components/ng-file-upload/ng-file-upload.js',
       'bower_components/json-editor/dist/jsoneditor.js',
+      'bower_components/ng-debounce/angular-debounce.js',
       'bower_components/lodash/lodash.js',
       'bower_components/leaflet/dist/leaflet-src.js',
       'bower_components/leaflet-draw/dist/leaflet.draw-src.js',
