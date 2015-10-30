@@ -180,7 +180,6 @@
         "Vehicle":{
             "multiple":true,
             "description":"A vehicle involved in the accident",
-            "propertyOrder":1,
             "title":"Vehicle",
             "required":[
                 "_localId"
@@ -343,7 +342,6 @@
         "Person":{
             "multiple":true,
             "description":"A person involved in the accident",
-            "propertyOrder":2,
             "title":"Person",
             "required":[
                 "_localId"
@@ -495,19 +493,22 @@
     "type":"object",
     "properties":{
         "Accident Details":{
-            "$ref":"#/definitions/Accident Details"
+            "$ref":"#/definitions/Accident Details",
+            "propertyOrder": 0
         },
         "Vehicle":{
             "items":{
                 "$ref":"#/definitions/Vehicle"
             },
-            "type":"array"
+            "type":"array",
+            "propertyOrder": 1
         },
         "Person":{
             "items":{
                 "$ref":"#/definitions/Person"
             },
-            "type":"array"
+            "type":"array",
+            "propertyOrder": 2
         }
     }
 }
