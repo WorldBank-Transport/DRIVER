@@ -6,6 +6,7 @@
     }
 
     angular.module('driver.filterbar', [
+        'debounce',
         'driver.resources',
         'driver.state',
         'ui.bootstrap'

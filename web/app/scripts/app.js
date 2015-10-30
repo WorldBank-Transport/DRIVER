@@ -45,6 +45,7 @@
      */
     angular.module('driver', [
         'Leaflet',
+        'debounce',
         'driver.config',
         'driver.navbar',
         'driver.filterbar',

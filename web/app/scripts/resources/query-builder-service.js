@@ -101,31 +101,41 @@
             var paramObj = {};
             /* jshint camelcase: false */
             if (doFilter) {
-                // An exceptional case for date ranges (not part of the JsonB we filter over)
+                // An exceptional case for date ranges (not part of the JsonB we filter over).
+                // If no dates are specified, the last 90 days are used.
+                var now = new Date();
+                var duration = moment.duration({ days:90 });
+                var maxDateString = now.toJSON().slice(0, 10);
+                var minDateString = new Date(now - duration).toJSON().slice(0, 10);
+
                 if (FilterState.filters.hasOwnProperty('__dateRange')) {
-                    if (FilterState.filters.__dateRange.hasOwnProperty('min')) {
-                        var minDate = new Date(FilterState.filters.__dateRange.min);
-                        paramObj.occurred_min = minDate.toISOString();
-                    }
-                    if (FilterState.filters.__dateRange.hasOwnProperty('max')) {
-                        var maxDate = new Date(FilterState.filters.__dateRange.max);
-                        paramObj.occurred_max = maxDate.toISOString();
-                    }
+                    minDateString = FilterState.filters.__dateRange.min || minDateString;
+                    maxDateString = FilterState.filters.__dateRange.max || maxDateString;
+                }
+
+                // Perform some sanity checks on the dates
+                var min = new Date(minDateString);
+                if (!isNaN(min.getTime())) {
+                    paramObj.occurred_min = min.toISOString();
+                }
+                var max = new Date(maxDateString + ' 23:59:59.999');
+                if (!isNaN(max.getTime())) {
+                    paramObj.occurred_max = max.toISOString();
                 }
 
                 var jsonFilters = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange'));
 
                 // Handle cases where no json filters are set
                 if (!_.isEmpty(jsonFilters)) {
-                    paramObj = _.extend(paramObj, {'jsonb': jsonFilters});
+                    paramObj = _.extend(paramObj, { jsonb: jsonFilters });
                 }
+                paramObj.limit = WebConfig.record.limit;
             }
 
             // Pagination offset
             if (offset) {
                 paramObj.offset = offset;
             }
-            paramObj.limit = WebConfig.record.limit;
 
             // Record Type
             RecordState.getSelected().then(function(selected) {

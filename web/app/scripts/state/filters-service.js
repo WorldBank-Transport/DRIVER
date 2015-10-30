@@ -6,15 +6,20 @@
     'use strict';
 
     /* ngInject */
-    function FilterState($log, $rootScope, localStorageService) {
+    function FilterState($log, $rootScope, debounce, localStorageService) {
         var svc = this;
 
         var storageName = 'filterbar.filters';
         var geoStorageName = 'filterbar.geofilter';
 
+        var filtersRestored = false;
+
         svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
-        svc.saveFilters = saveFilters;
+
+        // Need to debounce saveFilters, because it is called many times when the filters
+        // are being initialized, and we only want the final one to take effect.
+        svc.saveFilters = debounce(saveFilters, 500);
         svc.reset = reset;
         svc.filters = {};
 
@@ -25,6 +30,12 @@
          * @param {Object} filterGeom GeoJSON boundary to filter by.
          */
         function saveFilters(filters, filterGeom) {
+            // Don't allow saving filters until they're restored.
+            // Otherwise the saved state gets lost while loading.
+            if (!filtersRestored) {
+                return;
+            }
+
             svc.filters = filters;
             localStorageService.set(storageName, filters);
             if (filterGeom) {
@@ -64,6 +75,8 @@
             // tell the filterbar to set the filters back
             $rootScope.$broadcast('driver.filterbar:restore', [filterObj, geoFilterObj]);
             svc.filters = filterObj;
+
+            filtersRestored = true;
         }
 
         return svc;

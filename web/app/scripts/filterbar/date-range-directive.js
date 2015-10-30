@@ -13,7 +13,6 @@
                 var filterBarCtl = ctlArray[0];
                 var dateRangeCtl = ctlArray[1];
                 var dtRange = {};
-                init();
                 scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
                 scope.$on('driver.filterbar:reset', function() {
@@ -30,11 +29,11 @@
                 });
                 scope.$watch('dtMin', function(newMin) {
                     $('#dtMinField').datepicker('update', newMin);
-                    dtRange.min = scope.dtMin;
+                    scope.onDtRangeChange();
                 });
                 scope.$watch('dtMax', function(newMax) {
                     $('#dtMaxField').datepicker('update', newMax);
-                    dtRange.max = newMax;
+                    scope.onDtRangeChange();
                 });
 
                 // On change of DT value
@@ -49,11 +48,10 @@
                     var defaultMax = new Date();
                     // 90 days ago
                     var defaultMin = new Date(moment(defaultMax) - moment.duration({days:90}));
-                    dtRange.min = defaultMin;
-                    dtRange.max = defaultMax;
                     $('#dtMaxField').datepicker('update', defaultMax);
                     $('#dtMinField').datepicker('update', defaultMin);
                     scope.error = {};
+                    scope.updateFilter();
                 }
 
                 /**
@@ -64,11 +62,8 @@
                  * @param filterObj {object} filter data
                  */
                 scope.updateFilter = function() {
-                    var dayish = moment.duration({days: 1, milliseconds: -1});
-                    var inclusiveRange = _.clone(dtRange);
-                    inclusiveRange.max = new Date(moment(new Date(inclusiveRange.max)) + dayish);
                     if (scope.isMinMaxValid()) {
-                        filterBarCtl.updateFilter(filterLabel, inclusiveRange);
+                        filterBarCtl.updateFilter(filterLabel, dtRange);
                     }
                 };
 
@@ -77,11 +72,18 @@
                  * set classes properly by copying controller's `error` value to this scope
                  */
                 scope.isMinMaxValid = function() {
-                    var validity = dateRangeCtl.isMinMaxValid({'min': scope.dtMin, 'max': scope.Max});
+                    var validity = dateRangeCtl.isMinMaxValid({
+                        min: scope.dtMin,
+                        max: scope.dtMax
+                    });
                     scope.error = dateRangeCtl.error;
                     return validity;
                 };
 
+                // Initialize to 90 days by default.
+                // Must be called after the other scope variables are defined, since
+                // init references scope.
+                init();
             }
         };
         return module;

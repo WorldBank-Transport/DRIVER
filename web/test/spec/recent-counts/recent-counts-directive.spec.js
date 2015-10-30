@@ -13,18 +13,21 @@ describe('driver.recentCounts: RecentCounts', function () {
     var $rootScope;
     var $httpBackend;
     var $q;
+    var DriverResourcesMock;
     var ResourcesMock;
     var RecordState;
     var InitialState;
 
     beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$q_, _InitialState_,
-                                _RecordAggregates_, _ResourcesMock_, _RecordState_) {
+                                _RecordAggregates_, _DriverResourcesMock_, _ResourcesMock_,
+                                _RecordState_) {
         $compile = _$compile_;
         $q = _$q_;
         $httpBackend = _$httpBackend_;
         RecordAggregates = _RecordAggregates_;
         $rootScope = _$rootScope_;
         ResourcesMock = _ResourcesMock_;
+        DriverResourcesMock = _DriverResourcesMock_;
         RecordState = _RecordState_;
         spyOn(RecordState, 'getSelected').and.callFake(function() {
             var deferred = $q.defer();
@@ -48,6 +51,9 @@ describe('driver.recentCounts: RecentCounts', function () {
         RecordAggregates.recentCounts();
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(/\/api\/boundarypolygons/)
+            .respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-recent-counts></driver-recent-counts>')(scope);

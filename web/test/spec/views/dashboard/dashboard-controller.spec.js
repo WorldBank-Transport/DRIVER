@@ -27,10 +27,10 @@ describe('driver.views.dashboard: DashboardController', function () {
     it('should pass this placeholder test', function () {
         Controller = $controller('DashboardController', { $scope: $scope });
 
-        $httpBackend.expectGET(/\/api\/recordtypes\//)
-            .respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(/\/api\/boundaries/)
             .respond(ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(/\/api\/recordtypes\//)
+            .respond(200, ResourcesMock.RecordTypeResponse);
 
         $scope.$apply();
     });

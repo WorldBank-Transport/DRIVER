@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, InitialState, Records, RecordSchemas,
+    function DashboardController($scope, BoundaryState, InitialState, Records, RecordSchemas,
                                  RecordState, RecordAggregates) {
         var ctl = this;
 
@@ -10,12 +10,20 @@
 
         function init() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
+                .then(BoundaryState.getSelected().then(function(selected) {
+                    ctl.boundaryId = selected.uuid;
+                }))
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
 
             $scope.$on('driver.state.recordstate:selected', function(event, selected) {
                 ctl.recordType = selected;
+                loadRecords();
+            });
+
+            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+                ctl.boundaryId = selected.uuid;
                 loadRecords();
             });
         }
@@ -32,22 +40,17 @@
         }
 
         /*
-         * Loads a page of records from the API
+         * Loads records for toddow
          * @return {promise} Promise to load records
          */
         function loadRecords() {
             /* jshint camelcase: false */
-            var params = { limit: 50 };
+            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
 
-            RecordAggregates.toddow(false).then(function(toddowData) {
+            RecordAggregates.toddow(false, params).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
-
-            return Records.get(params)
-                .$promise.then(function(records) {
-                    ctl.records = records.results;
-                });
         }
 
         function onRecordsLoaded() {
