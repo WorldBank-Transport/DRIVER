@@ -16,7 +16,7 @@
                 init();
                 scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
-                scope.$on('driver.filterbar:reset', function(event) {
+                scope.$on('driver.filterbar:reset', function() {
                     init();
                 });
 
