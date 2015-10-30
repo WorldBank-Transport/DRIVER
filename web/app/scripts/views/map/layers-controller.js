@@ -153,7 +153,9 @@
                 }
                 else {
                     BoundaryState.getSelected().then(function(selected) {
-                        ctl.map.fitBounds(selected.bbox);
+                        if (selected && selected.bbox) {
+                            ctl.map.fitBounds(selected.bbox);
+                        }
                     });
                 }
                 if (MapState.getFilterGeoJSON()) {
