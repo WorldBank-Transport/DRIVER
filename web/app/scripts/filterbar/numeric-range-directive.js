@@ -29,6 +29,12 @@
                     }
                 });
 
+                scope.$on('driver.filterbar:reset', function() {
+                    scope.filter.min = null;
+                    scope.filter.max = null;
+                    scope.updateFilter(scope.label, scope.filter);
+                });
+
                 function init() {
                     scope.filter = {'_rule_type': 'intrange'};
                     scope.error = {};
