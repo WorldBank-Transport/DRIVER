@@ -18,7 +18,7 @@
     "angular-local-storage": "0.2.2",
     "bootstrap-sass-official": "^3.2.0",
     "ng-file-upload": "^4.0.0",
-    "json-editor": "azavea/json-editor#develop",
+    "json-editor": "azavea/json-editor#v10.7.23",
     "bootstrap-select": "1.7.3",
     "lodash": "^3.8.0",
     "leaflet": "~0.7.3",
