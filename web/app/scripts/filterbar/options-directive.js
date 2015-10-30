@@ -15,14 +15,18 @@
             link: function(scope, elem, attrs, ctlArray) {
                 var filterbarController = ctlArray[0];
                 var restored;
-                init();
+                // Use UUID for ID to track elements
+                init(guid());
 
-                function init() {
+                scope.$on('driver.filterbar:reset', function() {
+                    init();
+                });
+
+                function init(uuid) {
                     scope.filter = {contains: []};
                     scope.updateFilter = updateFilter;
 
-                    // Use UUID for ID to track elements
-                    scope.domID = guid();
+                    if (uuid) { scope.domID = uuid; }
                     restored = false;
 
                     // use `%timeout` to ensure that the template is rendered before selectpicker logic

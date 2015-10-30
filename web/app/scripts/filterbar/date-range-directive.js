@@ -16,6 +16,10 @@
                 init();
                 scope.calendarOptions = {'format': filterBarCtl.dateTimeFormat};
 
+                scope.$on('driver.filterbar:reset', function(event) {
+                    init();
+                });
+
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === filterLabel) {
@@ -27,16 +31,10 @@
                 scope.$watch('dtMin', function(newMin) {
                     $('#dtMinField').datepicker('update', newMin);
                     dtRange.min = scope.dtMin;
-                    if (scope.isMinMaxValid()) {
-                        scope.updateFilter();
-                    }
                 });
                 scope.$watch('dtMax', function(newMax) {
                     $('#dtMaxField').datepicker('update', newMax);
-                    if (scope.isMinMaxValid()) {
-                        dtRange.max = scope.dtMax;
-                    }
-                    scope.updateFilter();
+                    dtRange.max = newMax;
                 });
 
                 // On change of DT value

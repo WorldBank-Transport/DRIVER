@@ -7,6 +7,7 @@
         ctl.filters = {};
         ctl.filterPolygon = null;
         ctl.recordLabel = '';
+        ctl.reset = reset;
         init();
 
         function init() {
@@ -93,6 +94,14 @@
                     });
                 });
             }
+        }
+
+        /**
+         * Reset filter state and all filter widgets
+         */
+        function reset() {
+            FilterState.reset();
+            $scope.$broadcast('driver.filterbar:reset');
         }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {

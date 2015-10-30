@@ -15,7 +15,7 @@
         svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
         svc.saveFilters = saveFilters;
-        svc.clear = clear;
+        svc.reset = reset;
         svc.filters = {};
 
         /**
@@ -32,8 +32,10 @@
             }
         }
 
-        // TODO: currently unused
-        function clear() {
+        /**
+         * Set the filterbar to its initial state
+         */
+        function reset() {
             localStorageService.remove(storageName);
             localStorageService.remove(geoStorageName);
         }
