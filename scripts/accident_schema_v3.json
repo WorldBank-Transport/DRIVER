@@ -180,7 +180,6 @@
         "Vehicle":{
             "multiple":true,
             "description":"A vehicle involved in the accident",
-            "propertyOrder":1,
             "title":"Vehicle",
             "required":[
                 "_localId"
@@ -343,7 +342,6 @@
         "Person":{
             "multiple":true,
             "description":"A person involved in the accident",
-            "propertyOrder":2,
             "title":"Person",
             "required":[
                 "_localId"
