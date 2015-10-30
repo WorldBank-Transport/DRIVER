@@ -398,7 +398,7 @@
                         {
                             "source":"target",
                             "value":"{{item._localId}}",
-                            "title":""
+                            "title":"{{item.Vehicle type}} {{item.Make}} {{item.Model}}"
                         }
                     ],
                     "type":"string",
