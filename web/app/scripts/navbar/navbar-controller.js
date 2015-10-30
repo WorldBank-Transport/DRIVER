@@ -4,7 +4,7 @@
     /* ngInject */
     function NavbarController($log, $window, $rootScope, $scope, $state,
                               BoundaryState, GeographyState, InitialState,
-                              RecordState, WebConfig) {
+                              MapState, RecordState, WebConfig) {
         var ctl = this;
         var initialized = false;
 
@@ -46,6 +46,8 @@
         $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
             ctl.boundarySelected = selected;
             updateState();
+            MapState.setLocation(null);
+            MapState.setZoom(null);
         });
 
         // Geography selections

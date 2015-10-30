@@ -151,7 +151,11 @@
                 if (MapState.getLocation() && MapState.getZoom()) {
                     ctl.map.setView(MapState.getLocation(), MapState.getZoom());
                 }
-
+                else {
+                    BoundaryState.getSelected().then(function(selected) {
+                        ctl.map.fitBounds(selected.bbox);
+                    });
+                }
                 if (MapState.getFilterGeoJSON()) {
                     var layer = L.geoJson(MapState.getFilterGeoJSON());
                     layer.setStyle(filterStyle);
