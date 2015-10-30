@@ -2,11 +2,12 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, FilterState, RecordState, RecordSchemas) {
+    function FilterbarController($timeout, $log, $scope, FilterState, RecordState, RecordSchemas) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
         ctl.recordLabel = '';
+        ctl.reset = reset;
         init();
 
         function init() {
@@ -93,6 +94,15 @@
                     });
                 });
             }
+        }
+
+        /**
+         * Reset filter state and all filter widgets
+         */
+        function reset() {
+            FilterState.reset();
+            $scope.$broadcast('driver.filterbar:reset');
+            $timeout(ctl.sendFilter);
         }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {

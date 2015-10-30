@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function MapController($rootScope, $scope, InitialState,
+    function MapController($rootScope, $scope, InitialState, FilterState,
                            Records, RecordSchemas, RecordState, RecordAggregates) {
         var ctl = this;
 

@@ -25,7 +25,7 @@ describe('driver.views.record: ListController', function () {
         DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
         FilterState = _FilterState_;
-        FilterState.clear();
+        FilterState.reset();
     }));
 
     it('should have header keys', function () {
