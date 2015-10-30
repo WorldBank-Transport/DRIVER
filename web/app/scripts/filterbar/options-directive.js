@@ -14,20 +14,21 @@
             },
             link: function(scope, elem, attrs, ctlArray) {
                 var filterbarController = ctlArray[0];
-                var restored;
+                var restored = false;
+                scope.updateFilter = updateFilter;
+
                 // Use UUID for ID to track elements
                 init(guid());
 
                 scope.$on('driver.filterbar:reset', function() {
-                    init();
+                    scope.filter.contains = [];
+                    onContainsChange([]);
                 });
 
                 function init(uuid) {
                     scope.filter = {contains: []};
-                    scope.updateFilter = updateFilter;
 
                     if (uuid) { scope.domID = uuid; }
-                    restored = false;
 
                     // use `%timeout` to ensure that the template is rendered before selectpicker logic
                     $timeout(function() { $('#' + scope.domID).selectpicker(); });
@@ -44,10 +45,12 @@
                 });
 
                 // Watch `filter.contains`; ensure that when changes occur, they're set and shown
-                scope.$watch('filter.contains', function(contains) {
+                scope.$watch('filter.contains', onContainsChange);
+
+                function onContainsChange(contains) {
                     $('#' + scope.domID).val(contains);
                     $timeout(function() { $('#' + scope.domID).selectpicker('refresh'); });
-                });
+                }
 
                 /**
                  * A simple wrapper around driver-filterbar's updateFilter function.

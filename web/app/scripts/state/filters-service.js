@@ -38,6 +38,7 @@
         function reset() {
             localStorageService.remove(storageName);
             localStorageService.remove(geoStorageName);
+            svc.filters = {};
         }
 
         /**
