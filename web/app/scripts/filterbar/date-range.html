@@ -1,14 +1,13 @@
 <button id="record-type"
    role="button"
    ng-class="error.btnClasses"
-   class="ng-binding dropdown-toggle btn btn-default"
+   class="ng-binding btn btn-default dropdown-toggle"
    data-toggle="dropdown"
-   style="padding: 6px 12px;"
    aria-haspopup="true"
    aria-expanded="true">
   Date Range <span class="caret"></span>
 </button>
-<ul class="dropdown-menu date-range"
+<ul class="dropdown-menu alert date-range"
     ng-class="error.classes"
     role="menu"
     aria-labelledby="record-type"
@@ -17,10 +16,8 @@
         <span ng-show="isMinMaxValid()">Filter events by date of occurence.</span>
         <span ng-hide="isMinMaxValid()">Maximum must be at least as large as minimum value</span>
         <div class="ng-binding pull-right form-inline">
-            <div class="input-group">
-                <input datetimepicker
-                       datetimepicker-options="{{ calendarOptions }}"
-                       name="minimum"
+            <div class="input-group input-daterange">
+                <input name="minimum"
                        id="dtMinField"
                        ng-model="dtMin"
                        ng-change="onDtRangeChange()"

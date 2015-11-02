@@ -1,14 +1,13 @@
 <button id="record-type"
    role="button"
    ng-class="error.btnClasses"
-   class="ng-binding dropdown-toggle btn btn-default"
-   style="padding: 6px 12px;"
+   class="ng-binding btn btn-default dropdown-toggle"
    data-toggle="dropdown"
    aria-haspopup="true"
    aria-expanded="true">
   {{ label | labelFormatter }} <span class="caret"></span>
 </button>
-<ul class="dropdown-menu alert number-range"
+<ul class="dropdown-menu alert"
     ng-class="error.classes"
     role="menu"
     aria-labelledby="record-type"
@@ -20,9 +19,7 @@
             <div class="input-group">
                 <input type="number"
                        name="minimum"
-                       placeholder="Minimum"
-                       class="form-control"
-                       style="width:50%;border-right:0;"
+                       placeholder="Min"
                        min="{{ data.minimum }}"
                        max="{{ data.maximum }}"
                        ng-model="filter.min"
@@ -31,9 +28,7 @@
                 <span class="input-group-addon">to</span>
                 <input type="number"
                        name="maximum"
-                       placeholder="Maximum"
-                       style="width:50%;"
-                       class="form-control"
+                       placeholder="Max"
                        min="{{ data.minimum }}"
                        max="{{ data.maximum }}"
                        ng-model="filter.max"

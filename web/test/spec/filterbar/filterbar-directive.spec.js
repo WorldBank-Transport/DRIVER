@@ -50,6 +50,6 @@ describe('driver.filterbar: FilterbarDirective', function () {
         $httpBackend.verifyNoOutstandingRequest();
         $rootScope.$apply();
 
-        expect(element.find('.navbar').length).toBeGreaterThan(0);
+        expect(element.find('.filterbar').length).toBeGreaterThan(0);
     });
 });
