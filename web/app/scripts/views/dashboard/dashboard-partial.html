@@ -12,18 +12,18 @@
     <div class="block block-1x2 quick-map">
         <div class="block-inner">
             <div class="map" leaflet-map recent-events zoom-to-boundary></div>
+            <h3>{{ ctl.recordType.plural_label }} during the past two weeks
+                <a ui-sref="map" class="small pull-right">
+                    View all {{ ctl.recordType.plural_label | lowercase }} »
+                </a>
+            </h3>
         </div>
-        <h3>{{ ctl.recordType.plural_label }} during the past two weeks
-            <a ui-sref="map" class="small pull-right">
-                View all {{ ctl.recordType.plural_label | lowercase }} »
-            </a>
-        </h3>
     </div>
     <div class="block block-1x1 insights">
-        <driver-recent-proportions class="block-inner"></driver-recent-proportions>
+        <driver-recent-proportions class=""></driver-recent-proportions>
     </div>
     <div class="block block-1x1 counts">
-        <driver-recent-counts class="block-inner"></driver-recent-counts>
+        <driver-recent-counts class=""></driver-recent-counts>
     </div>
     <div class="block block-2x1 toddow">
         <div class="block-inner">

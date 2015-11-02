@@ -10,7 +10,7 @@
     /* ngInject */
     function ToDDoW() {
         // The color ramp to use
-        var rampValues = ['#ffffff', '#f6edb1', '#f7da22', '#ecbe1d', '#e77124',
+        var rampValues = ['#FDFBED', '#f6edb1', '#f7da22', '#ecbe1d', '#e77124',
                           '#d54927', '#cf3a27', '#a33936', '#7f182a', '#68101a'];
         var module = {
             restrict: 'E',

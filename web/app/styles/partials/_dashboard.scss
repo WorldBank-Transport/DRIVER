@@ -35,13 +35,13 @@
         }
         &.block-2x1 {
             width: 54%;
-            height: 32%;
+            height: 34%;
             left: 44%;
             top: 36%;
 
             &:nth-child(2n) {
-                top: 72%;
-                height: 24%;
+                top: 74%;
+                height: 22%;
             }
         }
 
@@ -78,11 +78,20 @@
 
                 .small { margin-top: 5px; }
             }
+
+            .map {
+                top: 10px;
+                bottom: 50px;
+                position: absolute!important;
+                left: 10px;
+                right: 10px;
+                height: auto;
+            }
         }
         &.insights {
             h1 {
                 font-size: 24px;
-                font-weight: 300;
+                font-weight: 400;
                 line-height: 1.4;
                 padding: 25px;
                 margin: 0;
@@ -107,7 +116,7 @@
             }
             h2 {
                 font-size: 21px;
-                font-weight: 300;
+                font-weight: 400;
                 margin: 0;
             }
         }
