@@ -44,8 +44,18 @@
          * @return {promise} Promise to load records
          */
         function loadRecords() {
+            // We want to see only the last 90 days worth of records on the dashboard
+            var now = new Date();
+            var duration = moment.duration({ days:90 });
+            var today = now.toISOString();
+            var threeMonthsBack = new Date(now - duration).toISOString();
+
             /* jshint camelcase: false */
-            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
+            var params = ctl.boundaryId ? {polygon_id: ctl.boundaryId} : {};
+            params = angular.extend(params, {
+              occurred_min: threeMonthsBack,
+              occurred_max: today
+            });
             /* jshint camelcase: true */
 
             RecordAggregates.toddow(false, params).then(function(toddowData) {
