@@ -25,6 +25,7 @@
                     width = 660;
                 var rect, color, svg;  // GLOBAL
                 var tooltip = d3.tip();
+                tooltip.offset(function() { return [-16, -18]; });
                 init();
 
                 /**
@@ -60,7 +61,7 @@
                     var theHours = ['0', '1', '2', '3', '4', '5',
                                     '6', '7', '8', '9', '10', '11',
                                     '12', '13', '14', '15', '16', '17',
-                                    '18', '19', '20', '21', '22', '23', '24'];
+                                    '18', '19', '20', '21', '22', '23'];
                     rect = svg.selectAll('.day')
                         .data(theDays)
                             .enter().append('g')
@@ -70,8 +71,16 @@
                             })
                         .selectAll('.hour')
                         .data(function(d, i) {
-                            var weekStart = d3.time.week(new Date());
-                            return d3.time.hours(moment(weekStart).add(i, 'days').toDate(), moment(weekStart).add(i + 1, 'days').toDate()); })
+                            /**
+                             * We use 01/01/2001 for construction of our week to avoid daylight
+                             *  savings time weirdness
+                            **/
+                            var weekStart = d3.time.week(new Date('01/01/2001'));
+                            return d3.time.hours(
+                              moment(weekStart).add(i, 'days').toDate(),
+                              moment(weekStart).add(i + 1, 'days').toDate()
+                            );
+                        })
                         .enter().append('g').append('rect')
                             .attr('class', 'hour')
                             .attr('fill', 'white')
@@ -85,7 +94,7 @@
                     svg.selectAll('.day')
                         .append('text')
                           .text(function(d, i) { return theDays[i]; })
-                          .attr('class', 'label month')
+                          .attr('class', 'label')
                           .attr('x', 0)
                           .attr('y', function(d, i) { return i * cellSize + 40; });
 
@@ -95,9 +104,8 @@
                                     return theHours[i];
                             })
                             .attr('class', 'label hours')
-                            // TODO: Actually center these in each cell
                             .attr('x', function(d, i) {
-                                    return i * cellSize + 37;
+                                return i * cellSize + 37;
                             })
                             .attr('y', 10);
 
