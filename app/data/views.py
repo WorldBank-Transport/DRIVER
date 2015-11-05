@@ -7,9 +7,13 @@ from django.db.models import Case, When, IntegerField, Value, Count
 
 from django_redis import get_redis_connection
 
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
+
+from data.serializers import UserSerializer, GroupSerializer
 
 from ashlar import views
 from  data import transformers
@@ -119,3 +123,19 @@ class DriverRecordViewSet(views.RecordViewSet):
         # to store the data exactly as it is.
         redis_conn = get_redis_connection('default')
         redis_conn.set(token, sql.encode('utf-8'))
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
