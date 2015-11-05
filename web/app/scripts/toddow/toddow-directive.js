@@ -25,6 +25,7 @@
                     width = 660;
                 var rect, color, svg;  // GLOBAL
                 var tooltip = d3.tip();
+                tooltip.offset(function() { return [-16, -18]; });
                 init();
 
                 /**
@@ -70,10 +71,15 @@
                             })
                         .selectAll('.hour')
                         .data(function(d, i) {
-                            var weekStart = d3.time.week(new Date());
+                            /**
+                             * We use 01/01/2001 for construction of our week to avoid daylight
+                             *  savings time weirdness
+                            **/
+                            var weekStart = d3.time.week(new Date('01/01/2001'));
                             return d3.time.hours(
                               moment(weekStart).add(i, 'days').toDate(),
-                              moment(weekStart).add(i + 1, 'days').toDate());
+                              moment(weekStart).add(i + 1, 'days').toDate()
+                            );
                         })
                         .enter().append('g').append('rect')
                             .attr('class', 'hour')
@@ -98,9 +104,8 @@
                                     return theHours[i];
                             })
                             .attr('class', 'label hours')
-                            // TODO: Actually center these in each cell
                             .attr('x', function(d, i) {
-                                    return i * cellSize + 37;
+                                return i * cellSize + 37;
                             })
                             .attr('y', 10);
 
