@@ -60,7 +60,7 @@
                     var theHours = ['0', '1', '2', '3', '4', '5',
                                     '6', '7', '8', '9', '10', '11',
                                     '12', '13', '14', '15', '16', '17',
-                                    '18', '19', '20', '21', '22', '23', '24'];
+                                    '18', '19', '20', '21', '22', '23'];
                     rect = svg.selectAll('.day')
                         .data(theDays)
                             .enter().append('g')
@@ -71,7 +71,10 @@
                         .selectAll('.hour')
                         .data(function(d, i) {
                             var weekStart = d3.time.week(new Date());
-                            return d3.time.hours(moment(weekStart).add(i, 'days').toDate(), moment(weekStart).add(i + 1, 'days').toDate()); })
+                            return d3.time.hours(
+                              moment(weekStart).add(i, 'days').toDate(),
+                              moment(weekStart).add(i + 1, 'days').toDate());
+                        })
                         .enter().append('g').append('rect')
                             .attr('class', 'hour')
                             .attr('fill', 'white')
@@ -85,7 +88,7 @@
                     svg.selectAll('.day')
                         .append('text')
                           .text(function(d, i) { return theDays[i]; })
-                          .attr('class', 'label month')
+                          .attr('class', 'label')
                           .attr('x', 0)
                           .attr('y', function(d, i) { return i * cellSize + 40; });
 
