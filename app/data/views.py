@@ -8,7 +8,9 @@ from django.db.models import Case, When, IntegerField, Value, Count
 from django_redis import get_redis_connection
 
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
+from rest_framework import permissions, status, viewsets
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
@@ -131,6 +133,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
+    permission_classes = (permissions.DjangoModelPermissions,)
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -139,3 +142,16 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+    permission_classes = (permissions.DjangoModelPermissions,)
+
+class DriverObtainAuthToken(ObtainAuthToken):
+    def post(self, request):
+        serializer = self.serializer_class(data=request.DATA)
+        if serializer.is_valid(raise_exception=True):
+            user = serializer.validated_data['user']
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key, 'user': token.user_id})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+obtain_auth_token = DriverObtainAuthToken.as_view()

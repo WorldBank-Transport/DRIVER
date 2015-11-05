@@ -22,6 +22,8 @@ router.register(r'groups', drv_views.GroupViewSet)
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(router.urls)),
+    # get token for given username/password
+    url(r'^api-token-auth/', drv_views.obtain_auth_token),
 ]
 
 # Allow login to the browseable API if in debug mode
