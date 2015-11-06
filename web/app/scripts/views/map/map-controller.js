@@ -49,6 +49,10 @@
             var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
 
+            RecordAggregates.stepwise(true, params).then(function(stepwiseData) {
+                ctl.stepwise = stepwiseData;
+            });
+
             RecordAggregates.toddow(true, params).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
