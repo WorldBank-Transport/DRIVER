@@ -61,7 +61,7 @@ class DriverRecordViewTestCase(APITestCase):
         """
         url = ('/api/records/stepwise/?record_type={uuid}&occurred_max={maximum}&occurred_min={minimum}'
                .format(uuid=str(self.record_type.uuid),
-                       minimum=(self.then - timedelta(hours=1)).isoformat() + 'Z',
+                       minimum=self.beforeThen.isoformat() + 'Z',
                        maximum=datetime.now().isoformat() + 'Z'))
 
         response = json.loads(self.client.get(url).content)
