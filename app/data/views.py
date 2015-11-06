@@ -1,5 +1,7 @@
 import uuid
 
+from dateutil.parser import parse as parse_date
+
 from django.db import connection
 from django.db.models import Case, When, IntegerField, Value, Count
 
@@ -7,9 +9,10 @@ from django_redis import get_redis_connection
 
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST
 
 from ashlar import views
-
+import data.transformers
 
 class DriverRecordViewSet(views.RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
@@ -27,6 +30,43 @@ class DriverRecordViewSet(views.RecordViewSet):
         else:
             response = super(DriverRecordViewSet, self).list(self, request, *args, **kwargs)
         return response
+
+    @list_route(methods=['get'])
+    def stepwise(self, request):
+        """Return an aggregation counts the occurrence of events per week (per year) between
+        two bounding datetimes
+        """
+        # We'll need to have minimum and maximum dates specified to properly construct our SQL
+        try:
+            start_date = parse_date(request.GET['occurred_min'])
+            end_date = parse_date(request.GET['occurred_max'])
+        except KeyError:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        # The min year can't be after or more than 2000 years before the max year
+        year_distance = end_date.year - start_date.year
+        if year_distance < 0 or year_distance > 2000:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        qryset = self.get_queryset()
+        for backend in list(self.filter_backends):
+            qryset = backend().filter_queryset(request, qryset, self)
+
+        # Build SQL `case` statement to annotate with the year
+        year_case = Case(*[When(occurred_from__year=year, then=Value(year))
+                           for year in xrange(start_date.year, end_date.year + 1)],
+                         output_field=IntegerField())
+        # Build SQL `case` statement to annotate with the day of week
+        week_case = Case(*[When(occurred_from__week=week, then=Value(week))
+                           for week in xrange(1, 54)], output_field=IntegerField())
+        annotated_recs = qryset.annotate(year=year_case).annotate(week=week_case)
+
+        # Voodoo to perform aggregations over `week` and `year` combinations
+        counted = (annotated_recs.values('year', 'week')
+                   .order_by('year', 'week')
+                   .annotate(count=Count('week')))
+
+        return Response(counted)
 
     @list_route(methods=['get'])
     def toddow(self, request):
