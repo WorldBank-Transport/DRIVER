@@ -48,9 +48,9 @@ class DriverRecordViewSet(views.RecordViewSet):
         if year_distance < 0 or year_distance > 2000:
             return Response(status=HTTP_400_BAD_REQUEST)
 
-        qryset = self.get_queryset()
+        queryset = self.get_queryset()
         for backend in list(self.filter_backends):
-            qryset = backend().filter_queryset(request, qryset, self)
+            queryset = backend().filter_queryset(request, queryset, self)
 
         # Build SQL `case` statement to annotate with the year
         year_case = Case(*[When(occurred_from__year=year, then=Value(year))
@@ -59,7 +59,7 @@ class DriverRecordViewSet(views.RecordViewSet):
         # Build SQL `case` statement to annotate with the day of week
         week_case = Case(*[When(occurred_from__week=week, then=Value(week))
                            for week in xrange(1, 54)], output_field=IntegerField())
-        annotated_recs = qryset.annotate(year=year_case).annotate(week=week_case)
+        annotated_recs = queryset.annotate(year=year_case).annotate(week=week_case)
 
         # Voodoo to perform aggregations over `week` and `year` combinations
         counted = (annotated_recs.values('year', 'week')
@@ -72,9 +72,9 @@ class DriverRecordViewSet(views.RecordViewSet):
     def toddow(self, request):
         """ Return aggregations which nicely format the counts for time of day and day of week
         """
-        qryset = self.get_queryset()
+        queryset = self.get_queryset()
         for backend in list(self.filter_backends):
-            qryset = backend().filter_queryset(request, qryset, self)
+            queryset = backend().filter_queryset(request, queryset, self)
 
         # Build SQL `case` statement to annotate with the day of week
         dow_case = Case(*[When(occurred_from__week_day=x, then=Value(x))
@@ -82,7 +82,7 @@ class DriverRecordViewSet(views.RecordViewSet):
         # Build SQL `case` statement to annotate with the time of day
         tod_case = Case(*[When(occurred_from__hour=x, then=Value(x))
                           for x in xrange(24)], output_field=IntegerField())
-        annotated_recs = qryset.annotate(dow=dow_case).annotate(tod=tod_case)
+        annotated_recs = queryset.annotate(dow=dow_case).annotate(tod=tod_case)
 
         # Voodoo to perform aggregations over `tod` and `dow` combinations
         counted = (annotated_recs.values('tod', 'dow')
