@@ -6,7 +6,13 @@
         $locationProvider.html5Mode(ASEConfig.html5Mode.enabled);
         $locationProvider.hashPrefix(ASEConfig.html5Mode.prefix);
 
-        $urlRouterProvider.otherwise('/recordtype');
+        // workaround for infinite redirect when not logged in
+        // https://github.com/angular-ui/ui-router/issues/600
+        $urlRouterProvider.otherwise(function($injector, $location) {
+            var $state = $injector.get("$state");
+            // '/recordtype'
+            $state.go('rt.list');
+        });
     }
 
     /* ngInject */
@@ -62,9 +68,9 @@
      * Main module of the application.
      */
     angular.module('ase', [
+        'ase.auth',
         'ase.config',
         'ase.notifications',
-        'ase.auth',
         'ase.navbar',
         'ase.views.geography',
         'ase.views.login',

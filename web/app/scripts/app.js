@@ -74,7 +74,7 @@
         'Leaflet',
         'debounce',
         'driver.config',
-        'driver.auth',
+        'ase.auth',
         'driver.navbar',
         'driver.filterbar',
         'driver.toddow',

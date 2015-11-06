@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('driver.navbar', [
-        'driver.auth',
+        'ase.auth',
         'driver.state',
         'ui.bootstrap',
         'ui.router'

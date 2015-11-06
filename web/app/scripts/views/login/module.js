@@ -21,7 +21,7 @@
     angular
       .module('driver.views.login', [
         'ui.router',
-        'driver.auth'
+        'ase.auth'
       ]).config(StateConfig);
 
 })();
