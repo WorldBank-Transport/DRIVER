@@ -1,0 +1,31 @@
+<div class="container loginmodal">
+    <form ng-submit="authenticate()" autocomplete="off">
+      <div class="row">
+        <div class="col-12">
+          <h3>Log In to Ashlar</h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 loginmodal-field">
+          <div class="form-group" ng-class="{true: 'login-field-error', false: ''}[auth.failure]">
+            <label for="username">Username:</label>
+            <input type="text" id="username" ng-model="auth.username" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 loginmodal-field">
+          <div class="form-group" ng-class="{true: 'login-field-error', false: ''}[auth.failure]">
+            <label for="password">Password:</label>
+            <input type="password" id="password" ng-model="auth.password" />
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 loginmodal-field">
+          <button type="submit" class="button button-primary btn-block">Login</button>
+        </div>
+      </div>
+    </form>
+    <alert ng-repeat="alert in alerts" type="alert.type">{{alert.msg}}</alert>
+</div>
