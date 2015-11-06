@@ -4,21 +4,20 @@
     /**
      * @ngInject
      */
-    function UserService ($resource, $q) {
+    function UserService ($resource, $q, ASEConfig) {
 
-        var User = $resource('/api/users/:id/', {id: '@id'}, {
+        var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id'}, {
             'update': {
                 method: 'PATCH',
-                url: '/api/users/:id/'
+                url: ASEConfig.api.hostname + '/api/users/:id/'
             },
-            // TODO: change/reset password not implemented in API yet
             'changePassword' : {
                 method: 'POST',
-                url: '/api/users/:id/change_password/'
+                url: ASEConfig.api.hostname + '/api/users/:id/change_password/'
             },
             'resetPassword' : {
                 method: 'POST',
-                url: '/api/users/:id/reset_password/'
+                url: ASEConfig.api.hostname + '/api/users/:id/reset_password/'
             },
             'query': {
                 method: 'GET'

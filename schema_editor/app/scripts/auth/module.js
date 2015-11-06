@@ -8,6 +8,7 @@
     }
 
     angular.module('ase.auth', [
+        'ase.config',
         'ase.userdata',
         'ngCookies'
       ]).config(InterceptorConfig);

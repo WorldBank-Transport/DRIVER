@@ -10,7 +10,7 @@
 
         InitialState.ready().then(init);
 
-        ctl.onLogoutButtonClicked = AuthService.logout; // TODO: add logout button
+        ctl.onLogoutButtonClicked = AuthService.logout;
         ctl.authenticated = AuthService.isAuthenticated();
         ctl.onGeographySelected = onGeographySelected;
         ctl.onBoundarySelected = onBoundarySelected;

@@ -8,8 +8,8 @@
 
         // workaround for infinite redirect when not logged in
         // https://github.com/angular-ui/ui-router/issues/600
-        $urlRouterProvider.otherwise(function($injector, $location) {
-            var $state = $injector.get("$state");
+        $urlRouterProvider.otherwise(function($injector) {
+            var $state = $injector.get('$state');
             // '/recordtype'
             $state.go('rt.list');
         });

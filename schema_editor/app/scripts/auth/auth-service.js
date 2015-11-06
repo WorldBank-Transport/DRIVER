@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthService ($q, $http, $cookies, $rootScope, $timeout, $window) {
+    function AuthService ($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig) {
         var module = {};
 
         var userIdCookieString = 'AuthService.userId';
@@ -20,14 +20,12 @@
         module.events = events;
 
         module.isAuthenticated =  function () {
-            // TODO: also need to check if token is expired or not
             return !!(module.getToken() && module.getUserId() >= 0);
         };
 
         module.authenticate = function (auth) {
             var dfd = $q.defer();
-            // TODO: make relative to HOST from config
-            $http.post('/api-token-auth/', auth)
+            $http.post(ASEConfig.api.hostname + '/api-token-auth/', auth)
             .success(function(data, status) {
                 var result = {
                     status: status,
