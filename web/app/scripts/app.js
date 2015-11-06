@@ -30,9 +30,36 @@
     }
 
     /* ngInject */
-    function HttpConfig($httpProvider) {
-        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    function RunConfig($cookies, $http, $rootScope, $state, AuthService, LogoutInterceptor) {
+        // Django CSRF Token compatibility
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.defaults.xsrfCookieName = 'csrftoken';
+
+        $rootScope.$on('$stateChangeStart', function (event, to, toParams, from, fromParams) {
+
+            if (!AuthService.isAuthenticated()) {
+                event.preventDefault();
+                // broadcast success to avoid infinite redirect
+                // see issue: https://github.com/angular-ui/ui-router/issues/178
+                $state.go('login', null, {notify: false}).then(function() {
+                    $rootScope.$broadcast('$stateChangeSuccess', to, toParams, from, fromParams);
+                });
+                return;
+            }
+        });
+
+        $rootScope.$on(AuthService.events.loggedOut, function () {
+            $rootScope.user = null;
+        });
+
+        $rootScope.$on(LogoutInterceptor.events.logOutUser, function () {
+            AuthService.logout();
+        });
+
+        // Restore user session on full page refresh
+        if (AuthService.isAuthenticated()) {
+            $rootScope.$broadcast(AuthService.events.loggedIn);
+        }
     }
 
     /**
@@ -47,12 +74,14 @@
         'Leaflet',
         'debounce',
         'driver.config',
+        'driver.auth',
         'driver.navbar',
         'driver.filterbar',
         'driver.toddow',
         'driver.state',
         'driver.stepwise',
         'driver.views.account',
+        'driver.views.login',
         'driver.views.dashboard',
         'driver.views.map',
         'driver.views.record',
@@ -63,5 +92,5 @@
     .config(LogConfig)
     .config(LeafletDefaultsConfig)
     .config(LocalStorageConfig)
-    .config(HttpConfig);
+    .run(RunConfig);
 })();
