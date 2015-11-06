@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, AuthService) {
+    function AuthController ($scope, $state, $window, AuthService) {
 
         $scope.auth = {};
 
@@ -21,7 +21,9 @@
             $scope.authenticated = AuthService.authenticate($scope.auth);
             $scope.authenticated.then(function(result) {
                 if (result.isAuthenticated) {
-                    $state.go('dashboard');
+                    // redirect to dashboard, with a full page reload,
+                    // to pick up the newly set credentials
+                    $window.location.href = '/';
                 } else {
                     handleError(result);
                 }

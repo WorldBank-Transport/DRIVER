@@ -20,6 +20,7 @@
         module.events = events;
 
         module.isAuthenticated =  function () {
+            // TODO: also need to check if token is expired or not
             return !!(module.getToken() && module.getUserId() >= 0);
         };
 

@@ -7,7 +7,7 @@
     'use strict';
 
     /* ngInject */
-    function InitialState($log, $q) {
+    function InitialState($q) {
 
         var recordTypeInitialized = false;
         var boundaryInitialized = false;
