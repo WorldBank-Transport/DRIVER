@@ -1,5 +1,7 @@
 import uuid
 
+from dateutil.parser import parse as parse_date
+
 from django.db import connection
 from django.db.models import Case, When, IntegerField, Value, Count
 
@@ -7,9 +9,10 @@ from django_redis import get_redis_connection
 
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.exceptions import ParseError
 
 from ashlar import views
-
+from  data import transformers
 
 class DriverRecordViewSet(views.RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
@@ -29,12 +32,55 @@ class DriverRecordViewSet(views.RecordViewSet):
         return response
 
     @list_route(methods=['get'])
+    def stepwise(self, request):
+        """Return an aggregation counts the occurrence of events per week (per year) between
+        two bounding datetimes
+        e.g. [{"week":35,"count":13,"year":2015},{"week":43,"count":1,"year":2015}]
+        """
+        # We'll need to have minimum and maximum dates specified to properly construct our SQL
+        try:
+            start_date = parse_date(request.query_params['occurred_min'])
+            end_date = parse_date(request.query_params['occurred_max'])
+        except KeyError:
+            raise ParseError("occurred_min and occurred_max must both be provided")
+        except ValueError:
+            raise ParseError("occurred_min and occurred_max must both be valid dates")
+
+        # The min year can't be after or more than 2000 years before the max year
+        year_distance = end_date.year - start_date.year
+        if year_distance < 0:
+            raise ParseError("occurred_min must be an earlier date than occurred_max")
+        if year_distance > 2000:
+            raise ParseError("occurred_min and occurred_max must be within 2000 years of one another")
+
+        queryset = self.get_queryset()
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(request, queryset, self)
+
+        # Build SQL `case` statement to annotate with the year
+        year_case = Case(*[When(occurred_from__year=year, then=Value(year))
+                           for year in xrange(start_date.year, end_date.year + 1)],
+                         output_field=IntegerField())
+        # Build SQL `case` statement to annotate with the day of week
+        week_case = Case(*[When(occurred_from__week=week, then=Value(week))
+                           for week in xrange(1, 54)], output_field=IntegerField())
+        annotated_recs = queryset.annotate(year=year_case).annotate(week=week_case)
+
+        # Voodoo to perform aggregations over `week` and `year` combinations
+        counted = (annotated_recs.values('year', 'week')
+                   .order_by('year', 'week')
+                   .annotate(count=Count('week')))
+
+        return Response(counted)
+
+    @list_route(methods=['get'])
     def toddow(self, request):
         """ Return aggregations which nicely format the counts for time of day and day of week
+        e.g. [{"count":1,"dow":6,"tod":1},{"count":1,"dow":3,"tod":3}]
         """
-        qryset = self.get_queryset()
+        queryset = self.get_queryset()
         for backend in list(self.filter_backends):
-            qryset = backend().filter_queryset(request, qryset, self)
+            queryset = backend().filter_queryset(request, queryset, self)
 
         # Build SQL `case` statement to annotate with the day of week
         dow_case = Case(*[When(occurred_from__week_day=x, then=Value(x))
@@ -42,7 +88,7 @@ class DriverRecordViewSet(views.RecordViewSet):
         # Build SQL `case` statement to annotate with the time of day
         tod_case = Case(*[When(occurred_from__hour=x, then=Value(x))
                           for x in xrange(24)], output_field=IntegerField())
-        annotated_recs = qryset.annotate(dow=dow_case).annotate(tod=tod_case)
+        annotated_recs = queryset.annotate(dow=dow_case).annotate(tod=tod_case)
 
         # Voodoo to perform aggregations over `tod` and `dow` combinations
         counted = (annotated_recs.values('tod', 'dow')
