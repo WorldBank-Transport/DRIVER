@@ -56,6 +56,22 @@ class DriverRecordViewTestCase(APITestCase):
             else:
                 self.assertEqual(toddow['count'], 2)
 
+    def test_stepwise(self):
+        """Test that date filtering is working appropriately and that data is being binned properly
+        """
+        url = ('/api/records/stepwise/?record_type={uuid}&occurred_max={maximum}&occurred_min={minimum}'
+               .format(uuid=str(self.record_type.uuid),
+                       minimum=(self.then - timedelta(hours=1)).isoformat() + 'Z',
+                       maximum=datetime.now().isoformat() + 'Z'))
+
+        response = json.loads(self.client.get(url).content)
+        self.assertEqual(len(response), 2)
+        for step in response:
+            if step['week'] == self.now.isocalendar()[1]:
+                self.assertEqual(step['count'], 1)
+            else:
+                self.assertEqual(step['count'], 2)
+
     def test_arbitrary_filters(self):
         base = '/api/records/toddow/?record_type={rt}&occurred_max={dtmax}Z&occurred_min={dtmin}Z'
 
