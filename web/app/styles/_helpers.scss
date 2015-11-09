@@ -12,6 +12,9 @@
     background-color: black;
     background-color: rgba(0,0,0,0.9);
     color: white;
+    margin-left: 0px;
+    margin-top: 10px;
+    pointer-events: none;
 
     &:after {
         content: '';

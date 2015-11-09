@@ -30,8 +30,38 @@
 .leaflet-popup {
     .leaflet-popup-content-wrapper {
         border-radius: 0;
+
+        h5 {
+            font-size: 12px;
+            font-weight: 500;
+            color: #aaa;
+            margin: 0;
+        }
+        h3 {
+            margin: 8px 0 15px;
+        }
+        a {
+            font-weight: 700;
+            font-size: 12px;
+            border: 1px solid #ccc;;
+            padding: 4px 10px;
+            border-radius: 99px;
+            margin-right: 8px;
+            color: #333;
+    
+            span { margin-right: 3px; }
+    
+            &:hover {
+                color: #333;
+                background-color: #e6e6e6;
+                border-color: #adadad;
+            }
+        }
     }
-    .close {
+    .leaflet-popup-close-button {
         padding: 10px 10px 0 0;
+        text-align: center;
+        width: 22px;
+        height: 24px;
     }
 }
