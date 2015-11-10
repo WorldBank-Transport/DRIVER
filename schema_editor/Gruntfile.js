@@ -15,6 +15,8 @@ module.exports = function (grunt) {
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
 
+  var modRewrite = require('connect-modrewrite');
+
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -76,11 +78,15 @@ module.exports = function (grunt) {
           middleware: function (connect) {
             return [
               connect.static('.tmp'),
-              connect().use(
+              connect()
+              .use(modRewrite(['^/editor/(.*)$ /$1 [R]']))
+              .use(
                 '/bower_components',
                 connect.static('./bower_components')
               ),
-              connect().use(
+              connect()
+              .use(modRewrite(['^/editor/(.*)$ /$1 [R]']))
+              .use(
                 '/app/styles',
                 connect.static('./app/styles')
               ),
