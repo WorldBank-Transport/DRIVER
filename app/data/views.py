@@ -16,6 +16,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 
 from data.serializers import UserSerializer, GroupSerializer
+from data.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
 
 from ashlar import views
 from  data import transformers
@@ -131,9 +132,18 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+
     serializer_class = UserSerializer
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (IsAdminOrReadSelfOnly,)
+    queryset = User.objects.all().order_by('-date_joined')
+
+    def get_queryset(self):
+        """Limit non-admin users to only see their own info"""
+        user = self.request.user
+        if user.is_staff:
+            return self.queryset
+        else:
+            return self.queryset.filter(id=user.id)
 
 
 class GroupViewSet(viewsets.ModelViewSet):
@@ -142,7 +152,8 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
-    permission_classes = (permissions.DjangoModelPermissions,)
+    permission_classes = (IsAdminOrReadOnly,)
+
 
 class DriverObtainAuthToken(ObtainAuthToken):
     def post(self, request):
