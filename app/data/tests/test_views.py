@@ -5,7 +5,10 @@ import uuid
 import mock
 import pytz
 
-from rest_framework.test import APITestCase, APIRequestFactory
+from rest_framework.test import APIClient, APITestCase, APIRequestFactory, force_authenticate
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+
 from ashlar.models import RecordSchema, RecordType, Record
 
 from data.views import DriverRecordViewSet
@@ -14,6 +17,16 @@ from data.views import DriverRecordViewSet
 class DriverRecordViewTestCase(APITestCase):
     def setUp(self):
         super(DriverRecordViewTestCase, self).setUp()
+
+        self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+        self.admin.is_superuser = True
+        self.admin.is_staff = True
+        self.admin.save()
+
+        self.admin_client = APIClient()
+        self.admin_client.force_authenticate(user=self.admin)
+        self.factory = APIRequestFactory()
+
         self.now = datetime.now(pytz.utc)
         self.then = self.now - timedelta(days=10)
         self.beforeThen = self.then - timedelta(days=1)
@@ -47,7 +60,7 @@ class DriverRecordViewTestCase(APITestCase):
 
     def test_toddow(self):
         url = '/api/records/toddow/?record_type={}'.format(str(self.record_type.uuid))
-        response = json.loads(self.client.get(url).content)
+        response = json.loads(self.admin_client.get(url).content)
         self.assertEqual(len(response), 2)
         for toddow in response:
             if toddow['dow'] == self.dow:
@@ -78,13 +91,13 @@ class DriverRecordViewTestCase(APITestCase):
         url1 = base.format(rt=self.record_type.uuid,
                            dtmin=self.beforeNow.isoformat(),  # later than `then`
                            dtmax=self.afterNow.isoformat())
-        response_data1 = json.loads(self.client.get(url1).content)
+        response_data1 = json.loads(self.admin_client.get(url1).content)
         self.assertEqual(len(response_data1), 1)
 
         url2 = base.format(rt=self.record_type.uuid,
                            dtmin=self.beforeThen.isoformat(),  # `then`
                            dtmax=self.afterNow.isoformat())
-        response_data2 = json.loads(self.client.get(url2).content)
+        response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
 
     def test_tilekey_param(self):
@@ -95,6 +108,7 @@ class DriverRecordViewTestCase(APITestCase):
             factory = APIRequestFactory()
             view = DriverRecordViewSet.as_view({'get': 'list'})
             request = factory.get('/api/records/', {'tilekey': 'true'})
+            force_authenticate(request, user=self.admin)
             response = view(request)
             self.assertEqual(mocked_redis.call_count, 1)
             self.assertIn('tilekey', response.data)
@@ -102,5 +116,6 @@ class DriverRecordViewTestCase(APITestCase):
             self.assertEqual(type(response.data['tilekey']), type(uuid.uuid4()))
             # Shouldn't be called again if 'tilekey' parameter is missing
             request = factory.get('/api/records/')
+            force_authenticate(request, user=self.admin)
             response = view(request)
             self.assertEqual(mocked_redis.call_count, 1)
