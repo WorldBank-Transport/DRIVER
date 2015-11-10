@@ -8,6 +8,7 @@ import pytz
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory, force_authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
 
 from ashlar.models import RecordSchema, RecordType, Record
 
@@ -18,10 +19,13 @@ class DriverRecordViewTestCase(APITestCase):
     def setUp(self):
         super(DriverRecordViewTestCase, self).setUp()
 
-        self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
-        self.admin.is_superuser = True
-        self.admin.is_staff = True
-        self.admin.save()
+        try:
+            self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
+        except User.DoesNotExist:
+            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+            self.admin.is_superuser = True
+            self.admin.is_staff = True
+            self.admin.save()
 
         self.admin_client = APIClient()
         self.admin_client.force_authenticate(user=self.admin)
@@ -77,7 +81,7 @@ class DriverRecordViewTestCase(APITestCase):
                        minimum=self.beforeThen.isoformat() + 'Z',
                        maximum=datetime.now().isoformat() + 'Z'))
 
-        response = json.loads(self.client.get(url).content)
+        response = json.loads(self.admin_client.get(url).content)
         self.assertEqual(len(response), 2)
         for step in response:
             if step['week'] == self.now.isocalendar()[1]:

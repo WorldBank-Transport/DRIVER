@@ -20,6 +20,11 @@ redis_port: 6379
 csrf_session_key: "seekrit"
 cookie_secret_key: "seekrit"
 
+## DEFAULT ADMIN USER SETTINGS
+driver_admin_username: "admin"
+driver_admin_password: "admin"
+driver_admin_email: "systems+driver@azavea.com"
+
 ## WEB SETTINGS
 web_js_html5mode: "false"
 web_js_api_hostname: "http://localhost:7000"

@@ -17,6 +17,11 @@ redis_bind_address: "{{ hostvars['database']['ansible_ec2_local_ipv4'] }}"
 csrf_session_key: "{{ lookup('env', 'DRIVER_CSRF_KEY') | default('seekrit', true) }}"
 cookie_secret_key: "{{ lookup('env', 'DRIVER_COOKIE_KEY') | default('seekrit', true) }}"
 
+## DEFAULT ADMIN USER SETTINGS
+driver_admin_username: "admin"
+driver_admin_password: "admin"
+driver_admin_email: "systems+driver@azavea.com"
+
 ## WEB SETTINGS
 web_js_html5mode: "false"
 web_js_api_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4'] }}"

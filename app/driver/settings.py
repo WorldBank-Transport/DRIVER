@@ -133,6 +133,12 @@ STATIC_ROOT = os.environ['DJANGO_STATIC_ROOT']
 MEDIA_ROOT = os.environ['DJANGO_MEDIA_ROOT']
 MEDIA_URL = '/media/'
 
+# user and group settings
+DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azavea.com')
+DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
+DEFAULT_ADMIN_PASSWORD = os.environ.get("DRIVER_ADMIN_PASSWORD", 'admin')
+DRIVER_GROUPS = ('driver_read_only',)
+
 # Django OAuth Toolkit
 # https://github.com/evonove/django-oauth-toolkit
 
