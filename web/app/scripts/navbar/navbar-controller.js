@@ -2,13 +2,16 @@
     'use strict';
 
     /* ngInject */
-    function NavbarController($log, $window, $rootScope, $scope, $state,
-                              BoundaryState, GeographyState, InitialState,
+    function NavbarController($rootScope, $scope, $state,
+                              AuthService, BoundaryState, GeographyState, InitialState,
                               MapState, RecordState, WebConfig) {
         var ctl = this;
         var initialized = false;
 
         InitialState.ready().then(init);
+
+        ctl.onLogoutButtonClicked = AuthService.logout;
+        ctl.authenticated = AuthService.isAuthenticated();
         ctl.onGeographySelected = onGeographySelected;
         ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
@@ -27,6 +30,7 @@
         }
 
         $rootScope.$on('$stateChangeSuccess', function(event, toState) {
+            ctl.authenticated = AuthService.isAuthenticated();
             setFilters(toState);
         });
 

@@ -6,7 +6,13 @@
         $locationProvider.html5Mode(ASEConfig.html5Mode.enabled);
         $locationProvider.hashPrefix(ASEConfig.html5Mode.prefix);
 
-        $urlRouterProvider.otherwise('/recordtype');
+        // workaround for infinite redirect when not logged in
+        // https://github.com/angular-ui/ui-router/issues/600
+        $urlRouterProvider.otherwise(function($injector) {
+            var $state = $injector.get('$state');
+            // '/recordtype'
+            $state.go('rt.list');
+        });
     }
 
     /* ngInject */
@@ -21,9 +27,36 @@
     }
 
     /* ngInject */
-    function HttpConfig($httpProvider) {
-        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    function RunConfig($cookies, $http, $rootScope, $state, AuthService, LogoutInterceptor) {
+        // Django CSRF Token compatibility
+        $http.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $http.defaults.xsrfCookieName = 'csrftoken';
+
+        $rootScope.$on('$stateChangeStart', function (event, to, toParams, from, fromParams) {
+
+            if (!AuthService.isAuthenticated()) {
+                event.preventDefault();
+                // broadcast success to avoid infinite redirect
+                // see issue: https://github.com/angular-ui/ui-router/issues/178
+                $state.go('login', null, {notify: false}).then(function() {
+                    $rootScope.$broadcast('$stateChangeSuccess', to, toParams, from, fromParams);
+                });
+                return;
+            }
+        });
+
+        $rootScope.$on(AuthService.events.loggedOut, function () {
+            $rootScope.user = null;
+        });
+
+        $rootScope.$on(LogoutInterceptor.events.logOutUser, function () {
+            AuthService.logout();
+        });
+
+        // Restore user session on full page refresh
+        if (AuthService.isAuthenticated()) {
+            $rootScope.$broadcast(AuthService.events.loggedIn);
+        }
     }
 
     /**
@@ -35,16 +68,19 @@
      * Main module of the application.
      */
     angular.module('ase', [
+        'ase.auth',
         'ase.config',
         'ase.notifications',
+        'ase.navbar',
         'ase.views.geography',
+        'ase.views.login',
         'ase.views.recordtype',
         'ase.resources',
         'ui.router',
         'LocalStorageModule'
     ])
     .config(DefaultRoutingConfig)
-    .config(HttpConfig)
     .config(LocalStorageConfig)
-    .config(LogConfig);
+    .config(LogConfig)
+    .run(RunConfig);
 })();

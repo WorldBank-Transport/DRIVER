@@ -1,9 +1,8 @@
 (function () {
     'use strict';
 
-    angular.module('driver.navbar', [
+    angular.module('ase.navbar', [
         'ase.auth',
-        'driver.state',
         'ui.bootstrap',
         'ui.router'
     ]);

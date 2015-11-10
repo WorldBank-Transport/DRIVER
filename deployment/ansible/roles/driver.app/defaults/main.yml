@@ -1,6 +1,9 @@
 ---
 driver_user: "{{ ansible_ssh_user }}"
 driver_conf:
+  DRIVER_ADMIN_USERNAME: "{{ driver_admin_username }}"
+  DRIVER_ADMIN_PASSWORD: "{{ driver_admin_password }}"
+  DRIVER_ADMIN_EMAIL: "{{ driver_admin_email }}"
   DRIVER_DB_NAME: "{{ postgresql_database }}"
   DRIVER_DB_USER: "{{ postgresql_username }}"
   DRIVER_DB_PASSWORD: "{{ postgresql_password }}"

@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'oauth2_provider',
 
     'django_extensions',
@@ -132,6 +133,12 @@ STATIC_ROOT = os.environ['DJANGO_STATIC_ROOT']
 MEDIA_ROOT = os.environ['DJANGO_MEDIA_ROOT']
 MEDIA_URL = '/media/'
 
+# user and group settings
+DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azavea.com')
+DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
+DEFAULT_ADMIN_PASSWORD = os.environ.get("DRIVER_ADMIN_PASSWORD", 'admin')
+DRIVER_GROUPS = ('driver_read_only',)
+
 # Django OAuth Toolkit
 # https://github.com/evonove/django-oauth-toolkit
 
@@ -148,12 +155,12 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        # TODO: re-enable authentication when we decide on exactly how to handle it
-        #'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # TODO: re-enable authentication when we decide on exactly how to handle it
-        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
@@ -193,9 +200,6 @@ ASHLAR = {
 }
 
 ## Tweak settings depending on deployment target
-if DEVELOP:
-    # Disable on production, this is for the browseable API only
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
 
 if PRODUCTION:
     # Enabled on production? This allows locking write permissions on views

@@ -71,9 +71,13 @@ module.exports = function(config) {
       'app/ase-scripts/resources/**.js',
       'app/ase-scripts/json-editor/module.js',
       'app/ase-scripts/json-editor/**.js',
+      'app/ase-scripts/userdata/module.js',
+      'app/ase-scripts/userdata/**.js',
+      'app/ase-scripts/auth/module.js',
+      'app/ase-scripts/auth/**js',
+
       'app/scripts/notifications/module.js',
       'app/scripts/notifications/**.js',
-
       'app/scripts/navbar/module.js',
       'app/scripts/navbar/**.js',
       'app/scripts/recent-counts/module.js',
@@ -101,6 +105,8 @@ module.exports = function(config) {
       'app/scripts/charts/**.js',
       'app/scripts/views/account/module.js',
       'app/scripts/views/account/**.js',
+      'app/scripts/views/login/module.js',
+      'app/scripts/views/login/**.js',
       'app/scripts/views/dashboard/module.js',
       'app/scripts/views/dashboard/**.js',
       'app/scripts/views/map/module.js',
