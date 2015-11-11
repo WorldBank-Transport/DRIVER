@@ -4,7 +4,6 @@
     </div>
     <div class="tool-content" ng-init="activeChart = 'toddow'">
         <div class="graph-header">
-            <!-- TODO: add this back in when stepwise aggregation is implemented
             <span class="pull-right">
                 <span class="graph-selector glyphicon glyphicon-th"
                       ng-click="activeChart = 'toddow'"
@@ -16,7 +15,6 @@
                       ng-class="{ 'active': activeChart === 'stepwise' }">
                 </span>
             </span>
-            -->
             <h4>Graphs</h4>
         </div>
         <hr />
@@ -24,11 +22,11 @@
             <driver-toddow chart-data="ctl.toddow"
                            ng-show="activeChart === 'toddow'">
             </driver-toddow>
-            <!-- TODO: add this back in when stepwise aggregation is implemented
-            <driver-stepwise chart-data="ctl.records"
+            <driver-stepwise chart-data="ctl.stepwise"
+                             min-date="ctl.minDate"
+                             max-date="ctl.maxDate"
                              ng-show="activeChart === 'stepwise'">
             </driver-stepwise>
-            -->
         </div>
     </div>
 </div>

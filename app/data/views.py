@@ -3,7 +3,11 @@ import uuid
 from dateutil.parser import parse as parse_date
 
 from django.db import connection
-from django.db.models import Case, When, IntegerField, Value, Count
+from django.db.models import (Case,
+                              When,
+                              IntegerField,
+                              Value,
+                              Count)
 
 from django_redis import get_redis_connection
 
@@ -19,7 +23,7 @@ from data.serializers import UserSerializer, GroupSerializer
 from data.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
 
 from ashlar import views
-from  data import transformers
+from data import transformers
 
 class DriverRecordViewSet(views.RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
@@ -65,17 +69,19 @@ class DriverRecordViewSet(views.RecordViewSet):
             queryset = backend().filter_queryset(request, queryset, self)
 
         # Build SQL `case` statement to annotate with the year
-        year_case = Case(*[When(occurred_from__year=year, then=Value(year))
-                           for year in xrange(start_date.year, end_date.year + 1)],
-                         output_field=IntegerField())
+        isoyear_case = Case(*[When(occurred_from__isoyear=year, then=Value(year))
+                              for year in xrange(start_date.year, end_date.year + 1)],
+                            output_field=IntegerField())
         # Build SQL `case` statement to annotate with the day of week
         week_case = Case(*[When(occurred_from__week=week, then=Value(week))
-                           for week in xrange(1, 54)], output_field=IntegerField())
-        annotated_recs = queryset.annotate(year=year_case).annotate(week=week_case)
+                           for week in xrange(1, 54)],
+                         output_field=IntegerField())
+
+        annotated_recs = queryset.annotate(year=isoyear_case).annotate(week=week_case)
 
         # Voodoo to perform aggregations over `week` and `year` combinations
-        counted = (annotated_recs.values('year', 'week')
-                   .order_by('year', 'week')
+        counted = (annotated_recs.values('week', 'year')
+                   .order_by('week', 'year')
                    .annotate(count=Count('week')))
 
         return Response(counted)

@@ -15,6 +15,11 @@
                 method: 'GET',
                 isArray: true
             },
+            stepwise: {
+                url: WebConfig.api.hostname + '/api/records/stepwise/',
+                method: 'GET',
+                isArray: true
+            },
             query: {
                 method: 'GET',
                 transformResponse: function(data) { return angular.fromJson(data).results; },

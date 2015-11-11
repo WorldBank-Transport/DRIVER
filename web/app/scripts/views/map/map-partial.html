@@ -1,6 +1,10 @@
 <main class="map-view">
     <div class="records-map" leaflet-map driver-map-layers zoom-to-boundary></div>
     <div class="tools">
-        <driver-charts records="ctl.records" toddow="ctl.toddow"></driver-charts>
+        <driver-charts stepwise="ctl.stepwise"
+                       min-date="ctl.minDate"
+                       max-date="ctl.maxDate"
+                       toddow="ctl.toddow">
+        </driver-charts>
     </div>
 </main>

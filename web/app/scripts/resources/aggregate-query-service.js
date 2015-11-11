@@ -8,7 +8,8 @@
     function RecordAggregates($q, RecordTypes, RecordState, Records, QueryBuilder) {
         var svc = {
             recentCounts: recentCounts,
-            toddow: toddow
+            toddow: toddow,
+            stepwise: stepwise
         };
         return svc;
 
@@ -28,6 +29,27 @@
 
                 Records.toddow(params).$promise.then(function(toddowData) {
                     deferred.resolve(toddowData);
+                });
+            });
+            return deferred.promise;
+        }
+
+        /**
+         * Retrieve stepwise data - API mirroring the query builder service
+         */
+        function stepwise(doFilter, extraParams) {
+            var deferred = $q.defer();
+            extraParams = extraParams || {};
+            doFilter = doFilter === undefined ? true : doFilter;
+            QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
+                // stepwise should never use a limit
+                params = _.extend(params, extraParams);
+                if (params.limit) {
+                    delete params.limit;
+                }
+
+                Records.stepwise(params).$promise.then(function(stepwiseData) {
+                    deferred.resolve(stepwiseData);
                 });
             });
             return deferred.promise;
