@@ -33,8 +33,7 @@ deploy:
   skip_cleanup: true
   on:
     repo: WorldBank-Transport/DRIVER
-    branch: develop
-    rvm: 1.9.3
+    branch: feature/fix-travis-deploy
 
 after_deploy:
   - rm deployment/driver.pem
