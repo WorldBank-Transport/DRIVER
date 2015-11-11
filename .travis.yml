@@ -12,9 +12,6 @@ language: bash
 services:
   - docker
 
-rvm:
-  - 1.9.3
-
 install:
   - docker build -f ./app/Dockerfile.base -t "quay.io/azavea/driver-app:${TRAVIS_COMMIT:0:7}" ./app
   - docker build -f ./schema_editor/Dockerfile -t "quay.io/azavea/driver-editor:${TRAVIS_COMMIT:0:7}" ./schema_editor
@@ -26,6 +23,7 @@ before_deploy:
   - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
   - sudo pip install ansible==1.9.4
   - openssl aes-256-cbc -K "${encrypted_71b51a189c16_key}" -iv "${encrypted_71b51a189c16_iv}" -in deployment/driver.pem.enc -out deployment/driver.pem -d
+  - export PATH="$PATH:$HOME/.rvm/bin"
 
 deploy:
   provider: script
@@ -34,7 +32,6 @@ deploy:
   on:
     repo: WorldBank-Transport/DRIVER
     branch: develop
-    rvm: 1.9.3
 
 after_deploy:
   - rm deployment/driver.pem
