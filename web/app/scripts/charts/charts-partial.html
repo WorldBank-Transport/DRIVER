@@ -22,10 +22,11 @@
             <driver-toddow chart-data="ctl.toddow"
                            ng-show="activeChart === 'toddow'">
             </driver-toddow>
-            <driver-stepwise chart-data="ctl.records"
+            <driver-stepwise chart-data="ctl.stepwise"
+                             min-date="ctl.minDate"
+                             max-date="ctl.maxDate"
                              ng-show="activeChart === 'stepwise'">
             </driver-stepwise>
-            -->
         </div>
     </div>
 </div>

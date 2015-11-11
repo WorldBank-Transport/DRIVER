@@ -100,13 +100,9 @@
 
                     svg.select('.day').selectAll('g')
                         .append('text')
-                            .text(function(d, i) {
-                                    return theHours[i];
-                            })
+                            .text(function(d, i) { return theHours[i]; })
                             .attr('class', 'label hours')
-                            .attr('x', function(d, i) {
-                                return i * cellSize + 37;
-                            })
+                            .attr('x', function(d, i) { return i * cellSize + 37; })
                             .attr('y', 10);
 
                     // Use try/catch pattern here to prevent unecessary logging before data loads

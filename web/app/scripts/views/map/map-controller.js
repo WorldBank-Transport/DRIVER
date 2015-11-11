@@ -50,6 +50,17 @@
             /* jshint camelcase: true */
 
             RecordAggregates.stepwise(true, params).then(function(stepwiseData) {
+                // minDate and maxDate are important for determining where the barchart begins/ends
+                ctl.minDate = null;
+                ctl.maxDate = null;
+                if (FilterState.filters.hasOwnProperty('__dateRange')) {
+                    if (FilterState.filters.__dateRange.hasOwnProperty('min')) {
+                        ctl.minDate = FilterState.filters.__dateRange.min;
+                    }
+                    if (FilterState.filters.__dateRange.hasOwnProperty('max')) {
+                        ctl.maxDate = FilterState.filters.__dateRange.max;
+                    }
+                }
                 ctl.stepwise = stepwiseData;
             });
 

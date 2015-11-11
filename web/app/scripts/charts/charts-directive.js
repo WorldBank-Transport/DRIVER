@@ -6,7 +6,9 @@
         var module = {
             restrict: 'AE',
             scope: {
-                records: '=',
+                stepwise: '=',
+                minDate: '=',
+                maxDate: '=',
                 toddow: '='
             },
             templateUrl: 'scripts/charts/charts-partial.html',

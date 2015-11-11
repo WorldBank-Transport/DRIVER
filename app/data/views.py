@@ -3,7 +3,12 @@ import uuid
 from dateutil.parser import parse as parse_date
 
 from django.db import connection
-from django.db.models import Case, When, IntegerField, Value, Count
+from django.db.models import (Case,
+                              When,
+                              IntegerField,
+                              Value,
+                              Count,
+                              Q)
 
 from django_redis import get_redis_connection
 
@@ -12,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 
 from ashlar import views
-from  data import transformers
+from data import transformers
 
 class DriverRecordViewSet(views.RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
@@ -58,8 +63,33 @@ class DriverRecordViewSet(views.RecordViewSet):
             queryset = backend().filter_queryset(request, queryset, self)
 
         # Build SQL `case` statement to annotate with the year
-        year_case = Case(*[When(occurred_from__year=year, then=Value(year))
-                           for year in xrange(start_date.year, end_date.year + 1)],
+        # This is hairy: weeks don't line up all that neatly with years, so unless we check on the
+        #  month in which a record occurs (whether it is january or december) whenever there's a
+        #  potential for overlap, the case statement will think that the first week of a given year
+        #  which starts on e.g. December 31st of the *previous* year is a week of that previous
+        #  year.
+        # Not on my watch, pal. These ugly looking Q expressions save us from this by adding just a
+        #  bit of logic when dealing with the first or last weeks of a year
+        prev_year_case = [When(Q(occurred_from__year=year) &
+                               Q(occurred_from__week=1) &
+                               Q(occurred_from__month=12),
+                               then=Value(year + 1))
+                          for year in xrange(start_date.year,
+                                             end_date.year + 1)]
+
+        next_year_case = [When(Q(occurred_from__year=year) &
+                               Q(Q(occurred_from__week=52) |
+                                 Q(occurred_from__week=53)) &
+                               Q(occurred_from__month=1),
+                               then=Value(year - 1))
+                          for year in xrange(start_date.year,
+                                             end_date.year + 1)]
+
+        norm_year_case = [When(occurred_from__year=year, then=Value(year))
+                          for year in xrange(start_date.year,
+                                             end_date.year + 1)]
+
+        year_case = Case(*(prev_year_case + next_year_case + norm_year_case),
                          output_field=IntegerField())
         # Build SQL `case` statement to annotate with the day of week
         week_case = Case(*[When(occurred_from__week=week, then=Value(week))
@@ -67,8 +97,8 @@ class DriverRecordViewSet(views.RecordViewSet):
         annotated_recs = queryset.annotate(year=year_case).annotate(week=week_case)
 
         # Voodoo to perform aggregations over `week` and `year` combinations
-        counted = (annotated_recs.values('year', 'week')
-                   .order_by('year', 'week')
+        counted = (annotated_recs.values('week', 'year')
+                   .order_by('week', 'year')
                    .annotate(count=Count('week')))
 
         return Response(counted)
