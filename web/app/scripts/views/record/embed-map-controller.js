@@ -3,6 +3,9 @@
 
     var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
 
+    // Default level to zoom to when a location is selected or a marker is dropped
+    var zoomInLevel = 17;
+
     /* ngInject */
     function EmbedMapController($log, $scope, $rootScope, TileUrlService) {
         var ctl = this;
@@ -60,7 +63,7 @@
                 }
 
                 // pan/zoom to marker on add
-                ctl.map.setView(latlng, 11, {animate: true});
+                ctl.map.setView(latlng, zoomInLevel, {animate: true});
             }
         }
 
@@ -89,7 +92,7 @@
             var latlng = L.latLng(data.lat, data.lng);
             setMarker(latlng);
             if (recenter) {
-                ctl.map.setView(latlng, 11, {animate: true});
+                ctl.map.setView(latlng, zoomInLevel, {animate: true});
             }
         });
 
