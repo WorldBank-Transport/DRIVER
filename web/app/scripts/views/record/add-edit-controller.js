@@ -151,7 +151,7 @@
         }
 
         function nominatimLookup(text) {
-            return Nominatim.forward(text, bbox);
+            return Nominatim.forward(text);
         }
 
         function nominatimSelect(item) {

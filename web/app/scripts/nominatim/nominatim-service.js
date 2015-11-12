@@ -8,6 +8,9 @@
         var PICKPOINT_NOMINATIM_URL = 'https://crossorigin.me/https://pickpoint.io/api/v1/';
         var SUGGEST_LIMIT = 15;
 
+        // Philippines country code. Limiting by country code seems to work better than the viewbox.
+        var COUNTRY_CODE = 'ph';
+
         var module = {
             forward: forward,
             reverse: reverse
@@ -15,12 +18,12 @@
 
         return module;
 
-        function forward(text, bboxArray) {
+        function forward(text) {
             return $http.get(PICKPOINT_NOMINATIM_URL + 'forward', {
                 params: {
                     key: WebConfig.nominatim.key,
                     q: text,
-                    viewbox: bboxArray.join(','),
+                    countrycodes: COUNTRY_CODE,
                     limit: SUGGEST_LIMIT
                 }
             }).then(function (result) {
