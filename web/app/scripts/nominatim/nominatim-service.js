@@ -18,14 +18,21 @@
 
         return module;
 
-        function forward(text) {
+        function forward(text, bboxArray) {
+            var params = {
+                key: WebConfig.nominatim.key,
+                q: text,
+                countrycodes: COUNTRY_CODE,
+                limit: SUGGEST_LIMIT
+            };
+
+            // bboxArray can sometimes be null, which was causing a null ref error
+            if (bboxArray) {
+                params.viewBox = bboxArray.join(',');
+            }
+
             return $http.get(PICKPOINT_NOMINATIM_URL + 'forward', {
-                params: {
-                    key: WebConfig.nominatim.key,
-                    q: text,
-                    countrycodes: COUNTRY_CODE,
-                    limit: SUGGEST_LIMIT
-                }
+                params: params
             }).then(function (result) {
                 return result.data;
             });
