@@ -4,8 +4,12 @@
     /* ngInject */
     function Nominatim($http, WebConfig) {
 
-        var PICKPOINT_NOMINATIM_URL = 'https://pickpoint.io/api/v1/';
+        // TODO: remove https://crossorigin.me/ prefix when pickpoint.io CORS is fixed
+        var PICKPOINT_NOMINATIM_URL = 'https://crossorigin.me/https://pickpoint.io/api/v1/';
         var SUGGEST_LIMIT = 15;
+
+        // Philippines country code. Limiting by country code seems to work better than the viewbox.
+        var COUNTRY_CODE = 'ph';
 
         var module = {
             forward: forward,
@@ -15,13 +19,20 @@
         return module;
 
         function forward(text, bboxArray) {
+            var params = {
+                key: WebConfig.nominatim.key,
+                q: text,
+                countrycodes: COUNTRY_CODE,
+                limit: SUGGEST_LIMIT
+            };
+
+            // bboxArray can sometimes be null, which was causing a null ref error
+            if (bboxArray) {
+                params.viewBox = bboxArray.join(',');
+            }
+
             return $http.get(PICKPOINT_NOMINATIM_URL + 'forward', {
-                params: {
-                    key: WebConfig.nominatim.key,
-                    q: text,
-                    viewbox: bboxArray.join(','),
-                    limit: SUGGEST_LIMIT
-                }
+                params: params
             }).then(function (result) {
                 return result.data;
             });
