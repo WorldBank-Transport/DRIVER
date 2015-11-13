@@ -1,0 +1,24 @@
+<div class="incident-report modal-content">
+    <div class="modal-content">
+        <div class="close" ng-click="modal.close()">
+            &times;
+        </div>
+        <div class="report-header">
+            <a ui-sref="record.details({ recorduuid: modal.record.uuid })" target="_blank">
+                <h3 class="modal-title">
+                    {{ modal.recordType.label }} Details
+                </h3>
+            </a>
+        </div>
+        <driver-details-tabs
+            class="modal-body"
+            record-schema="modal.recordSchema"
+            record="modal.record">
+        </driver-details-tabs>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="modal.close()">
+                Close
+            </button>
+        </div>
+    </div>
+</div>

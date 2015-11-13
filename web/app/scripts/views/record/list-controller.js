@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($scope, $rootScope, $log, $state, uuid4, FilterState,
+    function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, FilterState,
                                   InitialState, Notifications, RecordSchemas, RecordState,
                                   BoundaryState, QueryBuilder, WebConfig) {
         var ctl = this;
@@ -12,6 +12,7 @@
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
         ctl.getPreviousRecords = getPreviousRecords;
         ctl.getNextRecords = getNextRecords;
+        ctl.showDetailsModal = showDetailsModal;
         ctl.restoreFilters = restoreFilters;
         ctl.isInitialized = false;
 
@@ -104,6 +105,25 @@
         // Loads the next page of paginated record results
         function getNextRecords() {
             loadRecords(ctl.numRecordsPerPage);
+        }
+
+        // Show a details modal for the given record
+        function showDetailsModal(record) {
+            $modal.open({
+                templateUrl: 'scripts/views/record/details-modal-partial.html',
+                controller: 'RecordDetailsModalController as modal',
+                resolve: {
+                    record: function() {
+                        return record;
+                    },
+                    recordType: function() {
+                        return ctl.recordType;
+                    },
+                    recordSchema: function() {
+                        return ctl.recordSchema;
+                    }
+                }
+            });
         }
 
         // listen for event when filterbar is set
