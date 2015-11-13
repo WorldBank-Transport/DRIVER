@@ -29,7 +29,7 @@
                         </td>
 
                         <td class="links">
-                            <a ui-sref="record.details({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">
+                            <a ng-click="ctl.showDetailsModal(record)">
                                 <span class="glyphicon glyphicon-eye-open"></span> View
                             </a>
                             <span class="links-separator">|</span>

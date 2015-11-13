@@ -1,7 +1,18 @@
 driver-record-list {
-	position: fixed;
+    position: fixed;
     top: 105px;
     width: 100%;
     bottom: 0;
     overflow: scroll;
+}
+
+.links a {
+    cursor: pointer;
+}
+
+.modal-footer {
+    margin-top: 50px;
+    margin-bottom: 0;
+    padding-top: 10px;
+    padding-bottom: 0;
 }
