@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, $timeout, debounce,
-                                 FilterState, RecordState, RecordSchemas) {
+    function FilterbarController($log, $scope, $timeout, debounce, RecordSchemaState,
+                                 FilterState, RecordState) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
@@ -13,7 +13,7 @@
 
         function init() {
             RecordState.getSelected().then(function(selected) {
-                onRecordSelected(selected);
+                onRecordTypeSelected(selected);
             });
         }
 
@@ -66,41 +66,20 @@
          * When the record type changes, request the new schema
          */
         $scope.$on('driver.state.recordstate:selected',
-                   function(event, selected) { onRecordSelected(selected); });
+                   function(event, selected) { onRecordTypeSelected(selected); });
 
-        function onRecordSelected(selected) {
+        function onRecordTypeSelected(selected) {
             if (selected) {
                 // get label for add record button
                 ctl.recordLabel = selected.label;
 
-                RecordSchemas.get({
-                  /* jshint ignore:start */
-                  id: selected.current_schema
-                  /* jshint ignore:end */
-                }).$promise.then(function(data) {
-                    var definitions = data.schema.definitions;
-
-                    var namespaced = {};
-                    _.forEach(definitions, function(schema, i) {
-                        _.forEach(schema.properties, function(property, j) {
-                            // merge in `multiple` to keep track of the type of containment
-                            namespaced[i + '#' + j] = _.merge(property, {multiple: schema.multiple});
-                        });
-                    });
-
-                    var conditions = function(val) { return val.isSearchable; };
-                    ctl.filterables = {};
-                    _.forEach(namespaced, function(d, i) {
-                        if (conditions(d)) {
-                            ctl.filterables[i] = d;
-                        }
-                    });
-
-                    //
-                    $timeout(function() {
-                        FilterState.restoreFilters();
-                    });
-                });
+                /* jshint ignore:start */
+                RecordSchemaState.getFilterables(selected.current_schema)
+                  .then(function(filterables) {
+                      ctl.filterables = filterables;
+                      $timeout(function() { FilterState.restoreFilters(); });
+                  });
+                /* jshint ignore:end */
             }
         }
 

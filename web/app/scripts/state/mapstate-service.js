@@ -45,11 +45,11 @@
         }
 
         /**
-         * Get zoomlevel
+         * Get zoomlevel - default to 5
          */
         function getZoom() {
-            $log.debug('Getting stored map zoom...');
-            return zoom;
+            $log.debug('Getting stored map zoom: ' + JSON.stringify(zoom));
+            return zoom || 5;
         }
 
         /**
@@ -65,7 +65,7 @@
          * Get coordinates for the center of the map
          */
         function getLocation() {
-            $log.debug('Getting stored map location...');
+            $log.debug('Getting stored map location: ' + JSON.stringify(location));
             return location;
 
         }

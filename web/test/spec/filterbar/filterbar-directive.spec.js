@@ -39,8 +39,6 @@ describe('driver.filterbar: FilterbarDirective', function () {
         var recordSchemaId = recordSchema.uuid;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-filterbar></driver-filterbar>')(scope);
