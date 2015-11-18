@@ -366,7 +366,7 @@
             /* jshint camelcase: true */
 
             // The ng-click here refers to a function which sits on the map-controller's scope
-            str += '<a style="cursor:pointer" ng-click="showDetailsModal(\'' + record.uuid + '\')"><span class="glyphicon glyphicon-log-in"></span> View</a>';
+            str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')"><span class="glyphicon glyphicon-log-in"></span> View</a>';
             // Hardcoded href because dynamically added
             str += '<a href="/#!/record/' + record.uuid + '/edit" target="_blank"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
             str += '</div></div>';
