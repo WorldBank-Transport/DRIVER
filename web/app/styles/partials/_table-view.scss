@@ -15,14 +15,23 @@
         right: 0;
 
         .links {
-            font-weight: 700;
-            
-            span {
-                margin-right: 5px;
-            }
-            .links-separator {
-                padding: 0 10px;
-                color: #CCC;
+            text-align: right;
+
+            a {
+                font-weight: 700;
+                font-size: 12px;
+                border: 1px solid #ccc;;
+                padding: 4px 10px;
+                border-radius: 99px;
+                margin-left: 8px;
+
+                span { margin-right: 3px; }
+
+                &:hover {
+                    color: #333;
+                    background-color: #e6e6e6;
+                    border-color: #adadad;
+                }
             }
         }
     }

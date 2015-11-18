@@ -340,39 +340,15 @@
          * @returns {String} HTML snippet for a Leaflet popup.
          */
         ctl.buildRecordPopup = function(record) {
-            // read arbitrary record fields object
-
-            var data = JSON.parse(record.data);
-            var startingUnderscoreRegex = /^_/;
-
             // add header with event date constant field
             /* jshint camelcase: false */
             var str = '<div class="record-popup">';
-            str += '<div><h3>Occurred on: ' + record.occurred_from + '</h3>';
+            str += '<div><h5>Incident Details</h5><h3>' + record.occurred_from + '</h3>';
             /* jshint camelcase: true */
 
-            // build HTML for popup from the record object
-            function strFromObj(obj) {
-                angular.forEach(obj, function(value, key) {
-                    // Skip _localId hashes, any other presumably private values
-                    // starting with an underscore, and their children.
-                    // Checking type because some keys are numeric.
-                    if (typeof key === 'string' && !key.match(startingUnderscoreRegex)) {
-                        if (typeof value === 'object') {
-                            str += '<h4>' + key + '</h4><div style="margin:15px;">';
-                            // recursively add child things, indented
-                            strFromObj(value);
-                            str += '</div>';
-                        } else {
-                            // have a simple value; display it
-                            str += '<p>' + key + ': ' + value + '</p>';
-                        }
-                    }
-                });
-            }
-
-            strFromObj(data);
-
+            // TODO: Add in links
+            str += '<a ui-sref=""><span class="glyphicon glyphicon-log-in"></span> View</a>';
+            str += '<a ui-sref=""><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
             str += '</div></div>';
             return str;
         };
