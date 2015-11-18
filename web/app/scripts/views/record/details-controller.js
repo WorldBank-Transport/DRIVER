@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordDetailsController($stateParams,
-                                     Records, RecordSchemas, RecordState) {
+                                     Records, RecordSchemaState, RecordState) {
         var ctl = this;
         initialize();
 
@@ -32,8 +32,8 @@
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
 
-            return RecordSchemas.get({ id: currentSchemaId })
-                .$promise.then(function(recordSchema) {
+            return RecordSchemaState.get(currentSchemaId)
+                .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
         }

@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, FilterState,
-                                  InitialState, Notifications, RecordSchemas, RecordState,
+                                  InitialState, Notifications, RecordSchemaState, RecordState,
                                   BoundaryState, QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
@@ -33,8 +33,8 @@
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
 
-            return RecordSchemas.get({ id: currentSchemaId })
-                .$promise.then(function(recordSchema) {
+            return RecordSchemaState.get(currentSchemaId)
+                .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
         }

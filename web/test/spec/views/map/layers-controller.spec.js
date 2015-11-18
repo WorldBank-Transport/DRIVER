@@ -55,13 +55,15 @@ describe('driver.views.map: Layers Controller', function () {
         MapState.setZoom(7);
 
         var recordTypeUrl = /\/api\/recordtypes\//;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var boundaryUrl = /\/api\/boundaries\//;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
+        var recordsUrl = /\/api\/records\//;
+        var recordSchemaUrl = /\/api\/recordschemas/;
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        var boundaryPolygonsUrl = /api\/boundarypolygons/;
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
-        var recordsUrl = /\/api\/records\//;
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
 
@@ -84,7 +86,7 @@ describe('driver.views.map: Layers Controller', function () {
         // JSONB from record is returned as string from UTFGrid
         record.data = JSON.stringify(record.data);
 
-        var expected = '<div class="record-popup"><div><h5>Incident Details</h5><h3>2015-07-30T17:36:29.263000Z</h3><a ui-sref=""><span class="glyphicon glyphicon-log-in"></span> View</a><a ui-sref=""><span class="glyphicon glyphicon-pencil"></span> Edit</a></div></div>';
+        var expected = '<div id="record-popup" class="record-popup"><div><h5>Accident Details</h5><h3>Thu Jul 30 17:36:29 2015</h3><a ng-click="showDetailsModal(\'35d74ce1-7b08-486b-b791-da9bc1e93cfb\')"><span class="glyphicon glyphicon-log-in"></span> View</a><a href="/#!/record/35d74ce1-7b08-486b-b791-da9bc1e93cfb/edit" target="_blank"><span class="glyphicon glyphicon-pencil"></span> Edit</a></div></div>';
 
         var popup = Controller.buildRecordPopup(record);
         expect(popup).toEqual(expected);

@@ -2,9 +2,33 @@
     'use strict';
 
     /* ngInject */
-    function MapController($rootScope, $scope, BoundaryState, InitialState, FilterState,
-                           Records, RecordSchemas, RecordState, RecordAggregates) {
+    function MapController($rootScope, $scope, $modal, BoundaryState, InitialState, FilterState,
+                           Records, RecordSchemaState, RecordState, RecordAggregates) {
         var ctl = this;
+
+        /** This is one half of some fairly ugly code which serves to wire up a click
+         *  handling event on top of some dynamically generated HTML. The other half is in
+         *  views/map/layers-controller.js.
+         *
+         *  This half has the code that needs to be on scope for linking
+         */
+        $scope.showDetailsModal = function showDetailsModal(recordUUID) {
+            $modal.open({
+                templateUrl: 'scripts/views/record/details-modal-partial.html',
+                controller: 'RecordDetailsModalController as modal',
+                resolve: {
+                    record: function() {
+                        return Records.get({ id: recordUUID }).$promise;
+                    },
+                    recordType: function() {
+                        return ctl.recordType;
+                    },
+                    recordSchema: function() {
+                        return ctl.recordSchema;
+                    }
+                }
+            });
+        };
 
         InitialState.ready().then(init);
 
@@ -38,8 +62,8 @@
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
 
-            return RecordSchemas.get({ id: currentSchemaId })
-                .$promise.then(function(recordSchema) {
+            return RecordSchemaState.get(currentSchemaId)
+                .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
         }

@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, BoundaryState, InitialState, Records, RecordSchemas,
+    function DashboardController($scope, BoundaryState, InitialState, Records, RecordSchemaState,
                                  RecordState, RecordAggregates) {
         var ctl = this;
 
@@ -33,8 +33,8 @@
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
 
-            return RecordSchemas.get({ id: currentSchemaId })
-                .$promise.then(function(recordSchema) {
+            return RecordSchemaState.get(currentSchemaId)
+                .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
         }

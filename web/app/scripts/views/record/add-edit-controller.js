@@ -3,7 +3,7 @@
 
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
-                                     Nominatim, Notifications, Records, RecordSchemas,
+                                     Nominatim, Notifications, Records, RecordSchemaState,
                                      RecordState) {
         var ctl = this;
         var editorData = null;
@@ -108,8 +108,8 @@
             var currentSchemaId = ctl.recordType.current_schema;
             /* jshint camelcase: true */
 
-            return RecordSchemas.get({ id: currentSchemaId })
-                .$promise.then(function(recordSchema) {
+            return RecordSchemaState.get(currentSchemaId)
+                .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
                 });
         }

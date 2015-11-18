@@ -2,13 +2,14 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($q, $log, $scope, $rootScope, $timeout,
-                                    WebConfig, FilterState, RecordState, GeographyState,
-                                    BoundaryState, Records, QueryBuilder, MapState,
-                                    TileUrlService, InitialState) {
+    function DriverLayersController($q, $log, $scope, $rootScope, $timeout, $compile,
+                                    FilterState, RecordState, GeographyState,
+                                    RecordSchemaState, BoundaryState, QueryBuilder,
+                                    MapState, TileUrlService, InitialState) {
         var ctl = this;
 
         ctl.recordType = 'ALL';
+        ctl.recordTypeLabel = 'Record';
         ctl.layerSwitcher = null;
         ctl.drawControl = null;
         ctl.map = null;
@@ -48,9 +49,18 @@
             // get the current record type selection for filtering
             RecordState.getSelected().then(function(selected) {
                 if (selected && selected.uuid) {
+                    /* jshint camelcase: false */
                     ctl.recordType = selected.uuid;
+                    ctl.recordTypeLabel = selected.label;
+                    RecordSchemaState.getFilterables(selected.current_schema)
+                        .then(function(filterables) {
+                            ctl.recordSchemaFilterables = filterables;
+                        });
+                    /* jshint camelcase: true */
                 } else {
+                    ctl.recordSchemaFilterables = [];
                     ctl.recordType = 'ALL';
+                    ctl.recordTypeLabel = 'Record';
                 }
             }).then(function () {
                 return BoundaryState.getSelected().then(function(selected) {
@@ -167,7 +177,14 @@
 
             $scope.$on('driver.state.recordstate:selected', function(event, selected) {
                 if (ctl.recordType !== selected && selected && selected.uuid) {
+                    /* jshint camelcase: false */
                     ctl.recordType = selected.uuid;
+                    ctl.recordTypeLabel = selected.label;
+                    RecordSchemaState.getFilterables(selected.current_schema)
+                        .then(function(filterables) {
+                            ctl.recordSchemaFilterables = filterables;
+                        });
+                    /* jshint camelcase: false */
                     // re-add the layers to refresh with filtered content
                     ctl.setRecordLayers();
                 }
@@ -282,6 +299,7 @@
                         .setLatLng(e.latlng)
                         .setContent(ctl.buildRecordPopup(e.data))
                         .openOn(ctl.map);
+                    $compile($('#record-popup'))($scope);
                 });
                 // TODO: find a reasonable way to get the current layers selected, to add those back
                 // when switching record type, so selected layers does not change with filter change.
@@ -342,13 +360,15 @@
         ctl.buildRecordPopup = function(record) {
             // add header with event date constant field
             /* jshint camelcase: false */
-            var str = '<div class="record-popup">';
-            str += '<div><h5>Incident Details</h5><h3>' + record.occurred_from + '</h3>';
+            var str = '<div id="record-popup" class="record-popup">';
+            str += '<div><h5>' + ctl.recordTypeLabel + ' Details</h5><h3>' +
+                new Date(record.occurred_from).toLocaleString() + '</h3>';
             /* jshint camelcase: true */
 
-            // TODO: Add in links
-            str += '<a ui-sref=""><span class="glyphicon glyphicon-log-in"></span> View</a>';
-            str += '<a ui-sref=""><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+            // The ng-click here refers to a function which sits on the map-controller's scope
+            str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')"><span class="glyphicon glyphicon-log-in"></span> View</a>';
+            // Hardcoded href because dynamically added
+            str += '<a href="/#!/record/' + record.uuid + '/edit" target="_blank"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
             str += '</div></div>';
             return str;
         };

@@ -80,7 +80,7 @@
         // Sets states that can be navigated to (exclude current state, since we're already there)
         function setStates() {
             ctl.stateSelected = $state.current;
-            ctl.availableStates = _.chain($state.get())
+            ctl.availableStates = _($state.get())
                 .map(function(name) { return $state.get(name); })
                 .filter(function(state) {
                     return state.showInNavbar && state.name !== $state.get().name;
