@@ -29,3 +29,4 @@ web_js_windshaft_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4']
 
 editor_js_html5mode: "false"
 editor_js_api_hostname: "http://{{ hostvars['app']['ansible_ec2_public_ipv4'] }}"
+google_analytics_id: "GTM-5B5G65"

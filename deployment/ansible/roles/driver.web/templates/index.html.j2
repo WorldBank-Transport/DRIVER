@@ -1,0 +1,209 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>DRIVER</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.css" />
+    <link rel="stylesheet" href="bower_components/angular-spinkit/build/angular-spinkit.min.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-select/dist/css/bootstrap-select.css" />
+    <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="bower_components/leaflet-dist/leaflet.css" />
+    <link rel="stylesheet" href="bower_components/leaflet-draw/dist/leaflet.draw.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="driver">
+
+    <!-- Google Tag Manager -->
+    <noscript><iframe src="//www.googletagmanager.com/ns.html?id={{ google_analytics_id }}"height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5B5G65');</script>
+    <!-- End Google Tag Manager -->
+
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <driver-navbar></driver-navbar>
+    <main ui-view></main>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src='bower_components/jquery/dist/jquery.js'></script>
+    <script src='bower_components/angular/angular.js'></script>
+    <script src='bower_components/moment/moment.js'></script>
+    <script src='bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js'></script>
+    <script src='bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    <script src='bower_components/angular-bootstrap-datetimepicker-directive/angular-bootstrap-datetimepicker-directive.js'></script>
+    <script src='bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js'></script>
+    <script src='bower_components/angular-animate/angular-animate.js'></script>
+    <script src='bower_components/angular-aria/angular-aria.js'></script>
+    <script src='bower_components/angular-cookies/angular-cookies.js'></script>
+    <script src='bower_components/angular-spinkit/build/angular-spinkit.js'></script>
+    <script src='bower_components/angular-resource/angular-resource.js'></script>
+    <script src='bower_components/angular-sanitize/angular-sanitize.js'></script>
+    <script src='bower_components/angular-ui-router/release/angular-ui-router.js'></script>
+    <script src='bower_components/angular-bootstrap/ui-bootstrap-tpls.js'></script>
+    <script src='bower_components/bootstrap-select/dist/js/bootstrap-select.js'></script>
+    <script src='bower_components/angular-bootstrap-select/build/angular-bootstrap-select.js'></script>
+    <script src='bower_components/angular-uuid/uuid.min.js'></script>
+    <script src='bower_components/angular-local-storage/dist/angular-local-storage.js'></script>
+    <script src='bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js'></script>
+    <script src='bower_components/ng-file-upload/ng-file-upload.js'></script>
+    <script src='bower_components/json-editor/dist/jsoneditor.js'></script>
+    <script src='bower_components/ng-debounce/angular-debounce.js'></script>
+    <script src='bower_components/lodash/lodash.js'></script>
+    <script src='bower_components/leaflet/dist/leaflet-src.js'></script>
+    <script src='bower_components/leaflet-draw/dist/leaflet.draw-src.js'></script>
+    <script src='bower_components/Leaflet.utfgrid/dist/leaflet.utfgrid.js'></script>
+    <script src='bower_components/d3/d3.js'></script>
+    <script src='bower_components/d3-tip/index.js'></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/config.js"></script>
+
+    <!-- TODO: use bower instead of symlink -->
+    <script src="ase-scripts/config.js"></script>
+    <script src="ase-scripts/userdata/module.js"></script>
+    <script src="ase-scripts/userdata/user-service.js"></script>
+    <script src="ase-scripts/auth/module.js"></script>
+    <script src="ase-scripts/auth/auth-interceptor.js"></script>
+    <script src="ase-scripts/auth/auth-service.js"></script>
+    <script src="ase-scripts/auth/logout-interceptor.js"></script>
+    <script src="ase-scripts/json-editor/module.js"></script>
+    <script src="ase-scripts/json-editor/json-editor-defaults-service.js"></script>
+    <script src="ase-scripts/json-editor/json-editor-directive.js"></script>
+    <script src="ase-scripts/resources/module.js"></script>
+    <script src="ase-scripts/resources/builderschemas-service.js"></script>
+    <script src="ase-scripts/resources/geography-service.js"></script>
+    <script src="ase-scripts/resources/recordschemas-service.js"></script>
+    <script src="ase-scripts/resources/recordtypes-service.js"></script>
+    <script src="ase-scripts/schemas/module.js"></script>
+    <script src="ase-scripts/schemas/schemas-service.js"></script>
+
+    <!-- notifications has it's own symlink, since it needs to load HTML at a certain location -->
+    <script src="scripts/notifications/module.js"></script>
+    <script src="scripts/notifications/notifications-service.js"></script>
+    <script src="scripts/notifications/notifications-directive.js"></script>
+    <script src="scripts/notifications/notifications-controller.js"></script>
+    <script src="scripts/navbar/module.js"></script>
+    <script src="scripts/navbar/navbar-controller.js"></script>
+    <script src="scripts/navbar/navbar-directive.js"></script>
+    <script src="scripts/resources/module.js"></script>
+    <script src="scripts/resources/boundaries-service.js"></script>
+    <script src="scripts/resources/polygons-service.js"></script>
+    <script src="scripts/resources/records-service.js"></script>
+    <script src="scripts/resources/query-builder-service.js"></script>
+    <script src="scripts/resources/aggregate-query-service.js"></script>
+    <script src="scripts/state/module.js"></script>
+    <script src="scripts/state/initialstate-service.js"></script>
+    <script src="scripts/state/filters-service.js"></script>
+    <script src="scripts/state/mapstate-service.js"></script>
+    <script src="scripts/state/recordstate-service.js"></script>
+    <script src="scripts/state/boundarystate-service.js"></script>
+    <script src="scripts/state/geographystate-service.js"></script>
+    <script src="scripts/state/zoom-to-boundary-directive.js"></script>
+
+    <script src="scripts/nominatim/module.js"></script>
+    <script src="scripts/nominatim/nominatim-service.js"></script>
+
+    <script src="scripts/filterbar/module.js"></script>
+    <script src="scripts/filterbar/label-formatter.js"></script>
+    <script src="scripts/filterbar/filterbar-directive.js"></script>
+    <script src="scripts/filterbar/filterbar-controller.js"></script>
+    <script src="scripts/filterbar/numeric-range-directive.js"></script>
+    <script src="scripts/filterbar/numeric-range-controller.js"></script>
+    <script src="scripts/filterbar/date-range-directive.js"></script>
+    <script src="scripts/filterbar/date-range-controller.js"></script>
+    <script src="scripts/filterbar/options-directive.js"></script>
+    <script src="scripts/filterbar/options-controller.js"></script>
+
+    <script src="scripts/recent-proportions/module.js"></script>
+    <script src="scripts/recent-proportions/recent-proportions-directive.js"></script>
+    <script src="scripts/recent-proportions/recent-proportions-controller.js"></script>
+
+    <script src="scripts/recent-counts/module.js"></script>
+    <script src="scripts/recent-counts/recent-counts-directive.js"></script>
+    <script src="scripts/recent-counts/recent-counts-controller.js"></script>
+
+    <script src="scripts/black-spots/module.js"></script>
+    <script src="scripts/black-spots/black-spots-directive.js"></script>
+    <script src="scripts/black-spots/black-spots-controller.js"></script>
+
+    <script src="scripts/saved-filters/module.js"></script>
+    <script src="scripts/saved-filters/saved-filters-directive.js"></script>
+    <script src="scripts/saved-filters/saved-filters-controller.js"></script>
+
+    <script src="scripts/leaflet/module.js"></script>
+    <script src="scripts/leaflet/leaflet-map-directive.js"></script>
+    <script src="scripts/leaflet/leaflet-defaults-provider.js"></script>
+
+    <script src="scripts/details/module.js"></script>
+    <script src="scripts/details/details-field-controller.js"></script>
+    <script src="scripts/details/details-field-directive.js"></script>
+    <script src="scripts/details/details-constants-controller.js"></script>
+    <script src="scripts/details/details-constants-directive.js"></script>
+    <script src="scripts/details/details-image-controller.js"></script>
+    <script src="scripts/details/details-image-directive.js"></script>
+    <script src="scripts/details/details-multiple-controller.js"></script>
+    <script src="scripts/details/details-multiple-directive.js"></script>
+    <script src="scripts/details/details-reference-controller.js"></script>
+    <script src="scripts/details/details-reference-directive.js"></script>
+    <script src="scripts/details/details-selectlist-controller.js"></script>
+    <script src="scripts/details/details-selectlist-directive.js"></script>
+    <script src="scripts/details/details-single-controller.js"></script>
+    <script src="scripts/details/details-single-directive.js"></script>
+    <script src="scripts/details/details-tabs-controller.js"></script>
+    <script src="scripts/details/details-tabs-directive.js"></script>
+    <script src="scripts/details/details-text-controller.js"></script>
+    <script src="scripts/details/details-text-directive.js"></script>
+
+    <script src="scripts/views/account/module.js"></script>
+    <script src="scripts/views/account/account-controller.js"></script>
+    <script src="scripts/views/account/account-directive.js"></script>
+    <script src="scripts/views/login/module.js"></script>
+    <script src="scripts/views/login/auth-controller.js"></script>
+    <script src="scripts/views/dashboard/module.js"></script>
+    <script src="scripts/views/dashboard/dashboard-controller.js"></script>
+    <script src="scripts/views/dashboard/dashboard-directive.js"></script>
+    <script src="scripts/map-layers/module.js"></script>
+    <script src="scripts/map-layers/tile-url-service.js"></script>
+    <script src="scripts/map-layers/recent-events/module.js"></script>
+    <script src="scripts/map-layers/recent-events/recent-events-layer-directive.js"></script>
+    <script src="scripts/views/map/module.js"></script>
+    <script src="scripts/views/map/map-controller.js"></script>
+    <script src="scripts/views/map/map-directive.js"></script>
+    <script src="scripts/views/map/layers-controller.js"></script>
+    <script src="scripts/views/map/layers-directive.js"></script>
+    <script src="scripts/stepwise/module.js"></script>
+    <script src="scripts/stepwise/stepwise-directive.js"></script>
+    <script src="scripts/toddow/module.js"></script>
+    <script src="scripts/toddow/toddow-directive.js"></script>
+    <script src="scripts/charts/module.js"></script>
+    <script src="scripts/charts/charts-controller.js"></script>
+    <script src="scripts/charts/charts-directive.js"></script>
+    <script src="scripts/views/record/module.js"></script>
+    <script src="scripts/views/record/embed-map-controller.js"></script>
+    <script src="scripts/views/record/embed-map-directive.js"></script>
+    <script src="scripts/views/record/add-edit-controller.js"></script>
+    <script src="scripts/views/record/add-edit-directive.js"></script>
+    <script src="scripts/views/record/details-controller.js"></script>
+    <script src="scripts/views/record/details-directive.js"></script>
+    <script src="scripts/views/record/details-modal-controller.js"></script>
+    <script src="scripts/views/record/list-controller.js"></script>
+    <script src="scripts/views/record/list-directive.js"></script>
+    <script src="scripts/app.js"></script>
+    <!-- endbuild -->
+
+</body>
+</html>
