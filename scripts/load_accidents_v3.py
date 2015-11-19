@@ -95,24 +95,28 @@ def transform(record, schema_id):
     return obj
 
 
-def load(obj, api):
+def load(obj, api, headers=None):
     """Load a transformed object into the data store via the API"""
+    if headers is None:
+        headers = {}
     response = requests.post(api + '/records/',
                              data=json.dumps(obj),
-                             headers={'content-type': 'application/json'})
+                             headers=dict({'content-type': 'application/json'}.items() +
+                                          headers.items()))
     if response.status_code != 201:
         logger.error(response.text)
     response.raise_for_status()
 
 
-def create_schema(schema_path, api):
+def create_schema(schema_path, api, headers=None):
     """Create a recordtype/schema into which to load all new objects"""
     # Create record type
     response = requests.post(api + '/recordtypes/',
                              data={'label': 'Accident',
                                    'plural_label': 'Accidents',
                                    'description': 'Historical accident data',
-                                   'active': True})
+                                   'active': True},
+                             headers=headers)
     response.raise_for_status()
     rectype_id = response.json()['uuid']
     logger.info('Created RecordType')
@@ -122,7 +126,8 @@ def create_schema(schema_path, api):
         response = requests.post(api + '/recordschemas/',
                                  data=json.dumps({u'record_type': rectype_id,
                                                   u'schema': schema_json}),
-                                 headers={'content-type': 'application/json'})
+                                 headers=dict({'content-type': 'application/json'}.items() +
+                                              headers.items()))
     logger.debug(response.json())
     response.raise_for_status()
     logger.info('Created RecordSchema')
@@ -137,10 +142,16 @@ def main():
                                              'accident_schema_v3.json'))
     parser.add_argument('--api-url', help='API host / path to target for loading data',
                         default='http://localhost:7000/api')
+    parser.add_argument('--authz', help='Authorization header')
     args = parser.parse_args()
 
+    headers = None
+
+    if args.authz:
+        headers = {'Authorization': args.authz}
+
     # Do the work
-    schema_id = create_schema(args.schema_path, args.api_url)
+    schema_id = create_schema(args.schema_path, args.api_url, headers)
     logger.info("Loading data")
     count = 1
 
@@ -154,7 +165,7 @@ def main():
             if count % 100 == 0:
                 logger.info("{0} (file {1} of {2})".format(
                     count, files.index(csv_file) + 1, len(files)))
-            load(transform(record, schema_id), args.api_url)
+            load(transform(record, schema_id), args.api_url, headers)
             count += 1
     logger.info('Loading complete')
 
