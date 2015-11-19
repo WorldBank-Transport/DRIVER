@@ -38,6 +38,13 @@
                 },
                 'selectlist': { // Select list
                     toProperty: function(fieldData) {
+                        if (fieldData.displayType === 'checkbox') {
+                            return {
+                                type: 'multiselect',
+                                format: 'checkbox',
+                                items: { enum: fieldData.fieldOptions }
+                            };
+                        }
                         return {
                             type: 'string',
                             enum: fieldData.fieldOptions,
