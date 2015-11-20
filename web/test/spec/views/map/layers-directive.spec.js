@@ -22,17 +22,19 @@ describe('driver.views.map: Layers Directive', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
+    var DriverResourcesMock;
     var ResourcesMock;
     var InitialState;
 
     var Element;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
-                                _ResourcesMock_, _InitialState_) {
+                                _DriverResourcesMock_, _ResourcesMock_, _InitialState_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
+        DriverResourcesMock = _DriverResourcesMock_;
         ResourcesMock = _ResourcesMock_;
         InitialState = _InitialState_;
 
@@ -43,7 +45,7 @@ describe('driver.views.map: Layers Directive', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var boundaryUrl = /\/api\/boundaries\//;
-        $httpBackend.whenGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
+        $httpBackend.whenGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
         var recordSchemaUrl = /\/api\/recordschemas/;
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         var boundaryPolygonsUrl = /api\/boundarypolygons/;

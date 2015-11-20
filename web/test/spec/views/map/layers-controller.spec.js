@@ -60,7 +60,7 @@ describe('driver.views.map: Layers Controller', function () {
         var recordsUrl = /\/api\/records\//;
         var recordSchemaUrl = /\/api\/recordschemas/;
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
