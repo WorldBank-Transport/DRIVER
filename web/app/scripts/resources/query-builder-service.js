@@ -118,7 +118,7 @@
                 if (!isNaN(min.getTime())) {
                     paramObj.occurred_min = min.toISOString();
                 }
-                var max = new Date(maxDateString + ' 23:59:59.999');
+                var max = new Date(maxDateString + ' 23:59:59');
                 if (!isNaN(max.getTime())) {
                     paramObj.occurred_max = max.toISOString();
                 }
