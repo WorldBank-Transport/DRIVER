@@ -31,6 +31,7 @@
       --volumes-from driver-editor
       --volume {{ editor_scripts_dir }}/config.js:{{ editor_scripts_dir }}/config.js
       --volume {{ web_scripts_dir }}/config.js:{{ web_scripts_dir }}/config.js
+      --volume {{ web_dir }}/app/index.html:{{ web_dir }}/app/index.html
       --volume {{ web_build_dir }}:{{ web_build_dir }}
       --log-driver syslog
       quay.io/azavea/driver-web:latest
