@@ -3,7 +3,7 @@
 
     /* ngInject */
     function MapController($rootScope, $scope, $modal, BoundaryState, InitialState, FilterState,
-                           Records, RecordSchemaState, RecordState, RecordAggregates) {
+                           Records, RecordSchemaState, RecordState, MapState, RecordAggregates) {
         var ctl = this;
 
         /** This is one half of some fairly ugly code which serves to wire up a click
@@ -70,8 +70,15 @@
 
         function loadRecords() {
             /* jshint camelcase: false */
-            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
+            var params = {};
+            if (ctl.boundaryId) {
+                params.polygon_id = ctl.boundaryId;
+            }
             /* jshint camelcase: true */
+            var userDrawnPoly = MapState.getFilterGeoJSON();
+            if (userDrawnPoly) {
+                params.polygon = userDrawnPoly;
+            }
 
             RecordAggregates.stepwise(true, params).then(function(stepwiseData) {
                 // minDate and maxDate are important for determining where the barchart begins/ends
