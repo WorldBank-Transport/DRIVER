@@ -33,7 +33,7 @@ describe('driver.nominatim: Nominatim', function () {
         var reverseUrl = /reverse/;
         $httpBackend.whenGET(reverseUrl).respond(NominatimMock.ReverseResponse);
         Nominatim.reverse(120.597, 16.414).then(function (result) {
-            expect(result).toEqual('ECCO Building, Gen Luna, Court of Appeals Compound, Prieto Compound, Baguio, Benguet, Cordillera Administrative Region, 2600, Philippines');
+            expect(result.display_name).toEqual('ECCO Building, Gen Luna, Court of Appeals Compound, Prieto Compound, Baguio, Benguet, Cordillera Administrative Region, 2600, Philippines');
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
