@@ -44,3 +44,9 @@ class IsAdminOrReadOnly(permissions.BasePermission):
                 return True
 
         return False
+
+
+class IsOwnerOrAdmin(permissions.BasePermission):
+    """Allow access only to the user who created the object, and admins"""
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user or request.user.is_staff

@@ -20,10 +20,11 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 
 from data.serializers import UserSerializer, GroupSerializer
-from data.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
+from driver_auth.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
 
 from ashlar import views
 from data import transformers
+
 
 class DriverRecordViewSet(views.RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration

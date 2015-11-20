@@ -49,7 +49,9 @@ INSTALLED_APPS = (
 
     'ashlar',
 
+    'driver_auth',
     'data',
+    'user_filters',
 )
 
 MIDDLEWARE_CLASSES = (

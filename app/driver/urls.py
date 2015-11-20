@@ -6,24 +6,26 @@ from rest_framework import routers
 
 from ashlar import views as a_views
 
-from data import views as drv_views
+from data import views as data_views
+from user_filters import views as filt_views
 
 router = routers.DefaultRouter()
 router.register('boundaries', a_views.BoundaryViewSet)
 router.register('boundarypolygons', a_views.BoundaryPolygonViewSet)
-router.register('records', drv_views.DriverRecordViewSet)
+router.register('records', data_views.DriverRecordViewSet)
+router.register('userfilters', filt_views.SavedFilterViewSet, base_name='userfilters')
 router.register('recordschemas', a_views.RecordSchemaViewSet)
 router.register('recordtypes', a_views.RecordTypeViewSet)
 
 # user management
-router.register(r'users', drv_views.UserViewSet)
-router.register(r'groups', drv_views.GroupViewSet)
+router.register(r'users', data_views.UserViewSet)
+router.register(r'groups', data_views.GroupViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(router.urls)),
     # get token for given username/password
-    url(r'^api-token-auth/', drv_views.obtain_auth_token),
+    url(r'^api-token-auth/', data_views.obtain_auth_token),
 ]
 
 # Allow login to the browseable API if in debug mode
