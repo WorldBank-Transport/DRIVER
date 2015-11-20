@@ -23,7 +23,8 @@
                 key: WebConfig.nominatim.key,
                 q: text,
                 countrycodes: COUNTRY_CODE,
-                limit: SUGGEST_LIMIT
+                limit: SUGGEST_LIMIT,
+                addressdetails: 1
             };
 
             // bboxArray can sometimes be null, which was causing a null ref error
@@ -47,9 +48,7 @@
                     lon: x
                 }
             }).then(function (result) {
-                /*jshint camelcase: false */
-                return result.data.display_name;
-                /*jshint camelcase: true */
+                return result.data;
             });
         }
     }

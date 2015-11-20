@@ -28,7 +28,17 @@
             ctl.occurredFromOptions = {format: dateTimeFormat};
             ctl.occurredToOptions = {format: dateTimeFormat};
 
-            ctl.nominatimValue = '';
+            // Only location text is currently being displayed in the UI. The other nominatim
+            // values are only being stored. The variables have been placed on the controller
+            // since we may want to display them at some point. These are some common fields
+            // that are on many of the returned results, however not all are always present.
+            ctl.nominatimLocationText = '';
+            ctl.nominatimCity = '';
+            ctl.nominatimCityDistrict = '';
+            ctl.nominatimCounty = '';
+            ctl.nominatimNeighborhood = '';
+            ctl.nominatimRoad = '';
+            ctl.nominatimState = '';
 
             ctl.constantFieldErrors = null;
             ctl.geom = {
@@ -53,9 +63,17 @@
 
             $scope.$watchCollection(function () { return ctl.geom; }, function (newVal) {
                 if (newVal && newVal.lat && newVal.lng) {
-                    if(!ctl.nominatimValue || !suppressReverseNominatim) {
-                        Nominatim.reverse(newVal.lng, newVal.lat).then(function (displayName) {
-                            ctl.nominatimValue = displayName;
+                    if(!ctl.nominatimLocationText || !suppressReverseNominatim) {
+                        Nominatim.reverse(newVal.lng, newVal.lat).then(function (nominatimData) {
+                            /* jshint camelcase: false */
+                            ctl.nominatimLocationText = nominatimData.display_name;
+                            ctl.nominatimCity = nominatimData.address.city;
+                            ctl.nominatimCityDistrict = nominatimData.address.city_district;
+                            ctl.nominatimCounty = nominatimData.address.county;
+                            ctl.nominatimNeighborhood = nominatimData.address.neighbourhood;
+                            ctl.nominatimRoad = nominatimData.address.road;
+                            ctl.nominatimState = nominatimData.address.state;
+                            /* jshint camelcase: true */
                         });
                     } else {
                         suppressReverseNominatim = false;
@@ -88,7 +106,13 @@
                     // set lat/lng array into bind-able object
                     ctl.geom.lat = ctl.record.geom.coordinates[1];
                     ctl.geom.lng = ctl.record.geom.coordinates[0];
-                    ctl.nominatimValue = ctl.record.location_text;
+                    ctl.nominatimLocationText = ctl.record.location_text;
+                    ctl.nominatimCity = ctl.record.city;
+                    ctl.nominatimCityDistrict = ctl.record.city_district;
+                    ctl.nominatimCounty = ctl.record.county;
+                    ctl.nominatimNeighborhood = ctl.record.neighborhood;
+                    ctl.nominatimRoad = ctl.record.road;
+                    ctl.nominatimState = ctl.record.state;
                     /* jshint camelcase: true */
 
                     // notify map
@@ -294,9 +318,16 @@
 
             /* jshint camelcase: false */
             if (ctl.record.geom) {
-                // set back coordinates and location
+                // set back coordinates and nominatim values
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
-                ctl.record.location_text = ctl.nominatimValue;
+                ctl.record.location_text = ctl.nominatimLocationText;
+                ctl.record.city = ctl.nominatimCity;
+                ctl.record.city_district = ctl.nominatimCityDistrict;
+                ctl.record.county = ctl.nominatimCounty;
+                ctl.record.neighborhood = ctl.nominatimNeighborhood;
+                ctl.record.road = ctl.nominatimRoad;
+                ctl.record.state = ctl.nominatimState;
+
                 saveMethod = 'update';
                 // set `to` date to match `from` date
                 ctl.record.occurred_to = ctl.record.occurred_from;
@@ -310,7 +341,14 @@
 
                     // constant fields
                     geom: 'POINT(' + ctl.geom.lng + ' ' + ctl.geom.lat + ')',
-                    location_text: ctl.nominatimValue,
+                    location_text: ctl.nominatimLocationText,
+                    city: ctl.nominatimCity,
+                    city_district: ctl.nominatimCityDistrict,
+                    county: ctl.nominatimCounty,
+                    neighborhood: ctl.nominatimNeighborhood,
+                    road: ctl.nominatimRoad,
+                    state: ctl.nominatimState,
+
                     occurred_from: ctl.record.occurred_from,
                     // set `to` date to match `from` date
                     occurred_to: ctl.record.occurred_from
