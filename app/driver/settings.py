@@ -43,7 +43,6 @@ INSTALLED_APPS = (
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
-    'oauth2_provider',
 
     'django_extensions',
 
@@ -141,14 +140,6 @@ DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
 DEFAULT_ADMIN_PASSWORD = os.environ.get("DRIVER_ADMIN_PASSWORD", 'admin')
 DRIVER_GROUPS = ('driver_read_only',)
 
-# Django OAuth Toolkit
-# https://github.com/evonove/django-oauth-toolkit
-
-OAUTH2_PROVIDER = {
-    # Some default sensible scopes, could change later if more fine-grained scopes are necessary
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-}
-
 # Django Rest Framework
 # http://www.django-rest-framework.org/
 
@@ -159,7 +150,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
@@ -200,10 +190,3 @@ ASHLAR = {
     # plane.
     'SRID': 4326,
 }
-
-## Tweak settings depending on deployment target
-
-if PRODUCTION:
-    # Enabled on production? This allows locking write permissions on views
-    # to users that request tokens with write scope
-    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] += ('oauth2_provider.ext.rest_framework.TokenHasReadWriteScope',)
