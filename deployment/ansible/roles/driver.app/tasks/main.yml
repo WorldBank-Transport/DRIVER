@@ -66,8 +66,3 @@
   command: >
     /usr/bin/docker exec -ti driver-app ./manage.py migrate
   when: developing_or_staging
-
-- name: Add OAuth2 default application
-  command: >
-    /usr/bin/docker exec -ti driver-app ./manage.py create_oauth_app admin
-  when: developing_or_staging
