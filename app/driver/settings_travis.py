@@ -20,6 +20,8 @@ DATABASES = {
         'PORT': 5432,
         'USER': 'prs',
         'PASSWORD': 'prs',
+        'oauth_client_id': '',
+        'oauth_client_secret': '',
         'CONN_MAX_AGE': 3600,  # in seconds
     }
 }

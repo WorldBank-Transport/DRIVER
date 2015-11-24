@@ -255,8 +255,10 @@ HOST_URL = os.environ.get('DRIVER_APP_HOST', os.environ.get('HOSTNAME'))
 GOOGLE_OAUTH_CLIENT_ID = os.environ.get('OAUTH_CLIENT_ID', '')
 GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get('OAUTH_CLIENT_SECRET', '')
 
-AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
-                          'djangooidc.backends.OpenIdConnectBackend')
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+
+if GOOGLE_OAUTH_CLIENT_ID:
+    AUTHENTICATION_BACKENDS += ('djangooidc.backends.OpenIdConnectBackend',)
 
 LOGIN_URL = 'openid'
 
