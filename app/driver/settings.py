@@ -248,11 +248,6 @@ ASHLAR = {
     'SRID': 4326,
 }
 
-## Tweak settings depending on deployment target
-if DEVELOP:
-    # Disable on production, this is for the browseable API only
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
-
 ## django-oidc settings
 HOST_URL = os.environ.get('DRIVER_APP_HOST', os.environ.get('HOSTNAME'))
 
@@ -342,5 +337,9 @@ OIDC_PROVIDERS = {
 
 ## Tweak settings depending on deployment target
 if DEVELOP:
-    # Disable on production, this is for the browseable API only
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
+    # Disable session auth on production, this is for the browseable API only.
+    # NB: session auth must appear before token auth for both to work.
+    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
