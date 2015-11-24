@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     # get token for given username/password
     url(r'^api-token-auth/', data_views.obtain_auth_token),
+    # OIDC
+    url(r'openid/', include('djangooidc.urls')),
 ]
 
 # Allow login to the browseable API if in debug mode
