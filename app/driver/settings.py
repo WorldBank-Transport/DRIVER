@@ -16,7 +16,8 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 DEVELOP = True if os.environ.get('DJANGO_ENV', 'development') == 'development' else False
-PRODUCTION = not DEVELOP
+STAGING = True if os.environ.get('DJANGO_ENV', 'staging') == 'staging' else False
+PRODUCTION = not DEVELOP and not STAGING
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -28,7 +29,6 @@ SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 DEBUG = DEVELOP
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -192,14 +192,6 @@ LOGGING = {
     }
 }
 
-# Django OAuth Toolkit
-# https://github.com/evonove/django-oauth-toolkit
-
-OAUTH2_PROVIDER = {
-    # Some default sensible scopes, could change later if more fine-grained scopes are necessary
-    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Access to your groups'}
-}
-
 # user and group settings
 DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azavea.com')
 DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
@@ -262,11 +254,11 @@ if DEVELOP:
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
 
 ## django-oidc settings
+HOST_URL = os.environ.get('DRIVER_APP_HOST', os.environ.get('HOSTNAME'))
 
-# TODO: set these during provisioning
-HOST_URL = os.environ['HOST_URL']
-GOOGLE_OAUTH_CLIENT_ID = os.environ['GOOGLE_OAUTH_CLIENT_ID']
-GOOGLE_OAUTH_CLIENT_SECRET = os.environ['GOOGLE_OAUTH_CLIENT_SECRET']
+# TODO: conditionally set for GLUU in production
+GOOGLE_OAUTH_CLIENT_ID = os.environ.get('OAUTH_CLIENT_ID', '')
+GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get('OAUTH_CLIENT_SECRET', '')
 
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',
                           'djangooidc.backends.OpenIdConnectBackend')
@@ -281,7 +273,7 @@ OIDC_VERIFY_SSL = True
 # Ignored if auto registration is not used.
 OIDC_DYNAMIC_CLIENT_REGISTRATION_DATA = {
     "application_type": "web",
-    "contacts": ["kkillebrew@azavea.com"],
+    "contacts": ["list-geoinsights@azavea.com"],
     "redirect_uris": [HOST_URL + "/openid/callback/login/", ],
     "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/", ]
 }
@@ -348,15 +340,7 @@ OIDC_PROVIDERS = {
     }
 }
 
-OIDC_PROVIDERS = {}
-#######################################################################
-
 ## Tweak settings depending on deployment target
 if DEVELOP:
     # Disable on production, this is for the browseable API only
     REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] += ('rest_framework.authentication.SessionAuthentication',)
-
-if PRODUCTION:
-    # Enabled on production? This allows locking write permissions on views
-    # to users that request tokens with write scope
-    REST_FRAMEWORK['DEFAULT_PERMISSION_CLASSES'] += ('oauth2_provider.ext.rest_framework.TokenHasReadWriteScope',)
