@@ -21,22 +21,22 @@
         </ul>
     </div>
     <div class="pull-right">
-        <a 
-            class="btn btn-default btn-icon" 
+        <a ng-click="filterbar.showSavedFiltersModal()"
+            class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="bottom"
             tooltip="Saved Filters"><span class="glyphicon glyphicon-filter"></span></a>
-        <a 
-            class="btn btn-default btn-icon" 
-            tooltip-trigger
-            tooltip-placement="bottom" 
-            tooltip="Clear Filters"
-            ng-click="filterbar.reset()"><span class="glyphicon glyphicon-remove"></span></a>
-        <a 
-            class="btn btn-default btn-icon" 
+        <a
+            class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="bottom"
-            tooltip="Add New Record" 
+            tooltip="Clear Filters"
+            ng-click="filterbar.reset()"><span class="glyphicon glyphicon-remove"></span></a>
+        <a
+            class="btn btn-default btn-icon"
+            tooltip-trigger
+            tooltip-placement="bottom"
+            tooltip="Add New Record"
             ui-sref="record.add()"><span class="glyphicon glyphicon-plus-sign"></span></a>
     </div>
 </div>

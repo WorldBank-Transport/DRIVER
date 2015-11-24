@@ -2,13 +2,14 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $scope, $timeout, debounce, RecordSchemaState,
+    function FilterbarController($log, $modal, $scope, $timeout, debounce, RecordSchemaState,
                                  FilterState, RecordState) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
         ctl.recordLabel = '';
         ctl.reset = reset;
+        ctl.showSavedFiltersModal = showSavedFiltersModal;
         init();
 
         function init() {
@@ -90,6 +91,14 @@
             FilterState.reset();
             $scope.$broadcast('driver.filterbar:reset');
             $timeout(ctl.sendFilter);
+        }
+
+        // Shows the saved filters modal
+        function showSavedFiltersModal() {
+            $modal.open({
+                templateUrl: 'scripts/saved-filters/saved-filters-modal-partial.html',
+                controller: 'SavedFiltersModalController as modal'
+            });
         }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
