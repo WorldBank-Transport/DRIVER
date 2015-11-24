@@ -18,6 +18,6 @@ describe('driver.savedFilters: SavedFilters', function () {
         var element = $compile('<driver-saved-filters></driver-saved-filters>')(scope);
         $rootScope.$apply();
 
-        expect(element.find('tr').length).toEqual(5);
+        expect(element.find('tr').length).toEqual(1);
     });
 });

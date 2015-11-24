@@ -1,62 +1,35 @@
 <div class="block-inner">
     <h3>Saved Filters</h3>
-    <div class="filters-table">
-        <table class="table table-hover">
+    <div class="report-content tab-content filters-table">
+        <div ng-show="!filters.savedFilters.length">
+            <i>No filters have been saved</i>
+        </div>
+        <table ng-show="filters.savedFilters.length" class="table table-hover">
+            <thead ng-if="!filters.compact">
+                <tr>
+                    <td>Name</td>
+                    <td>Filters</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
             <tbody>
-                <tr>
-                    <td>Young Male Drivers</td>
+                <tr ng-repeat="sf in filters.savedFilters">
                     <td>
-                        <u>Age</u>: 16-25
-                        <span class="divider"></span>
-                        <u>Sex</u>: Male
-                        <span class="divider"></span>
-                        <u>Vehicle Type</u>: Car, Jeepney
+                        {{ ::sf.label }}
                     </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                </tr>
-                <tr>
-                    <td>Young Male Drivers</td>
+                    <td ng-bind-html="sf.filter_json | savedFilterAsHTML">
+                    </td>
                     <td>
-                        <u>Age</u>: 16-25
-                        <span class="divider"></span>
-                        <u>Sex</u>: Male
-                        <span class="divider"></span>
-                        <u>Vehicle Type</u>: Car, Jeepney
+                        <a ng-click="filters.viewFilter(sf)">
+                            View&nbsp;&raquo;
+                        </a>
                     </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                </tr>
-                <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                        <u>Age</u>: 16-25
-                        <span class="divider"></span>
-                        <u>Sex</u>: Male
-                        <span class="divider"></span>
-                        <u>Vehicle Type</u>: Car, Jeepney
+                    <td ng-if="!filters.compact">
+                        <a ng-click="filters.deleteFilter(sf)">
+                            Delete
+                        </a>
                     </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                </tr>
-                <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                        <u>Age</u>: 16-25
-                        <span class="divider"></span>
-                        <u>Sex</u>: Male
-                        <span class="divider"></span>
-                        <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
-                </tr>
-                <tr>
-                    <td>Young Male Drivers</td>
-                    <td>
-                        <u>Age</u>: 16-25
-                        <span class="divider"></span>
-                        <u>Sex</u>: Male
-                        <span class="divider"></span>
-                        <u>Vehicle Type</u>: Car, Jeepney
-                    </td>
-                    <td><a href="javascript:void(0);">View »</a></td>
                 </tr>
             </tbody>
         </table>

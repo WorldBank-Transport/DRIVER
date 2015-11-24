@@ -241,10 +241,121 @@
             }
         };
 
+        var SavedFiltersResponse = {
+            'count': 5,
+            'next': null,
+            'previous': null,
+            'results': [
+                {
+                    'uuid': '89ef93ac-e011-4ca1-bec7-4dbbb8cb63a9',
+                    'filter_json': {
+                        'Accident Details#Severity': {
+                            'contains': [
+                                'Injury'
+                            ],
+                            '_rule_type': 'containment'
+                        }
+                    },
+                    'label': 'Injury filter',
+                    'owner': 1
+                },
+                {
+                    'uuid': '4a270f45-eaf6-4c04-aeb7-1ee78998a38e',
+                    'filter_json': {
+                        'Accident Details#Severity': {
+                            'contains': [
+                                'Injury'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Num driver casualties': {
+                            '_rule_type': 'intrange',
+                            'min': 2
+                        }
+                    },
+                    'label': 'Injury with min casualties filter',
+                    'owner': 1
+                },
+                {
+                    'uuid': 'ec6b4c9a-4527-4abc-b943-3ab576da0070',
+                    'filter_json': {
+                        'Accident Details#Severity': {
+                            'contains': [
+                                'Injury'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Num driver casualties': {
+                            'max': 4,
+                            '_rule_type': 'intrange',
+                            'min': null
+                        }
+                    },
+                    'label': 'Injury with max casualties filter',
+                    'owner': 1
+                },
+                {
+                    'uuid': 'f5779d32-a3e4-49a1-9e84-cb76c157589e',
+                    'filter_json': {
+                        'Accident Details#Severity': {
+                            'contains': [
+                                'Injury'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Num driver casualties': {
+                            'max': 4,
+                            '_rule_type': 'intrange',
+                            'min': 1
+                        }
+                    },
+                    'label': 'Injury with casualty range',
+                    'owner': 1
+                },
+                {
+                    'uuid': '0a1235a1-fd2b-49d2-986d-81d677d546f1',
+                    'filter_json': {
+                        'Accident Details#Main cause': {
+                            'contains': [
+                                'Vehicle defect'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Weather': {
+                            'contains': [
+                                'Wind'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Num driver casualties': {
+                            'max': 4,
+                            '_rule_type': 'intrange',
+                            'min': 1
+                        },
+                        'Accident Details#Severity': {
+                            'contains': [
+                                'Injury'
+                            ],
+                            '_rule_type': 'containment'
+                        },
+                        'Accident Details#Collision type': {
+                            'contains': [
+                                'Right angle'
+                            ],
+                            '_rule_type': 'containment'
+                        }
+                    },
+                    'label': 'Very specific filter',
+                    'owner': 1
+                }
+            ]
+        };
+
         return {
             BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
-            RecordResponse: RecordResponse
+            RecordResponse: RecordResponse,
+            SavedFiltersResponse: SavedFiltersResponse
         };
     }
 
