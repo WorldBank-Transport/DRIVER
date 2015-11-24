@@ -270,7 +270,7 @@ OIDC_VERIFY_SSL = True
 # Ignored if auto registration is not used.
 OIDC_DYNAMIC_CLIENT_REGISTRATION_DATA = {
     "application_type": "web",
-    "contacts": ["list-geoinsights@azavea.com"],
+    "contacts": ["info@azavea.com", "kkillebrew@azavea.com"],
     "redirect_uris": [HOST_URL + "/openid/callback/login/", ],
     "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/", ]
 }
