@@ -164,6 +164,21 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'driver_auth': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'data': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'user_filters': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
         'oic': {
             'handlers': ['console'],
             'level': 'DEBUG',
