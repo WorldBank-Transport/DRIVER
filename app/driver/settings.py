@@ -281,10 +281,12 @@ OIDC_DEFAULT_BEHAVIOUR = {
     "scope": ["openid", "email"],
 }
 
-OIDC_PROVIDERS = {
+OIDC_PROVIDERS = { }
+
+if len(GOOGLE_OAUTH_CLIENT_ID) > 0:
     # see: https://developers.google.com/identity/protocols/OpenIDConnect?hl=en
     # example config towards bottom of page
-    "google.com": {
+    OIDC_PROVIDERS['google.com'] = {
         "provider_info": {
             "issuer": "https://accounts.google.com",
             "authorization_endpoint": "https://accounts.google.com/o/oauth2/v2/auth",
@@ -335,7 +337,6 @@ OIDC_PROVIDERS = {
             "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/"],
         }
     }
-}
 
 ## Tweak settings depending on deployment target
 if DEVELOP:
