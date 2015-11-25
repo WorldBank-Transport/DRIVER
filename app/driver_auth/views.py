@@ -1,10 +1,64 @@
+from urllib import quote
+from urlparse import parse_qs
+
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
-from rest_framework import permissions, status, viewsets
+from django.http import JsonResponse
+from django.shortcuts import redirect
+
+from rest_framework import status, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.response import Response
+
+from djangooidc.oidc import OIDCError
+from djangooidc.views import CLIENTS
 
 from driver_auth.serializers import UserSerializer, GroupSerializer
 from driver_auth.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
+
+# match what auth-service.js looks for
+USER_ID_COOKIE = 'AuthService.userId'
+TOKEN_COOKIE = 'AuthService.token'
+
+
+def authz_cb(request):
+    """
+    Based on OIDC callback:
+    https://github.com/marcanpilami/django-oidc/blob/master/djangooidc/views.py
+
+    Overriden to set auth token cookie for client; still logs in session as well.
+    """
+
+    client = CLIENTS[request.session["op"]]
+    query = None
+
+    try:
+        query = parse_qs(request.META['QUERY_STRING'])
+        userinfo = client.callback(query, request.session)
+        request.session["userinfo"] = userinfo
+        user = authenticate(**userinfo)
+        if user:
+            login(request, user) # authenticate session
+            token, created = Token.objects.get_or_create(user=user)
+            # set session cookie for frontend
+            response = redirect(request.session['next'])
+            response.set_cookie(USER_ID_COOKIE, token.user_id)
+            response.set_cookie(TOKEN_COOKIE, quote('"' + token.key + '"', safe=''))
+            return response
+        else:
+            # authentication failed
+            # return 403 here instead of raising error
+            return JsonResponse({'error': 'this login is not valid in this application'},
+                            status=403)
+    except OIDCError as err:
+        return JsonResponse({'error': err, 'callback': query}, status=400)
+
+
+# helper to return list of available SSO clients
+def get_oidc_client_list(request):
+    return JsonResponse({'clients': CLIENTS.keys()})
+
 
 class UserViewSet(viewsets.ModelViewSet):
     """

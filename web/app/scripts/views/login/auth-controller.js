@@ -4,9 +4,10 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, $window, AuthService) {
+    function AuthController ($scope, $state, $window, AuthService, WebConfig) {
 
         $scope.auth = {};
+        $scope.ssoClients = SSOClients;
 
         $scope.alerts = [];
         $scope.addAlert = function(alertObject) {
@@ -32,7 +33,11 @@
             });
         };
 
-        var handleError = function (result) {
+        $scope.sso = function(client) {
+            $window.location.href = WebConfig.api.hostname + '/openid/openid/' + client
+        };
+
+        var handleError = function(result) {
             $scope.auth.failure = true;
             var msg = result.error || (result.status + ': Unknown Error.');
             $scope.addAlert({
