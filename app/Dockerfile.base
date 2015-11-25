@@ -4,6 +4,12 @@ RUN mkdir -p /opt/app
 WORKDIR /opt/app
 
 COPY . /opt/app
+
+# install dependencies for django-oidc
+RUN apt-get update && apt-get install -y \
+    libffi-dev \
+    python-dev
+
 RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r requirements.txt
 
 EXPOSE 4000
