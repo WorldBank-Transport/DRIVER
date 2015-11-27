@@ -74,8 +74,6 @@
         };
 
         module.logout =  function() {
-            // TODO: hit logout openid endpoint after clearing cookies to log out of OpenID too,
-            // and let it redirect to 'next' GET param
             setUserId(null);
             $cookies.remove(tokenCookieString);
             $rootScope.$broadcast(events.loggedOut);
@@ -85,6 +83,11 @@
             }
             // trigger full page refresh
             $window.location.reload();
+
+            // TODO: hit logout openid endpoint after clearing cookies to log out of OpenID too,
+            // instead of simply refreshing page.
+            // Does GLUU support end_session_endpoint? Google seemingly has none defined.
+            //$window.location.href = ASEConfig.api.hostname + '/openid/logout?next=/';
         };
 
         return module;

@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, $window, AuthService, WebConfig) {
+    function AuthController ($scope, $state, $window, AuthService, SSOClients, WebConfig) {
 
         $scope.auth = {};
         $scope.ssoClients = SSOClients;
@@ -34,7 +34,7 @@
         };
 
         $scope.sso = function(client) {
-            $window.location.href = WebConfig.api.hostname + '/openid/openid/' + client
+            $window.location.href = WebConfig.api.hostname + '/openid/openid/' + client;
         };
 
         var handleError = function(result) {
