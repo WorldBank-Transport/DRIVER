@@ -43,8 +43,13 @@ def authz_cb(request):
             token, created = Token.objects.get_or_create(user=user)
             # set session cookie for frontend
             response = redirect(request.session['next'])
-            response.set_cookie(USER_ID_COOKIE, token.user_id)
-            response.set_cookie(TOKEN_COOKIE, quote('"' + token.key + '"', safe=''))
+
+            path = '/'
+            if 'editor' in request.session['next']:
+                path = '/editor'
+
+            response.set_cookie(USER_ID_COOKIE, token.user_id, path=path)
+            response.set_cookie(TOKEN_COOKIE, quote('"' + token.key + '"', safe=''), path=path)
             return response
         else:
             # authentication failed
