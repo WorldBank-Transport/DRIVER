@@ -33,12 +33,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.admin',
     'django.contrib.gis',
     'corsheaders',
     'rest_framework',
@@ -134,6 +134,11 @@ STATIC_ROOT = os.environ['DJANGO_STATIC_ROOT']
 
 MEDIA_ROOT = os.environ['DJANGO_MEDIA_ROOT']
 MEDIA_URL = '/media/'
+
+# use cookie-based sessions
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_HTTPONLY = True
+
 
 LOGGING = {
     'version': 1,

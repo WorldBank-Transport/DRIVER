@@ -14,14 +14,19 @@ describe('ase.views.recordtype: RTRelatedAdd', function () {
     var $httpBackend;
     var $rootScope;
     var ResourcesMock;
+    var AuthService;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
-                                _ResourcesMock_) {
+                                _ResourcesMock_, _AuthService_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         ResourcesMock = _ResourcesMock_;
 
+        AuthService = _AuthService_;
+        spyOn(AuthService, 'isAuthenticated').and.callFake(function() {
+            return true;
+        });
     }));
 
     it('should load directive', function () {

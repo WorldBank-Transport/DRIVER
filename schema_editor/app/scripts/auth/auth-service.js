@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthService ($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig) {
+    function AuthService($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig) {
         var module = {};
 
         var userIdCookieString = 'AuthService.userId';
@@ -23,7 +23,7 @@
             return !!(module.getToken() && module.getUserId() >= 0);
         };
 
-        module.authenticate = function (auth) {
+        module.authenticate = function(auth) {
             var dfd = $q.defer();
             $http.post(ASEConfig.api.hostname + '/api-token-auth/', auth)
             .success(function(data, status) {
@@ -64,16 +64,16 @@
             return dfd.promise;
         };
 
-        module.getToken =  function () {
+        module.getToken = function() {
             return $cookies.getObject(tokenCookieString);
         };
 
-        module.getUserId =  function () {
+        module.getUserId = function() {
             var userId = parseInt($cookies.getObject(userIdCookieString), 10);
             return isNaN(userId) ? -1 : userId;
         };
 
-        module.logout =  function () {
+        module.logout =  function() {
             setUserId(null);
             $cookies.remove(tokenCookieString);
             $rootScope.$broadcast(events.loggedOut);
@@ -83,11 +83,16 @@
             }
             // trigger full page refresh
             $window.location.reload();
+
+            // TODO: hit logout openid endpoint after clearing cookies to log out of OpenID too,
+            // instead of simply refreshing page.
+            // Does GLUU support end_session_endpoint? Google seemingly has none defined.
+            //$window.location.href = ASEConfig.api.hostname + '/openid/logout?next=/';
         };
 
         return module;
 
-        function setToken (token) {
+        function setToken(token) {
             if (!token) {
                 return;
             }
@@ -105,7 +110,7 @@
             }, cookieTimeoutMillis);
         }
 
-        function setUserId (id) {
+        function setUserId(id) {
             var userId = parseInt(id, 10);
             userId = !isNaN(userId) && userId >= 0 ? userId : -1;
             $cookies.putObject(userIdCookieString, userId);

@@ -4,9 +4,10 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, $window, AuthService) {
+    function AuthController ($scope, $state, $window, AuthService, SSOClients, ASEConfig) {
 
         $scope.auth = {};
+        $scope.ssoClients = SSOClients;
 
         $scope.alerts = [];
         $scope.addAlert = function(alertObject) {
@@ -30,6 +31,13 @@
             }, function (result) {
                 handleError(result);
             });
+        };
+
+        $scope.sso = function(client) {
+            $window.location.href = [ASEConfig.api.hostname,
+                '/openid/openid/',
+                client,
+                '?next=/editor/'].join('');
         };
 
         var handleError = function (result) {

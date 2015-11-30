@@ -26,6 +26,12 @@
           <button type="submit" class="button button-primary btn-block">Login</button>
         </div>
       </div>
+      <div class="row" ng-repeat="client in ssoClients">
+        <div class="col-12 loginmodal-field">
+          <a type="button" class="button button-primary btn-block"
+            ng-click="sso(client)">Log in with {{client}}</a>
+        </div>
+      </div>
     </form>
     <alert ng-repeat="alert in alerts" type="alert.type">{{alert.msg}}</alert>
 </div>
