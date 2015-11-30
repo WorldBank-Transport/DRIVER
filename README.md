@@ -61,8 +61,14 @@ telling it to communicate with the Docker daemon on the `app` virtual machine.
 
 A CSV of historical data can be downloaded from the project /data folder (accidents_and_sites.csv).
 
-Once the app has been built, this data can be loaded by running
-`python scripts/load_accidents_v3.py /path/to/accident_csvs`.
+Once the app has been built, this data can be loaded.
+
+You will first have to obtain an authorization header. Log in to the web application.
+Then open the network tab in web developer tools and reload the page. Inspect the request headers
+from an API request and pull out the value of the `Authorization` header, for example
+`Token f1acac96cc79c4822e9010d23ab425231d580875`.
+
+Run `python scripts/load_accidents_v3.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/accident_csvs`.
 Note that the import process will take roughly two hours for the full data set; you can cut down the
 number of records with `head` on the individual CSVs.
 
