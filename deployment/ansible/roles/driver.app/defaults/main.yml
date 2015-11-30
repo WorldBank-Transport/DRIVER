@@ -11,7 +11,7 @@ driver_conf:
   WINDSHAFT_DB_PASSWORD: "{{ windshaft_db_password }}"
   DRIVER_DB_HOST: "{{ postgresql_host }}"
   DRIVER_DB_PORT: "{{ postgresql_port }}"
-  DRIVER_APP_HOST: "{{ web_js_api_hostname }}"
+  DRIVER_APP_HOST: "{{ driver_app_hostname }}"
   OAUTH_CLIENT_ID: "{{ oauth_client_id }}"
   OAUTH_CLIENT_SECRET: "{{ oauth_client_secret }}"
   DRIVER_REDIS_HOST: "{{ redis_bind_address }}"
