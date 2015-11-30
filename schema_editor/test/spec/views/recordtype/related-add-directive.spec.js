@@ -17,14 +17,20 @@ describe('ase.views.recordtype: RTRelatedAdd', function () {
     var $rootScope;
     var RecordTypes;
     var ResourcesMock;
+    var AuthService;
 
-    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
-                                _RecordTypes_, _ResourcesMock_) {
+    beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, $q,
+                                _RecordTypes_, _ResourcesMock_, _AuthService_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         RecordTypes = _RecordTypes_;
         ResourcesMock = _ResourcesMock_;
+
+        AuthService = _AuthService_;
+        spyOn(AuthService, 'isAuthenticated').and.callFake(function() {
+            return true;
+        });
 
     }));
 
