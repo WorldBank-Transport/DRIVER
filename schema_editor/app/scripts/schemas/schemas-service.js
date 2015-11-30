@@ -38,6 +38,17 @@
                 },
                 'selectlist': { // Select list
                     toProperty: function(fieldData) {
+                        if (fieldData.displayType === 'checkbox') {
+                            return {
+                                type: 'array',
+                                format: 'checkbox',
+                                uniqueItems: true,
+                                items: {
+                                    type: 'string',
+                                    enum: fieldData.fieldOptions
+                                }
+                            };
+                        }
                         return {
                             type: 'string',
                             enum: fieldData.fieldOptions,
@@ -218,6 +229,7 @@
          */
         function schemaFormDataFromDefinition(definition) {
             var formData = [];
+
             _.each(definition.properties, function(schemaField, title) {
                 if (systemOnlyProperties[title]) {
                     // Don't include in schema editor form
@@ -225,28 +237,47 @@
                     var fieldData = {
                         fieldTitle: title
                     };
-                    // Iterate over schema keys and take the appropriate action
-                    _.each(schemaField, function(value, key) {
-                        switch(key) {
-                            case 'enum':
-                                fieldData.fieldOptions = value;
-                                break;
-                            case 'format':
-                                fieldData.textOptions = value;
-                                break;
-                            case 'type': // This is the JSON-Schema 'type', which is not used here.
-                                break;
-                            case 'media': // Also not used
-                                break;
-                            case 'watch':
-                                fieldData.referenceTarget = value.target;
-                                break;
-                            case 'enumSource': // Companion to 'watch', but not used here
-                                break;
-                            default:
-                                fieldData[key] = value;
-                        }
-                    });
+                    // checkboxes work a little differently
+                    if (schemaField.format === 'checkbox') {
+                        fieldData.fieldType = 'selectlist';
+                        fieldData.displayType = 'checkbox';
+                        _.each(schemaField, function(value, key) {
+                            switch(key) {
+                                case 'items':
+                                    fieldData.fieldOptions = value.enum;
+                                    break;
+                                case 'type':
+                                case 'format':
+                                case 'uniqueItems':
+                                    break;
+                                default:
+                                    fieldData[key] = value;
+                            }
+                        });
+                    } else {
+                        // Iterate over schema keys and take the appropriate action
+                        _.each(schemaField, function(value, key) {
+                            switch(key) {
+                                case 'enum':
+                                    fieldData.fieldOptions = value;
+                                    break;
+                                case 'format':
+                                    fieldData.textOptions = value;
+                                    break;
+                                case 'type': // This is the JSON-Schema 'type', which is not used here.
+                                    break;
+                                case 'media': // Also not used
+                                    break;
+                                case 'watch':
+                                    fieldData.referenceTarget = value.target;
+                                    break;
+                                case 'enumSource': // Companion to 'watch', but not used here
+                                    break;
+                                default:
+                                    fieldData[key] = value;
+                            }
+                        });
+                    }
 
                     // Handle required fields, which are stored outside the field info
                     var indexInRequired = _.findIndex(definition.required, function(item) {
