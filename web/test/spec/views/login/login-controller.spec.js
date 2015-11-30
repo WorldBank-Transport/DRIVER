@@ -1,8 +1,17 @@
-describe('driver.views:AuthController', function () {
-    'use strict';
+'use strict';
 
+// PhantomJS doesn't support bind yet
+Function.prototype.bind = Function.prototype.bind || function (thisp) {
+    var fn = this;
+    return function () {
+        return fn.apply(thisp, arguments);
+    };
+};
+
+describe('driver.views:AuthController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('driver.resources'));
     beforeEach(module('driver.views.login'));
 
     var $httpBackend;
@@ -13,9 +22,10 @@ describe('driver.views:AuthController', function () {
 
     var Controller;
     var Service;
+    var DriverResourcesMock;
 
     beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$q_, _$state_,
-                                _$window_) {
+                                _$window_, _DriverResourcesMock_, _WebConfig_) {
 
         $httpBackend = _$httpBackend_;
         $q = _$q_;
@@ -26,13 +36,16 @@ describe('driver.views:AuthController', function () {
 
         Service = $injector.get('AuthService');
 
+        DriverResourcesMock = _DriverResourcesMock_;
+
         Controller = _$controller_('AuthController', {
             $scope: $scope,
             $state: _$state_,
             $window: fakeWindow,
-            AuthService: Service
+            AuthService: Service,
+            SSOClients: DriverResourcesMock.SSOClientsResponse,
+            WebConfig: _WebConfig_
         });
-
     }));
 
     it('should add and close alerts', function () {

@@ -351,11 +351,16 @@
             ]
         };
 
+        var SSOClientsResponse = {
+            'clients': ['google.com']
+        };
+
         return {
             BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
             RecordResponse: RecordResponse,
-            SavedFiltersResponse: SavedFiltersResponse
+            SavedFiltersResponse: SavedFiltersResponse,
+            SSOClientsResponse: SSOClientsResponse
         };
     }
 
