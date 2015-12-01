@@ -121,9 +121,18 @@
             }
         }
         &.toddow {
+            height: 39%;
 
+            h3 {
+                margin: 0;
+                font-size: 21px;
+                font-weight: 400;
+            }
         }
         &.filters {
+            top: 78%;
+            height: 18%;
+
             h3 {
                 margin: 6px 0 8px;
                 font-size: 18px;
