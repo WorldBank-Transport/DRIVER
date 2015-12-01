@@ -1,69 +1,72 @@
-<div class="form-area no-filterbar" ng-if="::ctl.userCanWrite">
+<div class="json-editor-form form-area no-filterbar" ng-if="::ctl.userCanWrite">
     <div class="col-sm-8 col-sm-offset-2">
         <ase-notifications></ase-notifications>
         <div class="form-area-heading">
             <h2>{{ ::ctl.recordType.label }} Input Form</h2>
             <div class="content-border"></div>
         </div>
-        <div class="constant-fields">
-            <h3><span>Constant fields</span></h3>
-            <p>These fields exist for every record.</p>
-            <div class="well">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label">Location</label>
-                            <input type="text" class="form-control"
-                                typeahead="result.display_name for result in ctl.nominatimLookup($viewValue)"
-                                typeahead-on-select="ctl.nominatimSelect($item)"
-                                typeahead-wait-ms="250"
-                                ng-model="ctl.nominatimLocationText">
-                        </div>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="map" leaflet-map driver-embed-map editable="true"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group"
-                            ng-class="ctl.constantFieldErrors.latitude ? 'has-error' : ''">
-                            <label class="control-label required">Latitude</label>
-                            <input type="number" class="form-control"
-                                ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
-                            <p ng-if="ctl.constantFieldErrors.latitude"
-                                class="help-block errormsg">Value required.</p>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group"
-                            ng-class="ctl.constantFieldErrors.longitude ? 'has-error' : ''">
-                            <label class="control-label required">Longitude</label>
-                            <input type="number" class="form-control"
-                                ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
-                            <p ng-if="ctl.constantFieldErrors.longitude"
-                                class="help-block errormsg">Value required.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group date-picker"
-                            ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
-                            <label class="control-label required">Occurred</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control"
-                                    datepicker-popup="longDate"
-                                    is-open="ctl.occurredDatePicker.opened"
-                                    ng-change="ctl.occurredFromChanged()"
-                                    ng-model="ctl.record.occurred_from"
-                                    placeholder="From">
-                                <span class="input-group-addon picker" ng-click="ctl.openOccurredDatePicker()">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="constant-fields">
+                    <div class="well">
+                        <h3>{{ ::ctl.recordType.label }} Location & Time</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Location</label>
+                                    <input type="text" class="form-control"
+                                        typeahead="result.display_name for result in ctl.nominatimLookup($viewValue)"
+                                        typeahead-on-select="ctl.nominatimSelect($item)"
+                                        typeahead-wait-ms="250"
+                                        ng-model="ctl.nominatimLocationText">
+                                </div>
                             </div>
-                            <p ng-if="ctl.constantFieldErrors.occurred"
-                                class="help-block errormsg">Value required.</p>
+                            <div class="col-md-12">
+                                <div class="map" leaflet-map driver-embed-map editable="true"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                    ng-class="ctl.constantFieldErrors.latitude ? 'has-error' : ''">
+                                    <label class="control-label required">Latitude</label>
+                                    <input type="number" class="form-control"
+                                        ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
+                                    <p ng-if="ctl.constantFieldErrors.latitude"
+                                        class="help-block errormsg">Value required.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                    ng-class="ctl.constantFieldErrors.longitude ? 'has-error' : ''">
+                                    <label class="control-label required">Longitude</label>
+                                    <input type="number" class="form-control"
+                                        ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
+                                    <p ng-if="ctl.constantFieldErrors.longitude"
+                                        class="help-block errormsg">Value required.</p>
+                                </div>
+                            </div>
+        		</div>
+        		<div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                    ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
+                                    <label class="control-label required">Occurred</label>
+                                    <div class="input-group" id="datetimepicker-From">
+                                        <input type="text" class="form-control"
+                                            datetimepicker
+                                            datetimepicker-options="{{ ctl.occurredFromOptions }}"
+                                            ng-change="ctl.occurredFromChanged()"
+                                            ng-model="ctl.record.occurred_from"
+                                            placeholder="From">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <p ng-if="ctl.constantFieldErrors.occurred"
+                                        class="help-block errormsg">Value required.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -102,20 +105,22 @@
                         </select>
                     </div>
                 </div>
+                <json-editor editor-id="{{ ctl.editor.id }}"
+                             options="ctl.editor.options"
+                             on-data-change="ctl.onDataChange"
+                             class="form-area-body">
+                </json-editor>
+            </div>
+            <div class="col-sm-3">
+                <div class="save-area">
+                    <button type="button" class="btn btn-primary btn-block"
+                        ng-disabled="ctl.editor.errors.length > 0 || ctl.constantFieldErrors"
+                        ng-click="ctl.onSaveClicked()">Save {{ ::ctl.recordType.label }}</button>
+                    <button type="button" class="btn btn-default btn-block"
+                        ng-click="ctl.goBack()">Cancel</button>
+                </div>
             </div>
         </div>
-        <json-editor editor-id="{{ ctl.editor.id }}"
-                     options="ctl.editor.options"
-                     on-data-change="ctl.onDataChange"
-                     class="form-area-body">
-        </json-editor>
-        <div class="save-area">
-            <button type="button" class="btn btn-default"
-                    ng-disabled="ctl.editor.errors.length > 0 || ctl.constantFieldErrors"
-                    ng-click="ctl.onSaveClicked()">Save</button>
-            <button type="button" class="btn btn-default"
-                    ng-click="ctl.goBack()">Cancel</button>
-            </div>
         </div>
     </div>
 </div>

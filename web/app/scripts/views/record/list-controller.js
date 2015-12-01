@@ -114,6 +114,7 @@
             $modal.open({
                 templateUrl: 'scripts/views/record/details-modal-partial.html',
                 controller: 'RecordDetailsModalController as modal',
+                size: 'lg',
                 resolve: {
                     record: function() {
                         return record;
