@@ -35,10 +35,12 @@ describe('driver.navbar: NavbarController', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope
@@ -57,10 +59,12 @@ describe('driver.navbar: NavbarController', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
 
         $state.current = $state.get('dashboard');
 
@@ -83,10 +87,12 @@ describe('driver.navbar: NavbarController', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
 
         Controller = $controller('NavbarController', {
             $scope: $scope

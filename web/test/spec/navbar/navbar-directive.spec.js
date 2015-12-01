@@ -41,10 +41,12 @@ describe('driver.navbar: Navbar', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
 
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-navbar></driver-navbar>')(scope);
@@ -62,6 +64,7 @@ describe('driver.navbar: Navbar', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
 
         // log in first
         $httpBackend.expectPOST(/\/api-token-auth\//).respond({user: 1, token: 'gotatoken'});
@@ -72,6 +75,7 @@ describe('driver.navbar: Navbar', function () {
         $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-navbar></driver-navbar>')(scope);
