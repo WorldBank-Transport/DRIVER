@@ -8,6 +8,8 @@
         var ctl = this;
         var initialized = false;
 
+        var userDropdownDefault = 'My Account';
+
         InitialState.ready().then(init);
 
         ctl.onLogoutButtonClicked = AuthService.logout;
@@ -19,7 +21,7 @@
         ctl.navigateToStateName = navigateToStateName;
         ctl.getBoundaryLabel = getBoundaryLabel;
         ctl.recordTypesVisible = WebConfig.recordType.visible;
-        ctl.userEmail = 'My Account';
+        ctl.userEmail = userDropdownDefault;
 
         $rootScope.$on('$stateChangeSuccess', setStates);
 
@@ -32,7 +34,7 @@
                 if (userInfo && userInfo.email) {
                     ctl.userEmail = userInfo.email;
                 } else {
-                    ctl.userEmail = 'My Account';
+                    ctl.userEmail = userDropdownDefault;
                 }
             });
             initialized = true;
