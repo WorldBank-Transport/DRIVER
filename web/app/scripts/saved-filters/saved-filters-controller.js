@@ -27,8 +27,10 @@
         }
 
         // Activates the selected filter
-        function viewFilter(/*savedFilter -- commented out for jshint*/) {
-            // TODO: implement view filter logic
+        function viewFilter(savedFilter) {
+            /* jshint camelcase: false */
+            $scope.$emit('driver.savedFilters:filterSelected', savedFilter.filter_json);
+            /* jshint camelcase: true */
         }
     }
 

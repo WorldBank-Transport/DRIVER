@@ -2,14 +2,24 @@
     'use strict';
 
     /* ngInject */
-    function SavedFiltersModalController($modalInstance, $rootScope,
+    function SavedFiltersModalController($modalInstance, $rootScope, $scope,
                                          FilterState, Notifications, SavedFilters) {
         var ctl = this;
         ctl.label = '';
         ctl.save = save;
         ctl.closeModal = closeModal;
 
+        init();
+
         return ctl;
+
+
+        function init() {
+            $scope.$on('driver.savedFilters:filterSelected', function (e, savedFilter) {
+                FilterState.restoreFilters(savedFilter);
+                closeModal();
+            });
+        }
 
         // Saves the current filter
         function save() {
