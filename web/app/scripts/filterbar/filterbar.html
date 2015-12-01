@@ -25,12 +25,16 @@
             class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="left"
+            tooltip-append-to-body
+            tooltip-animation="false"
             tooltip="Saved Filters"><span class="glyphicon glyphicon-filter"></span></a>
         <a
             class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="left"
             tooltip="Clear Filters"
+            tooltip-append-to-body
+            tooltip-animation="false"
             ng-click="filterbar.reset()"><span class="glyphicon glyphicon-remove"></span></a>
         <a
             ng-if="::filterbar.userCanAdd"
@@ -38,6 +42,8 @@
             tooltip-trigger
             tooltip-placement="left"
             tooltip="Add New Record"
+            tooltip-append-to-body
+            tooltip-animation="false"
             ui-sref="record.add()"><span class="glyphicon glyphicon-plus-sign"></span></a>
     </div>
 </div>
