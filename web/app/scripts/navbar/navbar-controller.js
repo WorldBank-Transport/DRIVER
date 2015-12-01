@@ -4,9 +4,11 @@
     /* ngInject */
     function NavbarController($rootScope, $scope, $state,
                               AuthService, BoundaryState, GeographyState, InitialState,
-                              MapState, RecordState, WebConfig) {
+                              MapState, RecordState, UserService, WebConfig) {
         var ctl = this;
         var initialized = false;
+
+        var userDropdownDefault = 'My Account';
 
         InitialState.ready().then(init);
 
@@ -19,6 +21,8 @@
         ctl.navigateToStateName = navigateToStateName;
         ctl.getBoundaryLabel = getBoundaryLabel;
         ctl.recordTypesVisible = WebConfig.recordType.visible;
+        ctl.userEmail = userDropdownDefault;
+
         $rootScope.$on('$stateChangeSuccess', setStates);
 
         function init() {
@@ -26,6 +30,13 @@
             GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
             RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             setStates();
+            UserService.getUser(AuthService.getUserId()).then(function(userInfo) {
+                if (userInfo && userInfo.email) {
+                    ctl.userEmail = userInfo.email;
+                } else {
+                    ctl.userEmail = userDropdownDefault;
+                }
+            });
             initialized = true;
         }
 

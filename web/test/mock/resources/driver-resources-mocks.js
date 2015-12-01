@@ -355,12 +355,23 @@
             'clients': ['google.com']
         };
 
+        var UserInfoResponse = {
+            'id': 2,
+            'url': 'http://localhost:7000/api/users/2/',
+            'username': '0000000000000000000',
+            'email': 'test@azavea.com',
+            'groups': [],
+            'is_staff': false,
+            'is_superuser': false
+        }
+
         return {
             BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
             RecordResponse: RecordResponse,
             SavedFiltersResponse: SavedFiltersResponse,
-            SSOClientsResponse: SSOClientsResponse
+            SSOClientsResponse: SSOClientsResponse,
+            UserInfoResponse: UserInfoResponse
         };
     }
 

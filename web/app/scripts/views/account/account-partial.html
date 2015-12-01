@@ -1,9 +1,36 @@
-<div class="form-area">
-    <div class="col-sm-8 col-sm-offset-3">
+<div class="form-area no-filterbar acct-info">
+    <div class="col-sm-8 col-sm-offset-2">
         <div class="form-area-heading">
-            <h2>Account page placeholder</h2>
+            <h2>Account Information</h2>
         </div>
-        <div class="form-area-body">
+        <div class="well">
+            <div>
+                <div class="row">
+                    <div class="col-sm-2"><label>User ID:</label></div>
+                    <div class="col-sm-4">{{ userInfo.id }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>E-mail:</label></div>
+                    <div class="col-sm-4">{{ userInfo.email }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Administrator?</label></div>
+                    <div class="col-sm-4">
+                        <span ng-show="!!userInfo.is_staff">Yes</span>
+                        <span ng-show="!userInfo.is_staff">No</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="userInfo.groups.length > 0">
+                    <div class="col-sm-2"><label>Groups:</label></div>
+                    <div class="col-sm-4">
+                        <span>{{ userInfo.groups.join(', ') }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Token:</label></div>
+                    <div class="col-sm-4">{{ userInfo.token }}</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
