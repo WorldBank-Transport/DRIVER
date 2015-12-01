@@ -8,3 +8,20 @@
         width: 180px;
     }
 }
+
+.saved-filters {
+    form {
+        background: none;
+    }        
+    h4 {
+        margin-top: 0;
+    }
+
+    .well {
+        margin-top: 20px;
+
+        .form-group {
+            margin-right: 10px;
+        }
+    }
+}

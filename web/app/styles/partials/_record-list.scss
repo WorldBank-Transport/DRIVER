@@ -4,15 +4,14 @@ driver-record-list {
     width: 100%;
     bottom: 0;
     overflow: scroll;
-}
 
-.links a {
-    cursor: pointer;
-}
-
-.modal-footer {
-    margin-top: 50px;
-    margin-bottom: 0;
-    padding-top: 10px;
-    padding-bottom: 0;
+    .modal-footer {
+        margin-top: 50px;
+        margin-bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 0;
+    }
+    .links a {
+        cursor: pointer;
+    }
 }
