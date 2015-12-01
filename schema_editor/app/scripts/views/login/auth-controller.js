@@ -19,7 +19,7 @@
 
         $scope.authenticate = function() {
             $scope.alerts = [];
-            $scope.authenticated = AuthService.authenticate($scope.auth);
+            $scope.authenticated = AuthService.authenticate($scope.auth, true);
             $scope.authenticated.then(function(result) {
                 if (result.isAuthenticated) {
                     // redirect to editor main page, with a full page reload,

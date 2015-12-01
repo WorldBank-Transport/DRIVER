@@ -6,6 +6,8 @@
      */
     function UserService ($resource, $q, ASEConfig) {
 
+        var tmpToken = '';
+
         var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id'}, {
             'update': {
                 method: 'PATCH',
@@ -20,29 +22,21 @@
                 url: ASEConfig.api.hostname + '/api/users/:id/reset_password/'
             },
             'query': {
-                method: 'GET'
+                method: 'GET',
+                headers: {
+                    'Authorization': function(config) {
+                        return 'Token ' + tmpToken;
+                    }
+                }
             }
         }, {
             stripTrailingSlashes: false
         });
 
-        // TODO: Load from API
-        var groups = [
-            {
-                id: 1,
-                name: 'Administrator'
-            },
-            {
-                id: 2,
-                name: 'User'
-            }
-        ];
-
         var module = {
             User: User,
             getUser: getUser,
-            isSuperUser: isSuperUser,
-            groups: groups
+            isAdmin: isAdmin
         };
         return module;
 
@@ -54,8 +48,22 @@
             return dfd.promise;
         }
 
-        function isSuperUser(user) {
-            return user.groups[0] === groups[0].id;
+        function isAdmin(userId, token) {
+            tmpToken = token;
+            var dfd = $q.defer();
+            module.User.query({id: userId}, function (user) {
+                /* jshint camelcase: false */
+                if (user && user.is_staff) {
+                    dfd.resolve(true);
+                } else {
+                    dfd.resolve(false);
+                }
+                /* jshint camelcase: true */
+                tmpToken = '';
+            });
+
+            // config.headers.Authorization = 'Token ' + $cookies.getObject('AuthService.token');
+            return dfd.promise;
         }
     }
 

@@ -8,8 +8,8 @@
 
         var module = {};
         module.request = function(config) {
-            // set auth header for api requests
-            if (config.url.indexOf('api/') > -1) {
+            // set auth header for api requests if not already set
+            if (config.url.indexOf('api/') > -1 && !config.headers.Authorization) {
                 config.headers.Authorization = 'Token ' + $cookies.getObject('AuthService.token');
             }
             return config || $q.when(config);
