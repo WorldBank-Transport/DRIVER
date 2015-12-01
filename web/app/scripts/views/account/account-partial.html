@@ -1,14 +1,26 @@
-<div class="form-area">
-    <div class="col-sm-8 col-sm-offset-3">
+<div class="form-area no-filterbar acct-info">
+    <div class="col-sm-8 col-sm-offset-2">
         <div class="form-area-heading">
             <h2>Account Information</h2>
         </div>
-        <div class="form-area-body">
+        <div class="well">
             <div>
-                <p><strong>User ID:</strong> {{ userInfo.id }}</p>
-                <p><strong>E-mail:</strong> {{ userInfo.email }}</p>
-                <p><strong>Administrator:</strong> {{ !!userInfo.is_staff }}</p>
-                <p><strong>Token:</strong> {{ userInfo.token }}</p>
+                <div class="row">
+                    <div class="col-sm-2"><label>User ID:</label></div>
+                    <div class="col-sm-4">{{ userInfo.id }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>E-mail:</label></div>
+                    <div class="col-sm-4">{{ userInfo.email }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Administrator:</label></div>
+                    <div class="col-sm-4">{{ !!userInfo.is_staff }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Token:</label></div>
+                    <div class="col-sm-4">{{ userInfo.token }}</div>
+                </div>
             </div>
         </div>
     </div>
