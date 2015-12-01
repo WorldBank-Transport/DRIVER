@@ -17,6 +17,12 @@
                     <div class="col-sm-2"><label>Administrator:</label></div>
                     <div class="col-sm-4">{{ !!userInfo.is_staff }}</div>
                 </div>
+                <div class="row" ng-if="userInfo.groups.length > 0">
+                    <div class="col-sm-2"><label>Groups:</label></div>
+                    <div class="col-sm-4">
+                        <span>{{ userInfo.groups.join(', ') }}</span>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-2"><label>Token:</label></div>
                     <div class="col-sm-4">{{ userInfo.token }}</div>
