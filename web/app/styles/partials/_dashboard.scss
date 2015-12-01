@@ -35,13 +35,13 @@
         }
         &.block-2x1 {
             width: 54%;
-            height: 34%;
+            height: 39%;
             left: 44%;
             top: 36%;
 
             &:nth-child(2n) {
-                top: 74%;
-                height: 22%;
+                top: 78%;
+                height: 18%;
             }
         }
 
@@ -121,8 +121,6 @@
             }
         }
         &.toddow {
-            height: 39%;
-
             h3 {
                 margin: 0;
                 font-size: 21px;
@@ -130,9 +128,6 @@
             }
         }
         &.filters {
-            top: 78%;
-            height: 18%;
-
             h3 {
                 margin: 6px 0 8px;
                 font-size: 18px;
