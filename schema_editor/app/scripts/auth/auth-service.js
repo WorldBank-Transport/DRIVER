@@ -52,7 +52,7 @@
                                 result.error = 'Must be an administrator to access this portion of the site.';
                             }
                             dfd.resolve(result);
-                        }, function(error) {
+                        }, function() {
                             result.isAuthenticated = false;
                             result.error = 'Unknown error logging in.';
                             dfd.resolve(result);

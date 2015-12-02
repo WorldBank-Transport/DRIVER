@@ -24,7 +24,7 @@
             'query': {
                 method: 'GET',
                 headers: {
-                    'Authorization': function(config) {
+                    'Authorization': function() {
                         return 'Token ' + tmpToken;
                     }
                 }
