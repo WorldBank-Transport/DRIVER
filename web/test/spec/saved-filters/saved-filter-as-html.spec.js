@@ -32,7 +32,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                     'Injury',
                     'Fatality'
                 ],
-                '_rule_type': 'containment'
+                '_rule_type': 'containment_multiple'
             }
         };
         var expected = ' <u>Severity</u>: Injury, Fatality';
