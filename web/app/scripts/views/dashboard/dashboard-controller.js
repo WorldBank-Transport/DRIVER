@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, BoundaryState, InitialState, Records, RecordSchemaState,
-                                 RecordState, RecordAggregates) {
+    function DashboardController($scope, $state, BoundaryState, FilterState, InitialState, Records,
+                                 RecordSchemaState, RecordState, RecordAggregates) {
         var ctl = this;
 
         InitialState.ready().then(init);
@@ -25,6 +25,10 @@
             $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
                 ctl.boundaryId = selected.uuid;
                 loadRecords();
+            });
+            $scope.$on('driver.savedFilters:filterSelected', function(event, selectedFilter) {
+                FilterState.restoreFilters(selectedFilter);
+                $state.go('map');
             });
         }
 
