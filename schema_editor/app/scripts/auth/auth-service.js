@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthService($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig) {
+    function AuthService($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig, UserService) {
         var module = {};
 
         var userIdCookieString = 'AuthService.userId';
@@ -23,7 +23,7 @@
             return !!(module.getToken() && module.getUserId() >= 0);
         };
 
-        module.authenticate = function(auth) {
+        module.authenticate = function(auth, needsAdmin) {
             var dfd = $q.defer();
             $http.post(ASEConfig.api.hostname + '/api-token-auth/', auth)
             .success(function(data, status) {
@@ -31,19 +31,49 @@
                     status: status,
                     error: ''
                 };
-                if (data && data.user) {
-                    setUserId(data.user);
-                }
-                if (data && data.token) {
-                    setToken(data.token);
-                }
-                result.isAuthenticated = module.isAuthenticated();
-                if (result.isAuthenticated) {
-                    $rootScope.$broadcast(events.loggedIn);
+
+                // if user needs to be an admin to log in, check if they are first
+                if (needsAdmin) {
+                    if (data && data.user && data.token) {
+                        UserService.isAdmin(data.user, data.token).then(function(isAdmin) {
+                            if (isAdmin) {
+                                // am an admin; log in
+                                setUserId(data.user);
+                                setToken(data.token);
+                                result.isAuthenticated = module.isAuthenticated();
+                                if (result.isAuthenticated) {
+                                    $rootScope.$broadcast(events.loggedIn);
+                                } else {
+                                    result.error = 'Unknown error logging in.';
+                                }
+                            } else {
+                                // user is not an admin and admin access is required
+                                result.isAuthenticated = false;
+                                result.error = 'Must be an administrator to access this portion of the site.';
+                            }
+                            dfd.resolve(result);
+                        }, function() {
+                            result.isAuthenticated = false;
+                            result.error = 'Unknown error logging in.';
+                            dfd.resolve(result);
+                        });
+                    } else {
+                        result.isAuthenticated = false;
+                        result.error = 'Error obtaining user information.';
+                        dfd.resolve(result);
+                    }
                 } else {
-                    result.error = 'Unknown error logging in.';
+                    // admin access not required; log in
+                    setUserId(data.user);
+                    setToken(data.token);
+                    result.isAuthenticated = module.isAuthenticated();
+                    if (result.isAuthenticated) {
+                        $rootScope.$broadcast(events.loggedIn);
+                    } else {
+                        result.error = 'Unknown error logging in.';
+                    }
+                    dfd.resolve(result);
                 }
-                dfd.resolve(result);
             })
             .error(function(data, status) {
                 var error = _.values(data).join(' ');

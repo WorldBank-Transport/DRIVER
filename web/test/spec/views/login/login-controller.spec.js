@@ -9,23 +9,25 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 };
 
 describe('driver.views:AuthController', function () {
+
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('ase.userdata'));
+    beforeEach(module('ase.auth'));
     beforeEach(module('driver.resources'));
     beforeEach(module('driver.views.login'));
 
     var $httpBackend;
-    var $injector = angular.injector(['ase.auth']);
     var $q;
     var $scope;
     var fakeWindow;
 
     var Controller;
     var Service;
-    var DriverResourcesMock;
+    var ResourcesMock;
 
     beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$q_, _$state_,
-                                _$window_, _DriverResourcesMock_, _WebConfig_) {
+                                _$window_, _AuthService_, _ResourcesMock_, _WebConfig_) {
 
         $httpBackend = _$httpBackend_;
         $q = _$q_;
@@ -34,21 +36,21 @@ describe('driver.views:AuthController', function () {
         // fake the window because of full page reload after login
         fakeWindow = { location: {href: '/'}, document: _$window_.document};
 
-        Service = $injector.get('AuthService');
-
-        DriverResourcesMock = _DriverResourcesMock_;
+        Service = _AuthService_;
+        ResourcesMock = _ResourcesMock_;
 
         Controller = _$controller_('AuthController', {
             $scope: $scope,
             $state: _$state_,
             $window: fakeWindow,
             AuthService: Service,
-            SSOClients: DriverResourcesMock.SSOClientsResponse,
+            SSOClients: ResourcesMock.SSOClientsResponse,
             WebConfig: _WebConfig_
         });
     }));
 
     it('should add and close alerts', function () {
+
         $scope.addAlert('foo');
         $scope.addAlert('bar');
         $scope.addAlert('baz');

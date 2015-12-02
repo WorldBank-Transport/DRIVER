@@ -149,6 +149,26 @@
             }
         });
 
+        var UserInfoResponse = {
+            'id': 2,
+            'url': 'http://localhost:7000/api/users/2/',
+            'username': '0000000000000000000',
+            'email': 'test@azavea.com',
+            'groups': [],
+            'is_staff': false,
+            'is_superuser': false
+        };
+
+        var AdminUserInfoResponse = {
+            'id': 1,
+            'url': 'http://localhost:7000/api/users/1/',
+            'username': '0000000000000000000',
+            'email': 'admin@azavea.com',
+            'groups': [],
+            'is_staff': true,
+            'is_superuser': false
+        };
+
         var module = {
             GeographyResponse: GeographyResponse,
             BoundaryNoGeomResponse: BoundaryNoGeomResponse,
@@ -156,7 +176,9 @@
             RecordSchemaResponse: RecordSchemaResponse,
             RecordSchemaRequest: RecordSchemaRequest,
             RecordType: RecordType,
-            RecordTypeResponse: RecordTypeResponse
+            RecordTypeResponse: RecordTypeResponse,
+            UserInfoResponse: UserInfoResponse,
+            AdminUserInfoResponse: AdminUserInfoResponse
         };
         return module;
     }

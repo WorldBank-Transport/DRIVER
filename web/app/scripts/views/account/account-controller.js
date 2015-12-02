@@ -5,7 +5,10 @@
     function AccountController($scope, AuthService, UserInfo) {
 
         $scope.userInfo = UserInfo;
-        $scope.userInfo.token = AuthService.getToken();
+
+        if ($scope.userInfo) {
+            $scope.userInfo.token = AuthService.getToken();
+        }
     }
 
     angular.module('driver.views.account')
