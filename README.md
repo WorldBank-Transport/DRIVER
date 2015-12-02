@@ -25,10 +25,6 @@ A default OAuth2 application will be created, but only on a development provisio
 Navigate to http://localhost:7000/o/applications/ to retrieve the client id/secret after
 logging in via http://localhost:70000/admin/
 
-Requires [ashlar](https://github.com/azavea/ashlar/) to be available at the same level as
-the DRIVER repository. Running `git clone https://github.com/azavea/ashlar/ && git clone
-https://github.com/WorldBank-Transport/DRIVER` should be sufficient.
-
 Then run `vagrant up` from the DRIVER repository.
 
 For development, ssh into the app vm with `vagrant ssh app`.
