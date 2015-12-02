@@ -62,9 +62,11 @@
         /**
          * Broadcast event to trigger setting previously stored filters back on the filter bar.
          */
-        function restoreFilters() {
-            var filterObj = localStorageService.get(storageName);
-            filterObj = !!filterObj ? filterObj : {};
+        function restoreFilters(filterObj) {
+            if(!filterObj) {
+                filterObj = localStorageService.get(storageName);
+                filterObj = !!filterObj ? filterObj : {};
+            }
 
             var geoFilterObj = localStorageService.get(geoFilterObj);
             geoFilterObj = !!geoFilterObj ? geoFilterObj : null;
