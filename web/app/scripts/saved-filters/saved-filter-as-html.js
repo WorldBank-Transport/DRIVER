@@ -19,6 +19,7 @@
 
                 /* jshint camelcase: false */
                 switch(val._rule_type) {
+                    case 'containment_multiple':
                     case 'containment':
                         html += label + val.contains.join(', ');
                         break;
