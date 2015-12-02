@@ -105,19 +105,19 @@
 
         module.logout =  function() {
             setUserId(null);
-            $cookies.remove(tokenCookieString);
+            $cookies.remove(tokenCookieString, {path: '/'});
             $rootScope.$broadcast(events.loggedOut);
             if (cookieTimeout) {
                 $timeout.cancel(cookieTimeout);
                 cookieTimeout = null;
             }
-            // trigger full page refresh
-            $window.location.reload();
 
-            // TODO: hit logout openid endpoint after clearing cookies to log out of OpenID too,
-            // instead of simply refreshing page.
-            // Does GLUU support end_session_endpoint? Google seemingly has none defined.
-            //$window.location.href = ASEConfig.api.hostname + '/openid/logout?next=/';
+            // Hit logout openid endpoint after clearing cookies to log out of API session
+            // created by SSO login, too. Refreshes page for token/user cookies to clear as well.
+            // Redirects back to current location when done.
+            $window.location.href = [ASEConfig.api.hostname,
+                '/api-auth/logout/?next=',
+                $window.location.href].join('');
         };
 
         return module;
@@ -133,7 +133,7 @@
                 cookieTimeout = null;
             }
 
-            $cookies.putObject(tokenCookieString, token);
+            $cookies.putObject(tokenCookieString, token, {path: '/'});
 
             cookieTimeout = $timeout(function() {
                 module.logout();
@@ -143,7 +143,7 @@
         function setUserId(id) {
             var userId = parseInt(id, 10);
             userId = !isNaN(userId) && userId >= 0 ? userId : -1;
-            $cookies.putObject(userIdCookieString, userId);
+            $cookies.putObject(userIdCookieString, userId, {path: '/'});
         }
     }
 
