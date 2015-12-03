@@ -12,6 +12,8 @@
         var cookieTimeout = null;
         var cookieTimeoutMillis = 24 * 60 * 60 * 1000;      // 24 hours
 
+        var canWriteRecords = false; // keep track of whether user is read-only or not
+
         var events = {
             loggedIn: 'ASE:Auth:LoggedIn',
             loggedOut: 'ASE:Auth:LoggedOut'
@@ -40,6 +42,8 @@
                                 // am an admin; log in
                                 setUserId(data.user);
                                 setToken(data.token);
+                                // admins can write records
+                                canWriteRecords = true;
                                 result.isAuthenticated = module.isAuthenticated();
                                 if (result.isAuthenticated) {
                                     $rootScope.$broadcast(events.loggedIn);
@@ -69,6 +73,8 @@
                     result.isAuthenticated = module.isAuthenticated();
                     if (result.isAuthenticated) {
                         $rootScope.$broadcast(events.loggedIn);
+                        // check if user has write access or not
+                        checkWriteAccess();
                     } else {
                         result.error = 'Unknown error logging in.';
                     }
@@ -103,7 +109,15 @@
             return isNaN(userId) ? -1 : userId;
         };
 
+        /*
+         * Returns true if currently logged in user has write access (admin or analyst)
+         */
+        module.hasWriteAccess = function() {
+            return canWriteRecords;
+        };
+
         module.logout =  function() {
+            canWriteRecords = false;
             setUserId(null);
             $cookies.remove(tokenCookieString, {path: '/'});
             $rootScope.$broadcast(events.loggedOut);
@@ -121,6 +135,13 @@
         };
 
         return module;
+
+        function checkWriteAccess(userId) {
+            // check whether user can write records
+            UserService.canWriteRecords(data.user).then(function(canWrite) {
+                canWriteRecords = canWrite;
+            });
+        }
 
         function setToken(token) {
             if (!token) {

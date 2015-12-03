@@ -30,6 +30,7 @@
                 }
             }
         }, {
+            cache: true,
             stripTrailingSlashes: false
         });
 
@@ -48,21 +49,46 @@
             return dfd.promise;
         }
 
+        // check whether user has write access, post login
+        function canWriteRecords(userId) {
+            var dfd = $q.defer();
+            module.User.query({id: userId}, function (user) {
+                if (user && user.groups) {
+
+                    // admin or analyst can write records
+                    if (user.groups.indexOf(ASEConfig.api.groups.admin) > -1 ||
+                        user.groups.indexOf(ASEConfig.api.groups.readWrite) > -1) {
+
+                        dfd.resolve(true);
+                    } else {
+                        dfd.resolve(false);
+                    }
+                } else {
+                    dfd.resolve(false);
+                }
+            });
+
+            return dfd.promise;
+        }
+
+        /*
+         * Check whether user is an admin or not before logging them in (for the editor).
+         * Takes the user ID and token obtained by authentication but not yet set in cookies,
+         * temporarily sets the Authorization header in order to query for the user information,
+         * then un-sets the temporary header when done.
+         */
         function isAdmin(userId, token) {
             tmpToken = token;
             var dfd = $q.defer();
             module.User.query({id: userId}, function (user) {
-                /* jshint camelcase: false */
-                if (user && user.is_staff) {
+                if (user && user.groups && user.groups.indexOf(ASEConfig.api.groups.admin) > -1) {
                     dfd.resolve(true);
                 } else {
                     dfd.resolve(false);
                 }
-                /* jshint camelcase: true */
                 tmpToken = '';
             });
 
-            // config.headers.Authorization = 'Token ' + $cookies.getObject('AuthService.token');
             return dfd.promise;
         }
     }
