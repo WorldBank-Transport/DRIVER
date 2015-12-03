@@ -33,17 +33,17 @@ def delete_driver_groups(apps, schema_editor):
 
 def create_default_admin(apps, schema_editor):
     admin_user = User.objects.filter(username=ADMIN_USER['username'])
-    admin_group = settings.DRIVER_GROUPS['ADMIN']
+    admin_group = Group.objects.get(name=settings.DRIVER_GROUPS['ADMIN'])
     if len(admin_user) == 0:
         default_admin = User(**ADMIN_USER)
         default_admin.set_password(settings.DEFAULT_ADMIN_PASSWORD)
         default_admin.save()
-        default_admin.groups = (admin_group,)
+        default_admin.groups.add(admin_group)
         default_admin.save()
 
 def delete_default_admin(apps, schema_editor):
     try:
-        admin_user = User.objects.filter(username=ADMIN_USER['username'])
+        admin_user = User.objects.get(username=ADMIN_USER['username'])
         admin_user.delete()
     except User.DoesNotExist:
         pass
