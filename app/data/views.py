@@ -15,13 +15,23 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
 
-from ashlar import views
+from ashlar.views import (BoundaryPolygonViewSet,
+                          RecordViewSet,
+                          RecordTypeViewSet,
+                          SchemaViewSet,
+                          RecordSchemaViewSet,
+                          BoundaryViewSet)
+
 from data import transformers
 
+from driver_auth.permissions import (IsAdminOrReadOnly,
+                                     ReadersReadWritersWrite)
 
-class DriverRecordViewSet(views.RecordViewSet):
+
+class DriverRecordViewSet(RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
     """
+    permission_classes = (ReadersReadWritersWrite,)
     def list(self, request, *args, **kwargs):
         # Don't generate a tile key unless the user specifically requests it, to avoid
         # filling up the Redis cache with queries that will never be viewed as tiles
@@ -126,3 +136,25 @@ class DriverRecordViewSet(views.RecordViewSet):
         # to store the data exactly as it is.
         redis_conn = get_redis_connection('default')
         redis_conn.set(token, sql.encode('utf-8'))
+
+
+# override ashlar views to set permissions
+class DriverBoundaryPolygonViewSet(BoundaryPolygonViewSet):
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverRecordTypeViewSet(RecordTypeViewSet):
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverSchemaViewSet(SchemaViewSet):
+    """Base ViewSet for viewsets displaying subclasses of SchemaModel"""
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverRecordSchemaViewSet(RecordSchemaViewSet):
+    permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverBoundaryViewSet(BoundaryViewSet):
+    permission_classes = (IsAdminOrReadOnly,)
