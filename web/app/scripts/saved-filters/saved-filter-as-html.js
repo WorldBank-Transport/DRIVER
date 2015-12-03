@@ -15,7 +15,7 @@
             _.forOwn(filterObj, function(val, key) {
                 // All label keys start with the name of the related object plus a hash.
                 // We only want to display what's after that as the label.
-                var label = ' <u>' + key.split('#')[1] + '</u>: ';
+                var label = '<b>' + key.split('#')[1] + '</b>: ';
 
                 /* jshint camelcase: false */
                 switch(val._rule_type) {
@@ -48,6 +48,7 @@
                         html += 'Unknown rule type: ' + val._rule_type;
                         break;
                 }
+                html += '<span class="divider">|</span>';
                 /* jshint camelcase: true */
             });
 

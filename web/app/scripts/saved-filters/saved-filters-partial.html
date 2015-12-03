@@ -14,17 +14,17 @@
             </thead>
             <tbody>
                 <tr ng-repeat="sf in filters.savedFilters">
-                    <td>
+                    <td width="20%">
                         {{ ::sf.label }}
                     </td>
-                    <td ng-bind-html="sf.filter_json | savedFilterAsHTML">
+                    <td width="60%" ng-bind-html="sf.filter_json | savedFilterAsHTML">
                     </td>
-                    <td>
+                    <td width="10%">
                         <a ng-click="filters.viewFilter(sf)">
                             View&nbsp;&raquo;
                         </a>
                     </td>
-                    <td ng-if="!filters.compact">
+                    <td width="10%" ng-if="!filters.compact">
                         <a ng-click="filters.deleteFilter(sf)">
                             Delete
                         </a>
