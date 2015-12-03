@@ -4,19 +4,17 @@ from django.contrib import admin
 
 from rest_framework import routers
 
-from ashlar import views as a_views
-
 from data import views as data_views
 from driver_auth import views as auth_views
 from user_filters import views as filt_views
 
 router = routers.DefaultRouter()
-router.register('boundaries', a_views.BoundaryViewSet)
-router.register('boundarypolygons', a_views.BoundaryPolygonViewSet)
+router.register('boundaries', data_views.DriverBoundaryViewSet)
+router.register('boundarypolygons', data_views.DriverBoundaryPolygonViewSet)
 router.register('records', data_views.DriverRecordViewSet)
 router.register('userfilters', filt_views.SavedFilterViewSet, base_name='userfilters')
-router.register('recordschemas', a_views.RecordSchemaViewSet)
-router.register('recordtypes', a_views.RecordTypeViewSet)
+router.register('recordschemas', data_views.DriverRecordSchemaViewSet)
+router.register('recordtypes', data_views.DriverRecordTypeViewSet)
 
 # user management
 router.register(r'users', auth_views.UserViewSet)
