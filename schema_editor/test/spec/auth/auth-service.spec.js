@@ -31,6 +31,15 @@ describe('ase.auth:AuthService', function () {
                     }
                 };
             });
+
+            // avoid full page reload during test
+            $window = {
+                location: {},
+                document: window.document,
+                reload: jasmine.createSpy()
+            };
+
+            $provide.constant('$window', $window);
         });
 
         inject(function(_$cookies_, _$httpBackend_, _$rootScope_, _$window_, _$q_,
@@ -51,8 +60,6 @@ describe('ase.auth:AuthService', function () {
         angular.forEach($cookies.getAll(), function(value, key) {
             $cookies.remove(key);
         });
-
-        $window.location.reload = jasmine.createSpy();  // avoid full page reload during test
     });
 
     it('should log in and back out successfully', function () {
