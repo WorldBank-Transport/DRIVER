@@ -6,6 +6,7 @@
     }
 
     angular.module('driver.filterbar', [
+        'ase.auth',
         'debounce',
         'driver.resources',
         'driver.state',

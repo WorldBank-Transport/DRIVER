@@ -3,8 +3,8 @@
 
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
-                                     Nominatim, Notifications, Records, RecordSchemaState,
-                                     RecordState) {
+                                     AuthService, Nominatim, Notifications, Records,
+                                     RecordSchemaState, RecordState) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -24,6 +24,8 @@
             ctl.onGeomChanged = onGeomChanged;
             ctl.nominatimLookup = nominatimLookup;
             ctl.nominatimSelect = nominatimSelect;
+
+            ctl.userCanWrite = AuthService.hasWriteAccess();
 
             ctl.occurredFromOptions = {format: dateTimeFormat};
             ctl.occurredToOptions = {format: dateTimeFormat};

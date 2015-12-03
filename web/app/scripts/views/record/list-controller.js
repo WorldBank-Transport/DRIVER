@@ -2,9 +2,9 @@
     'use strict';
 
     /* ngInject */
-    function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, FilterState,
-                                  InitialState, Notifications, RecordSchemaState, RecordState,
-                                  BoundaryState, QueryBuilder, WebConfig) {
+    function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, AuthService,
+                                  FilterState, InitialState, Notifications, RecordSchemaState,
+                                  RecordState, BoundaryState, QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
         ctl.currentOffset = 0;
@@ -15,11 +15,13 @@
         ctl.showDetailsModal = showDetailsModal;
         ctl.restoreFilters = restoreFilters;
         ctl.isInitialized = false;
+        ctl.userCanWrite = false;
 
         InitialState.ready().then(init);
 
         function init() {
             ctl.isInitialized = false;
+            ctl.userCanWrite = AuthService.hasWriteAccess();
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(BoundaryState.getSelected().then(function(selected) {
                     ctl.boundaryId = selected.uuid;
