@@ -44,8 +44,12 @@
 
         function getUser(userId) {
             var dfd = $q.defer();
-            var result = module.User.get({id: userId}, function () {
-                dfd.resolve(result);
+            module.User.get({id: userId}, function (user) {
+                if (user && user.groups) {
+                    // append attribute to response to indicate if user is an admin or not
+                    user.isAdmin = (user.groups.indexOf(ASEConfig.api.groups.admin) > -1) ? true : false;
+                }
+                dfd.resolve(user);
             });
             return dfd.promise;
         }

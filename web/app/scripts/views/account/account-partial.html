@@ -7,28 +7,28 @@
             <div>
                 <div class="row">
                     <div class="col-sm-2"><label>User ID:</label></div>
-                    <div class="col-sm-4">{{ userInfo.id }}</div>
+                    <div class="col-sm-4">{{ ::userInfo.id }}</div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2"><label>E-mail:</label></div>
-                    <div class="col-sm-4">{{ userInfo.email }}</div>
+                    <div class="col-sm-4">{{ ::userInfo.email }}</div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2"><label>Administrator?</label></div>
                     <div class="col-sm-4">
-                        <span ng-show="!!userInfo.is_staff">Yes</span>
-                        <span ng-show="!userInfo.is_staff">No</span>
+                        <span ng-show="userInfo.isAdmin">Yes</span>
+                        <span ng-show="::!userInfo.isAdmin">No</span>
                     </div>
                 </div>
-                <div class="row" ng-if="userInfo.groups.length > 0">
+                <div class="row" ng-if="::userInfo.groups.length > 0">
                     <div class="col-sm-2"><label>Groups:</label></div>
                     <div class="col-sm-4">
-                        <span>{{ userInfo.groups.join(', ') }}</span>
+                        <span>{{ ::userInfo.groups.join(', ') }}</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-2"><label>Token:</label></div>
-                    <div class="col-sm-4">{{ userInfo.token }}</div>
+                    <div class="col-sm-4">{{ ::userInfo.token }}</div>
                 </div>
             </div>
         </div>
