@@ -36,6 +36,7 @@
 
         var module = {
             User: User,
+            canWriteRecords: canWriteRecords,
             getUser: getUser,
             isAdmin: isAdmin
         };
@@ -49,12 +50,12 @@
             return dfd.promise;
         }
 
-        // check whether user has write access, post login
-        function canWriteRecords(userId) {
+        // Check whether user has write access
+        function canWriteRecords(userId, token) {
+            tmpToken = token;
             var dfd = $q.defer();
             module.User.query({id: userId}, function (user) {
                 if (user && user.groups) {
-
                     // admin or analyst can write records
                     if (user.groups.indexOf(ASEConfig.api.groups.admin) > -1 ||
                         user.groups.indexOf(ASEConfig.api.groups.readWrite) > -1) {
@@ -66,17 +67,13 @@
                 } else {
                     dfd.resolve(false);
                 }
+                tmpToken = '';
             });
 
             return dfd.promise;
         }
 
-        /*
-         * Check whether user is an admin or not before logging them in (for the editor).
-         * Takes the user ID and token obtained by authentication but not yet set in cookies,
-         * temporarily sets the Authorization header in order to query for the user information,
-         * then un-sets the temporary header when done.
-         */
+        // Check whether user is an admin or not before logging them in (for the editor)
         function isAdmin(userId, token) {
             tmpToken = token;
             var dfd = $q.defer();

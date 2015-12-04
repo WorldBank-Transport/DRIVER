@@ -201,6 +201,7 @@ LOGGING = {
 DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azavea.com')
 DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
 DEFAULT_ADMIN_PASSWORD = os.environ.get("DRIVER_ADMIN_PASSWORD", 'admin')
+# the client keeps these group names in the editor's config.js
 DRIVER_GROUPS = {'READ_ONLY': 'public', 'READ_WRITE': 'analyst', 'ADMIN': 'admin'}
 
 # Django Rest Framework
