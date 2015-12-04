@@ -146,4 +146,38 @@ describe('driver.views.record: AddEditController', function () {
 
         $httpBackend.verifyNoOutstandingRequest();
     });
+
+    it('should fix occurred from for pickers', function () {
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordUrl = /\/api\/records/;
+        var nominatimRevUrl = /\/reverse/;
+
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+        var record = DriverResourcesMock.RecordResponse.results[0];
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordUrl).respond(200, record);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+        $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
+
+        Controller = $controller('RecordAddEditController', {
+            $scope: $scope,
+            $stateParams: { recorduuid: DriverResourcesMock.RecordResponse.results[0].uuid }
+        });
+        $scope.$apply();
+
+        var original = new Date(record.occurred_from);
+        Controller.fixOccurredDTForPickers(record);
+        // Occured from should be changed after applying the fix
+        expect(record.occurred_from).not.toEqual(original);
+        Controller.fixOccurredDTForPickers(record, true);
+        // Occured from should equal original after reverting the fix
+        expect(record.occurred_from).toEqual(original);
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+    });
+
 });

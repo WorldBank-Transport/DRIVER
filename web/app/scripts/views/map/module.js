@@ -17,6 +17,7 @@
         'Leaflet',
         'driver.charts',
         'driver.config',
+        'driver.localization',
         'driver.map-layers',
         'driver.state'
     ]).config(StateConfig);
