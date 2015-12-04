@@ -43,3 +43,8 @@ editor_js_html5mode_prefix: "!"
 ## OIDC SETTINGS
 oauth_client_id: ''
 oauth_client_secret: ''
+
+## Localization settings
+local_time_zone_id: 'Asia/Manila'
+local_country_code: 'ph'
+local_center_lat_lon: [12.375, 121.5]
