@@ -19,7 +19,9 @@
         LeafletDefaultsProvider.setDefaults({
             center: [12.375, 121.5], // geographic center of Philippines
             zoom: 5,
-            crs: L.CRS.EPSG3857
+            crs: L.CRS.EPSG3857,
+            touchZoom: false,
+            scrollWheelZoom: false
         });
     }
 
