@@ -27,6 +27,13 @@
 
         // Ensure initial state is ready before initializing layers
         ctl.initLayers = function(map) {
+            // TODO (maybe): This approach to setting map options is only tenable so long as most
+            // of our maps use the same options, with very limited exceptions. If we ever
+            // need to have lots of customized options for each map, then we'll need to find a way to
+            // insert arbitrary config options into each map directive instance. One possibility
+            // would be to define them as attributes, similar to how angular-leaflet-directive does
+            // it, but there may be better approaches.
+            map.scrollWheelZoom.enable();
             InitialState.ready().then(function() {
                 ctl.init(map);
             });
