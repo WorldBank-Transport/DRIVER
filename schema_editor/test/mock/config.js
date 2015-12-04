@@ -8,7 +8,12 @@
             prefix: '!'
         },
         api: {
-            hostname: 'http://localhost:7000'
+            hostname: 'http://localhost:7000',
+            groups: {
+                admin: 'admin',
+                readOnly: 'public',
+                readWrite: 'analyst'
+            }
         }
     };
 

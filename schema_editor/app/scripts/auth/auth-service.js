@@ -146,19 +146,14 @@
 
 
         function setCanWrite(canWrite) {
-            var dfd = $q.defer();
-
             // set cookie after a timeout. Angular polls every 100ms to see if there are any
             // cookies to set; necessary to make sure cookie is set before full page refresh.
             //
             // https://github.com/angular/angular.js/blob/1bb33cccbe12bda4c397ddabab35ba1df85d5137/src/ng/browser.js#L102
             // https://github.com/angular/angular.js/blob/1bb33cccbe12bda4c397ddabab35ba1df85d5137/src/ngCookies/cookies.js#L58-L66
-            $timeout(function() {
+            return $timeout(function() {
                 $cookies.putObject(canWriteCookieString, canWrite, {path: '/'});
-                dfd.resolve(true);
             }, 110);
-
-            return dfd.promise;
         }
 
         function setToken(token) {
