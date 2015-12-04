@@ -23,6 +23,11 @@
             visible: false,
             primaryLabel: 'Accident',
             secondaryLabel: 'Intervention'
+        },
+        localization: {
+            timeZone: 'Asia/Manila',
+            countryCode: 'ph',
+            centerLatLon: [12.375, 121.5]
         }
     };
 

@@ -115,6 +115,8 @@ module.exports = function(config) {
       'app/scripts/views/record/**.js',
       'app/scripts/leaflet/module.js',
       'app/scripts/leaflet/**.js',
+      'app/scripts/localization/module.js',
+      'app/scripts/localization/**.js',
       'app/scripts/map-layers/module.js',
       'app/scripts/map-layers/**/*.js',
       'app/scripts/details/module.js',
