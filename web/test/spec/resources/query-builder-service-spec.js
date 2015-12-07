@@ -27,7 +27,8 @@ describe('driver.resources: QueryBuilder', function () {
     }));
 
     it('should result in a call out to determine the selected RecordType and use the date filtering on FilterState', function () {
-        var recordsUrl = /\/api\/records\/\?limit=50&occurred_min=2015-10-05T00:00:00.000Z&record_type=15460346-65d7-4f4d-944d-27324e224691/;
+        // 2015-10-05 is 2015-10-04T16:00:00.000Z in local Manila time
+        var recordsUrl = /\/api\/records\/\?limit=50&occurred_min=2015-10-04T16:00:00.000Z&record_type=15460346-65d7-4f4d-944d-27324e224691/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
         QueryBuilder.djangoQuery();
