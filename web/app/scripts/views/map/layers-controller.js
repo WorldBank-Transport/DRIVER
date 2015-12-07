@@ -2,11 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($q, $log, $scope, $rootScope, $timeout, $compile,
+    function DriverLayersController($q, $filter, $log, $scope, $rootScope, $timeout, $compile,
                                     FilterState, RecordState, GeographyState,
                                     RecordSchemaState, BoundaryState, QueryBuilder,
                                     MapState, TileUrlService, InitialState) {
         var ctl = this;
+        var localDateTimeFilter = $filter('localDateTime');
+        var dateFormat = 'M/D/YYYY h:mm:ss A';
 
         ctl.recordType = 'ALL';
         ctl.recordTypeLabel = 'Record';
@@ -367,9 +369,10 @@
         ctl.buildRecordPopup = function(record) {
             // add header with event date constant field
             /* jshint camelcase: false */
+            // DateTimes come back from Windshaft without tz information, but they're all UTC
+            var occurredStr = localDateTimeFilter(moment.utc(record.occurred_from));
             var str = '<div id="record-popup" class="record-popup">';
-            str += '<div><h5>' + ctl.recordTypeLabel + ' Details</h5><h3>' +
-                new Date(record.occurred_from).toLocaleString() + '</h3>';
+            str += '<div><h5>' + ctl.recordTypeLabel + ' Details</h5><h3>' + occurredStr + '</h3>';
             /* jshint camelcase: true */
 
             // The ng-click here refers to a function which sits on the map-controller's scope
