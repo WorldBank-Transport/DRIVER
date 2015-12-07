@@ -26,8 +26,6 @@
 
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
-            ctl.occurredFromOptions = {format: dateTimeFormat};
-            ctl.occurredToOptions = {format: dateTimeFormat};
             ctl.openOccurredDatePicker = openOccurredDatePicker;
 
             // Only location text is currently being displayed in the UI. The other nominatim
