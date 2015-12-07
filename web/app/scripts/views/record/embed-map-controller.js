@@ -7,13 +7,13 @@
     var zoomInLevel = 17;
 
     /* ngInject */
-    function EmbedMapController($log, $scope, $rootScope, TileUrlService) {
+    function EmbedMapController($log, $timeout, $scope, $rootScope, TileUrlService) {
+        var dblClickTimeout = null;
         var ctl = this;
 
         ctl.isEditable = false;
         ctl.map = null;
         ctl.locationMarker = null;
-
         /*
          * Initialize map and listen for click events, if editable.
          *
@@ -32,10 +32,7 @@
             });
 
             if (ctl.isEditable) {
-                ctl.map.on('click', function(e) {
-                    broadcastCoordinates(e.latlng);
-                    setMarker(e.latlng);
-                });
+                ctl.map.on('click', handleClick);
                 ctl.map.on('moveend', function(e) {
                     broadcastBBox(e.target.getBounds());
                 });
@@ -45,6 +42,23 @@
                 setMarker(L.latLng(lat, lng));
             }
         };
+
+        /** Handle a click; need to do a bit of work here to prevent moving the marker on
+         * double-click. This has the unfortunate side effect of causing the marker placement to
+         * be slightly delayed.
+         */
+        function handleClick(e) {
+            if (dblClickTimeout) {
+                $timeout.cancel(dblClickTimeout);
+                dblClickTimeout = null;
+            } else {
+                dblClickTimeout = $timeout(function() {
+                  broadcastCoordinates(e.latlng);
+                  setMarker(e.latlng);
+                  dblClickTimeout = null;
+                }, 300);
+            }
+        }
 
         /** Set marker location, or create marker at location if it does not exist yet.
          *
