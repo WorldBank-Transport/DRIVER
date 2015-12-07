@@ -9,18 +9,20 @@ describe('driver.views.record: Embedded Map Controller', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
+    var $timeout;
 
     var Controller;
 
     var snippet = ['<div class="map" leaflet-map driver-embed-map ',
                    'editable="true" lat=11.1 lng=121.8></div>'].join('');
 
-    beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_) {
+    beforeEach(inject(function (_$compile_, _$controller_, _$httpBackend_, _$rootScope_, _$timeout_) {
         $compile = _$compile_;
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $scope = _$rootScope_.$new();
         $rootScope = _$rootScope_;
+        $timeout = _$timeout_;
 
         Element = $compile(snippet)($scope);
         $rootScope.$apply();
@@ -50,9 +52,28 @@ describe('driver.views.record: Embedded Map Controller', function () {
         spyOn($rootScope, '$broadcast').and.callThrough();
         Controller.map.fireEvent('click', {latlng: latlng});
 
+        // Clicking doesn't immediately move the marker; it waits 300ms to see if the click
+        // was actually the beginning of a double-click.
+        $timeout.flush(); // Synchronously resolve all timeouts immediately.
         expect($rootScope.$broadcast).toHaveBeenCalled();
         expect($rootScope.$broadcast).toHaveBeenCalledWith('driver.views.record:marker-moved',
                                                            [lng, lat]);
+    });
+
+    it('should not broadcast map click coordinates on double-click', function() {
+        var lat = 11.3;
+        var lng = 124.2;
+        var latlng = L.latLng(lat, lng);
+
+        spyOn($rootScope, '$broadcast').and.callThrough();
+        Controller.map.fireEvent('click', {latlng: latlng});
+        Controller.map.fireEvent('click', {latlng: latlng});
+
+        // Clicking doesn't immediately move the marker; it waits 300ms to see if the click
+        // was actually the beginning of a double-click. In this case, there should have been
+        // two clicks, so the marker should never move.
+        $timeout.flush();
+        expect($rootScope.$broadcast).not.toHaveBeenCalled();
     });
 
     it('should destroy map and marker on record close event', function() {
