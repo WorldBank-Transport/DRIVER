@@ -17,13 +17,22 @@ describe('driver.views.account: AccountController', function () {
     var DriverResourcesMock;
     var ResourcesMock;
     var UserInfo;
+    var AdminUserInfo;
 
     beforeEach(function() {
+        var $window;
 
         module(function ($provide) {
             // mock UserService
             $provide.factory('UserService', function() {
                 return {
+                    canWriteRecords: function() {
+                        return {
+                            then: function(callback) {
+                                return callback(false); // read only
+                            }
+                        }
+                    },
                     isAdmin: function() { return {
                             then: function(callback) {
                                 return callback(false); // not an admin
@@ -32,10 +41,20 @@ describe('driver.views.account: AccountController', function () {
                     }
                 };
             });
+
+            // avoid full page reload during test
+            $window = {
+                location: {href: '/'},
+                document: window.document,
+                reload: jasmine.createSpy()
+            };
+
+            $provide.constant('$window', $window);
         });
 
-        inject(function (_$controller_, _$httpBackend_, _$rootScope_,
-                                _DriverResourcesMock_, _ResourcesMock_, _AuthService_) {
+        inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$window_,
+                                _DriverResourcesMock_, _ResourcesMock_, _AuthService_,
+                                _UserService_) {
             $controller = _$controller_;
             $httpBackend = _$httpBackend_;
             $rootScope = _$rootScope_;
@@ -43,18 +62,19 @@ describe('driver.views.account: AccountController', function () {
             DriverResourcesMock = _DriverResourcesMock_;
             ResourcesMock = _ResourcesMock_;
             UserInfo = ResourcesMock.UserInfoResponse;
+            AdminUserInfo = ResourcesMock.AdminUserInfoResponse;
             AuthService = _AuthService_;
-
-            // log in first
-            var queryUrl = /\/api-token-auth/;
-            $httpBackend.expectPOST(queryUrl).respond({user: 1, token: 'gotatoken'});
-            AuthService.authenticate({username: 'foo', password: 'foo'});
-            $httpBackend.flush();
-            $rootScope.$digest();
         });
     });
 
     it('should load user information', function () {
+
+        // log in first
+        var queryUrl = /\/api-token-auth/;
+        $httpBackend.expectPOST(queryUrl).respond({user: 1, token: 'gotatoken'});
+        AuthService.authenticate({username: 'foo', password: 'foo'});
+        $httpBackend.flush();
+        $rootScope.$digest();
 
         Controller = $controller('AccountController', {
             $scope: $scope,
@@ -64,5 +84,7 @@ describe('driver.views.account: AccountController', function () {
         $scope.$apply();
 
         expect($scope.userInfo.email).toBe('test@azavea.com');
+
+        AuthService.logout();
     });
 });

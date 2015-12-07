@@ -17,7 +17,13 @@
             prefix: '{{ editor_js_html5mode_prefix }}'
         },
         api: {
-            hostname: '{{ editor_js_api_hostname }}'
+            hostname: '{{ editor_js_api_hostname }}',
+            // These group names are defined server-side in settings.py
+            groups: {
+                admin: 'admin',
+                readOnly: 'public',
+                readWrite: 'analyst'
+            }
         }
     };
 

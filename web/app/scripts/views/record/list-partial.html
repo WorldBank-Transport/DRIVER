@@ -32,7 +32,8 @@
                             <a ng-click="ctl.showDetailsModal(record)">
                                 <span class="glyphicon glyphicon-log-in"></span> View
                             </a>
-                            <a ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">
+                            <a ng-if="::ctl.userCanWrite"
+                                ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">
                                 <span class="glyphicon glyphicon-pencil"></span> Edit
                             </a>
                         </td>

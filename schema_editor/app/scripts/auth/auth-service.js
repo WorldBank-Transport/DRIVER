@@ -7,6 +7,7 @@
     function AuthService($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig, UserService) {
         var module = {};
 
+        var canWriteCookieString = 'AuthService.canWrite';
         var userIdCookieString = 'AuthService.userId';
         var tokenCookieString = 'AuthService.token';
         var cookieTimeout = null;
@@ -42,16 +43,21 @@
                                 setToken(data.token);
                                 result.isAuthenticated = module.isAuthenticated();
                                 if (result.isAuthenticated) {
-                                    $rootScope.$broadcast(events.loggedIn);
+                                    // admins can write records
+                                    setCanWrite(true).then(function() {
+                                        $rootScope.$broadcast(events.loggedIn);
+                                        dfd.resolve(result);
+                                    });
                                 } else {
                                     result.error = 'Unknown error logging in.';
+                                    dfd.resolve(result);
                                 }
                             } else {
                                 // user is not an admin and admin access is required
                                 result.isAuthenticated = false;
                                 result.error = 'Must be an administrator to access this portion of the site.';
+                                dfd.resolve(result);
                             }
-                            dfd.resolve(result);
                         }, function() {
                             result.isAuthenticated = false;
                             result.error = 'Unknown error logging in.';
@@ -68,11 +74,18 @@
                     setToken(data.token);
                     result.isAuthenticated = module.isAuthenticated();
                     if (result.isAuthenticated) {
-                        $rootScope.$broadcast(events.loggedIn);
+                        // set whether user has write access or not
+                        UserService.canWriteRecords(data.user, data.token).then(function(canWrite) {
+                            setCanWrite(canWrite).then(function() {
+                                $rootScope.$broadcast(events.loggedIn);
+                                dfd.resolve(result);
+                            });
+                        });
                     } else {
                         result.error = 'Unknown error logging in.';
+                        setCanWrite(false);
+                        dfd.resolve(result);
                     }
-                    dfd.resolve(result);
                 }
             })
             .error(function(data, status) {
@@ -103,24 +116,45 @@
             return isNaN(userId) ? -1 : userId;
         };
 
+        /*
+         * Returns true if currently logged in user has write access (admin or analyst)
+         */
+        module.hasWriteAccess = function() {
+            return $cookies.getObject(canWriteCookieString) || false;
+        };
+
         module.logout =  function() {
             setUserId(null);
             $cookies.remove(tokenCookieString, {path: '/'});
-            $rootScope.$broadcast(events.loggedOut);
-            if (cookieTimeout) {
-                $timeout.cancel(cookieTimeout);
-                cookieTimeout = null;
-            }
+            setCanWrite(false).then(function() {
+                $rootScope.$broadcast(events.loggedOut);
+                if (cookieTimeout) {
+                    $timeout.cancel(cookieTimeout);
+                    cookieTimeout = null;
+                }
 
-            // Hit logout openid endpoint after clearing cookies to log out of API session
-            // created by SSO login, too. Refreshes page for token/user cookies to clear as well.
-            // Redirects back to current location when done.
-            $window.location.href = [ASEConfig.api.hostname,
-                '/api-auth/logout/?next=',
-                $window.location.href].join('');
+                // Hit logout openid endpoint after clearing cookies to log out of API session
+                // created by SSO login, too. Refreshes page for token/user cookies to clear as well.
+                // Redirects back to current location when done.
+                $window.location.href = [ASEConfig.api.hostname,
+                    '/api-auth/logout/?next=',
+                    $window.location.href].join('');
+            });
         };
 
         return module;
+
+
+        function setCanWrite(canWrite) {
+            // set cookie after a timeout. Angular polls every 100ms to see if there are any
+            // cookies to set; necessary to make sure cookie is set before full page refresh.
+            //
+            // https://github.com/angular/angular.js/blob/1bb33cccbe12bda4c397ddabab35ba1df85d5137/src/ng/browser.js#L102
+            // https://github.com/angular/angular.js/blob/1bb33cccbe12bda4c397ddabab35ba1df85d5137/src/ngCookies/cookies.js#L58-L66
+            return $timeout(function() {
+                $cookies.putObject(canWriteCookieString, canWrite, {path: '/'});
+            }, 110);
+        }
 
         function setToken(token) {
             if (!token) {

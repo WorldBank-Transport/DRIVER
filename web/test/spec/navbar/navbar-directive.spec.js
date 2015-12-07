@@ -68,6 +68,7 @@ describe('driver.navbar: Navbar', function () {
 
         // log in first
         $httpBackend.expectPOST(/\/api-token-auth\//).respond({user: 1, token: 'gotatoken'});
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
         AuthService.authenticate({username: 'foo', password: 'foo'});
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();

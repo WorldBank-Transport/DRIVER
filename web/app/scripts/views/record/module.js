@@ -36,6 +36,7 @@
 
     angular.module('driver.views.record', [
         'ngSanitize',
+        'ase.auth',
         'ase.notifications',
         'ase.resources',
         'ase.schemas',

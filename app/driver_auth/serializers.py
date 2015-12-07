@@ -3,7 +3,11 @@ from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
+
+    # display groups by name
+    groups = serializers.StringRelatedField(many=True)
+
     class Meta:
         model = User
         fields = ('id', 'url', 'username', 'email', 'groups', 'password',
@@ -25,7 +29,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ('id', 'url', 'name')

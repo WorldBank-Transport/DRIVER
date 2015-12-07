@@ -24,6 +24,7 @@
                 if (result.isAuthenticated) {
                     // redirect to dashboard, with a full page reload,
                     // to pick up the newly set credentials
+
                     $window.location.href = '/';
                 } else {
                     handleError(result);

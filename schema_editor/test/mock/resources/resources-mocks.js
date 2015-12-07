@@ -154,7 +154,8 @@
             'url': 'http://localhost:7000/api/users/2/',
             'username': '0000000000000000000',
             'email': 'test@azavea.com',
-            'groups': [],
+            'groups': ['public'],
+            'isAdmin': false,
             'is_staff': false,
             'is_superuser': false
         };
@@ -164,8 +165,9 @@
             'url': 'http://localhost:7000/api/users/1/',
             'username': '0000000000000000000',
             'email': 'admin@azavea.com',
-            'groups': [],
-            'is_staff': true,
+            'groups': ['admin'],
+            'isAdmin': true,
+            'is_staff': false,
             'is_superuser': false
         };
 

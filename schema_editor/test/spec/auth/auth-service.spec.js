@@ -9,6 +9,7 @@ describe('ase.auth:AuthService', function () {
     var $httpBackend;
     var $rootScope;
     var $q;
+    var $timeout;
 
     var AuthService;
     var ResourcesMock;
@@ -23,6 +24,12 @@ describe('ase.auth:AuthService', function () {
             // mock UserService
             $provide.factory('UserService', function() {
                 return {
+                    canWriteRecords: function() { return {
+                            then: function(callback) {
+                                return callback(true); // analyst
+                            }
+                        };
+                    },
                     isAdmin: function() { return {
                             then: function(callback) {
                                 return callback(false); // not an admin
@@ -42,7 +49,7 @@ describe('ase.auth:AuthService', function () {
             $provide.constant('$window', $window);
         });
 
-        inject(function(_$cookies_, _$httpBackend_, _$rootScope_, _$window_, _$q_,
+        inject(function(_$cookies_, _$httpBackend_, _$rootScope_, _$window_, _$q_, _$timeout_,
                _AuthService_, _ResourcesMock_, _UserService_) {
 
             AuthService = _AuthService_;
@@ -50,6 +57,7 @@ describe('ase.auth:AuthService', function () {
             ResourcesMock = _ResourcesMock_;
             $httpBackend = _$httpBackend_;
             $q = _$q_;
+            $timeout = _$timeout_;
             $rootScope = _$rootScope_;
             $window = _$window_;
             $cookies = _$cookies_;
@@ -69,18 +77,22 @@ describe('ase.auth:AuthService', function () {
             expect(data.isAuthenticated).toBe(true);
             expect(data.status).toBe(200);
             expect(data.error).toBeFalsy();
+            expect($rootScope.$broadcast).toHaveBeenCalledWith(AuthService.events.loggedIn);
+            expect(AuthService.hasWriteAccess()).toBeTruthy();
             expect(AuthService.getUserId()).toBe(1);
             expect(AuthService.getToken()).toBe('gotatoken');
         });
 
         $httpBackend.flush();
-        expect($rootScope.$broadcast).toHaveBeenCalledWith(AuthService.events.loggedIn);
+        $timeout.flush();
 
         // log out
         AuthService.logout();
         $rootScope.$digest();
+        $timeout.flush();
         expect(AuthService.getUserId()).toBe(-1);
         expect(AuthService.getToken()).toBeUndefined();
+        expect(AuthService.hasWriteAccess()).toBeFalsy();
         expect($rootScope.$broadcast).toHaveBeenCalledWith(AuthService.events.loggedOut);
     });
 
@@ -93,9 +105,11 @@ describe('ase.auth:AuthService', function () {
             expect(data.error).toBe('Password field required.');
             expect(AuthService.getUserId()).toBe(-1);
             expect(AuthService.getToken()).toBeUndefined();
+            expect(AuthService.hasWriteAccess()).toBeFalsy();
         });
 
         $httpBackend.flush();
+        $timeout.flush();
     });
 
     it('should support restricting to admin logins', function () {
@@ -107,10 +121,12 @@ describe('ase.auth:AuthService', function () {
             expect(data.error).toBeTruthy();
             expect(AuthService.getUserId()).toBe(-1);
             expect(AuthService.getToken()).toBeUndefined();
+            expect(AuthService.hasWriteAccess()).toBeFalsy();
         });
 
         $rootScope.$digest();
         $httpBackend.flush();
+        $timeout.flush();
     });
 
 });

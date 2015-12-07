@@ -3,16 +3,18 @@
 
     /* ngInject */
     function FilterbarController($log, $modal, $scope, $timeout, debounce, RecordSchemaState,
-                                 FilterState, RecordState) {
+                                 AuthService, FilterState, RecordState) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
         ctl.recordLabel = '';
         ctl.reset = reset;
         ctl.showSavedFiltersModal = showSavedFiltersModal;
+        ctl.userCanAdd = false;
         init();
 
         function init() {
+            ctl.userCanAdd = AuthService.hasWriteAccess();
             RecordState.getSelected().then(function(selected) {
                 onRecordTypeSelected(selected);
             });
