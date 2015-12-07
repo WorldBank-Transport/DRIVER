@@ -87,6 +87,26 @@
             return filterParams;
         }
 
+        // Helper for converting a datetime string to the proper format to work with moment.tz.
+        // A datetime in the format MM/DD/YYYY doesn't work properly with with moment tz conversion,
+        // and must be converted to YYYY-MM-DD
+        function convertDT(dtString) {
+            // If empty, return null, we don't want it on the query
+            if (!dtString) {
+                return null;
+            }
+
+            // If it's already in the right format, don't do the conversion
+            if (dtString.indexOf('/') <= 0) {
+                return dtString;
+            }
+
+            var components = dtString.split('/');
+            var month = components[0];
+            var day = components[1];
+            var year = components[2];
+            return year + '-' + month + '-' + day;
+        }
 
         /**
          * Assemble all query parameters into a single query parameters object for the Record resource
@@ -109,18 +129,22 @@
                 var minDateString = new Date(now - duration).toJSON().slice(0, 10);
 
                 if (FilterState.filters.hasOwnProperty('__dateRange')) {
-                    minDateString = FilterState.filters.__dateRange.min || minDateString;
-                    maxDateString = FilterState.filters.__dateRange.max || maxDateString;
+                    minDateString = convertDT(FilterState.filters.__dateRange.min);
+                    maxDateString = convertDT(FilterState.filters.__dateRange.max);
                 }
 
                 // Perform some sanity checks on the dates
-                var min = new Date(minDateString);
-                if (!isNaN(min.getTime())) {
-                    paramObj.occurred_min = min.toISOString();
+                if (minDateString) {
+                    var min = moment.tz(minDateString, WebConfig.localization.timeZone);
+                    if (!isNaN(min.unix())) {
+                        paramObj.occurred_min = min.toISOString();
+                    }
                 }
-                var max = new Date(maxDateString + ' 23:59:59');
-                if (!isNaN(max.getTime())) {
-                    paramObj.occurred_max = max.toISOString();
+                if (maxDateString) {
+                var max = moment.tz(maxDateString + ' 23:59:59', WebConfig.localization.timeZone);
+                    if (!isNaN(max.unix())) {
+                        paramObj.occurred_max = max.toISOString();
+                    }
                 }
 
                 var jsonFilters = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange'));

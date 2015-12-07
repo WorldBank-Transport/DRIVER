@@ -3,7 +3,7 @@
         Occurred
     </label>
     <div class="value constant date occurred">
-        {{ ::ctl.record.occurred_from | date : ctl.dateFormat }}
+        {{ ::ctl.record.occurred_from | localDateTime : ctl.dateFormat }}
     </div>
 </div>
 <div class="col-sm-6">
@@ -11,7 +11,7 @@
         Created
     </label>
     <div class="value constant date created">
-        {{ ::ctl.record.created | date: ctl.dateFormat }}
+        {{ ::ctl.record.created | localDateTime: ctl.dateFormat }}
     </div>
 </div>
 <div class="col-sm-12">
@@ -44,4 +44,3 @@
         {{ ::ctl.record.geom.coordinates[0] | number:5 }}
     </div>
 </div>
-

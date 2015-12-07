@@ -4,19 +4,18 @@
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
                                      AuthService, Nominatim, Notifications, Records,
-                                     RecordSchemaState, RecordState) {
+                                     RecordSchemaState, RecordState, WebConfig) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
         var suppressReverseNominatim = true;
-
-        // expected format to save successfully
-        var dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
+        var timeZone = WebConfig.localization.timeZone;
 
         initialize();
 
         // Initialize for either adding or editing, depending on recorduuid being supplied
         function initialize() {
+            ctl.fixOccurredDTForPickers = fixOccurredDTForPickers;
             ctl.goBack = goBack;
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
@@ -27,8 +26,7 @@
 
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
-            ctl.occurredFromOptions = {format: dateTimeFormat};
-            ctl.occurredToOptions = {format: dateTimeFormat};
+            ctl.openOccurredDatePicker = openOccurredDatePicker;
 
             // Only location text is currently being displayed in the UI. The other nominatim
             // values are only being stored. The variables have been placed on the controller
@@ -46,6 +44,11 @@
             ctl.geom = {
                 lat: null,
                 lng: null
+            };
+
+            // Date picker state
+            ctl.occurredDatePicker = {
+                opened: false
             };
 
             $scope.$on('driver.views.record:marker-moved', function(event, data) {
@@ -89,6 +92,11 @@
                 .then(onSchemaReady);
         }
 
+        // Called when calendar icon of occurred date picker is pressed
+        function openOccurredDatePicker() {
+            ctl.occurredDatePicker.opened = true;
+        }
+
         // tell embed-map-directive to update marker location
         function onGeomChanged(recenter) {
             if (ctl.geom.lat && ctl.geom.lng) {
@@ -99,10 +107,42 @@
             constantFieldsValidationErrors();
         }
 
+        /**
+         * Since the date and time pickers rely on the browser's local timezone with
+         * no way to override, we need to modify the occurred datetime before it gets
+         * to the pickers. We want to show the datetime in the configured local tz,
+         * so we need to apply offsets for both the browser's tz and the configured
+         * local tz so it shows up as desired. This also needs to be undone before
+         * sending data over to the server when saving this request. This is a hack,
+         * but there's no clearly better way around it.
+         *
+         * @param {object} record The record object where occurred_to resides
+         * @param {bool} reverse True if the fix is being reversed out of for saving purposes
+         */
+        function fixOccurredDTForPickers(record, reverse) {
+            /* jshint camelcase: false */
+            var occurredDT = new Date(record.occurred_from);
+            var browserTZOffset = occurredDT.getTimezoneOffset();
+            var configuredTZOffset = moment(occurredDT).tz(timeZone)._offset;
+
+            // Note that the native js getTimezoneOffset returns the opposite of what
+            // you'd expect: i.e. EST which is UTC-5 gets returned as positive 5.
+            // The `moment` method of returning the offset would return this as a -5.
+            // Therefore if the browser tz is the same as the configured local tz,
+            // the following offset will cancel out and return zero.
+            var offset = (browserTZOffset + configuredTZOffset) * (reverse ? -1 : +1);
+            occurredDT.setMinutes(occurredDT.getMinutes() + offset);
+            record.occurred_from = occurredDT;
+            /* jshint camelcase: true */
+        }
+
         // Helper for loading the record -- only used when in edit mode
         function loadRecord() {
             return Records.get({ id: $stateParams.recorduuid })
                 .$promise.then(function(record) {
+                    // Prep the occurred_from datetime for use with pickers
+                    fixOccurredDTForPickers(record, false);
+
                     ctl.record = record;
                     /* jshint camelcase: false */
                     // set lat/lng array into bind-able object
@@ -317,6 +357,9 @@
             // If there is already a record, set the new editorData and update, else create one
             var saveMethod = null;
             var dataToSave = null;
+
+            // Reverse the date and time picker timezone fix to get back to the actual correct time
+            fixOccurredDTForPickers(ctl.record, true);
 
             /* jshint camelcase: false */
             if (ctl.record.geom) {

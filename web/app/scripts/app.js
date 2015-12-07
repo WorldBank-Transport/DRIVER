@@ -15,9 +15,9 @@
     }
 
     /* ngInject */
-    function LeafletDefaultsConfig(LeafletDefaultsProvider) {
+    function LeafletDefaultsConfig(LeafletDefaultsProvider, WebConfig) {
         LeafletDefaultsProvider.setDefaults({
-            center: [12.375, 121.5], // geographic center of Philippines
+            center: WebConfig.localization.centerLatLon,
             zoom: 5,
             crs: L.CRS.EPSG3857,
             touchZoom: false,

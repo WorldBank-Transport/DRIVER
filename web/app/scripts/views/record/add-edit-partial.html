@@ -45,25 +45,33 @@
                                 class="help-block errormsg">Value required.</p>
                         </div>
                     </div>
-				</div>
-				<div class= "row">
+                </div>
+                <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group"
+                        <div class="form-group date-picker"
                             ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
                             <label class="control-label required">Occurred</label>
-                            <div class="input-group" id="datetimepicker-From">
+                            <div class="input-group">
                                 <input type="text" class="form-control"
-                                    datetimepicker
-                                    datetimepicker-options="{{ ctl.occurredFromOptions }}"
+                                    datepicker-popup="longDate"
+                                    is-open="ctl.occurredDatePicker.opened"
                                     ng-change="ctl.occurredFromChanged()"
                                     ng-model="ctl.record.occurred_from"
                                     placeholder="From">
-                                <span class="input-group-addon">
+                                <span class="input-group-addon picker" ng-click="ctl.openOccurredDatePicker()">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
                             </div>
                             <p ng-if="ctl.constantFieldErrors.occurred"
                                 class="help-block errormsg">Value required.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group time-picker">
+                            <div class="input-group"
+                                 timepicker
+                                 ng-model="ctl.record.occurred_from">
+                            </div>
                         </div>
                     </div>
                 </div>

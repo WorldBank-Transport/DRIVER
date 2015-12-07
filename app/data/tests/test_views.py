@@ -31,7 +31,7 @@ class DriverRecordViewTestCase(APITestCase):
         self.admin_client.force_authenticate(user=self.admin)
         self.factory = APIRequestFactory()
 
-        self.now = datetime.now(pytz.utc)
+        self.now = datetime.now(pytz.timezone('Asia/Manila'))
         self.then = self.now - timedelta(days=10)
         self.beforeThen = self.then - timedelta(days=1)
         self.afterThen = self.then + timedelta(days=1)

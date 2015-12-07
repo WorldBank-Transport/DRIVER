@@ -17,7 +17,7 @@
                 <tbody>
                     <tr ng-repeat="record in ctl.records.results">
                         <td class="date">
-                            {{ ::record.occurred_to | date:'short' }}
+                            {{ ::record.occurred_to | localDateTime }}
                         </td>
                         <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
                             <driver-details-field
