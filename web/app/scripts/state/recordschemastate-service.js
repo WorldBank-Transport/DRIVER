@@ -34,7 +34,13 @@
         function getFilterables(schemaID) {
             var deferred = $q.defer();
             get(schemaID).then(function(schema) {
-                var definitions = schema.schema.definitions;
+                // Falling back on the empty object is necessary only for testing
+                var definitions;
+                if (schema.schema && schema.schema.definitions) {
+                    definitions = schema.schema.definitions;
+                } else {
+                    definitions = {};
+                }
 
                 var namespaced = {};
                 _.forEach(definitions, function(schema, i) {
@@ -74,8 +80,12 @@
             var deferred = $q.defer();
             if (!selected) {
                 RecordSchemas.get({ id: schemaID }).$promise.then(function(schema) {
-                    selected = schema;
-                    deferred.resolve(schema);
+                    if (schema.results) {
+                        selected = schema.results[schema.results.length-1];
+                    } else {
+                        selected = schema;
+                    }
+                    deferred.resolve(selected);
                 });
             } else {
                 deferred.resolve(selected);
