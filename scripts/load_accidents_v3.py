@@ -7,6 +7,7 @@ import logging
 import json
 import os
 from osgeo import ogr, osr
+import pytz
 import uuid
 
 import requests
@@ -67,6 +68,7 @@ def transform(record, schema_id):
 
     # Set the occurred_from/to fields
     occurred_date = parser.parse(record['record_date'])
+    occurred_date = pytz.timezone('Asia/Manila').localize(occurred_date)
     obj['occurred_from'] = occurred_date.isoformat()
     obj['occurred_to'] = occurred_date.isoformat()
 
