@@ -31,3 +31,8 @@ driver_app_hostname: "http://prs.azavea.com"
 editor_js_html5mode: "false"
 editor_js_api_hostname: "http://prs.azavea.com"
 google_analytics_id: "GTM-5B5G65"
+
+## Localization settings
+local_time_zone_id: 'Asia/Manila'
+local_country_code: 'ph'
+local_center_lat_lon: [12.375, 121.5]
