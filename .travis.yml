@@ -7,6 +7,7 @@ env:
   - secure: I69EcUo9LOve4HK54qGLJPdgov3AopDsTCOGp+3GvWJg9CeOuHdU8N7Ym84Xe5U3KPtxMIHDq+DwOdOjo0Im9kfPU65mmKc8bmymVVyZxUAldDaUbUC7fquvFcejoADB5r62SH7PzV4duvZeLXtZz5awOUO2HvMoE4i6VdJKu4M=
   - secure: GuiAqvRAZ7ITaDouiN5QD5xvdvNZwSS6loqt20Fh50HH0yAYivbgEIWH/fm2ioPA2BmsK0xMFFkAitt08G4GT4chdxENR9Joe/0fnAskmT1+tEQswhelAZfe/i8IljwVwo+4Z/frZMFKA+9tdrrdRQN6nVa9JimxoSoawqivqmM=
   - secure: rxJHlPjag0Ie6mFk5p40Rc+v0yegXXn+JLDwVJB5koZNOH4KNvDis+KG/VyZpLAXohd7Mrdqd87Z8xfzExur4Q10ubHyMMdLrgMDOTEx5j2S+8tt0kek+iFyTM4tsMi9H5MnS+zQ0MRNoF+Ay1tVi7XeHODMz/TKWGWsWzf+cvg=
+  - secure: wc2LNYrPX8OfaytX9iQi4Wp9CBdMzBEt2PGiJIzcxALl8CS/PnP4/efnSuuAW49zaKvtSZ2kwqXObH0E0PamcCufkR3QCbnG+pxuq+Zxu11152inz3FO8UiaYksmzBcO3tidGuehWFPr+ULinlbT3RYaItXmPoPTAfO5l/0r1F4=
 language: bash
 services:
 - docker

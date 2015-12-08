@@ -14,6 +14,7 @@ driver_conf:
   DRIVER_APP_HOST: "{{ driver_app_hostname }}"
   OAUTH_CLIENT_ID: "{{ oauth_client_id }}"
   OAUTH_CLIENT_SECRET: "{{ oauth_client_secret }}"
+  FORECAST_IO_API_KEY: "{{ forecast_io_api_key }}"
   DRIVER_REDIS_HOST: "{{ redis_bind_address }}"
   DRIVER_REDIS_PORT: "{{ redis_port }}"
   DJANGO_STATIC_ROOT: "{{ root_static_dir }}"
