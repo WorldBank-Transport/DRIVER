@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
                                      AuthService, Nominatim, Notifications, Records,
-                                     RecordSchemaState, RecordState, WebConfig) {
+                                     RecordSchemaState, RecordState, WeatherService, WebConfig) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -27,6 +27,12 @@
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
             ctl.openOccurredDatePicker = openOccurredDatePicker;
+
+            // Weather
+            ctl.lightValues = WeatherService.lightValues;
+            ctl.weatherValues = WeatherService.weatherValues;
+            ctl.weather = '';
+            ctl.light = '';
 
             // Only location text is currently being displayed in the UI. The other nominatim
             // values are only being stored. The variables have been placed on the controller
@@ -155,6 +161,8 @@
                     ctl.nominatimNeighborhood = ctl.record.neighborhood;
                     ctl.nominatimRoad = ctl.record.road;
                     ctl.nominatimState = ctl.record.state;
+                    ctl.weather = ctl.record.weather;
+                    ctl.light = ctl.record.light;
                     /* jshint camelcase: true */
 
                     // notify map
@@ -372,6 +380,8 @@
                 ctl.record.neighborhood = ctl.nominatimNeighborhood;
                 ctl.record.road = ctl.nominatimRoad;
                 ctl.record.state = ctl.nominatimState;
+                ctl.record.weather = ctl.weather;
+                ctl.record.light = ctl.light;
 
                 saveMethod = 'update';
                 // set `to` date to match `from` date
@@ -393,6 +403,8 @@
                     neighborhood: ctl.nominatimNeighborhood,
                     road: ctl.nominatimRoad,
                     state: ctl.nominatimState,
+                    weather: ctl.weather,
+                    light: ctl.light,
 
                     occurred_from: ctl.record.occurred_from,
                     // set `to` date to match `from` date
