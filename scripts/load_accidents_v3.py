@@ -38,8 +38,7 @@ def transform(record, schema_id):
         'num_pedestrian_casualties': 'Num pedestrian casualties',
         'traffic_control': 'Traffic control',
         'collision_type': 'Collision type',
-        'weather': 'Weather',
-        'light': 'Light',
+        'street_lights': 'Street lights',
         'surface_condition': 'Surface condition',
         'surface_type': 'Surface type',
         'main_cause': 'Main cause'

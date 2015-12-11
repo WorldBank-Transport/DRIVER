@@ -67,12 +67,10 @@
                     "isSearchable":false,
                     "type":"string"
                 },
-                "Light":{
+                "Street lights":{
                     "enum":[
-                        "Daylight",
-                        "Dawn/dusk",
-                        "Night (lit)",
-                        "Night (unlit)"
+                        "Lit",
+                        "Unlit"
                     ],
                     "displayType":"select",
                     "propertyOrder":10,
@@ -95,22 +93,6 @@
                     ],
                     "displayType":"select",
                     "propertyOrder":1,
-                    "fieldType":"selectlist",
-                    "isSearchable":true,
-                    "type":"string"
-                },
-                "Weather":{
-                    "enum":[
-                        "Fair",
-                        "Rain",
-                        "Wind",
-                        "Smoke",
-                        "Fog",
-                        "Drizzle",
-                        "Storm"
-                    ],
-                    "displayType":"select",
-                    "propertyOrder":9,
                     "fieldType":"selectlist",
                     "isSearchable":true,
                     "type":"string"
