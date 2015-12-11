@@ -79,16 +79,19 @@
                     <div class="col-md-6">
                         <label class="control-label">Weather</label>
                         <div class="input-group">
-                          <select class="form-control" ng-model="ctl.weather">
-                              <option ng-repeat="weatherVal in ctl.weatherValues" value="{{ weatherVal }}">
-                                  {{ weatherVal | weatherLabel }}
-                              </option>
-                          </select>
+                            <select class="form-control" ng-model="ctl.weather">
+                                <option ng-repeat="weatherVal in ctl.weatherValues" value="{{ weatherVal }}">
+                                    {{ weatherVal | weatherLabel }}
+                                </option>
+                            </select>
 
-                          <span class="input-group-addon">
-                              <i class="wi wi-forecast-io-{{ ctl.weather }}"></i>
-                          </span>
+                            <span class="input-group-addon">
+                                <i class="wi wi-forecast-io-{{ ctl.weather }}"></i>
+                            </span>
                         </div>
+                        <a href="http://forecast.io" ng-if="ctl.record.weather" target="_blank">
+                            Powered by Forecast
+                        </a>
                     </div>
                     <div class="col-md-6">
                         <label class="control-label">Light</label>

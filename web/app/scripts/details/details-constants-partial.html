@@ -54,6 +54,9 @@
             {{ ::ctl.record.weather | weatherLabel }}
         </span>
     </div>
+    <a href="http://forecast.io" ng-if="ctl.record.weather" target="_blank">
+        Powered by Forecast
+    </a>
 </div>
 <div class="col-sm-6">
     <label>
