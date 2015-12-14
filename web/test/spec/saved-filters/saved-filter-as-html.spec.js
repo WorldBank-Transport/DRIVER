@@ -21,7 +21,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '_rule_type': 'containment'
             }
         };
-        var expected = ' <u>Severity</u>: Injury';
+        var expected = '<b>Severity</b>: Injury<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -35,7 +35,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '_rule_type': 'containment_multiple'
             }
         };
-        var expected = ' <u>Severity</u>: Injury, Fatality';
+        var expected = '<b>Severity</b>: Injury, Fatality<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -46,7 +46,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'min': 2
             }
         };
-        var expected = ' <u>Num driver casualties</u>: &gt; 2';
+        var expected = '<b>Num driver casualties</b>: &gt; 2<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -57,7 +57,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'max': 2
             }
         };
-        var expected = ' <u>Num driver casualties</u>: &lt; 2';
+        var expected = '<b>Num driver casualties</b>: &lt; 2<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -69,7 +69,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'max': 2
             }
         };
-        var expected = ' <u>Num driver casualties</u>: 1-2';
+        var expected = '<b>Num driver casualties</b>: 1-2<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -117,9 +117,11 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '_rule_type': 'containment'
             }
         };
-        var expected = ' <u>Main cause</u>: Vehicle defect <u>Weather</u>: Wind ' +
-                '<u>Num driver casualties</u>: 1-4 <u>Severity</u>: Injury ' +
-                '<u>Collision type</u>: Right angle';
+        var expected = '<b>Main cause</b>: Vehicle defect<span class="divider">|</span>' +
+                '<b>Weather</b>: Wind<span class="divider">|</span>' +
+                '<b>Num driver casualties</b>: 1-4<span class="divider">|</span>' +
+                '<b>Severity</b>: Injury<span class="divider">|</span>' +
+                '<b>Collision type</b>: Right angle<span class="divider">|</span>';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 

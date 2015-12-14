@@ -48,7 +48,9 @@
                         html += 'Unknown rule type: ' + val._rule_type;
                         break;
                 }
-                html += '<span class="divider">|</span>';
+                if (html) {
+                    html += '<span class="divider">|</span>';
+                }
                 /* jshint camelcase: true */
             });
 
