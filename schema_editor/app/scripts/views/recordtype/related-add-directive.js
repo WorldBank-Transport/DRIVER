@@ -43,6 +43,11 @@
                 };
             }
 
+            // Set the collapsed option to true so all objects start collapsed when viewing
+            ctl.currentSchema.schema.properties[ctl.definition.title].options = {
+                collapsed: true
+            };
+
             RecordSchemas.create({
                 /* jshint camelcase:false */
                 schema: ctl.currentSchema.schema,

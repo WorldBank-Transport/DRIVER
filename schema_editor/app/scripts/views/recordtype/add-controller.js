@@ -45,7 +45,12 @@
             // with other libraries, we may need to find a fix.
             schema.definitions[definition.title] = definition;
             schema.properties[definition.title] = {
-                $ref: '#/definitions/' + Schemas.encodeJSONPointer(definition.title)
+                $ref: '#/definitions/' + Schemas.encodeJSONPointer(definition.title),
+
+                // Set the collapsed option of the details option to true so it starts collapsed
+                options: {
+                    collapsed: true
+                }
             };
 
             RecordSchemas.create({

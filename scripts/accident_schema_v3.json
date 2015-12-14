@@ -476,21 +476,30 @@
     "properties":{
         "Accident Details":{
             "$ref":"#/definitions/Accident Details",
-            "propertyOrder": 0
+            "propertyOrder": 0,
+            "options": {
+                "collapsed": true
+            }
         },
         "Vehicle":{
             "items":{
                 "$ref":"#/definitions/Vehicle"
             },
             "type":"array",
-            "propertyOrder": 1
+            "propertyOrder": 1,
+            "options": {
+                "collapsed": true
+            }
         },
         "Person":{
             "items":{
                 "$ref":"#/definitions/Person"
             },
             "type":"array",
-            "propertyOrder": 2
+            "propertyOrder": 2,
+            "options": {
+                "collapsed": true
+            }
         }
     }
 }
