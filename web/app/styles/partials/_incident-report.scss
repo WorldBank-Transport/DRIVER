@@ -59,6 +59,9 @@
         border: none;
         padding: 15px;
     }
+    .modal-footer {
+        margin: 15px -15px -15px;
+    }
     .edit {
         font-size: 14px;
         font-weight: 700;
@@ -107,6 +110,14 @@
                 color: #AAA;
             }
         }
+        h3 small {
+            margin-left: 10px;
+            
+            a {
+                font-weight: 700;
+                text-decoration: underline;
+            }
+        }
     }
     .report-sections {
         margin: 0 -15px;
@@ -136,6 +147,10 @@
                 margin: 20px 0;
             }
         }
+    }
+    .map {
+        height: 300px;
+        margin-bottom: 10px;
     }
 
     .table {

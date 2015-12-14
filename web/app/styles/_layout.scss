@@ -45,6 +45,10 @@ label {
 	margin-left: 0;
 	margin-right: 0;
 }
+.modal-content {
+    border-radius: 0;
+    border: none;
+}
 
 .acct-info {
     .row {
@@ -66,7 +70,7 @@ main {
     	margin-right: -15px;
     }
     .btn-group > .btn {
-        margin-right: 10px;
+        margin-left: 10px;
         border-radius: 6px !important;
     }
     .well-sm {
@@ -104,23 +108,6 @@ main {
 		fill: #999;
 
 	}
-}
-
-/* SAVE BUTTON AREA */
-
-.save-area {
-	margin: 25px 39%;
-	display: inline-block;
-	.btn {
-		margin-right: 15px;
-	}
-}
-
-/* CONSTANT FIELDS */
-
-.constant-fields {
-    position:relative;
-    z-index:5;
 }
 
 /* DETAILS */

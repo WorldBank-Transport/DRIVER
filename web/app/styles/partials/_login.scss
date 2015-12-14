@@ -10,7 +10,7 @@
         max-width: 600px;
         background: white;
         top: 50px;
-        margin: 0 auto;
+        margin: 0 auto 25px;
         position: relative;
         box-shadow: 0 4px 12px rgba(0,0,0,0.35);
         
@@ -24,6 +24,9 @@
         }
     }
 
+    form {
+        background: none;
+    }
     h6 {
         font-size: 14px;
         margin: 20px 0 0;
@@ -37,6 +40,9 @@
     }
     .bootstrap-select {
         margin-bottom: 20px;
+    }
+    label {
+        text-align: left;
     }
     hr {
         margin: 20px -20px;

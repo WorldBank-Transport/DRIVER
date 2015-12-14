@@ -253,6 +253,8 @@
                     disable_edit_json: true,
                     disable_properties: true,
                     disable_array_add: false,
+                    disable_array_reorder: false,
+                    collapsed: true,
                     theme: 'bootstrap3',
                     show_errors: 'change',
                     no_additional_properties: true,

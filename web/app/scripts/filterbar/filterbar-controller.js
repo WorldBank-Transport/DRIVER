@@ -99,7 +99,8 @@
         function showSavedFiltersModal() {
             $modal.open({
                 templateUrl: 'scripts/saved-filters/saved-filters-modal-partial.html',
-                controller: 'SavedFiltersModalController as modal'
+                controller: 'SavedFiltersModalController as modal',
+                size: 'lg'
             });
         }
 

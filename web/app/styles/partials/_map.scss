@@ -28,22 +28,26 @@
     }
 }
 .leaflet-popup {
+    .leaflet-popup-content {
+        margin: 20px 20px 25px;
+    }
     .leaflet-popup-content-wrapper {
         border-radius: 0;
 
         h5 {
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 700;
             color: #aaa;
             margin: 0;
         }
         h3 {
-            margin: 8px 0 15px;
+            margin: 8px 0 25px;
+            font-weight: 300;
         }
         a {
             font-weight: 700;
             font-size: 12px;
-            border: 1px solid #ccc;;
+            border: 1px solid #ccc;
             padding: 4px 10px;
             border-radius: 99px;
             margin-right: 8px;
@@ -60,7 +64,7 @@
         }
     }
     .leaflet-popup-close-button {
-        padding: 10px 10px 0 0;
+        padding: 10px 20px 0 0 !important;
         text-align: center;
         width: 22px;
         height: 24px;
