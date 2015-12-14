@@ -21,6 +21,8 @@ echo "oauth_client_id: \"${OAUTH_CLIENT_ID}\"" \
     >> deployment/ansible/group_vars/all
 echo "oauth_client_secret: \"${OAUTH_CLIENT_SECRET}\"" \
     >> deployment/ansible/group_vars/all
+echo "forecast_io_api_key: \"${FORECAST_IO_API_KEY}\"" \
+    >> deployment/ansible/group_vars/all
 set -x
 
 ansible-galaxy install -f -r deployment/ansible/roles.txt -p deployment/ansible/roles

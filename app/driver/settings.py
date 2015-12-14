@@ -260,6 +260,9 @@ HOST_URL = os.environ.get('DRIVER_APP_HOST', os.environ.get('HOSTNAME'))
 GOOGLE_OAUTH_CLIENT_ID = os.environ.get('OAUTH_CLIENT_ID', '')
 GOOGLE_OAUTH_CLIENT_SECRET = os.environ.get('OAUTH_CLIENT_SECRET', '')
 
+# Forecast.io settings
+FORECAST_IO_API_KEY = os.environ.get('FORECAST_IO_API_KEY', '')
+
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 
 if GOOGLE_OAUTH_CLIENT_ID:

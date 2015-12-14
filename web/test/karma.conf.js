@@ -103,6 +103,8 @@ module.exports = function(config) {
       'app/scripts/stepwise/**.js',
       'app/scripts/charts/module.js',
       'app/scripts/charts/**.js',
+      'app/scripts/weather/module.js',
+      'app/scripts/weather/**.js',
       'app/scripts/views/account/module.js',
       'app/scripts/views/account/**.js',
       'app/scripts/views/login/module.js',

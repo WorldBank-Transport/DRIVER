@@ -49,6 +49,7 @@
         'driver.resources',
         'driver.state',
         'driver.nominatim',
+        'driver.weather',
         'json-editor',
         'ui.bootstrap',
         'ui.router',

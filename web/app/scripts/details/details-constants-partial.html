@@ -44,3 +44,25 @@
         {{ ::ctl.record.geom.coordinates[0] | number:5 }}
     </div>
 </div>
+<div class="col-sm-6">
+    <label>
+        Weather
+    </label>
+    <div>
+        <i ng-if="ctl.record.weather" class="wi wi-forecast-io-{{ ::ctl.record.weather }}"></i>
+        <span class="value constant string weather">
+            {{ ::ctl.record.weather | weatherLabel }}
+        </span>
+    </div>
+    <a href="http://forecast.io" ng-if="ctl.record.weather" target="_blank">
+        Powered by Forecast
+    </a>
+</div>
+<div class="col-sm-6">
+    <label>
+        Light
+    </label>
+    <div class="value constant string light">
+        {{ ::ctl.record.light | weatherLabel }}
+    </div>
+</div>

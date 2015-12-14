@@ -31,5 +31,7 @@ describe('driver.details: DetailsConstants', function () {
         expect(element.find('.value.latitude').length).toEqual(1);
         expect(element.find('.value.longitude').length).toEqual(1);
         expect(element.find('.value.occurred').length).toEqual(1);
+        expect(element.find('.value.weather').length).toEqual(1);
+        expect(element.find('.value.light').length).toEqual(1);
     });
 });

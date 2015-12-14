@@ -4,8 +4,7 @@
     /* ngInject */
     function Nominatim($http, WebConfig) {
 
-        // TODO: remove https://crossorigin.me/ prefix when pickpoint.io CORS is fixed
-        var PICKPOINT_NOMINATIM_URL = 'https://crossorigin.me/https://pickpoint.io/api/v1/';
+        var PICKPOINT_NOMINATIM_URL = 'https://pickpoint.io/api/v1/';
         var SUGGEST_LIMIT = 15;
 
         var module = {
