@@ -102,7 +102,11 @@
             $rootScope.$broadcast('driver.views.record:marker-moved', [latlng.lng, latlng.lat]);
         }
 
-        $scope.$on('driver.views.record:location-selected', function(event, data, recenter) {
+        $rootScope.$on('driver.views.record:location-selected', function(event, data, recenter) {
+            if (!ctl.map) {
+                return;
+            }
+
             var latlng = L.latLng(data.lat, data.lng);
             setMarker(latlng);
             if (recenter) {
