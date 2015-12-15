@@ -8,7 +8,7 @@
 
         var tmpToken = '';
 
-        var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id'}, {
+        var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id', limit: 'all'}, {
             'delete': {
                 method: 'DELETE',
                 url: ASEConfig.api.hostname + '/api/users/:id/'
@@ -27,6 +27,8 @@
             },
             'query': {
                 method: 'GET',
+                transformResponse: function(data) { return angular.fromJson(data).results; },
+                isArray: true,
                 headers: {
                     'Authorization': function() {
                         // use a temporarily set token if we have one

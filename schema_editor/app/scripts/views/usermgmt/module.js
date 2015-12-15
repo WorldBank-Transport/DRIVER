@@ -31,18 +31,13 @@
         });
     }
 
-    /**
-     * @ngdoc overview
-     * @name driver.views
-     * @description
-     * # driver
-     */
     angular
       .module('ase.views.usermgmt', [
         'ui.router',
         'ui.bootstrap',
-        'ase.config',
         'ase.notifications',
+        'ase.directives',
+        'ase.views.sidebar',
         'ase.userdata'
       ]).config(StateConfig);
 

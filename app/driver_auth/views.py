@@ -14,6 +14,8 @@ from rest_framework.response import Response
 from djangooidc.oidc import OIDCError
 from djangooidc.views import CLIENTS
 
+from ashlar.pagination import OptionalLimitOffsetPagination
+
 from driver_auth.serializers import UserSerializer, GroupSerializer
 from driver_auth.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly
 
@@ -67,6 +69,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     permission_classes = (IsAdminOrReadSelfOnly,)
     queryset = User.objects.all().order_by('-date_joined')
+    pagination_class = OptionalLimitOffsetPagination
 
     def get_queryset(self):
         """Limit non-admin users to only see their own info"""
@@ -84,6 +87,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = OptionalLimitOffsetPagination
 
 
 class DriverObtainAuthToken(ObtainAuthToken):
