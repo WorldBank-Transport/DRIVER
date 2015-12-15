@@ -22,7 +22,7 @@
             template: '<ase-user-add></ase-user-add>'
         });
         $stateProvider.state('usermgmt.edit', {
-            url: '/edit/:id',
+            url: '/edit/:userid',
             template: '<ase-user-edit></ase-user-edit>'
         });
         $stateProvider.state('usermgmt.details', {
