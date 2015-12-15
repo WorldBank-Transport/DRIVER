@@ -21,7 +21,7 @@
                         <span ng-show="!UserDetails.user.isAdmin">No</span>
                     </div>
                 </div>
-                <div class="row" ng-if="::UserDetails.user.groups.length > 0">
+                <div class="row" ng-if="UserDetails.user.groups.length > 0">
                     <div class="col-sm-2"><label>Groups:</label></div>
                     <div class="col-sm-4">
                         <span>{{ ::UserDetails.user.groups.join(', ') }}</span>
