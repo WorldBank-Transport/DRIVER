@@ -351,3 +351,6 @@ if DEVELOP:
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
+
+# These fields will be visible to read-only users
+READ_ONLY_FIELDS = ['Accident Details']
