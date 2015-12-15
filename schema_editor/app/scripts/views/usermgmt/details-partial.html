@@ -28,6 +28,10 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-sm-2"><label>Account Created:</label></div>
+                    <div class="col-sm-4">{{ ::UserDetails.user.date_joined | date:'MM/dd/yyyy h:mm a' }}</div>
+                </div>
+                <div class="row">
                     <div class="col-sm-2"><label>Token:</label></div>
                     <div class="col-sm-4">{{ ::UserDetails.user.token }}</div>
                 </div>
