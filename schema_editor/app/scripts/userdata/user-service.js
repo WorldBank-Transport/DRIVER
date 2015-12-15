@@ -9,6 +9,10 @@
         var tmpToken = '';
 
         var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id'}, {
+            'delete': {
+                method: 'DELETE',
+                url: ASEConfig.api.hostname + '/api/users/:id/'
+            },
             'update': {
                 method: 'PATCH',
                 url: ASEConfig.api.hostname + '/api/users/:id/'
@@ -25,7 +29,11 @@
                 method: 'GET',
                 headers: {
                     'Authorization': function() {
-                        return 'Token ' + tmpToken;
+                        // use a temporarily set token if we have one
+                        if (tmpToken) {
+                            return 'Token ' + tmpToken;
+                        }
+                        return null;
                     }
                 }
             }
