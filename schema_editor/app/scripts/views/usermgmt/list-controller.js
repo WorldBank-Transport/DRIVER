@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function UserMgmtController ($log, $scope, Notifications, UserService) {
+    function UserListController ($log, $scope, Notifications, UserService) {
 
         var ctl = this;
         initialize();
@@ -35,6 +35,6 @@
         }
     }
 
-    angular.module('ase.views.usermgmt').controller('UserMgmtController', UserMgmtController);
+    angular.module('ase.views.usermgmt').controller('UserListController', UserListController);
 
 })();

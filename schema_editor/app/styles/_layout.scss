@@ -30,8 +30,10 @@ svg {
 label {
 	text-transform: uppercase;
 	font-size: 12px;
-	margin-top: 10px;
 	color: #555;
+    :not(.acct-info) {
+        margin-top: 10px;
+    }
 }
 
 .checkbox label {
@@ -42,6 +44,12 @@ label {
 .row {
 	margin-left: 0;
 	margin-right: 0;
+}
+
+.acct-info {
+    .row {
+        margin-top: 10px;
+    }
 }
 
 /* MAIN BODY */

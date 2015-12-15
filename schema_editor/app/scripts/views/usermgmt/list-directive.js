@@ -5,8 +5,8 @@
     function UserList() {
         var module = {
             restrict: 'E',
-            templateUrl: 'scripts/views/usermgmt/user-mgmt-partial.html',
-            controller: 'UserMgmtController',
+            templateUrl: 'scripts/views/usermgmt/list-partial.html',
+            controller: 'UserListController',
             controllerAs: 'UserList',
             bindToController: true
         };

@@ -26,7 +26,7 @@
             template: '<ase-user-edit></ase-user-edit>'
         });
         $stateProvider.state('usermgmt.details', {
-            url: '/details/:id',
+            url: '/details/:userid',
             template: '<ase-user-details></ase-user-details>'
         });
     }
@@ -36,6 +36,7 @@
         'ui.router',
         'ui.bootstrap',
         'ase.notifications',
+        'ase.auth',
         'ase.directives',
         'ase.views.sidebar',
         'ase.userdata'
