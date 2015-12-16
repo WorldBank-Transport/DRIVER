@@ -50,6 +50,19 @@
             $log.debug(ctl.user);
             $log.debug("and group info:");
             $log.debug(ctl.userGroup);
+
+            var patchUser = {
+                username: ctl.user.username,
+                email: ctl.user.email,
+                groups: 'SOMEJUNK'
+                //groups: [ctl.userGroup]
+            };
+
+            var response = UserService.User.update({id: ctl.user.id}, patchUser);
+
+            $log.debug('TODO: look at $promise on this response and check for error');
+            // also reload user info on success
+            $log.debug(response);
         };
     }
 
