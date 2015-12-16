@@ -1,12 +1,30 @@
+from django.utils import six
+
 from django.contrib.auth.models import User, Group
 from rest_framework.authtoken.models import Token
 from rest_framework import serializers
 
 
+
+class GroupStringRelatedField(serializers.StringRelatedField):
+    """
+    StringRelatedField in DRF is read-only.
+    Make it writeable, based on group name.
+    """
+    def to_internal_value(self, data):
+        """
+        Implement this field method so groups field may be writeable
+        """
+        if not isinstance(data, six.text_type):
+            msg = 'Incorrect type. Expected a string, but got %s'
+            raise serializers.ValidationError(msg % type(data).__name__)
+        return Group.objects.get(name=data)
+
+
 class UserSerializer(serializers.ModelSerializer):
 
     # display groups by name
-    groups = serializers.StringRelatedField(many=True)
+    groups = GroupStringRelatedField(many=True)
 
     class Meta:
         model = User
