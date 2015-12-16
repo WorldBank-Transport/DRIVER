@@ -10,7 +10,7 @@
         }
 
         return function(filterObj) {
-            var html = '';
+            var htmlBlocks = [];
 
             _.forOwn(filterObj, function(val, key) {
                 // All label keys start with the name of the related object plus a hash.
@@ -21,15 +21,14 @@
                 switch(val._rule_type) {
                     case 'containment_multiple':
                     case 'containment':
-                        html += label + val.contains.join(', ');
+                        htmlBlocks.push(label + val.contains.join(', '));
                         break;
 
                     case 'intrange':
                         if (!isNumeric(val.min) && !isNumeric(val.max)) {
                             // No min or max are specified, don't display
                         } else {
-                            html += label;
-
+                            var html = label;
                             if (isNumeric(val.min) && isNumeric(val.max)) {
                                 // Both min and max
                                 html += val.min + '-' + val.max;
@@ -40,21 +39,19 @@
                                 // Only max
                                 html += '&lt; ' + val.max;
                             }
+                            htmlBlocks.push(html);
                         }
 
                         break;
 
                     default:
-                        html += 'Unknown rule type: ' + val._rule_type;
+                        htmlBlocks.push('Unknown rule type: ' + val._rule_type);
                         break;
-                }
-                if (html) {
-                    html += '<span class="divider">|</span>';
                 }
                 /* jshint camelcase: true */
             });
 
-            return html;
+            return htmlBlocks.join('<span class="divider">|</span>');
         };
     }
 
