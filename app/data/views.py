@@ -6,6 +6,7 @@ from django.db import connection
 from django.db.models import (Case,
                               When,
                               IntegerField,
+                              DateTimeField,
                               Value,
                               Count)
 
@@ -18,7 +19,6 @@ from rest_framework.exceptions import ParseError
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
                           RecordTypeViewSet,
-                          SchemaViewSet,
                           RecordSchemaViewSet,
                           BoundaryViewSet)
 
@@ -29,6 +29,11 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
                                      is_admin_or_writer)
 
 from serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
+import transformers
+
+
+DateTimeField.register_lookup(transformers.ISOYearTransform)
+DateTimeField.register_lookup(transformers.WeekTransform)
 
 
 class DriverRecordViewSet(RecordViewSet):
