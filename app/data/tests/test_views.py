@@ -5,6 +5,7 @@ import uuid
 import mock
 import pytz
 
+from rest_framework.request import Request
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory, force_authenticate
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -12,7 +13,8 @@ from django.conf import settings
 
 from ashlar.models import RecordSchema, RecordType, Record
 
-from data.views import DriverRecordViewSet
+from data.views import DriverRecordViewSet, DriverRecordSchemaViewSet
+from data.serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
 
 
 class DriverRecordViewTestCase(APITestCase):
@@ -123,3 +125,26 @@ class DriverRecordViewTestCase(APITestCase):
             force_authenticate(request, user=self.admin)
             response = view(request)
             self.assertEqual(mocked_redis.call_count, 1)
+
+    def test_get_serializer_class(self):
+        """Test that get_serializer_class returns read-only serializer correctly"""
+        read_only = User.objects.create_user('public', 'public@public.com', 'public')
+        view = DriverRecordViewSet()
+        mock_req = mock.Mock(spec=Request)
+        mock_req.user = read_only
+        view.request = mock_req
+        serializer_class = view.get_serializer_class()
+        self.assertEqual(serializer_class, DetailsReadOnlyRecordSerializer)
+
+
+class DriverRecordSchemaViewTestCase(APITestCase):
+
+    def test_get_serializer_class(self):
+        """Test that get_serializer_class returns read-only serializer correctly"""
+        read_only = User.objects.create_user('public', 'public@public.com', 'public')
+        view = DriverRecordSchemaViewSet()
+        mock_req = mock.Mock(spec=Request)
+        mock_req.user = read_only
+        view.request = mock_req
+        serializer_class = view.get_serializer_class()
+        self.assertEqual(serializer_class, DetailsReadOnlyRecordSchemaSerializer)

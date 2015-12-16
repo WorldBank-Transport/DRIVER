@@ -1,4 +1,4 @@
-from django.db.models import IntegerField, DateTimeField, Transform
+from django.db.models import IntegerField, Transform
 
 
 class WeekTransform(Transform):
@@ -14,6 +14,7 @@ class WeekTransform(Transform):
     def output_field(self):
         return IntegerField()
 
+
 class ISOYearTransform(Transform):
     """A custom transform to turn a date field into the integer which represents its isoyear.
     Look here for more: http://www.postgresql.org/docs/8.3/static/functions-datetime.html"""
@@ -26,6 +27,3 @@ class ISOYearTransform(Transform):
     @property
     def output_field(self):
         return IntegerField()
-
-DateTimeField.register_lookup(ISOYearTransform)
-DateTimeField.register_lookup(WeekTransform)

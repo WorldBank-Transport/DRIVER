@@ -6,6 +6,7 @@ from django.db import connection
 from django.db.models import (Case,
                               When,
                               IntegerField,
+                              DateTimeField,
                               Value,
                               Count)
 
@@ -18,20 +19,34 @@ from rest_framework.exceptions import ParseError
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
                           RecordTypeViewSet,
-                          SchemaViewSet,
                           RecordSchemaViewSet,
                           BoundaryViewSet)
 
-from data import transformers
+from ashlar.serializers import RecordSerializer, RecordSchemaSerializer
 
 from driver_auth.permissions import (IsAdminOrReadOnly,
-                                     ReadersReadWritersWrite)
+                                     ReadersReadWritersWrite,
+                                     is_admin_or_writer)
+
+from serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
+import transformers
+
+
+DateTimeField.register_lookup(transformers.ISOYearTransform)
+DateTimeField.register_lookup(transformers.WeekTransform)
 
 
 class DriverRecordViewSet(RecordViewSet):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
     """
     permission_classes = (ReadersReadWritersWrite,)
+
+    # Filter out everything except details for read-only users
+    def get_serializer_class(self):
+        if is_admin_or_writer(self.request.user):
+            return RecordSerializer
+        return DetailsReadOnlyRecordSerializer
+
     def list(self, request, *args, **kwargs):
         # Don't generate a tile key unless the user specifically requests it, to avoid
         # filling up the Redis cache with queries that will never be viewed as tiles
@@ -147,13 +162,14 @@ class DriverRecordTypeViewSet(RecordTypeViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
 
-class DriverSchemaViewSet(SchemaViewSet):
-    """Base ViewSet for viewsets displaying subclasses of SchemaModel"""
-    permission_classes = (IsAdminOrReadOnly,)
-
-
 class DriverRecordSchemaViewSet(RecordSchemaViewSet):
     permission_classes = (IsAdminOrReadOnly,)
+
+    # Filter out everything except details for read-only users
+    def get_serializer_class(self):
+        if is_admin_or_writer(self.request.user):
+            return RecordSchemaSerializer
+        return DetailsReadOnlyRecordSchemaSerializer
 
 
 class DriverBoundaryViewSet(BoundaryViewSet):

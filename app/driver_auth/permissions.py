@@ -8,11 +8,13 @@ ADMIN_GROUP = settings.DRIVER_GROUPS['ADMIN']
 READ_GROUP = settings.DRIVER_GROUPS['READ_ONLY']
 WRITE_GROUP = settings.DRIVER_GROUPS['READ_WRITE']
 
+
 def belongs_to_group(user, group):
     try:
         return user.groups.filter(name=group).exists()
     except (User.DoesNotExist, Group.DoesNotExist):
         return False
+
 
 def is_reader_or_writer(user):
     try:
@@ -20,17 +22,21 @@ def is_reader_or_writer(user):
     except (User.DoesNotExist, Group.DoesNotExist):
         return False
 
+
 def is_admin_or_writer(user):
     try:
         return user.groups.filter(name__in=(ADMIN_GROUP, WRITE_GROUP)).exists()
     except (User.DoesNotExist, Group.DoesNotExist):
         return False
 
+
 def is_admin(user):
     return belongs_to_group(user, ADMIN_GROUP)
 
+
 def is_writer(user):
     return belongs_to_group(user, WRITE_GROUP)
+
 
 def is_reader(user):
     return belongs_to_group(user, READ_GROUP)
