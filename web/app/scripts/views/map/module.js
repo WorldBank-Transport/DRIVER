@@ -12,6 +12,7 @@
     }
 
     angular.module('driver.views.map', [
+        'ase.auth',
         'ui.router',
         'ui.bootstrap',
         'Leaflet',

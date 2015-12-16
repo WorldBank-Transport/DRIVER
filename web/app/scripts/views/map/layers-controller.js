@@ -3,7 +3,7 @@
 
     /* ngInject */
     function DriverLayersController($q, $filter, $log, $scope, $rootScope, $timeout, $compile,
-                                    FilterState, RecordState, GeographyState,
+                                    AuthService, FilterState, RecordState, GeographyState,
                                     RecordSchemaState, BoundaryState, QueryBuilder,
                                     MapState, TileUrlService, InitialState) {
         var ctl = this;
@@ -19,6 +19,7 @@
         ctl.baseMaps = null;
         ctl.editLayers = null;
         ctl.tilekey = null;
+        ctl.userCanWrite = false;
 
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var filterStyle = {
@@ -54,6 +55,7 @@
         ctl.init = function(map) {
 
             ctl.map = map;
+            ctl.userCanWrite = AuthService.hasWriteAccess();
 
             // get the current record type selection for filtering
             RecordState.getSelected().then(function(selected) {
@@ -308,6 +310,7 @@
                         .setLatLng(e.latlng)
                         .setContent(ctl.buildRecordPopup(e.data))
                         .openOn(ctl.map);
+
                     $compile($('#record-popup'))($scope);
                 });
                 // TODO: find a reasonable way to get the current layers selected, to add those back
@@ -376,9 +379,14 @@
             /* jshint camelcase: true */
 
             // The ng-click here refers to a function which sits on the map-controller's scope
-            str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')"><span class="glyphicon glyphicon-log-in"></span> View</a>';
+            str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')">';
+            str += '<span class="glyphicon glyphicon-log-in"></span> View</a>';
             // Hardcoded href because dynamically added
-            str += '<a href="/#!/record/' + record.uuid + '/edit" target="_blank"><span class="glyphicon glyphicon-pencil"></span> Edit</a>';
+            if (ctl.userCanWrite) {
+                str += '<a href="/#!/record/' + record.uuid + '/edit" target="_blank">';
+                str += '<span class="glyphicon glyphicon-pencil"></span> ';
+                str += 'Edit</a>';
+            }
             str += '</div></div>';
             return str;
         };
