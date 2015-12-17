@@ -5,8 +5,7 @@
     /* ngInject */
     function Utils () {
         var module = {
-            buildErrorHtml: buildErrorHtml,
-            makeID: makeID
+            buildErrorHtml: buildErrorHtml
         };
         return module;
 
@@ -36,17 +35,6 @@
                 });
             }
             return errorHtml;
-        }
-
-        // TODO: This function appears to be unused. Why is it here?
-        function makeID(idLength) {
-            idLength = isNaN(idLength) ? 8 : parseInt(idLength, 10);
-            var text = '';
-            var possible = 'ABCDEFGHIkLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            for (var i = 0; i < idLength; i++) {
-                text += possible.charAt(Math.floor(Math.random() * possible.length));
-            }
-            return text;
         }
     }
 
