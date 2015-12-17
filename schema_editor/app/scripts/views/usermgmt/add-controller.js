@@ -24,8 +24,6 @@
                 var errorHtml = '<h4>Failed to create user</h4>';
                 errorHtml += Utils.buildErrorHtml(error);
 
-                $log.debug(errorHtml);
-
                 Notifications.show({html: errorHtml, displayClass: 'alert-danger'});
             });
         };

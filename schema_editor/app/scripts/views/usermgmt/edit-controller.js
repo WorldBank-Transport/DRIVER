@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function UserEditController($log, $stateParams, ASEConfig, AuthService, UserService,
+    function UserEditController($log, $state, $stateParams, ASEConfig, AuthService, UserService,
                                 Notifications, Utils) {
         var ctl = this;
         ctl.user = {};
@@ -50,17 +50,16 @@
 
             UserService.User.update({id: ctl.user.id}, patchUser, function(response) {
                 getUserInfo();
-                Notifications.show({text: 'Successfully updated user ' + user.email,
+                Notifications.show({text: 'Successfully updated user ' + ctl.user.email,
                                    displayClass: 'alert-info',
                                    timeout: 3000});
+                $state.go('usermgmt.list');
             }, function(error) {
                 $log.error('error updating user:');
                 $log.error(error);
 
-                var errorHtml = '<h4>Failed to modify user ' + user.email + '</h4>';
+                var errorHtml = '<h4>Failed to modify user</h4>';
                 errorHtml += Utils.buildErrorHtml(error);
-
-                $log.debug(errorHtml);
 
                 Notifications.show({html: errorHtml, displayClass: 'alert-danger'});
             });
