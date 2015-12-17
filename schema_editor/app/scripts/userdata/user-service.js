@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function UserService ($resource, $q, ASEConfig) {
+    function UserService ($log, $resource, $q, ASEConfig) {
 
         var tmpToken = '';
 
@@ -32,14 +32,14 @@
             'query': {
                 method: 'GET',
                 transformResponse: function(data) { return angular.fromJson(data).results; },
-                isArray: true,
+                isArray: true
+            },
+            'queryWithTmpHeader': {
+                method: 'GET',
                 headers: {
                     'Authorization': function() {
-                        // use a temporarily set token if we have one
-                        if (tmpToken) {
-                            return 'Token ' + tmpToken;
-                        }
-                        return null;
+                        // use a temporarily set token
+                        return 'Token ' + tmpToken;
                     }
                 }
             }
@@ -70,7 +70,7 @@
         function canWriteRecords(userId, token) {
             tmpToken = token;
             var dfd = $q.defer();
-            module.User.query({id: userId}, function (user) {
+            module.User.queryWithTmpHeader({id: userId}, function (user) {
                 if (user && user.groups) {
                     // admin or analyst can write records
                     if (userBelongsToAdmin(user) ||
@@ -93,8 +93,13 @@
         function isAdmin(userId, token) {
             tmpToken = token;
             var dfd = $q.defer();
-            module.User.query({id: userId}, function (user) {
+            module.User.queryWithTmpHeader({id: userId}, function (user) {
+                $log.debug('user service got user to test:');
+                $log.debug(user);
+                $log.debug('with groups:');
+                $log.debug(user.groups);
                 if (userBelongsToAdmin(user)) {
+                    $log.debug('have admin in user service');
                     dfd.resolve(true);
                 } else {
                     dfd.resolve(false);

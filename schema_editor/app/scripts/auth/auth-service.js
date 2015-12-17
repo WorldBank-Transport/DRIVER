@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthService($q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig, UserService) {
+    function AuthService($log, $q, $http, $cookies, $rootScope, $timeout, $window, ASEConfig, UserService) {
         var module = {};
 
         var canWriteCookieString = 'AuthService.canWrite';
@@ -36,6 +36,11 @@
                 // if user needs to be an admin to log in, check if they are first
                 if (needsAdmin) {
                     if (data && data.user && data.token) {
+                        $log.debug('sending user service user:');
+                        $log.debug(data.user);
+                        $log.debug('and token');
+                        $log.debug(data.token);
+
                         UserService.isAdmin(data.user, data.token).then(function(isAdmin) {
                             if (isAdmin) {
                                 // am an admin; log in
@@ -54,6 +59,8 @@
                                 }
                             } else {
                                 // user is not an admin and admin access is required
+                                $log.debug('user service sent back:');
+                                $log.debug(isAdmin);
                                 result.isAuthenticated = false;
                                 result.error = 'Must be an administrator to access this portion of the site.';
                                 dfd.resolve(result);
