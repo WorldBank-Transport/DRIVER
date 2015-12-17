@@ -8,7 +8,6 @@
         initialize();
 
         function initialize() {
-            Notifications.hide();
             ctl.alert = {};
             ctl.alertHeight = 0;
             ctl.hideAlert = hideAlert;
