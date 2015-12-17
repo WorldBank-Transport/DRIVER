@@ -73,6 +73,8 @@ module.exports = function(config) {
       'app/scripts/views/login/**.js',
       'app/scripts/views/recordtype/module.js',
       'app/scripts/views/recordtype/**.js',
+      'app/scripts/views/usermgmt/module.js',
+      'app/scripts/views/usermgmt/**.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js',
       'app/scripts/app.js',

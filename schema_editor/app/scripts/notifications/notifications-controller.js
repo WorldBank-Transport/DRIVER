@@ -8,12 +8,10 @@
         initialize();
 
         function initialize() {
-            Notifications.hide();
             ctl.alert = {};
             ctl.alertHeight = 0;
             ctl.hideAlert = hideAlert;
 
-            $scope.$on('ase.notifications.hide', hideAlert);
             $scope.$on('ase.notifications.show', showAlert);
 
             function showAlert(event, alert) {
@@ -29,7 +27,10 @@
                 if (alertTimeout) {
                     $timeout.cancel(alertTimeout);
                     alertTimeout = null;
+                    ctl.alert = null;
                 }
+                // clear notification in service as well
+                Notifications.hide();
             }
 
             if (Notifications.activeAlert()) {

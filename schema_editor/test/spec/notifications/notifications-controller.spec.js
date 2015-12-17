@@ -27,18 +27,6 @@ describe('ase.notifications: NotificationsController', function () {
         expect(Controller.active).toBe(true);
     });
 
-    it('should set active to false when ase.notifications.hide is broadcast', function () {
-        Controller = $controller('NotificationsController', {
-            $scope: $scope
-        });
-        $scope.$apply();
-        expect(Controller.active).toBe(undefined);
-        Controller.active = true;
-        expect(Controller.active).toBe(true);
-        $rootScope.$broadcast('ase.notifications.hide', {});
-        expect(Controller.active).toBe(false);
-    });
-
     it('should save the alert options sent to it', function () {
         Controller = $controller('NotificationsController', {
             $scope: $scope

@@ -50,7 +50,6 @@
         'ase.config',
         'ase.directives',
         'ase.notifications',
-        'ase.utils',
         'ase.schemas',
         'ase.resources'
     ]).config(StateConfig);

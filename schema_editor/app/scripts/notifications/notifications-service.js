@@ -26,7 +26,6 @@
 
         /**
          * Hide a global notification
-         * @return Broadcasts ase.notifications.hide on $rootScope
          */
         function hide() {
             if (timeoutId) {
@@ -34,7 +33,6 @@
                 timeoutId = null;
             }
             active = null;
-            $rootScope.$broadcast('ase.notifications.hide');
         }
 
         /**
