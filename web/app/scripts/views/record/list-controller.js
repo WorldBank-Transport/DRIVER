@@ -124,6 +124,9 @@
                     },
                     recordSchema: function() {
                         return ctl.recordSchema;
+                    },
+                    userCanWrite: function() {
+                        return ctl.userCanWrite;
                     }
                 }
             });

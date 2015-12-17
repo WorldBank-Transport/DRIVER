@@ -21,7 +21,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '_rule_type': 'containment'
             }
         };
-        var expected = '<b>Severity</b>: Injury<span class="divider">|</span>';
+        var expected = '<b>Severity</b>: Injury';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -35,7 +35,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '_rule_type': 'containment_multiple'
             }
         };
-        var expected = '<b>Severity</b>: Injury, Fatality<span class="divider">|</span>';
+        var expected = '<b>Severity</b>: Injury, Fatality';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -46,7 +46,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'min': 2
             }
         };
-        var expected = '<b>Num driver casualties</b>: &gt; 2<span class="divider">|</span>';
+        var expected = '<b>Num driver casualties</b>: &gt; 2';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -57,7 +57,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'max': 2
             }
         };
-        var expected = '<b>Num driver casualties</b>: &lt; 2<span class="divider">|</span>';
+        var expected = '<b>Num driver casualties</b>: &lt; 2';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -69,7 +69,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 'max': 2
             }
         };
-        var expected = '<b>Num driver casualties</b>: 1-2<span class="divider">|</span>';
+        var expected = '<b>Num driver casualties</b>: 1-2';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
@@ -121,7 +121,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
                 '<b>Weather</b>: Wind<span class="divider">|</span>' +
                 '<b>Num driver casualties</b>: 1-4<span class="divider">|</span>' +
                 '<b>Severity</b>: Injury<span class="divider">|</span>' +
-                '<b>Collision type</b>: Right angle<span class="divider">|</span>';
+                '<b>Collision type</b>: Right angle';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 

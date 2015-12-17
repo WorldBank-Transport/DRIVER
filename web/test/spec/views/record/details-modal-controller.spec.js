@@ -32,7 +32,8 @@ describe('driver.views.record: RecordDetailsModalController', function () {
             $modalInstance: ModalInstance,
             record: DriverResourcesMock.RecordResponse,
             recordType: ResourcesMock.RecordTypeResponse,
-            recordSchema: ResourcesMock.RecordSchema
+            recordSchema: ResourcesMock.RecordSchema,
+            userCanWrite: true
         });
         $scope.$apply();
 

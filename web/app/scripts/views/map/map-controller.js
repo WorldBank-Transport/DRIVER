@@ -2,9 +2,11 @@
     'use strict';
 
     /* ngInject */
-    function MapController($rootScope, $scope, $modal, BoundaryState, InitialState, FilterState,
-                           Records, RecordSchemaState, RecordState, MapState, RecordAggregates) {
+    function MapController($rootScope, $scope, $modal, AuthService, BoundaryState,
+                           InitialState, FilterState, Records, RecordSchemaState,
+                           RecordState, MapState, RecordAggregates) {
         var ctl = this;
+        ctl.userCanWrite = false;
 
         /** This is one half of some fairly ugly code which serves to wire up a click
          *  handling event on top of some dynamically generated HTML. The other half is in
@@ -26,6 +28,9 @@
                     },
                     recordSchema: function() {
                         return ctl.recordSchema;
+                    },
+                    userCanWrite: function() {
+                        return ctl.userCanWrite;
                     }
                 }
             });
@@ -34,6 +39,8 @@
         InitialState.ready().then(init);
 
         function init() {
+            ctl.userCanWrite = AuthService.hasWriteAccess();
+
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
                 .then(BoundaryState.getSelected().then(function(selected) {
                     ctl.boundaryId = selected.uuid;
