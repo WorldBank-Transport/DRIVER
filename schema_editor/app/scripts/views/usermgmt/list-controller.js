@@ -23,7 +23,7 @@
                 refreshUserList();
 
                 Notifications.show({text: 'Deleted user ' + user.username + ' successfully.',
-                                    displayClass: 'alert-info',
+                                    displayClass: 'alert-success',
                                     timeout: 3000});
             }, function(error) {
                 $log.error(error);

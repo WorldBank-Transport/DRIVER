@@ -14,7 +14,7 @@
 
             UserService.User.create(ctl.user, function() {
                 Notifications.show({text: 'User ' + ctl.user.username + ' created successfully',
-                                    displayClass: 'alert-info',
+                                    displayClass: 'alert-success',
                                     timeout: 3000});
                 $state.go('usermgmt.list');
             }, function(error) {

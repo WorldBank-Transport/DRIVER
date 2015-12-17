@@ -51,7 +51,7 @@
             UserService.User.update({id: ctl.user.id}, patchUser, function() {
                 getUserInfo();
                 Notifications.show({text: 'Successfully updated user ' + ctl.user.email,
-                                   displayClass: 'alert-info',
+                                   displayClass: 'alert-success',
                                    timeout: 3000});
                 $state.go('usermgmt.list');
             }, function(error) {
