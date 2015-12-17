@@ -21,10 +21,13 @@
         function deleteUser(user) {
             UserService.User.delete({id: user.id}, function (data) {
                 refreshUserList();
+
+                Notifications.show({text: 'Deleted user ' + user.username + ' successfully.',
+                                    displayClass: 'alert-info',
+                                    timeout: 3000});
             }, function(error) {
                 $log.error(error);
 
-                // TODO: find out why notifications do not display on list view page
                 Notifications.show({text: 'Error deleting user ' + user.email,
                                    displayClass: 'alert-danger'});
             });

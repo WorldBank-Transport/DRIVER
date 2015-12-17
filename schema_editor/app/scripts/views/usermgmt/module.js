@@ -35,10 +35,11 @@
       .module('ase.views.usermgmt', [
         'ui.router',
         'ui.bootstrap',
-        'ase.notifications',
-        'ase.auth',
+        'ase.config',
         'ase.directives',
+        'ase.notifications',
         'ase.views.sidebar',
+        'ase.auth',
         'ase.userdata'
       ]).config(StateConfig);
 

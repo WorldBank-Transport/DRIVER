@@ -19,12 +19,6 @@
                 ctl.user = userInfo;
                 ctl.user.token = AuthService.getToken();
                 ctl.userGroup = getUserGroup();
-
-                $log.debug('got user:');
-                $log.debug(ctl.user);
-
-                $log.debug('in group:');
-                $log.debug(ctl.userGroup);
             });
         }
 
@@ -46,23 +40,24 @@
         }
 
         ctl.submitForm = function() {
-            $log.debug("submitted user info:");
-            $log.debug(ctl.user);
-            $log.debug("and group info:");
-            $log.debug(ctl.userGroup);
-
+            // submit just the data that may have changed
             var patchUser = {
                 username: ctl.user.username,
                 email: ctl.user.email,
-                groups: 'SOMEJUNK'
-                //groups: [ctl.userGroup]
+                groups: [ctl.userGroup]
             };
 
-            var response = UserService.User.update({id: ctl.user.id}, patchUser);
-
-            $log.debug('TODO: look at $promise on this response and check for error');
-            // also reload user info on success
-            $log.debug(response);
+            UserService.User.update({id: ctl.user.id}, patchUser, function(response) {
+                getUserInfo();
+                Notifications.show({text: 'Successfully updated user ' + user.email,
+                                   displayClass: 'alert-info',
+                                   timeout: 3000});
+            }, function(error) {
+                $log.error('error updating user:');
+                $log.error(error);
+                Notifications.show({text: 'Error updating user ' + user.email,
+                                   displayClass: 'alert-danger'});
+            });
         };
     }
 

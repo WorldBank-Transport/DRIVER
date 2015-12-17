@@ -9,7 +9,7 @@ from rest_framework import serializers
 class GroupStringRelatedField(serializers.StringRelatedField):
     """
     StringRelatedField in DRF is read-only.
-    Make it writeable, based on group name.
+    Make it writeable for user groups, based on group name.
     """
     def to_internal_value(self, data):
         """

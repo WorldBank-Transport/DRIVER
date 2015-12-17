@@ -9,6 +9,10 @@
         var tmpToken = '';
 
         var User = $resource(ASEConfig.api.hostname + '/api/users/:id/', {id: '@id', limit: 'all'}, {
+            'create': {
+                method: 'POST',
+                url: ASEConfig.api.hostname + '/api/users/'
+            },
             'delete': {
                 method: 'DELETE',
                 url: ASEConfig.api.hostname + '/api/users/:id/'
