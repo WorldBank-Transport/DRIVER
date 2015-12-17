@@ -24,14 +24,12 @@ describe('ase.notifications: Notifications', function () {
         expect(Notifications.activeAlert()).toBeNull();
     });
 
-    it('should emit the correct events when show / hide is called', function () {
+    it('should emit the correct event when show is called', function () {
         spyOn($rootScope, '$broadcast');
         Notifications.show({});
         expect($rootScope.$broadcast).toHaveBeenCalledWith('ase.notifications.show',
             jasmine.any(Object) // Don't check the default values here.
         );
-        Notifications.hide();
-        expect($rootScope.$broadcast).toHaveBeenCalledWith('ase.notifications.hide');
     });
 
     it('should set sane defaults on newly created alerts', function () {

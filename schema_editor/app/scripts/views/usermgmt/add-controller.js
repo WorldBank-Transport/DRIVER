@@ -12,7 +12,7 @@
 
             ctl.user.groups = [ctl.userGroup];
 
-            UserService.User.create(ctl.user, function(response) {
+            UserService.User.create(ctl.user, function() {
                 Notifications.show({text: 'User ' + ctl.user.username + ' created successfully',
                                     displayClass: 'alert-info',
                                     timeout: 3000});

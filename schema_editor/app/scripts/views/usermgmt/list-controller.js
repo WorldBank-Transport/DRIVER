@@ -19,7 +19,7 @@
         }
 
         function deleteUser(user) {
-            UserService.User.delete({id: user.id}, function (data) {
+            UserService.User.delete({id: user.id}, function () {
                 refreshUserList();
 
                 Notifications.show({text: 'Deleted user ' + user.username + ' successfully.',

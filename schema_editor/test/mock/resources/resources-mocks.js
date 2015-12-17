@@ -171,6 +171,33 @@
             'is_superuser': false
         };
 
+        var UsersResponse = {
+            "count": 4,
+            "next": null,
+            "previous": null,
+            "results": [
+                {
+                    'id': 2,
+                    'url': 'http://localhost:7000/api/users/2/',
+                    'username': '0000000000000000000',
+                    'email': 'test@azavea.com',
+                    'groups': ['public'],
+                    'isAdmin': false,
+                    'is_staff': false,
+                    'is_superuser': false
+                }, {
+                    'id': 1,
+                    'url': 'http://localhost:7000/api/users/1/',
+                    'username': '0000000000000000000',
+                    'email': 'admin@azavea.com',
+                    'groups': ['admin'],
+                    'isAdmin': true,
+                    'is_staff': false,
+                    'is_superuser': false
+                }
+            ]
+        };
+
         var module = {
             GeographyResponse: GeographyResponse,
             BoundaryNoGeomResponse: BoundaryNoGeomResponse,
@@ -180,7 +207,8 @@
             RecordType: RecordType,
             RecordTypeResponse: RecordTypeResponse,
             UserInfoResponse: UserInfoResponse,
-            AdminUserInfoResponse: AdminUserInfoResponse
+            AdminUserInfoResponse: AdminUserInfoResponse,
+            UsersResponse: UsersResponse
         };
         return module;
     }
