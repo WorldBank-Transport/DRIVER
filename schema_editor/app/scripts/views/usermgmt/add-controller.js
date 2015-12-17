@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function UserAddController($log, $state, ASEConfig, AuthService, UserService, Notifications) {
+    function UserAddController($log, $state, ASEConfig, AuthService, UserService, Notifications, Utils) {
         var ctl = this;
         ctl.user = {};
         ctl.userGroup = '';
@@ -22,24 +22,7 @@
                 $log.error(error);
 
                 var errorHtml = '<h4>Failed to create user</h4>';
-
-                // get back dict of {fieldName: [Array of errors]}
-                if (error.data) {
-                    errorHtml += '<ul>';
-                    angular.forEach(error.data, function(fieldErrors, fieldName) {
-                        // list point for each field
-                        errorHtml += '<li>' + fieldName + ':';
-                        if (fieldErrors.length) {
-                            errorHtml += '<ul>';
-                            // sub-list with points for each field error
-                            fieldErrors.forEach(function(err) {
-                                errorHtml += '<li>' + err + '</li>';
-                            });
-                            errorHtml += '</ul>';
-                        }
-                        errorHtml += '</ul>';
-                    });
-                }
+                errorHtml += Utils.buildErrorHtml(error);
 
                 $log.debug(errorHtml);
 

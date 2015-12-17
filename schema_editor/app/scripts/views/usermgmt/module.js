@@ -35,6 +35,7 @@
       .module('ase.views.usermgmt', [
         'ui.router',
         'ui.bootstrap',
+        'ase.utils',
         'ase.config',
         'ase.directives',
         'ase.notifications',

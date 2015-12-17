@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function UserEditController($log, $stateParams, ASEConfig, AuthService, UserService) {
+    function UserEditController($log, $stateParams, ASEConfig, AuthService, UserService,
+                                Notifications, Utils) {
         var ctl = this;
         ctl.user = {};
         ctl.userGroup = '';
@@ -55,8 +56,13 @@
             }, function(error) {
                 $log.error('error updating user:');
                 $log.error(error);
-                Notifications.show({text: 'Error updating user ' + user.email,
-                                   displayClass: 'alert-danger'});
+
+                var errorHtml = '<h4>Failed to modify user ' + user.email + '</h4>';
+                errorHtml += Utils.buildErrorHtml(error);
+
+                $log.debug(errorHtml);
+
+                Notifications.show({html: errorHtml, displayClass: 'alert-danger'});
             });
         };
     }
