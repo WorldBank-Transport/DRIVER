@@ -14,7 +14,6 @@
             },
             link: function(scope, elem, attrs, ctlArray) {
                 var filterbarController = ctlArray[0];
-                var locked = false;
                 scope.updateFilter = updateFilter;
 
                 // Use UUID for ID to track elements
@@ -37,14 +36,8 @@
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === scope.label) {
-                        if (!locked && filter) {
-                            locked = true;
-                            scope.filter.contains = filter.value.contains;
-                            $timeout(function() {
-                                updateFilter(scope.label);
-                                locked = false;
-                            });
-                        }
+                        scope.filter.contains = filter.value.contains;
+                        updateFilter(scope.label);
                     }
                 });
 

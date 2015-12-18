@@ -2,7 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function DashboardController($scope, $state, BoundaryState, FilterState, InitialState, Records,
+    function DashboardController($scope, $state, $timeout,
+                                 BoundaryState, FilterState, InitialState, Records,
                                  RecordSchemaState, RecordState, RecordAggregates) {
         var ctl = this;
 
@@ -27,8 +28,10 @@
                 loadRecords();
             });
             $scope.$on('driver.savedFilters:filterSelected', function(event, selectedFilter) {
-                FilterState.restoreFilters(selectedFilter);
                 $state.go('map');
+                $timeout(function () {
+                    FilterState.restoreFilters(selectedFilter);
+                }, 2000);  // this needs to be quite long to avoid race conditions, unfortunately
             });
         }
 
