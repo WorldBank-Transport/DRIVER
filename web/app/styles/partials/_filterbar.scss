@@ -21,6 +21,14 @@
         width: 100%;
         height: 100%;
     }
+    .btn-group.dropdown.options.active {
+        .dropdown-toggle.btn-default {}
+        .filter-option {
+            text-decoration: none;
+            font-style: italic;
+            color: black;
+        }
+    }
     .dropdown-menu.date-range,
     .dropdown-menu.number-range {
         padding: 15px;
