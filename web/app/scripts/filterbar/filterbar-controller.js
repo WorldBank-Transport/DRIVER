@@ -105,10 +105,16 @@
         }
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
+            var filterOn = _.keys(ctl.filterables);
+            var value;
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
 
-            _.each(ctl.filterables, function(value, label) {
+            if (ctl.filters.__dateRange) {
+                filterOn.push('__dateRange');
+            }
+
+            _.each(filterOn, function(label) {
                 if (ctl.filters[label]) {
                     value = ctl.filters[label];
                 } else {
