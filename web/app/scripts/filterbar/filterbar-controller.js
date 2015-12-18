@@ -108,7 +108,12 @@
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
 
-            _.each(ctl.filters, function(value, label) {
+            _.each(ctl.filterables, function(value, label) {
+                if (ctl.filters[label]) {
+                    value = ctl.filters[label];
+                } else {
+                    value = { contains: [] };
+                }
                 $log.debug('restored filter ' + label + ' has val: ', value);
                 // listen for this in filter widget controllers to set value if label matches
                 $scope.$broadcast('driver.filterbar:restored', {label: label, value: value});
