@@ -30,7 +30,7 @@
             &.open {
                 .tool-tab {
                     bottom: -2px;
-                    padding-top: 16px;
+                    padding-top: 20px;
                 }
                 .tool-content {
                     max-height: 300px;
@@ -59,7 +59,7 @@
 
             .tool-tab {
                 background: white;
-                padding: 12px 20px 16px;
+                padding: 16px 20px 16px;
                 position: relative;
                 bottom: -2px;
                 transition: 0.5s all;

@@ -1,5 +1,8 @@
 .json-editor-form {
 
+    .form-group {
+        margin-top: 10px;
+    }
     .save-area {
         display: block;
         position: fixed;
@@ -101,7 +104,9 @@
         margin-top: 0;
     }
     label.required {
-        color: black;
+        &:after {
+            content: ' *';
+        }
     }
 
 }
