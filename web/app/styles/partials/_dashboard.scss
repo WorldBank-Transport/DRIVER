@@ -90,34 +90,39 @@
         }
         &.insights {
             h1 {
-                font-size: 24px;
+                font-size: 27px;
                 font-weight: 400;
                 line-height: 1.4;
                 padding: 25px;
                 margin: 0;
 
-                b { font-weight: 700; }
+                b { font-weight: 700; color: #266DD3; }
             }
             .nav-pills > li > a {
                 background: #CCC;
                 padding: 6px;
             }
             .nav-pills > li.active > a {
-                background: #337ab7;
+                background: #266DD3;
             }
         }
         &.counts {
             text-align: center;
 
             h1 {
-                font-size: 48px;
+                font-size: 60px;
                 font-weight: 700;
                 margin: 30px 0 10px;
+                color: #266DD3;
             }
             h2 {
                 font-size: 21px;
                 font-weight: 400;
                 margin: 0;
+            }
+
+            .active > a {
+                background: #266DD3;
             }
         }
         &.toddow {

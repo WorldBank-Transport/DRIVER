@@ -3,10 +3,14 @@
 }
 
 .navbar-default {
-   position: fixed;
-   z-index: 10;
-   width: 100%;
-   top: 0px;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    top: 0px;
+   
+    background-color: #344055;
+    border: none;
+    border-radius: 0;
 }
 
 .navbar .nav-dropdown {
@@ -32,7 +36,29 @@ nav {
     .navbar-brand {
         font-weight: 700;
         font-size: 14px;
-        border-right: 1px solid #ddd;
+
+        border-right: 1px solid #68748A;
+        color: white !important;
+        margin-right: 10px;
+        transition: 0.5s all;
+
+        &:hover {
+            opacity: 0.65;
+            color: white !important;
+        }
+    }
+    .dropdown.open .dropdown-toggle {
+        background-color: #344055 !important;
+        color: white;
+    }
+    .dropdown-toggle {
+        color: white !important;
+        transition: 0.5s all;
+
+        &:hover {
+            opacity: 0.65;
+            color: white !important;
+        }
     }
     .dropdown-menu {
         border: none;

@@ -21,6 +21,16 @@
         width: 100%;
         height: 100%;
     }
+    .btn-group.dropdown.options.active {
+        .dropdown-toggle.btn-default {
+            background: rgba(39, 111, 212, 0.2);
+        }
+        .filter-option {
+            text-decoration: none;
+            font-style: italic;
+            color: black;
+        }
+    }
     .dropdown-menu.date-range,
     .dropdown-menu.number-range {
         padding: 15px;
@@ -45,10 +55,6 @@
 
 .no-filterbar {
     top: 50px;
-}
-
-.active .filter-option {
-    text-decoration: underline;
 }
 
 .saved-filters {

@@ -53,4 +53,18 @@
 	text-align: left;
 }
 
+.date-picker {
+    .dropdown-menu {
+        table {
+            button {
+                border: none;
+            }
+        }
+    }
+}
 
+select[ng-model="ctl.weather"] {
+    & + span > .wi {
+        width: 18px;
+    }
+}
