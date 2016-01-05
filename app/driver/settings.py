@@ -210,7 +210,9 @@ DRIVER_GROUPS = {'READ_ONLY': 'public', 'READ_WRITE': 'analyst', 'ADMIN': 'admin
 CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
+    # NB: session auth must appear before token auth for both to work.
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
@@ -345,15 +347,6 @@ if len(GOOGLE_OAUTH_CLIENT_ID) > 0:
             "post_logout_redirect_uris": [HOST_URL + "/openid/callback/logout/"],
         }
     }
-
-## Tweak settings depending on deployment target
-if DEVELOP:
-    # Disable session auth on production, this is for the browseable API only.
-    # NB: session auth must appear before token auth for both to work.
-    REST_FRAMEWORK['DEFAULT_AUTHENTICATION_CLASSES'] = (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    )
 
 # These fields will be visible to read-only users
 READ_ONLY_FIELDS = ['Accident Details']
