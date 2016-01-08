@@ -52,6 +52,7 @@ INSTALLED_APPS = (
     'driver_auth',
     'data',
     'user_filters',
+    'black_spots',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -179,6 +180,11 @@ LOGGING = {
             'propagate': True,
         },
         'user_filters': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'black_spots': {
             'handlers': ['console'],
             'level': 'DEBUG',
             'propagate': True,

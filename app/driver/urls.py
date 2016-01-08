@@ -4,17 +4,20 @@ from django.contrib import admin
 
 from rest_framework import routers
 
+from black_spots import views as black_spot_views
 from data import views as data_views
 from driver_auth import views as auth_views
 from user_filters import views as filt_views
 
 router = routers.DefaultRouter()
+router.register('blackspots', black_spot_views.BlackSpotViewSet, base_name='blackspots')
+router.register('blackspotsets', black_spot_views.BlackSpotSetViewSet, base_name='blackspotsets')
 router.register('boundaries', data_views.DriverBoundaryViewSet)
 router.register('boundarypolygons', data_views.DriverBoundaryPolygonViewSet)
 router.register('records', data_views.DriverRecordViewSet)
-router.register('userfilters', filt_views.SavedFilterViewSet, base_name='userfilters')
 router.register('recordschemas', data_views.DriverRecordSchemaViewSet)
 router.register('recordtypes', data_views.DriverRecordTypeViewSet)
+router.register('userfilters', filt_views.SavedFilterViewSet, base_name='userfilters')
 
 # user management
 router.register(r'users', auth_views.UserViewSet)
