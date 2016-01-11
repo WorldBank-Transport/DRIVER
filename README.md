@@ -68,6 +68,8 @@ Run `python scripts/load_accidents_v3.py --authz 'Token YOUR_AUTH_TOKEN' /path/t
 Note that the import process will take roughly two hours for the full data set; you can cut down the
 number of records with `head` on the individual CSVs.
 
+To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/black_spots.json`.
+
 ## Production
 
 TODO: Notes on creating a production superuser and adding a production OAuth2 application
