@@ -5,7 +5,7 @@
     function DriverLayersController($q, $filter, $log, $scope, $rootScope, $timeout, $compile,
                                     AuthService, FilterState, RecordState, GeographyState,
                                     RecordSchemaState, BoundaryState, QueryBuilder,
-                                    MapState, TileUrlService, InitialState) {
+                                    MapState, TileUrlService, InitialState, BlackspotSets) {
         var ctl = this;
         var localDateTimeFilter = $filter('localDateTime');
         var dateFormat = 'M/D/YYYY, h:mm:ss A';
@@ -259,13 +259,42 @@
                 $log.error('Map controller has no map! Cannot add layers.');
                 return;
             }
-
+            var maxDateString;
+            if (FilterState.filters.hasOwnProperty('__dateRange')) {
+                var dtString = FilterState.filters.__dateRange.max;
+                // If empty, return current time
+                if (!dtString) {
+                    dtString = new Date().toJSON();
+                    maxDateString = dtString;
+                }
+                // If it's already in the right format, don't do the conversion
+                else if (dtString.indexOf('/') <= 0) {
+                    maxDateString = dtString + 'T23:59:59Z';
+                } else {
+                    var components = dtString.split('/');
+                    var month = components[0];
+                    var day = components[1];
+                    var year = components[2];
+                    maxDateString = year + '-' + month + '-' + day + 'T23:59:59Z';
+                }
+            }
             $q.all([TileUrlService.recTilesUrl(ctl.recordType),
                     TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                    TileUrlService.recHeatmapUrl(ctl.recordType)]).then(function(tileUrls) {
+                    TileUrlService.recHeatmapUrl(ctl.recordType),
+                    BlackspotSets.query({'effective_at': maxDateString}).$promise
+                    .then(function(blackspotSet){
+                        var set = blackspotSet[blackspotSet.length-1];
+                        if(set){
+                            return TileUrlService.blackspotsUrl(set.uuid);
+                        }
+                        return undefined;
+                    })
+                   ]
+            ).then(function(tileUrls) {
                 var baseRecordsUrl = tileUrls[0];
                 var baseUtfGridUrl = tileUrls[1];
                 var baseHeatmapUrl = tileUrls[2];
+                var blackspotsUrl = tileUrls[3];
                 var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
 
                 // remove overlays if already added
@@ -313,6 +342,12 @@
 
                     $compile($('#record-popup'))($scope);
                 });
+
+                var blackspotOptions = angular.extend(defaultLayerOptions, {zIndex: 6});
+                var blackspotsLayer;
+                if(blackspotsUrl){
+                    blackspotsLayer = new L.tileLayer(blackspotsUrl, blackspotOptions); //use last date in filter
+                }
                 // TODO: find a reasonable way to get the current layers selected, to add those back
                 // when switching record type, so selected layers does not change with filter change.
 
@@ -324,6 +359,10 @@
                     'Events': recordsLayerGroup,
                     'Heatmap': heatmapLayer
                 };
+
+                if(blackspotsUrl){
+                    recordsOverlays.Blackspots = blackspotsLayer;
+                }
 
                 // construct user-uploaded boundary layer(s)
                 var availableBoundaries = $q.defer();
