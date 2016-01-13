@@ -283,9 +283,9 @@
                 TileUrlService.recUtfGridTilesUrl(ctl.recordType),
                 TileUrlService.recHeatmapUrl(ctl.recordType),
                 BlackspotSets.query({
-                    'effective_at': maxDateString
-                }).$promise
-                .then(function(blackspotSet) {
+                    'effective_at': maxDateString,
+                    'record_type': ctl.recordType
+                }).$promise.then(function(blackspotSet) {
                     var set = blackspotSet[blackspotSet.length - 1];
                     if (set) {
                         return TileUrlService.blackspotsUrl(set.uuid);
