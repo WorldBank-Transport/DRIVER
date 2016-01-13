@@ -30,8 +30,7 @@
                     var dtString = FilterState.filters.__dateRange.max;
                     // If empty, return current time
                     if (!dtString) {
-                        dtString = new Date().toJSON();
-                        maxDateString = dtString;
+                        maxDateString = new Date().toJSON();
                     }
                     // If it's already in the right format, don't do the conversion
                     else if (dtString.indexOf('/') <= 0) {
@@ -43,6 +42,8 @@
                         var year = components[2];
                         maxDateString = year + '-' + month + '-' + day + 'T23:59:59Z';
                     }
+                } else {
+                    maxDateString = new Date().toJSON();
                 }
 
                 $q.all([leafletController.getMap(),

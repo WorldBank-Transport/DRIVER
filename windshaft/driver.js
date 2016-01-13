@@ -145,13 +145,9 @@ function setRequestParameters(request, callback, redisClient) {
         params.style = constructCartoStyle('#ashlar_boundary', boundaryRules.concat([colorStyle]));
 
         // build query for bounding polygon
-        if (params.id === 'ALL') {
-            params.sql = baseBoundaryQuery + endBoundaryQuery;
-        } else {
-            // filter for a specific bounding polygon UUID
-            params.sql = baseBoundaryQuery + filterBoundaryQuery +
-                params.id + "'" + endBoundaryQuery;
-        }
+        // filter for a specific bounding polygon UUID
+        params.sql = baseBoundaryQuery + filterBoundaryQuery +
+            params.id + "'" + endBoundaryQuery;
 
         callback(null, request);
     } else if (params.tablename === 'black_spots_blackspot') {
