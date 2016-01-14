@@ -52,6 +52,10 @@ describe('driver.views.map: Layers Directive', function () {
         $httpBackend.whenGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         var recordsUrl = /api\/records/;
         $httpBackend.whenGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
+        var blackspotUrl = /\/api\/blackspotsets/;
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($rootScope);
         $rootScope.$apply();

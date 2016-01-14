@@ -17,7 +17,12 @@
                 },
                 query: {
                     method: 'GET',
-                    transformResponse: function(data) { return angular.fromJson(data).results; },
+                    transformResponse: function(data) {
+                        if (data){
+                            return angular.fromJson(data).results;
+                        }
+                        return [];
+                    },
                     isArray: true
                 },
                 update: {
@@ -42,7 +47,12 @@
                 },
                 query: {
                     method: 'GET',
-                    transformResponse: function(data) { return angular.fromJson(data).results; },
+                    transformResponse: function(data) {
+                        if (data) {
+                            return angular.fromJson(data).results;
+                        }
+                        return [];
+                    },
                     isArray: true
                 },
                 update: {
