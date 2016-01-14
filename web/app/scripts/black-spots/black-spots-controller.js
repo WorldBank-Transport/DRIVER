@@ -56,7 +56,7 @@
 
         function getBlackspotSets(selected) {
             return BlackspotSets.query({
-                'effective_at': getDate(),
+                'effective_at': FilterState.getDateFilter().maxDate,
                 'record_type': (selected ? selected.uuid : '')
             }).$promise;
         }
@@ -64,30 +64,6 @@
         function getBlackspotUrl(blackspotSet) {
             return TileUrlService.blackspotsUrl(
                 blackspotSet[blackspotSet.length - 1].uuid);
-        }
-
-        function getDate() {
-            var maxDateString;
-            if (FilterState.filters.hasOwnProperty('__dateRange')) {
-                var dtString = FilterState.filters.__dateRange.max;
-                // If empty, return current time
-                if (!dtString) {
-                    maxDateString = new Date().toJSON();
-                }
-                // If it's already in the right format, don't do the conversion
-                else if (dtString.indexOf('/') <= 0) {
-                    maxDateString = dtString + 'T23:59:59Z';
-                } else {
-                    var components = dtString.split('/');
-                    var month = components[0];
-                    var day = components[1];
-                    var year = components[2];
-                    maxDateString = year + '-' + month + '-' + day + 'T23:59:59Z';
-                }
-            } else {
-                maxDateString = new Date().toJSON();
-            }
-            return maxDateString;
         }
     }
 

@@ -260,30 +260,11 @@
                 $log.error('Map controller has no map! Cannot add layers.');
                 return;
             }
-            var maxDateString;
-            if (FilterState.filters.hasOwnProperty('__dateRange')) {
-                var dtString = FilterState.filters.__dateRange.max;
-                // If empty, return current time
-                if (!dtString) {
-                    dtString = new Date().toJSON();
-                    maxDateString = dtString;
-                }
-                // If it's already in the right format, don't do the conversion
-                else if (dtString.indexOf('/') <= 0) {
-                    maxDateString = dtString + 'T23:59:59Z';
-                } else {
-                    var components = dtString.split('/');
-                    var month = components[0];
-                    var day = components[1];
-                    var year = components[2];
-                    maxDateString = year + '-' + month + '-' + day + 'T23:59:59Z';
-                }
-            }
             $q.all([TileUrlService.recTilesUrl(ctl.recordType),
                 TileUrlService.recUtfGridTilesUrl(ctl.recordType),
                 TileUrlService.recHeatmapUrl(ctl.recordType),
                 BlackspotSets.query({
-                    'effective_at': maxDateString,
+                    'effective_at': FilterState.getDateFilter().maxDate,
                     'record_type': ctl.recordType
                 }).$promise.then(function(blackspotSet) {
                     var set = blackspotSet[blackspotSet.length - 1];
