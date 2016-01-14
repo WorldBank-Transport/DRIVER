@@ -339,9 +339,10 @@
                 var blackspotOptions = angular.extend(defaultLayerOptions, {
                     zIndex: 6
                 });
-                var blackspotsLayer;
+                var blackspotsLayer = new L.layerGroup([]);
                 if (blackspotsUrl) {
-                    blackspotsLayer = new L.tileLayer(blackspotsUrl, blackspotOptions); //use last date in filter
+                    blackspotsLayer.addLayer(
+                        new L.tileLayer(blackspotsUrl, blackspotOptions));
                 }
                 // TODO: find a reasonable way to get the current layers selected, to add those back
                 // when switching record type, so selected layers does not change with filter change.
@@ -352,12 +353,10 @@
 
                 var recordsOverlays = {
                     'Events': recordsLayerGroup,
-                    'Heatmap': heatmapLayer
+                    'Heatmap': heatmapLayer,
+                    'Blackspots': blackspotsLayer
                 };
 
-                if (blackspotsUrl) {
-                    recordsOverlays.Blackspots = blackspotsLayer;
-                }
 
                 // construct user-uploaded boundary layer(s)
                 var availableBoundaries = $q.defer();
