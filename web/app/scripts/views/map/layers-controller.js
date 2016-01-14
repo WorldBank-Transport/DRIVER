@@ -21,12 +21,20 @@
         ctl.editLayers = null;
         ctl.tilekey = null;
         ctl.userCanWrite = false;
+        ctl.eventLayerGroup = null;
+        ctl.heatmapLayerGroup = null;
+        ctl.blackspotLayerGroup = null;
+        ctl.boundariesLayerGroup = null;
 
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var filterStyle = {
             color: '#f357a1',
             fillColor: '#f357a1',
             fill: true
+        };
+        var defaultLayerOptions = {
+            attribution: 'PRS',
+            detectRetina: true
         };
 
         // Ensure initial state is ready before initializing layers
@@ -251,154 +259,208 @@
             */
         }
 
-        /**
-         * Adds the map layers. Removes them first if they already exist.
-         *
-         */
+
         ctl.setRecordLayers = function() {
             if (!ctl.map) {
                 $log.error('Map controller has no map! Cannot add layers.');
                 return;
             }
-            $q.all([TileUrlService.recTilesUrl(ctl.recordType),
-                TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                TileUrlService.recHeatmapUrl(ctl.recordType),
-                BlackspotSets.query({
-                    'effective_at': FilterState.getDateFilter().maxDate,
-                    'record_type': ctl.recordType
-                }).$promise.then(function(blackspotSet) {
-                    var set = blackspotSet[blackspotSet.length - 1];
-                    if (set) {
-                        return TileUrlService.blackspotsUrl(set.uuid);
-                    }
-                    return undefined;
-                })
-            ]).then(function(tileUrls) {
-                var baseRecordsUrl = tileUrls[0];
-                var baseUtfGridUrl = tileUrls[1];
-                var baseHeatmapUrl = tileUrls[2];
-                var blackspotsUrl = tileUrls[3];
-                var defaultLayerOptions = {
-                    attribution: 'PRS',
-                    detectRetina: true
-                };
 
-                // remove overlays if already added
-                if (ctl.overlays) {
-                    angular.forEach(ctl.overlays, function(overlay) {
-                        ctl.map.removeLayer(overlay);
+            if(ctl.layerSwitcher){
+                getUrls()
+                    .then(updateLayerGroups);
+            } else {
+                ctl.layerSwitcher = {init: true};
+                getUrls()
+                    .then(updateLayerGroups)
+                    .then(addBoundaryLayers)
+                    .then(addLayerSwitcher);
+            }
+
+        };
+
+        function getUrls() {
+            return $q.all(
+                [TileUrlService.recTilesUrl(ctl.recordType),
+                    TileUrlService.recUtfGridTilesUrl(ctl.recordType),
+                    TileUrlService.recHeatmapUrl(ctl.recordType),
+                    BlackspotSets.query({
+                        'effective_at': FilterState.getDateFilter().maxDate,
+                        'record_type': ctl.recordType
+                    }).$promise.then(function(blackspotSet) {
+                        var set = blackspotSet[blackspotSet.length - 1];
+                        if (set) {
+                            return TileUrlService.blackspotsUrl(set.uuid);
+                        }
+                        return undefined;
+                    })
+                ]);
+        }
+
+        function updateLayerGroups(urls) {
+            var baseRecordsUrl = urls[0];
+            var baseUtfGridUrl = urls[1];
+            var baseHeatmapUrl = urls[2];
+            var blackspotsUrl = urls[3];
+
+            updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
+            updateHeatmapLayer(baseHeatmapUrl);
+            updateBlackspotLayer(blackspotsUrl);
+        }
+
+        function addBoundaryLayers() {
+            return GeographyState.getOptions()
+                .then(function(options) {
+                    var boundaryLayerOptions = angular.extend(defaultLayerOptions, {
+                        zIndex: 2
                     });
+
+                    var layerPromises = options.map(function(boundary) {
+                        return TileUrlService.boundaryTilesUrl(boundary.uuid).then(
+                            function(baseBoundUrl) {
+                                var colorUrl =
+                                    (baseBoundUrl +
+                                     '?color=' +
+                                     encodeURIComponent(
+                                         boundary.color.toLowerCase()));
+                                var layer = new L.tileLayer(
+                                    colorUrl, boundaryLayerOptions);
+                                return [boundary.label, layer];
+                            }
+                        );
+                    });
+
+                    return $q.all(layerPromises).then(function(layerLabelPairs) {
+                        ctl.boundariesLayerGroup = _.zipObject(layerLabelPairs);
+                    });
+                });
+        }
+
+        function addLayerSwitcher() {
+            if (!ctl.layerSwitcher.init) {
+                $log.error('LayerSwitcher was initialized twice');
+                return;
+            }
+            var overlays = angular.extend(
+                {
+                    Events: ctl.eventLayerGroup,
+                    Heatmap: ctl.heatmapLayerGroup,
+                    Blackspots: ctl.blackspotLayerGroup
+                },
+                ctl.boundariesLayerGroup
+            );
+
+            ctl.baseMaps.then(
+                function(baseMaps){
+                    ctl.layerSwitcher = L.control.layers(
+                        baseMaps,
+                        overlays,
+                        {
+                            autoZIndex: false
+                        }
+                    );
+
+                    ctl.layerSwitcher.addTo(ctl.map);
                 }
+            );
+        }
 
-                // Event record points. Use 'ALL' or record type UUID to filter layer
-                var recordsLayerOptions = angular.extend(defaultLayerOptions, {
-                    zIndex: 3
-                });
-                var recordsLayer = new L.tileLayer(
-                    ctl.getFilterQuery(baseRecordsUrl, ctl.tilekey),
-                    recordsLayerOptions);
 
-                // layer with heatmap of events
-                var heatmapOptions = angular.extend(defaultLayerOptions, {
-                    zIndex: 4
-                });
-                var heatmapLayer = new L.tileLayer(ctl.getFilterQuery(baseHeatmapUrl, ctl.tilekey),
-                    heatmapOptions);
+        function updateEventLayer(baseRecordsUrl, baseUtfGridUrl){
+            var recordsLayerOptions = angular.extend(defaultLayerOptions, {
+                zIndex: 3
+            });
 
-                // interactivity for record layer
-                var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey), {
+            var recordsLayer = new L.tileLayer(
+                ctl.getFilterQuery(baseRecordsUrl, ctl.tilekey),
+                recordsLayerOptions);
+
+            var utfGridRecordsLayer = new L.UtfGrid(
+                ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey), {
                     useJsonP: false,
                     zIndex: 5
                 });
 
-                // combination of records and UTF grid layers, so they can be toggled as a group
-                var recordsLayerGroup = new L.layerGroup([recordsLayer, utfGridRecordsLayer]);
+            addGridRecordEvent(utfGridRecordsLayer);
 
-                utfGridRecordsLayer.on('click', function(e) {
-                    // ignore clicks where there is no event record
-                    if (!e.data) {
-                        return;
-                    }
-
-                    var popupOptions = {
-                        maxWidth: 400,
-                        maxHeight: 300,
-                        autoPan: true,
-                        closeButton: true,
-                        autoPanPadding: [5, 5]
-                    };
-
-                    new L.popup(popupOptions)
-                        .setLatLng(e.latlng)
-                        .setContent(ctl.buildRecordPopup(e.data))
-                        .openOn(ctl.map);
-
-                    $compile($('#record-popup'))($scope);
-                });
-
-                var blackspotOptions = angular.extend(defaultLayerOptions, {
-                    zIndex: 6
-                });
-                var blackspotsLayer = new L.layerGroup([]);
-                if (blackspotsUrl) {
-                    blackspotsLayer.addLayer(
-                        new L.tileLayer(blackspotsUrl, blackspotOptions));
+            if (!ctl.eventLayerGroup) {
+                ctl.eventLayerGroup = new L.layerGroup(
+                    [recordsLayer, utfGridRecordsLayer]);
+                ctl.map.addLayer(ctl.eventLayerGroup);
+            } else {
+                for (var layer in ctl.eventLayerGroup._layers) {
+                    ctl.eventLayerGroup.removeLayer(layer);
                 }
-                // TODO: find a reasonable way to get the current layers selected, to add those back
-                // when switching record type, so selected layers does not change with filter change.
+                ctl.eventLayerGroup.addLayer(recordsLayer);
+                ctl.eventLayerGroup.addLayer(utfGridRecordsLayer);
+            }
+        }
 
-                // Add layers to show by default.
-                // Layers added to map will automatically be selected in the layer switcher.
-                ctl.map.addLayer(recordsLayerGroup);
+        function addGridRecordEvent(utfGridRecordsLayer) {
+            utfGridRecordsLayer.on('click', function(e) {
+                // ignore clicks where there is no event record
+                if (!e.data) {
+                    return;
+                }
 
-                var recordsOverlays = {
-                    'Events': recordsLayerGroup,
-                    'Heatmap': heatmapLayer,
-                    'Blackspots': blackspotsLayer
+                var popupOptions = {
+                    maxWidth: 400,
+                    maxHeight: 300,
+                    autoPan: true,
+                    closeButton: true,
+                    autoPanPadding: [5, 5]
                 };
 
+                new L.popup(popupOptions)
+                    .setLatLng(e.latlng)
+                    .setContent(ctl.buildRecordPopup(e.data))
+                    .openOn(ctl.map);
 
-                // construct user-uploaded boundary layer(s)
-                var availableBoundaries = $q.defer();
-                GeographyState.getOptions().then(function(boundaries) {
-                    var boundaryLayerOptions = angular.extend(defaultLayerOptions, {
-                        zIndex: 2
-                    });
-                    $q.all(boundaries.map(function(boundary) {
-                        return TileUrlService.boundaryTilesUrl(boundary.uuid).then(
-                            function(baseBoundUrl) {
-                                var colorUrl = (baseBoundUrl +
-                                    '?color=' +
-                                    encodeURIComponent(boundary.color));
-                                var layer = new L.tileLayer(colorUrl, boundaryLayerOptions);
-                                return [boundary.label, layer];
-                            }
-                        );
-                    })).then(function(boundaryLabelsLayers) { // Array of [label, layer] pairs
-                        availableBoundaries.resolve(_.zipObject(boundaryLabelsLayers));
-                    });
-                });
-
-                // Once boundary layers have been created, add them (along with the other layers
-                // created so far) to the map.
-                $q.all([availableBoundaries.promise, ctl.baseMaps]).then(function(allOverlays) {
-                    var boundaryOverlays = allOverlays[0];
-                    var baseMaps = allOverlays[1];
-                    ctl.overlays = angular.extend({}, boundaryOverlays, recordsOverlays);
-
-                    // add layer switcher control; expects to have layer zIndex already set
-
-                    // If layer switcher already initialized, must re-initialize it.
-                    if (ctl.layerSwitcher) {
-                        ctl.layerSwitcher.removeFrom(ctl.map);
-                    }
-                    ctl.layerSwitcher = L.control.layers(baseMaps, ctl.overlays, {
-                        autoZIndex: false
-                    });
-                    ctl.layerSwitcher.addTo(ctl.map);
-                });
+                $compile($('#record-popup'))($scope);
             });
-        };
+        }
+
+        function updateHeatmapLayer(baseHeatmapUrl) {
+            var heatmapOptions = angular.extend(defaultLayerOptions, {
+                zIndex: 4
+            });
+            var heatmapLayer = new L.tileLayer(
+                ctl.getFilterQuery(baseHeatmapUrl, ctl.tilekey),
+                heatmapOptions);
+
+            if (ctl.heatmapLayerGroup) {
+                for (var hlayer in ctl.heatmapLayerGroup._layers) {
+                    ctl.heatmapLayerGroup.removeLayer(hlayer);
+                }
+                ctl.heatmapLayerGroup.addLayer(heatmapLayer);
+            } else {
+                ctl.heatmapLayerGroup = new L.layerGroup(
+                    [heatmapLayer]);
+            }
+        }
+
+        function updateBlackspotLayer(blackspotsUrl) {
+            var blackspotOptions = angular.extend(defaultLayerOptions, {
+                zIndex: 6
+            });
+            if (ctl.blackspotLayerGroup) {
+                for (var blayer in ctl.blackspotLayerGroup._layers) {
+                    ctl.blackspotLayerGroup.removeLayer(blayer);
+                }
+            } else {
+                ctl.blackspotLayerGroup = new L.layerGroup([]);
+            }
+            if (blackspotsUrl) {
+                ctl.blackspotLayerGroup.addLayer(
+                    new L.tileLayer(blackspotsUrl, blackspotOptions));
+            }
+
+            var blackspotsLayer = new L.layerGroup([]);
+            if (blackspotsUrl) {
+                blackspotsLayer.addLayer(
+                    new L.tileLayer(blackspotsUrl, blackspotOptions));
+            }
+        }
 
         /**
          * Build popup content from arbitrary record data.

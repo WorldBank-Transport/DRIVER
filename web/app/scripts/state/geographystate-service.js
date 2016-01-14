@@ -40,22 +40,23 @@
                 if (!results.length) {
                     $log.warn('No geographies returned');
                 } else {
-                      if (!selected && options[0]) {
-                          selected = svc.setSelected(options[0]);
-                      } else if (!_.includes(options, selected)) {
-                          svc.setSelected(selected);
-                      }
+                    if (!selected && options[0]) {
+                        selected = svc.setSelected(options[0]);
+                    } else if (!_.includes(options, selected)) {
+                        svc.setSelected(selected);
+                    }
                 }
             });
         }
 
         function getOptions() {
-            var deferred = $q.defer();
-            if (!options) {
-                updateOptions().then(function() { deferred.resolve(options); });
+            if(options){
+                return $q.when(options);
+            } else {
+                return updateOptions().then(function(){
+                    return options;
+                });
             }
-            deferred.resolve(options);
-            return deferred.promise;
         }
 
         /**
