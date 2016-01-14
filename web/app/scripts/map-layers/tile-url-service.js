@@ -44,7 +44,6 @@
 
         function blackspotTilesUrl(blackspotSet) {
             return _insertIdAtALL(blackspotsUrl, blackspotSet);
-
         }
 
         function getBaseLayerUrl() {

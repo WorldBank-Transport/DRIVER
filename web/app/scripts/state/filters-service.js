@@ -107,7 +107,7 @@
 
             // Perform some sanity checks on the dates
             if (minDateString) {
-                var min = moment.tz(minDateString, WebConfig.localization.timeZone);
+                var min = moment.tz(minDateString + ' 00:00:00', WebConfig.localization.timeZone);
                 if (!isNaN(min.unix())) {
                     dateFilters.minDate = min.toISOString();
                 }

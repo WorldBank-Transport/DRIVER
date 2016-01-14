@@ -9,9 +9,6 @@
         var ctl = this;
         ctl.map = null;
         ctl.initMap = initMap;
-        initialize();
-
-        function initialize() {}
 
         function initMap(leafletController) {
             leafletController.getMap()
