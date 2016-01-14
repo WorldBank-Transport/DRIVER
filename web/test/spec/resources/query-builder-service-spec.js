@@ -2,7 +2,16 @@
 
 describe('driver.resources: QueryBuilder', function () {
 
-    var mockFilterState = {'filters': {'__dateRange': {'min': '2015-10-05'}}};
+    var mockFilterState = {
+        'filters': {
+            '__dateRange': {
+                'min': '2015-10-05'
+            }
+        },
+        'getDateFilter': function(){
+            return {minDate:'2015-10-04T16:00:00.000Z'};
+        }
+    };
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.resources', function($provide) {
         $provide.value('FilterState', mockFilterState);

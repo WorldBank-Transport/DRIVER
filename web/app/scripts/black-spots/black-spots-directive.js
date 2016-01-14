@@ -1,20 +1,30 @@
-(function () {
+(function() {
     'use strict';
 
     /* ngInject */
-    function BlackSpots() {
+    function BlackSpots(InitialState) {
+
         var module = {
-            restrict: 'EA',
-            templateUrl: 'scripts/black-spots/black-spots-partial.html',
-            bindToController: true,
+            restrict: 'A',
+            scope: false,
             replace: true,
             controller: 'BlackSpotsController',
-            controllerAs: 'blackspots'
+            require: ['leafletMap', 'driver-black-spots'],
+            link: link
         };
         return module;
+
+        function link(scope, element, attrs, controllers) {
+            InitialState.ready().then(function() {
+                var leafletController = controllers[0];
+                var controller = controllers[1];
+                controller.initMap(leafletController);
+            });
+        }
+
     }
 
     angular.module('driver.blackSpots')
-    .directive('driverBlackSpots', BlackSpots);
+        .directive('driverBlackSpots', BlackSpots);
 
 })();

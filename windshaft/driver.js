@@ -16,6 +16,11 @@ var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, 
 var filterBoundaryQuery = " WHERE b.uuid ='";
 var endBoundaryQuery = ") AS ashlar_boundary";
 
+var baseBlackspotQuery = ["(SELECT * ",
+                          "FROM black_spots_blackspot b "].join("");
+var filterBlackspotQuery = "WHERE b.black_spot_set_id ='";
+var endBlackspotQuery = ") AS black_spots_blackspot";
+
 // styling
 
 var heatmapRules = [
@@ -49,6 +54,20 @@ var boundaryRules = [
     'line-opacity: 0.7;', // line-color will be set on a per-request basis
 ];
 
+var blackspotRules = [
+    'line-width: 2;',
+    'polygon-opacity: 0.5;',
+    'line-opacity: 0.8;',
+    'line-color: red;',
+    'polygon-fill: red;',
+    '[ severity_score > 0] { line-color: green; polygon-fill: green ; }',
+    '[ severity_score > 0.1] { line-color: blue; polygon-fill: blue ; }',
+    '[ severity_score > 0.3] { line-color: purple; polygon-fill: purple ; }',
+    '[ severity_score > 0.5] { line-color: orange; polygon-fill: orange ; }',
+    '[ severity_score > 0.7] { line-color: red; polygon-fill: red ; }',
+];
+var blackspotStyle = constructCartoStyle('#black_spots_blackspot', blackspotRules);
+
 /** Construct a CartoCSS style string that applies to class, containing rules
  * @param {String} layer The #-prefixed layer name
  * @param {Array} rules The styling rules to apply to this layer
@@ -64,7 +83,9 @@ function setRequestParameters(request, callback, redisClient) {
 
     params.dbname = 'driver';
 
-    if (params.tablename !== 'ashlar_boundary' && params.tablename !== 'ashlar_record') {
+    if (params.tablename !== 'ashlar_boundary' &&
+        params.tablename !== 'ashlar_record' &&
+        params.tablename !== 'black_spots_blackspot') {
         // table name must be for record or boundary polygon
         throw('Invalid table name');
     }
@@ -117,21 +138,27 @@ function setRequestParameters(request, callback, redisClient) {
                 callback(null, request);
             });
         }
-    } else {
+    } else if (params.tablename === 'ashlar_boundary'){
         params.interactivity = 'label';
         var boundaryColor = request.query.color || '#f4b431';
         var colorStyle = 'line-color: ' + boundaryColor + ';';
         params.style = constructCartoStyle('#ashlar_boundary', boundaryRules.concat([colorStyle]));
 
         // build query for bounding polygon
-        if (params.id === 'ALL') {
-            params.sql = baseBoundaryQuery + endBoundaryQuery;
-        } else {
-            // filter for a specific bounding polygon UUID
-            params.sql = baseBoundaryQuery + filterBoundaryQuery + params.id + "'"
-                + endBoundaryQuery;
-        }
+        // filter for a specific bounding polygon UUID
+        params.sql = baseBoundaryQuery + filterBoundaryQuery +
+            params.id + "'" + endBoundaryQuery;
 
+        callback(null, request);
+    } else if (params.tablename === 'black_spots_blackspot') {
+        //record type, filter effective at
+        params.style = blackspotStyle;
+        if (params.id === 'ALL') {
+            params.sql = baseBoundaryQuery + endBlackspotQuery;
+        } else {
+            params.sql = baseBlackspotQuery + filterBlackspotQuery +
+                params.id + "'" + endBlackspotQuery;
+        }
         callback(null, request);
     }
 }

@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterState($log, $rootScope, debounce, localStorageService) {
+    function FilterState($log, $rootScope, debounce, localStorageService, WebConfig) {
         var svc = this;
 
         var storageName = 'filterbar.filters';
@@ -16,6 +16,7 @@
 
         svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
+        svc.getDateFilter = getDateFilter;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -60,7 +61,8 @@
         }
 
         /**
-         * Broadcast event to trigger setting previously stored filters back on the filter bar.
+         * Broadcast event to trigger setting previously stored filters
+         * back on the filter bar.
          */
         function restoreFilters(filterObj) {
             if(!filterObj) {
@@ -79,6 +81,65 @@
             svc.filters = filterObj;
 
             filtersRestored = true;
+        }
+
+        /*
+         * returns an object containing the min and max dates
+         * If none are set, uses passed in defaults or its own
+         */
+        function getDateFilter(defaults) {
+            // An exceptional case for date ranges (not part of the JsonB we filter over).
+            // If no dates are specified, the last 90 days are used.
+            var now = new Date();
+            var duration = moment.duration({ days:90 });
+            var maxDateString = now.toJSON().slice(0, 10);
+            var minDateString = new Date(now - duration).toJSON().slice(0, 10);
+            var dateFilters = {};
+            if(defaults){
+                maxDateString = defaults.maxDate ? defaults.maxDate : maxDateString;
+                minDateString = defaults.minDate ? defaults.minDate : minDateString;
+            }
+
+            if (svc.filters && svc.filters.hasOwnProperty('__dateRange')) {
+                minDateString = convertDT(svc.filters.__dateRange.min);
+                maxDateString = convertDT(svc.filters.__dateRange.max);
+            }
+
+            // Perform some sanity checks on the dates
+            if (minDateString) {
+                var min = moment.tz(minDateString + ' 00:00:00', WebConfig.localization.timeZone);
+                if (!isNaN(min.unix())) {
+                    dateFilters.minDate = min.toISOString();
+                }
+            }
+            if (maxDateString) {
+                var max = moment.tz(maxDateString + ' 23:59:59', WebConfig.localization.timeZone);
+                if (!isNaN(max.unix())) {
+                    dateFilters.maxDate = max.toISOString();
+                }
+            }
+            return dateFilters;
+        }
+
+        // Helper for converting a datetime string to the proper format to work with moment.tz.
+        // A datetime in the format MM/DD/YYYY doesn't work properly with with moment tz conversion,
+        // and must be converted to YYYY-MM-DD
+        function convertDT(dtString) {
+            // If empty, return null, we don't want it on the query
+            if (!dtString) {
+                return null;
+            }
+
+            // If it's already in the right format, don't do the conversion
+            if (dtString.indexOf('/') <= 0) {
+                return dtString;
+            }
+
+            var components = dtString.split('/');
+            var month = components[0];
+            var day = components[1];
+            var year = components[2];
+            return year + '-' + month + '-' + day;
         }
 
         return svc;

@@ -87,27 +87,6 @@
             return filterParams;
         }
 
-        // Helper for converting a datetime string to the proper format to work with moment.tz.
-        // A datetime in the format MM/DD/YYYY doesn't work properly with with moment tz conversion,
-        // and must be converted to YYYY-MM-DD
-        function convertDT(dtString) {
-            // If empty, return null, we don't want it on the query
-            if (!dtString) {
-                return null;
-            }
-
-            // If it's already in the right format, don't do the conversion
-            if (dtString.indexOf('/') <= 0) {
-                return dtString;
-            }
-
-            var components = dtString.split('/');
-            var month = components[0];
-            var day = components[1];
-            var year = components[2];
-            return year + '-' + month + '-' + day;
-        }
-
         /**
          * Assemble all query parameters into a single query parameters object for the Record resource
          *
@@ -121,33 +100,14 @@
             var paramObj = {};
             /* jshint camelcase: false */
             if (doFilter) {
-                // An exceptional case for date ranges (not part of the JsonB we filter over).
-                // If no dates are specified, the last 90 days are used.
-                var now = new Date();
-                var duration = moment.duration({ days:90 });
-                var maxDateString = now.toJSON().slice(0, 10);
-                var minDateString = new Date(now - duration).toJSON().slice(0, 10);
+                var dateFilter = FilterState.getDateFilter();
+                paramObj = {
+                    occurred_max: dateFilter.maxDate,
+                    occurred_min: dateFilter.minDate
+                };
 
-                if (FilterState.filters.hasOwnProperty('__dateRange')) {
-                    minDateString = convertDT(FilterState.filters.__dateRange.min);
-                    maxDateString = convertDT(FilterState.filters.__dateRange.max);
-                }
-
-                // Perform some sanity checks on the dates
-                if (minDateString) {
-                    var min = moment.tz(minDateString, WebConfig.localization.timeZone);
-                    if (!isNaN(min.unix())) {
-                        paramObj.occurred_min = min.toISOString();
-                    }
-                }
-                if (maxDateString) {
-                var max = moment.tz(maxDateString + ' 23:59:59', WebConfig.localization.timeZone);
-                    if (!isNaN(max.unix())) {
-                        paramObj.occurred_max = max.toISOString();
-                    }
-                }
-
-                var jsonFilters = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange'));
+                var jsonFilters = svc.assembleJsonFilterParams(
+                    _.omit(FilterState.filters, '__dateRange'));
 
                 // Handle cases where no json filters are set
                 if (!_.isEmpty(jsonFilters)) {

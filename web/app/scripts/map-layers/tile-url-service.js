@@ -12,13 +12,16 @@
         var allBoundariesUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png');
         var heatmapUrl = allRecordsUrl + '?heatmap=true';
+        var blackspotsUrl = (WebConfig.windshaft.hostname +
+                             '/tiles/table/black_spots_blackspot/id/ALL/{z}/{x}/{y}.png');
 
         var module = {
             recTilesUrl: recordsTilesUrlForType,
             recUtfGridTilesUrl: recordsUtfGridTilesUrlForType,
             recHeatmapUrl: recordsHeatmapTilesUrl,
             boundaryTilesUrl: boundaryTilesUrl,
-            baseLayerUrl: getBaseLayerUrl
+            baseLayerUrl: getBaseLayerUrl,
+            blackspotsUrl: blackspotTilesUrl
         };
         return module;
 
@@ -37,6 +40,10 @@
 
         function boundaryTilesUrl(boundsUuid) {
             return _insertIdAtALL(allBoundariesUrl, boundsUuid);
+        }
+
+        function blackspotTilesUrl(blackspotSet) {
+            return _insertIdAtALL(blackspotsUrl, blackspotSet);
         }
 
         function getBaseLayerUrl() {

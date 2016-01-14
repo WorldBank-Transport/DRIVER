@@ -355,12 +355,18 @@
             'clients': ['google.com']
         };
 
+        var BlackspotSetResponse = {
+            results: [{
+                uuid: 'uuid'
+            }]
+        };
         return {
             BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
             RecordResponse: RecordResponse,
             SavedFiltersResponse: SavedFiltersResponse,
-            SSOClientsResponse: SSOClientsResponse
+            SSOClientsResponse: SSOClientsResponse,
+            BlackspotSetResponse: BlackspotSetResponse
         };
     }
 

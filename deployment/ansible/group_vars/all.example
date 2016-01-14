@@ -26,6 +26,7 @@ windshaft_tables:
     - ashlar_boundarypolygon
     - ashlar_recordschema
     - ashlar_recordtype
+    - black_spots_blackspot
 
 redis_bind_address: "redis.service.driver.internal"
 redis_port: 6379

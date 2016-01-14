@@ -59,13 +59,17 @@ describe('driver.views.map: Layers Controller', function () {
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
         var recordsUrl = /\/api\/records\//;
         var recordSchemaUrl = /\/api\/recordschemas/;
+        var blackspotUrl = /\/api\/blackspotsets/;
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
         Controller = Element.controller('driverMapLayers');

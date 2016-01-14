@@ -1,11 +1,12 @@
-(function () {
+(function() {
     'use strict';
 
     /* ngInject */
-    function DriverLayersController($q, $filter, $log, $scope, $rootScope, $timeout, $compile,
-                                    AuthService, FilterState, RecordState, GeographyState,
-                                    RecordSchemaState, BoundaryState, QueryBuilder,
-                                    MapState, TileUrlService, InitialState) {
+    function DriverLayersController(
+        $q, $filter, $log, $scope, $rootScope, $timeout, $compile,
+        AuthService, FilterState, RecordState, GeographyState,
+        RecordSchemaState, BoundaryState, QueryBuilder,
+        MapState, TileUrlService, InitialState, BlackspotSets) {
         var ctl = this;
         var localDateTimeFilter = $filter('localDateTime');
         var dateFormat = 'M/D/YYYY, h:mm:ss A';
@@ -73,18 +74,18 @@
                     ctl.recordType = 'ALL';
                     ctl.recordTypeLabel = 'Record';
                 }
-            }).then(function () {
+            }).then(function() {
                 return BoundaryState.getSelected().then(function(selected) {
                     if (selected && selected.uuid) {
                         ctl.boundaryId = selected.uuid;
                     }
                 });
-            }).then(function () {
+            }).then(function() {
                 return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
-                .then(function(records) {
-                    ctl.tilekey = records.tilekey;
-                });
-            }).then(function () {
+                    .then(function(records) {
+                        ctl.tilekey = records.tilekey;
+                    });
+            }).then(function() {
                 // add base layer
                 var baseMaps = $q.defer();
                 ctl.baseMaps = baseMaps.promise;
@@ -97,9 +98,11 @@
                     var streets = new L.tileLayer(streetsUrl, streetsOptions);
                     ctl.map.addLayer(streets);
 
-                    baseMaps.resolve({ 'CartoDB Positron': streets });
+                    baseMaps.resolve({
+                        'CartoDB Positron': streets
+                    });
                 });
-            }).then(function () {
+            }).then(function() {
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
                 ctl.map.addLayer(ctl.editLayers);
@@ -171,8 +174,7 @@
             }).then(function() {
                 if (MapState.getLocation() && MapState.getZoom()) {
                     ctl.map.setView(MapState.getLocation(), MapState.getZoom());
-                }
-                else {
+                } else {
                     BoundaryState.getSelected().then(function(selected) {
                         if (selected && selected.bbox) {
                             ctl.map.fitBounds(selected.bbox);
@@ -254,19 +256,32 @@
          *
          */
         ctl.setRecordLayers = function() {
-
             if (!ctl.map) {
                 $log.error('Map controller has no map! Cannot add layers.');
                 return;
             }
-
             $q.all([TileUrlService.recTilesUrl(ctl.recordType),
-                    TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                    TileUrlService.recHeatmapUrl(ctl.recordType)]).then(function(tileUrls) {
+                TileUrlService.recUtfGridTilesUrl(ctl.recordType),
+                TileUrlService.recHeatmapUrl(ctl.recordType),
+                BlackspotSets.query({
+                    'effective_at': FilterState.getDateFilter().maxDate,
+                    'record_type': ctl.recordType
+                }).$promise.then(function(blackspotSet) {
+                    var set = blackspotSet[blackspotSet.length - 1];
+                    if (set) {
+                        return TileUrlService.blackspotsUrl(set.uuid);
+                    }
+                    return undefined;
+                })
+            ]).then(function(tileUrls) {
                 var baseRecordsUrl = tileUrls[0];
                 var baseUtfGridUrl = tileUrls[1];
                 var baseHeatmapUrl = tileUrls[2];
-                var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
+                var blackspotsUrl = tileUrls[3];
+                var defaultLayerOptions = {
+                    attribution: 'PRS',
+                    detectRetina: true
+                };
 
                 // remove overlays if already added
                 if (ctl.overlays) {
@@ -276,18 +291,25 @@
                 }
 
                 // Event record points. Use 'ALL' or record type UUID to filter layer
-                var recordsLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 3});
-                var recordsLayer = new L.tileLayer(ctl.getFilterQuery(baseRecordsUrl, ctl.tilekey),
-                                                   recordsLayerOptions);
+                var recordsLayerOptions = angular.extend(defaultLayerOptions, {
+                    zIndex: 3
+                });
+                var recordsLayer = new L.tileLayer(
+                    ctl.getFilterQuery(baseRecordsUrl, ctl.tilekey),
+                    recordsLayerOptions);
 
                 // layer with heatmap of events
-                var heatmapOptions = angular.extend(defaultLayerOptions, {zIndex: 4});
+                var heatmapOptions = angular.extend(defaultLayerOptions, {
+                    zIndex: 4
+                });
                 var heatmapLayer = new L.tileLayer(ctl.getFilterQuery(baseHeatmapUrl, ctl.tilekey),
-                                                   heatmapOptions);
+                    heatmapOptions);
 
                 // interactivity for record layer
-                var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey),
-                                                        {useJsonP: false, zIndex: 5});
+                var utfGridRecordsLayer = new L.UtfGrid(ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey), {
+                    useJsonP: false,
+                    zIndex: 5
+                });
 
                 // combination of records and UTF grid layers, so they can be toggled as a group
                 var recordsLayerGroup = new L.layerGroup([recordsLayer, utfGridRecordsLayer]);
@@ -313,6 +335,15 @@
 
                     $compile($('#record-popup'))($scope);
                 });
+
+                var blackspotOptions = angular.extend(defaultLayerOptions, {
+                    zIndex: 6
+                });
+                var blackspotsLayer = new L.layerGroup([]);
+                if (blackspotsUrl) {
+                    blackspotsLayer.addLayer(
+                        new L.tileLayer(blackspotsUrl, blackspotOptions));
+                }
                 // TODO: find a reasonable way to get the current layers selected, to add those back
                 // when switching record type, so selected layers does not change with filter change.
 
@@ -322,13 +353,17 @@
 
                 var recordsOverlays = {
                     'Events': recordsLayerGroup,
-                    'Heatmap': heatmapLayer
+                    'Heatmap': heatmapLayer,
+                    'Blackspots': blackspotsLayer
                 };
+
 
                 // construct user-uploaded boundary layer(s)
                 var availableBoundaries = $q.defer();
                 GeographyState.getOptions().then(function(boundaries) {
-                    var boundaryLayerOptions = angular.extend(defaultLayerOptions, {zIndex: 2});
+                    var boundaryLayerOptions = angular.extend(defaultLayerOptions, {
+                        zIndex: 2
+                    });
                     $q.all(boundaries.map(function(boundary) {
                         return TileUrlService.boundaryTilesUrl(boundary.uuid).then(
                             function(baseBoundUrl) {
@@ -357,7 +392,9 @@
                     if (ctl.layerSwitcher) {
                         ctl.layerSwitcher.removeFrom(ctl.map);
                     }
-                    ctl.layerSwitcher = L.control.layers(baseMaps, ctl.overlays, {autoZIndex: false});
+                    ctl.layerSwitcher = L.control.layers(baseMaps, ctl.overlays, {
+                        autoZIndex: false
+                    });
                     ctl.layerSwitcher.addTo(ctl.map);
                 });
             });
@@ -444,7 +481,9 @@
 
         // Gets the additional parameters to be sent in the request to Django
         function getAdditionalParams() {
-            var params = { tilekey: true };
+            var params = {
+                tilekey: true
+            };
             var geojson = getPolygonFromLayer(ctl.editLayers);
             if (geojson) {
                 params.polygon = geojson;
@@ -477,6 +516,6 @@
     }
 
     angular.module('driver.views.map')
-    .controller('driverLayersController', DriverLayersController);
+        .controller('driverLayersController', DriverLayersController);
 
 })();
