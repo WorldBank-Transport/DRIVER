@@ -4,7 +4,9 @@ django-filter==0.11.0
 django-extensions==1.6.1
 django-cors-headers==1.0.0
 git+https://github.com/rohe/pyoidc.git
-git+https://github.com/marcanpilami/django-oidc.git
+# TODO: revert to marcanpilami django-oidc when https://github.com/rohe/pyoidc/issues/161 fixed
+git+https://github.com/flibbertigibbet/django-oidc.git
+#git+https://github.com/marcanpilami/django-oidc.git
 django-redis==4.2.0
 python-dateutil==2.4.2
 pytz==2015.7
