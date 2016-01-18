@@ -17,7 +17,10 @@
         ctl.drawControl = null;
         ctl.map = null;
         ctl.overlays = null;
-        ctl.baseMaps = null;
+        // baseMaps was renamed to bMaps because the test framework does an
+        // unguarded string replace on the word "base" with with the base url
+        // in its error messages... 
+        ctl.bMaps = null;
         ctl.editLayers = null;
         ctl.tilekey = null;
         ctl.userCanWrite = false;
@@ -39,12 +42,13 @@
 
         // Ensure initial state is ready before initializing layers
         ctl.initLayers = function(map) {
-            // TODO (maybe): This approach to setting map options is only tenable so long as most
-            // of our maps use the same options, with very limited exceptions. If we ever
-            // need to have lots of customized options for each map, then we'll need to find a way to
-            // insert arbitrary config options into each map directive instance. One possibility
-            // would be to define them as attributes, similar to how angular-leaflet-directive does
-            // it, but there may be better approaches.
+            // TODO (maybe): This approach to setting map options is only tenable so
+            // long as most of our maps use the same options, with very limited
+            // exceptions. If we ever need to have lots of customized options
+            // for each map, then we'll need to find a way to insert arbitrary
+            // config options into each map directive instance. One possibility
+            // would be to define them as attributes, similar to how
+            // angular-leaflet-directive does it, but there may be better approaches.
             map.scrollWheelZoom.enable();
             InitialState.ready().then(function() {
                 ctl.init(map);
@@ -65,6 +69,8 @@
 
             ctl.map = map;
             ctl.userCanWrite = AuthService.hasWriteAccess();
+            var bmapDefer = $q.defer();
+            ctl.bMaps = bmapDefer.promise;
 
             // get the current record type selection for filtering
             RecordState.getSelected().then(function(selected) {
@@ -95,8 +101,6 @@
                     });
             }).then(function() {
                 // add base layer
-                var baseMaps = $q.defer();
-                ctl.baseMaps = baseMaps.promise;
                 var streetsOptions = {
                     attribution: cartoDBAttribution,
                     detectRetina: false,
@@ -105,8 +109,7 @@
                 TileUrlService.baseLayerUrl().then(function(streetsUrl) {
                     var streets = new L.tileLayer(streetsUrl, streetsOptions);
                     ctl.map.addLayer(streets);
-
-                    baseMaps.resolve({
+                    bmapDefer.resolve({
                         'CartoDB Positron': streets
                     });
                 });
@@ -349,8 +352,7 @@
                 },
                 ctl.boundariesLayerGroup
             );
-
-            ctl.baseMaps.then(
+            ctl.bMaps.then(
                 function(baseMaps){
                     ctl.layerSwitcher = L.control.layers(
                         baseMaps,
