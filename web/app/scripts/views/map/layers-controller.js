@@ -18,7 +18,7 @@
         ctl.map = null;
         ctl.overlays = null;
         // baseMaps was renamed to bMaps because the test framework does an
-        // unguarded string replace on the word "base" with with the base url
+        // unguarded string replace on the word "base" with the base url
         // in its error messages... 
         ctl.bMaps = null;
         ctl.editLayers = null;
@@ -270,18 +270,20 @@
             }
 
             if(ctl.layerSwitcher){
-                getUrls()
-                    .then(updateLayerGroups);
+                getUrls().then(updateLayerGroups);
             } else {
-                ctl.layerSwitcher = {init: true};
-                getUrls()
-                    .then(updateLayerGroups)
+                getUrls().then(updateLayerGroups)
                     .then(addBoundaryLayers)
                     .then(addLayerSwitcher);
             }
 
         };
 
+        /**
+         * Returns a promise which resolves to the URls for the record,
+         * utfgridtile, heatmap, and blackspot layers as an array of form:
+         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl]
+         */
         function getUrls() {
             return $q.all(
                 [TileUrlService.recTilesUrl(ctl.recordType),
@@ -297,9 +299,16 @@
                         }
                         return undefined;
                     })
-                ]);
+                ]
+            );
         }
 
+        /**
+         * Given an array of urls in form:
+         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl],
+         * updates the layer groups so that the layer switcher does not
+         * need to be re-initialized every time layer urls change
+         */
         function updateLayerGroups(urls) {
             var baseRecordsUrl = urls[0];
             var baseUtfGridUrl = urls[1];
@@ -311,7 +320,17 @@
             updateBlackspotLayer(blackspotsUrl);
         }
 
+        /**
+         * Adds the boundary layers.  This function should only be called once
+         * before the layer switcher is initialized.  These layers should never
+         * be updated, so they are not contained in layer groups
+         */
         function addBoundaryLayers() {
+            // only add boundary layers to the map once
+            if(ctl.boundariesLayerGroup) {
+                return $q.when();
+            }
+
             return GeographyState.getOptions()
                 .then(function(options) {
                     var boundaryLayerOptions = angular.extend(defaultLayerOptions, {
@@ -339,11 +358,16 @@
                 });
         }
 
+        /**
+         * Adds the layer switcher to the map.
+         * The overlays are added as layer groups because they must be
+         * allowed to change when a new filter is applied, and the
+         * layer picker makes it complicated without using layer groups
+         *
+         * The layer switcher is only initialized once so that
+         * when a new filter is applied, layer selection is preserved
+         */
         function addLayerSwitcher() {
-            if (!ctl.layerSwitcher.init) {
-                $log.error('LayerSwitcher was initialized twice');
-                return;
-            }
             var overlays = angular.extend(
                 {
                     Events: ctl.eventLayerGroup,
@@ -354,20 +378,28 @@
             );
             ctl.bMaps.then(
                 function(baseMaps){
-                    ctl.layerSwitcher = L.control.layers(
-                        baseMaps,
-                        overlays,
-                        {
-                            autoZIndex: false
-                        }
-                    );
+                    // only add the layer switcher once
+                    if(!ctl.layerSwitcher){
+                        ctl.layerSwitcher = L.control.layers(
+                            baseMaps,
+                            overlays,
+                            {
+                                autoZIndex: false
+                            }
+                        );
 
-                    ctl.layerSwitcher.addTo(ctl.map);
+                        ctl.layerSwitcher.addTo(ctl.map);
+                    }
                 }
             );
         }
 
-
+        /**
+         * Updates the event layer group
+         * The event layer group is composed of the records layer for the actual
+         * records on the map, and the utfGridRecords layer which is for the
+         * click events and popup
+         */
         function updateEventLayer(baseRecordsUrl, baseUtfGridUrl){
             var recordsLayerOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 3
@@ -390,14 +422,21 @@
                     [recordsLayer, utfGridRecordsLayer]);
                 ctl.map.addLayer(ctl.eventLayerGroup);
             } else {
-                for (var layer in ctl.eventLayerGroup._layers) {
+                _.forEach(ctl.eventLayerGroup._layers,function(layer) {
+                    if (typeof layer.off === 'function') {
+                        layer.off('click');
+                    }
                     ctl.eventLayerGroup.removeLayer(layer);
-                }
+                });
                 ctl.eventLayerGroup.addLayer(recordsLayer);
                 ctl.eventLayerGroup.addLayer(utfGridRecordsLayer);
             }
         }
 
+        /**
+         * Adds the onClick event to the specified utfGridRecordsLayer
+         * in order to create the info popups
+         */
         function addGridRecordEvent(utfGridRecordsLayer) {
             utfGridRecordsLayer.on('click', function(e) {
                 // ignore clicks where there is no event record
@@ -422,6 +461,12 @@
             });
         }
 
+        /**
+         * Updates the heatmap layer group.
+         * Can be called as many times as necessary.  Removes the old
+         * heatmap layer and adds a new one to the layer group with
+         * the updated URL
+         */
         function updateHeatmapLayer(baseHeatmapUrl) {
             var heatmapOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 4
@@ -441,6 +486,12 @@
             }
         }
 
+        /**
+         * Updates the blackspot layer group.
+         * Can be called as many times as necessary.  Removes the old
+         * blackspot layer and adds a new one to the layer group with
+         * the updated URL
+         */
         function updateBlackspotLayer(blackspotsUrl) {
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 6
