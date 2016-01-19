@@ -475,7 +475,7 @@
     "type":"object",
     "properties":{
         "Accident Details":{
-            "$ref":"#/definitions/Accident Details",
+            "$ref":"#/definitions/Accident%20Details",
             "propertyOrder": 0,
             "options": {
                 "collapsed": true
