@@ -138,11 +138,7 @@
          * @return {string} Currently just returns encodeURIComponent(string)
          */
         function encodeJSONPointer(str) {
-            // TODO: This can probably be switched after upgrading json-editor:
-            // https://github.com/jdorn/json-editor/issues/402
-            // return encodeURIComponent(str);
-            // But the current version of json-editor doesn't support this properly.
-            return str;
+            return encodeURIComponent(str);
         }
 
         /**
