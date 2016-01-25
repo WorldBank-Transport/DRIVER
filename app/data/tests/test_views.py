@@ -6,14 +6,17 @@ import mock
 import pytz
 
 from rest_framework.request import Request
+
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory, force_authenticate
+from rest_framework import status
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
 from ashlar.models import RecordSchema, RecordType, Record
 
-from data.views import DriverRecordViewSet, DriverRecordSchemaViewSet
+from data.filters import RecordAuditLogFilter
+from data.models import RecordAuditLogEntry
+from data.views import DriverRecordViewSet, DriverRecordSchemaViewSet, DriverRecordAuditLogViewSet
 from data.serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
 
 
@@ -136,6 +139,38 @@ class DriverRecordViewTestCase(APITestCase):
         serializer_class = view.get_serializer_class()
         self.assertEqual(serializer_class, DetailsReadOnlyRecordSerializer)
 
+    def test_audit_log_creation(self):
+        """Test that audit logs are generated on create operations"""
+        url = '/api/records/'
+        post_data = {
+            'data': {
+                'Person': [],
+                'Accident Details': {
+                    'Num passenger casualties': '',
+                    'Num driver casualties': '',
+                    'Num pedestrian casualties': '',
+                    '_localId': '9635a7f7-a897-4a3f-904e-93f5b273f990',
+                    'Num vehicles': '',
+                    'Description': ''
+                },
+                'Vehicle': []
+            },
+            'schema': self.schema.pk,
+            'geom': 'POINT(120.81298917531966 15.180301034030107)',
+            'location_text': 'JASA, Gapan, Nueva Ecija, Central Luzon, 3105, Philippines',
+            'city': 'Gapan',
+            'road': 'JASA',
+            'state': 'Nueva Ecija',
+            'weather': '',
+            'light': '',
+            'occurred_from': '2015-12-31T16:00:00.000Z',
+            'occurred_to': '2015-12-31T16:00:00.000Z'
+        }
+        self.assertEqual(RecordAuditLogEntry.objects.count(), 0)
+        response = self.admin_client.post(url, post_data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(RecordAuditLogEntry.objects.count(), 1)
+
 
 class DriverRecordSchemaViewTestCase(APITestCase):
 
@@ -148,3 +183,80 @@ class DriverRecordSchemaViewTestCase(APITestCase):
         view.request = mock_req
         serializer_class = view.get_serializer_class()
         self.assertEqual(serializer_class, DetailsReadOnlyRecordSchemaSerializer)
+
+
+class DriverRecordAuditLogViewSetTestCase(APITestCase):
+    def setUp(self):
+        super(DriverRecordAuditLogViewSetTestCase, self).setUp()
+        try:
+            self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
+        except User.DoesNotExist:
+            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+            self.admin.is_superuser = True
+            self.admin.is_staff = True
+            self.admin.save()
+        self.now = datetime.now(pytz.timezone('Asia/Manila'))
+        self.ten_days_ago = self.now - timedelta(days=10)
+        self.ten_days_hence = self.now + timedelta(days=10)
+
+        self.admin_client = APIClient()
+        self.admin_client.force_authenticate(user=self.admin)
+        self.url = '/api/audit-log/'
+
+    def test_view_permissions(self):
+        """Test that view is read-only to admin"""
+        response = self.admin_client.get(self.url, {'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.admin_client.post(self.url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_param_validation(self):
+        """Tests that the view ensures min_date and max_date exist and are <= 1 month apart"""
+        response = self.admin_client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.admin_client.get(self.url, {'min_date': self.now})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.admin_client.get(self.url, {'max_date': self.now})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        long_long_ago = self.now - timedelta(days=300)
+        response = self.admin_client.get(self.url, {'min_date': long_long_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.admin_client.get(self.url, {'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_view_filters(self):
+        """Test that view filtering works"""
+        self.assertIs(DriverRecordAuditLogViewSet.filter_class, RecordAuditLogFilter)
+        # Create some spurious audit log entries so that we can filter them
+        for act in ['create', 'update', 'delete']:
+            RecordAuditLogEntry.objects.create(user=self.admin,
+                                               username='admin',
+                                               record_uuid='1234',
+                                               action=act)
+
+        response = self.admin_client.get(self.url, {'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(3, len(json.loads(response.content)))
+        response = self.admin_client.get(self.url, {'action': 'delete',
+                                                    'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(1, len(json.loads(response.content)))
+        response = self.admin_client.get(self.url, {'max_date': self.ten_days_ago,
+                                                    'min_date': self.ten_days_ago})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(0, len(json.loads(response.content)))
+        response = self.admin_client.get(self.url, {'username': 'admin',
+                                                    'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(3, len(json.loads(response.content)))
+        response = self.admin_client.get(self.url, {'username': 'not-a-user',
+                                                    'min_date': self.ten_days_ago,
+                                                    'max_date': self.ten_days_hence})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(0, len(json.loads(response.content)))
