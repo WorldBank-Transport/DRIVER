@@ -11,4 +11,5 @@ django-redis==4.2.0
 python-dateutil==2.4.2
 pytz==2015.7
 mock==1.3.0
+djangorestframework-csv==1.4.1
 git+https://github.com/azavea/ashlar.git@develop#egg=ashlar
