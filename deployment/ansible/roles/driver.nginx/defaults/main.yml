@@ -1,6 +1,4 @@
 ---
-celery: false
-
 driver_user: "{{ ansible_ssh_user }}"
 driver_conf:
   DRIVER_ADMIN_USERNAME: "{{ driver_admin_username }}"

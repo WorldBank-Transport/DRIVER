@@ -239,7 +239,7 @@ REDIS_PORT = os.environ.get('DRIVER_REDIS_PORT', '6379')
 CACHES = {
     "default": {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/1',
+        'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/2',
         'TIMEOUT': None, # never expire
         'KEY_PREFIX': 'DJANGO',
         'VERSION': 1,
@@ -252,6 +252,17 @@ CACHES = {
             # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
         }
     }
+}
+
+# Celery
+BROKER_URL = 'redis://{}:{}/0'.format(REDIS_HOST, REDIS_PORT)
+CELERY_RESULT_BACKEND = 'redis://{}:{}/1'.format(REDIS_HOST, REDIS_PORT)
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ROUTES = {
+    'black_spots.tasks.calculate_block_spots': {'queue': 'taskworker'},
+    'data.tasks.remove_duplicates': {'queue': 'taskworker'},
 }
 
 ASHLAR = {

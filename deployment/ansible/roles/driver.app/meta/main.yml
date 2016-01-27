@@ -1,5 +1,5 @@
 ---
 dependencies:
   - { role: "driver.docker" }
-  - { role: "driver.nginx" }
   - { role: "driver.web"}
+  - { role: "driver.windshaft" }

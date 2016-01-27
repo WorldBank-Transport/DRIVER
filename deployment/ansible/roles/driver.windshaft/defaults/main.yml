@@ -1,0 +1,15 @@
+---
+driver_conf:
+  DRIVER_DB_NAME: "{{ postgresql_database }}"
+  DRIVER_DB_USER: "{{ postgresql_username }}"
+  DRIVER_DB_PASSWORD: "{{ postgresql_password }}"
+  WINDSHAFT_DB_USER: "{{ windshaft_db_username }}"
+  WINDSHAFT_DB_PASSWORD: "{{ windshaft_db_password }}"
+  DRIVER_DB_HOST: "{{ postgresql_host }}"
+  DRIVER_DB_PORT: "{{ postgresql_port }}"
+  DRIVER_APP_HOST: "{{ driver_app_hostname }}"
+  DRIVER_REDIS_HOST: "{{ redis_bind_address }}"
+  DRIVER_REDIS_PORT: "{{ redis_port }}"
+
+
+root_windshaft_dir: "/opt/windshaft"
