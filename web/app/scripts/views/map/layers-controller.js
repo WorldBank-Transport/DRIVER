@@ -280,9 +280,11 @@
                     .then(addBoundaryLayers)
                     .then(addLayerSwitcher);
             }
-
         };
 
+        /**
+         * Returns a promise which resolves to the blackspot set id given the current filters
+         */
         function getBlackspotSetId() {
             return BlackspotSets.query({
                 'effective_at': FilterState.getDateFilter().maxDate,
@@ -293,7 +295,7 @@
         /**
          * Returns a promise which resolves to the URls for the record,
          * utfgridtile, heatmap, and blackspot layers as an array of form:
-         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl]
+         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl, blackspotsUtfGridUrl]
          */
         function getUrls(blackspotSet) {
             var set = blackspotSet[blackspotSet.length - 1];
@@ -553,7 +555,10 @@
         }
 
         /**
+         * Build popup content from blackspot data
          *
+         * @param {Object} UTFGrid interactivity data from interation event object
+         * @returns {String} HTML snippet for a Leaflet popup
          */
         ctl.buildBlackspotPopup = function(blackspot) {
             /* jshint camelcase: false */
