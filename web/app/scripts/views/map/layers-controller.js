@@ -409,7 +409,7 @@
          */
         function updateEventLayer(baseRecordsUrl, baseUtfGridUrl){
             var recordsLayerOptions = angular.extend(defaultLayerOptions, {
-                zIndex: 3
+                zIndex: 5
             });
 
             var recordsLayer = new L.tileLayer(
@@ -419,7 +419,7 @@
             var utfGridRecordsLayer = new L.UtfGrid(
                 ctl.getFilterQuery(baseUtfGridUrl, ctl.tilekey), {
                     useJsonP: false,
-                    zIndex: 5
+                    zIndex: 7
                 });
 
             addGridRecordEvent(utfGridRecordsLayer);
@@ -476,7 +476,7 @@
          */
         function updateHeatmapLayer(baseHeatmapUrl) {
             var heatmapOptions = angular.extend(defaultLayerOptions, {
-                zIndex: 4
+                zIndex: 6
             });
             var heatmapLayer = new L.tileLayer(
                 ctl.getFilterQuery(baseHeatmapUrl, ctl.tilekey),
@@ -501,7 +501,7 @@
          */
         function updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl) {
             var blackspotOptions = angular.extend(defaultLayerOptions, {
-                zIndex: 6
+                zIndex: 3
             });
             if (ctl.blackspotLayerGroup) {
                 for (var blayer in ctl.blackspotLayerGroup._layers) {
@@ -519,7 +519,7 @@
                 var blackspotUtfGridLayer = new L.UtfGrid(
                     blackspotsUtfGridUrl, {
                         useJsonP: false,
-                        zIndex: 7
+                        zIndex: 4
                     });
                 addGridBlackspotEvent(blackspotUtfGridLayer);
                 ctl.blackspotLayerGroup.addLayer(blackspotUtfGridLayer);
@@ -532,7 +532,7 @@
 
         function addGridBlackspotEvent(blackspotUtfGridLayer) {
             blackspotUtfGridLayer.on('click', function (e) {
-                // ignore clicks where there is no event record
+                // ignore clicks where there is no blackspot
                 if (!e.data) {
                     return;
                 }
