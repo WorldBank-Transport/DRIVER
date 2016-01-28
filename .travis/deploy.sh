@@ -32,4 +32,4 @@ chmod 0600 deployment/driver.pem
 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook \
   -i deployment/ansible/inventory/staging \
   --private-key="${TRAVIS_BUILD_DIR}/deployment/driver.pem" \
-  deployment/ansible/database.yml deployment/ansible/app.yml
+  deployment/ansible/database.yml deployment/ansible/app.yml deployment/ansible/celery.yml
