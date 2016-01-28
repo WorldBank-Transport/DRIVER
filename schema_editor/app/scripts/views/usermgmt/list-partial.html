@@ -3,7 +3,22 @@
         <ase-notifications></ase-notifications>
         <div class="form-area-heading">
             <h2>All Users</h2>
-            <button type="button" ui-sref="usermgmt.add" class="btn btn-default">Add new user</button>
+            <div class="button-container">
+                <div class="dropdown">
+                    <button class="dropdown-toggle btn btn-default" data-toggle="dropdown" role="button">
+                        {{ UserList.groupFilter ? 'Group: ' + UserList.groupFilter : 'Filter by group...' }}
+                        <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                        <li><a ng-click="UserList.onGroupSelected(null)">All</a></li>
+                        <li ng-repeat="group in UserList.groups">
+                            <a ng-click="UserList.onGroupSelected(group)">
+                                {{ group }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" ui-sref="usermgmt.add" class="btn btn-default">Add new user</button>
+            </div>
             <div class="content-border"></div>
         </div>
         <div class="form-area-body">
