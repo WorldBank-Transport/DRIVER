@@ -27,8 +27,8 @@ describe('ase.views.usermgmt: userList', function () {
         var element = $compile('<ase-user-list></ase-user-list>')(scope);
         $rootScope.$apply();
 
-        // 'add new user' button
-        expect(element.find('button').length).toEqual(1);
+        // 'add new user' button and 'filter by group' button
+        expect(element.find('button').length).toEqual(2);
     });
 
 });
