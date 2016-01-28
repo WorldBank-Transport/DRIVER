@@ -5,7 +5,7 @@
     'use strict';
 
     /* ngInject */
-    function MapState($log) {
+    function MapState() {
         var filterGeoJSON, zoom, location;
         var svc = {
             setFilterGeoJSON: setFilterGeoJSON,
