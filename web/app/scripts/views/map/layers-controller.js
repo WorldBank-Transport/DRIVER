@@ -19,7 +19,7 @@
         ctl.overlays = null;
         // baseMaps was renamed to bMaps because the test framework does an
         // unguarded string replace on the word "base" with the base url
-        // in its error messages... 
+        // in its error messages.
         ctl.bMaps = null;
         ctl.editLayers = null;
         ctl.tilekey = null;
@@ -270,35 +270,39 @@
             }
 
             if(ctl.layerSwitcher){
-                getUrls().then(updateLayerGroups);
+                getBlackspotSetId()
+                    .then(getUrls)
+                    .then(updateLayerGroups);
             } else {
-                getUrls().then(updateLayerGroups)
+                getBlackspotSetId()
+                    .then(getUrls)
+                    .then(updateLayerGroups)
                     .then(addBoundaryLayers)
                     .then(addLayerSwitcher);
             }
 
         };
 
+        function getBlackspotSetId() {
+            return BlackspotSets.query({
+                'effective_at': FilterState.getDateFilter().maxDate,
+                'record_type': ctl.recordType
+            }).$promise;
+        }
+
         /**
          * Returns a promise which resolves to the URls for the record,
          * utfgridtile, heatmap, and blackspot layers as an array of form:
          * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl]
          */
-        function getUrls() {
+        function getUrls(blackspotSet) {
+            var set = blackspotSet[blackspotSet.length - 1];
             return $q.all(
                 [TileUrlService.recTilesUrl(ctl.recordType),
-                    TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                    TileUrlService.recHeatmapUrl(ctl.recordType),
-                    BlackspotSets.query({
-                        'effective_at': FilterState.getDateFilter().maxDate,
-                        'record_type': ctl.recordType
-                    }).$promise.then(function(blackspotSet) {
-                        var set = blackspotSet[blackspotSet.length - 1];
-                        if (set) {
-                            return TileUrlService.blackspotsUrl(set.uuid);
-                        }
-                        return undefined;
-                    })
+                 TileUrlService.recUtfGridTilesUrl(ctl.recordType),
+                 TileUrlService.recHeatmapUrl(ctl.recordType),
+                 set ? TileUrlService.blackspotsUrl(set.uuid) : $q.when(''),
+                 set ? TileUrlService.blackspotsUtfGridUrl(set.uuid) : $q.when('')
                 ]
             );
         }
@@ -314,10 +318,11 @@
             var baseUtfGridUrl = urls[1];
             var baseHeatmapUrl = urls[2];
             var blackspotsUrl = urls[3];
+            var blackspotsUtfGridUrl = urls[4];
 
             updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
             updateHeatmapLayer(baseHeatmapUrl);
-            updateBlackspotLayer(blackspotsUrl);
+            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl);
         }
 
         /**
@@ -492,7 +497,7 @@
          * blackspot layer and adds a new one to the layer group with
          * the updated URL
          */
-        function updateBlackspotLayer(blackspotsUrl) {
+        function updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl) {
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 6
             });
@@ -508,12 +513,58 @@
                     new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
 
-            var blackspotsLayer = new L.layerGroup([]);
+            if (blackspotsUtfGridUrl){
+                var blackspotUtfGridLayer = new L.UtfGrid(
+                    blackspotsUtfGridUrl, {
+                        useJsonP: false,
+                        zIndex: 7
+                    });
+                addGridBlackspotEvent(blackspotUtfGridLayer);
+                ctl.blackspotLayerGroup.addLayer(blackspotUtfGridLayer);
+            }
             if (blackspotsUrl) {
-                blackspotsLayer.addLayer(
+                ctl.blackspotLayerGroup.addLayer(
                     new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
         }
+
+        function addGridBlackspotEvent(blackspotUtfGridLayer) {
+            blackspotUtfGridLayer.on('click', function (e) {
+                // ignore clicks where there is no event record
+                if (!e.data) {
+                    return;
+                }
+
+                var popupOptions = {
+                    maxWidth: 400,
+                    maxHeight: 300,
+                    autoPan: true,
+                    closeButton: true,
+                    autoPanPadding: [5, 5]
+                };
+
+                new L.popup(popupOptions)
+                    .setLatLng(e.latlng)
+                    .setContent(ctl.buildBlackspotPopup(e.data))
+                    .openOn(ctl.map);
+
+                $compile($('#blackspot-popup'))($scope);
+            });
+        }
+
+        /**
+         *
+         */
+        ctl.buildBlackspotPopup = function(blackspot) {
+            /* jshint camelcase: false */
+            var str = '<div id="blackspot-popup" class="blackspot-popup">';
+            str += '<div><h4>Blackspot</h4></div>';
+            str += '<div><h6>Severity score: ' + blackspot.severity_score + '</h6></div>';
+            str += '<div><h6>Accidents: ' + blackspot.num_records + '</h6></div>';
+            str += '<div><h6>Fatilities: ' + blackspot.num_severe + '</h6></div>';
+            /* jshint camelcase: true */
+            return str;
+        };
 
         /**
          * Build popup content from arbitrary record data.

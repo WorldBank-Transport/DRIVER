@@ -40,7 +40,7 @@
          * @param {number} mapZoom The zoom level of the leaflet map
          */
         function setZoom(mapZoom) {
-            $log.debug('Setting zoom to: ' + JSON.stringify(mapZoom));
+            //$log.debug('Setting zoom to: ' + JSON.stringify(mapZoom));
             zoom = mapZoom;
         }
 
@@ -57,7 +57,7 @@
          * @param {object} mapLocation a leaflet lat/lng object
          */
         function setLocation(mapLocation) {
-            $log.debug('Setting location to: ' + JSON.stringify(mapLocation));
+            //$log.debug('Setting location to: ' + JSON.stringify(mapLocation));
             location = mapLocation;
         }
 
