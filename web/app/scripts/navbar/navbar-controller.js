@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function NavbarController($rootScope, $scope, $state,
+    function NavbarController($rootScope, $scope, $state, $modal,
                               AuthService, BoundaryState, GeographyState, InitialState,
                               MapState, RecordState, UserService, WebConfig) {
         var ctl = this;
@@ -19,6 +19,7 @@
         ctl.onRecordTypeSelected = onRecordTypeSelected;
         ctl.onStateSelected = onStateSelected;
         ctl.navigateToStateName = navigateToStateName;
+        ctl.showAuditDownloadModal = showAuditDownloadModal;
         ctl.getBoundaryLabel = getBoundaryLabel;
         ctl.recordTypesVisible = WebConfig.recordType.visible;
         ctl.userEmail = userDropdownDefault;
@@ -71,7 +72,6 @@
         });
         $scope.$on('driver.state.geographystate:selected', function(event, selected) {
             ctl.geographySelected = selected;
-
             // Need to get the new list of boundaries for the selected geography.
             // Only do this after initializing: otherwise an unneeded request is sent.
             if (initialized) {
@@ -141,6 +141,15 @@
             /* jshint camelcase: false */
             return boundary.data[ctl.geographySelected.display_field];
             /* jshint camelcase: true */
+        }
+
+        // Show a details modal for the given record
+        function showAuditDownloadModal() {
+            $modal.open({
+                templateUrl: 'scripts/audit/audit-download-modal-partial.html',
+                controller: 'AuditDownloadModalController as modal',
+                size: 'sm',
+            });
         }
     }
 
