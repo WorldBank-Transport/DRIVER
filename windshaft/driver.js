@@ -152,6 +152,7 @@ function setRequestParameters(request, callback, redisClient) {
         callback(null, request);
     } else if (params.tablename === 'black_spots_blackspot') {
         //record type, filter effective at
+        params.interactivity = 'uuid,severity_score,num_records,num_severe';
         params.style = blackspotStyle;
         if (params.id === 'ALL') {
             params.sql = baseBoundaryQuery + endBlackspotQuery;

@@ -360,13 +360,23 @@
                 uuid: 'uuid'
             }]
         };
+
+        var BlackspotResponse = {
+            results: [{
+                uuid: 'uuid',
+                severity_score: 'severity_score',
+                num_records: 'num_records',
+                num_severe: 'num_severe'
+            }]
+        };
         return {
             BoundaryResponse: BoundaryResponse,
             PolygonResponse: PolygonResponse,
             RecordResponse: RecordResponse,
             SavedFiltersResponse: SavedFiltersResponse,
             SSOClientsResponse: SSOClientsResponse,
-            BlackspotSetResponse: BlackspotSetResponse
+            BlackspotSetResponse: BlackspotSetResponse,
+            BlackspotResponse: BlackspotResponse
         };
     }
 

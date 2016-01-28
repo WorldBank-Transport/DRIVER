@@ -14,6 +14,8 @@
         var heatmapUrl = allRecordsUrl + '?heatmap=true';
         var blackspotsUrl = (WebConfig.windshaft.hostname +
                              '/tiles/table/black_spots_blackspot/id/ALL/{z}/{x}/{y}.png');
+        var blackspotsUtfGridUrl = (WebConfig.windshaft.hostname +
+                                    '/tiles/table/black_spots_blackspot/id/ALL/{z}/{x}/{y}.grid.json');
 
         var module = {
             recTilesUrl: recordsTilesUrlForType,
@@ -21,7 +23,8 @@
             recHeatmapUrl: recordsHeatmapTilesUrl,
             boundaryTilesUrl: boundaryTilesUrl,
             baseLayerUrl: getBaseLayerUrl,
-            blackspotsUrl: blackspotTilesUrl
+            blackspotsUrl: blackspotTilesUrl,
+            blackspotsUtfGridUrl: blackspotUtfGridTilesUrl
         };
         return module;
 
@@ -44,6 +47,10 @@
 
         function blackspotTilesUrl(blackspotSet) {
             return _insertIdAtALL(blackspotsUrl, blackspotSet);
+        }
+
+        function blackspotUtfGridTilesUrl(blackspotSet) {
+            return _insertIdAtALL(blackspotsUtfGridUrl, blackspotSet);
         }
 
         function getBaseLayerUrl() {
