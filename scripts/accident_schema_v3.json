@@ -469,7 +469,44 @@
                     }
                 }
             }
-        }
+        },
+        "Photo": {
+                "multiple": true,
+                "description": "Pictures of the accident",
+                "title": "Photo",
+                "required": [
+                    "_localId",
+                    "Picture"
+                ],
+                "plural_title": "Photos",
+                "definitions": {},
+                "type": "object",
+                "properties": {
+                    "Picture": {
+                        "media": {
+                            "type": "image/jpeg",
+                            "binaryEncoding": "base64"
+                        },
+                        "type": "string",
+                        "fieldType": "image",
+                        "propertyOrder": 0
+                    },
+                    "Description": {
+                        "isSearchable": true,
+                        "propertyOrder": 1,
+                        "type": "string",
+                        "fieldType": "text",
+                        "format": "text"
+                    },
+                    "_localId": {
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string",
+                        "options": {
+                            "hidden": true
+                        }
+                    }
+                }
+            }
     },
     "$schema":"http://json-schema.org/draft-04/schema#",
     "type":"object",
@@ -497,6 +534,16 @@
             },
             "type":"array",
             "propertyOrder": 2,
+            "options": {
+                "collapsed": true
+            }
+        },
+        "Photo": {
+            "items": {
+                "$ref": "#/definitions/Photo"
+            },
+            "type": "array",
+            "propertyOrder": 3,
             "options": {
                 "collapsed": true
             }
