@@ -79,7 +79,15 @@
         }
 
         function onRecordsLoaded() {
-            var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions, 'details');
+            var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions,
+                function(val, key) {
+                    if (key.indexOf('Details') > -1) {
+                        // keep the actual field name
+                        // for lookup on ctl.recordSchema.schema.definitions
+                        ctl.detailsPropertyName = key;
+                        return val;
+                    }
+                });
             if (detailsDefinitions.length !== 1) {
                 $log.error('Expected one details definition, found ' + detailsDefinitions.length);
                 return;
