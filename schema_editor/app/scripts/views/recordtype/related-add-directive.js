@@ -20,7 +20,7 @@
         }
 
         function submitForm() {
-            var key = ctl.definition.title;
+            var key = Schemas.generateFieldName(ctl.definition.title);
             if (ctl.currentSchema.schema.definitions[key]) {
                 $log.debug('Title', key, 'exists for current schema');
                 return;
@@ -29,22 +29,22 @@
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
 
             // Use an array or object depending on the 'multiple' setting
-            var ref = '#/definitions/' + Schemas.encodeJSONPointer(ctl.definition.title);
+            var ref = '#/definitions/' + key;
             if (ctl.definition.multiple) {
-                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                ctl.currentSchema.schema.properties[key] = {
                     type: 'array',
                     items: {
                         $ref: ref
                     }
                 };
             } else {
-                ctl.currentSchema.schema.properties[ctl.definition.title] = {
+                ctl.currentSchema.schema.properties[key] = {
                     $ref: ref
                 };
             }
 
             // Set the collapsed option to true so all objects start collapsed when viewing
-            ctl.currentSchema.schema.properties[ctl.definition.title].options = {
+            ctl.currentSchema.schema.properties[key].options = {
                 collapsed: true
             };
 
