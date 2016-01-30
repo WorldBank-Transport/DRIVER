@@ -286,6 +286,15 @@
          * Returns a promise which resolves to the blackspot set id given the current filters
          */
         function getBlackspotSetId() {
+            var polygon = getPolygonFromLayer(ctl.editLayers);
+
+            if (polygon) {
+              return BlackspotSets.query({
+                'efffective_at': FilterState.getDateFilter().maxDate,
+                'record_type': ctl.recordType,
+                'polygon': polygon
+              }).$promise;
+            }
             return BlackspotSets.query({
                 'effective_at': FilterState.getDateFilter().maxDate,
                 'record_type': ctl.recordType
@@ -297,14 +306,29 @@
          * utfgridtile, heatmap, and blackspot layers as an array of form:
          * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl, blackspotsUtfGridUrl]
          */
-        function getUrls(blackspotSet) {
-            var set = blackspotSet[blackspotSet.length - 1];
+        function getUrls(response) {
+            var blackspotUrl = $q.when('');
+            var blackspotUtfUrl = $q.when('');
+            var blackspotTileKey = false;
+            if (response && response[0] && response[0].tilekey) {
+                var data = response[0];
+                if( data.tilekey ) {
+                    blackspotUrl = TileUrlService.blackspotsUrl(data.tilekey);
+                    blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(data.tilekey);
+                    blackspotTileKey = true;
+                }
+            } else if (response && response[0] && response[0].uuid){
+                var uuid = response[0].uuid;
+                blackspotUrl = TileUrlService.blackspotsUrl(uuid);
+                blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(uuid);
+            }
             return $q.all(
                 [TileUrlService.recTilesUrl(ctl.recordType),
                  TileUrlService.recUtfGridTilesUrl(ctl.recordType),
                  TileUrlService.recHeatmapUrl(ctl.recordType),
-                 set ? TileUrlService.blackspotsUrl(set.uuid) : $q.when(''),
-                 set ? TileUrlService.blackspotsUtfGridUrl(set.uuid) : $q.when('')
+                 blackspotUrl,
+                 blackspotUtfUrl,
+                 blackspotTileKey
                 ]
             );
         }
@@ -321,10 +345,11 @@
             var baseHeatmapUrl = urls[2];
             var blackspotsUrl = urls[3];
             var blackspotsUtfGridUrl = urls[4];
+            var blackspotTileKey = urls[5];
 
             updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
             updateHeatmapLayer(baseHeatmapUrl);
-            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl);
+            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
         }
 
         /**
@@ -499,25 +524,32 @@
          * blackspot layer and adds a new one to the layer group with
          * the updated URL
          */
-        function updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl) {
+        function updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, tilekey) {
+            // TODO: update to pass in a tilekey which will filter on polygon
+            // if there is no tilekey, it should return all for blackspot set
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 3
             });
             if (ctl.blackspotLayerGroup) {
-                for (var blayer in ctl.blackspotLayerGroup._layers) {
-                    ctl.blackspotLayerGroup.removeLayer(blayer);
-                }
+                _.forEach(ctl.blackspotLayerGroup._layers,function(layer) {
+                    if (typeof layer.off === 'function') {
+                        layer.off('click');
+                    }
+                    ctl.blackspotLayerGroup.removeLayer(layer);
+                });
             } else {
                 ctl.blackspotLayerGroup = new L.layerGroup([]);
             }
             if (blackspotsUrl) {
                 ctl.blackspotLayerGroup.addLayer(
-                    new L.tileLayer(blackspotsUrl, blackspotOptions));
+                    new L.tileLayer(addBlackspotParams(blackspotsUrl, tilekey),
+                                    blackspotOptions));
             }
 
             if (blackspotsUtfGridUrl){
                 var blackspotUtfGridLayer = new L.UtfGrid(
-                    blackspotsUtfGridUrl, {
+                    addBlackspotParams(blackspotsUtfGridUrl, tilekey),
+                    {
                         useJsonP: false,
                         zIndex: 4
                     });
@@ -528,6 +560,16 @@
                 ctl.blackspotLayerGroup.addLayer(
                     new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
+        }
+
+        function addBlackspotParams(baseUrl, tilekey) {
+            var url = baseUrl;
+            if(tilekey) {
+                url += (url.match(/\?/) ? '&' : '?') + 'tilekey=';
+                url += tilekey;
+                return url;
+            }
+            return url;
         }
 
         function addGridBlackspotEvent(blackspotUtfGridLayer) {
