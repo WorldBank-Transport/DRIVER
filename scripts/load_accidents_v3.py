@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """Loads accidents from multiple accident database dumps (schema v3)"""
 import argparse
 import csv

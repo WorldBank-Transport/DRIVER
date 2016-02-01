@@ -126,19 +126,26 @@
             validateSchemaFormData: validateSchemaFormData,
             definitionFromSchemaFormData: definitionFromSchemaFormData,
             schemaFormDataFromDefinition: schemaFormDataFromDefinition,
-            encodeJSONPointer: encodeJSONPointer
+            generateFieldName: generateFieldName
         };
         return module;
 
         /**
-         * Encode a string so that it complies with the JSON Pointer spec
-         * http://tools.ietf.org/html/draft-pbryan-zyp-json-pointer-02
-         * This is what is used in $ref to specify sub-schema paths
-         * @param {string} str
-         * @return {string} Currently just returns encodeURIComponent(string)
+         * Convert field titles into field names that are intially lower case,
+         * camel cased (no spaces), and escaped for use in URIs.
+         *
+         * @param {string} "Example Field Name"
+         * @return {string} "exampleFieldName"
          */
-        function encodeJSONPointer(str) {
-            return encodeURIComponent(str);
+        function generateFieldName(str) {
+            // based on:
+            // http://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
+            return encodeURIComponent(str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                if (+match === 0) {
+                    return '';
+                }
+                return index === 0 ? match.toLowerCase() : match.toUpperCase();
+            }));
         }
 
         /**
