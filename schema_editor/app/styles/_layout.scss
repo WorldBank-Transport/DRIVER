@@ -67,9 +67,14 @@ label {
 }
 
 .form-area-heading {
-	.btn {
+	.button-container {
 		float: right;
 		margin-top: -40px;
+
+        .btn, .dropdown {
+            float: left;
+            margin-left: 5px;
+        }
 	}
 }
 

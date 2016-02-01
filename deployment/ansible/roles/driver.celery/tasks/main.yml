@@ -1,0 +1,40 @@
+---
+- name: Build application Docker image
+  command: >
+    docker build
+      -f {{ root_app_dir }}/Dockerfile.base
+      -t quay.io/azavea/driver-app:latest
+      {{ root_app_dir }}
+  when: developing
+
+- name: Build application Docker image
+  command: >
+    docker build
+      -f {{ root_app_dir }}/Dockerfile.development
+      -t quay.io/azavea/driver-app:latest
+      {{ root_app_dir }}
+  when: developing
+
+- name: Pull application Docker image
+  command: /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  when: staging
+  notify:
+    - Restart driver-celery
+
+- name: Configure Driver celery service definition
+  template: src=upstart-celery.conf.j2 dest=/etc/init/driver-celery.conf
+  notify:
+    - Restart driver-celery
+
+- name: Ensure Driver celery service is running
+  service: name=driver-celery state=started
+
+- name: Add black spot calculation cronjob
+  cron: name="black spot calculation"
+        job="docker exec $(docker ps -q -f name=driver-app) manage.py calculate_black_spots"
+        hour=3 minute=10
+
+- name: Add remove duplicate records cronjob
+  cron: name="remove duplicate records"
+        job="docker exec $(docker ps -q -f name=driver-app) manage.py remove_duplicates"
+        hour=1 minute=10

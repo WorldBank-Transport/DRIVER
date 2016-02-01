@@ -18,7 +18,9 @@
       apt: update_cache=yes
 
   roles:
+    - { role: "driver.windshaft" }
     - { role: "driver.app" }
+    - { role: "driver.nginx" }
 
 - hosts: database-servers
 

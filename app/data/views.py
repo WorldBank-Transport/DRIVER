@@ -1,8 +1,9 @@
 import uuid
 
 from dateutil.parser import parse as parse_date
+from datetime import timedelta
 
-from django.db import connection
+from django.db import connection, transaction
 from django.db.models import (Case,
                               When,
                               IntegerField,
@@ -11,9 +12,14 @@ from django.db.models import (Case,
                               Count)
 from django_redis import get_redis_connection
 
+from rest_framework import viewsets
 from rest_framework.decorators import list_route
-from rest_framework.response import Response
 from rest_framework.exceptions import ParseError
+from rest_framework.response import Response
+from rest_framework import serializers
+from rest_framework.settings import api_settings
+
+from rest_framework_csv import renderers as csv_renderer
 
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
@@ -25,9 +31,13 @@ from ashlar.serializers import RecordSerializer, RecordSchemaSerializer
 
 from driver_auth.permissions import (IsAdminOrReadOnly,
                                      ReadersReadWritersWrite,
+                                     IsAdminAndReadOnly,
                                      is_admin_or_writer)
 
-from serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
+import filters
+from models import RecordAuditLogEntry
+from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer,
+                         RecordAuditLogEntrySerializer)
 import transformers
 
 DateTimeField.register_lookup(transformers.ISOYearTransform)
@@ -45,6 +55,35 @@ class DriverRecordViewSet(RecordViewSet):
             return RecordSerializer
         return DetailsReadOnlyRecordSerializer
 
+    # Change auditing
+    def add_to_audit_log(self, request, instance, action):
+        """Creates a new audit log entry; instance must have an ID"""
+        if not instance.pk:
+            raise ValueError('Cannot create audit log entries for unsaved model objects')
+        if action not in RecordAuditLogEntry.ActionTypes.as_list():
+            raise ValueError("{} not one of 'create', 'update', or 'delete'".format(action))
+        RecordAuditLogEntry.objects.create(user=request.user,
+                                           username=request.user.username,
+                                           record=instance,
+                                           record_uuid=str(instance.pk),
+                                           action=action)
+
+    @transaction.atomic
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.CREATE)
+
+    @transaction.atomic
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.UPDATE)
+
+    @transaction.atomic
+    def perform_delete(self, instance):
+        self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.DELETE)
+        instance.delete()
+
+    # Views
     def list(self, request, *args, **kwargs):
         # Don't generate a tile key unless the user specifically requests it, to avoid
         # filling up the Redis cache with queries that will never be viewed as tiles
@@ -149,6 +188,37 @@ class DriverRecordViewSet(RecordViewSet):
         # to store the data exactly as it is.
         redis_conn = get_redis_connection('default')
         redis_conn.set(token, sql.encode('utf-8'))
+
+
+class DriverRecordAuditLogViewSet(viewsets.ModelViewSet):
+    """Viewset for accessing audit logs; will output CSVs if Accept text/csv is specified"""
+    queryset = RecordAuditLogEntry.objects.all()
+    renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES + [csv_renderer.CSVRenderer]
+    serializer_class = RecordAuditLogEntrySerializer
+    permission_classes = (IsAdminAndReadOnly,)
+    filter_class = filters.RecordAuditLogFilter
+    pagination_class = None
+
+    def list(self, request, *args, **kwargs):
+        """Validate filter params"""
+        # Will throw an error if these are missing or not valid ISO-8601
+        try:
+            min_date = parse_date(request.query_params['min_date'])
+            max_date = parse_date(request.query_params['max_date'])
+        except KeyError:
+            raise ParseError("min_date and max_date must both be provided")
+        except ValueError:
+            raise ParseError("occurred_min and occurred_max must both be valid dates")
+        # Make sure that min_date and max_date are less than 32 days apart
+        if max_date - min_date >= timedelta(days=32):
+            raise ParseError('max_date and min_date must be less than one month apart')
+        return super(DriverRecordAuditLogViewSet, self).list(request, *args, **kwargs)
+
+    # Override default CSV field ordering for ease of use
+    def get_renderer_context(self):
+        context = super(DriverRecordAuditLogViewSet, self).get_renderer_context()
+        context['header'] = ('date', 'username', 'record_uuid', 'action', 'uuid',)
+        return context
 
 
 # override ashlar views to set permissions

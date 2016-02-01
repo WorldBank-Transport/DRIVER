@@ -76,6 +76,8 @@ module.exports = function(config) {
       'app/ase-scripts/auth/module.js',
       'app/ase-scripts/auth/**js',
 
+      'app/scripts/audit/module.js',
+      'app/scripts/audit/**.js',
       'app/scripts/notifications/module.js',
       'app/scripts/notifications/**.js',
       'app/scripts/navbar/module.js',

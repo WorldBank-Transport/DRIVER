@@ -90,6 +90,17 @@ class IsAdminOrReadOnly(permissions.BasePermission):
         return False
 
 
+class IsAdminAndReadOnly(permissions.BasePermission):
+    """
+    Allow read-only access to administrators; entries should be immutable
+    """
+    def has_permission(self, request, view):
+        if request.user and request.user.is_authenticated():
+            if request.method in permissions.SAFE_METHODS and is_admin(request.user):
+                return True
+        return False
+
+
 class ReadersReadWritersWrite(permissions.BasePermission):
     """
     Allow read-only access to readers group, and full access to writers or admins.

@@ -2,7 +2,9 @@
     <div class="col-sm-8 col-sm-offset-3">
         <div class="form-area-heading">
             <h2>Related Content for {{ rt.recordType.plural_label }}</h2>
-            <button type="button" class="btn btn-default" ui-sref="rt.related-add({uuid: rt.recordType.uuid })">Add new content</button>
+            <div class="button-container">
+                <button type="button" class="btn btn-default" ui-sref="rt.related-add({uuid: rt.recordType.uuid })">Add new content</button>
+            </div>
             <div class="content-border"></div>
         </div>
         <div class="form-area-body">

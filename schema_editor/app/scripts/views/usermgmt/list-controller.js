@@ -4,16 +4,18 @@
     /**
      * @ngInject
      */
-    function UserListController ($log, $scope, Notifications, UserService) {
+    function UserListController ($log, $scope, Notifications, UserService, ASEConfig) {
 
         var ctl = this;
         initialize();
 
         function initialize() {
-
             ctl.users = {};
+            ctl.groups = _.values(ASEConfig.api.groups).sort();
+            ctl.groupFilter = null;
 
             ctl.deleteUser = deleteUser;
+            ctl.onGroupSelected = onGroupSelected;
 
             refreshUserList();
         }
@@ -33,8 +35,22 @@
             });
         }
 
+        function filterUserList() {
+            ctl.users = _.filter(ctl.allUsers, function (user) {
+                return !ctl.groupFilter || _.contains(user.groups, ctl.groupFilter);
+            });
+        }
+
         function refreshUserList() {
-            ctl.users = UserService.User.query();
+            UserService.User.query().$promise.then(function (results) {
+                ctl.allUsers = results;
+                filterUserList();
+            });
+        }
+
+        function onGroupSelected(group) {
+            ctl.groupFilter = group;
+            filterUserList();
         }
     }
 

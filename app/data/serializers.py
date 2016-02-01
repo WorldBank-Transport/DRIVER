@@ -1,5 +1,9 @@
+from rest_framework.serializers import ModelSerializer
+
 from ashlar import serializers
 from ashlar import serializer_fields
+
+from models import RecordAuditLogEntry
 
 from django.conf import settings
 
@@ -30,3 +34,9 @@ class DetailsReadOnlyRecordSchemaSerializer(serializers.RecordSchemaSerializer):
             if k in settings.READ_ONLY_FIELDS:
                 new_value[k] = value[k]
         return key, new_value
+
+
+class RecordAuditLogEntrySerializer(ModelSerializer):
+    """Serialize Audit Log Entries"""
+    class Meta:
+        model = RecordAuditLogEntry

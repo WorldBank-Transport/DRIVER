@@ -1,0 +1,44 @@
+description "driver-celery"
+
+start on (filesystem and started docker)
+stop on stopping docker
+
+kill timeout 20
+kill signal CONT
+respawn
+
+pre-start script
+  {% if 'development' in group_names -%}
+  until mountpoint -q {{ root_app_dir }}; do sleep 1; done
+  {% endif %}
+
+  /usr/bin/docker kill driver-celery || true
+  /usr/bin/docker rm driver-celery || true
+
+  {% if 'staging' in group_names -%}
+  /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  {% endif %}
+end script
+
+exec /usr/bin/docker run \
+  --name driver-app \
+  --publish 4000:4000 \
+  --volume {{ root_static_dir }}:{{ root_static_dir }} \
+  --volume {{ root_media_dir }}:{{ root_media_dir }} \
+  {% if 'development' in group_names -%}
+  --volume {{ root_app_dir }}:{{ root_app_dir }} \
+  --volume /opt/ashlar:/opt/ashlar \
+  --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
+  {% endif -%}
+  {% for k,v in driver_conf.items() -%}
+  --env {{ k }}={{ v }} \
+  {% endfor -%}
+  --log-driver syslog \
+  --entrypoint 'celery' \
+  quay.io/azavea/driver-app:latest \
+  -A driver worker --queue=taskworker --loglevel=info --concurrency=4
+
+post-stop script
+  /usr/bin/docker kill driver-celery
+  /usr/bin/docker rm driver-celery
+end script

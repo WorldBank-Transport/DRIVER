@@ -5,7 +5,7 @@
     'use strict';
 
     /* ngInject */
-    function MapState($log) {
+    function MapState() {
         var filterGeoJSON, zoom, location;
         var svc = {
             setFilterGeoJSON: setFilterGeoJSON,
@@ -23,7 +23,6 @@
          * @param {object} geojson for a filter
          */
         function setFilterGeoJSON(geojson) {
-            $log.debug('Setting drawn layer');
             filterGeoJSON = geojson;
         }
 
@@ -31,7 +30,6 @@
          * Get filter geojson
          */
         function getFilterGeoJSON() {
-            $log.debug('Getting stored drawn layer...');
             return filterGeoJSON;
         }
 
@@ -40,7 +38,6 @@
          * @param {number} mapZoom The zoom level of the leaflet map
          */
         function setZoom(mapZoom) {
-            $log.debug('Setting zoom to: ' + JSON.stringify(mapZoom));
             zoom = mapZoom;
         }
 
@@ -48,7 +45,6 @@
          * Get zoomlevel - default to 5
          */
         function getZoom() {
-            $log.debug('Getting stored map zoom: ' + JSON.stringify(zoom));
             return zoom || 5;
         }
 
@@ -57,7 +53,6 @@
          * @param {object} mapLocation a leaflet lat/lng object
          */
         function setLocation(mapLocation) {
-            $log.debug('Setting location to: ' + JSON.stringify(mapLocation));
             location = mapLocation;
         }
 
@@ -65,7 +60,6 @@
          * Get coordinates for the center of the map
          */
         function getLocation() {
-            $log.debug('Getting stored map location: ' + JSON.stringify(location));
             return location;
 
         }
