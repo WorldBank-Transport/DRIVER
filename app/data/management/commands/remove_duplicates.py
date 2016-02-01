@@ -8,4 +8,4 @@ class Command(BaseCommand):
     help = 'Remove duplicates'
 
     def handle(self, *args, **options):
-        remove_duplicates.s()
+        remove_duplicates()

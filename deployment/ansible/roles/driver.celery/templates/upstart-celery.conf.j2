@@ -21,7 +21,7 @@ pre-start script
 end script
 
 exec /usr/bin/docker run \
-  --name driver-app \
+  --name driver-celery \
   --publish 4000:4000 \
   --volume {{ root_static_dir }}:{{ root_static_dir }} \
   --volume {{ root_media_dir }}:{{ root_media_dir }} \
@@ -36,7 +36,9 @@ exec /usr/bin/docker run \
   --log-driver syslog \
   --entrypoint 'celery' \
   quay.io/azavea/driver-app:latest \
-  -A driver worker --queue=taskworker --loglevel=info --concurrency=4
+  -A driver worker --queue=taskworker \
+  --loglevel={% if 'development' in group_names %}debug{% else %}info{% endif %} \
+  --concurrency=4
 
 post-stop script
   /usr/bin/docker kill driver-celery

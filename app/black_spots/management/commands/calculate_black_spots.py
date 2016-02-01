@@ -8,4 +8,4 @@ class Command(BaseCommand):
     help = 'Calculate black spots'
 
     def handle(self, *args, **options):
-        calculate_black_spots.s()
+        calculate_black_spots()
