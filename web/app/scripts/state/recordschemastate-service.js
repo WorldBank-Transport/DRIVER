@@ -34,7 +34,12 @@
         function getFilterables(schemaID) {
             var deferred = $q.defer();
             get(schemaID).then(function(schema) {
-                var definitions = schema.schema.definitions;
+                var definitions;
+                if (schema.schema && schema.schema.definitions) {
+                    definitions = schema.schema.definitions;
+                } else {
+                    definitions = {};
+                }
 
                 var namespaced = {};
                 _.forEach(definitions, function(schema, i) {

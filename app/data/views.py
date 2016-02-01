@@ -9,7 +9,6 @@ from django.db.models import (Case,
                               DateTimeField,
                               Value,
                               Count)
-
 from django_redis import get_redis_connection
 
 from rest_framework.decorators import list_route
@@ -31,7 +30,6 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
 from serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
 import transformers
 
-
 DateTimeField.register_lookup(transformers.ISOYearTransform)
 DateTimeField.register_lookup(transformers.WeekTransform)
 
@@ -51,7 +49,7 @@ class DriverRecordViewSet(RecordViewSet):
         # Don't generate a tile key unless the user specifically requests it, to avoid
         # filling up the Redis cache with queries that will never be viewed as tiles
         if ('tilekey' in request.query_params and
-                request.query_params['tilekey'] in ['True', 'true']):
+            request.query_params['tilekey'] in ['True', 'true']):
             response = Response(dict())
             query_sql = self._generate_query_sql(request)
             tile_token = uuid.uuid4()

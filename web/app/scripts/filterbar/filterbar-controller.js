@@ -114,6 +114,10 @@
                 filterOn.push('__dateRange');
             }
 
+            if (ctl.filters.__searchText) {
+                filterOn.push('__searchText');
+            }
+
             _.each(filterOn, function(label) {
                 if (ctl.filters[label]) {
                     value = ctl.filters[label];
