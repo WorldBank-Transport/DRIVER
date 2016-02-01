@@ -261,8 +261,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ROUTES = {
-    'black_spots.tasks.calculate_block_spots': {'queue': 'taskworker'},
-    'data.tasks.remove_duplicates': {'queue': 'taskworker'},
+    'black_spots.tasks.calculate_black_spots.calculate_black_spots': {'queue': 'taskworker'},
+    'data.tasks.remove_duplicates.remove_duplicates': {'queue': 'taskworker'},
 }
 
 ASHLAR = {

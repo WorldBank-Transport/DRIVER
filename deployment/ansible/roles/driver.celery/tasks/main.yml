@@ -31,10 +31,10 @@
 
 - name: Add black spot calculation cronjob
   cron: name="black spot calculation"
-        job="docker exec $(docker ps -q -f name=driver-app) manage.py calculate_black_spots"
+        job="docker exec $(docker ps -q -f name=driver-celery) manage.py calculate_black_spots"
         hour=3 minute=10
 
 - name: Add remove duplicate records cronjob
   cron: name="remove duplicate records"
-        job="docker exec $(docker ps -q -f name=driver-app) manage.py remove_duplicates"
+        job="docker exec $(docker ps -q -f name=driver-celery) manage.py remove_duplicates"
         hour=1 minute=10
