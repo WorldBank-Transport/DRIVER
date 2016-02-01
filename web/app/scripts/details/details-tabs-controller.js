@@ -7,12 +7,27 @@
         ctl.sortedDefinitions = sortedDefinitions;
         ctl.sortedProperties = sortedProperties;
 
-        // Sorts definitions alphabetically, and puts the details definition first
         function sortedDefinitions() {
-            return _(ctl.recordSchema.schema.definitions)
-                .toArray()
-                .sortByAll(['details', 'plural_title'])
+            // get the section names, sorted by propertyOrder
+            var ordering = _(ctl.recordSchema.schema.properties)
+                .sortBy(function(obj, key) {
+                    obj.propertyName = key;
+                    return (obj.propertyOrder !== undefined) ? obj.propertyOrder : 99;
+                })
+                .map(function(obj) {
+                    return obj.propertyName;
+                })
                 .value();
+
+
+            // get section definitions as sorted array, with added property for the section name
+            var sorted = _.map(ordering, function(section) {
+                var definition = ctl.recordSchema.schema.definitions[section];
+                definition.propertyName = section;
+                return definition;
+            });
+
+            return sorted;
         }
 
         // Returning an array of definition properties sorted by propertyOrder

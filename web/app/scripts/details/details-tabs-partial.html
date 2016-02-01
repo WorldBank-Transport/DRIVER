@@ -1,7 +1,7 @@
 <tabset>
     <tab ng-repeat="definition in ctl.sortedDefinitions()"
          heading="{{ definition.multiple ? definition.plural_title : definition.title }}"
-         ng-init="data = ctl.record.data[definition.title]; properties = ctl.sortedProperties(definition.properties)">
+         ng-init="data = ctl.record.data[definition.propertyName]; properties = ctl.sortedProperties(definition.properties)">
 
         <driver-details-single
             data="data"
