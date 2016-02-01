@@ -175,9 +175,6 @@ function setRequestParameters(request, callback, redisClient) {
                 }).join(', ');
 
                 params.sql = '(' + castSelect + theRest + ') as black_spots_blackspot' ;
-                console.log('=========================================================================================================');
-                console.log('Altered sql: \n'+ params.sql);
-                console.log('Original sql: \n'+ sql)
                 callback(null, request);
             });
         } else {
