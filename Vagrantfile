@@ -13,7 +13,8 @@ if !ENV["VAGRANT_ENV"].nil? && ENV["VAGRANT_ENV"] == "TEST"
   ANSIBLE_ENV_GROUPS = {
     "test:children" => [
       "app-servers",
-      "database-servers"
+      "database-servers",
+      "celery-servers"
     ]
   }
   VAGRANT_NETWORK_OPTIONS = { auto_correct: true }
@@ -21,7 +22,8 @@ else
   ANSIBLE_ENV_GROUPS = {
     "development:children" => [
       "app-servers",
-      "database-servers"
+      "database-servers",
+      "celery-servers"
     ]
   }
   VAGRANT_NETWORK_OPTIONS = { auto_correct: false }
@@ -29,7 +31,8 @@ end
 
 ANSIBLE_GROUPS = {
   "app-servers" => [ "app" ],
-  "database-servers" => [ "database" ]
+  "database-servers" => [ "database" ],
+  "celery-servers" => [ "celery" ]
 }
 
 Vagrant.configure("2") do |config|
@@ -111,6 +114,37 @@ Vagrant.configure("2") do |config|
     app.vm.provider :virtualbox do |v|
       v.memory = ENV.fetch("DRIVER_APP_MEM", 3584)
       v.cpus = ENV.fetch("DRIVER_APP_CPUS", 2)
+    end
+  end
+
+  config.vm.define "celery" do |celery|
+    celery.vm.hostname = "celery"
+    celery.hostmanager.aliases = %w(celery.service.driver.internal)
+    celery.vm.network "private_network", ip: "192.168.11.103"
+
+    # Disable because this will not get used.
+    celery.vm.synced_folder ".", "/vagrant", disabled: true
+
+    celery.vm.synced_folder "./app", "/opt/app", type: "nfs"
+    celery.vm.synced_folder "./web", "/opt/web", type: "nfs"
+    celery.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs"
+    celery.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs"
+
+    # Docker
+    celery.vm.network "forwarded_port", guest: 2375, host: 2376
+
+    celery.vm.provision "ansible" do |ansible|
+      ansible.playbook = "deployment/ansible/celery.yml"
+      ansible.groups = ANSIBLE_GROUPS.merge(ANSIBLE_ENV_GROUPS)
+      ansible.limit = "all"
+      ansible.raw_arguments = ["--timeout=60"]
+    end
+
+    celery.ssh.forward_x11 = true
+
+    celery.vm.provider :virtualbox do |v|
+      v.memory = ENV.fetch("DRIVER_CELERY_MEM", 3584)
+      v.cpus = ENV.fetch("DRIVER_CELERY_CPUS", 2)
     end
   end
 end

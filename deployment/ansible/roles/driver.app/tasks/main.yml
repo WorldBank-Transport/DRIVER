@@ -1,6 +1,4 @@
 ---
-- { include: windshaft.yml }
-
 - name: Create static files directory
   file: path={{ root_static_dir }}
         owner={{ driver_user }}
@@ -44,19 +42,6 @@
 
 - name: Ensure Driver application is running
   service: name=driver-app state=started
-
-- name: Configure Nginx site
-  template: src=nginx-app.conf.j2
-            dest=/etc/nginx/sites-available/driver-app.conf
-  notify:
-    - Restart Nginx
-
-- name: Enable Nginx site
-  file: src=/etc/nginx/sites-available/driver-app.conf
-        dest=/etc/nginx/sites-enabled/driver-app
-        state=link
-  notify:
-    - Restart Nginx
 
 - name: Run Django collectstatic
   command: >

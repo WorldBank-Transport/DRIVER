@@ -9,22 +9,17 @@
       action: ec2_facts
       when: staging
 
-- hosts: app-servers
+- hosts: celery-servers
 
   sudo: True
+
+  vars:
+    celery: True
 
   pre_tasks:
     - name: Update APT cache
       apt: update_cache=yes
 
   roles:
-    - { role: "driver.windshaft" }
-    - { role: "driver.app" }
-    - { role: "driver.nginx" }
+    - { role: "driver.celery" }
 
-- hosts: database-servers
-
-  sudo: True
-
-  roles:
-    - { role: "driver.access" }

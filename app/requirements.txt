@@ -7,6 +7,7 @@ git+https://github.com/rohe/pyoidc.git
 # TODO: revert to marcanpilami django-oidc when https://github.com/rohe/pyoidc/issues/161 fixed
 git+https://github.com/flibbertigibbet/django-oidc.git
 #git+https://github.com/marcanpilami/django-oidc.git
+celery[redis]==3.1.19
 django-redis==4.2.0
 python-dateutil==2.4.2
 pytz==2015.7
