@@ -1,5 +1,3 @@
-import uuid as uuidlib
-
 from django.conf import settings
 from django.contrib.gis.db import models
 
@@ -14,8 +12,7 @@ class BlackSpot(AshlarModel):
     #: Buffered road segment polygon where black spot analysis is performed
     geom = models.PolygonField(srid=settings.ASHLAR['SRID'])
 
-    #: Number that determines the severity of this black spot.
-    # May be used for color-coding on map.
+    #: Number that determines the severity of this black spot. May be used for color-coding on map.
     severity_score = models.FloatField()
 
     #: Number of records accounted for in the polygon while analyzing

@@ -312,23 +312,24 @@
             var blackspotTileKey = false;
             if (response && response[0] && response[0].tilekey) {
                 var data = response[0];
-                if( data.tilekey ) {
+                if (data.tilekey) {
                     blackspotUrl = TileUrlService.blackspotsUrl(data.tilekey);
                     blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(data.tilekey);
                     blackspotTileKey = true;
                 }
-            } else if (response && response[0] && response[0].uuid){
+            } else if (response && response[0] && response[0].uuid) {
                 var uuid = response[0].uuid;
                 blackspotUrl = TileUrlService.blackspotsUrl(uuid);
                 blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(uuid);
             }
             return $q.all(
-                [TileUrlService.recTilesUrl(ctl.recordType),
-                 TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                 TileUrlService.recHeatmapUrl(ctl.recordType),
-                 blackspotUrl,
-                 blackspotUtfUrl,
-                 blackspotTileKey
+                [
+                    TileUrlService.recTilesUrl(ctl.recordType),
+                    TileUrlService.recUtfGridTilesUrl(ctl.recordType),
+                    TileUrlService.recHeatmapUrl(ctl.recordType),
+                    blackspotUrl,
+                    blackspotUtfUrl,
+                    blackspotTileKey
                 ]
             );
         }
@@ -525,8 +526,6 @@
          * the updated URL
          */
         function updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, tilekey) {
-            // TODO: update to pass in a tilekey which will filter on polygon
-            // if there is no tilekey, it should return all for blackspot set
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 3
             });
