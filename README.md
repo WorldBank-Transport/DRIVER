@@ -70,6 +70,8 @@ number of records with `head` on the individual CSVs.
 
 To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/black_spots.json`.
 
+To load mock interventions, run `python scripts/load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/interventions_sample_pts.geojson`.
+
 ## Production
 
 TODO: Notes on creating a production superuser and adding a production OAuth2 application
