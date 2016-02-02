@@ -8,11 +8,11 @@ from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer
 from black_spots.filters import (BlackSpotFilter, BlackSpotSetFilter)
 
 from driver_auth.permissions import IsAdminOrReadOnly
-
+from driver import mixins
 import uuid
 
 
-class BlackSpotViewSet(viewsets.ModelViewSet):
+class BlackSpotViewSet(viewsets.ModelViewSet, mixins.GenerateViewsetQuery):
     """ViewSet for black spots"""
     queryset = BlackSpot.objects.all()
     serializer_class = BlackSpotSerializer
@@ -35,22 +35,6 @@ class BlackSpotViewSet(viewsets.ModelViewSet):
             response = super(BlackSpotViewSet, self).list(self, request, *args, **kwargs)
         return response
 
-    def _generate_query_sql(self, request):
-        qset = self.get_queryset()
-        # apply filters
-        # copy start
-        # get sql for the BlackspotViewSet query that should be run
-        for backend in list(self.filter_backends):
-            qset = backend().filter_queryset(request, qset, self)
-
-        cursor = connection.cursor().cursor
-        sql, params = qset.query.sql_with_params()
-        # get properly escaped string representation of the query
-        query_str = cursor.mogrify(sql, params)
-        cursor.close()
-        return query_str
-        # copy end
-
 
 class BlackSpotSetViewSet(viewsets.ModelViewSet):
     """ViewSet for black spot sets"""
@@ -65,7 +49,7 @@ class BlackSpotSetViewSet(viewsets.ModelViewSet):
         # Store the required SQL to filter Blackspots on that polygon
         if 'polygon' in request.query_params and len(response.data['results']) > 0:
             request.uuid = response.data['results'][0]['uuid']
-            query_sql = BlackSpotViewSet()._generate_query_sql(request)
+            query_sql = BlackSpotViewSet().generate_query_sql(request)
             tile_token = uuid.uuid4()
             redis_conn = get_redis_connection('default')
             redis_conn.set(tile_token, query_sql.encode('utf-8'))
