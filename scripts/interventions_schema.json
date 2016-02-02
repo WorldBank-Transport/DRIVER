@@ -3,10 +3,10 @@
     "title": "",
     "plural_title": "",
     "definitions": {
-        "Intervention Details": {
+        "interventionDetails": {
             "multiple": false,
             "description": "Details for Intervention",
-            "title": "Intervention Details",
+            "title": "Intervention Detail",
             "required": [
                 "_localId"
             ],
@@ -99,8 +99,8 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
-        "Intervention Details": {
-            "$ref": "#/definitions/Intervention%20Details"
+        "interventionDetails": {
+            "$ref": "#/definitions/interventionDetails"
         }
     }
 }

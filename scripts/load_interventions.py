@@ -52,7 +52,7 @@ def transform(record, schema_id):
 
     obj = {
         'data': {
-            'Intervention Details': dict(),
+            'interventionDetails': dict(),
         },
         'schema': str(schema_id),
         'occurred_from': 'None',
@@ -61,13 +61,13 @@ def transform(record, schema_id):
     }
     
     data = obj['data']
-    data['Intervention Details']['Type'] = record['properties']['Type']
+    data['interventionDetails']['Type'] = record['properties']['Type']
 
     # Add in the _localId field; they're not used here but the schema requires them
     def _add_local_id(dictionary):
         dictionary['_localId'] = str(uuid.uuid4())
 
-    _add_local_id(data['Intervention Details'])
+    _add_local_id(data['interventionDetails'])
 
     # Set the occurred_from/to fields
     # TODO: change from temporarily saving current time
