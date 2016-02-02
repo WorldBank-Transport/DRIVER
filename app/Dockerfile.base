@@ -10,6 +10,12 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     python-dev
 
+# install dependencies for generate_black_spots_training_input script
+RUN apt-get update && apt-get install -y \
+    libgeos-dev \
+    libspatialindex-dev \
+    libgdal1-dev
+
 RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r requirements.txt
 
 EXPOSE 4000
