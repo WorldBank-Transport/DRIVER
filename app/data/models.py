@@ -64,6 +64,9 @@ class DedupeJob(models.Model):
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
     status = models.CharField(max_length=8, choices=Status.CHOICES, default=Status.PENDING)
 
+    class Meta(object):
+        get_latest_by = 'datetime'
+
 
 class RecordDuplicate(AshlarModel):
     """ Store information about a possible duplicate record pair
