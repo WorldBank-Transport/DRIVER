@@ -43,7 +43,7 @@ class RecordAuditLogEntry(models.Model):
     action = models.CharField(max_length=6, choices=ActionTypes.choices)
 
 
-class CeleryJob(models.Model):
+class DedupeJob(models.Model):
     """ Stores information about a celery job
     """
 
@@ -60,14 +60,8 @@ class CeleryJob(models.Model):
             (ERROR, 'Error'),
         )
 
-    class TaskType(object):
-        CHOICES = (
-            (DEDUPE, 'DEDUPE'),
-        )
-
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    date = models.DateTimeField(auto_now_add=True, db_index=True)
-    task_type = models.CharField(choices=TaskType.CHOICES)
+    datetime = models.DateTimeField(auto_now_add=True, db_index=True)
     status = models.CharField(max_length=8, choices=Status.CHOICES, default=Status.PENDING)
 
 
@@ -78,4 +72,4 @@ class RecordDuplicate(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     records = models.ManyToManyField(Record)
     resolved = models.BooleanField(default=False)
-    celery_job = models.ForeignKey(CeleryJob)
+    job = models.ForeignKey(DedupeJob)
