@@ -40,13 +40,14 @@ from models import RecordAuditLogEntry
 from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer,
                          RecordAuditLogEntrySerializer)
 import transformers
+from driver import mixins
 
 
 DateTimeField.register_lookup(transformers.ISOYearTransform)
 DateTimeField.register_lookup(transformers.WeekTransform)
 
 
-class DriverRecordViewSet(RecordViewSet):
+class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
     """
     permission_classes = (ReadersReadWritersWrite,)
@@ -92,7 +93,7 @@ class DriverRecordViewSet(RecordViewSet):
         if ('tilekey' in request.query_params and
                 request.query_params['tilekey'] in ['True', 'true']):
             response = Response(dict())
-            query_sql = self._generate_query_sql(request)
+            query_sql = self.generate_query_sql(request)
             tile_token = uuid.uuid4()
             self._cache_tile_sql(tile_token, query_sql.encode('utf-8'))
             response.data['tilekey'] = tile_token
@@ -166,20 +167,6 @@ class DriverRecordViewSet(RecordViewSet):
                    .order_by('tod', 'dow')
                    .annotate(count=Count('tod')))
         return Response(counted)
-
-    def _generate_query_sql(self, request):
-        """Generate the SQL used to generate a query response and return it as a string"""
-        qset = self.get_queryset()
-        # apply the filters
-        for backend in list(self.filter_backends):
-            qset = backend().filter_queryset(request, qset, self)
-
-        cursor = connection.cursor().cursor
-        sql, params = qset.query.sql_with_params()
-        # get properly escaped string representation of the query
-        query_str = cursor.mogrify(sql, params)
-        cursor.close()
-        return query_str
 
     def _cache_tile_sql(self, token, sql):
         """Stores a sql string in the common cache so it can be retrieved by Windshaft later"""

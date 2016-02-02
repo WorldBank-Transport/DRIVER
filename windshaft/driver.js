@@ -80,6 +80,7 @@ function constructCartoStyle(layer, rules) {
 function setRequestParameters(request, callback, redisClient) {
 
     var params = request.params;
+    var tilekey = request.query.tilekey;
 
     params.dbname = 'driver';
 
@@ -110,7 +111,6 @@ function setRequestParameters(request, callback, redisClient) {
         }
 
         // retrieve stored query for record points
-        var tilekey = request.query.tilekey;
         if (!tilekey) {
             throw('Parameter: `tilekey` must be specified');
         } else {
@@ -151,16 +151,44 @@ function setRequestParameters(request, callback, redisClient) {
 
         callback(null, request);
     } else if (params.tablename === 'black_spots_blackspot') {
-        //record type, filter effective at
-        params.interactivity = 'uuid,severity_score,num_records,num_severe';
-        params.style = blackspotStyle;
-        if (params.id === 'ALL') {
-            params.sql = baseBoundaryQuery + endBlackspotQuery;
+        if (tilekey) {
+            params.interactivity = 'uuid,severity_score,num_records,num_severe';
+            params.style = blackspotStyle;
+            redisClient.get(params.id, function(err, sql) {
+                if (!sql) {
+                    callback('Error getting tilekey', null);
+                    return;
+                }
+
+                var fromIdx = sql.indexOf(' FROM');
+                var select = sql.substr(0, fromIdx);
+                var theRest = sql.substr(fromIdx);
+                var fields = select.split(', ');
+                var geomRegex = /geom/;
+                var severityRegex = /severity_score/;
+                var castSelect = _.map(fields, function(field) {
+                    if (field.match(geomRegex) || field.match(severityRegex)) {
+                        return field; // do not cast geom field
+                    } else {
+                        return field + '::varchar';
+                    }
+                }).join(', ');
+
+                params.sql = '(' + castSelect + theRest + ') as black_spots_blackspot' ;
+                callback(null, request);
+            });
         } else {
-            params.sql = baseBlackspotQuery + filterBlackspotQuery +
-                params.id + "'" + endBlackspotQuery;
+            //record type, filter effective at
+            params.interactivity = 'uuid,severity_score,num_records,num_severe';
+            params.style = blackspotStyle;
+            if (params.id === 'ALL') {
+                params.sql = baseBoundaryQuery + endBlackspotQuery;
+            } else {
+                params.sql = baseBlackspotQuery + filterBlackspotQuery +
+                    params.id + "'" + endBlackspotQuery;
+            }
+            callback(null, request);
         }
-        callback(null, request);
     }
 }
 

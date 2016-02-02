@@ -8,9 +8,24 @@ from ashlar.exceptions import QueryParameterException
 
 from black_spots.models import (BlackSpot, BlackSpotSet)
 
+from django.contrib.gis.geos import GEOSGeometry
+
+from rest_framework.exceptions import ParseError
+
 
 class BlackSpotFilter(django_filters.FilterSet):
     """Filter for black spots"""
+
+    polygon = django_filters.MethodFilter(name='polygon', action='filter_polygon')
+
+    def filter_polygon(self, queryset, geojson):
+        """ Method filter for arbitrary polygon, sent in as geojson """
+        poly = GEOSGeometry(geojson)
+        if poly.valid:
+            return queryset.filter(geom__intersects=poly)
+        else:
+            raise ParseError('Input polygon must be valid GeoJSON: ' + poly.valid_reason)
+
     class Meta:
         model = BlackSpot
         fields = ['black_spot_set']

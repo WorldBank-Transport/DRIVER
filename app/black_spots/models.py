@@ -5,7 +5,9 @@ from ashlar.models import AshlarModel
 
 
 class BlackSpot(AshlarModel):
-    """A black spot -- an area where there is an historical/statistical concentration of records"""
+    """A black spot -- an area where there is an historical/statistical
+    concentration of records
+    """
 
     #: Buffered road segment polygon where black spot analysis is performed
     geom = models.PolygonField(srid=settings.ASHLAR['SRID'])
@@ -29,7 +31,8 @@ class BlackSpotSet(AshlarModel):
     #: DateTime when the black spots become effective
     effective_start = models.DateTimeField()
 
-    #: DateTime when the black spotd are no longer effective. Should be null when first inserted.
+    #: DateTime when the black spots are no longer effective.
+    #  Should be null when first inserted.
     effective_end = models.DateTimeField(null=True, blank=True)
 
     #: The record type these black spots are associated with
