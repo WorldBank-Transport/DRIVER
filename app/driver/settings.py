@@ -263,6 +263,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ROUTES = {
     'black_spots.tasks.calculate_black_spots.calculate_black_spots': {'queue': 'taskworker'},
     'data.tasks.remove_duplicates.remove_duplicates': {'queue': 'taskworker'},
+    'data.tasks.export_csv.export_csv': {'queue': 'taskworker'},
 }
 
 ASHLAR = {
