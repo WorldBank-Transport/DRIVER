@@ -10,6 +10,7 @@ import json
 import os
 from osgeo import ogr, osr
 import pytz
+from time import sleep
 import uuid
 
 import requests
@@ -106,9 +107,11 @@ def load(obj, api, headers=None):
                              data=json.dumps(obj),
                              headers=dict({'content-type': 'application/json'}.items() +
                                           headers.items()))
+    sleep(0.2)
     if response.status_code != 201:
         logger.error(response.text)
-    response.raise_for_status()
+        logger.error('retrying...')
+        load(obj, api, headers)
 
 
 def create_schema(schema_path, api, headers=None):
