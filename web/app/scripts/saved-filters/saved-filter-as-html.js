@@ -21,9 +21,12 @@
                 switch(val._rule_type) {
                     case 'containment_multiple':
                     case 'containment':
-                        htmlBlocks.push(label + val.contains.join(', '));
+                        if (val.pattern) {  // If text search
+                            htmlBlocks.push('Search text: ' + val.pattern);
+                        } else {
+                            htmlBlocks.push(label + val.contains.join(', '));
+                        }
                         break;
-
                     case 'intrange':
                         if (!isNumeric(val.min) && !isNumeric(val.max)) {
                             // No min or max are specified, don't display

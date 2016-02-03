@@ -9,7 +9,7 @@
     'use strict';
 
     /* ngInject */
-    function QueryBuilder($q, FilterState, RecordState, Records, WebConfig) {
+    function QueryBuilder($q, FilterState, RecordState, RecordSchemaState, Records, WebConfig) {
         var svc = {
             djangoQuery: djangoQuery,
             unfilteredDjangoQuery: function(offset, extraParams) {
@@ -72,19 +72,47 @@
          *                         by the filter service - transformed to produce a query string
          */
         function assembleJsonFilterParams(filterSpecs) {
+            var deferred = $q.defer();
             // Remove unused filters
-            var filters = _.cloneDeep(filterSpecs);
-            var toRemove = [];
+            var searchText = filterSpecs.__searchText;
+            var filters = _.cloneDeep(_.omit(filterSpecs, '__searchText'));
             _.each(filters, function(filter, path) {
-                if (filter.contains && !filter.contains.length) { toRemove.push(path); }
+                if (filter.contains && !filter.contains.length) { delete filters[path]; }
             });
-            _.each(toRemove, function(v){ delete filters[v]; });
 
-            var filterParams = {};
-            _(filters).each(function(filter, path) {
+            RecordSchemaState.getFilterables().then(function(filterables) {
+                // Delete the extraneous parts of 'filterables'
+                _.each(filters, function(filter, key) { delete filterables[key]; });
+                _.each(filterables, function(filterable, key) {
+                    if (filterable.fieldType !== 'selectlist' && filterable.fieldType !== 'text') {
+                        delete filterables[key];
+                    } else {
+                        filterables[key] = {};
+                        filterables[key].pattern = searchText;  // Add searchText
+                        // Djsonb needs to know if we're dealing with single or multiple fields
+
+                        /* jshint camelcase: false */
+                        if (filterable.multiple) {
+                            filterables[key]._rule_type = 'containment_multiple';
+                        } else {
+                            filterables[key]._rule_type = 'containment';
+                        }
+                        /* jshint camelcase: true */
+                    }
+                });
+
+                // If searchtext, add specifications to tree
+                if (searchText) { filters = _.merge(filters, filterables); }
+
+                // The final filter object
+                var filterParams = {};
+                _.each(filters, function(filter, path) {
                 filterParams = _.merge(filterParams, expandFilter(path.split('#'), filter));
-            }).value();
-            return filterParams;
+                });
+
+                deferred.resolve(filterParams);
+            });
+            return deferred.promise;
         }
 
         /**
@@ -98,6 +126,8 @@
         function assembleParams(doFilter, offset) {
             var deferred = $q.defer();
             var paramObj = {};
+            var jsonFilters;
+            var p1;
             /* jshint camelcase: false */
             if (doFilter) {
                 var dateFilter = FilterState.getDateFilter();
@@ -106,27 +136,30 @@
                     occurred_min: dateFilter.minDate
                 };
 
-                var jsonFilters = svc.assembleJsonFilterParams(
-                    _.omit(FilterState.filters, '__dateRange'));
+                svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(function(filts) {
+                    jsonFilters = filts;
+                    // Handle cases where no json filters are set
+                    if (!_.isEmpty(jsonFilters)) {
+                        paramObj = _.extend(paramObj, { jsonb: jsonFilters });
+                    }
+                    paramObj.limit = WebConfig.record.limit;
+                });
+            }
 
-                // Handle cases where no json filters are set
-                if (!_.isEmpty(jsonFilters)) {
-                    paramObj = _.extend(paramObj, { jsonb: jsonFilters });
+            $q.when(p1).then(function() {
+                // Pagination offset
+                if (offset) {
+                    paramObj.offset = offset;
                 }
-                paramObj.limit = WebConfig.record.limit;
-            }
 
-            // Pagination offset
-            if (offset) {
-                paramObj.offset = offset;
-            }
-
-            // Record Type
-            RecordState.getSelected().then(function(selected) {
-                paramObj.record_type = selected.uuid;
-                deferred.resolve(paramObj);
+                // Record Type
+                RecordState.getSelected().then(function(selected) {
+                    paramObj.record_type = selected.uuid;
+                    deferred.resolve(paramObj);
+                });
             });
             /* jshint camelcase: true */
+
             return deferred.promise;
         }
 
