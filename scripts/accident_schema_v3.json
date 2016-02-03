@@ -119,21 +119,21 @@
                     "type": "string"
                 },
                 "Insurance details": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 6,
                     "type": "string",
                     "fieldType": "text",
                     "format": "textarea"
                 },
                 "Chassis number": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 4,
                     "type": "string",
                     "fieldType": "text",
                     "format": "text"
                 },
                 "Make": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 1,
                     "type": "string",
                     "fieldType": "text",
@@ -178,21 +178,21 @@
                     }
                 },
                 "Model": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 2,
                     "type": "string",
                     "fieldType": "text",
                     "format": "text"
                 },
                 "Plate number": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 3,
                     "type": "string",
                     "fieldType": "text",
                     "format": "text"
                 },
                 "Engine number": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 5,
                     "type": "string",
                     "fieldType": "text",
@@ -231,7 +231,7 @@
                     "type": "string"
                 },
                 "Description": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 3,
                     "type": "string",
                     "fieldType": "text",
@@ -366,14 +366,14 @@
             "type": "object",
             "properties": {
                 "License number": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 2,
                     "type": "string",
                     "fieldType": "text",
                     "format": "text"
                 },
                 "Name": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 0,
                     "type": "string",
                     "fieldType": "text",
@@ -466,7 +466,7 @@
                     "type": "string"
                 },
                 "Address": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 1,
                     "type": "string",
                     "fieldType": "text",
@@ -486,7 +486,7 @@
                     "type": "string"
                 },
                 "Hospital": {
-                    "isSearchable": false,
+                    "isSearchable": true,
                     "propertyOrder": 9,
                     "type": "string",
                     "fieldType": "text",
