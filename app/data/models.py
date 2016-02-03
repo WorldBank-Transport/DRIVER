@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
-from ashlar.models import Record
+from ashlar.models import AshlarModel, Record
 
 
 class RecordAuditLogEntry(models.Model):
@@ -65,11 +65,12 @@ class DedupeJob(models.Model):
     status = models.CharField(max_length=8, choices=Status.CHOICES, default=Status.PENDING)
 
 
-class RecordDuplicate(models.Model):
-    """ Store information about a possible duplicate record
-
+class RecordDuplicate(AshlarModel):
+    """ Store information about a possible duplicate record pair
+    Duplicates are found using a time-distance heuristic
     """
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    records = models.ManyToManyField(Record)
+    record = models.ForeignKey(Record, null=True, related_name="record")
+    duplicate_record = models.ForeignKey(Record, null=True, related_name="duplicate_record")
+    score = models.FloatField(default=0)
     resolved = models.BooleanField(default=False)
     job = models.ForeignKey(DedupeJob)
