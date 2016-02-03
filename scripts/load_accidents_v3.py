@@ -48,9 +48,9 @@ def transform(record, schema_id):
     }
     obj = {
         'data': {
-            'Accident Details': dict(),
-            'Person': [],
-            'Vehicle': []
+            'accidentDetails': dict(),
+            'person': [],
+            'vehicle': []
         },
         'schema': str(schema_id),
         'occurred_from': 'None',
@@ -60,13 +60,13 @@ def transform(record, schema_id):
     data = obj['data']
     for key, value in details_mapping.iteritems():
         if key in record:
-            data['Accident Details'][value] = record[key]
+            data['accidentDetails'][value] = record[key]
 
     # Add in the _localId field; they're not used here but the schema requires them
     def _add_local_id(dictionary):
         dictionary['_localId'] = str(uuid.uuid4())
 
-    _add_local_id(data['Accident Details'])
+    _add_local_id(data['accidentDetails'])
 
     # Set the occurred_from/to fields
     occurred_date = parser.parse(record['record_date'])
