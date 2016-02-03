@@ -113,6 +113,8 @@ module.exports = function(config) {
       'app/scripts/views/login/**.js',
       'app/scripts/views/dashboard/module.js',
       'app/scripts/views/dashboard/**.js',
+      'app/scripts/views/duplicates/module.js',
+      'app/scripts/views/duplicates/**.js',
       'app/scripts/views/map/module.js',
       'app/scripts/views/map/**.js',
       'app/scripts/views/record/module.js',
