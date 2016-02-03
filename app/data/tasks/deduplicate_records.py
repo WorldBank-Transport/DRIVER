@@ -29,7 +29,7 @@ def calculate_score(record, duplicate):
     """
     tdelta = abs(record.occurred_from - duplicate.occurred_from)
     tscore = 0
-    if tdelta == 0:
+    if tdelta.total_seconds() == 0:
         tscore = 1.0
     else:
         tscore = tdelta.total_seconds() / get_time_allowance().total_seconds()
@@ -46,12 +46,11 @@ def calculate_score(record, duplicate):
 def find_duplicates_for_record(uuid):
     """ Given a record, find all possible duplicates for it
     """
-    # TODO: use meters instead. default srid unit is degrees
     # .001 degrees is ~110m give or take 10 depending on location, which should
     # be good enough
     record = Record.objects.get(uuid=uuid)
     return Record.objects.filter(
-        geom__dwithin=(record.geom, 0.001),
+        geom__dwithin=(record.geom, get_distance_allowance()),
         occurred_from__range=(
             record.occurred_from - get_time_allowance(), record.occurred_from + get_time_allowance()
         )
@@ -119,6 +118,7 @@ def find_duplicate_records():
     """
     time_extent = get_time_extent()
     ids, queryset = get_dedupe_set(time_extent)
+    # this can be adjusted depending on the memory required
     paginator = Paginator(ids, 1000)
     job = DedupeJob(status=DedupeJob.Status.STARTED)
     job.save()
