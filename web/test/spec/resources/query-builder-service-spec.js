@@ -39,22 +39,17 @@ describe('driver.resources: QueryBuilder', function () {
         // 2015-10-05 is 2015-10-04T16:00:00.000Z in local Manila time
         var recordsUrl = /\/api\/records\/\?limit=50&occurred_min=2015-10-04T16:00:00.000Z&record_type=15460346-65d7-4f4d-944d-27324e224691/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordSchemaUrl = /\/api\/recordschemas/;
 
         QueryBuilder.djangoQuery();
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
 
         $rootScope.$apply();
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
-    });
-
-    it('should deduplicate redundant information when provided a flattened representation of multiple nodes', function() {
-        expect(QueryBuilder.assembleJsonFilterParams({'a#b': {'_rule_type': 'containment', 'contains': [1,2,3]},
-                                                       'a#c': {'_rule_type': 'intrange', 'min': 1, 'max': 5}}))
-          .toEqual({'a': {'b': {'_rule_type': 'containment', 'contains': [1,2,3]},
-                          'c': {'_rule_type': 'intrange', 'min': 1, 'max': 5}}});
     });
 });

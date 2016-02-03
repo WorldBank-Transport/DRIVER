@@ -67,6 +67,7 @@ describe('driver.views.map: Layers Controller', function () {
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
         $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);

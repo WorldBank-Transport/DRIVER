@@ -84,7 +84,7 @@
                 // Delete the extraneous parts of 'filterables'
                 _.each(filters, function(filter, key) { delete filterables[key]; });
                 _.each(filterables, function(filterable, key) {
-                    if (filterable.fieldType !== 'selectlist') {
+                    if (filterable.fieldType !== 'selectlist' && filterable.fieldType !== 'text') {
                         delete filterables[key];
                     } else {
                         filterables[key] = {};

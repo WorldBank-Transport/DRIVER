@@ -23,12 +23,14 @@ describe('driver.map-layers.recent-events: Recent Events Layer Directive', funct
     it('should create a leaflet map', function () {
         var scope = $rootScope.$new();
         var element = $compile('<div leaflet-map recent-events></div>')(scope);
+        var recordSchemaUrl = /\/api\/recordschemas/;
 
-        $httpBackend.whenGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(/\/api\/recordtypes\/\?active=True/)
             .respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.whenGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(/\/api\/boundarypolygons/)
             .respond(ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(/\api\/records/).respond(200, ResourcesMock.RecordResponse);
 
         $rootScope.$digest();
