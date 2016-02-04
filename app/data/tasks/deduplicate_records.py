@@ -8,6 +8,7 @@ from data.models import (DedupeJob, RecordDuplicate)
 from ashlar.models import Record
 
 import datetime
+from pytz import timezone
 
 logger = get_task_logger(__name__)
 
@@ -76,8 +77,8 @@ def get_time_extent():
     if last_job:
         start_time = last_job.datetime - time_allowance
     else:
-        start_time = Record.objects.first().occurred_from
-    end_time = datetime.datetime.now()
+        start_time = Record.objects.earliest('occurred_from').occurred_from
+    end_time = datetime.datetime.utcnow().replace(tzinfo=timezone('UTC'))
     return {'start_time': start_time, 'end_time': end_time}
 
 
@@ -127,6 +128,7 @@ def find_duplicate_records():
     starttime = datetime.datetime.now()
     duplicatecount = 0
     try:
+        print "Finding duplicates"
         for page_num in paginator.page_range:
             page = paginator.page(page_num)
             records = queryset.in_bulk(page.object_list)
