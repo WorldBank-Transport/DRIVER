@@ -14,13 +14,13 @@ logger = get_task_logger(__name__)
 
 
 def get_time_allowance():
-    return datetime.timedelta(days=1)
+    return datetime.timedelta(hours=settings.DEDUPE_TIME_RANGE_HOURS)
 
 
 # .001 degrees is ~110m give or take 10 depending on location, which should
 # be good enough
 def get_distance_allowance():
-    return 0.001
+    return settings.DEDUPE_DISTANCE_DEGREES
 
 
 def calculate_score(record, duplicate):

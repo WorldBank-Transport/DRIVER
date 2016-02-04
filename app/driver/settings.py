@@ -265,6 +265,11 @@ CELERY_ROUTES = {
     'data.tasks.remove_duplicates.remove_duplicates': {'queue': 'taskworker'},
 }
 
+# Deduplication settings
+DEDUPE_TIME_RANGE_HOURS = 24
+# .001 ~= 110m
+DEDUPE_DISTANCE_DEGREES = 0.001
+
 ASHLAR = {
     # It is suggested to change this if you know that your data will be limited to
     # a certain part of the world, for example to a UTM Grid projection or a state
