@@ -16,6 +16,8 @@ def get_time_allowance():
     return datetime.timedelta(days=1)
 
 
+# .001 degrees is ~110m give or take 10 depending on location, which should
+# be good enough
 def get_distance_allowance():
     return 0.001
 
@@ -46,10 +48,9 @@ def calculate_score(record, duplicate):
 def find_duplicates_for_record(uuid):
     """ Given a record, find all possible duplicates for it
     """
-    # .001 degrees is ~110m give or take 10 depending on location, which should
-    # be good enough
     record = Record.objects.get(uuid=uuid)
     return Record.objects.filter(
+        schema__record_type=record.schema.record_type,
         geom__dwithin=(record.geom, get_distance_allowance()),
         occurred_from__range=(
             record.occurred_from - get_time_allowance(), record.occurred_from + get_time_allowance()
@@ -82,19 +83,20 @@ def get_time_extent():
 
 def get_dedupe_set(extent):
     """ Get the set of records to dedupe
-    return a set of uuids to check for duplicates.
+    return a set of uuids to check for duplicates, and the queryset used to
+    generate it
     """
     queryset = Record.objects.filter(
         occurred_from__range=(
             extent['start_time'], extent['end_time']
         )
-    ).exclude(uuid__in=get_matched_records())
+    ).exclude(uuid__in=get_dedupe_ids())
     ids = list(queryset.values_list(queryset.model._meta.pk.name, flat=True))
     return (ids, queryset)
 
 
-def get_matched_records(job=None):
-    """ Get the set of records to dedupe
+def get_dedupe_ids(job=None):
+    """ Get the ids of records to dedupe
     return a set of uuids to check for duplicates.
     """
     queryset = None
@@ -140,6 +142,7 @@ def find_duplicate_records():
                             RecordDuplicate(
                                 record=rec,
                                 duplicate_record=duplicate,
+                                record_type=rec.schema.record_type,
                                 job=job,
                                 score=calculate_score(rec, duplicate)
                             )

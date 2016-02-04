@@ -2,7 +2,7 @@ import uuid
 
 from django.db import models
 from django.contrib.auth.models import User
-from ashlar.models import AshlarModel, Record
+from ashlar.models import AshlarModel, Record, RecordType
 
 
 class RecordAuditLogEntry(models.Model):
@@ -74,6 +74,7 @@ class RecordDuplicate(AshlarModel):
     """
     record = models.ForeignKey(Record, null=True, related_name="record")
     duplicate_record = models.ForeignKey(Record, null=True, related_name="duplicate_record")
+    record_type = models.ForeignKey(RecordType, null=True)
     score = models.FloatField(default=0)
     resolved = models.BooleanField(default=False)
     job = models.ForeignKey(DedupeJob)
