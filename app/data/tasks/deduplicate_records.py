@@ -128,7 +128,8 @@ def find_duplicate_records():
     starttime = datetime.datetime.now()
     duplicatecount = 0
     try:
-        print "Finding duplicates"
+        logger.info("Finding duplicates. 1000 records/batch, %d batches total" %
+                    (paginator.num_pages))
         for page_num in paginator.page_range:
             page = paginator.page(page_num)
             records = queryset.in_bulk(page.object_list)
@@ -139,26 +140,34 @@ def find_duplicate_records():
                 recordDuplicates = []
                 for duplicate in duplicates:
                     if duplicate.uuid not in done:
-                        rec = Record.objects.get(uuid=record)
-                        recordDuplicates.append(
-                            RecordDuplicate(
-                                record=rec,
-                                duplicate_record=duplicate,
-                                record_type=rec.schema.record_type,
-                                job=job,
-                                score=calculate_score(rec, duplicate)
+                        # handle this in the find_duplicates_for_record call
+                        # to reduce number of queries
+                        num_reversed = RecordDuplicate.objects.filter(
+                            record__uuid=duplicate.uuid,
+                            duplicate_record__uuid=record
+                        ).count()
+                        if num_reversed == 0:
+                            rec = Record.objects.get(uuid=record)
+                            recordDuplicates.append(
+                                RecordDuplicate(
+                                    record=rec,
+                                    duplicate_record=duplicate,
+                                    job=job,
+                                    score=calculate_score(rec, duplicate)
+                                )
                             )
-                        )
-                        duplicatecount += 1
+                            duplicatecount += 1
                 RecordDuplicate.objects.bulk_create(recordDuplicates)
-            print "Page %d of %d done. %d duplicates found, %s elapsed" % (
-                page_num, paginator.num_pages,
-                duplicatecount,
-                datetime.datetime.now()-starttime)
-        print "Finished searching for duplicate records."
+            logger.info(
+                "Batch %d of %d done. %d duplicates found, %s elapsed" % (
+                    page_num, paginator.num_pages, duplicatecount,
+                    datetime.datetime.now() - starttime
+                )
+            )
+        logger.info("Finished searching for duplicate records.")
         job.status = DedupeJob.Status.SUCCESS
     except Exception as e:
         # TODO: retry job next time it runs with same start time
         job.status = DedupeJob.Status.ERROR
-        print "Failed: exception=\n%s" % (e,)
+        logger.error("Failed: exception=\n%s" % (e, ))
     job.save()

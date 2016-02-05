@@ -266,9 +266,9 @@ CELERY_ROUTES = {
 }
 
 # Deduplication settings
-DEDUPE_TIME_RANGE_HOURS = 24
+DEDUPE_TIME_RANGE_HOURS = 12
 # .001 ~= 110m
-DEDUPE_DISTANCE_DEGREES = 0.001
+DEDUPE_DISTANCE_DEGREES = 0.0008
 
 ASHLAR = {
     # It is suggested to change this if you know that your data will be limited to
