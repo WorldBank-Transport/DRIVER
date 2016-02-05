@@ -1,0 +1,22 @@
+@mixin close-modal {
+    position: absolute;
+    right: -15px;
+    top: -15px;
+    background: white;
+    padding: 8px;
+    opacity: 1;
+    box-shadow: 0 0 5px rgba(0,0,0,0.25);
+    width: 30px;
+    height: 30px;
+    line-height: 0.6;
+    text-align: center;
+    border-radius: 999px;
+    color: #999;
+    transition: 0.5s all;
+
+    &:hover {
+        color: #000;
+        box-shadow: 0 0 5px rgba(0,0,0,0.45);
+    }
+}
+

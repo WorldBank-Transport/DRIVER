@@ -15,12 +15,6 @@ driver-duplicates-list {
     bottom: 0;
     overflow: scroll;
 
-    .modal-footer {
-        margin-top: 50px;
-        margin-bottom: 0;
-        padding-top: 10px;
-        padding-bottom: 0;
-    }
     .links a {
         cursor: pointer;
     }
@@ -29,5 +23,60 @@ driver-duplicates-list {
     }
     .date {
         min-width: 70px;
+    }
+}
+
+.duplicate-modal {
+    &.modal {
+        background: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        border-radius: 0;
+        border: none;
+        padding: 15px;
+    }
+    .close {
+        @include close-modal();
+    }
+    .modal-body {
+        width: 100%;
+        padding: 0px;
+    }
+
+    .duplicate-details {
+        width: 50%;
+        display: inline-block;
+        border: 1px solid #e5e5e5;
+        padding: 20px 15px 30px;
+    }
+
+    .modal-footer {
+        margin-top: -5px;
+        margin-bottom: 0;
+        padding: 0px;
+        padding-bottom: 0;
+        text-align: center;
+    }
+    .select-record {
+        width: 50%;
+        float: left;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: #ddd;
+        &:hover {
+            background: #888;
+            color: #fff;
+        }
+    }
+
+    .keep-both {
+        clear: both;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        &:hover {
+            background: #efefef;
+        }
     }
 }
