@@ -38,16 +38,10 @@ def calculate_similarity_score(record1, record2, time_allowance, distance_allowa
     """
     tdelta = abs(record1.occurred_from - record2.occurred_from)
     tscore = 0
-    if tdelta.total_seconds() == 0:
-        tscore = 1.0
-    else:
-        tscore = 1.0 - (tdelta.total_seconds() / time_allowance.total_seconds())
+    tscore = 1.0 - (tdelta.total_seconds() / time_allowance.total_seconds())
     ddelta = record1.geom.distance(record2.geom)
     dscore = 0
-    if ddelta == 0.0:
-        dscore = 1.0
-    else:
-        dscore = 1.0 - (ddelta / distance_allowance)
+    dscore = 1.0 - (ddelta / distance_allowance)
     score = (tscore + dscore) / 2
     return score
 
