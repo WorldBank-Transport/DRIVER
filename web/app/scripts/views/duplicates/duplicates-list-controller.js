@@ -42,24 +42,21 @@
          * @return {promise} Promise to load duplicates
          */
         function loadDuplicates(offset) {
-            var paramsOffset;
+            var newOffset;
             if (offset) {
-                ctl.currentOffset += offset;
-                if (ctl.currentOffset) {
-                    paramsOffset = ctl.currentOffset;
-                }
+                newOffset = ctl.currentOffset + offset;
             } else {
-                ctl.currentOffset = 0;
-                paramsOffset = 0;
+                newOffset = 0;
             }
 
             /* jshint camelcase: false */
             return Duplicates.query({record_type: ctl.recordType.uuid,
                                      limit: ctl.numDuplicatesPerPage,
-                                     offset: paramsOffset}).$promise
+                                     offset: newOffset}).$promise
             /* jshint camelcase: true */
                 .then(function(duplicates) {
                     ctl.duplicates = duplicates;
+                    ctl.currentOffset = newOffset;
                     onDuplicatesLoaded();
                 }
             );
