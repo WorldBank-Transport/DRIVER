@@ -83,7 +83,7 @@ def get_time_extent(job):
     if DedupeJob.objects.all().count() > 0:
         try:
             last_job = DedupeJob.objects.exclude(uuid=job.uuid).latest()
-        except:
+        except DedupeJob.DoesNotExist:
             pass
     if last_job:
         start_time = last_job.datetime
