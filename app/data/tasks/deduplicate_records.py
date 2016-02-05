@@ -118,6 +118,18 @@ def find_duplicate_records():
     Heuristic:
     Records that have times within 1 day of each other
     Records that are located ~100m from each other
+
+    Multiple tasks running:
+    Each job will only consider records added after the last task started.
+    This should allow multiple tasks to run at the same time without identifying
+    duplicates more than once.
+
+    Job failure:
+    On job failure, the task should be retried after deleting the duplicates
+    associated with the task.  This is not automatic at this time.
+    A job may fail in a way that the job's failed state is not updated to be ERROR
+    if the celery worker itself goes down.  Otherwise, the task status should be
+    set properly
     """
     time_extent = get_time_extent()
     ids, queryset = get_dedupe_set(time_extent)
