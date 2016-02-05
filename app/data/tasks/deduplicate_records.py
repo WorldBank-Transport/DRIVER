@@ -85,7 +85,6 @@ def get_time_extent(job):
             last_job = DedupeJob.objects.exclude(uuid=job.uuid).latest()
         except:
             pass
-    start_time = None
     if last_job:
         start_time = last_job.datetime
     else:
@@ -104,7 +103,7 @@ def get_dedupe_set(extent):
             extent['start_time'], extent['end_time']
         )
     ).exclude(uuid__in=get_dedupe_ids())
-    ids = queryset.values_list('uuid', flat=True)
+    ids = queryset.values_list('pk', flat=True)
     return (ids, queryset)
 
 
