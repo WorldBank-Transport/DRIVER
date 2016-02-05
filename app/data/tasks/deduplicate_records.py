@@ -41,13 +41,13 @@ def calculate_similarity_score(record1, record2, time_allowance, distance_allowa
     if tdelta.total_seconds() == 0:
         tscore = 1.0
     else:
-        tscore = tdelta.total_seconds() / time_allowance.total_seconds()
+        tscore = 1.0 - (tdelta.total_seconds() / time_allowance.total_seconds())
     ddelta = record1.geom.distance(record2.geom)
     dscore = 0
     if ddelta == 0.0:
         dscore = 1.0
     else:
-        dscore = ddelta / distance_allowance
+        dscore = 1.0 - (ddelta / distance_allowance)
     score = (tscore + dscore) / 2
     return score
 
@@ -158,7 +158,11 @@ def find_duplicate_records(self, time_allowance=None, distance_allowance=None, t
 
     start_time = datetime.datetime.now()
     duplicate_count = 0
-    logger.info("Finding duplicates. 1000 records/batch, %d batches total" % (paginator.num_pages))
+    logger.info(
+        "Finding duplicates. 1000 records/batch, {0} batches total".format(
+            paginator.num_pages
+        )
+    )
     for page_num in paginator.page_range:
         page = paginator.page(page_num)
         records = queryset.in_bulk(page.object_list)
@@ -182,7 +186,7 @@ def find_duplicate_records(self, time_allowance=None, distance_allowance=None, t
                     duplicate_count += 1
             RecordDuplicate.objects.bulk_create(record_duplicates)
         logger.info(
-            "Batch %d of %d done. %d duplicates found, %s elapsed" % (
+            "Batch {0} of {1} done. {2} duplicates found, {3}s elapsed".format(
                 page_num, paginator.num_pages, duplicate_count, datetime.datetime.now() - start_time
             )
         )
