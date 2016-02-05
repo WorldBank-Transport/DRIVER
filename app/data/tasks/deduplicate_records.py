@@ -21,11 +21,13 @@ class DedupeTask(Task):
     def on_success(self, retval, task_id, args, kwargs):
         job = DedupeJob.objects.get(celery_task=task_id)
         job.status = DedupeJob.Status.SUCCESS
+        job.save()
 
     def on_failure(self, exc, task_id, args, kwargs, einfo):
         """ On failure, delete duplicates found in the unsuccessful run"""
         job = DedupeJob.objects.get(celery_task=task_id)
         job.status = DedupeJob.Status.ERROR
+        job.save()
         RecordDuplicate.objects.filter(job=job).delete()
 
 
@@ -35,12 +37,13 @@ def calculate_similarity_score(record1, record2, time_allowance, distance_allowa
     on the criteria.  score is a float between 0 and 1
 
     normalized dimensions are considered equal (1 day equally as important as 100m)
+
+    If the records are more than time_allowance or distance_allowance apart, this will
+    return a negative value
     """
     tdelta = abs(record1.occurred_from - record2.occurred_from)
-    tscore = 0
     tscore = 1.0 - (tdelta.total_seconds() / time_allowance.total_seconds())
     ddelta = record1.geom.distance(record2.geom)
-    dscore = 0
     dscore = 1.0 - (ddelta / distance_allowance)
     score = (tscore + dscore) / 2
     return score
@@ -57,16 +60,17 @@ def find_duplicates_for_record(uuid, time_allowance, distance_allowance):
             record.occurred_from - time_allowance, record.occurred_from + time_allowance
         )
     ).exclude(
-        uuid=record.uuid,
-        uuid__in=RecordDuplicate.objects.filter(
-            Q(record__uuid=record.uuid) | Q(
-                duplicate_record__uuid=record.uuid
+        Q(uuid=record.uuid) | Q(
+            uuid__in=RecordDuplicate.objects.filter(
+                Q(record__uuid=record.uuid) | Q(
+                    duplicate_record__uuid=record.uuid
+                )
             )
         )
     )
 
 
-def get_time_extent(time_allowance):
+def get_time_extent(job):
     """ Get the time range to dedupe
     Calculate from X hr before the last dedupe run to the current task run's
     start time, where X is the heuristic's time allowance
@@ -75,16 +79,18 @@ def get_time_extent(time_allowance):
         dictionary containing the start and end times for the next dedupe task
         {starttime: timestamp, endtime: timestamp}
     """
-    # TODO: get config var determining matching time - use value of 1 hr for now
     last_job = None
     if DedupeJob.objects.all().count() > 0:
-        last_job = DedupeJob.objects.latest()
+        try:
+            last_job = DedupeJob.objects.exclude(uuid=job.uuid).latest()
+        except:
+            pass
     start_time = None
     if last_job:
         start_time = last_job.datetime
     else:
         start_time = Record.objects.earliest('created').created
-    end_time = datetime.datetime.utcnow().replace(tzinfo=timezone('UTC'))
+    end_time = job.datetime
     return {'start_time': start_time, 'end_time': end_time}
 
 
@@ -142,13 +148,13 @@ def find_duplicate_records(self, time_allowance=None, distance_allowance=None, t
     if distance_allowance is None:
         distance_allowance = settings.DEDUPE_DISTANCE_DEGREES
 
-    time_extent = get_time_extent(time_allowance)
+    job = DedupeJob(status=DedupeJob.Status.STARTED, celery_task=self.request.id)
+    job.save()
+
+    time_extent = get_time_extent(job)
     ids, queryset = get_dedupe_set(time_extent)
     # this can be adjusted depending on the memory required
     paginator = Paginator(ids, 1000)
-
-    job = DedupeJob(status=DedupeJob.Status.STARTED, celery_task=self.request.id)
-    job.save()
 
     start_time = datetime.datetime.now()
     duplicate_count = 0

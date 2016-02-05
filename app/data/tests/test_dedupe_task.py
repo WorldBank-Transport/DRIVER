@@ -13,9 +13,11 @@ from django.db.models import Q
 
 
 class DedupeTaskTestCase(TestCase):
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+    @override_settings(
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_ALWAYS_EAGER=True,
+        BROKER_BACKEND='memory'
+    )
     def setUp(self):
         super(DedupeTaskTestCase, self).setUp()
         self.start = datetime.now(pytz.timezone('Asia/Manila'))
@@ -45,14 +47,14 @@ class DedupeTaskTestCase(TestCase):
         self.record2 = Record.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
-            geom='POINT (0 0.00001)',
+            geom='POINT (0 0)',
             location_text='Equator2',
             schema=self.schema
         )
         self.record3 = Record.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
-            geom='POINT (0 0.0002)',
+            geom='POINT (0 0.0001)',
             location_text='Equator3',
             schema=self.schema
         )
@@ -66,9 +68,11 @@ class DedupeTaskTestCase(TestCase):
         )
         self.stop = datetime.now(pytz.timezone('Asia/Manila'))
 
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+    @override_settings(
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_ALWAYS_EAGER=True,
+        BROKER_BACKEND='memory'
+    )
     def test_find_duplicate_records(self):
         self.assertEqual(DedupeJob.objects.count(), 0)
         self.assertEqual(RecordDuplicate.objects.count(), 0)
@@ -105,9 +109,11 @@ class DedupeTaskTestCase(TestCase):
         )
         self.assertEqual(RecordDuplicate.objects.count(), 4)
 
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+    @override_settings(
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_ALWAYS_EAGER=True,
+        BROKER_BACKEND='memory'
+    )
     def test_get_dedupe_ids(self):
         self.assertEqual(DedupeJob.objects.count(), 0)
         self.assertEqual(RecordDuplicate.objects.count(), 0)
@@ -130,11 +136,14 @@ class DedupeTaskTestCase(TestCase):
         self.assertNotEqual(job1, job2)
         self.assertEqual(
             len(task.get_dedupe_ids(job1)),
-            RecordDuplicate.objects.filter(job=job1).count())
+            RecordDuplicate.objects.filter(job=job1).count()
+        )
 
-    @override_settings(CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
-                       CELERY_ALWAYS_EAGER=True,
-                       BROKER_BACKEND='memory')
+    @override_settings(
+        CELERY_EAGER_PROPAGATES_EXCEPTIONS=True,
+        CELERY_ALWAYS_EAGER=True,
+        BROKER_BACKEND='memory'
+    )
     def test_get_dedupe_set(self):
         self.assertEqual(DedupeJob.objects.count(), 0)
         self.assertEqual(RecordDuplicate.objects.count(), 0)
@@ -147,11 +156,35 @@ class DedupeTaskTestCase(TestCase):
             schema=self.schema
         )
         stop2 = datetime.utcnow().replace(tzinfo=pytz.timezone('UTC'))
-
-        for record in Record.objects.filter(occurred_from=start2):
-            print "created=%s, occurred_from=%s" % (record.created, record.occurred_from)
-
         set, queryset = task.get_dedupe_set({'start_time': self.start, 'end_time': self.stop})
         self.assertEqual(len(set), 4)
         set, queryset = task.get_dedupe_set({'start_time': start2, 'end_time': stop2})
         self.assertEqual(len(set), 1)
+
+    def test_get_time_extent(self):
+        time = Record.objects.earliest('created').created
+        job = DedupeJob(status=DedupeJob.Status.SUCCESS)
+        job.save()
+        result = task.get_time_extent(job)
+
+        self.assertEqual(result['start_time'], time)
+        self.assertEqual(result['end_time'], job.datetime)
+
+    def test_find_duplicates_for_record(self):
+        tdiff = timedelta(hours=1)
+        results = task.find_duplicates_for_record(self.record1.uuid, tdiff, 0.001)
+        self.assertEqual(results.count(), 2)
+
+    def test_calculate_similarity_score(self):
+        time_allowance = timedelta(hours=1)
+        distance_allowance = .001
+        self.assertEqual(
+            task.calculate_similarity_score(
+                self.record1, self.record2, time_allowance, distance_allowance
+            ), 1.0
+        )
+        self.assertTrue(
+            task.calculate_similarity_score(
+                self.record1, self.record4, time_allowance, distance_allowance
+            ) < 0
+        )
