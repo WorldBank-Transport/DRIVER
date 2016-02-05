@@ -63,6 +63,10 @@ class DedupeJob(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     datetime = models.DateTimeField(auto_now_add=True, db_index=True)
     status = models.CharField(max_length=8, choices=Status.CHOICES, default=Status.PENDING)
+    celery_task = models.UUIDField(null=True)
+
+    class Meta(object):
+        get_latest_by = 'datetime'
 
 
 class RecordDuplicate(AshlarModel):
