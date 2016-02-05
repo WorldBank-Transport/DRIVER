@@ -76,7 +76,7 @@ class DedupeTaskTestCase(TestCase):
             0
         )
 
-        # test incrimental dedupe task
+        # test incremental dedupe task
         now = datetime.utcnow().replace(tzinfo=pytz.timezone('UTC'))
         newrecord = Record.objects.create(
             occurred_from=now,
