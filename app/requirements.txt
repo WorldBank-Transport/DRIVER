@@ -14,3 +14,9 @@ pytz==2015.7
 mock==1.3.0
 djangorestframework-csv==1.4.1
 git+https://github.com/azavea/ashlar.git@develop#egg=ashlar
+# Dependencies for generate_black_spots_training_input script
+argparse==1.2.1
+Fiona==1.6.3
+pyproj==1.9.5.1
+Rtree==0.8.2
+Shapely==1.5.13
