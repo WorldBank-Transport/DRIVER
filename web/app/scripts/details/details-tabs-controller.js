@@ -26,7 +26,6 @@
                 definition.propertyName = section;
                 return definition;
             });
-
             return sorted;
         }
 

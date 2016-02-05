@@ -3,7 +3,8 @@
 
     /* ngInject */
     function Records($resource, WebConfig) {
-        return $resource(WebConfig.api.hostname + '/api/records/:id/', {id: '@uuid'}, {
+        return $resource(WebConfig.api.hostname + '/api/records/:id/',
+                         {id: '@uuid', archived: false}, {
             create: {
                 method: 'POST'
             },

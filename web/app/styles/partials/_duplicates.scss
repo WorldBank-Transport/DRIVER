@@ -46,8 +46,10 @@ driver-duplicates-list {
     .duplicate-details {
         width: 50%;
         display: inline-block;
-        border: 1px solid #e5e5e5;
+        border-right: 1px solid #e5e5e5;
+        border-left: 1px solid #e5e5e5;
         padding: 20px 15px 30px;
+        vertical-align: top;
     }
 
     .modal-footer {

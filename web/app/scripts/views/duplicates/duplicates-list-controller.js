@@ -60,8 +60,34 @@
             /* jshint camelcase: true */
                 .then(function(duplicates) {
                     ctl.duplicates = duplicates;
+                    onDuplicatesLoaded();
                 }
             );
+        }
+
+        function onDuplicatesLoaded() {
+            var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions,
+                function(val, key) {
+                    if (key.indexOf('Details') > -1) {
+                        return val;
+                    }
+                });
+            if (detailsDefinitions.length !== 1) {
+                $log.error('Expected one details definition, found ' + detailsDefinitions.length);
+                return;
+            }
+
+            // Get the property names -- sorted by propertyOrder
+            ctl.headerKeys = _(detailsDefinitions[0].properties)
+                .omit('_localId')
+                .map(function(obj, propertyName) {
+                    obj.propertyName = propertyName;
+                    return obj;
+                })
+                .sortBy('propertyOrder')
+                .value();
+
+            ctl.detailsProperty = detailsDefinitions[0].title;
         }
 
         // Loads the previous page of paginated duplicates results
@@ -77,19 +103,20 @@
         // Show a modal for resolving the given duplicate
         function showResolveModal(duplicate) {
             $modal.open({
-                templateUrl: 'scripts/views/duplicates/duplicate-modal-partial.html',
+                templateUrl: 'scripts/views/duplicates/resolve-duplicate-modal-partial.html',
                 controller: 'ResolveDuplicateModalController as modal',
                 size: 'lg',
                 resolve: {
-                    duplicate: function() {
-                        return duplicate;
-                    },
-                    recordType: function() {
-                        return ctl.recordType;
-                    },
-                    recordSchema: function() {
-                        return ctl.recordSchema;
-                    },
+                    params: function() {
+                        return {
+                            duplicate: duplicate,
+                            duplicatesList: ctl.duplicates.results,
+                            recordType: ctl.recordType,
+                            recordSchema: ctl.recordSchema,
+                            properties: ctl.headerKeys,
+                            propertyName: ctl.detailsProperty
+                        };
+                    }
                 }
             });
         }

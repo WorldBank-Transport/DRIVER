@@ -3,7 +3,8 @@
 
     /* ngInject */
     function Duplicates($resource, WebConfig) {
-        return $resource(WebConfig.api.hostname + '/api/duplicates/:id/',
+        var baseUrl = WebConfig.api.hostname + '/api/duplicates/:id/';
+        return $resource(baseUrl,
                          {id: '@uuid', limit: 'all'}, {
             get: {
                 method: 'GET'
@@ -15,6 +16,10 @@
             },
             update: {
                 method: 'PATCH'
+            },
+            resolve: {
+                method: 'PATCH',
+                url: baseUrl + 'resolve/'
             }
         });
     }
