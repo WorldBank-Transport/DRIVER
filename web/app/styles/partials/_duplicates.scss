@@ -1,0 +1,33 @@
+.duplicates-title {
+    width: 100%;
+    position: fixed;
+    z-index: 8;
+    top: 52px;
+    height: 50px !important;
+    padding: 0px 14px !important;
+    background: #f1f2f2;
+}
+
+driver-duplicates-list {
+    position: fixed;
+    top: 105px;
+    width: 100%;
+    bottom: 0;
+    overflow: scroll;
+
+    .modal-footer {
+        margin-top: 50px;
+        margin-bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 0;
+    }
+    .links a {
+        cursor: pointer;
+    }
+    .links {
+        min-width: 105px;
+    }
+    .date {
+        min-width: 70px;
+    }
+}

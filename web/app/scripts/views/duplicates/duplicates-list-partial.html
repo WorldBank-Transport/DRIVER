@@ -1,0 +1,57 @@
+<div class="duplicates-title drop-shadow"><h3>Potential Duplicate Records</h3></div>
+<div class="table-view">
+    <div class="table-view-container">
+        <div class="overflow">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="date">Date &amp; Time</th>
+                        <th class="detail">Location</th>
+                        <th class="date">Date &amp; Time</th>
+                        <th class="detail">Location</th>
+                        <th>Status</th>
+                        <!-- Resolve link -->
+                        <th class="links"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dup in ctl.duplicates.results">
+                        <td ng-repeat-start="record in [dup.record, dup.duplicate_record]" class="date">
+                            {{ ::record.occurred_to | localDateTime }}
+                        </td>
+                        <td ng-repeat-end class="detail">
+                            {{ ::record.location_text }}
+                        </td>
+                        <td>{{ dup.resolved ? 'Resolved' : 'Potential Duplicate' }}</td>
+
+                        <td class="links">
+                            <a ng-if="::ctl.userCanWrite" ng-click="ctl.showResolveModal(dup)">
+                                <span class="glyphicon glyphicon-pencil"></span> Resolve
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pager">
+                    <li class="previous" ng-if="ctl.duplicates.previous">
+                        <a type="button" class="btn btn-default" ng-click="ctl.getPreviousDuplicates()">
+                            <span aria-hidden="true">&larr;</span> Previous</a>
+                    </li>
+                    <li ng-if="ctl.duplicates.count" class="text-center">
+                        <i>
+                            Showing results
+                            {{ ctl.currentOffset + 1}} -
+                            {{ ctl.currentOffset + ctl.duplicates.results.length }} of
+                            {{ ctl.duplicates.count }}
+                        </i>
+                    </li>
+                    <li class="next" ng-if="ctl.duplicates.next">
+                        <a type="button" class="btn btn-default" ng-click="ctl.getNextDuplicates()">
+                            Next <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

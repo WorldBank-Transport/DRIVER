@@ -35,9 +35,9 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
                                      is_admin_or_writer)
 
 import filters
-from models import RecordAuditLogEntry
+from models import RecordAuditLogEntry, RecordDuplicate
 from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer,
-                         RecordAuditLogEntrySerializer)
+                         RecordAuditLogEntrySerializer, RecordDuplicateSerializer)
 import transformers
 from driver import mixins
 
@@ -229,3 +229,10 @@ class DriverRecordSchemaViewSet(RecordSchemaViewSet):
 
 class DriverBoundaryViewSet(BoundaryViewSet):
     permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
+    queryset = RecordDuplicate.objects.all().order_by('record__occurred_to')
+    serializer_class = RecordDuplicateSerializer
+    permission_classes = (ReadersReadWritersWrite,)
+    filter_class = filters.RecordDuplicateFilter

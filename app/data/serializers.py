@@ -3,7 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from ashlar import serializers
 from ashlar import serializer_fields
 
-from models import RecordAuditLogEntry
+from models import RecordAuditLogEntry, RecordDuplicate
 
 from django.conf import settings
 
@@ -40,3 +40,11 @@ class RecordAuditLogEntrySerializer(ModelSerializer):
     """Serialize Audit Log Entries"""
     class Meta:
         model = RecordAuditLogEntry
+
+
+class RecordDuplicateSerializer(ModelSerializer):
+    record = serializers.RecordSerializer(required=False, allow_null=True)
+    duplicate_record = serializers.RecordSerializer(required=False, allow_null=True)
+
+    class Meta:
+        model = RecordDuplicate
