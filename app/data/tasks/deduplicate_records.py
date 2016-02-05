@@ -10,7 +10,6 @@ from data.models import (DedupeJob, RecordDuplicate)
 from ashlar.models import Record
 
 import datetime
-from pytz import timezone
 
 logger = get_task_logger(__name__)
 
