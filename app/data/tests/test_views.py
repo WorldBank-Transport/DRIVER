@@ -9,21 +9,19 @@ from rest_framework.request import Request
 
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory, force_authenticate
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.conf import settings
 
 from ashlar.models import RecordSchema, RecordType, Record
 
 from data.filters import RecordAuditLogFilter
-from data.models import RecordAuditLogEntry
+from data.models import RecordAuditLogEntry, DedupeJob, RecordDuplicate
 from data.views import DriverRecordViewSet, DriverRecordSchemaViewSet, DriverRecordAuditLogViewSet
 from data.serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
 
 
-class DriverRecordViewTestCase(APITestCase):
-    def setUp(self):
-        super(DriverRecordViewTestCase, self).setUp()
-
+class ViewTestSetUpMixin(object):
+    def set_up_admin_client(self):
         try:
             self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
         except User.DoesNotExist:
@@ -34,8 +32,15 @@ class DriverRecordViewTestCase(APITestCase):
 
         self.admin_client = APIClient()
         self.admin_client.force_authenticate(user=self.admin)
-        self.factory = APIRequestFactory()
 
+    def set_up_public_client(self):
+        self.public = User.objects.create_user('public', 'public@ashlar', 'public')
+        self.public.groups.add(Group.objects.get(name='public'))
+        self.public.save()
+        self.public_client = APIClient()
+        self.public_client.force_authenticate(user=self.public)
+
+    def set_up_records(self):
         self.now = datetime.now(pytz.timezone('Asia/Manila'))
         self.then = self.now - timedelta(days=10)
         self.beforeThen = self.then - timedelta(days=1)
@@ -66,6 +71,15 @@ class DriverRecordViewTestCase(APITestCase):
                                              geom='POINT (0 0)',
                                              location_text='Equator',
                                              schema=self.schema)
+
+
+class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
+    def setUp(self):
+        super(DriverRecordViewTestCase, self).setUp()
+
+        self.set_up_admin_client()
+        self.set_up_records()
+        self.factory = APIRequestFactory()
 
     def test_toddow(self):
         url = '/api/records/toddow/?record_type={}'.format(str(self.record_type.uuid))
@@ -185,22 +199,15 @@ class DriverRecordSchemaViewTestCase(APITestCase):
         self.assertEqual(serializer_class, DetailsReadOnlyRecordSchemaSerializer)
 
 
-class DriverRecordAuditLogViewSetTestCase(APITestCase):
+class DriverRecordAuditLogViewSetTestCase(APITestCase, ViewTestSetUpMixin):
     def setUp(self):
         super(DriverRecordAuditLogViewSetTestCase, self).setUp()
-        try:
-            self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
-        except User.DoesNotExist:
-            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
-            self.admin.is_superuser = True
-            self.admin.is_staff = True
-            self.admin.save()
+        self.set_up_admin_client()
+
         self.now = datetime.now(pytz.timezone('Asia/Manila'))
         self.ten_days_ago = self.now - timedelta(days=10)
         self.ten_days_hence = self.now + timedelta(days=10)
 
-        self.admin_client = APIClient()
-        self.admin_client.force_authenticate(user=self.admin)
         self.url = '/api/audit-log/'
 
     def test_view_permissions(self):
@@ -260,3 +267,66 @@ class DriverRecordAuditLogViewSetTestCase(APITestCase):
                                                     'max_date': self.ten_days_hence})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(0, len(json.loads(response.content)))
+
+
+class DriverDuplicatesViewSetTestCase(APITestCase, ViewTestSetUpMixin):
+    def setUp(self):
+        super(DriverDuplicatesViewSetTestCase, self).setUp()
+        self.set_up_admin_client()
+        self.set_up_public_client()
+        self.set_up_records()
+        self.url = '/api/duplicates/'
+
+        self.job = DedupeJob.objects.create()
+        self.dup1 = RecordDuplicate.objects.create(job=self.job, record=self.record1,
+                                                   duplicate_record=self.record2)
+        self.dup2 = RecordDuplicate.objects.create(job=self.job, record=self.record1,
+                                                   duplicate_record=self.record3)
+        self.dup3 = RecordDuplicate.objects.create(job=self.job, record=self.record2,
+                                                   duplicate_record=self.record3)
+
+    def test_list_view(self):
+        response = self.admin_client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        content = json.loads(response.content)
+        self.assertEqual(4, len(content),
+                         'Duplicates list response should have 4 keys (count, results, next, previous)')
+        self.assertEqual(content['count'], len(content['results']))
+
+    def test_update_permissions(self):
+        """Test that view is read-only except to admin"""
+        url = self.url + '{}/resolve/'.format(self.dup1.uuid)
+        response = self.admin_client.patch(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.public_client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_keep_both(self):
+        url = self.url + '{}/resolve/'.format(self.dup1.uuid)
+        response = self.admin_client.patch(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
+
+    def test_resolve_with_A(self):
+        """ Resolving with record A should resolve the duplicate and archive record B. """
+        url = self.url + '{}/resolve/'.format(self.dup1.uuid)
+        response = self.admin_client.patch(url, {'recordUUID': self.dup1.record.uuid})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(Record.objects.get(pk=self.dup1.record.pk).archived)
+        self.assertTrue(Record.objects.get(pk=self.dup1.duplicate_record.pk).archived)
+        self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
+        self.assertFalse(RecordDuplicate.objects.get(pk=self.dup2.pk).resolved)
+        self.assertTrue(RecordDuplicate.objects.get(pk=self.dup3.pk).resolved)
+
+    def test_resolve_with_B(self):
+        """ Resolving with record B should resolve the duplicate and archive record A,
+        and also resolve any other duplicates involving record A. """
+        url = self.url + '{}/resolve/'.format(self.dup2.uuid)
+        response = self.admin_client.patch(url, {'recordUUID': self.dup2.duplicate_record.uuid})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue(Record.objects.get(pk=self.dup2.record.pk).archived)
+        self.assertFalse(Record.objects.get(pk=self.dup2.duplicate_record.pk).archived)
+        self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
+        self.assertTrue(RecordDuplicate.objects.get(pk=self.dup2.pk).resolved)
+        self.assertFalse(RecordDuplicate.objects.get(pk=self.dup3.pk).resolved)
