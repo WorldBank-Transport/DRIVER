@@ -265,6 +265,9 @@ CELERY_ROUTES = {
     'data.tasks.remove_duplicates.remove_duplicates': {'queue': 'taskworker'},
     'data.tasks.export_csv.export_csv': {'queue': 'taskworker'},
 }
+# This needs to match the proxy configuration in nginx so that requests for files generated
+# by celery jobs go to the right place.
+CELERY_DOWNLOAD_PREFIX = '/download/'
 
 # Deduplication settings
 DEDUPE_TIME_RANGE_HOURS = 12

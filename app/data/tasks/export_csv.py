@@ -3,7 +3,9 @@ import os
 import tarfile
 import tempfile
 
+from celery import current_task
 from celery import shared_task
+from celery import states
 from celery.utils.log import get_task_logger
 
 from django_redis import get_redis_connection
@@ -13,7 +15,7 @@ from ashlar.models import Record
 logger = get_task_logger(__name__)
 
 
-@shared_task
+@shared_task(track_started=True)
 def export_csv(query_key):
     """Exports a set of records to a series of CSV files and places them in a compressed tarball
     :param query_key: A UUID corresponding to a cached SQL query which will be used to filter
@@ -55,7 +57,7 @@ def export_csv(query_key):
     # Cleanup
     record_writer.cleanup()
 
-    return archive.name
+    return os.path.basename(archive.name)
 
 
 def get_sql_string_by_key(key):

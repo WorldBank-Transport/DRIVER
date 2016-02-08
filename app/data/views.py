@@ -3,7 +3,10 @@ import uuid
 from dateutil.parser import parse as parse_date
 from datetime import timedelta
 
-from django.db import connection, transaction
+from celery import states
+
+from django.conf import settings
+from django.db import transaction
 from django.db.models import (Case,
                               When,
                               IntegerField,
@@ -17,8 +20,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
-from rest_framework import serializers
 from rest_framework.settings import api_settings
+from rest_framework import status
 
 from rest_framework_csv import renderers as csv_renderer
 
@@ -34,6 +37,7 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
                                      ReadersReadWritersWrite,
                                      IsAdminAndReadOnly,
                                      is_admin_or_writer)
+from data.tasks import export_csv
 
 import filters
 from models import RecordAuditLogEntry, RecordDuplicate
@@ -41,6 +45,7 @@ from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordS
                          RecordAuditLogEntrySerializer, RecordDuplicateSerializer)
 import transformers
 from driver import mixins
+
 
 DateTimeField.register_lookup(transformers.ISOYearTransform)
 DateTimeField.register_lookup(transformers.WeekTransform)
@@ -90,7 +95,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         # Don't generate a tile key unless the user specifically requests it, to avoid
         # filling up the Redis cache with queries that will never be viewed as tiles
         if ('tilekey' in request.query_params and
-            request.query_params['tilekey'] in ['True', 'true']):
+                request.query_params['tilekey'] in ['True', 'true']):
             response = Response(dict())
             query_sql = self.generate_query_sql(request)
             tile_token = uuid.uuid4()
@@ -264,3 +269,49 @@ class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
             resolved_ids = [str(uuid) for uuid in resolved_dup_qs.values_list('pk', flat=True)]
             resolved_dup_qs.update(resolved=True)
         return Response({'resolved': resolved_ids})
+
+
+class RecordCsvExportViewSet(viewsets.ViewSet):
+    """A view for interacting with CSV export jobs
+
+    Since these jobs are not model-backed, we won't use any of the standard DRF mixins
+    """
+    permissions_classes = (IsAdminOrReadOnly,)
+
+    def retrieve(self, request, pk=None):
+        """Return the status of the celery task with query_params['taskid']"""
+        # N.B. Celery will never return an error if a task_id doesn't correspond to a
+        # real task; it will simply return a task with a status of 'PENDING' that will never
+        # complete.
+        job_result = export_csv.AsyncResult(pk)
+        if job_result.state in states.READY_STATES:
+            if job_result.state in states.EXCEPTION_STATES:
+                e = job_result.get(propagate=False)
+                return Response({'status': job_result.state, 'error': str(e)})
+            # Set up the URL to proxy to the celery worker
+            # TODO: This won't work with multiple celery workers
+            # TODO: We should add a cleanup task to prevent result files from accumulating
+            # on the celery worker.
+            uri = '{scheme}://{host}{prefix}{file}'.format(scheme=request.scheme,
+                                                           host=request.get_host(),
+                                                           prefix=settings.CELERY_DOWNLOAD_PREFIX,
+                                                           file=str(job_result.get()))
+            return Response({'status': job_result.state, 'result': uri})
+        return Response({'status': job_result.state, 'info': job_result.info})
+
+    def create(self, request, *args, **kwargs):
+        """Create a new CSV export task, using the passed filterkey as a parameter
+
+        filterkey is the same as the "tilekey" that we pass to Windshaft; it must be requested
+        from the Records endpoint using tilekey=true
+        """
+        filter_key = request.data.get('tilekey', None)
+        if not filter_key:
+            return Response({'errors': {'tilekey': 'This parameter is required'}},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        task = export_csv.delay(filter_key)
+        return Response({'success': True, 'taskid': task.id}, status=status.HTTP_201_CREATED)
+
+    # TODO: If we switch to a Django/ORM database backend, we can subclass AbortableTask
+    # and allow cancellation as well.

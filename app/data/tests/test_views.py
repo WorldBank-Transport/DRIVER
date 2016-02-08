@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 import json
 import uuid
 
+import celery
 import mock
 import pytz
 
@@ -330,3 +331,58 @@ class DriverDuplicatesViewSetTestCase(APITestCase, ViewTestSetUpMixin):
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup2.pk).resolved)
         self.assertFalse(RecordDuplicate.objects.get(pk=self.dup3.pk).resolved)
+
+
+class RecordCsvExportViewSetTestCase(APITestCase):
+    def setUp(self):
+        try:
+            self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
+        except User.DoesNotExist:
+            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+            self.admin.is_superuser = True
+            self.admin.is_staff = True
+            self.admin.save()
+        self.admin_client = APIClient()
+        self.admin_client.force_authenticate(user=self.admin)
+        self.base_url = '/api/csv-export/'
+
+    def test_create_csv_export(self):
+        """Test that POSTing kicks off a celery task"""
+        test_job_id = 'test-job-id'
+        with mock.patch('data.views.export_csv.delay') as mock_delay:
+            mock_delay.return_value.id = test_job_id
+            response = self.admin_client.post(self.base_url, {'tilekey': 'test-filter-key'})
+            self.assertEqual({'success': True, 'taskid': test_job_id}, response.data)
+
+    def test_no_filterkey(self):
+        """Test that POSTing with no filterkey fails"""
+        with mock.patch('data.views.export_csv.delay'):
+            response = self.admin_client.post(self.base_url)
+            self.assertEqual({'errors': {'tilekey': 'This parameter is required'}}, response.data)
+
+    def test_return_job_status(self):
+        """Test that GETs return job status"""
+
+        with mock.patch('data.views.export_csv.AsyncResult',
+                        spec=celery.result.AsyncResult) as mock_status:
+            mock_status.return_value.state = celery.states.PENDING
+            mock_status.return_value.info = dict()
+            response = self.admin_client.get(self.base_url + 'fake-id/')
+            self.assertEqual({'status': celery.states.PENDING, 'info': {}}, response.data)
+
+            mock_status.return_value.state = celery.states.STARTED
+            response = self.admin_client.get(self.base_url + 'fake-id/')
+            self.assertEqual({'status': celery.states.STARTED, 'info': {}}, response.data)
+
+            mock_status.return_value.state = celery.states.SUCCESS
+            mock_status.return_value.get.return_value = 'filepath-here.tar.gz'
+            response = self.admin_client.get(self.base_url + 'fake-id/')
+            self.assertEqual({'status': celery.states.SUCCESS,
+                             'result': 'http://testserver/download/filepath-here.tar.gz'},
+                             response.data)
+
+            mock_status.return_value.state = celery.states.FAILURE
+            mock_status.return_value.get.return_value = 'error msg here'
+            response = self.admin_client.get(self.base_url + 'fake-id/')
+            self.assertEqual({'status': celery.states.FAILURE, 'error': 'error msg here'},
+                             response.data)
