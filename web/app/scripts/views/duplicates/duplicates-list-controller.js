@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DuplicatesListController($scope, $rootScope, $log, $modal, $state, AuthService,
+    function DuplicatesListController($scope, $log, $modal, $state, AuthService,
                                       InitialState, WebConfig, Duplicates, RecordState,
                                       RecordSchemaState ) {
         var ctl = this;
@@ -16,7 +16,6 @@
         InitialState.ready().then(init);
 
         function init() {
-            ctl.isInitialized = false;
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })

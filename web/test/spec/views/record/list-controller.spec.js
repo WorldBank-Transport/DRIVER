@@ -93,7 +93,7 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.flush();
 
         Controller.getNextRecords();
-        recordOffsetUrl = recordOffsetUrl = new RegExp('api/records/\\?limit=50.*offset=50.*');
+        recordOffsetUrl = recordOffsetUrl = new RegExp('api/records/\\?.*limit=50.*offset=50.*');
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 
