@@ -115,6 +115,7 @@
                 selected = null;
             }
             localStorageService.set('recordtype.selected', selected);
+            localStorageService.set('secondaryrecordtype.selected', secondaryType);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
             return selected;
         }
