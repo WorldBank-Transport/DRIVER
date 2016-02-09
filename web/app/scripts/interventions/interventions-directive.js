@@ -6,13 +6,11 @@
         var module = {
             restrict: 'AE',
             scope: {
-                minDate: '=',
-                maxDate: '='
             },
             templateUrl: 'scripts/interventions/interventions-partial.html',
             bindToController: true,
             controller: 'InterventionsController',
-            controllerAs: 'ctl'
+            controllerAs: 'interventions'
         };
         return module;
     }
