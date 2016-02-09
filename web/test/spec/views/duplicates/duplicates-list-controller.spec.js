@@ -17,44 +17,42 @@ describe('driver.views.duplicates: DuplicatesListController', function () {
     var InitialState;
 
     // Initialize the controller and a mock scope
-    beforeEach(function () {
-        inject(function (_$controller_, _$httpBackend_, _$rootScope_,
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
                                 _DriverResourcesMock_, _ResourcesMock_, _InitialState_) {
-            $controller = _$controller_;
-            $httpBackend = _$httpBackend_;
-            $rootScope = _$rootScope_;
-            $scope = $rootScope.$new();
-            DriverResourcesMock = _DriverResourcesMock_;
-            ResourcesMock = _ResourcesMock_;
-            InitialState = _InitialState_;
+        $controller = _$controller_;
+        $httpBackend = _$httpBackend_;
+        $rootScope = _$rootScope_;
+        $scope = $rootScope.$new();
+        DriverResourcesMock = _DriverResourcesMock_;
+        ResourcesMock = _ResourcesMock_;
+        InitialState = _InitialState_;
 
-            InitialState.setRecordTypeInitialized();
-            InitialState.setBoundaryInitialized();
-            InitialState.setGeographyInitialized();
+        InitialState.setRecordTypeInitialized();
+        InitialState.setBoundaryInitialized();
+        InitialState.setGeographyInitialized();
 
-            var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
-            var recordSchema = ResourcesMock.RecordSchema;
-            var recordSchemaId = recordSchema.uuid;
-            var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaId = recordSchema.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
 
-            var recordType = ResourcesMock.RecordType;
-            var recordTypeId = recordType.uuid;
+        var recordType = ResourcesMock.RecordType;
+        var recordTypeId = recordType.uuid;
 
-            $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-            $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-            $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
-            Controller = $controller('DuplicatesListController', {
-                $scope: $scope,
-            });
-
-            var duplicatesOffsetUrl = /api\/duplicates\//;
-            $httpBackend.expectGET(duplicatesOffsetUrl).respond(200, DriverResourcesMock.DuplicatesResponse);
-            $httpBackend.flush();
-            $httpBackend.verifyNoOutstandingRequest();
+        Controller = $controller('DuplicatesListController', {
+            $scope: $scope,
         });
-    });
+
+        var duplicatesOffsetUrl = /api\/duplicates\//;
+        $httpBackend.expectGET(duplicatesOffsetUrl).respond(200, DriverResourcesMock.DuplicatesResponse);
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+    }));
 
     it('should have header keys', function () {
         expect(Controller.headerKeys.length).toBeGreaterThan(0);

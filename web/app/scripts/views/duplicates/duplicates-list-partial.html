@@ -25,7 +25,8 @@
                         <td>{{ dup.resolved ? 'Resolved' : 'Potential Duplicate' }}</td>
 
                         <td class="links">
-                            <a ng-if="::ctl.userCanWrite" ng-click="ctl.showResolveModal(dup)">
+                            <a ng-if="ctl.userCanWrite &amp;&amp; !dup.resolved"
+                               ng-click="ctl.showResolveModal(dup)">
                                 <span class="glyphicon glyphicon-pencil"></span> Resolve
                             </a>
                         </td>
