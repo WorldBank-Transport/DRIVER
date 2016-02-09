@@ -87,6 +87,7 @@
         'driver.views.dashboard',
         'driver.views.map',
         'driver.views.record',
+        'driver.views.duplicates',
         'ui.router',
         'LocalStorageModule'
     ])

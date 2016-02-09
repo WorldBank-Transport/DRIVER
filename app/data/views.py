@@ -9,11 +9,12 @@ from django.db.models import (Case,
                               IntegerField,
                               DateTimeField,
                               Value,
-                              Count)
+                              Count,
+                              Q)
 from django_redis import get_redis_connection
 
 from rest_framework import viewsets
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework import serializers
@@ -35,9 +36,9 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
                                      is_admin_or_writer)
 
 import filters
-from models import RecordAuditLogEntry
+from models import RecordAuditLogEntry, RecordDuplicate
 from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer,
-                         RecordAuditLogEntrySerializer)
+                         RecordAuditLogEntrySerializer, RecordDuplicateSerializer)
 import transformers
 from driver import mixins
 
@@ -229,3 +230,37 @@ class DriverRecordSchemaViewSet(RecordSchemaViewSet):
 
 class DriverBoundaryViewSet(BoundaryViewSet):
     permission_classes = (IsAdminOrReadOnly,)
+
+
+class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
+    queryset = RecordDuplicate.objects.all().order_by('record__occurred_to')
+    serializer_class = RecordDuplicateSerializer
+    permission_classes = (ReadersReadWritersWrite,)
+    filter_class = filters.RecordDuplicateFilter
+
+    @detail_route(methods=['patch'])
+    def resolve(self, request, pk=None):
+        duplicate = self.queryset.get(pk=pk)
+        recordUUID = request.data.get('recordUUID', None)
+        if recordUUID is None:
+            # No record id means they want to keep both, so just resolve the duplicate
+            duplicate.resolved = True
+            duplicate.save()
+            resolved_ids = [duplicate.pk]
+        else:
+            # If they picked a record, archive the other one and resolve all duplicates involving it
+            # (which will include the current one)
+            if recordUUID == str(duplicate.record.uuid):
+                rejected_record = duplicate.duplicate_record
+            elif recordUUID == str(duplicate.duplicate_record.uuid):
+                rejected_record = duplicate.record
+            else:
+                raise Exception("Error: Trying to resolve a duplicate with an unconnected record.")
+            rejected_record.archived = True
+            rejected_record.save()
+            resolved_dup_qs = RecordDuplicate.objects.filter(Q(resolved=False),
+                                                             Q(record=rejected_record) |
+                                                             Q(duplicate_record=rejected_record))
+            resolved_ids = [str(uuid) for uuid in resolved_dup_qs.values_list('pk', flat=True)]
+            resolved_dup_qs.update(resolved=True)
+        return Response({'resolved': resolved_ids})

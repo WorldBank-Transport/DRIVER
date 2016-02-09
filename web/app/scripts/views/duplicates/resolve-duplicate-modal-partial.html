@@ -1,0 +1,29 @@
+<div class="duplicate-modal">
+    <div class="close" ng-click="modal.close()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3>Resolve duplicate entries</h3>
+    </div>
+    <div class="modal-body">
+        <div class="duplicate-details"
+             ng-repeat="record in [modal.params.duplicate.record, modal.params.duplicate.duplicate_record]">
+            <driver-details-single
+                data="record.data[modal.params.propertyName]"
+                properties="modal.params.properties"
+                record="record">
+            </driver-details-single>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="select-record" ng-click="modal.selectRecord(modal.params.duplicate.record.uuid)">
+            Use this record
+        </div>
+        <div class="select-record" ng-click="modal.selectRecord(modal.params.duplicate.duplicate_record.uuid)">
+            Use this record
+        </div>
+        <div class="keep-both" ng-click="modal.keepBoth()">
+          Keep both unique records
+        </div>
+    </div>
+</div>

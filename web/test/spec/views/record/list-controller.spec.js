@@ -88,17 +88,17 @@ describe('driver.views.record: ListController', function () {
         $httpBackend.flush();
 
         $rootScope.$broadcast('driver.filterbar:changed', {});
-        var recordOffsetUrl = new RegExp('api/records/\\?limit=50.*');
+        var recordOffsetUrl = new RegExp('api/records/\\?.*limit=50.*');
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 
         Controller.getNextRecords();
-        recordOffsetUrl = recordOffsetUrl = new RegExp('api/records/\\?limit=50.*offset=50.*');
+        recordOffsetUrl = recordOffsetUrl = new RegExp('api/records/\\?.*limit=50.*offset=50.*');
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 
         Controller.getPreviousRecords();
-        recordOffsetUrl = new RegExp('api/records/\\?limit=50.*');
+        recordOffsetUrl = new RegExp('api/records/\\?.*limit=50.*');
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.flush();
 

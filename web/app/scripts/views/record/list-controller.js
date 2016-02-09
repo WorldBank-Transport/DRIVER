@@ -57,24 +57,21 @@
          * @return {promise} Promise to load records
          */
         function loadRecords(offset) {
-            var paramsOffset;
+            var newOffset;
             if (offset) {
-                ctl.currentOffset += offset;
-                if (ctl.currentOffset) {
-                    paramsOffset = ctl.currentOffset;
-                }
+                newOffset = ctl.currentOffset + offset;
             } else {
-                ctl.currentOffset = 0;
-                paramsOffset = 0;
+                newOffset = 0;
             }
 
             /* jshint camelcase: false */
             var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
 
-            return QueryBuilder.djangoQuery(true, paramsOffset, params)
+            return QueryBuilder.djangoQuery(true, newOffset, params)
             .then(function(records) {
                 ctl.records = records;
+                ctl.currentOffset = newOffset;
             });
         }
 
