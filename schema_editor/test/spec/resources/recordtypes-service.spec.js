@@ -19,7 +19,7 @@ describe('ase.resources: RecordTypes', function () {
         var requestUrl = /\/api\/recordtypes/;
         $httpBackend.whenGET(requestUrl).respond(ResourcesMock.RecordTypeResponse);
         RecordTypes.query({ active: 'True' }).$promise.then(function (data) {
-            expect(data.length).toBe(2);
+            expect(data.length).toBe(3);
 
             var recordType = data[0];
             expect(recordType.label).toEqual(jasmine.any(String));

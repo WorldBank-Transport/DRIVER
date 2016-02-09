@@ -107,7 +107,7 @@
         };
 
         var RecordTypeResponse = {
-            'count': 2,
+            'count': 3,
             'next': null,
             'previous': null,
             'results': [
@@ -120,6 +120,16 @@
                     'plural_label':'Accidents',
                     'description':'An accident.',
                     'active':true
+                },
+                {
+                    'uuid': '99eeb841-31cf-4059-a408-070a0853c875',
+                    'current_schema': 'd71e6475-e328-41d3-8e1f-556ab4145129',
+                    'created': '2016-02-02T19:10:58.039863Z',
+                    'modified': '2016-02-02T19:10:58.039897Z',
+                    'label': 'Intervention',
+                    'plural_label': 'Interventions',
+                    'description': 'Actions to improve traffic safety',
+                    'active': true
                 },
                 {
                     'uuid':'1a8232f4-2fe8-4df0-9c78-786f666b3551',
@@ -135,6 +145,9 @@
         };
 
         var RecordType = RecordTypeResponse.results[0];
+
+        var SecondaryRecordType = RecordTypeResponse.results[1];
+
         var RecordSchemaRequest = angular.extend({}, RecordType, {
             definitions: {
                 'Accident Details': {
@@ -172,10 +185,10 @@
         };
 
         var UsersResponse = {
-            "count": 4,
-            "next": null,
-            "previous": null,
-            "results": [
+            'count': 4,
+            'next': null,
+            'previous': null,
+            'results': [
                 {
                     'id': 2,
                     'url': 'http://localhost:7000/api/users/2/',
@@ -205,6 +218,7 @@
             RecordSchemaResponse: RecordSchemaResponse,
             RecordSchemaRequest: RecordSchemaRequest,
             RecordType: RecordType,
+            SecondaryRecordType: SecondaryRecordType,
             RecordTypeResponse: RecordTypeResponse,
             UserInfoResponse: UserInfoResponse,
             AdminUserInfoResponse: AdminUserInfoResponse,
