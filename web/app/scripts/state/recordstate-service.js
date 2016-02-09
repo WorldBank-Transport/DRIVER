@@ -10,6 +10,7 @@
                          InitialState, RecordTypes, WebConfig) {
         var defaultParams,
             selected,
+            secondaryType,
             options,
             gettingSelected,
             selectedPromise,
@@ -85,11 +86,21 @@
                     selection = _.find(options, function(d) {
                         return d.label === WebConfig.recordType.primaryLabel;
                     });
+                    secondaryType = _.find(options, function(d) {
+                      return d.label === WebConfig.recordType.secondaryLabel;
+                    });
                 } else {
                     var oldRecordType = localStorageService.get('recordtype.selected');
                     if (oldRecordType) {
                         selection = _.find(options, function(d) {
                             return d.uuid === oldRecordType.uuid;
+                        });
+                    }
+
+                    var oldSecondaryType = localStorageService.get('secondaryrecordtype.selected');
+                    if (oldSecondaryType) {
+                        secondaryType = _.find(options, function(d) {
+                            return d.uuid === oldSecondaryType.uuid;
                         });
                     }
                 }
@@ -104,6 +115,7 @@
                 selected = null;
             }
             localStorageService.set('recordtype.selected', selected);
+            localStorageService.set('secondaryrecordtype.selected', secondaryType);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
             return selected;
         }

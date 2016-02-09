@@ -19,7 +19,7 @@ describe('driver.resources: Records', function () {
         var requestUrl = /\/api\/records/;
         $httpBackend.whenGET(requestUrl).respond(DriverResourcesMock.RecordResponse);
         Records.query({ active: 'True' }).$promise.then(function (data) {
-            expect(data.length).toBe(2);
+            expect(data.length).toBe(3);
 
             var record = data[0];
             expect(record.schema).toEqual(jasmine.any(String));
