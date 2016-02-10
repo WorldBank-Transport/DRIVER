@@ -5,7 +5,7 @@
     function Duplicates($resource, WebConfig) {
         var baseUrl = WebConfig.api.hostname + '/api/duplicates/:id/';
         return $resource(baseUrl,
-                         {id: '@uuid', limit: 'all'}, {
+                         {id: '@uuid', limit: 'all', resolved: 'False'}, {
             get: {
                 method: 'GET'
             },

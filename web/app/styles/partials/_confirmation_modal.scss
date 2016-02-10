@@ -1,0 +1,35 @@
+.confirmation-modal {
+    top: 175px;
+
+    .modal-content {
+        border-radius: 0;
+        border: none;
+    }
+
+    .modal-body {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-footer {
+        margin-top: -5px;
+        margin-bottom: 0;
+        padding: 0px;
+        padding-bottom: 0;
+        text-align: center;
+    }
+
+    .select {
+        width: 50%;
+        float: left;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-right: 1px solid #e5e5e5;
+        color: #999;
+        font-weight: 700;
+        &:hover {
+            color: #000;
+        }
+    }
+}

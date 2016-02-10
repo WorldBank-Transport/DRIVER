@@ -402,7 +402,7 @@
                     created: '2016-02-03T19:20:31.266354Z',
                     modified: '2016-02-08T14:51:51.169961Z',
                     score: 0.0,
-                    resolved: true,
+                    resolved: false,
                     job: '05b59583-2776-458c-835d-b7747a82b7d9',
                     record: RecordList[0],
                     duplicate_record: RecordList[1]

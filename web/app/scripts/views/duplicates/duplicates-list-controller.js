@@ -44,8 +44,10 @@
             var newOffset;
             if (offset) {
                 newOffset = ctl.currentOffset + offset;
-            } else {
+            } else if (offset === 0) {
                 newOffset = 0;
+            } else {
+                newOffset = ctl.currentOffset;
             }
 
             /* jshint camelcase: false */
@@ -106,7 +108,6 @@
                     params: function() {
                         return {
                             duplicate: duplicate,
-                            duplicatesList: ctl.duplicates.results,
                             recordType: ctl.recordType,
                             recordSchema: ctl.recordSchema,
                             properties: ctl.headerKeys,
@@ -114,6 +115,8 @@
                         };
                     }
                 }
+            }).result.then(function () {
+                loadDuplicates();
             });
         }
     }
