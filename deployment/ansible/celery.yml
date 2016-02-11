@@ -22,4 +22,4 @@
 
   roles:
     - { role: "driver.celery" }
-
+    - { role: "driver-celery.nginx" }

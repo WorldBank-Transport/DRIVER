@@ -1,0 +1,4 @@
+---
+driver_user: "{{ ansible_ssh_user }}"
+root_www_dir: "/var/www"
+root_media_dir: "{{ root_www_dir }}/media"
