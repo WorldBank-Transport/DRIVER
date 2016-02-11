@@ -17,6 +17,7 @@
         'ui.bootstrap',
         'Leaflet',
         'driver.charts',
+        'driver.interventions',
         'driver.config',
         'driver.localization',
         'driver.map-layers',
