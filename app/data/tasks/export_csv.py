@@ -27,7 +27,10 @@ def export_csv(query_key):
     records = get_queryset_by_key(query_key)
     # Get the most recent Schema for the Records' RecordType
     # This assumes that all of the Records have the same RecordType.
-    schema = records[0].schema.record_type.get_current_schema()
+    try:
+        schema = records[0].schema.record_type.get_current_schema()
+    except IndexError:
+        raise Exception('Filter includes no records')
     # Create files and CSV Writers from Schema
     record_writer = AshlarRecordExporter(schema)
 

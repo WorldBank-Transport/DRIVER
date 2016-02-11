@@ -79,6 +79,7 @@
         function loadRecords() {
             /* jshint camelcase: false */
             var params = {};
+
             if (ctl.boundaryId) {
                 params.polygon_id = ctl.boundaryId;
             }
@@ -87,6 +88,8 @@
             if (userDrawnPoly) {
                 params.polygon = userDrawnPoly;
             }
+
+            ctl.recordQueryParams = params;
 
             RecordAggregates.stepwise(true, params).then(function(stepwiseData) {
                 // minDate and maxDate are important for determining where the barchart begins/ends

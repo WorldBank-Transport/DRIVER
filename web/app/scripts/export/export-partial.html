@@ -1,0 +1,34 @@
+<div class="tool export" ng-class="{ 'open': ctl.isOpen }">
+    <div class="tool-tab" ng-click="ctl.toggle()" >
+        <span class="glyphicon glyphicon-share"
+              ng-if="ctl.isOpen || (!ctl.pending && !ctl.downloadURL)"></span>
+        <cube-grid-spinner ng-if="!ctl.isOpen && ctl.pending"></cube-grid-spinner>
+        <span class="glyphicon glyphicon-download-alt"
+              ng-if="!ctl.isOpen && ctl.downloadURL && !ctl.pending"></span>
+        Export
+    </div>
+    <div class="tool-content">
+        <div class="tool-body">
+            <div class="export-item">
+                <span class="glyphicon glyphicon-th-list"></span>
+                Custom Report
+            </div>
+            <div class="export-item" ng-class="{ 'clickable': !ctl.pending }">
+                <div ng-if="!ctl.pending" ng-click="ctl.exportCSV()">
+                    <span class="glyphicon glyphicon-export"></span>
+                    <span ng-if="!ctl.downloadURL">Export CSV</span>
+                    <span ng-if="ctl.downloadURL">Export New CSV</span>
+                </div>
+                <div ng-if="ctl.pending">
+                    <cube-grid-spinner></cube-grid-spinner>
+                    Exporting CSV
+                </div>
+                <div class="error" ng-if="ctl.error">{{ ctl.error }}</div>
+            </div>
+            <div class="export-item" ng-if="ctl.downloadURL && !ctl.pending">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                <a href="{{ ctl.downloadURL }}" download>Download CSV</a>
+            </div>
+        </div>
+    </div>
+</div>

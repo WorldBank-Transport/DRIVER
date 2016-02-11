@@ -1,9 +1,9 @@
-<div class="tool graphs" ng-init="open = false" ng-class="{ 'open': open }">
-    <div class="tool-tab" ng-click="open = !open" >
+<div class="tool graphs" ng-class="{ 'open': ctl.isOpen }">
+    <div class="tool-tab" ng-click="ctl.toggle()" >
         <span class="glyphicon glyphicon-list-alt"></span> Graphs
     </div>
     <div class="tool-content" ng-init="activeChart = 'toddow'">
-        <div class="graph-header">
+        <div class="tool-header">
             <span class="pull-right">
                 <span class="graph-selector glyphicon glyphicon-th"
                       ng-click="activeChart = 'toddow'"
@@ -18,7 +18,7 @@
             <h4>Graphs</h4>
         </div>
         <hr />
-        <div class="graph-content">
+        <div class="tool-body">
             <driver-toddow chart-data="ctl.toddow"
                            ng-show="activeChart === 'toddow'">
             </driver-toddow>
