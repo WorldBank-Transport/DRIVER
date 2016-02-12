@@ -23,7 +23,7 @@
             // get section definitions as sorted array, with added property for the section name
             var sorted = _.map(ordering, function(section) {
                 var definition = ctl.recordSchema.schema.definitions[section];
-                definition.propertyName = section;
+                definition.propertyName = definition.title;
                 return definition;
             });
             return sorted;

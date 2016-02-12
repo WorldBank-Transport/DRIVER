@@ -81,7 +81,9 @@
                     if (key.indexOf('Details') > -1) {
                         // keep the actual field name
                         // for lookup on ctl.recordSchema.schema.definitions
-                        ctl.detailsPropertyName = key;
+                        /* jshint camelcase: false */
+                        ctl.detailsPropertyName = val.plural_title || val.title || key;
+                        /* jshint camelcase: true */
                         return val;
                     }
                 });

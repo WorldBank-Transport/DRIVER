@@ -35,7 +35,11 @@
                     type: 'array',
                     items: {
                         $ref: ref
-                    }
+                    },
+                    title: ctl.currentSchema.definition.title,
+                    /* jshint camelcase:false */
+                    plural_title: ctl.currentSchema.definition.plural_title
+                    /* jshint camelcase:true */
                 };
             } else {
                 ctl.currentSchema.schema.properties[key] = {
