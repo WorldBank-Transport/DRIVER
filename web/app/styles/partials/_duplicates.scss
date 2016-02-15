@@ -66,6 +66,8 @@ driver-duplicates-list {
         text-transform: uppercase;
         cursor: pointer;
         background: #ddd;
+        color: #999;
+        font-weight: 700;
         &:hover {
             background: #888;
             color: #fff;

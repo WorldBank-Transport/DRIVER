@@ -9,7 +9,6 @@
                         <th class="detail">Location</th>
                         <th class="date">Date &amp; Time</th>
                         <th class="detail">Location</th>
-                        <th>Status</th>
                         <!-- Resolve link -->
                         <th class="links"></th>
                     </tr>
@@ -22,8 +21,6 @@
                         <td ng-repeat-end class="detail">
                             {{ ::record.location_text }}
                         </td>
-                        <td>{{ dup.resolved ? 'Resolved' : 'Potential Duplicate' }}</td>
-
                         <td class="links">
                             <a ng-if="ctl.userCanWrite &amp;&amp; !dup.resolved"
                                ng-click="ctl.showResolveModal(dup)">
