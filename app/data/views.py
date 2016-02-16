@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from dateutil.parser import parse as parse_date
@@ -19,12 +20,14 @@ from django_redis import get_redis_connection
 from rest_framework import viewsets
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.exceptions import ParseError
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
-from rest_framework import status
+from rest_framework import renderers, status
 
 from rest_framework_csv import renderers as csv_renderer
 
+from ashlar.models import RecordSchema
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
                           RecordTypeViewSet,
@@ -85,6 +88,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         instance = serializer.save()
         self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.UPDATE)
 
+    # TODO: this appears to be mis-named; DestroyModelMixin method is perform_destroy
     @transaction.atomic
     def perform_delete(self, instance):
         self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.DELETE)
@@ -214,7 +218,24 @@ class DriverRecordAuditLogViewSet(viewsets.ModelViewSet):
         return context
 
 
-# override ashlar views to set permissions
+def start_jar_build(schema_uuid):
+    """Helper to kick off build of a Dalvik jar file with model classes for a schema.
+    Publishes schema with its UUID to a redis channel that the build task listens on.
+
+    :param schema_uuid: Schema UUID, which is the key used to store the jar on redis.
+    """
+    # Find the schema with the requested UUID.
+    schema_model = RecordSchema.objects.get(uuid=schema_uuid)
+    if not schema_model:
+        return False
+
+    schema = schema_model.schema
+    redis_conn = get_redis_connection('jars')
+    redis_conn.publish('jar-build', json.dumps({'uuid': schema_uuid, 'schema': schema}))
+    return True
+
+
+# override ashlar views to set permissions and trigger model jar builds
 class DriverBoundaryPolygonViewSet(BoundaryPolygonViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
@@ -231,6 +252,19 @@ class DriverRecordSchemaViewSet(RecordSchemaViewSet):
         if is_admin_or_writer(self.request.user):
             return RecordSchemaSerializer
         return DetailsReadOnlyRecordSchemaSerializer
+
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        start_jar_build(str(instance.pk))
+
+    def perform_update(self, serializer):
+        instance = serializer.save()
+        start_jar_build(str(instance.pk))
+
+    def perform_destroy(self, instance):
+        redis_conn = get_redis_connection('jars')
+        redis_conn.delete(str(instance.pk))
+        instance.delete()
 
 
 class DriverBoundaryViewSet(BoundaryViewSet):
@@ -315,3 +349,59 @@ class RecordCsvExportViewSet(viewsets.ViewSet):
 
     # TODO: If we switch to a Django/ORM database backend, we can subclass AbortableTask
     # and allow cancellation as well.
+
+
+class JarFileRenderer(renderers.BaseRenderer):
+    """Renderer for downloading JARs.
+
+    http://www.django-rest-framework.org/api-guide/renderers/#data
+    """
+    media_type = 'application/java-archive'
+    charset = None
+    render_style = 'binary'
+    format = 'jar'
+
+    def render(self, data, media_type=None, renderer_context=None, format=None):
+        return data
+
+
+class AndroidSchemaModelsViewSet(viewsets.ViewSet):
+    """A view for interacting with Android jar build jobs."""
+
+    permissions_classes = (IsAuthenticated,)
+    renderer_classes = [JarFileRenderer] + api_settings.DEFAULT_RENDERER_CLASSES
+
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super(AndroidSchemaModelsViewSet, self).finalize_response(request, response, *args, **kwargs)
+        if isinstance(response.accepted_renderer, JarFileRenderer):
+            response['content-disposition'] = 'attachment; filename=models.jar'
+        return response
+
+    def retrieve(self, request, pk=None):
+        """Return the model jar if found, or kick of a task to create it if not found.
+
+        If a previous message has already been sent for the same UUID, the new request will be
+        ignored by the subscriber, which processes requests serially.
+        """
+
+        uuid = str(pk)
+        if not uuid:
+            return Response({'errors': {'uuid': 'This parameter is required'}},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        redis_conn = get_redis_connection('jars')
+        found_jar = redis_conn.get(uuid)
+        if not found_jar:
+            found = RecordSchema.objects.filter(uuid=uuid).count()
+            if found == 1:
+                # have a good schema UUID but no jar for it; go kick off a jar build
+                start_jar_build(uuid)
+                return Response({'success': True}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'errors': {'uuid': 'Schema matching UUID not found'}},
+                                status=status.HTTP_400_BAD_REQUEST)
+        else:
+            # update cache expiry, then return the jar binary found in redis
+            # to actually download the file, specify format=jar request parameter
+            redis_conn.expire(uuid, settings.JARFILE_REDIS_TTL_SECONDS)
+            return Response(found_jar)

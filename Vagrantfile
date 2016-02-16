@@ -130,6 +130,9 @@ Vagrant.configure("2") do |config|
     celery.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs"
     celery.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs"
 
+    # jar build task on celery vm
+    celery.vm.synced_folder "./gradle", "/opt/gradle", type: "nfs"
+
     # Docker
     celery.vm.network "forwarded_port", guest: 2375, host: 2376
 

@@ -1,0 +1,28 @@
+---
+- name: Ensure that gradle container mount directory exists
+  file: path={{ gradle_dir }}/data
+        recurse=yes
+        state=directory
+
+- name: Copy jar signing key
+  copy: src="../../gradle/data/driver.keystore" dest="/opt/gradle/data/driver.keystore"
+
+- name: Build gradle Docker image
+  command: >
+    docker build
+      -f {{ gradle_dir }}/Dockerfile
+      -t quay.io/azavea/driver-gradle:latest
+      {{ gradle_dir }}
+  when: developing
+
+- name: Pull gradle Docker image
+  command: /usr/bin/docker pull quay.io/azavea/driver-gradle:latest
+  when: staging
+
+- name: Configure gradle service definition
+  template: src=upstart-gradle.conf.j2 dest=/etc/init/driver-gradle.conf
+  notify:
+    - Restart driver-gradle
+
+- name: Ensure gradle service is running
+  service: name=driver-gradle state=started

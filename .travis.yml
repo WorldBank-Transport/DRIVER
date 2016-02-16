@@ -8,6 +8,7 @@ env:
   - secure: GuiAqvRAZ7ITaDouiN5QD5xvdvNZwSS6loqt20Fh50HH0yAYivbgEIWH/fm2ioPA2BmsK0xMFFkAitt08G4GT4chdxENR9Joe/0fnAskmT1+tEQswhelAZfe/i8IljwVwo+4Z/frZMFKA+9tdrrdRQN6nVa9JimxoSoawqivqmM=
   - secure: rxJHlPjag0Ie6mFk5p40Rc+v0yegXXn+JLDwVJB5koZNOH4KNvDis+KG/VyZpLAXohd7Mrdqd87Z8xfzExur4Q10ubHyMMdLrgMDOTEx5j2S+8tt0kek+iFyTM4tsMi9H5MnS+zQ0MRNoF+Ay1tVi7XeHODMz/TKWGWsWzf+cvg=
   - secure: wc2LNYrPX8OfaytX9iQi4Wp9CBdMzBEt2PGiJIzcxALl8CS/PnP4/efnSuuAW49zaKvtSZ2kwqXObH0E0PamcCufkR3QCbnG+pxuq+Zxu11152inz3FO8UiaYksmzBcO3tidGuehWFPr+ULinlbT3RYaItXmPoPTAfO5l/0r1F4=
+  - secure: hZNrcEi/XfMpdjegA9AAFm/XDM6+aP+NV7NfQAo4/P5IN2rBz20TEHcLmtDs0YODPnT0mneoqWaEM1V55VFZIp4FhDJetOA3nk+MhKpo6jAy+E5au+jJ8R5yWkwGAosedBBEYhU5T6iF073SpYcjfyun4fgC58o7yuYNoBISWVg=
 language: bash
 services:
 - docker
@@ -35,6 +36,11 @@ deploy:
     branch: develop
 after_deploy:
 - rm deployment/driver.pem
+- rm gradle/data/driver.keystore
 notifications:
   slack:
     secure: RVtR2f3Q+hyW+JeXXsf6TyS1f5OQi7HW35jW+Auu/ET1VxOtQ/Swheiil26a8h6XtEC51YL+SiUhhiAxeKCMz31O33LZ3AsWjOC3ercIjDXDBPVYiYCsSpKoMGPm1/+FXjHnMzEPvIrOo2vA9hLk0QGr8fEiDZ/pHcUxmtVOmWc=
+before_install:
+- '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && openssl aes-256-cbc -K "${encrypted_1319bc8a028f_key}"
+  -iv "${encrypted_1319bc8a028f_iv}" -in deployment/driver.keystore.enc -out gradle/data/driver.keystore
+  -d || true'

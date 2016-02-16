@@ -3,7 +3,7 @@
 set -e
 set -x
 
-for image in app editor web;
+for image in app editor web gradle;
 do
   docker push "quay.io/azavea/driver-${image}:${TRAVIS_COMMIT:0:7}"
   docker tag -f "quay.io/azavea/driver-${image}:${TRAVIS_COMMIT:0:7}" "quay.io/azavea/driver-${image}:latest"
@@ -22,6 +22,8 @@ echo "oauth_client_id: \"${OAUTH_CLIENT_ID}\"" \
 echo "oauth_client_secret: \"${OAUTH_CLIENT_SECRET}\"" \
     >> deployment/ansible/group_vars/all
 echo "forecast_io_api_key: \"${FORECAST_IO_API_KEY}\"" \
+    >> deployment/ansible/group_vars/all
+echo "keystore_password: \"${DRIVER_KEYSTORE_PASSWORD}\"" \
     >> deployment/ansible/group_vars/all
 set -x
 

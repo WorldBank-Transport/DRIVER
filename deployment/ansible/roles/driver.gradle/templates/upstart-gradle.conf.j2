@@ -1,0 +1,35 @@
+description "driver-gradle"
+
+start on (filesystem and started docker)
+stop on stopping docker
+
+kill timeout 20
+kill signal CONT
+respawn
+
+pre-start script
+  {% if 'development' in group_names -%}
+  until mountpoint -q {{ gradle_dir }}; do sleep 1; done
+  {% endif %}
+
+  /usr/bin/docker kill driver-gradle || true
+  /usr/bin/docker rm driver-gradle || true
+
+  {% if 'staging' in group_names -%}
+  /usr/bin/docker pull quay.io/azavea/driver-gradle:latest
+  {% endif %}
+end script
+
+exec /usr/bin/docker run \
+  --name driver-gradle \
+  --volume {{ gradle_dir }}/data:/opt/app/data:rw \
+  {% for k,v in driver_conf.items() -%}
+  --env {{ k }}={{ v }} \
+  {% endfor -%}
+  --log-driver syslog \
+  quay.io/azavea/driver-gradle:latest
+
+post-stop script
+  /usr/bin/docker kill driver-gradle
+  /usr/bin/docker rm driver-gradle
+end script

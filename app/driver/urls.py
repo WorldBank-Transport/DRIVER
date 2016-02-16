@@ -16,6 +16,7 @@ router.register('blackspotsets', black_spot_views.BlackSpotSetViewSet, base_name
 router.register('boundaries', data_views.DriverBoundaryViewSet)
 router.register('boundarypolygons', data_views.DriverBoundaryPolygonViewSet)
 router.register('csv-export', data_views.RecordCsvExportViewSet, base_name='csv-export')
+router.register('jars', data_views.AndroidSchemaModelsViewSet, base_name='jars')
 router.register('records', data_views.DriverRecordViewSet)
 router.register('recordschemas', data_views.DriverRecordSchemaViewSet)
 router.register('recordtypes', data_views.DriverRecordTypeViewSet)

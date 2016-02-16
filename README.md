@@ -13,6 +13,10 @@ Obtain a pickpoint api key from https://pickpoint.io.
 Copy `deployment/ansible/group_vars/all.example` to `deployment/ansible/group_vars/all`
 and add the API key for pickpoint under `web_js_nominatim_key`.
 
+To build schema model jar files for the Android app, copy the signing keystore to `gradle/data`
+and set the password for the keystore under `keystore_password` in `deployment/ansible/group_vars/all`.
+To run in development without support for jar file building, `touch gradle/data/driver.keystore`.
+
 Install plugins before `vagrant up` via: `vagrant plugin install <plugin-name>`
 
 The app runs on localhost on port 7000. The schema editor is available at /editor/.
