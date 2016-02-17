@@ -268,6 +268,7 @@ CELERY_ROUTES = {
 # This needs to match the proxy configuration in nginx so that requests for files generated
 # by celery jobs go to the right place.
 CELERY_DOWNLOAD_PREFIX = '/download/'
+CELERY_EXPORTS_FILE_PATH = '/var/www/media'
 
 # Deduplication settings
 DEDUPE_TIME_RANGE_HOURS = 12

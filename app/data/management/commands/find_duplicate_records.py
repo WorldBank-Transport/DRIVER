@@ -1,11 +1,10 @@
-
 from django.core.management.base import BaseCommand
 
-from data.tasks.remove_duplicates import remove_duplicates
+from data.tasks import find_duplicate_records
 
 
 class Command(BaseCommand):
-    help = 'Remove duplicates'
+    help = 'Find duplicates'
 
     def handle(self, *args, **options):
-        remove_duplicates()
+        find_duplicate_records()
