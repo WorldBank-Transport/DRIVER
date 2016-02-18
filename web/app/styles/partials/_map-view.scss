@@ -36,9 +36,37 @@
                     max-height: 300px;
                 }
             }
+            .tool-tab {
+                background: white;
+                padding: 16px 20px 16px;
+                position: relative;
+                bottom: -2px;
+                transition: 0.5s all;
+                cursor: pointer;
+            }
+            .tool-content {
+                width: 600px;
+                background: white;
+                max-height: 0;
+                bottom: 50px;
+                overflow: hidden;
+                position: absolute;
+                transition: 0.5s all;
+            }
+            .tool-header {
+                margin: 20px 15px 0 15px;
+            }
+            .tool-body {
+            }
+
             &.graphs {
                 .tool-content {
                     width: 600px;
+                }
+                .tool-body {
+                    margin: 25px 15px 20px 15px;
+                    height: 300px;
+                    padding: 0px;
                 }
             }
             &.interventions {
@@ -53,34 +81,33 @@
             }
             &.export {
                 .tool-content {
-                    width: 220px;
+                    width: 200px;
+                }
+                .export-item {
+                    padding: 15px;
+                    border-bottom: 1px solid #eeeeee;
+                    &.clickable {
+                        cursor: pointer;
+                    }
+                    a {
+                        color: inherit;
+                    }
+                }
+                .cube-grid-spinner {
+                    width: 15px;
+                    height: 15px;
+                    margin: 0px 0px -2px 0px;
+                    display: inline-block;
                 }
             }
 
-            .tool-tab {
-                background: white;
-                padding: 16px 20px 16px;
-                position: relative;
-                bottom: -2px;
-                transition: 0.5s all;
-                cursor: pointer;
+            .error {
+                background-color: #EF6055;
+                padding: 5px;
+                margin-top: 5px;
+                cursor: default;
             }
-            .tool-content {
-                width: 600px;
-                background: white;
-                max-height: 0;
-                height: 300px;
-                bottom: 50px;
-                overflow: hidden;
-                position: absolute;
-                transition: 0.5s all;
-            }
-            .graph-header {
-                margin: 20px 15px 0 15px;
-            }
-            .graph-content {
-                margin: 25px 15px 0 15px;
-            }
+
             .graph-selector {
                 cursor: pointer;
                 color: lightgrey;
