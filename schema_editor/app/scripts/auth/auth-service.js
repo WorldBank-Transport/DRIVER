@@ -10,6 +10,7 @@
         var canWriteCookieString = 'AuthService.canWrite';
         var userIdCookieString = 'AuthService.userId';
         var tokenCookieString = 'AuthService.token';
+        var isAdminCookieString = 'AuthService.isAdmin';
         var cookieTimeout = null;
         var cookieTimeoutMillis = 24 * 60 * 60 * 1000;      // 24 hours
 
@@ -33,69 +34,66 @@
                     error: ''
                 };
 
-                // if user needs to be an admin to log in, check if they are first
-                if (needsAdmin) {
-                    if (data && data.user && data.token) {
-                        $log.debug('sending user service user:');
-                        $log.debug(data.user);
-                        $log.debug('and token');
-                        $log.debug(data.token);
-
-                        UserService.isAdmin(data.user, data.token).then(function(isAdmin) {
-                            if (isAdmin) {
-                                // am an admin; log in
-                                setUserId(data.user);
-                                setToken(data.token);
-                                result.isAuthenticated = module.isAuthenticated();
-                                if (result.isAuthenticated) {
-                                    // admins can write records
-                                    setCanWrite(true).then(function() {
-                                        $rootScope.$broadcast(events.loggedIn);
-                                        dfd.resolve(result);
-                                    });
-                                } else {
-                                    result.error = 'Unknown error logging in.';
+                if (data && data.user && data.token) {
+                    $log.debug('sending user service user:');
+                    $log.debug(data.user);
+                    $log.debug('and token');
+                    $log.debug(data.token);
+                } else {
+                    result.isAuthenticated = false;
+                    result.error = 'Error obtaining user information.';
+                    dfd.resolve(result);
+                }
+                // Need to get admin data in all cases in order to configure UI properly
+                // TODO: This results in a redundant request to the User endpoint in some cases;
+                // I attempted to refactor but ran into some difficulties with tests.
+                UserService.isAdmin(data.user, data.token).then(function(isAdmin) {
+                    // if user needs to be an admin to log in, check if they are first
+                    if (needsAdmin) {
+                        if (isAdmin) {
+                            // am an admin; log in
+                            setUserId(data.user);
+                            setToken(data.token);
+                            result.isAuthenticated = module.isAuthenticated();
+                            if (result.isAuthenticated) {
+                                // admins can write records
+                                setPermissionsCookies(true, isAdmin).then(function() {
+                                    $rootScope.$broadcast(events.loggedIn);
                                     dfd.resolve(result);
-                                }
+                                });
                             } else {
-                                // user is not an admin and admin access is required
-                                $log.debug('user service sent back:');
-                                $log.debug(isAdmin);
-                                result.isAuthenticated = false;
-                                result.error = 'Must be an administrator to access this portion of the site.';
+                                result.error = 'Unknown error logging in.';
                                 dfd.resolve(result);
                             }
-                        }, function() {
+                        } else {
+                            // user is not an admin and admin access is required
+                            $log.debug('user service sent back:');
+                            $log.debug(isAdmin);
                             result.isAuthenticated = false;
-                            result.error = 'Unknown error logging in.';
+                            result.error = 'Must be an administrator to access this portion of the site.';
                             dfd.resolve(result);
-                        });
+                        }
                     } else {
-                        result.isAuthenticated = false;
-                        result.error = 'Error obtaining user information.';
-                        dfd.resolve(result);
-                    }
-                } else {
-                    // admin access not required; log in
-                    setUserId(data.user);
-                    setToken(data.token);
-                    result.isAuthenticated = module.isAuthenticated();
-                    if (result.isAuthenticated) {
-                        // set whether user has write access or not
-                        UserService.canWriteRecords(data.user, data.token).then(function(canWrite) {
-                            setCanWrite(canWrite).then(function() {
-                                $rootScope.$broadcast(events.loggedIn);
-                                dfd.resolve(result);
+                        // admin access not required; log in
+                        setUserId(data.user);
+                        setToken(data.token);
+                        result.isAuthenticated = module.isAuthenticated();
+                        if (result.isAuthenticated) {
+                            // set whether user has write access or not
+                            UserService.canWriteRecords(data.user, data.token).then(function(canWrite) {
+                                setPermissionsCookies(canWrite, isAdmin).then(function() {
+                                    $rootScope.$broadcast(events.loggedIn);
+                                    dfd.resolve(result);
+                                });
                             });
-                        });
-                    } else {
-                        result.error = 'Unknown error logging in.';
-                        setCanWrite(false);
-                        dfd.resolve(result);
+                        } else {
+                            result.error = 'Unknown error logging in.';
+                            setPermissionsCookies(false, false);
+                            dfd.resolve(result);
+                        }
                     }
-                }
-            })
-            .error(function(data, status) {
+                });
+            }).error(function(data, status) {
                 var error = _.values(data).join(' ');
                 if (data.username) {
                     error = 'Username field required.';
@@ -130,10 +128,17 @@
             return $cookies.getObject(canWriteCookieString) || false;
         };
 
+        /*
+         * Returns true if currently logged in user is an admin
+         */
+        module.isAdmin = function() {
+          return $cookies.getObject(isAdminCookieString) || false;
+        };
+
         module.logout =  function() {
             setUserId(null);
             $cookies.remove(tokenCookieString, {path: '/'});
-            setCanWrite(false).then(function() {
+            setPermissionsCookies(false, false).then(function() {
                 $rootScope.$broadcast(events.loggedOut);
                 if (cookieTimeout) {
                     $timeout.cancel(cookieTimeout);
@@ -152,7 +157,7 @@
         return module;
 
 
-        function setCanWrite(canWrite) {
+        function setPermissionsCookies(canWrite, isAdmin) {
             // set cookie after a timeout. Angular polls every 100ms to see if there are any
             // cookies to set; necessary to make sure cookie is set before full page refresh.
             //
@@ -160,6 +165,7 @@
             // https://github.com/angular/angular.js/blob/1bb33cccbe12bda4c397ddabab35ba1df85d5137/src/ngCookies/cookies.js#L58-L66
             return $timeout(function() {
                 $cookies.putObject(canWriteCookieString, canWrite, {path: '/'});
+                $cookies.putObject(isAdminCookieString, isAdmin, {path: '/'});
             }, 110);
         }
 

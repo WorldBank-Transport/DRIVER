@@ -15,6 +15,7 @@
         ctl.onLogoutButtonClicked = AuthService.logout;
         ctl.authenticated = AuthService.isAuthenticated();
         ctl.hasWriteAccess = AuthService.hasWriteAccess();
+        ctl.isAdmin = AuthService.isAdmin();
         ctl.onGeographySelected = onGeographySelected;
         ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
