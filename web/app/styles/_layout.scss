@@ -45,15 +45,17 @@ label {
 	margin-left: 0;
 	margin-right: 0;
 }
-.modal-content {
-    border-radius: 0;
-    border: none;
-}
 
 .acct-info {
     .row {
         margin-top: 10px;
     }
+}
+
+.error {
+    background-color: #EF6055;
+    padding: 5px;
+    margin-top: 5px;
 }
 
 /* MAIN BODY */

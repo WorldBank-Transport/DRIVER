@@ -150,6 +150,7 @@
                 templateUrl: 'scripts/audit/audit-download-modal-partial.html',
                 controller: 'AuditDownloadModalController as modal',
                 size: 'sm',
+                backdrop: 'static',
             });
         }
     }

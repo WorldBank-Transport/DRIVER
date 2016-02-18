@@ -1,3 +1,12 @@
+.modal-content {
+    border-radius: 0;
+    border: none;
+
+    .close {
+        @include close-modal();
+    }
+}
+
 .confirmation-modal {
     top: 175px;
 
@@ -32,4 +41,21 @@
             color: #000;
         }
     }
+}
+
+.audit-download {
+    .month-select {
+        width: 45%;
+    }
+
+    input[type="number"] {
+        width: 40%;
+    }
+}
+
+.fading-circle-spinner {
+    width: 15px;
+    height: 15px;
+    margin: 0px 0px -2px 0px;
+    display: inline-block;
 }
