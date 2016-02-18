@@ -207,10 +207,10 @@ class DriverRecordAuditLogViewSet(viewsets.ModelViewSet):
             raise ParseError('max_date and min_date must be less than one month apart')
         return super(DriverRecordAuditLogViewSet, self).list(request, *args, **kwargs)
 
-    # Override default CSV field ordering for ease of use
+    # Override default CSV field ordering and include URL
     def get_renderer_context(self):
         context = super(DriverRecordAuditLogViewSet, self).get_renderer_context()
-        context['header'] = ('date', 'username', 'record_uuid', 'action', 'uuid',)
+        context['header'] = self.serializer_class.Meta.fields
         return context
 
 
