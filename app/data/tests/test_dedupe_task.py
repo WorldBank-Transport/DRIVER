@@ -1,10 +1,9 @@
 from datetime import datetime, timedelta
-import uuid
 import pytz
 
 from ashlar.models import RecordSchema, RecordType, Record
 from data.models import DedupeJob, RecordDuplicate
-from data.tasks import deduplicate_records as task
+from data.tasks import find_duplicates as task
 
 from django.test import TestCase
 from django.test.utils import override_settings

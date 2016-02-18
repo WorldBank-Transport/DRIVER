@@ -34,7 +34,12 @@
         job="docker exec $(docker ps -q -f name=driver-celery) manage.py calculate_black_spots"
         hour=3 minute=10
 
-- name: Add remove duplicate records cronjob
-  cron: name="remove duplicate records"
-        job="docker exec $(docker ps -q -f name=driver-celery) manage.py remove_duplicates"
+- name: Add find duplicate records cronjob
+  cron: name="find duplicate records"
+        job="docker exec $(docker ps -q -f name=driver-celery) manage.py find_duplicate_records"
         hour=1 minute=10
+
+- name: Clean up CSV export files cronjob
+  cron: name="export file cleanup"
+        job="docker exec $(docker ps -q -f name=driver-celery) manage.py remove_old_exports"
+        minute=10

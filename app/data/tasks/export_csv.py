@@ -3,6 +3,8 @@ import os
 import tarfile
 import tempfile
 
+from django.conf import settings
+
 from celery import current_task
 from celery import shared_task
 from celery import states
@@ -42,7 +44,8 @@ def export_csv(query_key):
         tarinfo.mode = 0755
         return tarinfo
 
-    archive = tarfile.open('/var/www/media/{}.tar.gz'.format(query_key), mode='w:gz')
+    archive = tarfile.open(os.path.join(settings.CELERY_EXPORTS_FILE_PATH,
+                                        '{}.tar.gz'.format(query_key)), mode='w:gz')
     # Add a directory for the schema we're outputting
     dir = tarfile.TarInfo('schema-' + str(schema.pk))
     dir.type = tarfile.DIRTYPE
