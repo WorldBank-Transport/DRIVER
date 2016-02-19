@@ -22,12 +22,24 @@
 
             &:nth-child(2n) {
                 top: 52%;
+
+                @media screen and (max-width: 1024px) {
+                    top: 51%;
+                }
+            }
+
+            @media screen and (max-width: 1024px) {
+                height: 45%;
             }
         }
         &.block-1x1 {
             width: 26%;
             height: 28%;
             left: 44%;
+
+            @media screen and (max-width: 1024px) {
+                height: 30%;
+            }
 
             &:nth-child(2n) {
                 left: 72%;
@@ -76,6 +88,13 @@
                 margin: 14px 0;
                 font-size: 21px;
 
+                span {
+                    max-width: 65%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: inline-block;
+                }
                 .small { margin-top: 5px; }
             }
 
@@ -97,6 +116,10 @@
                 margin: 0;
 
                 b { font-weight: 700; color: #266DD3; }
+
+                @media screen and (max-width: 1024px) {
+                    font-size: 24px;
+                }
             }
             .nav-pills > li > a {
                 background: #CCC;
@@ -114,6 +137,10 @@
                 font-weight: 700;
                 margin: 30px 0 10px;
                 color: #266DD3;
+
+                @media screen and (max-width: 1024px) {
+                    font-size: 54px;
+                }
             }
             h2 {
                 font-size: 21px;
@@ -123,6 +150,14 @@
 
             .active > a {
                 background: #266DD3;
+            }
+
+            @media screen and (max-width: 1024px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
             }
         }
         &.toddow {

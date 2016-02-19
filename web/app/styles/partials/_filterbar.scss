@@ -12,6 +12,13 @@
         margin-right: 5px;
     }
 
+    .pull-left {
+        max-width: 90%;
+
+        @media screen and (max-width: 1024px) {
+            max-width: 85%;
+        }
+    }
     .navbar-nav {
          margin: 0 5px 0 0;
 
