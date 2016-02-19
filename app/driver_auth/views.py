@@ -17,12 +17,14 @@ from djangooidc.views import CLIENTS
 from ashlar.pagination import OptionalLimitOffsetPagination
 
 from driver_auth.serializers import UserSerializer, GroupSerializer
-from driver_auth.permissions import IsAdminOrReadSelfOnly, IsAdminOrReadOnly, is_admin_or_writer
+from driver_auth.permissions import (IsAdminOrReadSelfOnly, IsAdminOrReadOnly, is_admin_or_writer,
+                                     is_admin)
 
 # match what auth-service.js looks for
 USER_ID_COOKIE = 'AuthService.userId'
 TOKEN_COOKIE = 'AuthService.token'
 CAN_WRITE_COOKIE = 'AuthService.canWrite'
+ADMIN_COOKIE = 'AuthService.isAdmin'
 
 
 def authz_cb(request):
@@ -49,6 +51,8 @@ def authz_cb(request):
             # set cookie for frontend write access (will be false by default)
             if is_admin_or_writer(user):
                 response.set_cookie(CAN_WRITE_COOKIE, 'true')
+            if is_admin(user):
+                response.set_cookie(ADMIN_COOKIE, 'true')
             response.set_cookie(TOKEN_COOKIE, quote('"' + token.key + '"', safe=''))
             return response
         else:
