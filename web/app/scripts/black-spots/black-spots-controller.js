@@ -59,8 +59,11 @@
         }
 
         function getBlackspotUrl(blackspotSet) {
-            return TileUrlService.blackspotsUrl(
-                blackspotSet[blackspotSet.length - 1].uuid);
+            if (blackspotSet.length > 0) {
+                return TileUrlService.blackspotsUrl(blackspotSet[blackspotSet.length - 1].uuid);
+            } else {
+                return '';
+            }
         }
     }
 

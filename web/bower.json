@@ -16,6 +16,7 @@
     "angular-bootstrap-select": "0.0.5",
     "angular-uuid": "~0.1.0",
     "angular-local-storage": "0.2.2",
+    "angular-file-saver": "1.0.3",
     "bootstrap-sass-official": "^3.2.0",
     "ng-file-upload": "^4.0.0",
     "json-editor": "azavea/json-editor#v10.7.23",

@@ -20,7 +20,6 @@ class RecordAuditLogEntry(models.Model):
     username = models.CharField(max_length=30, db_index=True)
     # Same for the record; if the record this refers to is deleted we still want to be able to
     # determine which audit log entries pertained to that record.
-
     record = models.ForeignKey(Record, null=True, on_delete=models.SET_NULL)
     record_uuid = models.CharField(max_length=36, db_index=True)
 

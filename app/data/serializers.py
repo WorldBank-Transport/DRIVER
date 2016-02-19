@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from ashlar import serializers
 from ashlar import serializer_fields
@@ -38,8 +38,14 @@ class DetailsReadOnlyRecordSchemaSerializer(serializers.RecordSchemaSerializer):
 
 class RecordAuditLogEntrySerializer(ModelSerializer):
     """Serialize Audit Log Entries"""
+    record_url = SerializerMethodField()
+
+    def get_record_url(self, obj):
+        return settings.HOST_URL + '/#!/record/{}/details'.format(str(obj.uuid))
+
     class Meta:
         model = RecordAuditLogEntry
+        fields = ['date', 'username', 'action', 'record_uuid', 'record_url', 'uuid']
 
 
 class RecordDuplicateSerializer(ModelSerializer):

@@ -2,22 +2,49 @@
     'use strict';
 
     /* ngInject */
-    function AuditDownloadModalController($modalInstance, WebConfig) {
+    function AuditDownloadModalController($modalInstance, $scope, WebConfig, AuditLogs,
+                                          FileSaver, Blob) {
         var defaultDate = new Date();
         var timeZone = WebConfig.localization.timeZone;
         var ctl = this;
+        var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
+                          'September', 'October', 'November', 'December'];
 
-        ctl.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-                      'September', 'October', 'November', 'December'];
-        ctl.selectedYear = defaultDate.getFullYear();
-        ctl.selectedMonth = defaultDate.getMonth().toString();
-        onDateChange(ctl.selectedYear, ctl.selectedMonth);
-        ctl.onDateChange = onDateChange;
-        ctl.close = function () {
-            $modalInstance.close();
-        };
+        initialize();
 
-        function makeDateQueryStr(year, month) {
+        function initialize() {
+            ctl.pending = false;
+            ctl.error = null;
+            ctl.months = monthList;
+            ctl.currentYear = defaultDate.getFullYear();
+            ctl.currentMonth = defaultDate.getMonth();
+            ctl.selectedYear = ctl.currentYear;
+            ctl.selectedMonth = ctl.currentMonth;
+            onDateChange();
+
+            ctl.onDateChange = onDateChange;
+            ctl.onDownloadClicked = onDownloadClicked;
+            ctl.close = function () {
+                $modalInstance.close();
+            };
+        }
+
+        function onDateChange() {
+            ctl.error = null;
+            if (ctl.selectedYear === ctl.currentYear) {
+                ctl.months = _.slice(monthList, 0, ctl.currentMonth + 1);
+                if (ctl.selectedMonth >= ctl.months.length) {
+                    ctl.selectedMonth = ctl.months.length - 1;
+                }
+            } else {
+                ctl.months = monthList;
+            }
+        }
+
+        function onDownloadClicked() {
+            ctl.pending = true;
+            var year = ctl.selectedYear;
+            var month = ctl.selectedMonth;
             // Months are 1-indexed in the API; zero-indexed in the menu.
             var apiMonth = month + 1;
             // From http://stackoverflow.com/questions/315760/what-is-the-best-way-to-determine-the-number-of-days-in-a-month-with-javascript
@@ -28,14 +55,24 @@
             // return the last day of the month previous to March, which is the last day of
             // February.
             var daysInMonth = (new Date(year, apiMonth, 0)).getDate();
-            var startDate = moment.tz([year, month], timeZone);
-            var endDate = moment.tz([year, month, daysInMonth, 23, 59, 59, 999], timeZone);
-            return 'min_date=' + startDate.toISOString() + '&max_date=' + endDate.toISOString();
+            var startDate = moment.tz([year, month], timeZone).toISOString();
+            var endDate = moment.tz([year, month, daysInMonth, 23, 59, 59, 999],
+                                    timeZone).toISOString();
+            /* jshint camelcase: false */
+            AuditLogs.csv({ min_date: startDate, max_date: endDate }).$promise.then(function (data) {
+                /* jshint camelcase: true */
+                if (data.data === '') {
+                    ctl.error = 'No audit records exist for the selected month.';
+                } else {
+                    FileSaver.saveAs(new Blob([data.data], {type: 'application/csv'}),
+                                     csvFilename(year, apiMonth));
+                }
+                ctl.pending = false;
+            });
         }
 
-        function onDateChange(year, month) {
-            var monthNum = parseInt(month, 10);
-            ctl.dateQueryStr = makeDateQueryStr(year, monthNum);
+        function csvFilename(year, month) {
+            return 'audit-log-' + month + '-' + year + '.csv';
         }
     }
 
