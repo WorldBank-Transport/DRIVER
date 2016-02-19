@@ -1,11 +1,35 @@
+import json
 from mock import Mock, MagicMock
 
 from django.conf import settings
 from django.test import TestCase
 from django.contrib.auth.models import User, Group
 from rest_framework.request import Request
+from rest_framework.test import APIClient
 
 from driver_auth.permissions import IsOwnerOrAdmin, ReadersReadWritersWrite, IsAdminOrReadOnly
+from driver_auth.views import UserViewSet
+
+
+class UserViewTestCase(TestCase):
+    def setUp(self):
+        self.public = User.objects.create(username='public')
+
+        self.admin = User.objects.create(username='isAnAdmin')
+        admin_group = Group.objects.get(name=settings.DRIVER_GROUPS['ADMIN'])
+        self.admin.groups.add(admin_group)
+
+        self.client = APIClient()
+
+    def test_get_queryset(self):
+        """Test that queryset includes all users for admins"""
+        url = '/api/users/'
+        self.client.force_authenticate(user=self.admin)
+        response = json.loads(self.client.get(url).content)
+        self.assertEqual(len(response['results']), 3)  # Built-in admin always exists
+        self.client.force_authenticate(user=self.public)
+        response = json.loads(self.client.get(url).content)
+        self.assertEqual(len(response['results']), 1)
 
 
 class PermissionsTestCase(TestCase):
@@ -49,7 +73,6 @@ class PermissionsTestCase(TestCase):
         # admin user can access unowned object
         self.request.user = self.admin
         self.assertTrue(owner_or_admin.has_object_permission(self.request, MagicMock(), obj))
-
 
     def test_readers_read_writers_write(self):
         readers_writers = ReadersReadWritersWrite()

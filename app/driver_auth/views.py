@@ -82,7 +82,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         """Limit non-admin users to only see their own info"""
         user = self.request.user
-        if user.is_staff:
+        if is_admin(user):
             return self.queryset
         else:
             return self.queryset.filter(id=user.id)
