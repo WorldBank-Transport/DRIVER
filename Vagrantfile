@@ -52,7 +52,7 @@ Vagrant.configure("2") do |config|
     database.vm.hostname = "database"
     # installing redis on the database server
     database.hostmanager.aliases = %w(database.service.driver.internal redis.service.driver.internal)
-    database.vm.network "private_network", ip: "192.168.11.101"
+    database.vm.network "private_network", ip: "192.168.12.101"
 
     # For PGAdmin access
     database.vm.network "forwarded_port", guest: 5432, host: Integer(ENV.fetch("DRIVER_DATABASE_PORT_5432", 5432))
@@ -76,7 +76,7 @@ Vagrant.configure("2") do |config|
   config.vm.define "app" do |app|
     app.vm.hostname = "app"
     app.hostmanager.aliases = %w(app.service.driver.internal)
-    app.vm.network "private_network", ip: "192.168.11.102"
+    app.vm.network "private_network", ip: "192.168.12.102"
 
     # Disable because this will not get used.
     app.vm.synced_folder ".", "/vagrant", disabled: true
@@ -120,18 +120,20 @@ Vagrant.configure("2") do |config|
   config.vm.define "celery" do |celery|
     celery.vm.hostname = "celery"
     celery.hostmanager.aliases = %w(celery.service.driver.internal)
-    celery.vm.network "private_network", ip: "192.168.11.103"
+    celery.vm.network "private_network", ip: "192.168.12.103"
 
     # Disable because this will not get used.
     celery.vm.synced_folder ".", "/vagrant", disabled: true
 
-    celery.vm.synced_folder "./app", "/opt/app", type: "nfs"
-    celery.vm.synced_folder "./web", "/opt/web", type: "nfs"
-    celery.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs"
-    celery.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs"
+    celery.vm.synced_folder "./app", "/opt/app", type: "nfs", mount_options: ['rw', 'vers=4', 'tcp', 'nolock']
+    celery.vm.synced_folder "./web", "/opt/web", type: "nfs", mount_options: ['rw', 'vers=4', 'tcp', 'nolock']
+    celery.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs", mount_options: ['rw', 'vers=4', 'tcp', 'nolock']
+    celery.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs", mount_options: ['rw', 'vers=4', 'tcp', 'nolock']
 
     # jar build task on celery vm
-    celery.vm.synced_folder "./gradle", "/opt/gradle", type: "nfs"
+    celery.vm.synced_folder "./gradle", "/opt/gradle",
+      :nfs => true,
+      :mount_options => ['rw', 'vers=4', 'tcp', 'nolock']
 
     # Docker
     celery.vm.network "forwarded_port", guest: 2375, host: 2376
