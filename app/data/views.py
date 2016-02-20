@@ -88,9 +88,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         instance = serializer.save()
         self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.UPDATE)
 
-    # TODO: this appears to be mis-named; DestroyModelMixin method is perform_destroy
     @transaction.atomic
-    def perform_delete(self, instance):
+    def perform_destroy(self, instance):
         self.add_to_audit_log(self.request, instance, RecordAuditLogEntry.ActionTypes.DELETE)
         instance.delete()
 
