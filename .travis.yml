@@ -26,7 +26,7 @@ before_deploy:
 - openssl aes-256-cbc -K "${encrypted_71b51a189c16_key}" -iv "${encrypted_71b51a189c16_iv}"
   -in deployment/driver.pem.enc -out deployment/driver.pem -d
 - export PATH="$PATH:$HOME/.rvm/bin"
-- export PHANTOMJS_CDNURL=http://cnpmjs.org/downloads npm install phantomjs
+- export PHANTOMJS_CDNURL=http://cnpmjs.org/downloads
 deploy:
   provider: script
   script: ".travis/deploy.sh"
