@@ -4,7 +4,6 @@
 # Takes two command-line arguments:
 # 1 - UUID of schema
 # 2 - the schema, as a string
-# 3 - expiry time for JAR file in redis, in seconds
 
 # use temp file for output jar file and temp dir for input schemas
 MODEL_JAR=`mktemp data/models.XXXXX.jar`
@@ -59,6 +58,6 @@ fi
 redis-cli -h $DRIVER_REDIS_HOST -p $DRIVER_REDIS_PORT -n $DRIVER_REDIS_JAR_DB -x SET $1 < $MODEL_JAR
 
 # set expiry on key
-redis-cli -h $DRIVER_REDIS_HOST -p $DRIVER_REDIS_PORT -n $DRIVER_REDIS_JAR_DB EXPIRE $1 $3
+redis-cli -h $DRIVER_REDIS_HOST -p $DRIVER_REDIS_PORT -n $DRIVER_REDIS_JAR_DB EXPIRE $1 $DRIVER_JAR_TTL_SECONDS
 
 echo "Jar contents set in redis for schema ${1}. All done!"

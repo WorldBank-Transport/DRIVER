@@ -29,6 +29,8 @@ if not r.ping():
 pub = r.pubsub()
 pub.subscribe('jar-build')
 
+print('Successfully connected to redis')
+
 for message in pub.listen():
     if message['type'] == 'message':
         try:
@@ -55,5 +57,4 @@ for message in pub.listen():
         sys.stdout.flush()
 
 print('Redis subscription loop exited! Was there an error with the connection?')
-sys.stdout.flush()
 pub.close()
