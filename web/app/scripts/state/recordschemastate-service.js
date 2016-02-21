@@ -67,17 +67,22 @@
          * Wrapper (with super simple caching) for getting the record schema
          *
          * @param schemaID {string} The Schema UUID for which filterables are sought
+         *                          If called without schemaID, returns the last one loaded.
          */
         function get(schemaID) {
+            if (!schemaID) {
+                schemaID = lastChosen;
+            }
+
             if (!gettingSelected || schemaID !== lastChosen) {
                 gettingSelected = true;
+                lastChosen = schemaID;
             } else {
                 return selectedPromise;
             }
-            lastChosen = schemaID;
 
             var deferred = $q.defer();
-            if (!selected) {
+            if (!selected || selected.uuid !== schemaID) {
                 RecordSchemas.get({ id: schemaID }).$promise.then(function(schema) {
                     selected = schema;
                     deferred.resolve(schema);

@@ -3,8 +3,8 @@
 
     /* ngInject */
     function MapController($rootScope, $scope, $modal, AuthService, BoundaryState,
-                           InitialState, FilterState, Records, RecordSchemaState,
-                           RecordState, MapState, RecordAggregates) {
+                           InitialState, FilterState, Records, RecordTypes,
+                           RecordState, RecordSchemaState, MapState, RecordAggregates) {
         var ctl = this;
         ctl.userCanWrite = false;
 
@@ -15,25 +15,35 @@
          *  This half has the code that needs to be on scope for linking
          */
         $scope.showDetailsModal = function showDetailsModal(recordUUID) {
-            $modal.open({
-                templateUrl: 'scripts/views/record/details-modal-partial.html',
-                controller: 'RecordDetailsModalController as modal',
-                size: 'lg',
-                resolve: {
-                    record: function() {
-                        return Records.get({ id: recordUUID }).$promise;
-                    },
-                    recordType: function() {
-                        return ctl.recordType;
-                    },
-                    recordSchema: function() {
-                        return ctl.recordSchema;
-                    },
-                    userCanWrite: function() {
-                        return ctl.userCanWrite;
-                    }
-                }
-            });
+            RecordTypes.query({ record: recordUUID }).$promise
+                .then(function (result) {
+                    var recordType = result[0];
+                    /* jshint camelcase: false */
+                    RecordSchemaState.get(recordType.current_schema)
+                    /* jshint camelcase: true */
+                        .then(function(recordSchema) {
+                            $modal.open({
+                                templateUrl: 'scripts/views/record/details-modal-partial.html',
+                                controller: 'RecordDetailsModalController as modal',
+                                size: 'lg',
+                                resolve: {
+                                    record: function() {
+                                        return Records.get({ id: recordUUID }).$promise;
+                                    },
+                                    recordType: function () {
+                                        return recordType;
+                                    },
+                                    recordSchema: function () {
+                                        return recordSchema;
+                                    },
+                                    userCanWrite: function() {
+                                        return ctl.userCanWrite;
+                                    }
+                                }
+                            });
+
+                        });
+                });
         };
 
         InitialState.ready().then(init);
@@ -45,7 +55,6 @@
                 .then(BoundaryState.getSelected().then(function(selected) {
                     ctl.boundaryId = selected.uuid;
                 }))
-                .then(loadRecordSchema)
                 .then(loadRecords);
 
             // TODO: This also needs to listen for changing filters, both from the filterbar
@@ -63,17 +72,6 @@
                 ctl.boundaryId = selected.uuid;
                 loadRecords();
             });
-        }
-
-        function loadRecordSchema() {
-            /* jshint camelcase: false */
-            var currentSchemaId = ctl.recordType.current_schema;
-            /* jshint camelcase: true */
-
-            return RecordSchemaState.get(currentSchemaId)
-                .then(function(recordSchema) {
-                    ctl.recordSchema = recordSchema;
-                });
         }
 
         function loadRecords() {

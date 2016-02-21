@@ -36,6 +36,17 @@ label {
     }
 }
 
+.jse-MultiCheckboxControl {
+    label {
+        text-transform: initial;
+    }
+    input {
+        // margin-bottom: 3px;
+        margin-top: 3px;
+        margin-right: 2px
+    }
+}
+
 .checkbox label {
 	text-transform: initial;
 	margin-top: 5px;
