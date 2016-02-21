@@ -23,6 +23,7 @@ end script
 exec /usr/bin/docker run \
   --name driver-gradle \
   --volume {{ gradle_dir }}/data:/opt/app/data:rw \
+  --volume /dev/urandom:/dev/random \
   {% for k,v in driver_conf.items() -%}
   --env {{ k }}={{ v }} \
   {% endfor -%}

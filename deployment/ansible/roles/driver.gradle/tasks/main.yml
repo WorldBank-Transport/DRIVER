@@ -1,4 +1,10 @@
 ---
+- name: Install tools for VM entropy
+  apt: pkg={{ item }} state=present
+  with_items:
+    - pollen
+    - haveged
+
 - name: Ensure that gradle container mount directory exists
   file: path={{ gradle_dir }}/data
         recurse=yes
