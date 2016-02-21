@@ -2,5 +2,6 @@ build/
 .gradle/
 caches/
 native/
+daemon/
 *.jar
 *.keystore
