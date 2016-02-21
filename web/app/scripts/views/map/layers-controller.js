@@ -25,6 +25,7 @@
         ctl.tilekey = null;
         ctl.userCanWrite = false;
         ctl.eventLayerGroup = null;
+        ctl.secondaryLayerGroup = null;
         ctl.heatmapLayerGroup = null;
         ctl.blackspotLayerGroup = null;
         ctl.boundariesLayerGroup = null;
@@ -80,11 +81,15 @@
                         .then(function(filterables) {
                             ctl.recordSchemaFilterables = filterables;
                         });
+                    var secondary = RecordState.getSecondary();
+                    ctl.secondaryType = secondary.uuid;
+                    ctl.secondaryTypeLabel = secondary.label;
                     /* jshint camelcase: true */
                 } else {
                     ctl.recordSchemaFilterables = [];
                     ctl.recordType = 'ALL';
                     ctl.recordTypeLabel = 'Record';
+                    ctl.secondaryType = null;
                 }
             }).then(function() {
                 return BoundaryState.getSelected().then(function(selected) {
@@ -92,12 +97,9 @@
                         ctl.boundaryId = selected.uuid;
                     }
                 });
-            }).then(function() {
-                return QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
-                    .then(function(records) {
-                        ctl.tilekey = records.tilekey;
-                    });
-            }).then(function() {
+            }).then(
+                getTilekeys
+            ).then(function() {
                 // add base layer
                 var streetsOptions = {
                     attribution: cartoDBAttribution,
@@ -225,11 +227,9 @@
             $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
                 if (selected && selected.uuid !== ctl.boundaryId) {
                     ctl.boundaryId = selected.uuid;
-                    QueryBuilder.djangoQuery(true, 0, getAdditionalParams())
-                        .then(function(records) {
-                            ctl.tilekey = records.tilekey;
-                            ctl.setRecordLayers();
-                        });
+                    getTilekeys().then(function () {
+                        ctl.setRecordLayers();
+                    });
                 }
             });
         };
@@ -310,9 +310,7 @@
         }
 
         /**
-         * Returns a promise which resolves to the URls for the record,
-         * utfgridtile, heatmap, and blackspot layers as an array of form:
-         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl, blackspotsUtfGridUrl]
+         * Returns a promise which resolves to an object containing the URLs for all the layers
          */
         function getUrls(response) {
             var blackspotUrl = $q.when('');
@@ -330,39 +328,42 @@
                 blackspotUrl = TileUrlService.blackspotsUrl(uuid);
                 blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(uuid);
             }
+            var secondaryRecordsUrl = $q.when('');
+            var secondaryUtfGridUrl = $q.when('');
+            if (ctl.secondaryType) {
+                secondaryRecordsUrl = TileUrlService.secondaryTilesUrl(ctl.secondaryType);
+                secondaryUtfGridUrl = TileUrlService.recUtfGridTilesUrl(ctl.secondaryType);
+            }
+
             return $q.all(
-                [
-                    TileUrlService.recTilesUrl(ctl.recordType),
-                    TileUrlService.recUtfGridTilesUrl(ctl.recordType),
-                    TileUrlService.recHeatmapUrl(ctl.recordType),
-                    blackspotUrl,
-                    blackspotUtfUrl,
-                    blackspotTileKey
-                ]
+                {
+                    baseRecordsUrl:       TileUrlService.recTilesUrl(ctl.recordType),
+                    baseUtfGridUrl:       TileUrlService.recUtfGridTilesUrl(ctl.recordType),
+                    baseHeatmapUrl:       TileUrlService.recHeatmapUrl(ctl.recordType),
+                    blackspotsUrl:        blackspotUrl,
+                    blackspotsUtfGridUrl: blackspotUtfUrl,
+                    blackspotTileKey:     blackspotTileKey,
+                    secondaryRecordsUrl:  secondaryRecordsUrl,
+                    secondaryUtfGridUrl:  secondaryUtfGridUrl,
+                }
             );
         }
 
         /**
-         * Given an array of urls in form:
-         * [baseRecordsUrl, baseUtfGridUrl, baseHeatmapUrl, blackspotsUrl],
+         * Given the urls object returned by getUrls,
          * updates the layer groups so that the layer switcher does not
          * need to be re-initialized every time layer urls change
          */
         function updateLayerGroups(urls) {
-            var baseRecordsUrl = urls[0];
-            var baseUtfGridUrl = urls[1];
-            var baseHeatmapUrl = urls[2];
-            var blackspotsUrl = urls[3];
-            var blackspotsUtfGridUrl = urls[4];
-            var blackspotTileKey = urls[5];
-
             // N.B. The order in which UTF Grid layers are added to the map determines their click
             // event precedence; layers are added on top of each other, so the last layer added
             // will intercept click events first; this is apparently the case regardless of
             // whether a z-index has been set on some or all of the UTF Grid layers.
-            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
-            updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
-            updateHeatmapLayer(baseHeatmapUrl);
+            updateBlackspotLayer(urls.blackspotsUrl, urls.blackspotsUtfGridUrl,
+                                 urls.blackspotTileKey);
+            updateSecondaryLayer(urls.secondaryRecordsUrl, urls.secondaryUtfGridUrl);
+            updateEventLayer(urls.baseRecordsUrl, urls.baseUtfGridUrl);
+            updateHeatmapLayer(urls.baseHeatmapUrl);
         }
 
         /**
@@ -416,6 +417,7 @@
             var overlays = angular.extend(
                 {
                     Events: ctl.eventLayerGroup,
+                    Interventions: ctl.secondaryLayerGroup,
                     Heatmap: ctl.heatmapLayerGroup,
                     Blackspots: ctl.blackspotLayerGroup
                 },
@@ -460,7 +462,7 @@
                     zIndex: 7
                 });
 
-            addGridRecordEvent(utfGridRecordsLayer);
+            addGridRecordEvent(utfGridRecordsLayer, { label: ctl.recordTypeLabel });
 
             if (!ctl.eventLayerGroup) {
                 ctl.eventLayerGroup = new L.layerGroup(
@@ -479,10 +481,48 @@
         }
 
         /**
+         * Updates the secondary layer group
+         * The secondary layer group is composed of the records layer for the actual
+         * records on the map, and the utfGridRecords layer which is for the
+         * click events and popup
+         */
+        function updateSecondaryLayer(recordsUrl, utfGridUrl){
+            var recordsLayerOptions = angular.extend(defaultLayerOptions, {
+                zIndex: 9
+            });
+
+            var recordsLayer = new L.tileLayer(
+                ctl.getFilterQuery(recordsUrl, ctl.secondaryTilekey),
+                recordsLayerOptions);
+
+            var utfGridRecordsLayer = new L.UtfGrid(
+                ctl.getFilterQuery(utfGridUrl, ctl.secondaryTilekey), {
+                    useJsonP: false,
+                    zIndex: 11
+                });
+
+            addGridRecordEvent(utfGridRecordsLayer, { label: ctl.secondaryTypeLabel });
+
+            if (!ctl.secondaryLayerGroup) {
+                ctl.secondaryLayerGroup = new L.layerGroup(
+                    [recordsLayer, utfGridRecordsLayer]);
+            } else {
+                _.forEach(ctl.secondaryLayerGroup._layers,function(layer) {
+                    if (typeof layer.off === 'function') {
+                        layer.off('click');
+                    }
+                    ctl.secondaryLayerGroup.removeLayer(layer);
+                });
+                ctl.secondaryLayerGroup.addLayer(recordsLayer);
+                ctl.secondaryLayerGroup.addLayer(utfGridRecordsLayer);
+            }
+        }
+
+        /**
          * Adds the onClick event to the specified utfGridRecordsLayer
          * in order to create the info popups
          */
-        function addGridRecordEvent(utfGridRecordsLayer) {
+        function addGridRecordEvent(utfGridRecordsLayer, popupParams) {
             utfGridRecordsLayer.on('click', function(e) {
                 // ignore clicks where there is no event record
                 if (!e.data) {
@@ -499,7 +539,7 @@
 
                 new L.popup(popupOptions)
                     .setLatLng(e.latlng)
-                    .setContent(ctl.buildRecordPopup(e.data))
+                    .setContent(ctl.buildRecordPopup(e.data, popupParams))
                     .openOn(ctl.map);
 
                 $compile($('#record-popup'))($scope);
@@ -633,13 +673,13 @@
          * @param {Object} UTFGrid interactivity data from interaction event object
          * @returns {String} HTML snippet for a Leaflet popup.
          */
-        ctl.buildRecordPopup = function(record) {
+        ctl.buildRecordPopup = function(record, popupParams) {
             // add header with event date constant field
             /* jshint camelcase: false */
             // DateTimes come back from Windshaft without tz information, but they're all UTC
             var occurredStr = localDateTimeFilter(moment.utc(record.occurred_from), dateFormat);
             var str = '<div id="record-popup" class="record-popup">';
-            str += '<div><h5>' + ctl.recordTypeLabel + ' Details</h5><h3>' + occurredStr + '</h3>';
+            str += '<div><h5>' + popupParams.label + ' Details</h5><h3>' + occurredStr + '</h3>';
             /* jshint camelcase: true */
 
             // The ng-click here refers to a function which sits on the map-controller's scope
@@ -724,14 +764,28 @@
             return params;
         }
 
+        function getTilekeys() {
+            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams()).then(
+                function(records) { ctl.tilekey = records.tilekey; }
+            );
+            var secondary = $q.resolve('');
+            if (ctl.secondaryType) {
+                var params = getAdditionalParams();
+                /* jshint camelcase: false */
+                params.record_type = ctl.secondaryType;
+                /* jshint camelcase: true */
+                secondary = QueryBuilder.djangoQuery(0, params, true, false).then(
+                    function(records) { ctl.secondaryTilekey = records.tilekey; }
+                );
+            }
+            return $q.all([primary, secondary]);
+        }
+
         /**
          * Update map when filters change
          */
         var filterHandler = $rootScope.$on('driver.filterbar:changed', function() {
-
-            // get the raw SQL for the filter to send along to Windshaft
-            QueryBuilder.djangoQuery(true, 0, getAdditionalParams()).then(function(records) {
-                ctl.tilekey = records.tilekey;
+            getTilekeys().then(function() {
                 ctl.setRecordLayers();
             });
         });
