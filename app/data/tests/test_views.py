@@ -50,7 +50,9 @@ class ViewTestSetUpMixin(object):
         self.afterNow = self.now + timedelta(days=1)
 
         self.tod = self.now.hour
-        self.dow = self.now.isoweekday() + 1  # 1 added here to handle differences in indexing
+
+        # 1 added here to handle differences in indexing
+        self.dow = self.now.isoweekday() + 1 if self.now.isoweekday() + 1 <= 7 else 1
 
         self.record_type = RecordType.objects.create(label='foo', plural_label='foos')
         self.schema = RecordSchema.objects.create(schema={"type": "object"},

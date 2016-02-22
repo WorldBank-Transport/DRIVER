@@ -236,6 +236,9 @@ REST_FRAMEWORK = {
 REDIS_HOST = os.environ.get('DRIVER_REDIS_HOST', '127.0.0.1')
 REDIS_PORT = os.environ.get('DRIVER_REDIS_PORT', '6379')
 
+# JAR file cache TLL (keep in redis for this many seconds since creation or last retrieval)
+JARFILE_REDIS_TTL_SECONDS = os.environ.get('DRIVER_JAR_TTL_SECONDS', 60 * 60 * 24 * 30) # 30 days
+
 CACHES = {
     "default": {
         'BACKEND': 'django_redis.cache.RedisCache',
@@ -248,6 +251,21 @@ CACHES = {
             'SOCKET_CONNECT_TIMEOUT': 5, # seconds
             'SOCKET_TIMEOUT': 5, # seconds
             'MAX_ENTRIES': 900, # defaults to 300
+            'CULL_FREQUENCY': 4, # fraction culled when max reached (1 / CULL_FREQ); default: 3
+            # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
+        }
+    },
+    "jars": {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/3',
+        'TIMEOUT': JARFILE_REDIS_TTL_SECONDS,
+        'KEY_PREFIX': None,
+        'VERSION': 1,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': 5, # seconds
+            'SOCKET_TIMEOUT': 5, # seconds
+            'MAX_ENTRIES': 300, # defaults to 300
             'CULL_FREQUENCY': 4, # fraction culled when max reached (1 / CULL_FREQ); default: 3
             # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
         }

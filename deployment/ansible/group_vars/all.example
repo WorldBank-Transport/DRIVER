@@ -54,3 +54,6 @@ local_center_lat_lon: [12.375, 121.5]
 forecast_io_api_key: ''
 
 celery_host_address: "celery.service.driver.internal"
+
+## Android jar signing settings
+keystore_password: 'driverkeystore'

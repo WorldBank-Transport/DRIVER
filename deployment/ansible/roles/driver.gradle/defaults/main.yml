@@ -1,0 +1,13 @@
+---
+
+redis_jar_db: 3
+redis_jar_ttl_seconds: 2592000 # 30 days
+
+driver_conf:
+  DRIVER_REDIS_HOST: "{{ redis_bind_address }}"
+  DRIVER_REDIS_PORT: "{{ redis_port }}"
+  DRIVER_REDIS_JAR_DB: "{{ redis_jar_db }}"
+  DRIVER_JAR_TTL_SECONDS: "{{ redis_jar_ttl_seconds }}"
+  DRIVER_KEYSTORE_PASSWORD: "{{ keystore_password }}"
+
+gradle_dir: "/opt/gradle"

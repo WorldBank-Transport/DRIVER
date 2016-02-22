@@ -14,7 +14,7 @@ var redisConfig = {
     port: redisPort
 };
 
-// Create a connection to the redis client (db #1) for tilekey lookups
+// Create a connection to the redis client (db #2) for tilekey lookups
 console.log('Creating redis client');
 var redisClient = Redis.createClient(redisConfig.port, redisConfig.host);
 redisClient.select(2);

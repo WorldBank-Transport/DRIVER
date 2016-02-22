@@ -1,0 +1,6 @@
+---
+- name: Restart Gradle
+  service: name=driver-gradle state=restarted
+
+- name: Restart Docker
+  service: name=docker state=restarted
