@@ -5,17 +5,6 @@
     - pollen
     - haveged
 
-# TODO: remove this workaround when fixed by kernel update
-- name: Install backported kernel for AUFS stability
-  apt: pkg={{ item }} state=present
-  with_items:
-    - linux-headers-3.19.0-39
-    - linux-headers-3.19.0-39-generic
-    - linux-image-3.19.0-39-generic
-    - linux-image-extra-3.19.0-39-generic
-  notify:
-    - Restart Docker
-
 - name: Ensure that gradle container mount directory exists
   file: path={{ gradle_dir }}/data
         recurse=yes
