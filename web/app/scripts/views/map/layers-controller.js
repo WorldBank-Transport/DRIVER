@@ -116,6 +116,16 @@
                 ctl.editLayers = new L.FeatureGroup();
                 ctl.map.addLayer(ctl.editLayers);
 
+                // Drawn polygons default to clickable: true, which swallows click events
+                // before they get to the map at all, which prevents them from making it into
+                // Leaflet's event system.
+                // Setting clickable: false in shapeOptions solves the immediate issue, but
+                // then makes it impossible to delete a polygon after it has been created.
+                // This re-fires any click events on the polygon onto the map.
+                ctl.editLayers.on('click', function(e) {
+                  ctl.map.fire('click', e);
+                });
+
                 ctl.drawControl = new L.Control.Draw({
                     draw: {
                         // TODO: figure out a good way to export circles.
@@ -346,9 +356,13 @@
             var blackspotsUtfGridUrl = urls[4];
             var blackspotTileKey = urls[5];
 
+            // N.B. The order in which UTF Grid layers are added to the map determines their click
+            // event precedence; layers are added on top of each other, so the last layer added
+            // will intercept click events first; this is apparently the case regardless of
+            // whether a z-index has been set on some or all of the UTF Grid layers.
+            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
             updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
             updateHeatmapLayer(baseHeatmapUrl);
-            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
         }
 
         /**
