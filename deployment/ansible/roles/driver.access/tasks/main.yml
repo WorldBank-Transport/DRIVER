@@ -1,7 +1,7 @@
 ---
 
 - name: Set table-level access privileges for Windshaft DB role
-  sudo_user: postgres
+  become_user: postgres
   postgresql_privs: >
     state=present
     type=table

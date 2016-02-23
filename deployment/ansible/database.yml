@@ -10,7 +10,7 @@
 
 - hosts: database-servers
 
-  sudo: yes
+  become: True
 
   pre_tasks:
     - name: Update APT cache
