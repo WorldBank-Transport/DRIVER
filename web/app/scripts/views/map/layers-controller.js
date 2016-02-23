@@ -63,8 +63,6 @@
          */
         // TODO: Split into smaller directives to encapsulate related functionality and simplify
         // this function.
-        // TODO: Enable polygon filtering whenever Windshaft boundary filtering is fixed (currently,
-        // all but the simplest boundaries result in a 414 URI Too Long
         ctl.init = function(map) {
 
             ctl.map = map;
@@ -117,6 +115,16 @@
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
                 ctl.map.addLayer(ctl.editLayers);
+
+                // Drawn polygons default to clickable: true, which swallows click events
+                // before they get to the map at all, which prevents them from making it into
+                // Leaflet's event system.
+                // Setting clickable: false in shapeOptions solves the immediate issue, but
+                // then makes it impossible to delete a polygon after it has been created.
+                // This re-fires any click events on the polygon onto the map.
+                ctl.editLayers.on('click', function(e) {
+                  ctl.map.fire('click', e);
+                });
 
                 ctl.drawControl = new L.Control.Draw({
                     draw: {
@@ -348,9 +356,13 @@
             var blackspotsUtfGridUrl = urls[4];
             var blackspotTileKey = urls[5];
 
+            // N.B. The order in which UTF Grid layers are added to the map determines their click
+            // event precedence; layers are added on top of each other, so the last layer added
+            // will intercept click events first; this is apparently the case regardless of
+            // whether a z-index has been set on some or all of the UTF Grid layers.
+            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
             updateEventLayer(baseRecordsUrl, baseUtfGridUrl);
             updateHeatmapLayer(baseHeatmapUrl);
-            updateBlackspotLayer(blackspotsUrl, blackspotsUtfGridUrl, blackspotTileKey);
         }
 
         /**
@@ -529,6 +541,7 @@
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 3
             });
+            // Clear blackspot layer group, or initialize it if it doesn't exist
             if (ctl.blackspotLayerGroup) {
                 _.forEach(ctl.blackspotLayerGroup._layers,function(layer) {
                     if (typeof layer.off === 'function') {
@@ -539,12 +552,18 @@
             } else {
                 ctl.blackspotLayerGroup = new L.layerGroup([]);
             }
-            if (blackspotsUrl) {
+
+            // Add Blackspot tiles, optionally filtered by a tilekey
+            if (blackspotsUrl && tilekey) {
                 ctl.blackspotLayerGroup.addLayer(
                     new L.tileLayer(addBlackspotParams(blackspotsUrl, tilekey),
                                     blackspotOptions));
+            } else if (blackspotsUrl) {
+                ctl.blackspotLayerGroup.addLayer(
+                    new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
 
+            // Add blackspot interactivity via UtfGrid.
             if (blackspotsUtfGridUrl){
                 var blackspotUtfGridLayer = new L.UtfGrid(
                     addBlackspotParams(blackspotsUtfGridUrl, tilekey),
@@ -554,10 +573,6 @@
                     });
                 addGridBlackspotEvent(blackspotUtfGridLayer);
                 ctl.blackspotLayerGroup.addLayer(blackspotUtfGridLayer);
-            }
-            if (blackspotsUrl) {
-                ctl.blackspotLayerGroup.addLayer(
-                    new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
         }
 
