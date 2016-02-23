@@ -27,7 +27,7 @@ echo "keystore_password: \"${DRIVER_KEYSTORE_PASSWORD}\"" \
     >> deployment/ansible/group_vars/all
 set -x
 
-ansible-galaxy install -f -r deployment/ansible/roles.txt -p deployment/ansible/roles
+ansible-galaxy install -f -r deployment/ansible/roles.yml -p deployment/ansible/roles
 
 chmod 0600 deployment/driver.pem
 

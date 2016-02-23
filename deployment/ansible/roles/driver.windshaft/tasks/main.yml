@@ -8,7 +8,7 @@
                copy_links=no
                src="../../windshaft/"
                dest="/opt/windshaft"
-  sudo: False
+  become: False
   when: staging
   notify:
     - Restart Windshaft

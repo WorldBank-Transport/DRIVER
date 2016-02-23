@@ -11,7 +11,7 @@
 
 - hosts: app-servers
 
-  sudo: True
+  become: True
 
   pre_tasks:
     - name: Update APT cache
@@ -24,7 +24,7 @@
 
 - hosts: database-servers
 
-  sudo: True
+  become: True
 
   roles:
     - { role: "driver.access" }

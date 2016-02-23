@@ -11,7 +11,7 @@
 
 - hosts: celery-servers
 
-  sudo: True
+  become: True
 
   vars:
     celery: True
