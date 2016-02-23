@@ -11,6 +11,7 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 describe('driver.views.record: RecordAddEdit', function () {
 
     beforeEach(module('ase.mock.resources'));
+    beforeEach(module('nominatim.mock'));
     beforeEach(module('ase.auth'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.mock.resources'));
@@ -20,10 +21,12 @@ describe('driver.views.record: RecordAddEdit', function () {
     var $compile;
     var $httpBackend;
     var $rootScope;
+    var $stateParams;
     var AuthService;
     var RecordTypes;
     var DriverResourcesMock;
     var ResourcesMock;
+    var NominatimMock;
 
     beforeEach(function() {
         var $window;
@@ -58,21 +61,22 @@ describe('driver.views.record: RecordAddEdit', function () {
             $provide.constant('$window', $window);
         });
 
-        inject(function (_$compile_, _$httpBackend_, _$rootScope_,
+        inject(function (_$compile_, _$httpBackend_, _$rootScope_, _$stateParams_, _NominatimMock_,
                          _AuthService_, _RecordTypes_, _DriverResourcesMock_, _ResourcesMock_) {
 
             $compile = _$compile_;
             $httpBackend = _$httpBackend_;
             $rootScope = _$rootScope_;
+            $stateParams = _$stateParams_;
             AuthService = _AuthService_;
             RecordTypes = _RecordTypes_;
             DriverResourcesMock = _DriverResourcesMock_;
             ResourcesMock = _ResourcesMock_;
+            NominatimMock = _NominatimMock_;
         });
     });
 
     it('should load directive', function () {
-
         // allow user to write records
         spyOn(AuthService, 'hasWriteAccess').and.returnValue(true);
 
@@ -83,13 +87,19 @@ describe('driver.views.record: RecordAddEdit', function () {
         $httpBackend.flush();
         $rootScope.$digest();
 
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var recordUrl = /\/api\/records/;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + ResourcesMock.RecordSchema.uuid);
+        var recordId = DriverResourcesMock.RecordResponse.results[0].uuid;
+        $stateParams.recorduuid = recordId;
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
+        var recordTypeUrl = new RegExp('api/recordtypes/.*record=' + recordId);
+        var recordUrl = new RegExp('api/records/' + recordId);
+        var nominatimRevUrl = /\/reverse/;
 
+
+        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, ResourcesMock.RecordSchema);
+        $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         var scope = $rootScope.$new();
         var element = $compile('<driver-record-add-edit></driver-record-add-edit>')(scope);
@@ -98,8 +108,8 @@ describe('driver.views.record: RecordAddEdit', function () {
         // TODO: there's a hard-to-debug exception raised here when running the following code.
         // Commenting it out until we can investigate further.
         // Seems to be related to the element reference in the dependent JSON editor directive link.
-        //$httpBackend.flush();
-        //$httpBackend.verifyNoOutstandingRequest();
+        // $httpBackend.flush();
+        // $httpBackend.verifyNoOutstandingRequest();
 
         expect(element.find('json-editor').length).toEqual(1);
     });

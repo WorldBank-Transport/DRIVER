@@ -45,7 +45,6 @@ describe('driver.export: ExportController', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         var recordSchemaUrl = /\/api\/recordschemas\/\?limit=all/;
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchemaResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         $scope.recordQueryParams = {};
         Controller = $controller('ExportController', { $scope: $scope });

@@ -30,7 +30,6 @@ describe('driver.map-layers.recent-events: Recent Events Layer Directive', funct
         $httpBackend.whenGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(/\/api\/boundarypolygons/)
             .respond(ResourcesMock.BoundaryNoGeomResponse);
-        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(/\api\/records/).respond(200, ResourcesMock.RecordResponse);
 
         $rootScope.$digest();
