@@ -63,8 +63,6 @@
          */
         // TODO: Split into smaller directives to encapsulate related functionality and simplify
         // this function.
-        // TODO: Enable polygon filtering whenever Windshaft boundary filtering is fixed (currently,
-        // all but the simplest boundaries result in a 414 URI Too Long
         ctl.init = function(map) {
 
             ctl.map = map;
@@ -529,6 +527,7 @@
             var blackspotOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 3
             });
+            // Clear blackspot layer group, or initialize it if it doesn't exist
             if (ctl.blackspotLayerGroup) {
                 _.forEach(ctl.blackspotLayerGroup._layers,function(layer) {
                     if (typeof layer.off === 'function') {
@@ -539,12 +538,18 @@
             } else {
                 ctl.blackspotLayerGroup = new L.layerGroup([]);
             }
-            if (blackspotsUrl) {
+
+            // Add Blackspot tiles, optionally filtered by a tilekey
+            if (blackspotsUrl && tilekey) {
                 ctl.blackspotLayerGroup.addLayer(
                     new L.tileLayer(addBlackspotParams(blackspotsUrl, tilekey),
                                     blackspotOptions));
+            } else if (blackspotsUrl) {
+                ctl.blackspotLayerGroup.addLayer(
+                    new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
 
+            // Add blackspot interactivity via UtfGrid.
             if (blackspotsUtfGridUrl){
                 var blackspotUtfGridLayer = new L.UtfGrid(
                     addBlackspotParams(blackspotsUtfGridUrl, tilekey),
@@ -554,10 +559,6 @@
                     });
                 addGridBlackspotEvent(blackspotUtfGridLayer);
                 ctl.blackspotLayerGroup.addLayer(blackspotUtfGridLayer);
-            }
-            if (blackspotsUrl) {
-                ctl.blackspotLayerGroup.addLayer(
-                    new L.tileLayer(blackspotsUrl, blackspotOptions));
             }
         }
 
