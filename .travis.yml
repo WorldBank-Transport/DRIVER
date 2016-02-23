@@ -19,6 +19,8 @@ install:
   ./schema_editor
 - docker build -f ./web/Dockerfile -t "quay.io/azavea/driver-web:${TRAVIS_COMMIT:0:7}"
   ./web
+- docker build -f ./gradle/Dockerfile -t "quay.io/azavea/driver-gradle:${TRAVIS_COMMIT:0:7}"
+  ./gradle
 script: ".travis/script.sh"
 before_deploy:
 - docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
