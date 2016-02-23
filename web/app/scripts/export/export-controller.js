@@ -40,7 +40,7 @@
 
             var params = _.extend({ tilekey: true, limit: 0 }, ctl.recordQueryParams);
             // Get a tilekey then trigger an export
-            QueryBuilder.djangoQuery(true, 0, params).then(function(records) {
+            QueryBuilder.djangoQuery(0, params).then(function(records) {
                 Exports.create({ tilekey: records.tilekey },
                     function (result) {pollForDownload(result.taskid); },
                     function () { ctl.error = 'Error initializing export.'; }

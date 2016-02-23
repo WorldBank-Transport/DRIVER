@@ -16,32 +16,37 @@
         /**
          * Retrieve TODDOW data - API mirroring the query builder service
          */
-        function toddow(doFilter, extraParams) {
+        function toddow(extraParams, doAttrFilters, doJsonFilters) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doFilter = doFilter === undefined ? true : doFilter;
-            QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
-                // toddow should never use a limit
-                params = _.extend(params, extraParams);
-                if (params.limit) {
-                    delete params.limit;
-                }
+            doAttrFilters = doAttrFilters !== false;
+            doJsonFilters = doJsonFilters !== false;
+            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters).then( // 0 for offset
+                function(params) {
+                    // toddow should never use a limit
+                    params = _.extend(params, extraParams);
+                    if (params.limit) {
+                        delete params.limit;
+                    }
 
-                Records.toddow(params).$promise.then(function(toddowData) {
-                    deferred.resolve(toddowData);
-                });
-            });
+                    Records.toddow(params).$promise.then(function(toddowData) {
+                        deferred.resolve(toddowData);
+                    });
+                }
+            );
             return deferred.promise;
         }
 
         /**
          * Retrieve stepwise data - API mirroring the query builder service
          */
-        function stepwise(doFilter, extraParams) {
+        function stepwise(extraParams, doAttrFilters, doJsonFilters) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doFilter = doFilter === undefined ? true : doFilter;
-            QueryBuilder.assembleParams(doFilter, 0).then(function(params) {  // 0 for offset
+            doAttrFilters = doAttrFilters !== false;
+            doJsonFilters = doJsonFilters !== false;
+            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters).then( // 0 for offset
+                function(params) {
                 // stepwise should never use a limit
                 params = _.extend(params, extraParams);
                 if (params.limit) {

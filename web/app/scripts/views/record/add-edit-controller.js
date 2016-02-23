@@ -328,7 +328,6 @@
         }
 
         function onSaveClicked() {
-
             var validationErrorMessage = constantFieldsValidationErrors();
 
             if (ctl.editor.errors.length > 0) {
