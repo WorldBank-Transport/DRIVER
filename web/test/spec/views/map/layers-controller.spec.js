@@ -57,8 +57,9 @@ describe('driver.views.map: Layers Controller', function () {
         var recordTypeUrl = /\/api\/recordtypes\//;
         var boundaryUrl = /\/api\/boundaries\//;
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
-        var recordsUrl = /\/api\/records\//;
-        var recordSchemaUrl = /\/api\/recordschemas/;
+        // var recordsUrl = /\/api\/records\/.*record_type/;
+        var tilekeyUrl = /\/api\/records\/\?.*tilekey=true/;
+        var recordSchemaUrl = /\/api\/recordschemas\/[a-e0-9-]+/;
         var blackspotUrl = /\/api\/blackspotsets/;
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundaryUrl).respond(200, DriverResourcesMock.BoundaryResponse);
@@ -66,10 +67,14 @@ describe('driver.views.map: Layers Controller', function () {
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
-        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
-        $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
-        $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
-        $httpBackend.expectGET(recordsUrl).respond(200, '{"tilekey": "xxx"}');
+
+        // Two record layers (primary and secondary), each gets called once on init then once
+        // triggered by the filterbar loading
+        $httpBackend.expectGET(tilekeyUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(tilekeyUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(tilekeyUrl).respond(200, '{"tilekey": "xxx"}');
+        $httpBackend.expectGET(tilekeyUrl).respond(200, '{"tilekey": "xxx"}');
+
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($scope);
@@ -93,7 +98,7 @@ describe('driver.views.map: Layers Controller', function () {
 
         var expected = '<div id="record-popup" class="record-popup"><div><h5>Accident Details</h5><h3>7/31/2015, 1:36:29 AM</h3><a ng-click="showDetailsModal(\'35d74ce1-7b08-486b-b791-da9bc1e93cfb\')"><span class="glyphicon glyphicon-log-in"></span> View</a></div></div>';
 
-        var popup = Controller.buildRecordPopup(record);
+        var popup = Controller.buildRecordPopup(record, { label: Controller.recordType.label });
         expect(popup).toEqual(expected);
     });
 
@@ -112,7 +117,7 @@ describe('driver.views.map: Layers Controller', function () {
 
     it('should listen for record type change', function() {
         spyOn(Controller, 'setRecordLayers');
-        RecordState.setSelected({uuid: 'foo'});
+        RecordState.setSelected(ResourcesMock.RecordTypeResponse.results[2]);
         expect(Controller.setRecordLayers).toHaveBeenCalled();
     });
 

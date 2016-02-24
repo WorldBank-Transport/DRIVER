@@ -45,7 +45,6 @@ describe('driver.resources: QueryBuilder', function () {
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
 
         $rootScope.$apply();

@@ -27,28 +27,29 @@ describe('driver.views.record: AddEditController', function () {
         DriverResourcesMock = _DriverResourcesMock_;
         NominatimMock = _NominatimMock_;
         ResourcesMock = _ResourcesMock_;
-    }));
 
-    it('should fill in _localIds', function () {
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var recordId = DriverResourcesMock.RecordResponse.results[0].uuid;
+        var recordSchema = ResourcesMock.RecordSchema;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
+        var recordTypeUrl = new RegExp('api/recordtypes/.*record=' + recordId);
         var recordUrl = /\/api\/records/;
         var nominatimRevUrl = /\/reverse/;
 
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
+        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         Controller = $controller('RecordAddEditController', {
             $scope: $scope,
             $stateParams: { recorduuid: DriverResourcesMock.RecordResponse.results[0].uuid }
         });
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
         $scope.$apply();
+    }));
 
+    it('should fill in _localIds', function () {
         // Mock the editor so we can receive the value updates
         var editorValue = null;
         var editor = {
@@ -76,32 +77,10 @@ describe('driver.views.record: AddEditController', function () {
         expect(editorValue.Details._localId).toMatch(uuidR);
         expect(editorValue.Person[0]._localId).toEqual(testUuid);
 
-        $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should allow editing a record', function () {
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var recordUrl = /\/api\/records/;
-        var nominatimRevUrl = /\/reverse/;
-
-
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
-
-        Controller = $controller('RecordAddEditController', {
-            $scope: $scope,
-            $stateParams: { recorduuid: DriverResourcesMock.RecordResponse.results[0].uuid }
-        });
-        $scope.$apply();
-        $httpBackend.flush();
-
         // Should submit a PATCH request to record endpoint
         var recordEndpoint = new RegExp('api/records/');
         $httpBackend.expectPATCH(recordEndpoint).respond(200);
@@ -112,33 +91,6 @@ describe('driver.views.record: AddEditController', function () {
     });
 
     it('should allow adding a new record', function () {
-        var records = DriverResourcesMock.RecordResponse;
-        var record = records.results[0];
-
-        // set coordinate as happens for a new record
-        $scope.geom = {
-            lat: record.geom.coordinates[0],
-            lng: record.geom.coordinates[1]
-        };
-        delete record.geom;
-        delete record.occurred_to;
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var recordUrl = /\/api\/records/;
-
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-
-        Controller = $controller('RecordAddEditController', {
-            $scope: $scope
-        });
-        $scope.$apply();
-        $httpBackend.flush();
-
         // Should submit a PUT request to record endpoint
         var recordEndpoint = new RegExp('api/records/');
         $httpBackend.expectPUT(recordEndpoint).respond(200);
@@ -148,25 +100,7 @@ describe('driver.views.record: AddEditController', function () {
     });
 
     it('should fix occurred from for pickers', function () {
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var recordUrl = /\/api\/records/;
-        var nominatimRevUrl = /\/reverse/;
-
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
         var record = DriverResourcesMock.RecordResponse.results[0];
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(recordUrl).respond(200, record);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-        $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
-
-        Controller = $controller('RecordAddEditController', {
-            $scope: $scope,
-            $stateParams: { recorduuid: DriverResourcesMock.RecordResponse.results[0].uuid }
-        });
-        $scope.$apply();
 
         var original = new Date(record.occurred_from);
         Controller.fixOccurredDTForPickers(record);
@@ -176,7 +110,6 @@ describe('driver.views.record: AddEditController', function () {
         // Occured from should equal original after reverting the fix
         expect(record.occurred_from).toEqual(original);
 
-        $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
     });
 

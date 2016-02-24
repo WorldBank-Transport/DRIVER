@@ -55,7 +55,6 @@ describe('driver.views.map: Layers Directive', function () {
         var blackspotUrl = /\/api\/blackspotsets/;
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
         $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
-        $httpBackend.expectGET(blackspotUrl).respond(200, ResourcesMock.BlackspotResponse);
 
         Element = $compile('<div leaflet-map driver-map-layers></div>')($rootScope);
         $rootScope.$apply();

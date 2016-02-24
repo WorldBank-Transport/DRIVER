@@ -6,6 +6,7 @@
     function TileUrlService($q, WebConfig) {
         var allRecordsUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png');
+        var secondaryRecordsUrl = allRecordsUrl + '?secondary=true';
         var allRecordsUtfGridUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json');
         var positronUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
@@ -19,6 +20,7 @@
 
         var module = {
             recTilesUrl: recordsTilesUrlForType,
+            secondaryTilesUrl: secondaryTilesUrlForType,
             recUtfGridTilesUrl: recordsUtfGridTilesUrlForType,
             recHeatmapUrl: recordsHeatmapTilesUrl,
             boundaryTilesUrl: boundaryTilesUrl,
@@ -30,6 +32,10 @@
 
         function recordsTilesUrlForType(typeUuid) {
             return _insertIdAtALL(allRecordsUrl, typeUuid);
+        }
+
+        function secondaryTilesUrlForType(typeUuid) {
+            return _insertIdAtALL(secondaryRecordsUrl, typeUuid);
         }
 
         function recordsUtfGridTilesUrlForType(typeUuid) {

@@ -2,14 +2,12 @@
     'use strict';
 
     /* ngInject */
-    function RecordDetailsController($stateParams,
-                                     Records, RecordSchemaState, RecordState) {
+    function RecordDetailsController($stateParams, Records, RecordSchemaState, RecordTypes) {
         var ctl = this;
         initialize();
 
         function initialize() {
             loadRecord()
-                .then(loadRecordType)
                 .then(loadRecordSchema);
         }
 
@@ -20,21 +18,14 @@
                 });
         }
 
-        function loadRecordType () {
-            return RecordState.getSelected()
-                .then(function(recordType) {
-                    ctl.recordType = recordType;
-                });
-        }
-
         function loadRecordSchema() {
-            /* jshint camelcase: false */
-            var currentSchemaId = ctl.recordType.current_schema;
-            /* jshint camelcase: true */
-
-            return RecordSchemaState.get(currentSchemaId)
-                .then(function(recordSchema) {
-                    ctl.recordSchema = recordSchema;
+            return RecordTypes.query({ record: $stateParams.recorduuid }).$promise
+                .then(function (result) {
+                    ctl.recordType = result[0];
+                    /* jshint camelcase: false */
+                    return RecordSchemaState.get(ctl.recordType.current_schema)
+                    /* jshint camelcase: true */
+                        .then(function(recordSchema) { ctl.recordSchema = recordSchema; });
                 });
         }
     }

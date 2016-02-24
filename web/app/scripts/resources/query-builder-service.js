@@ -1,8 +1,7 @@
 /**
  * This Service provides a centralized location to handle construction of queries that involve
  *  the many (sometimes complex) filters that DRIVER requires for dates, spaces, and jsonb.
- *  At root, there are two functions: `djangoQuery` and `windshaftQuery`. Each of these share
- *  a function, `assembleParams` which is a promise-based function in which all of the relevant
+ *  `assembleParams` is a promise-based function in which all of the relevant
  *  information for making a query is gathered together into a flattened object.
  */
 (function () {
@@ -13,10 +12,8 @@
         var svc = {
             djangoQuery: djangoQuery,
             unfilteredDjangoQuery: function(offset, extraParams) {
-                return djangoQuery(false, offset, extraParams);
+                return djangoQuery(offset, extraParams, false, false);
             },
-            windshaftQuery: windshaftQuery,
-            unfilteredWindshaftQuery: function() { return windshaftQuery({}, false); },
             // KEEP THESE AVAILABLE FOR TESTING
             assembleParams: assembleParams,
             assembleJsonFilterParams: assembleJsonFilterParams
@@ -28,37 +25,24 @@
          * This function takes two (optional) arguments, compiles a query, and carries out the
          *  corresponding request for filtering django records.
          *
-         * @param {bool} doFilter If true: Generate a filter from FilterState service.
          * @param {number} offset The page in django's pagination to return
          * @param {object} extraParams an object whose properties are extra parameters
          *                             not otherwise configured. Can include extra filters here
          *                             that will be included along with those from FilterState,
-         *                             or used independently if doFilter is false.
+         *                             or used independently if the do*Filters params are false.
+         * @param {bool} doAttrFilters If true: Generate a filter on record attributes (e.g. date)
+                                       from FilterState service.
+         * @param {bool} doJsonFilters If true: Generate a filter on record data (i.e. jsonb fields)
+                                       from FilterState service.
          */
-        function djangoQuery(doFilter, offset, extraParams) {
+        function djangoQuery(offset, extraParams, doAttrFilters, doJsonFilters) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doFilter = doFilter || true;
-            assembleParams(doFilter, offset).then(function(params) {
+            // Default to applying filters
+            doAttrFilters = doAttrFilters !== false;
+            doJsonFilters = doJsonFilters !== false;
+            assembleParams(offset, doAttrFilters, doJsonFilters).then(function(params) {
                 Records.get(_.extend(params, extraParams)).$promise.then(function(records) {
-                    deferred.resolve(records);
-                });
-            });
-            return deferred.promise;
-        }
-
-        /**
-         * This function takes two (optional) arguments, compiles a query, and carries out the
-         *  corresponding request for filtering windshaft results.
-         *
-         * @param {bool} doFilter If true: filter results
-         */
-        function windshaftQuery(doFilter, extraParams) {
-            var deferred = $q.defer();
-            extraParams = extraParams || {};
-            doFilter = doFilter || true;
-            assembleParams(doFilter).then(function(params) {
-                Records.get(params).$promise.then(function(records) {
                     deferred.resolve(records);
                 });
             });
@@ -117,33 +101,35 @@
 
         /**
          * Assemble all query parameters into a single query parameters object for the Record resource
+         * Offset and record type filters are applied regardless of do*Filters settings.
          *
-         * @param {bool} doFilter Whether or not to include filters in this query at all (still do
-         *                        offsets and record_type filtering, however)
          * @param {number} offset The offset to use for pagination of results
+         * @param {bool} doAttrFilters Whether or not to include filters on record attributes
+         * @param {bool} doJsonFilters Whether or not to include filters on record data (jsonb fields)
          *
          */
-        function assembleParams(doFilter, offset) {
+        function assembleParams(offset, doAttrFilters, doJsonFilters) {
             var deferred = $q.defer();
-            var paramObj = {};
-            var jsonFilters;
+            var paramObj = { limit: WebConfig.record.limit };
             var p1;
             /* jshint camelcase: false */
-            if (doFilter) {
+            if (doAttrFilters) {
                 var dateFilter = FilterState.getDateFilter();
-                paramObj = {
+                paramObj = _.extend(paramObj, {
                     occurred_max: dateFilter.maxDate,
                     occurred_min: dateFilter.minDate
-                };
-
-                svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(function(filts) {
-                    jsonFilters = filts;
-                    // Handle cases where no json filters are set
-                    if (!_.isEmpty(jsonFilters)) {
-                        paramObj = _.extend(paramObj, { jsonb: jsonFilters });
-                    }
-                    paramObj.limit = WebConfig.record.limit;
                 });
+            }
+
+            if (doJsonFilters) {
+                p1 = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(
+                    function(jsonFilters) {
+                        // Handle cases where no json filters are set
+                        if (!_.isEmpty(jsonFilters)) {
+                            paramObj = _.extend(paramObj, { jsonb: jsonFilters });
+                        }
+                    }
+                );
             }
 
             $q.when(p1).then(function() {

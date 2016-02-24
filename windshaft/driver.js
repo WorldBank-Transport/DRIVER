@@ -7,6 +7,8 @@ var _ = require('windshaft/node_modules/underscore');
 // RFC4122. See: http://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
 var uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+var validTables = ['ashlar_boundary', 'ashlar_record', 'black_spots_blackspot'];
+
 // queries
 var baseBoundaryQuery = ["(SELECT p.uuid AS polygon_id, b.uuid AS shapefile_id, ",
                          "b.label, b.color, p.geom ",
@@ -48,6 +50,19 @@ var eventsRules = [
 ];
 var eventsStyle = constructCartoStyle('#ashlar_record', eventsRules);
 
+var secondaryRules = [
+    'marker-fill-opacity: 0.5;',
+    'marker-fill: #00ee40;',
+    'marker-line-color: #FFF;',
+    'marker-line-width: 0;',
+    'marker-line-opacity: 1;',
+    'marker-placement: point;',
+    'marker-type: ellipse;',
+    'marker-width: 4;',
+    'marker-allow-overlap: true;',
+];
+var secondaryStyle = constructCartoStyle('#ashlar_record', secondaryRules);
+
 var boundaryRules = [
     'line-width: 2;',
     'polygon-opacity: 0;',
@@ -84,11 +99,9 @@ function setRequestParameters(request, callback, redisClient) {
 
     params.dbname = 'driver';
 
-    if (params.tablename !== 'ashlar_boundary' &&
-        params.tablename !== 'ashlar_record' &&
-        params.tablename !== 'black_spots_blackspot') {
-        // table name must be for record or boundary polygon
-        throw('Invalid table name');
+    // table name must be in the whitelist
+    if (!_.contains(validTables, params.tablename)) {
+        throw('Invalid table name ' + params.tablename);
     }
 
     // check for a valid record type UUID (or 'ALL' to match all record types)
@@ -108,6 +121,8 @@ function setRequestParameters(request, callback, redisClient) {
         if (request.query.heatmap) {
             // make a heatmap if optional parameter for that was sent in
             params.style = heatmapStyle;
+        } else if (request.query.secondary) {
+            params.style = secondaryStyle;
         }
 
         // retrieve stored query for record points

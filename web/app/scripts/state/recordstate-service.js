@@ -22,6 +22,7 @@
         svc.getOptions = getOptions;
         svc.setSelected = setSelected;
         svc.getSelected = getSelected;
+        svc.getSecondary = getSecondary;
         init();
 
         /**
@@ -86,9 +87,6 @@
                     selection = _.find(options, function(d) {
                         return d.label === WebConfig.recordType.primaryLabel;
                     });
-                    secondaryType = _.find(options, function(d) {
-                      return d.label === WebConfig.recordType.secondaryLabel;
-                    });
                 } else {
                     var oldRecordType = localStorageService.get('recordtype.selected');
                     if (oldRecordType) {
@@ -96,16 +94,8 @@
                             return d.uuid === oldRecordType.uuid;
                         });
                     }
-
-                    var oldSecondaryType = localStorageService.get('secondaryrecordtype.selected');
-                    if (oldSecondaryType) {
-                        secondaryType = _.find(options, function(d) {
-                            return d.uuid === oldSecondaryType.uuid;
-                        });
-                    }
                 }
-                initialized = true;
-                InitialState.setRecordTypeInitialized();
+                initializeSecondary();
             }
             if (_.find(options, function(d) { return d.uuid === selection.uuid; })) {
                 selected = selection;
@@ -115,9 +105,19 @@
                 selected = null;
             }
             localStorageService.set('recordtype.selected', selected);
-            localStorageService.set('secondaryrecordtype.selected', secondaryType);
             $rootScope.$broadcast('driver.state.recordstate:selected', selected);
+            if (!initialized) {
+                initialized = true;
+                InitialState.setRecordTypeInitialized();
+            }
             return selected;
+        }
+
+        function initializeSecondary() {
+            secondaryType = _.find(options, function(d) {
+                return d.label === WebConfig.recordType.secondaryLabel;
+            });
+            localStorageService.set('secondaryrecordtype.selected', secondaryType);
         }
 
         function getSelected() {
@@ -139,6 +139,14 @@
 
             selectedPromise.then(function() { gettingSelected = false; });
             return selectedPromise;
+        }
+
+        function getSecondary() {
+            if (initialized) {
+                return secondaryType;
+            } else {
+                return getSelected().then(function () { return secondaryType; });
+            }
         }
 
         return svc;

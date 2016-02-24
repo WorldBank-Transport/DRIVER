@@ -26,17 +26,11 @@ describe('driver.views.record: ListController', function () {
         ResourcesMock = _ResourcesMock_;
         FilterState = _FilterState_;
         FilterState.reset();
-    }));
 
-    it('should have header keys', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 
         var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
+        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
 
         var boundariesUrl = /api\/boundaries/;
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
@@ -54,6 +48,11 @@ describe('driver.views.record: ListController', function () {
         $scope.$apply();
 
         $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+    }));
+
+    it('should have header keys', function () {
+
         $rootScope.$broadcast('driver.filterbar:changed', {});
         var recordOffsetUrl = /api\/records\//;
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);
@@ -64,29 +63,6 @@ describe('driver.views.record: ListController', function () {
     });
 
     it('should make offset requests for pagination', function () {
-        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-
-        var boundariesUrl = /api\/boundaries/;
-        var boundaryPolygonsUrl = /api\/boundarypolygons/;
-
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
-        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
-        $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
-
-        Controller = $controller('RecordListController', {
-            $scope: $scope
-        });
-        $scope.$apply();
-        $httpBackend.flush();
-
         $rootScope.$broadcast('driver.filterbar:changed', {});
         var recordOffsetUrl = new RegExp('api/records/\\?.*limit=50.*');
         $httpBackend.expectGET(recordOffsetUrl).respond(200, DriverResourcesMock.RecordResponse);

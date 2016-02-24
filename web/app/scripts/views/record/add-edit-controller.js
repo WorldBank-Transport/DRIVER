@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
                                      AuthService, Nominatim, Notifications, Records,
-                                     RecordSchemaState, RecordState, WeatherService, WebConfig) {
+                                     RecordSchemaState, RecordTypes, WeatherService, WebConfig) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -93,8 +93,7 @@
             });
 
             var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
-            (recordPromise ? recordPromise.then(loadRecordType) : loadRecordType())
-                .then(loadRecordSchema)
+            (recordPromise ? recordPromise.then(loadRecordSchema) : loadRecordSchema())
                 .then(onSchemaReady);
         }
 
@@ -170,21 +169,14 @@
                 });
         }
 
-        function loadRecordType() {
-            return RecordState.getSelected()
-                .then(function(recordType) {
-                    ctl.recordType = recordType;
-                });
-        }
-
         function loadRecordSchema() {
-            /* jshint camelcase: false */
-            var currentSchemaId = ctl.recordType.current_schema;
-            /* jshint camelcase: true */
-
-            return RecordSchemaState.get(currentSchemaId)
-                .then(function(recordSchema) {
-                    ctl.recordSchema = recordSchema;
+            return RecordTypes.query({ record: $stateParams.recorduuid }).$promise
+                .then(function (result) {
+                    ctl.recordType = result[0];
+                    /* jshint camelcase: false */
+                    return RecordSchemaState.get(ctl.recordType.current_schema)
+                    /* jshint camelcase: true */
+                        .then(function(recordSchema) { ctl.recordSchema = recordSchema; });
                 });
         }
 
@@ -336,7 +328,6 @@
         }
 
         function onSaveClicked() {
-
             var validationErrorMessage = constantFieldsValidationErrors();
 
             if (ctl.editor.errors.length > 0) {
