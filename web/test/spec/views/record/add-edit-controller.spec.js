@@ -32,9 +32,11 @@ describe('driver.views.record: AddEditController', function () {
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
         var recordTypeUrl = new RegExp('api/recordtypes/.*record=' + recordId);
-        var recordUrl = /\/api\/records/;
+        var allRecordTypesUrl = new RegExp('api/recordtypes/');
+        var recordUrl = new RegExp('api/records/' + recordId);
         var nominatimRevUrl = /\/reverse/;
 
+        $httpBackend.expectGET(allRecordTypesUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
@@ -42,7 +44,7 @@ describe('driver.views.record: AddEditController', function () {
 
         Controller = $controller('RecordAddEditController', {
             $scope: $scope,
-            $stateParams: { recorduuid: DriverResourcesMock.RecordResponse.results[0].uuid }
+            $stateParams: { recorduuid: recordId }
         });
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
@@ -86,29 +88,27 @@ describe('driver.views.record: AddEditController', function () {
         $httpBackend.expectPATCH(recordEndpoint).respond(200);
         Controller.onSaveClicked();
         $httpBackend.flush();
-
         $httpBackend.verifyNoOutstandingRequest();
     });
 
     it('should allow adding a new record', function () {
         // Should submit a PUT request to record endpoint
         var recordEndpoint = new RegExp('api/records/');
-        $httpBackend.expectPUT(recordEndpoint).respond(200);
+        Controller.record = null;
+        $httpBackend.expectPOST(recordEndpoint).respond(201);
         Controller.onSaveClicked();
-
+        $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should fix occurred from for pickers', function () {
-        var record = DriverResourcesMock.RecordResponse.results[0];
-
-        var original = new Date(record.occurred_from);
-        Controller.fixOccurredDTForPickers(record);
+    it('should fix occurred_from for date pickers', function () {
+        var original = new Date(Controller.occurred_from);
+        Controller.fixOccurredDTForPickers();
         // Occured from should be changed after applying the fix
-        expect(record.occurred_from).not.toEqual(original);
-        Controller.fixOccurredDTForPickers(record, true);
+        expect(Controller.occurred_from).not.toEqual(original);
+        Controller.fixOccurredDTForPickers(true);
         // Occured from should equal original after reverting the fix
-        expect(record.occurred_from).toEqual(original);
+        expect(Controller.occurred_from).toEqual(original);
 
         $httpBackend.verifyNoOutstandingRequest();
     });

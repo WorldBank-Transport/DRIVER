@@ -14,6 +14,13 @@
             label: 'Add a Record',
             showInNavbar: false
         });
+        $stateProvider.state('record.addSecondary', {
+            url: '/addsecondary',
+            template: '<driver-record-add-edit></driver-record-add-edit>',
+            label: 'Add a Record',
+            showInNavbar: false,
+            secondary: true
+        });
         $stateProvider.state('record.list', {
             url: '/list',
             template: '<driver-record-list></driver-record-list>',
