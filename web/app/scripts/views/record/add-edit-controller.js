@@ -137,8 +137,7 @@
          * @param {bool} reverse True if the fix is being reversed out of for saving purposes
          */
         function fixOccurredDTForPickers(reverse) {
-            /* jshint camelcase: false */
-            var occurredFromDT = new Date(ctl.occurred_from);
+            var occurredFromDT = new Date(ctl.occurredFrom);
             var browserTZOffset = occurredFromDT.getTimezoneOffset();
             var configuredTZOffset = moment(occurredFromDT).tz(timeZone)._offset;
             // Note that the native js getTimezoneOffset returns the opposite of what
@@ -149,14 +148,13 @@
             var offset = (browserTZOffset + configuredTZOffset) * (reverse ? -1 : +1);
 
             occurredFromDT.setMinutes(occurredFromDT.getMinutes() + offset);
-            ctl.occurred_from = occurredFromDT;
+            ctl.occurredFrom = occurredFromDT;
 
-            if (ctl.occurred_to) {
-                var occurredToDT = new Date(ctl.occurred_to);
+            if (ctl.occurredTo) {
+                var occurredToDT = new Date(ctl.occurredTo);
                 occurredToDT.setMinutes(occurredToDT.getMinutes() + offset);
-                ctl.occurred_to = occurredToDT;
+                ctl.occurredTo = occurredToDT;
             }
-            /* jshint camelcase: true */
         }
 
         // Helper for loading the record -- only used when in edit mode
@@ -166,8 +164,8 @@
                     ctl.record = record;
 
                     /* jshint camelcase: false */
-                    ctl.occurred_from = ctl.record.occurred_from;
-                    ctl.occurred_to = ctl.record.occurred_to;
+                    ctl.occurredFrom = ctl.record.occurred_from;
+                    ctl.occurredTo = ctl.record.occurred_to;
                     // Prep the occurred_from datetime for use with pickers
                     fixOccurredDTForPickers(false);
 
@@ -347,13 +345,11 @@
          * @returns {String} error message, which is empty if there are no errors
          */
         function constantFieldsValidationErrors() {
-            /* jshint camelcase: false */
             var required = {
                 'latitude': ctl.geom.lat,
                 'longitude': ctl.geom.lng,
-                'occurred': ctl.occurred_from
+                'occurred': ctl.occurredFrom
             };
-            /* jshint camelcase: true */
 
             ctl.constantFieldErrors = {};
             angular.forEach(required, function(value, fieldName) {
@@ -362,11 +358,10 @@
                     ctl.constantFieldErrors[fieldName] = fieldName + ': Value required';
                 }
             });
-            /* jshint camelcase: false */
-            if (ctl.occurred_from && ctl.occurred_to && ctl.occurred_from > ctl.occurred_to) {
-                ctl.constantFieldErrors.occurred_to = 'End date cannot be before start date.';
+            if (ctl.secondary && ctl.occurredFrom && ctl.occurredTo &&
+                    ctl.occurredFrom > ctl.occurredTo) {
+                ctl.constantFieldErrors.occurredTo = 'End date cannot be before start date.';
             }
-            /* jshint camelcase: true */
 
             // make field errors falsy if empty, for partial to check easily
             if (Object.keys(ctl.constantFieldErrors).length === 0) {
@@ -418,14 +413,14 @@
 
             // If editing a primary record (where we don't ask for 'to' date) or if 'to' date is
             // blank, set it to be the same as 'from' date.
-            /* jshint camelcase: false */
-            if (!ctl.secondary || !ctl.occurred_to) {
-                ctl.occurred_to = ctl.occurred_from;
+            if (!ctl.secondary || !ctl.occurredTo) {
+                ctl.occurredTo = ctl.occurredFrom;
             }
 
             // Reverse the date and time picker timezone fix to get back to the actual correct time
             fixOccurredDTForPickers(true);
 
+            /* jshint camelcase: false */
             if (ctl.record && ctl.record.geom) {
                 // set back coordinates and nominatim values
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
@@ -438,8 +433,8 @@
                 ctl.record.state = ctl.nominatimState;
                 ctl.record.weather = ctl.weather;
                 ctl.record.light = ctl.light;
-                ctl.record.occurred_from = ctl.occurred_from;
-                ctl.record.occurred_to = ctl.occurred_to;
+                ctl.record.occurred_from = ctl.occurredFrom;
+                ctl.record.occurred_to = ctl.occurredTo;
 
                 saveMethod = 'update';
                 dataToSave = ctl.record;
@@ -462,8 +457,8 @@
                     weather: ctl.weather,
                     light: ctl.light,
 
-                    occurred_from: ctl.occurred_from,
-                    occurred_to: ctl.occurred_to
+                    occurred_from: ctl.occurredFrom,
+                    occurred_to: ctl.occurredTo
                 };
             }
             /* jshint camelcase: true */

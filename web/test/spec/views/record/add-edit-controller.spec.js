@@ -101,14 +101,14 @@ describe('driver.views.record: AddEditController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should fix occurred_from for date pickers', function () {
-        var original = new Date(Controller.occurred_from);
+    it('should fix occurredFrom for date pickers', function () {
+        var original = new Date(Controller.occurredFrom);
         Controller.fixOccurredDTForPickers();
         // Occured from should be changed after applying the fix
-        expect(Controller.occurred_from).not.toEqual(original);
+        expect(Controller.occurredFrom).not.toEqual(original);
         Controller.fixOccurredDTForPickers(true);
         // Occured from should equal original after reverting the fix
-        expect(Controller.occurred_from).toEqual(original);
+        expect(Controller.occurredFrom).toEqual(original);
 
         $httpBackend.verifyNoOutstandingRequest();
     });

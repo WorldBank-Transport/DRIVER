@@ -58,7 +58,7 @@
                                             datepicker-popup="longDate"
                                             is-open="ctl.occurredDatePicker.opened"
                                             ng-change="ctl.onDateChanged()"
-                                            ng-model="ctl.occurred_from"
+                                            ng-model="ctl.occurredFrom"
                                             placeholder="From">
                                         <span class="input-group-addon picker"
                                               ng-click="ctl.occurredDatePicker.opened = true">
@@ -73,7 +73,7 @@
                                 <div class="form-group time-picker">
                                     <div class="input-group"
                                          timepicker
-                                         ng-model="ctl.occurred_from"
+                                         ng-model="ctl.occurredFrom"
                                          ng-change="ctl.onDateChanged()">
                                     </div>
                                 </div>
@@ -83,29 +83,29 @@
                         <div class="row" ng-if="ctl.secondary">
                             <div class="col-md-6">
                                 <div class="form-group date-picker"
-                                    ng-class="ctl.constantFieldErrors.occurred_to ? 'has-error' : ''">
+                                    ng-class="ctl.constantFieldErrors.occurredTo ? 'has-error' : ''">
                                     <label class="control-label">Occurred to</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control"
                                             datepicker-popup="longDate"
                                             is-open="ctl.occurredToDatePicker.opened"
                                             ng-change="ctl.onDateChanged()"
-                                            ng-model="ctl.occurred_to"
+                                            ng-model="ctl.occurredTo"
                                             placeholder="To">
                                         <span class="input-group-addon picker"
                                               ng-click="ctl.occurredToDatePicker.opened = true">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
-                                    <p ng-if="ctl.constantFieldErrors.occurred_to"
-                                        class="help-block errormsg">{{ctl.constantFieldErrors.occurred_to}}</p>
+                                    <p ng-if="ctl.constantFieldErrors.occurredTo"
+                                        class="help-block errormsg">{{ctl.constantFieldErrors.occurredTo}}</p>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group time-picker">
                                     <div class="input-group"
                                          timepicker
-                                         ng-model="ctl.occurred_to"
+                                         ng-model="ctl.occurredTo"
                                          ng-change="ctl.onDateChanged()">
                                     </div>
                                 </div>
