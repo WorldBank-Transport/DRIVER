@@ -771,7 +771,7 @@
         }
 
         function getTilekeys() {
-            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams()).then(
+            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams(), true, true, false).then(
                 function(records) { ctl.tilekey = records.tilekey; }
             );
             var secondary = $q.resolve('');
@@ -780,7 +780,7 @@
                 /* jshint camelcase: false */
                 params.record_type = ctl.secondaryType.uuid;
                 /* jshint camelcase: true */
-                secondary = QueryBuilder.djangoQuery(0, params, true, false).then(
+                secondary = QueryBuilder.djangoQuery(0, params, true, false, false).then(
                     function(records) { ctl.secondaryTilekey = records.tilekey; }
                 );
             }

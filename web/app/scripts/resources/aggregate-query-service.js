@@ -21,7 +21,7 @@
             extraParams = extraParams || {};
             doAttrFilters = doAttrFilters !== false;
             doJsonFilters = doJsonFilters !== false;
-            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters).then( // 0 for offset
+            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters, true).then( // 0 for offset
                 function(params) {
                     // toddow should never use a limit
                     params = _.extend(params, extraParams);
@@ -45,7 +45,7 @@
             extraParams = extraParams || {};
             doAttrFilters = doAttrFilters !== false;
             doJsonFilters = doJsonFilters !== false;
-            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters).then( // 0 for offset
+            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters, true).then( // 0 for offset
                 function(params) {
                 // stepwise should never use a limit
                 params = _.extend(params, extraParams);
