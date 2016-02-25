@@ -19,7 +19,7 @@
     "angular-file-saver": "1.0.3",
     "bootstrap-sass-official": "^3.2.0",
     "ng-file-upload": "^4.0.0",
-    "json-editor": "azavea/json-editor#v10.7.23",
+    "json-editor": "azavea/json-editor#v0.7.24",
     "ng-debounce": "^0.1.7",
     "bootstrap-select": "1.7.3",
     "lodash": "^3.8.0",

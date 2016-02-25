@@ -36,6 +36,7 @@
             return RecordSchemas.get({ id: currentSchemaId })
                 .$promise.then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
+                    ctl.schemaTitle = recordSchema.schema.definitions[ctl.schemaKey].title;
                 });
         }
 
@@ -85,9 +86,12 @@
             var schema = ctl.relatedBuilderSchema.toJSON();
 
             // Populate saved properties
+            /* jshint camelcase: false */
             var definition = ctl.recordSchema.schema.definitions[ctl.schemaKey];
             schema.description = definition.description;
             schema.title = definition.title;
+            schema.plural_title = definition.plural_title;
+            /* jshint camelcase: true */
             var initialData = Schemas.schemaFormDataFromDefinition(definition);
             $log.debug('Initializing form with startval', initialData);
 
