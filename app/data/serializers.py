@@ -1,3 +1,5 @@
+import re
+
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from ashlar import serializers
@@ -14,7 +16,7 @@ class DetailsReadOnlyRecordSerializer(serializers.RecordSerializer):
 
     def filter_details_only(self, key, value):
         """Return only the details object and no other related info"""
-        if key in settings.READ_ONLY_FIELDS:
+        if re.search(settings.READ_ONLY_FIELDS_REGEX, key):
             return key, value
         else:
             raise serializer_fields.DropJsonKeyException
@@ -31,7 +33,7 @@ class DetailsReadOnlyRecordSchemaSerializer(serializers.RecordSchemaSerializer):
         # If we're looking at properties/definitions, remove everything that isn't read-only
         new_value = {}
         for k in value.viewkeys():
-            if k in settings.READ_ONLY_FIELDS:
+            if re.search(settings.READ_ONLY_FIELDS_REGEX, k):
                 new_value[k] = value[k]
         return key, new_value
 

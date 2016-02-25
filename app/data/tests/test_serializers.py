@@ -15,9 +15,9 @@ class DetailsReadOnlyRecordSerializerTestCase(TestCase):
     def test_filter_details_only(self):
         """Test that non-read-only fields are dropped"""
         with self.assertRaises(serializer_fields.DropJsonKeyException):
-            self.serializer.filter_details_only('Definitely Not Details', {})
-        for field_name in settings.READ_ONLY_FIELDS:
-            self.assertEqual((field_name, {}), self.serializer.filter_details_only(field_name, {}))
+            self.serializer.filter_details_only('Hidden Secrets', {})
+        self.assertEqual(('Visible Details', {}),
+                         self.serializer.filter_details_only('Visible Details', {}))
 
 
 class DetailsReadOnlyRecordSchemaSerializerTestCase(TestCase):
