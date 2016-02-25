@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 
 from dateutil.parser import parse as parse_date
@@ -49,6 +50,7 @@ from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordS
 import transformers
 from driver import mixins
 
+logger = logging.getLogger(__name__)
 
 DateTimeField.register_lookup(transformers.ISOYearTransform)
 DateTimeField.register_lookup(transformers.WeekTransform)
@@ -61,7 +63,13 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
 
     # Filter out everything except details for read-only users
     def get_serializer_class(self):
-        if is_admin_or_writer(self.request.user):
+        # check if parameter details_only is set to true, and if so, use details-only serializer
+        requested_details_only = False
+        details_only_param = self.request.query_params.get('details_only', None)
+        if details_only_param == 'True' or details_only_param == 'true':
+            requested_details_only = True
+
+        if is_admin_or_writer(self.request.user) and not requested_details_only:
             return RecordSerializer
         return DetailsReadOnlyRecordSerializer
 
