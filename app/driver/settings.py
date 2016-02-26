@@ -394,4 +394,4 @@ if len(GOOGLE_OAUTH_CLIENT_ID) > 0:
     }
 
 # These fields will be visible to read-only users
-READ_ONLY_FIELDS = ['Accident Details']
+READ_ONLY_FIELDS_REGEX = r'Details$'
