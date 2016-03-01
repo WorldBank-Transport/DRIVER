@@ -74,7 +74,6 @@
             var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions, 'details');
             ctl.propertiesKey = detailsDefinitions[0].properties;
             ctl.headerKeys = _.without(_.keys(ctl.propertiesKey), '_localId');
-            ctl.detailsProperty = detailsDefinitions[0].title;
         }
     }
 

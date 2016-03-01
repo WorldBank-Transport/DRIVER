@@ -81,9 +81,7 @@
                     if (key.indexOf('Details') > -1) {
                         // keep the actual field name
                         // for lookup on ctl.recordSchema.schema.definitions
-                        /* jshint camelcase: false */
-                        ctl.detailsPropertyName = val.plural_title || val.title || key;
-                        /* jshint camelcase: true */
+                        ctl.detailsPropertyKey = key;
                         return val;
                     }
                 });
@@ -102,8 +100,6 @@
                 .sortBy('propertyOrder')
                 .map('propertyName')
                 .value();
-
-            ctl.detailsProperty = detailsDefinitions[0].title;
         }
 
         // Loads the previous page of paginated record results
