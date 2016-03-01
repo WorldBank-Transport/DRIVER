@@ -4,11 +4,19 @@
             &times;
         </div>
         <div class="report-header">
-            <a ui-sref="record.details({ recorduuid: modal.record.uuid })" target="_blank">
-                <h3 class="modal-title">
-                    {{ modal.recordType.label }} Details <small ng-if="modal.userCanWrite"><a ui-sref="record.edit({ recorduuid: modal.record.uuid })" target="_blank">Edit {{ modal.recordType.label }}</a></small>
-                </h3>
-            </a>
+            <h3 class="modal-title">
+                <small ng-if="modal.userCanWrite" class="pull-right">
+                    <a ui-sref="record.edit({ recorduuid: modal.record.uuid })" target="_blank">
+                        <span class="glyphicon glyphicon-share"></span> Edit
+                    </a>
+                </small>
+                <small class="pull-right">
+                    <a ui-sref="record.details({ recorduuid: modal.record.uuid })" target="_blank">
+                        <span class="glyphicon glyphicon-share"></span> View
+                    </a>
+                </small>
+                {{ modal.recordType.label }} Details
+            </h3>
         </div>
         <driver-details-tabs
             class="modal-body"
