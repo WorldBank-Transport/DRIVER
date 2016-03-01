@@ -7,7 +7,8 @@
             restrict: 'AE',
             scope: {
                 recordSchema: '=',
-                record: '='
+                record: '=',
+                userCanWrite: '='
             },
             templateUrl: 'scripts/details/details-tabs-partial.html',
             bindToController: true,
