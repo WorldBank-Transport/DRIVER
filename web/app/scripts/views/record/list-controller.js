@@ -4,7 +4,7 @@
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, AuthService,
                                   FilterState, InitialState, Notifications, RecordSchemaState,
-                                  Records, RecordState, BoundaryState, QueryBuilder, WebConfig) {
+                                  RecordState, BoundaryState, QueryBuilder, WebConfig) {
         var ctl = this;
         ctl.boundaryId = null;
         ctl.currentOffset = 0;
@@ -120,12 +120,7 @@
                 size: 'lg',
                 resolve: {
                     record: function() {
-                        if (ctl.userCanWrite) {
-                            // for non-public users, go fetch all the other sections of the record
-                            return Records.get({ id: record.uuid }).$promise;
-                        } else {
-                            return record;
-                        }
+                         return record;
                     },
                     recordType: function() {
                         return ctl.recordType;

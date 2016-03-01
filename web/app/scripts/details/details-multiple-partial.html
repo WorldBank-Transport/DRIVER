@@ -1,5 +1,6 @@
 <div class="incident-report">
-    <div class="table">
+    <cube-grid-spinner ng-if="ctl.definition.pending"></cube-grid-spinner>
+    <div class="table" ng-if="!ctl.definition.pending">
         <div class="table-head">
             <div class="row">
                 <div class="col-sm-3" ng-repeat="property in ctl.properties | limitTo : ctl.maxDataColumns">
