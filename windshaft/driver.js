@@ -115,7 +115,7 @@ function setRequestParameters(request, callback, redisClient) {
 
     if (params.tablename === 'ashlar_record') {
 
-        params.interactivity = 'uuid,occurred_from,data';
+        params.interactivity = 'uuid,occurred_from';
         params.style = eventsStyle;
 
         if (request.query.heatmap) {
