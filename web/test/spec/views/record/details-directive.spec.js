@@ -32,10 +32,12 @@ describe('driver.views.record: RecordDetails', function () {
         $stateParams.recorduuid = recordId;
         var recordSchema = ResourcesMock.RecordSchema;
 
+        var allRecordTypesUrl = new RegExp('api/recordtypes/');
         var recordTypeUrl = new RegExp('api/recordtypes/.*record=' + recordId);
         var recordUrl = new RegExp('api/records/' + recordId);
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
 
+        $httpBackend.expectGET(allRecordTypesUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);

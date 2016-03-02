@@ -27,8 +27,9 @@
 
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
-            // This state attribute will be true when adding secondary records
-            ctl.secondary = $state.current.secondary;
+            // This state attribute will be true when adding secondary records. When editing,
+            // this will be set when the record type is loaded.
+            ctl.isSecondary = $state.current.secondary;
 
             // Only location text is currently being displayed in the UI. The other nominatim
             // values are only being stored. The variables have been placed on the controller
@@ -98,7 +99,7 @@
 
             schemaPromise.then(function () {
                 // Suppress light and weather for Interventions
-                if (!ctl.secondary) {
+                if (!ctl.isSecondary) {
                     // Weather
                     ctl.lightValues = WeatherService.lightValues;
                     ctl.weatherValues = WeatherService.weatherValues;
@@ -190,9 +191,9 @@
 
         /* Loads the right schema:
          * -If there's a record, loads the latest schema for the record's type, checking whether
-         *  it matches the secondary type and setting ctl.secondary to true if so.
+         *  it matches the secondary type and setting ctl.isSecondary to true if so.
          * -Othersise, loads either the latest schema for either the primary or the secondary
-         *  record type, depending on whether ctl.secondary is true.
+         *  record type, depending on whether ctl.isSecondary is true.
          * If no record type loads (e.g. if someone is trying to add a secondary record but has
          * no secondary recordType), sets an error and returns a rejected promise.
          */
@@ -204,12 +205,12 @@
                         var recordType = result[0];
                         RecordState.getSecondary().then(function (secondaryType) {
                             if (!!secondaryType && secondaryType.uuid === recordType.uuid) {
-                                ctl.secondary = true;
+                                ctl.isSecondary = true;
                             }
                         });
                         return recordType;
                     });
-            } else if (ctl.secondary) {
+            } else if (ctl.isSecondary) {
                 typePromise = RecordState.getSecondary();
             } else {
                 typePromise = RecordState.getSelected();
@@ -358,7 +359,7 @@
                     ctl.constantFieldErrors[fieldName] = fieldName + ': Value required';
                 }
             });
-            if (ctl.secondary && ctl.occurredFrom && ctl.occurredTo &&
+            if (ctl.isSecondary && ctl.occurredFrom && ctl.occurredTo &&
                     ctl.occurredFrom > ctl.occurredTo) {
                 ctl.constantFieldErrors.occurredTo = 'End date cannot be before start date.';
             }
@@ -413,7 +414,7 @@
 
             // If editing a primary record (where we don't ask for 'to' date) or if 'to' date is
             // blank, set it to be the same as 'from' date.
-            if (!ctl.secondary || !ctl.occurredTo) {
+            if (!ctl.isSecondary || !ctl.occurredTo) {
                 ctl.occurredTo = ctl.occurredFrom;
             }
 

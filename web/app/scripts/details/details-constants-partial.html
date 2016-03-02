@@ -4,6 +4,9 @@
     </label>
     <div class="value constant date occurred">
         {{ ::ctl.record.occurred_from | localDateTime : ctl.dateFormat }}
+        <span ng-if="::ctl.record.isSecondary && ctl.record.occurred_to">
+         - {{ ::ctl.record.occurred_to | localDateTime : ctl.dateFormat }}
+        </span>
     </div>
 </div>
 <div class="col-sm-6">
@@ -44,7 +47,7 @@
         {{ ::ctl.record.geom.coordinates[0] | number:5 }}
     </div>
 </div>
-<div class="col-sm-6">
+<div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
     <label>
         Weather
     </label>
@@ -58,7 +61,7 @@
         Powered by Forecast
     </a>
 </div>
-<div class="col-sm-6">
+<div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
     <label>
         Light
     </label>

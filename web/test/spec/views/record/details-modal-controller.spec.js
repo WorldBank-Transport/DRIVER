@@ -7,6 +7,7 @@ describe('driver.views.record: RecordDetailsModalController', function () {
     beforeEach(module('driver.views.record'));
 
     var $controller;
+    var $httpBackend;
     var $rootScope;
     var $scope;
     var Controller;
@@ -14,9 +15,10 @@ describe('driver.views.record: RecordDetailsModalController', function () {
     var ResourcesMock;
     var ModalInstance;
 
-    beforeEach(inject(function (_$controller_, _$rootScope_,
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
                                 _DriverResourcesMock_, _ResourcesMock_) {
         $controller = _$controller_;
+        $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         DriverResourcesMock = _DriverResourcesMock_;
@@ -27,6 +29,10 @@ describe('driver.views.record: RecordDetailsModalController', function () {
     }));
 
     it('should initialize the modal controller and be able to close it', function () {
+        var allRecordTypesUrl = new RegExp('api/recordtypes/');
+        $httpBackend.expectGET(allRecordTypesUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(allRecordTypesUrl).respond(200, ResourcesMock.RecordTypeResponse);
+
         Controller = $controller('RecordDetailsModalController', {
             $scope: $scope,
             $modalInstance: ModalInstance,
@@ -36,6 +42,8 @@ describe('driver.views.record: RecordDetailsModalController', function () {
             userCanWrite: true
         });
         $scope.$apply();
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
 
         expect(Controller.record).toEqual(DriverResourcesMock.RecordResponse);
         expect(Controller.recordType).toEqual(ResourcesMock.RecordTypeResponse);

@@ -3,16 +3,28 @@
 
     /* ngInject */
     function RecordDetailsModalController($modalInstance, record, recordType,
-                                          recordSchema, userCanWrite) {
+                                          recordSchema, userCanWrite, RecordState) {
         var ctl = this;
-        ctl.record = record;
-        ctl.recordType = recordType;
-        ctl.recordSchema = recordSchema;
-        ctl.userCanWrite = userCanWrite;
+        initialize();
 
-        ctl.close = function () {
-            $modalInstance.close();
-        };
+        function initialize() {
+            ctl.record = record;
+            ctl.recordType = recordType;
+            ctl.recordSchema = recordSchema;
+            ctl.userCanWrite = userCanWrite;
+
+            ctl.close = function () {
+                $modalInstance.close();
+            };
+
+            RecordState.getSecondary().then(function (secondaryType) {
+                if (!!secondaryType && secondaryType.uuid === ctl.recordType.uuid) {
+                    ctl.record.isSecondary = true;
+                } else {
+                    ctl.record.isSecondary = false;
+                }
+            });
+        }
     }
 
     angular.module('driver.views.record')

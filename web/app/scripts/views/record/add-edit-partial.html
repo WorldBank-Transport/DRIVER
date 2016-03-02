@@ -52,7 +52,7 @@
                             <div class="col-md-6">
                                 <div class="form-group date-picker"
                                     ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
-                                    <label class="control-label required">Occurred {{ ctl.secondary ? 'from' : ''}}</label>
+                                    <label class="control-label required">Occurred {{ ctl.isSecondary ? 'from' : ''}}</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control"
                                             datepicker-popup="longDate"
@@ -80,7 +80,7 @@
                             </div>
                         </div>
 
-                        <div class="row" ng-if="ctl.secondary">
+                        <div class="row" ng-if="ctl.isSecondary">
                             <div class="col-md-6">
                                 <div class="form-group date-picker"
                                     ng-class="ctl.constantFieldErrors.occurredTo ? 'has-error' : ''">
@@ -112,7 +112,7 @@
                             </div>
                         </div>
 
-                        <div class="row" ng-if="!ctl.secondary">
+                        <div class="row" ng-if="!ctl.isSecondary">
                             <div class="col-md-6">
                                 <label class="control-label">Weather</label>
                                 <div class="input-group">
