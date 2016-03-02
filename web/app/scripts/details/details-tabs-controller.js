@@ -23,6 +23,7 @@
             var sorted = _.map(ordering, function(section) {
                 var definition = ctl.recordSchema.schema.definitions[section];
                 definition.propertyName = definition.title;
+                definition.propertyKey = section;
                 return definition;
             });
             return sorted;
