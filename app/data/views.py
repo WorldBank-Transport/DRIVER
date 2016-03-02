@@ -13,6 +13,8 @@ from django.db.models import (Case,
                               When,
                               IntegerField,
                               DateTimeField,
+                              CharField,
+                              UUIDField,
                               Value,
                               Count,
                               Q)
@@ -28,7 +30,7 @@ from rest_framework import renderers, status
 
 from rest_framework_csv import renderers as csv_renderer
 
-from ashlar.models import RecordSchema
+from ashlar.models import RecordSchema, RecordType, Record, BoundaryPolygon, Boundary
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
                           RecordTypeViewSet,
@@ -182,6 +184,230 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                    .order_by('tod', 'dow')
                    .annotate(count=Count('tod')))
         return Response(counted)
+
+    @list_route(methods=['get'])
+    def crosstabs(self, request):
+        """Returns a columnar aggregation of event totals; this is essentially a generalized ToDDoW
+
+        Requires the following query parameters:
+        - Exactly one row specification parameter chosen from:
+            - row_period_type: A time period to use as rows; valid choices are:
+                               {'hour', 'day', 'week_day', 'week', 'month', 'year'}
+                               The value 'day' signifies day-of-month
+            - row_boundary_id: Id of a Boundary whose BoundaryPolygons should be used as rows
+            - row_choices_path: Path components to a schema property whose choices should be used
+                                as rows, separated by commas
+                                e.g. &row_choices_path=accidentDetails,properties,Collision%20type
+                                Note that ONLY properties which have an 'enum' key are valid here.
+        - Exactly one column specification parameter chosen from:
+            - col_period_type
+            - col_boundary_id
+            - col_choices_path
+            As you might expect, these operate identically to the row_* parameters above, but the
+            results are used as columns instead.
+        - record_type_id: The UUID of the record type which should be aggregated
+
+        Allows the following query parameters:
+        - aggregation_boundary: Id of a Boundary; separate tables will be generated for each
+                                BoundaryPolygon associated with the Boundary.
+        - all other filter params accepted by the list endpoint; these will filter the set of
+            records before any aggregation is applied. This may result in some rows / columns /
+            tables having zero records.
+
+        Response format:
+        {
+            "row_labels": {
+                "row_key1": "row_label1",
+                ...
+            },
+            "col_labels": {
+                "col_key1": "col_label1",
+                ...
+            },
+            "table_labels": {
+                "table_key1": "table_label1",
+                // This will be empty if aggregation_boundary is not provided
+            },
+            "tables": [
+                {
+                    "tablekey": "table_key1",
+                    "data": [
+                        {
+                            "row": "row_key1",
+                            "col": "col_key1",
+                            "count": X
+                        },
+                        ...
+                    ]
+                },
+                ...
+            ]
+        }
+        Note that all combinations of rows / columns are NOT guaranteed to exist within the
+        table `data` arrays; in other words, the tables are sparse.
+        """
+        valid_row_params = set(['row_period_type', 'row_boundary_id', 'row_choices_path'])
+        valid_col_params = set(['col_period_type', 'col_boundary_id', 'col_choices_path'])
+        # Validate there's exactly one row_* and one col_* parameter
+        row_params = set(request.query_params) & valid_row_params
+        col_params = set(request.query_params) & valid_col_params
+        if len(row_params) != 1 or len(col_params) != 1:
+            raise ParseError(detail='Exactly one col_* and row_* parameter required; options are {}'
+                                    .format(list(valid_row_params | valid_col_params)))
+
+        # Pass parameters to case-statement generators
+        row_param = row_params.pop()  # Guaranteed to be just one at this point
+        col_param = col_params.pop()
+        row_case, row_labels = self._query_param_to_case_stmnt(row_param, request)
+        col_case, col_labels = self._query_param_to_case_stmnt(col_param, request)
+
+        # Generate filtered queryset based on other params
+        queryset = self.get_queryset()
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(request, queryset, self)
+
+        # Apply case statements to filtered queryset
+        annotated_qs = queryset.annotate(row=row_case).annotate(col=col_case)
+
+        # If aggregation_boundary_id exists, grab the associated BoundaryPolygons.
+        tables_boundary = request.query_params.get('aggregation_boundary', None)
+        if tables_boundary:
+            boundaries = BoundaryPolygon.objects.filter(boundary=tables_boundary)
+        else:
+            boundaries = None
+
+        # Assemble crosstabs either once or multiple times if there are boundaries
+        response = dict(tables=[], table_labels=dict(), row_labels=row_labels,
+                        col_labels=col_labels)
+        if boundaries:
+            # Add table labels
+            parent = Boundary.objects.get(pk=tables_boundary)
+            response['table_labels'] = {str(poly.pk): poly.data[parent.display_field]
+                                        for poly in boundaries}
+            # Filter by polygon for counting
+            for poly in boundaries:
+                counted = (annotated_qs.filter(geom__within=poly.geom)
+                                       .values('row', 'col')
+                                       .order_by('row', 'col')
+                                       .annotate(count=Count('row')))
+                response['tables'].append({'tablekey': poly.pk, 'data': counted})
+        else:
+            counted = (annotated_qs.values('row', 'col')
+                                   .order_by('row', 'col')
+                                   .annotate(count=Count('row')))
+            response['tables'].append({'tablekey': None, 'data': counted})
+        return Response(response)
+
+    def _query_param_to_case_stmnt(self, param, request):
+        """Wrapper to handle getting the params for each case generator because we do it twice"""
+        try:
+            record_type = request.query_params['record_type']
+        except KeyError:
+            raise ParseError(detail="The 'record_type' parameter is required")
+        if param.endswith('period_type'):
+            return self._make_period_case(request.query_params[param], record_type)
+        elif param.endswith('boundary_id'):
+            return self._make_boundary_case(request.query_params[param])
+        else:  # 'choices_path'; ensured by parent function
+            schema = RecordType.objects.get(pk=record_type).get_current_schema()
+            return self._make_choices_case(schema, request.query_params[param].split(','))
+
+    def _make_period_case(self, period_type, record_type_id):
+        """Constructs a Django Case statement for a certain type of period.
+
+        Args:
+            period_type (string): One of 'hour', 'day', 'week_day', 'week', 'month', 'year'
+            record_type_id (string): Record type to use (uuid)
+        Returns:
+            (Case, labels), where Case is a Django Case object giving the period in which each
+            record's occurred_from falls, and labels is a dict mapping Case values to period labels
+
+        """
+        easy_ranges = {  # Most date-related things are 1-indexed.
+            'month': xrange(1, 13),
+            'week': xrange(1, 54),  # Up to 53 weeks in a year
+            'week_day': xrange(1, 8),
+            'day': xrange(1, 32),
+            'hour': xrange(0, 24)
+        }
+        valid_periods = easy_ranges.keys() + ['year']
+        if period_type not in valid_periods:
+            raise ParseError(detail=('row_/col_period_type must be one of {}; received {}'
+                                     .format(valid_periods, period_type)))
+
+        # Set the range min / maxes based on the period type
+        period_range = None
+        if period_type == 'year':
+            recs = Record.objects.filter(schema__record_type_id=record_type_id)
+            range_min = recs.order_by('occurred_from').first().occurred_from.year
+            range_max = recs.order_by('-occurred_from').first().occurred_from.year + 1
+            period_range = xrange(range_min, range_max)
+        else:
+            period_range = easy_ranges[period_type]
+
+        whens = []  # Eventual list of When-clause objects
+        when_lookup = 'occurred_from__{}'.format(period_type)
+        for x in period_range:
+            when_args = {'then': Value(x)}
+            when_args[when_lookup] = x
+            whens.append(When(**when_args))
+        # TODO: It would be nice to have friendlier names for weekdays and months, but that
+        # would introduce potential translation complexity down the road so I'm going to hold off
+        # until we get a better understanding of what the upcoming multilingual / date issues look
+        # like.
+        return (Case(*whens, output_field=IntegerField()), {str(x): str(x) for x in period_range})
+
+    def _make_boundary_case(self, boundary_id):
+        """Constructs a Django Case statement for points falling within a particular polygon
+
+        Args:
+            boundary_id (uuid): Id of a Boundary whose BoundaryPolygons should be used in the case
+        Returns:
+            (Case, labels), where Case is a Django Case object outputting the UUID of the polygon
+            which contains each record, and labels is a dict mapping boundary pks to their labels.
+        """
+        boundary = Boundary.objects.get(pk=boundary_id)
+        polygons = BoundaryPolygon.objects.filter(boundary=boundary)
+        return (Case(*[When(geom__within=poly.geom, then=Value(poly.pk)) for poly in polygons],
+                     output_field=UUIDField()),
+                {str(poly.pk): poly.data[boundary.display_field] for poly in polygons})
+
+    def _make_choices_case(self, schema, path):
+        """Constructs a Django Case statement for the choices of a schema property
+
+        Args:
+            schema (RecordSchema): A RecordSchema to get properties from
+            path (list): A list of path fragments to navigate to the desired property
+        Returns:
+            (Case, labels), where Case is a Django Case object with the choice of each record,
+            and labels is a dict matching choices to their labels (currently the same).
+        """
+        # Walk down the schema using the path components
+        obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths
+        try:
+            for key in path:
+                obj = obj[key]
+        except KeyError as e:
+            raise ParseError(detail="Part of choices_path was not found: '{}'".format(e.message))
+
+        # Build a JSONB filter that will catch Records that match each choice in the enum.
+        choices = obj.get('enum', None)
+        if not choices:
+            raise ParseError(detail="The property at choices_path is missing required 'enum' field")
+        # Build the djsonb filter specification from the inside out, and skip 'properties' -- it's
+        # only for Schemas.
+        filter_path = [component for component in reversed(path) if component != 'properties']
+        whens = []
+        for choice in choices:
+            filter_rule = dict(_rule_type='containment', contains=[choice])
+            for component in filter_path:
+                # Nest filter inside itself so we eventually get something like:
+                # {"accidentDetails": {"severity": {"_rule_type": "containment"}}}
+                tmp = dict()
+                tmp[component] = filter_rule
+                filter_rule = tmp
+            whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
+        return (Case(*whens, output_field=CharField()), {choice: choice for choice in choices})
 
     def _cache_tile_sql(self, token, sql):
         """Stores a sql string in the common cache so it can be retrieved by Windshaft later"""
