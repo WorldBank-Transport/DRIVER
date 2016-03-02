@@ -27,9 +27,14 @@
                                 controller: 'RecordDetailsModalController as modal',
                                 size: 'lg',
                                 resolve: {
+                                    /* jshint camelcase: false */
                                     record: function() {
-                                        return Records.get({ id: recordUUID }).$promise;
+                                        return Records.get({
+                                            id: recordUUID,
+                                            details_only: 'True'
+                                        }).$promise;
                                     },
+                                    /* jshint camelcase: true */
                                     recordType: function () {
                                         return recordType;
                                     },
