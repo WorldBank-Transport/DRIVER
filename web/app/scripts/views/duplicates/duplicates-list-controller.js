@@ -67,6 +67,7 @@
             var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions,
                 function(val, key) {
                     if (key.indexOf('Details') > -1) {
+                        ctl.detailsPropertyKey = key;
                         return val;
                     }
                 });
@@ -84,8 +85,6 @@
                 })
                 .sortBy('propertyOrder')
                 .value();
-
-            ctl.detailsProperty = detailsDefinitions[0].title;
         }
 
         // Loads the previous page of paginated duplicates results
@@ -111,7 +110,7 @@
                             recordType: ctl.recordType,
                             recordSchema: ctl.recordSchema,
                             properties: ctl.headerKeys,
-                            propertyName: ctl.detailsProperty
+                            propertyKey: ctl.detailsPropertyKey
                         };
                     }
                 }

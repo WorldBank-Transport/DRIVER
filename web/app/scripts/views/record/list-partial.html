@@ -22,9 +22,9 @@
                         <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
                             <driver-details-field
                                 compact="true"
-                                data="::record.data[ctl.detailsPropertyName][headerKey]"
+                                data="::record.data[ctl.detailsPropertyKey][headerKey]"
                                 record="::record"
-                                property="::ctl.recordSchema.schema.definitions[ctl.detailsPropertyName].properties[headerKey]">
+                                property="::ctl.recordSchema.schema.definitions[ctl.detailsPropertyKey].properties[headerKey]">
                             </driver-details-field>
                         </td>
 

@@ -9,7 +9,7 @@
         <div class="duplicate-details"
              ng-repeat="record in [modal.params.duplicate.record, modal.params.duplicate.duplicate_record]">
             <driver-details-single
-                data="record.data[modal.params.propertyName]"
+                data="record.data[modal.params.propertyKey]"
                 properties="modal.params.properties"
                 record="record">
             </driver-details-single>
