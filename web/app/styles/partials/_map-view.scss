@@ -58,6 +58,25 @@
             }
             .tool-body {
             }
+            .tool-item {
+                padding: 15px;
+                border-bottom: 1px solid #eeeeee;
+                &.clickable {
+                    cursor: pointer;
+                }
+                a {
+                    color: inherit;
+                }
+            }
+            .cube-grid-spinner {
+                width: 15px;
+                height: 15px;
+                margin: 0px 0px -2px 0px;
+                display: inline-block;
+            }
+            .error {
+                cursor: default;
+            }
 
             &.graphs {
                 .tool-content {
@@ -83,26 +102,11 @@
                 .tool-content {
                     width: 200px;
                 }
-                .export-item {
-                    padding: 15px;
-                    border-bottom: 1px solid #eeeeee;
-                    &.clickable {
-                        cursor: pointer;
-                    }
-                    a {
-                        color: inherit;
-                    }
-                }
-                .cube-grid-spinner {
-                    width: 15px;
-                    height: 15px;
-                    margin: 0px 0px -2px 0px;
-                    display: inline-block;
-                }
             }
-
-            .error {
-                cursor: default;
+            &.interventions {
+                .tool-content {
+                    width: 215px;
+                }
             }
 
             .graph-selector {

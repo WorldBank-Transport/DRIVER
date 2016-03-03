@@ -1,10 +1,10 @@
 'use strict';
 
-describe('driver.export: ExportController', function () {
+describe('driver.tools.export: ExportController', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
-    beforeEach(module('driver.export'));
+    beforeEach(module('driver.tools.export'));
 
     var $controller;
     var $httpBackend;
@@ -66,7 +66,7 @@ describe('driver.export: ExportController', function () {
         expect(Controller.pending).toBe(false);
     });
 
-    describe('driver.export: ExportController.pollForDownload', function () {
+    describe('driver.tools.export: ExportController.pollForDownload', function () {
         var statusURL;
 
         beforeEach(function () {

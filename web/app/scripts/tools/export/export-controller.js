@@ -36,7 +36,7 @@
         function toggle() {
             ctl.isOpen = !ctl.isOpen;
             if (ctl.isOpen) {
-                $rootScope.$broadcast('driver.export.open');
+                $rootScope.$broadcast('driver.tools.export.open');
             }
         }
 
@@ -97,11 +97,12 @@
             });
         }
 
-        $scope.$on('driver.charts.open', function () { ctl.isOpen = false; });
+        $scope.$on('driver.tools.charts.open', function () { ctl.isOpen = false; });
+        $scope.$on('driver.tools.interventions.open', function () { ctl.isOpen = false; });
         $scope.$on('$destroy', cancelPolling);
     }
 
-    angular.module('driver.export')
+    angular.module('driver.tools.export')
     .controller('ExportController', ExportController);
 
 })();

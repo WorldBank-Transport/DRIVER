@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('driver.export', [
+    angular.module('driver.tools.export', [
         'ui.bootstrap',
         'ui.router',
         'driver.customReports',

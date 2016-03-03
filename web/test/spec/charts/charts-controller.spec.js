@@ -1,8 +1,8 @@
 'use strict';
 
-describe('driver.charts: ChartsController', function () {
+describe('driver.tools.charts: ChartsController', function () {
 
-    beforeEach(module('driver.charts'));
+    beforeEach(module('driver.tools.charts'));
 
     var $controller;
     var $rootScope;

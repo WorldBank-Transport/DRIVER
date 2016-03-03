@@ -14,14 +14,15 @@
         function toggle() {
             ctl.isOpen = !ctl.isOpen;
             if (ctl.isOpen) {
-                $rootScope.$broadcast('driver.charts.open');
+                $rootScope.$broadcast('driver.tools.charts.open');
             }
         }
 
-        $scope.$on('driver.export.open', function () { ctl.isOpen = false; });
+        $scope.$on('driver.tools.export.open', function () { ctl.isOpen = false; });
+        $scope.$on('driver.tools.interventions.open', function () { ctl.isOpen = false; });
     }
 
-    angular.module('driver.charts')
+    angular.module('driver.tools.charts')
     .controller('ChartsController', ChartsController);
 
 })();
