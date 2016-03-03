@@ -1,4 +1,4 @@
-<div class="json-editor-form form-area no-filterbar" ng-if="::ctl.userCanWrite">
+<div class="json-editor-form form-area no-filterbar" ng-if="ctl.userCanWrite && !ctl.error">
     <div class="col-sm-8 col-sm-offset-2">
         <div class="form-area-heading">
             <h2>{{ ::ctl.recordType.label }} Input Form</h2>
@@ -46,22 +46,22 @@
                                         class="help-block errormsg">Value required.</p>
                                 </div>
                             </div>
-        		</div>
+                        </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group date-picker"
                                     ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
-                                    <label class="control-label required">Occurred</label>
+                                    <label class="control-label required">Occurred {{ ctl.isSecondary ? 'from' : ''}}</label>
                                     <div class="input-group">
                                         <input type="text" class="form-control"
                                             datepicker-popup="longDate"
                                             is-open="ctl.occurredDatePicker.opened"
-                                            ng-change="ctl.occurredFromChanged()"
-                                            ng-model="ctl.record.occurred_from"
+                                            ng-change="ctl.onDateChanged()"
+                                            ng-model="ctl.occurredFrom"
                                             placeholder="From">
                                         <span class="input-group-addon picker"
-                                              ng-click="ctl.openOccurredDatePicker()">
+                                              ng-click="ctl.occurredDatePicker.opened = true">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
                                     </div>
@@ -73,12 +73,46 @@
                                 <div class="form-group time-picker">
                                     <div class="input-group"
                                          timepicker
-                                         ng-model="ctl.record.occurred_from">
+                                         ng-model="ctl.occurredFrom"
+                                         ng-change="ctl.onDateChanged()">
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
+
+                        <div class="row" ng-if="ctl.isSecondary">
+                            <div class="col-md-6">
+                                <div class="form-group date-picker"
+                                    ng-class="ctl.constantFieldErrors.occurredTo ? 'has-error' : ''">
+                                    <label class="control-label">Occurred to</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control"
+                                            datepicker-popup="longDate"
+                                            is-open="ctl.occurredToDatePicker.opened"
+                                            ng-change="ctl.onDateChanged()"
+                                            ng-model="ctl.occurredTo"
+                                            placeholder="To">
+                                        <span class="input-group-addon picker"
+                                              ng-click="ctl.occurredToDatePicker.opened = true">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <p ng-if="ctl.constantFieldErrors.occurredTo"
+                                        class="help-block errormsg">{{ctl.constantFieldErrors.occurredTo}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group time-picker">
+                                    <div class="input-group"
+                                         timepicker
+                                         ng-model="ctl.occurredTo"
+                                         ng-change="ctl.onDateChanged()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="!ctl.isSecondary">
                             <div class="col-md-6">
                                 <label class="control-label">Weather</label>
                                 <div class="input-group">
@@ -128,4 +162,8 @@
 <div class="form-area no-filterbar" ng-if="::!ctl.userCanWrite">
     <!-- Shouldn't get here, but have a message to display, just in case -->
     <h2>Current user does not have access to write records</h2>
+</div>
+<div class="form-area no-filterbar" ng-if="::ctl.error">
+    <!-- Shouldn't get here, but have a message to display, just in case -->
+    <h2>{{ctl.error}}</h2>
 </div>

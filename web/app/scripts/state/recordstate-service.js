@@ -143,7 +143,7 @@
 
         function getSecondary() {
             if (initialized) {
-                return secondaryType;
+                return $q.resolve(secondaryType);
             } else {
                 return getSelected().then(function () { return secondaryType; });
             }

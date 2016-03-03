@@ -85,7 +85,9 @@
                         .then(function(filterables) {
                             ctl.recordSchemaFilterables = filterables;
                         });
-                    ctl.secondaryType = RecordState.getSecondary();
+                    RecordState.getSecondary().then(function (secondaryType) {
+                        ctl.secondaryType = secondaryType;
+                    });
                 } else {
                     ctl.recordSchemaFilterables = [];
                     ctl.recordType = {

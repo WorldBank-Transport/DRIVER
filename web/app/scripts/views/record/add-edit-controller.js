@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, $window, uuid4,
-                                     AuthService, Nominatim, Notifications, Records,
+    function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, uuid4,
+                                     AuthService, Nominatim, Notifications, Records, RecordState,
                                      RecordSchemaState, RecordTypes, WeatherService, WebConfig) {
         var ctl = this;
         var editorData = null;
@@ -19,20 +19,17 @@
             ctl.goBack = goBack;
             ctl.onDataChange = onDataChange;
             ctl.onSaveClicked = onSaveClicked;
-            ctl.occurredFromChanged = occurredFromChanged;
+            ctl.onDateChanged = onDateChanged;
             ctl.onGeomChanged = onGeomChanged;
             ctl.nominatimLookup = nominatimLookup;
             ctl.nominatimSelect = nominatimSelect;
+            ctl.openOccurredDatePicker = openOccurredDatePicker;
 
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
-            ctl.openOccurredDatePicker = openOccurredDatePicker;
-
-            // Weather
-            ctl.lightValues = WeatherService.lightValues;
-            ctl.weatherValues = WeatherService.weatherValues;
-            ctl.weather = '';
-            ctl.light = '';
+            // This state attribute will be true when adding secondary records. When editing,
+            // this will be set when the record type is loaded.
+            ctl.isSecondary = $state.current.secondary;
 
             // Only location text is currently being displayed in the UI. The other nominatim
             // values are only being stored. The variables have been placed on the controller
@@ -92,9 +89,25 @@
                 }
             });
 
-            var recordPromise = $stateParams.recorduuid ? loadRecord() : null;
-            (recordPromise ? recordPromise.then(loadRecordSchema) : loadRecordSchema())
-                .then(onSchemaReady);
+            // If there's a record, load it first then get its schema.
+            var schemaPromise;
+            if ($stateParams.recorduuid) {
+                schemaPromise = loadRecord().then(loadRecordSchema);
+            } else {
+                schemaPromise = loadRecordSchema();
+            }
+
+            schemaPromise.then(function () {
+                // Suppress light and weather for Interventions
+                if (!ctl.isSecondary) {
+                    // Weather
+                    ctl.lightValues = WeatherService.lightValues;
+                    ctl.weatherValues = WeatherService.weatherValues;
+                    ctl.weather = '';
+                    ctl.light = '';
+                }
+                onSchemaReady();
+            });
         }
 
         // Called when calendar icon of occurred date picker is pressed
@@ -124,32 +137,39 @@
          * @param {object} record The record object where occurred_to resides
          * @param {bool} reverse True if the fix is being reversed out of for saving purposes
          */
-        function fixOccurredDTForPickers(record, reverse) {
-            /* jshint camelcase: false */
-            var occurredDT = new Date(record.occurred_from);
-            var browserTZOffset = occurredDT.getTimezoneOffset();
-            var configuredTZOffset = moment(occurredDT).tz(timeZone)._offset;
-
+        function fixOccurredDTForPickers(reverse) {
+            var occurredFromDT = new Date(ctl.occurredFrom);
+            var browserTZOffset = occurredFromDT.getTimezoneOffset();
+            var configuredTZOffset = moment(occurredFromDT).tz(timeZone)._offset;
             // Note that the native js getTimezoneOffset returns the opposite of what
             // you'd expect: i.e. EST which is UTC-5 gets returned as positive 5.
             // The `moment` method of returning the offset would return this as a -5.
             // Therefore if the browser tz is the same as the configured local tz,
             // the following offset will cancel out and return zero.
             var offset = (browserTZOffset + configuredTZOffset) * (reverse ? -1 : +1);
-            occurredDT.setMinutes(occurredDT.getMinutes() + offset);
-            record.occurred_from = occurredDT;
-            /* jshint camelcase: true */
+
+            occurredFromDT.setMinutes(occurredFromDT.getMinutes() + offset);
+            ctl.occurredFrom = occurredFromDT;
+
+            if (ctl.occurredTo) {
+                var occurredToDT = new Date(ctl.occurredTo);
+                occurredToDT.setMinutes(occurredToDT.getMinutes() + offset);
+                ctl.occurredTo = occurredToDT;
+            }
         }
 
         // Helper for loading the record -- only used when in edit mode
         function loadRecord() {
             return Records.get({ id: $stateParams.recorduuid })
                 .$promise.then(function(record) {
-                    // Prep the occurred_from datetime for use with pickers
-                    fixOccurredDTForPickers(record, false);
-
                     ctl.record = record;
+
                     /* jshint camelcase: false */
+                    ctl.occurredFrom = ctl.record.occurred_from;
+                    ctl.occurredTo = ctl.record.occurred_to;
+                    // Prep the occurred_from datetime for use with pickers
+                    fixOccurredDTForPickers(false);
+
                     // set lat/lng array into bind-able object
                     ctl.geom.lat = ctl.record.geom.coordinates[1];
                     ctl.geom.lng = ctl.record.geom.coordinates[0];
@@ -169,18 +189,47 @@
                 });
         }
 
+        /* Loads the right schema:
+         * -If there's a record, loads the latest schema for the record's type, checking whether
+         *  it matches the secondary type and setting ctl.isSecondary to true if so.
+         * -Othersise, loads either the latest schema for either the primary or the secondary
+         *  record type, depending on whether ctl.isSecondary is true.
+         * If no record type loads (e.g. if someone is trying to add a secondary record but has
+         * no secondary recordType), sets an error and returns a rejected promise.
+         */
         function loadRecordSchema() {
-            return RecordTypes.query({ record: $stateParams.recorduuid }).$promise
-                .then(function (result) {
-                    ctl.recordType = result[0];
+            var typePromise;
+            if (ctl.record) {
+                typePromise = RecordTypes.query({ record: ctl.record.uuid }).$promise
+                    .then(function (result) {
+                        var recordType = result[0];
+                        RecordState.getSecondary().then(function (secondaryType) {
+                            if (!!secondaryType && secondaryType.uuid === recordType.uuid) {
+                                ctl.isSecondary = true;
+                            }
+                        });
+                        return recordType;
+                    });
+            } else if (ctl.isSecondary) {
+                typePromise = RecordState.getSecondary();
+            } else {
+                typePromise = RecordState.getSelected();
+            }
+            return typePromise.then(function (recordType) {
+                if (recordType) {
+                    ctl.recordType = recordType;
                     /* jshint camelcase: false */
                     return RecordSchemaState.get(ctl.recordType.current_schema)
                     /* jshint camelcase: true */
                         .then(function(recordSchema) { ctl.recordSchema = recordSchema; });
-                });
+                } else {
+                    ctl.error = 'Unable to load record schema.';
+                    return $q.reject(ctl.error);
+                }
+            });
         }
 
-        function occurredFromChanged() {
+        function onDateChanged() {
             // update whether all constant fields are present
             constantFieldsValidationErrors();
         }
@@ -297,30 +346,34 @@
          * @returns {String} error message, which is empty if there are no errors
          */
         function constantFieldsValidationErrors() {
-            /* jshint camelcase: false */
             var required = {
                 'latitude': ctl.geom.lat,
                 'longitude': ctl.geom.lng,
-                'occurred': (ctl.record ? ctl.record.occurred_from : null)
+                'occurred': ctl.occurredFrom
             };
-            /* jshint camelcase: true */
 
             ctl.constantFieldErrors = {};
-            var errorMessage = '';
             angular.forEach(required, function(value, fieldName) {
                 if (!value) {
                     // message formatted to match errors from json-editor
-                    errorMessage += '<p>' + fieldName + ': Value required</p>';
-                    ctl.constantFieldErrors[fieldName] = true;
+                    ctl.constantFieldErrors[fieldName] = fieldName + ': Value required';
                 }
             });
+            if (ctl.isSecondary && ctl.occurredFrom && ctl.occurredTo &&
+                    ctl.occurredFrom > ctl.occurredTo) {
+                ctl.constantFieldErrors.occurredTo = 'End date cannot be before start date.';
+            }
 
             // make field errors falsy if empty, for partial to check easily
             if (Object.keys(ctl.constantFieldErrors).length === 0) {
                 ctl.constantFieldErrors = null;
+                return '';
+            } else {
+                var errors = _.map(ctl.constantFieldErrors, function(message) {
+                    return '<p>' + message + '</p>';
+                });
+                return errors.join('');
             }
-
-            return errorMessage;
         }
 
         function goBack() {
@@ -359,11 +412,17 @@
             var saveMethod = null;
             var dataToSave = null;
 
+            // If editing a primary record (where we don't ask for 'to' date) or if 'to' date is
+            // blank, set it to be the same as 'from' date.
+            if (!ctl.isSecondary || !ctl.occurredTo) {
+                ctl.occurredTo = ctl.occurredFrom;
+            }
+
             // Reverse the date and time picker timezone fix to get back to the actual correct time
-            fixOccurredDTForPickers(ctl.record, true);
+            fixOccurredDTForPickers(true);
 
             /* jshint camelcase: false */
-            if (ctl.record.geom) {
+            if (ctl.record && ctl.record.geom) {
                 // set back coordinates and nominatim values
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 ctl.record.location_text = ctl.nominatimLocationText;
@@ -375,10 +434,10 @@
                 ctl.record.state = ctl.nominatimState;
                 ctl.record.weather = ctl.weather;
                 ctl.record.light = ctl.light;
+                ctl.record.occurred_from = ctl.occurredFrom;
+                ctl.record.occurred_to = ctl.occurredTo;
 
                 saveMethod = 'update';
-                // set `to` date to match `from` date
-                ctl.record.occurred_to = ctl.record.occurred_from;
                 dataToSave = ctl.record;
                 dataToSave.data = editorData;
             } else {
@@ -399,9 +458,8 @@
                     weather: ctl.weather,
                     light: ctl.light,
 
-                    occurred_from: ctl.record.occurred_from,
-                    // set `to` date to match `from` date
-                    occurred_to: ctl.record.occurred_from
+                    occurred_from: ctl.occurredFrom,
+                    occurred_to: ctl.occurredTo
                 };
             }
             /* jshint camelcase: true */

@@ -40,7 +40,7 @@ describe('driver.views.record: RecordAddEdit', function () {
                             then: function(callback) {
                                 return callback(true); // read-write
                             }
-                        }
+                        };
                     },
                     isAdmin: function() { return {
                             then: function(callback) {
@@ -92,10 +92,11 @@ describe('driver.views.record: RecordAddEdit', function () {
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
         var recordTypeUrl = new RegExp('api/recordtypes/.*record=' + recordId);
+        var allRecordTypesUrl = new RegExp('api/recordtypes/');
         var recordUrl = new RegExp('api/records/' + recordId);
         var nominatimRevUrl = /\/reverse/;
 
-
+        $httpBackend.expectGET(allRecordTypesUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(nominatimRevUrl).respond(200, NominatimMock.ReverseResponse);
