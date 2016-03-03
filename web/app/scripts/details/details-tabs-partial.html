@@ -1,21 +1,21 @@
 <tabset>
-    <tab ng-repeat="definition in ctl.sortedDefinitions()"
+    <tab ng-repeat="definition in ctl.sortedDefinitions"
          heading="{{ definition.multiple ? definition.plural_title : definition.title }}"
-         ng-init="data = ctl.record.data[definition.propertyKey]; properties = ctl.sortedProperties(definition.properties)">
+         ng-init="properties = ctl.sortedProperties(definition.properties)">
 
         <driver-details-single
-            data="data"
-            properties="properties"
-            record="ctl.record"
-            definition="definition"
+            data="::ctl.record.data[definition.propertyKey]"
+            properties="::properties"
+            record="::ctl.record"
+            definition="::definition"
             ng-if="!definition.multiple">
         </driver-details-single>
 
         <driver-details-multiple
-            data="data"
-            properties="properties"
-            record="ctl.record"
-            definition="definition"
+            data="::ctl.record.data[definition.propertyKey]"
+            properties="::properties"
+            record="::ctl.record"
+            definition="::definition"
             ng-if="definition.multiple">
         </driver-details-multiple>
     </tab>

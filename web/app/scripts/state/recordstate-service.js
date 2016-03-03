@@ -29,12 +29,12 @@
          * initialization
          */
         function init() {
-          selected = null;
-          gettingSelected = false;
-          gettingOptions = false;
-          options = [];
-          defaultParams = {'active': 'True'};
-          svc.updateOptions();
+            selected = null;
+            gettingSelected = false;
+            gettingOptions = false;
+            options = [];
+            defaultParams = {'active': 'True'};
+            svc.updateOptions();
         }
 
         /**
@@ -45,17 +45,17 @@
         function updateOptions(params) {
             var filterParams = angular.extend({}, params, defaultParams);
             return RecordTypes.query(filterParams).$promise.then(function(results) {
-                  options = results;
-                  $rootScope.$broadcast('driver.state.recordstate:options', options);
-                  if (!results.length) {
-                      $log.warn('No record types returned');
-                  } else {
-                      if (!selected && options[0]) {
-                          selected = svc.setSelected(options[0]);
-                      } else if (!_.includes(options, selected)) {
-                          svc.setSelected(selected);
-                      }
-                  }
+                options = results;
+                $rootScope.$broadcast('driver.state.recordstate:options', options);
+                if (!results.length) {
+                    $log.warn('No record types returned');
+                } else {
+                    if (!selected && options[0]) {
+                        selected = svc.setSelected(options[0]);
+                    } else if (!_.includes(options, selected)) {
+                        svc.setSelected(selected);
+                    }
+                }
             });
         }
 

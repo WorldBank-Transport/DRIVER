@@ -11,6 +11,7 @@ describe('driver.details: DetailsTabs', function () {
     var $httpBackend;
     var $rootScope;
     var DriverResourcesMock;
+    var Records;
     var ResourcesMock;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,
@@ -24,14 +25,19 @@ describe('driver.details: DetailsTabs', function () {
 
     it('should render tabs item', function () {
         var scope = $rootScope.$new();
-
         scope.record = DriverResourcesMock.RecordResponse.results[0];
         scope.recordSchema = ResourcesMock.RecordSchemaResponse.results[0];
 
+        var recordUrl = /api\/records\//;
+        $httpBackend.expectGET(recordUrl).respond(200, DriverResourcesMock.RecordResponse.results[0]);
+
         var element = $compile('<driver-details-tabs ' +
-                               'record-schema="recordSchema" record="record">' +
+                               'record-schema="recordSchema" record="record" user-can-write="true">' +
                                '</driver-details-tabs>')(scope);
         $rootScope.$apply();
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
 
         expect(element.find('.tab-content').length).toEqual(1);
     });

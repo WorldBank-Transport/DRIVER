@@ -418,17 +418,17 @@
          * when a new filter is applied, layer selection is preserved
          */
         function addLayerSwitcher() {
-            var overlays = angular.extend(
-                _.zipObject([
-                    /* jshint camelcase: false */
-                    [ctl.recordType.plural_label, ctl.primaryLayerGroup],
-                    [ctl.secondaryType.plural_label, ctl.secondaryLayerGroup],
-                    /* jshint camelcase: true */
-                    ['Heatmap', ctl.heatmapLayerGroup],
-                    ['Blackspots', ctl.blackspotLayerGroup],
-                ]),
-                ctl.boundariesLayerGroup
-            );
+            /* jshint camelcase: false */
+            var recordLayers = [[ctl.recordType.plural_label, ctl.primaryLayerGroup]];
+            if (ctl.secondaryType) {
+                recordLayers.push([ctl.secondaryType.plural_label, ctl.secondaryLayerGroup]);
+            }
+            /* jshint camelcase: true */
+
+            recordLayers.push(['Heatmap', ctl.heatmapLayerGroup]);
+            recordLayers.push(['Blackspots', ctl.blackspotLayerGroup]);
+            var overlays = angular.extend(_.zipObject(recordLayers), ctl.boundariesLayerGroup);
+
             ctl.bMaps.then(
                 function(baseMaps){
                     // only add the layer switcher once
@@ -493,6 +493,11 @@
          * click events and popup
          */
         function updateSecondaryLayer(recordsUrl, utfGridUrl){
+            if (!ctl.secondaryType) {
+                ctl.secondaryLayerGroup = null;
+                return;
+            }
+
             var recordsLayerOptions = angular.extend(defaultLayerOptions, {
                 zIndex: 9
             });
@@ -507,7 +512,12 @@
                     zIndex: 11
                 });
 
-            addGridRecordEvent(utfGridRecordsLayer, { label: ctl.secondaryType.label });
+            var secondaryParams = {};
+            if (ctl.secondaryType) {
+                secondaryParams = { label: ctl.secondaryType.label };
+            }
+
+            addGridRecordEvent(utfGridRecordsLayer, secondaryParams);
 
             if (!ctl.secondaryLayerGroup) {
                 ctl.secondaryLayerGroup = new L.layerGroup(
@@ -771,7 +781,7 @@
         }
 
         function getTilekeys() {
-            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams()).then(
+            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams(), true, true, false).then(
                 function(records) { ctl.tilekey = records.tilekey; }
             );
             var secondary = $q.resolve('');
@@ -780,7 +790,7 @@
                 /* jshint camelcase: false */
                 params.record_type = ctl.secondaryType.uuid;
                 /* jshint camelcase: true */
-                secondary = QueryBuilder.djangoQuery(0, params, true, false).then(
+                secondary = QueryBuilder.djangoQuery(0, params, true, false, false).then(
                     function(records) { ctl.secondaryTilekey = records.tilekey; }
                 );
             }

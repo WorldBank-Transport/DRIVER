@@ -34,14 +34,18 @@
                                        from FilterState service.
          * @param {bool} doJsonFilters If true: Generate a filter on record data (i.e. jsonb fields)
                                        from FilterState service.
+         * @param {bool} detailsOnly   If true: Return only the Details section of the record
          */
-        function djangoQuery(offset, extraParams, doAttrFilters, doJsonFilters) {
+        function djangoQuery(offset, extraParams, doAttrFilters, doJsonFilters, detailsOnly) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
             // Default to applying filters
             doAttrFilters = doAttrFilters !== false;
             doJsonFilters = doJsonFilters !== false;
-            assembleParams(offset, doAttrFilters, doJsonFilters).then(function(params) {
+            // Default to include only details in response
+            detailsOnly = detailsOnly !== false;
+
+            assembleParams(offset, doAttrFilters, doJsonFilters, detailsOnly).then(function(params) {
                 Records.get(_.extend(params, extraParams)).$promise.then(function(records) {
                     deferred.resolve(records);
                 });
@@ -106,9 +110,10 @@
          * @param {number} offset The offset to use for pagination of results
          * @param {bool} doAttrFilters Whether or not to include filters on record attributes
          * @param {bool} doJsonFilters Whether or not to include filters on record data (jsonb fields)
+         * @param {bool} detailsOnly   Whether or not to request only the Details section
          *
          */
-        function assembleParams(offset, doAttrFilters, doJsonFilters) {
+        function assembleParams(offset, doAttrFilters, doJsonFilters, detailsOnly) {
             var deferred = $q.defer();
             var paramObj = { limit: WebConfig.record.limit };
             var p1;
@@ -130,6 +135,12 @@
                         }
                     }
                 );
+            }
+
+            if (detailsOnly) {
+                paramObj = _.extend(paramObj, {
+                    details_only: 'True'
+                });
             }
 
             $q.when(p1).then(function() {

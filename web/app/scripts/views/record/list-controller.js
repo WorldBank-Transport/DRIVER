@@ -68,7 +68,7 @@
             var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
             /* jshint camelcase: true */
 
-            return QueryBuilder.djangoQuery(newOffset, params)
+            return QueryBuilder.djangoQuery(newOffset, params, true, true, true)
             .then(function(records) {
                 ctl.records = records;
                 ctl.currentOffset = newOffset;
@@ -120,7 +120,7 @@
                 size: 'lg',
                 resolve: {
                     record: function() {
-                        return record;
+                         return record;
                     },
                     recordType: function() {
                         return ctl.recordType;
