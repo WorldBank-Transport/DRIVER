@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterbarController($log, $modal, $scope, $timeout, debounce, RecordSchemaState,
+    function FilterbarController($modal, $scope, $timeout, debounce, RecordSchemaState,
                                  AuthService, FilterState, RecordState) {
         var ctl = this;
         ctl.filters = {};
@@ -124,7 +124,6 @@
                 } else {
                     value = { contains: [] };
                 }
-                $log.debug('restored filter ' + label + ' has val: ', value);
                 // listen for this in filter widget controllers to set value if label matches
                 $scope.$broadcast('driver.filterbar:restored', {label: label, value: value});
             });
