@@ -466,7 +466,11 @@
 
             Records[saveMethod](dataToSave, function (record) {
                 $log.debug('Saved record with uuid: ', record.uuid);
-                $state.go('record.list');
+                if (ctl.isSecondary) {
+                    $state.go('map');
+                } else {
+                    $state.go('record.list');
+                }
             }, function (error) {
                 $log.debug('Error while creating record:', error);
                 showErrorNotification(['<p>Error creating record</p><p>',
