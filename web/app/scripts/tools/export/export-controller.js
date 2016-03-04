@@ -13,12 +13,9 @@
      */
 
     /* ngInject */
-    function ExportController($interval, $modal, $rootScope, $scope,
-                              Exports, InitialState, QueryBuilder) {
+    function ExportController($modal, $rootScope, $scope, RecordExports, InitialState,
+                              QueryBuilder) {
         var ctl = this;
-        var pollingInterval;
-        var POLLING_INTERVAL_MS = 1500;
-        var MAX_POLLING_TIME_S = 100;
 
         InitialState.ready().then(initialize);
 
@@ -40,53 +37,23 @@
             }
         }
 
+        $scope.$on('driver.tools.charts.open', function () { ctl.isOpen = false; });
+        $scope.$on('driver.tools.interventions.open', function () { ctl.isOpen = false; });
+
         function exportCSV() {
-            cancelPolling();
+            RecordExports.cancelPolling();
             ctl.error = null;
             ctl.downloadURL = null;
+            ctl.pending = true;
 
             var params = _.extend({ tilekey: true, limit: 0 }, ctl.recordQueryParams);
             // Get a tilekey then trigger an export
             QueryBuilder.djangoQuery(0, params).then(function(records) {
-                Exports.create({ tilekey: records.tilekey },
-                    function (result) {pollForDownload(result.taskid); },
-                    function () { ctl.error = 'Error initializing export.'; }
-                );
+                RecordExports.exportCSV(records.tilekey).promise.then(
+                    function (result) { ctl.downloadURL = result; },
+                    function (error) { ctl.error = error; }
+                ).finally(function() { ctl.pending = false; });
             });
-        }
-
-        function pollForDownload(taskID) {
-            ctl.pending = true;
-            pollingInterval = $interval(function () {
-                    Exports.get({ id: taskID }).$promise.then(function (response) {
-                        switch (response.status) {
-                            case 'PENDING':
-                            case 'STARTED':
-                                break;
-                            case 'FAILURE':
-                                ctl.error = response.error;
-                                cancelPolling();
-                                break;
-                            case 'SUCCESS':
-                                ctl.downloadURL = response.result;
-                                cancelPolling();
-                                break;
-                        }
-                    });
-                },
-                POLLING_INTERVAL_MS,
-                MAX_POLLING_TIME_S * 1000 / POLLING_INTERVAL_MS
-            );
-            // The interval's promise resolves if it hits the limit without being cancelled
-            pollingInterval.then(function () {
-                cancelPolling();
-                ctl.error = 'Export request timed out.';
-            });
-        }
-
-        function cancelPolling() {
-            ctl.pending = false;
-            $interval.cancel(pollingInterval);
         }
 
         // Shows the custom reports modal
@@ -97,9 +64,7 @@
             });
         }
 
-        $scope.$on('driver.tools.charts.open', function () { ctl.isOpen = false; });
-        $scope.$on('driver.tools.interventions.open', function () { ctl.isOpen = false; });
-        $scope.$on('$destroy', cancelPolling);
+        $scope.$on('$destroy', RecordExports.cancelPolling);
     }
 
     angular.module('driver.tools.export')

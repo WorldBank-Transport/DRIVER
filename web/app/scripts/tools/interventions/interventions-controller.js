@@ -3,16 +3,13 @@
 
     /**
      * Handles the interaction for intervention adding and exports.
-     * Applies date and geography filters.
+     * Applies date and geography filters to export.
      */
 
     /* ngInject */
-    function InterventionsController($rootScope, $scope, $interval, RecordState,
-                                     InitialState, QueryBuilder, Exports) {
+    function InterventionsController($rootScope, $scope, RecordState, InitialState, QueryBuilder,
+                                     RecordExports) {
         var ctl = this;
-        var pollingInterval;
-        var POLLING_INTERVAL_MS = 1500;
-        var MAX_POLLING_TIME_S = 100;
 
         InitialState.ready().then(initialize);
 
@@ -41,58 +38,25 @@
         $scope.$on('driver.tools.export.open', function () { ctl.isOpen = false; });
 
         function exportCSV() {
-            cancelPolling();
+            RecordExports.cancelPolling();
             ctl.error = null;
             ctl.downloadURL = null;
+            ctl.pending = true;
 
             /* jshint camelcase: false */
             var params = _.extend({ tilekey: true, record_type: ctl.recordType.uuid },
                                   ctl.recordQueryParams);
             /* jshint camelcase: true */
             // Get a tilekey then trigger an export
-            QueryBuilder.djangoQuery(0, params).then(function(records) {
-                Exports.create({ tilekey: records.tilekey },
-                    function (result) { pollForDownload(result.taskid); },
-                    function () { ctl.error = 'Error initializing export.'; }
-                );
+            QueryBuilder.djangoQuery(0, params, true, false, true).then(function(records) {
+                RecordExports.exportCSV(records.tilekey).promise.then(
+                    function (result) { ctl.downloadURL = result; },
+                    function (error) { ctl.error = error; }
+                ).finally(function() { ctl.pending = false; });
             });
         }
 
-        function pollForDownload(taskID) {
-            ctl.pending = true;
-            pollingInterval = $interval(function () {
-                    Exports.get({ id: taskID }).$promise.then(function (response) {
-                        switch (response.status) {
-                            case 'PENDING':
-                            case 'STARTED':
-                                break;
-                            case 'FAILURE':
-                                ctl.error = response.error;
-                                cancelPolling();
-                                break;
-                            case 'SUCCESS':
-                                ctl.downloadURL = response.result;
-                                cancelPolling();
-                                break;
-                        }
-                    });
-                },
-                POLLING_INTERVAL_MS,
-                MAX_POLLING_TIME_S * 1000 / POLLING_INTERVAL_MS
-            );
-            // The interval's promise resolves if it hits the limit without being cancelled
-            pollingInterval.then(function () {
-                cancelPolling();
-                ctl.error = 'Export request timed out.';
-            });
-        }
-
-        function cancelPolling() {
-            ctl.pending = false;
-            $interval.cancel(pollingInterval);
-        }
-
-        $scope.$on('$destroy', cancelPolling);
+        $scope.$on('$destroy', RecordExports.cancelPolling);
     }
 
     angular.module('driver.tools.interventions')

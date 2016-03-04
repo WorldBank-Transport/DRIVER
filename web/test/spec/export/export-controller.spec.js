@@ -66,7 +66,7 @@ describe('driver.tools.export: ExportController', function () {
         expect(Controller.pending).toBe(false);
     });
 
-    describe('driver.tools.export: ExportController.pollForDownload', function () {
+    describe('driver.tools.export: ExportController.exportCSV', function () {
         var statusURL;
 
         beforeEach(function () {
