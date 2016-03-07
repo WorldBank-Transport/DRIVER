@@ -22,8 +22,7 @@
 
     /* ngInject */
     function LocalStorageConfig(localStorageServiceProvider) {
-        localStorageServiceProvider.setPrefix('DRIVER.ASE')
-                                   .setStorageType('sessionStorage');
+        localStorageServiceProvider.setPrefix('DRIVER.ASE');
     }
 
     /* ngInject */
