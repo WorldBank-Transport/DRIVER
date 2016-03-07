@@ -3,7 +3,7 @@
 
     /* ngInject */
     function BlackSpotsController(
-        InitialState, TileUrlService, FilterState, RecordState, BlackspotSets
+        InitialState, TileUrlService, FilterState, RecordState, BoundaryState, BlackspotSets
     ) {
         var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var ctl = this;
@@ -13,6 +13,7 @@
         function initMap(leafletController) {
             leafletController.getMap()
                 .then(addBaseLayers)
+                .then(updateBoundary)
                 .then(addBlackSpotLayer);
         }
 
@@ -64,6 +65,16 @@
             } else {
                 return '';
             }
+        }
+
+        function updateBoundary(map) {
+            BoundaryState.getSelected().then(function(boundary) {
+                if (boundary.bbox) {
+                    map.fitBounds(boundary.bbox);
+                }
+            });
+
+            return map;
         }
     }
 
