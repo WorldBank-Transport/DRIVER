@@ -7,11 +7,11 @@ import json
 import requests
 import sys
 import os
-from dateutil import parser
 import uuid
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
+
 
 def read_interventions(input_path):
     """Reads the input geojson file of interventions"""
@@ -32,6 +32,7 @@ def read_interventions(input_path):
 
         return interventions
 
+
 def load(record, api, headers=None):
     """Load an object into the data store via the API"""
     if headers is None:
@@ -43,6 +44,7 @@ def load(record, api, headers=None):
     if response.status_code != 201:
         logger.error(response.text)
     response.raise_for_status()
+
 
 def transform(record, schema_id):
     """Converts records into objects compliant with the schema.
@@ -59,7 +61,7 @@ def transform(record, schema_id):
         'occurred_to': 'None',
         'geom': 'POINT (0 0)'
     }
-    
+
     data = obj['data']
     data['interventionDetails']['Type'] = record['properties']['Type']
 
@@ -79,18 +81,27 @@ def transform(record, schema_id):
 
     return obj
 
+
 def create_schema(schema_path, api, headers=None):
     """Create a recordtype/schema into which to load all new objects"""
-    # Create record type
-    response = requests.post(api + '/recordtypes/',
-                             data={'label': 'Intervention',
-                                   'plural_label': 'Interventions',
-                                   'description': 'Actions to improve traffic safety',
-                                   'active': True},
-                             headers=headers)
+    response = requests.get(api + '/recordtypes/?label=Intervention&active=True', headers=headers)
     response.raise_for_status()
-    rectype_id = response.json()['uuid']
-    logger.info('Created RecordType')
+    results = response.json()['results']
+    try:
+        rectype_id = results[0]['uuid']
+        logger.info('Loaded RecordType')
+    except IndexError:
+        # Create record type
+        response = requests.post(api + '/recordtypes/',
+                                 data={'label': 'Intervention',
+                                       'plural_label': 'Interventions',
+                                       'description': 'Actions to improve traffic safety',
+                                       'active': True},
+                                 headers=headers)
+        response.raise_for_status()
+        rectype_id = response.json()['uuid']
+        logger.info('Created RecordType')
+
     # Create associated schema
     with open(schema_path, 'r') as schema_file:
         schema_json = json.load(schema_file)
@@ -99,10 +110,11 @@ def create_schema(schema_path, api, headers=None):
                                                   u'schema': schema_json}),
                                  headers=dict({'content-type': 'application/json'}.items() +
                                               headers.items()))
-    logger.warn(response.json())
+    logger.warn('Schema creation response: %s', response.json())
     response.raise_for_status()
     logger.info('Created RecordSchema')
     return response.json()['uuid']
+
 
 def main():
     """Main entry point for the script"""
@@ -125,8 +137,8 @@ def main():
     logger.info("Loading data")
     interventions = read_interventions(args.geojson_input_path)
     for intervention in interventions:
-    	logger.warn(intervention)
-    	load(transform(intervention, schema_id), args.api_url, headers)
+        logger.warn(intervention)
+        load(transform(intervention, schema_id), args.api_url, headers)
 
     logger.info('Loading interventions complete')
 
