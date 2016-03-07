@@ -30,7 +30,8 @@ def export_csv(query_key):
     # Get the most recent Schema for the Records' RecordType
     # This assumes that all of the Records have the same RecordType.
     try:
-        schema = records[0].schema.record_type.get_current_schema()
+        record_type = records[0].schema.record_type
+        schema = record_type.get_current_schema()
     except IndexError:
         raise Exception('Filter includes no records')
     # Create files and CSV Writers from Schema
@@ -47,8 +48,9 @@ def export_csv(query_key):
         tarinfo.mode = 0755
         return tarinfo
 
-    archive = tarfile.open(os.path.join(settings.CELERY_EXPORTS_FILE_PATH,
-                                        '{}.tar.gz'.format(query_key)), mode='w:gz')
+    filename = os.path.join(settings.CELERY_EXPORTS_FILE_PATH,
+                            "{}-{}.tar.gz".format(record_type.plural_label, query_key[:8]))
+    archive = tarfile.open(filename, mode='w:gz')
     # Add a directory for the schema we're outputting
     dir = tarfile.TarInfo('schema-' + str(schema.pk))
     dir.type = tarfile.DIRTYPE
