@@ -1,0 +1,73 @@
+<div class="custom-reports">
+    <div class="close" ng-click="modal.closeModal()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3>Custom Report</h3>
+    </div>
+    <div class="modal-body">
+        <div class="well">
+            <h4>Active Filters</h4>
+            <div>
+                <strong>Date Range:</strong>
+                <span>{{ ::modal.dateFilter.minDate | localDateTime : modal.dateFormat }}</span> -
+                <span>{{ ::modal.dateFilter.maxDate | localDateTime : modal.dateFormat }}</span>
+            </div>
+            <div ng-if="modal.nonDateFilters | savedFilterAsHTML">
+                <span ng-bind-html="modal.nonDateFilters | savedFilterAsHTML: '<br />'"></span>
+            </div>
+            <h6>
+                <em>* To modify these filters, cancel and make adjustments on the page</em>
+            </h6>
+        </div>
+
+        <div class="col-md-6">
+            <label class="control-label">Organize Report By (rows)</label>
+            <select ng-options="agg as agg.label
+                                group by agg.type
+                                for agg in modal.rowColAggs
+                                | orderBy: 'label'"
+                    ng-model="modal.rowAggSelected"
+                    class="form-control">
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="control-label">Organize Report By (columns)</label>
+            <select ng-options="agg as agg.label
+                                group by agg.type
+                                for agg in modal.rowColAggs
+                                | orderBy: 'label'"
+                    ng-model="modal.colAggSelected"
+                    class="form-control">
+            </select>
+        </div>
+
+        <div class="col-md-12"
+             ng-if="modal.colAggSelected && modal.rowAggSelected
+                    && modal.colAggSelected.type !== 'Geography'
+                    && modal.rowAggSelected.type !== 'Geography'">
+            <label class="control-label">
+                Geographic Aggregation (pages &mdash; <em>optional</em>)
+            </label>
+            <select ng-options="agg as agg.label for agg in modal.rowColAggs
+                                | filter: { type: 'Geography' }
+                                | orderBy: 'label'"
+                    ng-model="modal.geoAggSelected"
+                    class="form-control">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default"
+                ng-click="modal.closeModal()">
+            Cancel
+        </button>
+        <button class="btn btn-default"
+                ng-click="modal.createReport()"
+                ng-disabled="!modal.colAggSelected || !modal.rowAggSelected">
+            Custom Report
+        </button>
+    </div>
+</div>

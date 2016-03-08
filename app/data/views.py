@@ -205,7 +205,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             - col_choices_path
             As you might expect, these operate identically to the row_* parameters above, but the
             results are used as columns instead.
-        - record_type_id: The UUID of the record type which should be aggregated
+        - record_type: The UUID of the record type which should be aggregated
 
         Allows the following query parameters:
         - aggregation_boundary: Id of a Boundary; separate tables will be generated for each

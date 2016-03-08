@@ -9,7 +9,10 @@
             return !isNaN(parseFloat(n)) && isFinite(n);
         }
 
-        return function(filterObj) {
+        return function(filterObj, divider) {
+            // `divider` text is optional, if unspecified it uses a span containing a pipe
+            divider = divider || '<span class="divider">|</span>';
+
             var htmlBlocks = [];
 
             _.forOwn(filterObj, function(val, key) {
@@ -54,7 +57,7 @@
                 /* jshint camelcase: true */
             });
 
-            return htmlBlocks.join('<span class="divider">|</span>');
+            return htmlBlocks.join(divider);
         };
     }
 

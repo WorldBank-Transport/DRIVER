@@ -2,13 +2,19 @@
     'use strict';
 
     /**
-     * Handles the interaction for CSV exports.
-     * Makes a request to start an export job then polls for the result and provides the link.
+     * Handles the interaction for CSV exports and custom report generation.
      * Uses filter query parameters provided by MapController.
+     *
+     * For CSV exports - makes a request to start an export job then polls
+     * for the result and provides the link.
+     *
+     * For custom reports - displays a modal to configure the report then
+     * opens up the report in a new window.
      */
 
     /* ngInject */
-    function ExportController($rootScope, $scope, $interval, Exports, InitialState, QueryBuilder) {
+    function ExportController($interval, $modal, $rootScope, $scope,
+                              Exports, InitialState, QueryBuilder) {
         var ctl = this;
         var pollingInterval;
         var POLLING_INTERVAL_MS = 1500;
@@ -24,6 +30,7 @@
 
             ctl.toggle = toggle;
             ctl.exportCSV = exportCSV;
+            ctl.showCustomReportsModal = showCustomReportsModal;
         }
 
         function toggle() {
@@ -80,6 +87,14 @@
         function cancelPolling() {
             ctl.pending = false;
             $interval.cancel(pollingInterval);
+        }
+
+        // Shows the custom reports modal
+        function showCustomReportsModal() {
+            $modal.open({
+                templateUrl: 'scripts/custom-reports/custom-reports-modal-partial.html',
+                controller: 'CustomReportsModalController as modal'
+            });
         }
 
         $scope.$on('driver.charts.open', function () { ctl.isOpen = false; });
