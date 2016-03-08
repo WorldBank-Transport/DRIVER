@@ -11,7 +11,7 @@
             bindToController: true,
             scope: {
                 recordQueryParams: '=params'
-            },
+            }
         };
         return module;
 
