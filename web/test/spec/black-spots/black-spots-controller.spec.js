@@ -48,12 +48,21 @@ describe('driver.blackSpots: BlackSpotsController', function() {
         MapState.setZoom(7);
 
         var recordTypeUrl = /\/api\/recordtypes\//;
+        var boundaryUrl = /\/api\/boundaries\//;
         var blackspotUrl = /\/api\/blackspotsets\//;
+        var boundaryPolygonsUrl = /\/api\/boundarypolygons/;
 
         $httpBackend.expectGET(recordTypeUrl)
             .respond(200, ResourcesMock.RecordTypeResponse);
+
+        $httpBackend.expectGET(boundaryUrl)
+            .respond(200, DriverResourcesMock.BoundaryResponse);        
+
         $httpBackend.expectGET(recordTypeUrl)
             .respond(200, ResourcesMock.RecordTypeResponse);
+
+        $httpBackend.expectGET(boundaryPolygonsUrl)
+            .respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $httpBackend.expectGET(blackspotUrl)
             .respond(200, DriverResourcesMock.BlackspotSetResponse);
