@@ -91,11 +91,14 @@
         function loadFilters(recordSchema) {
             return RecordSchemaState.getFilterables(recordSchema.uuid).then(function(filters) {
                 _.each(filters, function(filter, path) {
-                    ctl.rowColAggs.push({
-                        label: path.split('#')[1],
-                        value: path.replace('#', ','),
-                        type: 'Filter'
-                    });
+                    // The backend only supports enumerable (selectlist) fields
+                    if (filter.fieldType === 'selectlist') {
+                        ctl.rowColAggs.push({
+                            label: path.split('#')[1],
+                            value: path.replace('#', ','),
+                            type: 'Filter'
+                        });
+                    }
                 });
             });
         }
