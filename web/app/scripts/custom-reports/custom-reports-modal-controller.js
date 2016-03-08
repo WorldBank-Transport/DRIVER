@@ -66,7 +66,6 @@
 
             // Add the list of filters availalable to the dropdown aggregation lists
             RecordState.getSelected()
-                .then(loadRecordSchema)
                 .then(loadFilters);
         }
 
@@ -82,23 +81,28 @@
             });
         }
 
-        function loadRecordSchema(recordType) {
+        /**
+         * We can only aggregate on enumerated properties. Loops through the schema (at the
+         * definition#property level, not recursively) and adds filters for each
+         * enumerated property it finds.
+         *
+         * TODO:  add " || property.format === 'number'" to the condition to enable aggregating
+         * numerical properties if/when that's implemented on the back end.
+         */
+        function loadFilters(recordType) {
             /* jshint camelcase: false */
-            return RecordSchemaState.get(recordType.current_schema);
+            return RecordSchemaState.get(recordType.current_schema).then(function(schema) {
             /* jshint camelcase: true */
-        }
-
-        function loadFilters(recordSchema) {
-            return RecordSchemaState.getFilterables(recordSchema.uuid).then(function(filters) {
-                _.each(filters, function(filter, path) {
-                    // The backend only supports enumerable (selectlist) fields
-                    if (filter.fieldType === 'selectlist') {
-                        ctl.rowColAggs.push({
-                            label: path.split('#')[1],
-                            value: path.replace('#', ','),
-                            type: 'Filter'
-                        });
-                    }
+                _.forEach(schema.schema.definitions, function(definition, defName) {
+                    _.forEach(definition.properties, function(property, propName) {
+                        if (property.fieldType === 'selectlist') {
+                            ctl.rowColAggs.push({
+                                label: propName,
+                                value: [defName, propName].join(','),
+                                type: 'Filter'
+                            });
+                        }
+                    });
                 });
             });
         }
