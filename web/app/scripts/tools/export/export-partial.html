@@ -9,11 +9,11 @@
     </div>
     <div class="tool-content">
         <div class="tool-body">
-            <div class="export-item clickable" ng-click="ctl.showCustomReportsModal()">
+            <div class="tool-item clickable" ng-click="ctl.showCustomReportsModal()">
                 <span class="glyphicon glyphicon-th-list"></span>
                 Custom Report
             </div>
-            <div class="export-item" ng-class="{ 'clickable': !ctl.pending }">
+            <div class="tool-item" ng-class="{ 'clickable': !ctl.pending }">
                 <div ng-if="!ctl.pending" ng-click="ctl.exportCSV()">
                     <span class="glyphicon glyphicon-export"></span>
                     <span ng-if="!ctl.downloadURL">Export CSV</span>
@@ -25,7 +25,7 @@
                 </div>
                 <div class="error" ng-if="ctl.error">{{ ctl.error }}</div>
             </div>
-            <div class="export-item" ng-if="ctl.downloadURL && !ctl.pending">
+            <div class="tool-item" ng-if="ctl.downloadURL && !ctl.pending">
                 <span class="glyphicon glyphicon-download-alt"></span>
                 <a href="{{ ctl.downloadURL }}" download>Download CSV</a>
             </div>

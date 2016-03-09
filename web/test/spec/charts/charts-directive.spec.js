@@ -1,9 +1,9 @@
 'use strict';
 
-describe('driver.charts: Charts', function () {
+describe('driver.tools.charts: Charts', function () {
 
     beforeEach(module('ase.templates'));
-    beforeEach(module('driver.charts'));
+    beforeEach(module('driver.tools.charts'));
 
     var $compile;
     var $rootScope;

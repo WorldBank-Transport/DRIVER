@@ -11,7 +11,7 @@
                 maxDate: '=',
                 toddow: '='
             },
-            templateUrl: 'scripts/charts/charts-partial.html',
+            templateUrl: 'scripts/tools/charts/charts-partial.html',
             bindToController: true,
             controller: 'ChartsController',
             controllerAs: 'ctl'
@@ -19,7 +19,7 @@
         return module;
     }
 
-    angular.module('driver.charts')
+    angular.module('driver.tools.charts')
     .directive('driverCharts', Charts);
 
 })();

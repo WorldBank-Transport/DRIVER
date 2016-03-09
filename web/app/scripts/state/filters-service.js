@@ -6,7 +6,7 @@
     'use strict';
 
     /* ngInject */
-    function FilterState($log, $rootScope, debounce, localStorageService, WebConfig) {
+    function FilterState($rootScope, debounce, localStorageService, WebConfig) {
         var svc = this;
 
         var storageName = 'filterbar.filters';
@@ -72,9 +72,6 @@
 
             var geoFilterObj = localStorageService.get(geoFilterObj);
             geoFilterObj = !!geoFilterObj ? geoFilterObj : null;
-
-            $log.debug('Restoring filters:');
-            $log.debug([filterObj, geoFilterObj]);
 
             // tell the filterbar to set the filters back
             $rootScope.$broadcast('driver.filterbar:restore', [filterObj, geoFilterObj]);

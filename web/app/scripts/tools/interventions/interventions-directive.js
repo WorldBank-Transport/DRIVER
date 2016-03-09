@@ -2,22 +2,22 @@
     'use strict';
 
     /* ngInject */
-    function Export() {
+    function Interventions() {
         var module = {
             restrict: 'AE',
-            templateUrl: 'scripts/export/export-partial.html',
-            controller: 'ExportController',
+            templateUrl: 'scripts/tools/interventions/interventions-partial.html',
+            controller: 'InterventionsController',
             controllerAs: 'ctl',
             bindToController: true,
             scope: {
                 recordQueryParams: '=params'
-            }
+            },
         };
         return module;
 
     }
 
-    angular.module('driver.export')
-    .directive('driverExport', Export);
+    angular.module('driver.tools.interventions')
+    .directive('driverInterventions', Interventions);
 
 })();
