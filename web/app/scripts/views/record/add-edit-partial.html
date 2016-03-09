@@ -151,7 +151,7 @@
                     <button type="button" class="btn btn-primary btn-block"
                         ng-disabled="ctl.editor.errors.length > 0 || ctl.constantFieldErrors"
                         ng-click="ctl.onSaveClicked()">Save {{ ::ctl.recordType.label }}</button>
-                    <button type="button" class="btn btn-warning btn-block"
+                    <button type="button" class="btn btn-warning btn-block" ng-if="ctl.record"
                         ng-click="ctl.onDeleteClicked()">Delete {{ ::ctl.recordType.label }}</button>
                     <button type="button" class="btn btn-default btn-block"
                         ng-click="ctl.goBack()">Cancel</button>
