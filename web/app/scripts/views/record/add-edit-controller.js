@@ -382,7 +382,7 @@
         }
 
         function onDeleteClicked() {
-            if ($window.confirm('Really delete? This cannot be undone.')) {
+            if ($window.confirm('Do you really want to delete? This cannot be undone.')) {
                 var patchData = {
                     archived: true,
                     uuid: ctl.record.uuid
