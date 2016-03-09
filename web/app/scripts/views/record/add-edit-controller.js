@@ -18,6 +18,7 @@
             ctl.fixOccurredDTForPickers = fixOccurredDTForPickers;
             ctl.goBack = goBack;
             ctl.onDataChange = onDataChange;
+            ctl.onDeleteClicked = onDeleteClicked;
             ctl.onSaveClicked = onSaveClicked;
             ctl.onDateChanged = onDateChanged;
             ctl.onGeomChanged = onGeomChanged;
@@ -378,6 +379,28 @@
 
         function goBack() {
             $window.history.back();
+        }
+
+        function onDeleteClicked() {
+            if ($window.confirm('Do you really want to delete? This cannot be undone.')) {
+                var patchData = {
+                    archived: true,
+                    uuid: ctl.record.uuid
+                };
+
+                Records.update(patchData, function (record) {
+                    $log.debug('Deleted record with uuid: ', record.uuid);
+                    $state.go('record.list');
+                }, function (error) {
+                    $log.debug('Error while deleting record:', error);
+                    showErrorNotification(['<p>Error creating record</p><p>',
+                       error.status,
+                       ': ',
+                       error.statusText,
+                       '</p>'
+                    ].join(''));
+                });
+            }
         }
 
         function onSaveClicked() {

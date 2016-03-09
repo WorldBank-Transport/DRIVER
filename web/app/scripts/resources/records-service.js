@@ -3,8 +3,10 @@
 
     /* ngInject */
     function Records($resource, WebConfig) {
-        return $resource(WebConfig.api.hostname + '/api/records/:id/',
-                         {id: '@uuid', archived: false}, {
+        return $resource(WebConfig.api.hostname + '/api/records/:id/', {
+            id: '@uuid',
+            archived: 'False' // Note: a regular 'false' boolean doesn't filter properly in DRF
+        }, {
             create: {
                 method: 'POST'
             },

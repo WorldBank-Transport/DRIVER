@@ -27,8 +27,7 @@
 
     /* ngInject */
     function LocalStorageConfig(localStorageServiceProvider) {
-        localStorageServiceProvider.setPrefix('DRIVER.web')
-                                   .setStorageType('sessionStorage');
+        localStorageServiceProvider.setPrefix('DRIVER.web');
     }
 
     /* ngInject */

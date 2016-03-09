@@ -4,10 +4,10 @@
 
 .navbar-default {
     position: fixed;
-    z-index: 10;
+    z-index: 1001; /* Ensure above Leaflet controls */
     width: 100%;
     top: 0px;
-   
+
     background-color: #344055;
     border: none;
     border-radius: 0;

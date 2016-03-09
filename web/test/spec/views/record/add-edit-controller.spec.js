@@ -11,19 +11,21 @@ describe('driver.views.record: AddEditController', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
+    var $window;
     var Controller;
     var DriverResourcesMock;
     var ResourcesMock;
     var NominatimMock;
 
     // Initialize the controller and a mock scope
-    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$window_,
                                 _DriverResourcesMock_, _NominatimMock_,
                                 _ResourcesMock_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
+        $window = _$window_;
         DriverResourcesMock = _DriverResourcesMock_;
         NominatimMock = _NominatimMock_;
         ResourcesMock = _ResourcesMock_;
@@ -89,6 +91,21 @@ describe('driver.views.record: AddEditController', function () {
         Controller.onSaveClicked();
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
+    });
+
+    it('should allow deleting a record', function () {
+        // Deleting a record causes a confirmation dialog. This fakes the click.
+        spyOn($window, 'confirm').and.callFake(function () {
+            return true;
+        });
+
+        // Should submit a PATCH request to record endpoint
+        var recordEndpoint = new RegExp('api/records/');
+        $httpBackend.expectPATCH(recordEndpoint).respond(200);
+        Controller.onDeleteClicked();
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+        expect($window.confirm).toHaveBeenCalled();
     });
 
     it('should allow adding a new record', function () {
