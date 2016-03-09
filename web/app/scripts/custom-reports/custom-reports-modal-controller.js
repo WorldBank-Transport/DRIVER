@@ -2,12 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function CustomReportsModalController($log, $modalInstance,
+    function CustomReportsModalController($log, $modalInstance, $state, $window,
                                           FilterState, GeographyState, QueryBuilder,
                                           RecordState, RecordSchemaState) {
         var ctl = this;
         ctl.closeModal = closeModal;
         ctl.createReport = createReport;
+        ctl.onParamChanged = onParamChanged;
 
         // Only the date part is needed when displaying these dates
         ctl.dateFormat = 'MMM D, YYYY';
@@ -57,6 +58,8 @@
         init();
 
         function init() {
+            ctl.ready = false;
+
             // Add the active filters for display
             ctl.nonDateFilters = _.omit(FilterState.filters, '__dateRange');
             ctl.dateFilter = FilterState.getDateFilter();
@@ -98,7 +101,7 @@
                         if (property.fieldType === 'selectlist') {
                             ctl.rowColAggs.push({
                                 label: propName,
-                                value: [defName, propName].join(','),
+                                value: [defName, 'properties', propName].join(','),
                                 type: 'Filter'
                             });
                         }
@@ -132,11 +135,16 @@
             params[key] = aggObj.value;
         }
 
-        function createReport() {
-            QueryBuilder.assembleParams(0, true, true).then(
-                function(params) {
-                    /* jshint camelcase: false */
+        function onParamChanged() {
+            ctl.ready = false;
+            if (ctl.colAggSelected && ctl.rowAggSelected) {
+                assembleParams().then(function () { ctl.ready = true; });
+            }
+        }
 
+        function assembleParams() {
+            return QueryBuilder.assembleParams(0, true, true).then(
+                function(params) {
                     var crosstabsParams = {};
                     setRowColParam('col', ctl.colAggSelected, crosstabsParams);
                     setRowColParam('row', ctl.rowAggSelected, crosstabsParams);
@@ -145,11 +153,13 @@
                     // aggregation was selected for rows/cols. Similar logic is in the partial
                     // for displaying/hiding the dropdown, but it is also performed here for
                     // good measure (e.g. if selections are made and then later changed).
+                    /* jshint camelcase: false */
                     if (ctl.geoAggSelected &&
                         ctl.colAggSelected.type !== 'Geography' &&
                         ctl.rowAggSelected.type !== 'Geography') {
                         crosstabsParams.aggregation_boundary = ctl.geoAggSelected.value;
                     }
+                    /* jshint camelcase: true */
                     params = _.extend(params, crosstabsParams);
 
                     // Ensure the page limit parameter is not set
@@ -157,14 +167,13 @@
                         delete params.limit;
                     }
 
-                    // We now have all the parameters needed for performing a crosstabs query.
-                    // TODO: when reports page exists, open it in a new window with these params.
-
-                    /* jshint camelcase: true */
-
-                    $modalInstance.close();
+                    ctl.params = params;
                 }
             );
+        }
+
+        function createReport() {
+            $window.open($state.href('report', ctl.params, {absolute: true}), '_blank');
         }
 
         return ctl;

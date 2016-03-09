@@ -1,0 +1,23 @@
+<div class="table-view custom-report">
+    <div class="table-view-container">
+        <div class="overflow">
+            <table class="table" ng-repeat="table in ctl.report.tables">
+                <caption><!-- Table title --></caption>
+                <thead>
+                    <tr>
+                        <th><!--Label for row category--></th>
+                        <th ng-repeat="col in ctl.report.col_labels">{{ ::col.label }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in ctl.report.row_labels">
+                        <td>{{ ::row.label }}</td>
+                        <td ng-repeat="col in ctl.report.col_labels">
+                            {{ table.data && table.data[row.key] && table.data[row.key][col.key] || 0 }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -28,6 +28,7 @@
                                 for agg in modal.rowColAggs
                                 | orderBy: 'label'"
                     ng-model="modal.rowAggSelected"
+                    ng-change="modal.onParamChanged()"
                     class="form-control">
             </select>
         </div>
@@ -39,6 +40,7 @@
                                 for agg in modal.rowColAggs
                                 | orderBy: 'label'"
                     ng-model="modal.colAggSelected"
+                    ng-change="modal.onParamChanged()"
                     class="form-control">
             </select>
         </div>
@@ -54,6 +56,7 @@
                                 | filter: { type: 'Geography' }
                                 | orderBy: 'label'"
                     ng-model="modal.geoAggSelected"
+                    ng-change="modal.onParamChanged()"
                     class="form-control">
                 <option value=""></option>
             </select>
@@ -66,8 +69,8 @@
         </button>
         <button class="btn btn-default"
                 ng-click="modal.createReport()"
-                ng-disabled="!modal.colAggSelected || !modal.rowAggSelected">
-            Custom Report
+                ng-disabled="!modal.ready">
+                Custom Report
         </button>
     </div>
 </div>
