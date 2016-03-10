@@ -4,7 +4,7 @@
     /* ngInject */
     function CustomReportsModalController($log, $modalInstance, $state, $window,
                                           FilterState, GeographyState, QueryBuilder,
-                                          RecordState, RecordSchemaState) {
+                                          AggregationsConfig) {
         var ctl = this;
         ctl.closeModal = closeModal;
         ctl.createReport = createReport;
@@ -18,42 +18,6 @@
         ctl.rowAggSelected = null;
         ctl.geoAggSelected = null;
 
-        // List of aggregations available for rows and columns.
-        // The time-related options defined here (type: `Time`) are constant.
-        // This list is later populated with all available filterable types (type: `Filter`),
-        // and all available geographies (type: `Geography`).
-        ctl.rowColAggs = [
-            {
-                label: 'Day of Month',
-                value: 'day',
-                type: 'Time'
-            },
-            {
-                label: 'Day of Week',
-                value: 'week_day',
-                type: 'Time'
-            },
-            {
-                label: 'Hour of Day',
-                value: 'hour',
-                type: 'Time'
-            },
-            {
-                label: 'Month of Year',
-                value: 'month',
-                type: 'Time'
-            },
-            {
-                label: 'Week of Year',
-                value: 'week',
-                type: 'Time'
-            },
-            {
-                label: 'Year',
-                value: 'year',
-                type: 'Time'
-            }
-        ];
 
         init();
 
@@ -64,49 +28,8 @@
             ctl.nonDateFilters = _.omit(FilterState.filters, '__dateRange');
             ctl.dateFilter = FilterState.getDateFilter();
 
-            // Add the list of geographies availalable to the dropdown aggregation lists
-            loadGeographies();
-
-            // Add the list of filters availalable to the dropdown aggregation lists
-            RecordState.getSelected()
-                .then(loadFilters);
-        }
-
-        function loadGeographies() {
-            return GeographyState.getOptions().then(function(geographies) {
-                _.each(geographies, function(geography) {
-                    ctl.rowColAggs.push({
-                        label: geography.label,
-                        value: geography.uuid,
-                        type: 'Geography'
-                    });
-                });
-            });
-        }
-
-        /**
-         * We can only aggregate on enumerated properties. Loops through the schema (at the
-         * definition#property level, not recursively) and adds filters for each
-         * enumerated property it finds.
-         *
-         * TODO:  add " || property.format === 'number'" to the condition to enable aggregating
-         * numerical properties if/when that's implemented on the back end.
-         */
-        function loadFilters(recordType) {
-            /* jshint camelcase: false */
-            return RecordSchemaState.get(recordType.current_schema).then(function(schema) {
-            /* jshint camelcase: true */
-                _.forEach(schema.schema.definitions, function(definition, defName) {
-                    _.forEach(definition.properties, function(property, propName) {
-                        if (property.fieldType === 'selectlist') {
-                            ctl.rowColAggs.push({
-                                label: propName,
-                                value: [defName, 'properties', propName].join(','),
-                                type: 'Filter'
-                            });
-                        }
-                    });
-                });
+            AggregationsConfig.getOptions().then(function (options) {
+                ctl.rowColAggs = options;
             });
         }
 
