@@ -266,7 +266,7 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
     year_ranges = [
         (max_occurred - relativedelta(years=offset),
          max_occurred - relativedelta(years=(offset + 1)),
-         't{}records'.format(offset),
+         't{}notsev'.format(offset),
          't{}severe'.format(offset))
         for offset in range(num_years)
     ]
@@ -295,7 +295,7 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
 
         # Add time offset aggregation data
         for year_range in year_ranges:
-            max_occurred, min_occurred, records_label, severe_label = year_range
+            max_occurred, min_occurred, notsev_label, severe_label = year_range
             if records:
                 records_in_range = [
                     record for record in records
@@ -305,11 +305,12 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
                     record for record in records_in_range
                     if record['severe']
                 ]
-                data[records_label] = len(records_in_range)
-                data[severe_label] = len(severe_records_in_range)
+                num_severe = len(severe_records_in_range)
+                data[severe_label] = num_severe
+                data[notsev_label] = len(records_in_range) - num_severe
             else:
-                data[records_label] = 0
                 data[severe_label] = 0
+                data[notsev_label] = 0
 
         segments_with_data.append((segment, data))
 
