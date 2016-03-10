@@ -1,6 +1,7 @@
 import json
 import logging
 import uuid
+import calendar
 
 from dateutil.parser import parse as parse_date
 from datetime import timedelta
@@ -224,6 +225,10 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             records before any aggregation is applied. This may result in some rows / columns /
             tables having zero records.
 
+        Note that the tables are sparse: rows will only appear in 'data' and 'row_totals',
+        and columns will only appear in rows, if there are values returned by the query.
+        'row_labels' and 'col_labels', however, are complete and in order.
+
         Response format:
         {
             "row_labels": [
@@ -244,18 +249,21 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                     "data": {
                         {
                             "row_key1": {
-                                "col_key1": X,
-                                "col_key3": Y,
+                                "col_key1": N,
+                                "col_key3": N,
                             },
                         },
                         ...
-                    ]
+                    },
+                    "row_totals": {
+                        {
+                            "row_key1": N,
+                            "row_key3": N,
+                    }
                 },
                 ...
             ]
         }
-        Note that all combinations of rows / columns are NOT guaranteed to exist within the
-        table `data` dictionaries; in other words, the tables are sparse.
         """
         valid_row_params = set(['row_period_type', 'row_boundary_id', 'row_choices_path'])
         valid_col_params = set(['col_period_type', 'col_boundary_id', 'col_choices_path'])
@@ -266,16 +274,16 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ParseError(detail='Exactly one col_* and row_* parameter required; options are {}'
                                     .format(list(valid_row_params | valid_col_params)))
 
-        # Pass parameters to case-statement generators
-        row_param = row_params.pop()  # Guaranteed to be just one at this point
-        col_param = col_params.pop()
-        row_case, row_labels = self._query_param_to_case_stmnt(row_param, request)
-        col_case, col_labels = self._query_param_to_case_stmnt(col_param, request)
-
         # Generate filtered queryset based on other params
         queryset = self.get_queryset()
         for backend in list(self.filter_backends):
             queryset = backend().filter_queryset(request, queryset, self)
+
+        # Pass parameters to case-statement generators
+        row_param = row_params.pop()  # Guaranteed to be just one at this point
+        col_param = col_params.pop()
+        row_case, row_labels = self._query_param_to_case_stmnt(row_param, request, queryset)
+        col_case, col_labels = self._query_param_to_case_stmnt(col_param, request, queryset)
 
         # Apply case statements to filtered queryset
         annotated_qs = queryset.annotate(row=row_case).annotate(col=col_case)
@@ -297,69 +305,73 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                                         for poly in boundaries}
             # Filter by polygon for counting
             for poly in boundaries:
-                counted = self._fill_table(annotated_qs.filter(geom__within=poly.geom))
-                response['tables'].append({'tablekey': poly.pk, 'data': counted})
+                table = self._fill_table(annotated_qs.filter(geom__within=poly.geom))
+                table['tablekey'] = poly.pk
+                response['tables'].append(table)
         else:
-            counted = self._fill_table(annotated_qs)
-            response['tables'].append({'tablekey': None, 'data': counted})
+            response['tables'].append(self._fill_table(annotated_qs))
         return Response(response)
 
     def _fill_table(self, annotated_qs):
-        """ Fill a nested dictionary with the counts """
+        """ Fill a nested dictionary with the counts and compute row totals. """
         data = {}
         for value in (annotated_qs.values('row', 'col')
-                                  .order_by('row', 'col')
-                                  .annotate(count=Count('row'))):
-            print 'value is {}'.format(value)
+                      .order_by('row', 'col')
+                      .annotate(count=Count('row'))):
             data.setdefault(str(value['row']), {})[str(value['col'])] = value['count']
-        return data
 
-    def _query_param_to_case_stmnt(self, param, request):
+        row_totals = {row: sum(cols.values()) for (row, cols) in data.items()}
+
+        return {'data': data, 'row_totals': row_totals}
+
+    def _query_param_to_case_stmnt(self, param, request, queryset):
         """Wrapper to handle getting the params for each case generator because we do it twice"""
         try:
             record_type_id = request.query_params['record_type']
         except KeyError:
             raise ParseError(detail="The 'record_type' parameter is required")
         if param.endswith('period_type'):
-            return self._make_period_case(request.query_params[param], record_type_id)
+            return self._make_period_case(request.query_params[param], queryset)
         elif param.endswith('boundary_id'):
             return self._make_boundary_case(request.query_params[param])
         else:  # 'choices_path'; ensured by parent function
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
             return self._make_choices_case(schema, request.query_params[param].split(','))
 
-    def _make_period_case(self, period_type, record_type_id):
+    def _make_period_case(self, period_type, queryset):
         """Constructs a Django Case statement for a certain type of period.
 
         Args:
             period_type (string): One of 'hour', 'day', 'week_day', 'week', 'month', 'year'
-            record_type_id (string): Record type to use (uuid)
+            queryset (string): Filtered queryset to use for getting range for some period types
         Returns:
             (Case, labels), where Case is a Django Case object giving the period in which each
             record's occurred_from falls, and labels is a dict mapping Case values to period labels
 
         """
         easy_ranges = {  # Most date-related things are 1-indexed.
-            'month': xrange(1, 13),
-            'week': xrange(1, 54),  # Up to 53 weeks in a year
-            'week_day': xrange(1, 8),
-            'day': xrange(1, 32),
-            'hour': xrange(0, 24)
+            'month': {'keys': xrange(1, 13), 'labels': lambda x: calendar.month_name[x]},
+            # Up to 53 weeks in a year
+            'week': {'keys': xrange(1, 54), 'labels': lambda x: 'Week {}'.format(str(x))},
+            'week_day': {'keys': xrange(1, 8), 'labels': lambda x: calendar.day_name[x-1]},
+            'day': {'keys': xrange(1, 32), 'labels': lambda x: str(x)},
+            'hour': {'keys': xrange(0, 24), 'labels': lambda x: '{}:00'.format(x)},
         }
-        valid_periods = easy_ranges.keys() + ['year']
-        if period_type not in valid_periods:
-            raise ParseError(detail=('row_/col_period_type must be one of {}; received {}'
-                                     .format(valid_periods, period_type)))
 
-        # Set the range min / maxes based on the period type
-        period_range = None
+        # TODO: This sets year range based on the oldest and youngest records in the filtered
+        # queryset, but it (and possibly other date ranges) should be defined by the request's
+        # occurred_max and occurred_min parameters if available.
         if period_type == 'year':
-            recs = Record.objects.filter(schema__record_type_id=record_type_id)
-            range_min = recs.order_by('occurred_from').first().occurred_from.year
-            range_max = recs.order_by('-occurred_from').first().occurred_from.year + 1
+            range_min = queryset.order_by('occurred_from').first().occurred_from.year
+            range_max = queryset.order_by('-occurred_from').first().occurred_from.year + 1
             period_range = xrange(range_min, range_max)
+            period_labels = lambda x: str(x)
+        elif period_type in easy_ranges.keys():
+            period_range = easy_ranges[period_type]['keys']
+            period_labels = easy_ranges[period_type]['labels']
         else:
-            period_range = easy_ranges[period_type]
+            raise ParseError(detail=('row_/col_period_type must be one of {}; received {}'
+                                     .format(easy_ranges.keys() + 'year', period_type)))
 
         whens = []  # Eventual list of When-clause objects
         when_lookup = 'occurred_from__{}'.format(period_type)
@@ -367,11 +379,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             when_args = {'then': Value(x)}
             when_args[when_lookup] = x
             whens.append(When(**when_args))
-        # TODO: It would be nice to have friendlier names for weekdays and months, but that
-        # would introduce potential translation complexity down the road so I'm going to hold off
-        # until we get a better understanding of what the upcoming multilingual / date issues look
-        # like.
-        labels = [{'key': str(x), 'label': str(x)} for x in period_range]
+
+        labels = [{'key': str(x), 'label': period_labels(x)} for x in period_range]
         return (Case(*whens, output_field=IntegerField()), labels)
 
     def _make_boundary_case(self, boundary_id):
