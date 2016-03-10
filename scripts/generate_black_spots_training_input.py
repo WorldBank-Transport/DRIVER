@@ -38,11 +38,17 @@ def read_roads(roads_shp):
     return (roads, shp_file.crs)
 
 
-def get_intersections(roads):
+def get_intersections(roads, skip_logging=False):
     """Calculates the intersection points of all roads
     :param roads: List of shapely geometries representing road segments
+    :param skip_logging: Whether or not to log status. Recursive calls don't log to avoid confusion.
     """
     intersections = []
+    num_combinations = (len(roads) * (len(roads) - 1)) / 2.0
+    if not skip_logging:
+        logger.info('Finding intersections for {:,} combinations'.format(int(num_combinations)))
+
+    combination_count = 0
     for road1, road2 in itertools.combinations(roads, 2):
         if road1.intersects(road2):
             intersection = road1.intersection(road2)
@@ -57,7 +63,19 @@ def get_intersections(roads):
                 intersections.append(Point(first_coords[0], first_coords[1]))
                 intersections.append(Point(last_coords[0], last_coords[1]))
             elif 'GeometryCollection' == intersection.type:
-                intersections.extend(get_intersections(intersection))
+                intersections.extend(get_intersections(intersection, True))
+
+        # Log every million combinations processed to provide feedback.
+        # This is the most time-consuming part of the script.
+        combination_count += 1
+        if not skip_logging and combination_count % 1000000 == 0:
+            logger.info('Processed {} million combinations ({:.1f}% complete)'.format(
+                combination_count / 1000000, (combination_count / num_combinations) * 100
+            ))
+
+    if not skip_logging:
+        logger.info('Processed {:,} combinations (100% complete)'.format(combination_count))
+
     # The unary_union removes duplicate points
     return unary_union(intersections)
 
@@ -382,7 +400,7 @@ def main():
 
     logger.info('Reading shapefile from {}'.format(args.roads_shp))
     roads, road_projection = read_roads(args.roads_shp)
-    logger.info('Found {} roads in projection: {}'.format(len(roads), road_projection['init']))
+    logger.info('Found {:,} roads in projection: {}'.format(len(roads), road_projection['init']))
 
     logger.info('Reading records from {}'.format(args.records_csv))
     tz = pytz.timezone(args.time_zone)
@@ -392,27 +410,27 @@ def main():
         args.record_col_id, args.record_col_x, args.record_col_y,
         args.record_col_occurred, args.record_col_severe
     )
-    logger.info('Found {} records between {} and {}'.format(
+    logger.info('Found {:,} records between {} and {}'.format(
         len(records), min_occurred.date(), max_occurred.date())
     )
 
     int_buffers = get_intersection_buffers(roads, args.intersection_buffer_units)
-    logger.info('Found {} intersections'.format(len(int_buffers)))
+    logger.info('Found {:,} intersections'.format(len(int_buffers)))
 
     int_multilines, non_int_lines = get_intersection_parts(roads, int_buffers, args.max_line_units)
     combined_segments = int_multilines + non_int_lines
-    logger.info('Found {} intersection multilines'.format(len(int_multilines)))
-    logger.info('Found {} non-intersection lines'.format(len(non_int_lines)))
-    logger.info('Found {} combined segments'.format(len(combined_segments)))
+    logger.info('Found {:,} intersection multilines'.format(len(int_multilines)))
+    logger.info('Found {:,} non-intersection lines'.format(len(non_int_lines)))
+    logger.info('Found {:,} combined segments'.format(len(combined_segments)))
 
     match_tolerance = args.match_tolerance
     segments_with_records = match_records_to_segments(records, combined_segments, match_tolerance)
-    logger.info('Found {} segments with records'.format(len(segments_with_records)))
+    logger.info('Found {:,} segments with records'.format(len(segments_with_records)))
 
     schema, segments_with_data = get_segments_with_data(
         combined_segments, segments_with_records, min_occurred, max_occurred
     )
-    logger.info('Compiled data for {} segments'.format(len(segments_with_data)))
+    logger.info('Compiled data for {:,} segments'.format(len(segments_with_data)))
 
     segments_shp_path = os.path.join(args.output_dir, args.combined_segments_shp_name)
     write_segments_shp(segments_shp_path, road_projection, segments_with_data, schema)
