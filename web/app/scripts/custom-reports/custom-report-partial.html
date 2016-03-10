@@ -1,20 +1,18 @@
 <cube-grid-spinner ng-if="ctl.loading"></cube-grid-spinner>
 <div class="table-view custom-report" ng-if="!ctl.loading">
-    <div class="table-view-container">
-        <table class="table" ng-repeat="table in ctl.report.tables">
-            <caption>
-                <h2>
-                    <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span> -
-                    <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
-                </h2>
-                <h3>
-                    Incidents
-                    <span ng-if="ctl.params.aggregation_boundary"> for {{ ::ctl.report.table_labels[table.tablekey] }}</span>
-                    by {{ ::ctl.rowCategoryLabel }} and {{ ::ctl.colCategoryLabel }}
-                </h3>
-            </caption>
-            <thead table-data-string="ctl.headerHTML"></thead>
-            <tbody table-data-string="table.bodyHTML"></tbody>
-        </table>
-    </div>
+    <table class="table" ng-repeat="table in ctl.report.tables">
+        <caption>
+            <h2>
+                <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span> -
+                <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
+            </h2>
+            <h3>
+                Incidents
+                <span ng-if="ctl.params.aggregation_boundary"> for {{ ::ctl.report.table_labels[table.tablekey] }}</span>
+                by {{ ::ctl.rowCategoryLabel }} and {{ ::ctl.colCategoryLabel }}
+            </h3>
+        </caption>
+        <thead table-data-string="ctl.headerHTML"></thead>
+        <tbody table-data-string="table.bodyHTML"></tbody>
+    </table>
 </div>

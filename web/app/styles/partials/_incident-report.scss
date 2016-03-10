@@ -41,7 +41,7 @@
             padding-top: 0;
 
             h2 {
-                background: #f1f2f2;
+                background: $light-gray;
                 padding: 12px 16px;
 
                 @media print {
@@ -103,7 +103,7 @@
     }
     .report-sections {
         margin: 0 -15px;
-        background-color: #f1f2f2;
+        background-color: $light-gray;
         padding: 5px 8px 0;
 
         a { font-weight: 700; }
@@ -161,7 +161,7 @@
                     }
 
                     &.open {
-                        background-color: #f1f2f2;
+                        background-color: $light-gray;
 
                         & + .table-body-row-content {
                             max-height: 1000px;

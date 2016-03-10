@@ -1,5 +1,5 @@
 .login-view {
-    background: #f1f2f2;
+    background: $light-gray;
     padding: 2.5%;
     position: absolute;
     bottom: 0;
@@ -50,7 +50,7 @@
         &.divider {
             margin: 30px auto;
             width: 25%;
-            border-bottom: 10px solid #f1f2f2;
+            border-bottom: 10px solid $light-gray;
         }
     }
 }
