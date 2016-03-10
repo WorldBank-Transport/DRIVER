@@ -2,19 +2,31 @@
     <div class="table-view-container">
         <div class="overflow">
             <table class="table" ng-repeat="table in ctl.report.tables">
-                <caption><!-- Table title --></caption>
+                <caption>
+                    <h2>
+                        <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span> -
+                        <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
+                    </h2>
+                    <h3>
+                        Incidents
+                        <span ng-if="ctl.params.aggregation_boundary"> for {{ ::ctl.report.table_labels[table.tablekey] }}</span>
+                        by {{ ::ctl.rowCategoryLabel }} and {{ ::ctl.colCategoryLabel }}
+                    </h3>
+                </caption>
                 <thead>
                     <tr>
-                        <th><!--Label for row category--></th>
+                        <th>{{ ::ctl.rowCategoryLabel }}</th>
                         <th ng-repeat="col in ctl.report.col_labels">{{ ::col.label }}</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr ng-repeat="row in ctl.report.row_labels">
                         <td>{{ ::row.label }}</td>
                         <td ng-repeat="col in ctl.report.col_labels">
-                            {{ table.data && table.data[row.key] && table.data[row.key][col.key] || 0 }}
+                            {{ table.data[row.key] && table.data[row.key][col.key] || 0 }}
                         </td>
+                        <td>{{ table.row_totals && table.row_totals[row.key] || 0}}
                     </tr>
                 </tbody>
             </table>
