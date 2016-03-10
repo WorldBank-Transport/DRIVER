@@ -30,7 +30,8 @@ def read_roads(roads_shp):
         shape(road['geometry'])
         for road in shp_file
         # We're only interested in non-bridge, non-tunnel highways
-        if (road['properties']['class'] == 'highway'
+        # 'class' is optional, so only consider it when it's available.
+        if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
             and road['properties']['bridge'] == 0
             and road['properties']['tunnel'] == 0)
     ]
