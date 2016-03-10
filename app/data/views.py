@@ -311,7 +311,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                                   .order_by('row', 'col')
                                   .annotate(count=Count('row'))):
             print 'value is {}'.format(value)
-            data.setdefault(value['row'], {})[value['col']] = value['count']
+            data.setdefault(str(value['row']), {})[str(value['col'])] = value['count']
         return data
 
     def _query_param_to_case_stmnt(self, param, request):

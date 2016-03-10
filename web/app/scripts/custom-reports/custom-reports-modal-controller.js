@@ -126,7 +126,7 @@
                 key += 'period_type';
             } else if (aggObj.type === 'Filter') {
                 key += 'choices_path';
-            } else if (aggObj.type === 'Geometry') {
+            } else if (aggObj.type === 'Geography') {
                 key += 'boundary_id';
             } else {
                 $log.error('Cannot set row/col param with type: ', aggObj.type);
