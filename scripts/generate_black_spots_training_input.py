@@ -30,18 +30,25 @@ def read_roads(roads_shp):
         shape(road['geometry'])
         for road in shp_file
         # We're only interested in non-bridge, non-tunnel highways
-        if (road['properties']['class'] == 'highway'
+        # 'class' is optional, so only consider it when it's available.
+        if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
             and road['properties']['bridge'] == 0
             and road['properties']['tunnel'] == 0)
     ]
     return (roads, shp_file.crs)
 
 
-def get_intersections(roads):
+def get_intersections(roads, skip_logging=False):
     """Calculates the intersection points of all roads
     :param roads: List of shapely geometries representing road segments
+    :param skip_logging: Whether or not to log status. Recursive calls don't log to avoid confusion.
     """
     intersections = []
+    num_combinations = (len(roads) * (len(roads) - 1)) / 2.0
+    if not skip_logging:
+        logger.info('Finding intersections for {:,} combinations'.format(int(num_combinations)))
+
+    combination_count = 0
     for road1, road2 in itertools.combinations(roads, 2):
         if road1.intersects(road2):
             intersection = road1.intersection(road2)
@@ -56,7 +63,19 @@ def get_intersections(roads):
                 intersections.append(Point(first_coords[0], first_coords[1]))
                 intersections.append(Point(last_coords[0], last_coords[1]))
             elif 'GeometryCollection' == intersection.type:
-                intersections.extend(get_intersections(intersection))
+                intersections.extend(get_intersections(intersection, True))
+
+        # Log every million combinations processed to provide feedback.
+        # This is the most time-consuming part of the script.
+        combination_count += 1
+        if not skip_logging and combination_count % 1000000 == 0:
+            logger.info('Processed {} million combinations ({:.1f}% complete)'.format(
+                combination_count / 1000000, (combination_count / num_combinations) * 100
+            ))
+
+    if not skip_logging:
+        logger.info('Processed {:,} combinations (100% complete)'.format(combination_count))
+
     # The unary_union removes duplicate points
     return unary_union(intersections)
 
@@ -151,7 +170,7 @@ def read_records(records_csv, road_projection, record_projection, tz,
     :param col_x: Record x-coordinate column name
     :param col_y: Record y-coordinate column name
     :param col_occurred: Record occurred datetime column name
-    :param col_severe: Record severe column name
+    :param col_severe: Record severe column name. This column is optional.
     """
 
     # Create a function for projecting a point
@@ -183,7 +202,7 @@ def read_records(records_csv, road_projection, record_projection, tz,
                 'id': row[col_id],
                 'point': transform(project, Point(float(row[col_x]), float(row[col_y]))),
                 'occurred': occurred,
-                'severe': bool(int(row[col_severe]))
+                'severe': bool(int(row[col_severe])) if col_severe in row else 0
             })
 
     return records, min_occurred, max_occurred
@@ -266,7 +285,7 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
     year_ranges = [
         (max_occurred - relativedelta(years=offset),
          max_occurred - relativedelta(years=(offset + 1)),
-         't{}records'.format(offset),
+         't{}notsev'.format(offset),
          't{}severe'.format(offset))
         for offset in range(num_years)
     ]
@@ -295,7 +314,7 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
 
         # Add time offset aggregation data
         for year_range in year_ranges:
-            max_occurred, min_occurred, records_label, severe_label = year_range
+            max_occurred, min_occurred, notsev_label, severe_label = year_range
             if records:
                 records_in_range = [
                     record for record in records
@@ -305,11 +324,12 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
                     record for record in records_in_range
                     if record['severe']
                 ]
-                data[records_label] = len(records_in_range)
-                data[severe_label] = len(severe_records_in_range)
+                num_severe = len(severe_records_in_range)
+                data[severe_label] = num_severe
+                data[notsev_label] = len(records_in_range) - num_severe
             else:
-                data[records_label] = 0
                 data[severe_label] = 0
+                data[notsev_label] = 0
 
         segments_with_data.append((segment, data))
 
@@ -374,12 +394,13 @@ def main():
     parser.add_argument('--record-col-x', help='Record column: x-coordinate', default='LNG')
     parser.add_argument('--record-col-y', help='Record column: y-coordinate', default='LAT')
     parser.add_argument('--record-col-occurred', help='Record column: occurred', default='DATETIME')
-    parser.add_argument('--record-col-severe', help='Record column: severe', default='FATAL')
+    parser.add_argument('--record-col-severe', help='(Optional) Record column: severe',
+                        default='FATAL')
     args = parser.parse_args()
 
     logger.info('Reading shapefile from {}'.format(args.roads_shp))
     roads, road_projection = read_roads(args.roads_shp)
-    logger.info('Found {} roads in projection: {}'.format(len(roads), road_projection['init']))
+    logger.info('Found {:,} roads in projection: {}'.format(len(roads), road_projection['init']))
 
     logger.info('Reading records from {}'.format(args.records_csv))
     tz = pytz.timezone(args.time_zone)
@@ -389,27 +410,27 @@ def main():
         args.record_col_id, args.record_col_x, args.record_col_y,
         args.record_col_occurred, args.record_col_severe
     )
-    logger.info('Found {} records between {} and {}'.format(
+    logger.info('Found {:,} records between {} and {}'.format(
         len(records), min_occurred.date(), max_occurred.date())
     )
 
     int_buffers = get_intersection_buffers(roads, args.intersection_buffer_units)
-    logger.info('Found {} intersections'.format(len(int_buffers)))
+    logger.info('Found {:,} intersections'.format(len(int_buffers)))
 
     int_multilines, non_int_lines = get_intersection_parts(roads, int_buffers, args.max_line_units)
     combined_segments = int_multilines + non_int_lines
-    logger.info('Found {} intersection multilines'.format(len(int_multilines)))
-    logger.info('Found {} non-intersection lines'.format(len(non_int_lines)))
-    logger.info('Found {} combined segments'.format(len(combined_segments)))
+    logger.info('Found {:,} intersection multilines'.format(len(int_multilines)))
+    logger.info('Found {:,} non-intersection lines'.format(len(non_int_lines)))
+    logger.info('Found {:,} combined segments'.format(len(combined_segments)))
 
     match_tolerance = args.match_tolerance
     segments_with_records = match_records_to_segments(records, combined_segments, match_tolerance)
-    logger.info('Found {} segments with records'.format(len(segments_with_records)))
+    logger.info('Found {:,} segments with records'.format(len(segments_with_records)))
 
     schema, segments_with_data = get_segments_with_data(
         combined_segments, segments_with_records, min_occurred, max_occurred
     )
-    logger.info('Compiled data for {} segments'.format(len(segments_with_data)))
+    logger.info('Compiled data for {:,} segments'.format(len(segments_with_data)))
 
     segments_shp_path = os.path.join(args.output_dir, args.combined_segments_shp_name)
     write_segments_shp(segments_shp_path, road_projection, segments_with_data, schema)
