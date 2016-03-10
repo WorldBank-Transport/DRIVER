@@ -151,7 +151,7 @@ def read_records(records_csv, road_projection, record_projection, tz,
     :param col_x: Record x-coordinate column name
     :param col_y: Record y-coordinate column name
     :param col_occurred: Record occurred datetime column name
-    :param col_severe: Record severe column name
+    :param col_severe: Record severe column name. This column is optional.
     """
 
     # Create a function for projecting a point
@@ -183,7 +183,7 @@ def read_records(records_csv, road_projection, record_projection, tz,
                 'id': row[col_id],
                 'point': transform(project, Point(float(row[col_x]), float(row[col_y]))),
                 'occurred': occurred,
-                'severe': bool(int(row[col_severe]))
+                'severe': bool(int(row[col_severe])) if col_severe in row else 0
             })
 
     return records, min_occurred, max_occurred
@@ -375,7 +375,8 @@ def main():
     parser.add_argument('--record-col-x', help='Record column: x-coordinate', default='LNG')
     parser.add_argument('--record-col-y', help='Record column: y-coordinate', default='LAT')
     parser.add_argument('--record-col-occurred', help='Record column: occurred', default='DATETIME')
-    parser.add_argument('--record-col-severe', help='Record column: severe', default='FATAL')
+    parser.add_argument('--record-col-severe', help='(Optional) Record column: severe',
+                        default='FATAL')
     args = parser.parse_args()
 
     logger.info('Reading shapefile from {}'.format(args.roads_shp))
