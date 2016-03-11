@@ -49,17 +49,29 @@
         };
         return svc;
 
+        /* Gets the available geographies and schema filters and loads them into the list.
+         * Uses $q.all() since those two queries are independent.
+         */
         function getOptions() {
             if (initialized) {
                 return $q.resolve(aggregations);
             } else {
-                return RecordState.getSelected()
-                    .then(loadFilters)
-                    .then(loadGeographies)
-                    .then(function() {
-                        initialized = true;
-                        return aggregations;
-                    });
+                var filtersPromise = RecordState.getSelected().then(function (recordType) {
+                    /* jshint camelcase: false */
+                    return RecordSchemaState.get(recordType.current_schema);
+                    /* jshint camelcase: false */
+                });
+                return $q.all([filtersPromise, GeographyState.getOptions()]).then(function (data) {
+                    var schema = data[0];
+                    var geographies = data[1];
+
+                    loadFilters(schema);
+                    loadGeographies(geographies);
+                    return aggregations;
+                }).then(function(aggregations) {
+                    initialized = true;
+                    return aggregations;
+                });
             }
         }
 
@@ -71,33 +83,27 @@
          * TODO:  add " || property.format === 'number'" to the condition to enable aggregating
          * numerical properties if/when that's implemented on the back end.
          */
-        function loadFilters(recordType) {
-            /* jshint camelcase: false */
-            return RecordSchemaState.get(recordType.current_schema).then(function(schema) {
-            /* jshint camelcase: true */
-                _.forEach(schema.schema.definitions, function(definition, defName) {
-                    _.forEach(definition.properties, function(property, propName) {
-                        if (property.fieldType === 'selectlist') {
-                            aggregations.push({
-                                label: propName,
-                                value: [defName, 'properties', propName].join(','),
-                                type: 'Filter'
-                            });
-                        }
-                    });
+        function loadFilters(schema) {
+            _.forEach(schema.schema.definitions, function(definition, defName) {
+                _.forEach(definition.properties, function(property, propName) {
+                    if (property.fieldType === 'selectlist') {
+                        aggregations.push({
+                            label: propName,
+                            value: [defName, 'properties', propName].join(','),
+                            type: 'Filter'
+                        });
+                    }
                 });
             });
         }
 
         // Add the list of geographies availalable to the dropdown aggregation lists
-        function loadGeographies() {
-            return GeographyState.getOptions().then(function(geographies) {
-                _.each(geographies, function(geography) {
-                    aggregations.push({
-                        label: geography.label,
-                        value: geography.uuid,
-                        type: 'Geography'
-                    });
+        function loadGeographies(geographies) {
+            _.each(geographies, function(geography) {
+                aggregations.push({
+                    label: geography.label,
+                    value: geography.uuid,
+                    type: 'Geography'
                 });
             });
         }
