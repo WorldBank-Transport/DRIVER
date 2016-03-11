@@ -345,7 +345,7 @@
                 {
                     primaryRecordsUrl:    TileUrlService.recTilesUrl(ctl.recordType.uuid),
                     primaryUtfGridUrl:    TileUrlService.recUtfGridTilesUrl(ctl.recordType.uuid),
-                    primaryHeatmapUrl:    TileUrlService.recHeatmapUrl(ctl.recordType),
+                    primaryHeatmapUrl:    TileUrlService.recHeatmapUrl(ctl.recordType.uuid),
                     blackspotsUrl:        blackspotUrl,
                     blackspotsUtfGridUrl: blackspotUtfUrl,
                     blackspotTileKey:     blackspotTileKey,
