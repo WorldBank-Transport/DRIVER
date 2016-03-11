@@ -106,9 +106,15 @@
 
         $scope.$on('driver.filterbar:restore', function(event, filters) {
             var filterOn = _.keys(ctl.filterables);
+            // Keep the old date range so that loading a filter doesn't revert to defaults
+            var dateRange = ctl.filters.__dateRange;
             var value;
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
+
+            if (!ctl.filters.__dateRange && dateRange) {
+                ctl.filters.__dateRange = dateRange;
+            }
 
             if (ctl.filters.__dateRange) {
                 filterOn.push('__dateRange');
