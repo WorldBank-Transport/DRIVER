@@ -96,7 +96,17 @@
         }
 
         function createReport() {
-            $window.open($state.href('report', ctl.params, {absolute: true}), '_blank');
+            // If we were using $resource, Angular would automagically encode params that are
+            // objects. But since we're using $state.href, we have to do it ourselves.
+            var urlParams = _.mapValues(ctl.params, function (value) {
+                if (typeof(value) === 'object') {
+                    return angular.toJson(value);
+                } else {
+                    return value;
+                }
+            });
+
+            $window.open($state.href('report', urlParams, {absolute: true}), '_blank');
         }
 
         return ctl;
