@@ -1,9 +1,21 @@
 .table-view {
-    background: #f1f2f2;
+    background: $light-gray;
     position: absolute;
     bottom: 0;
     width: 100%;
     top: 0;
+
+    &.custom-report {
+        // Custom report uses table-view without table-view-container, because it scrolls
+        // the whole page so the absolute-positioned gray background breaks things.
+        background: white;
+        margin-top: 50px;
+        padding: 0px 20px;
+
+        td:nth-child(even) {
+            background: $light-gray;
+        }
+    }
 
     .table-view-container {
         margin: 25px;
@@ -14,13 +26,14 @@
         left: 0;
         right: 0;
 
+
         .links {
             text-align: right;
 
             a {
                 font-weight: 700;
                 font-size: 12px;
-                border: 1px solid #ccc;;
+                border: 1px solid #ccc;
                 padding: 4px 10px;
                 border-radius: 99px;
                 margin-left: 8px;
@@ -55,6 +68,12 @@
             font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
+        }
+
+        caption {
+            text-align: left;
+            margin: 10px;
+            font-size: 18px;
         }
     }
 }

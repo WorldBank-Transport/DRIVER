@@ -40,7 +40,7 @@
                 text-align: left;
             }
             &:nth-child(2n) {
-                background: #f1f2f2;
+                background: $light-gray;
             }
         }
         td {
@@ -51,7 +51,7 @@
                 text-align: left;
             }
             &:nth-child(2n) {
-                background: #f1f2f2;
+                background: $light-gray;
             }
         }
     }
@@ -62,7 +62,7 @@
         &:last-of-type { margin: 0; }
 
         .map {
-            background: #f1f2f2;
+            background: $light-gray;
             margin-right: 5%;
             width: 45%;
             height: 260px;

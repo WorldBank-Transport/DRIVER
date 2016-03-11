@@ -67,7 +67,7 @@ nav {
         border-radius: 0;
 
         > li {
-            border-bottom: 1px solid #f1f2f2;
+            border-bottom: 1px solid $light-gray;
             z-index: 10;
 
             &:last-of-type {

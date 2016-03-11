@@ -19,6 +19,7 @@
         'driver.tools.charts',
         'driver.tools.export',
         'driver.tools.interventions',
+        'driver.customReports',
         'driver.config',
         'driver.localization',
         'driver.map-layers',

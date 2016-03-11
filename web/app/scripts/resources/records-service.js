@@ -13,6 +13,14 @@
             get: {
                 method: 'GET'
             },
+            query: {
+                method: 'GET',
+                transformResponse: function(data) { return angular.fromJson(data).results; },
+                isArray: true
+            },
+            update: {
+                method: 'PATCH'
+            },
             toddow: {
                 url: WebConfig.api.hostname + '/api/records/toddow/',
                 method: 'GET',
@@ -23,14 +31,10 @@
                 method: 'GET',
                 isArray: true
             },
-            query: {
+            report: {
+                url: WebConfig.api.hostname + '/api/records/crosstabs/',
                 method: 'GET',
-                transformResponse: function(data) { return angular.fromJson(data).results; },
-                isArray: true
             },
-            update: {
-                method: 'PATCH'
-            }
         });
     }
 
