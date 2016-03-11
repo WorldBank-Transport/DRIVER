@@ -27,7 +27,7 @@
                 // scales
                 var tScale = d3.time.scale().range([0, width]);
                 var x = d3.scale.ordinal().rangeBands([0, width], 0.05);
-                var y = d3.scale.linear().range([height - 10, 0]);
+                var y = d3.scale.linear().range([height + 6, 0]);
 
                 var tooltip = d3.tip().html(function(d) {
                     return '<strong>Week of: </strong>' + d.dt.toLocaleDateString() + '</br><strong>Event Count:</strong> <span>' + d.count + '</span>';
