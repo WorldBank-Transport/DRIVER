@@ -9,7 +9,7 @@
      */
 
     /* ngInject */
-    function CustomReportController($state, $stateParams, Records, AggregationsConfig) {
+    function CustomReportController($state, $stateParams, $q, Records, AggregationsConfig) {
         var ctl = this;
         ctl.dateFormat = 'MMM D, YYYY';
         init();
@@ -18,12 +18,14 @@
             ctl.loading = true;
             ctl.params = $stateParams;
 
-            getCategoryLabels().then(function () {
-                return Records.report(ctl.params).$promise;
-            }).then(function (report) {
-                console.log('report ready');
-                ctl.report = report;
-                composeTables();
+            $q.all([getCategoryLabels(), Records.report(ctl.params).$promise]).then(
+                function (data) {
+                    ctl.report = data[1];
+                    composeTables();
+                }, function (error) {
+                    ctl.error = error.data.detail;
+                }
+            ).finally(function () {
                 ctl.loading = false;
             });
         }
@@ -38,15 +40,25 @@
                             ctl.params.row_boundary_id,
                             ctl.params.row_choices_path].indexOf(filter.value) >= 0;
                     });
-                ctl.rowCategoryLabel = rowCategory.label;
+                if (rowCategory) {
+                    ctl.rowCategoryLabel = rowCategory.label;
+                } else {
+                   ctl.rowCategoryLabel = '';
+                }
 
                 var colCategory = _.find(options, function (filter) {
                     return [ctl.params.col_period_type,
                             ctl.params.col_boundary_id,
                             ctl.params.col_choices_path].indexOf(filter.value) >= 0;
                     });
-                ctl.colCategoryLabel = colCategory.label;
+                if (colCategory) {
+                    ctl.colCategoryLabel = colCategory.label;
+                } else {
+                    ctl.colCategoryLabel = '';
+                }
+
                 /* jshint camelcase: true */
+                return [ctl.rowCategoryLabel, ctl.colCategoryLabel];
             });
         }
 
