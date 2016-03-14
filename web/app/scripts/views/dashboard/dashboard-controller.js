@@ -65,7 +65,7 @@
             });
             /* jshint camelcase: true */
 
-            RecordAggregates.toddow(false, params).then(function(toddowData) {
+            RecordAggregates.toddow(params, false, false).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
         }
