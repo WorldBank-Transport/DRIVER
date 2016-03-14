@@ -29,10 +29,10 @@
 - name: Ensure Driver celery service is running
   service: name=driver-celery state=started
 
-- name: Add black spot calculation cronjob
-  cron: name="black spot calculation"
-        job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots"
-        hour=19 minute=10  # 3:10am in UTC+8
+# - name: Add black spot calculation cronjob
+#   cron: name="black spot calculation"
+#         job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots"
+#         hour=19 minute=10  # 3:10am in UTC+8
 
 - name: Add find duplicate records cronjob
   cron: name="find duplicate records"
