@@ -1,4 +1,10 @@
 ---
+- name: Ensure windshaft directory exists
+  file: path="/opt/windshaft"
+        owner={{ansible_ssh_user}}
+        group={{ansible_ssh_user}}
+        state=directory
+
 - name: Synchronize Windshaft configuration
   synchronize: archive=no
                checksum=yes
