@@ -94,7 +94,7 @@
 
             ctl.recordQueryParams = params;
 
-            RecordAggregates.stepwise(true, params).then(function(stepwiseData) {
+            RecordAggregates.stepwise(params).then(function(stepwiseData) {
                 // minDate and maxDate are important for determining where the barchart begins/ends
                 ctl.minDate = null;
                 ctl.maxDate = null;
@@ -109,7 +109,7 @@
                 ctl.stepwise = stepwiseData;
             });
 
-            RecordAggregates.toddow(true, params).then(function(toddowData) {
+            RecordAggregates.toddow(params).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
         }
