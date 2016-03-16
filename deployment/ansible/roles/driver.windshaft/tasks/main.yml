@@ -4,6 +4,7 @@
         owner={{ansible_ssh_user}}
         group={{ansible_ssh_user}}
         state=directory
+  when: staging
 
 - name: Synchronize Windshaft configuration
   synchronize: archive=no
