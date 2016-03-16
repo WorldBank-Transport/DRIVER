@@ -38,7 +38,7 @@
             return RecordSchemaState.get(currentSchemaId)
                 .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
-                });
+                }).then(onSchemaLoaded);
         }
 
         /*
@@ -75,7 +75,7 @@
             });
         }
 
-        function onRecordsLoaded() {
+        function onSchemaLoaded() {
             var detailsDefinitions = _.filter(ctl.recordSchema.schema.definitions,
                 function(val, key) {
                     if (key.indexOf('Details') > -1) {
@@ -142,7 +142,6 @@
             }
 
             loadRecords()
-              .then(onRecordsLoaded)
               .then(function() {
                   ctl.isInitialized = true;
               });
@@ -158,8 +157,7 @@
             if (ctl.recordType !== selected) {
                 ctl.recordType = selected;
                 loadRecordSchema()
-                    .then(loadRecords)
-                    .then(onRecordsLoaded);
+                    .then(loadRecords);
             }
         });
 
@@ -169,7 +167,7 @@
             }
             ctl.boundaryId = selected.uuid;
 
-            loadRecords().then(onRecordsLoaded);
+            loadRecords();
         });
 
         // $rootScope listeners must be manually unbound when the $scope is destroyed
