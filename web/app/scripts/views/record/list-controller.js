@@ -57,6 +57,7 @@
          * @return {promise} Promise to load records
          */
         function loadRecords(offset) {
+            ctl.loadingRecords = true;
             var newOffset;
             if (offset) {
                 newOffset = ctl.currentOffset + offset;
@@ -100,6 +101,8 @@
                 .sortBy('propertyOrder')
                 .map('propertyName')
                 .value();
+
+            ctl.loadingRecords = false;
         }
 
         // Loads the previous page of paginated record results

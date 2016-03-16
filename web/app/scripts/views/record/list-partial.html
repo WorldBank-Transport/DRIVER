@@ -15,7 +15,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr ng-repeat="record in ctl.records.results">
+                    <div class="loadingrecords" ng-if="ctl.loadingRecords">
+                        <fading-circle-spinner></fading-circle-spinner>
+                    </div>
+                    <tr ng-if="!ctl.loadingRecords" ng-repeat="record in ctl.records.results">
                         <td class="date">
                             {{ ::record.occurred_to | localDateTime }}
                         </td>
@@ -41,7 +44,7 @@
                 </tbody>
             </table>
             <nav>
-                <ul class="pager">
+                <ul class="pager" ng-if="!ctl.loadingRecords">
                     <li class="previous" ng-if="ctl.records.previous">
                         <a type="button" class="btn btn-default" ng-click="ctl.getPreviousRecords()">
                             <span aria-hidden="true">&larr;</span> Previous</a>
