@@ -73,6 +73,8 @@
             .then(function(records) {
                 ctl.records = records;
                 ctl.currentOffset = newOffset;
+            }).finally(function() {
+                ctl.loadingRecords = false;
             });
         }
 
@@ -101,8 +103,6 @@
                 .sortBy('propertyOrder')
                 .map('propertyName')
                 .value();
-
-            ctl.loadingRecords = false;
         }
 
         // Loads the previous page of paginated record results
