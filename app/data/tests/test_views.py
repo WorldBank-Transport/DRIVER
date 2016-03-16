@@ -54,8 +54,22 @@ class ViewTestSetUpMixin(object):
         # 1 added here to handle differences in indexing
         self.dow = self.now.isoweekday() + 1 if self.now.isoweekday() + 1 <= 7 else 1
 
+        schema = {
+            "type": "object",
+            "definitions": {
+                "objectDetails": {
+                    "properties": {
+                        "Itness": {
+                            "displayType": "select",
+                            "enum": ["It", "Not it"]
+                        }
+                    }
+                },
+            },
+        }
+
         self.record_type = RecordType.objects.create(label='foo', plural_label='foos')
-        self.schema = RecordSchema.objects.create(schema={"type": "object"},
+        self.schema = RecordSchema.objects.create(schema=schema,
                                                   version=1,
                                                   record_type=self.record_type)
         self.record1 = Record.objects.create(occurred_from=self.now,
@@ -187,6 +201,57 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         response = self.admin_client.post(url, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(RecordAuditLogEntry.objects.count(), 1)
+
+
+class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
+    def setUp(self):
+        super(DriverCustomReportViewTestCase, self).setUp()
+
+        self.set_up_admin_client()
+        self.set_up_records()
+
+        self.url = ('/api/records/crosstabs/?archived=False&occurred_max={max}&occurred_min={min}' +
+                    '&record_type={record_type}')
+
+        self.date1 = datetime(2015, 12, 12, 2, 0, 0, 0, pytz.timezone('Asia/Manila'))
+        self.date2 = datetime(2016, 2, 29, 13, 0, 0, 0, pytz.timezone('Asia/Manila'))
+        data = {'objectDetails': {'Itness': 'It'}}
+
+        Record.objects.create(occurred_from=self.date1, occurred_to=self.date1,
+                              geom='POINT (120.97 14.62)', location_text='Manila',
+                              schema=self.schema)
+        Record.objects.create(occurred_from=self.date2, occurred_to=self.date2,
+                              geom='POINT (120.97 14.62)', location_text='Manila',
+                              schema=self.schema)
+        Record.objects.create(occurred_from=self.date2, occurred_to=self.date2,
+                              geom='POINT (120.97 14.62)', location_text='Manila',
+                              schema=self.schema, data=data)
+
+    def test_month_by_day_of_week(self):
+        """Test two date aggregations. Checks that the label arrays are the right length and that
+        there's no entry for """
+        url_template = (self.url + '&row_period_type=month&col_period_type=day_of_week')
+        url = url_template.format(record_type=str(self.record_type.uuid),
+                                  min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
+                                  max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
+        response = json.loads(self.admin_client.get(url).content)
+
+        self.assertEqual(len(response['row_labels']), 4)
+        self.assertEqual(len(response['col_labels']), 7)
+        self.assertEqual(response['tables'][0]['data']['(2016, 2)']['2'], 2,
+                         'Should be two incidents on Tuesday in February 2016')
+        self.assertTrue('(2016, 1)' not in response['tables'][0]['data'])
+        self.assertTrue('(2015, 12)' in response['tables'][0]['data'])
+        self.assertEqual(len(response['tables'][0]['row_totals']), 2)
+
+    def test_year_by_property(self):
+        url_template = (self.url + '&row_period_type=year' +
+                        '&col_choices_path=objectDetails,properties,Itness')
+        url = url_template.format(record_type=str(self.record_type.uuid),
+                                  min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
+                                  max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
+        response = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response['tables'][0]['data']['2016']['It'], 1)
 
 
 class DriverRecordSchemaViewTestCase(APITestCase):

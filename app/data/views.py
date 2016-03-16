@@ -2,9 +2,10 @@ import json
 import logging
 import uuid
 import calendar
+import datetime
 
 from dateutil.parser import parse as parse_date
-from datetime import timedelta
+from django.template.defaultfilters import date as template_date
 
 from celery import states
 
@@ -331,57 +332,141 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         except KeyError:
             raise ParseError(detail="The 'record_type' parameter is required")
         if param.endswith('period_type'):
-            return self._make_period_case(request.query_params[param], queryset)
+            return self._make_period_case(request.query_params[param], request, queryset)
         elif param.endswith('boundary_id'):
             return self._make_boundary_case(request.query_params[param])
         else:  # 'choices_path'; ensured by parent function
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
             return self._make_choices_case(schema, request.query_params[param].split(','))
 
-    def _make_period_case(self, period_type, queryset):
+    def _make_period_case(self, period_type, request, queryset):
         """Constructs a Django Case statement for a certain type of period.
 
         Args:
-            period_type (string): One of 'hour', 'day', 'week_day', 'week', 'month', 'year'
-            queryset (string): Filtered queryset to use for getting range for some period types
+            period_type (string): one of the valid aggegation type keys, either periodic (e.g.
+                'day_of_week', 'month_of_year') or sequential (e.g. 'day', 'month', 'year')
+            request (Request): the request, from which max and min date will be read if needed
+            queryset (QuerySet): filtered queryset to use for getting date range if it's needed
+                and the request is missing a max and/or min date
         Returns:
             (Case, labels), where Case is a Django Case object giving the period in which each
             record's occurred_from falls, and labels is a dict mapping Case values to period labels
-
         """
-        easy_ranges = {  # Most date-related things are 1-indexed.
-            'month': {'keys': xrange(1, 13), 'labels': lambda x: calendar.month_name[x]},
-            # Up to 53 weeks in a year
-            'week': {'keys': xrange(1, 54), 'labels': lambda x: 'Week {}'.format(str(x))},
-            'week_day': {'keys': xrange(1, 8), 'labels': lambda x: calendar.day_name[x-1]},
-            'day': {'keys': xrange(1, 32), 'labels': lambda x: str(x)},
-            'hour': {'keys': xrange(0, 24), 'labels': lambda x: '{}:00'.format(x)},
+        # Most date-related things are 1-indexed.
+        periodic_ranges = {
+            'month_of_year': {
+                'range': xrange(1, 13),
+                'lookup': lambda x: {'occurred_from__month': x},
+                'label': lambda x: calendar.month_name[x]
+            },
+            'week_of_year': {
+                'range': xrange(1, 54),  # Up to 53 weeks in a year
+                'lookup': lambda x: {'occurred_from__week': x},
+                'label': lambda x: 'Week {}'.format(str(x))
+            },
+            'day_of_week': {
+                'range': xrange(1, 8),
+                'lookup': lambda x: {'occurred_from__week_day': x},
+                'label': lambda x: calendar.day_name[x-1]
+            },
+            'day_of_month': {
+                'range': xrange(1, 32),
+                'lookup': lambda x: {'occurred_from__day': x},
+                'label': lambda x: str(x)
+            },
+            'hour_of_day': {
+                'range': xrange(0, 24),
+                'lookup': lambda x: {'occurred_from__hour': x},
+                'label': lambda x: '{}:00'.format(x)
+            },
         }
 
-        # TODO: This sets year range based on the oldest and youngest records in the filtered
-        # queryset, but it (and possibly other date ranges) should be defined by the request's
-        # occurred_max and occurred_min parameters if available.
-        if period_type == 'year':
-            range_min = queryset.order_by('occurred_from').first().occurred_from.year
-            range_max = queryset.order_by('-occurred_from').first().occurred_from.year + 1
-            period_range = xrange(range_min, range_max)
-            period_labels = lambda x: str(x)
-        elif period_type in easy_ranges.keys():
-            period_range = easy_ranges[period_type]['keys']
-            period_labels = easy_ranges[period_type]['labels']
+        # Ranges are built below, partly based on the ranges in 'periodic_ranges' above.
+        sequential_ranges = {
+            'year': {
+                'range': [],
+                'lookup': lambda x: {'occurred_from__year': x},
+                'label': lambda x: str(x)
+            },
+            'month': {
+                'range': [],
+                'lookup': lambda (yr, mo): {'occurred_from__month': mo, 'occurred_from__year': yr},
+                'label': lambda (yr, mo): '{}, {}'.format(calendar.month_name[mo], str(yr))
+            },
+            'week': {
+                'range': [],
+                'lookup': lambda (yr, wk): {'occurred_from__week': wk, 'occurred_from__year': yr},
+                'label': lambda (yr, wk): '{} Week {}'.format(str(yr), str(wk))
+            },
+            'day': {
+                'range': [],
+                'lookup': lambda (yr, wk, day): {'occurred_from__week': wk,
+                                                 'occurred_from__year': yr,
+                                                 'occurred_from__day': day},
+                'label': lambda (yr, wk, day): template_date(datetime.date(yr, wk, day))
+            },
+        }
+
+        if period_type in periodic_ranges.keys():
+            period = periodic_ranges[period_type]
+        elif period_type in sequential_ranges.keys():
+            # Get the desired range, either from the query params or the filtered queryset
+            if request.query_params.get('occurred_min') is not None:
+                min_date = parse_date(request.query_params['occurred_min']).date()
+            else:
+                min_date = queryset.order_by('occurred_from').first().occurred_from.date()
+            if request.query_params.get('occurred_max') is not None:
+                max_date = parse_date(request.query_params['occurred_max']).date()
+            else:
+                max_date = queryset.order_by('-occurred_from').first().occurred_from.date()
+
+            # Build the relevant range of aggregation periods, based partly on the ones
+            # already built in 'periodic_ranges' above
+            sequential_ranges['year']['range'] = xrange(min_date.year, max_date.year + 1)
+            if period_type != 'year':
+                # Using the existing lists for 'year' and 'month_of_year', builds a list of
+                # (year, month) tuples in order for the min_date to max_date range
+                sequential_ranges['month']['range'] = [
+                    (year, month) for year in sequential_ranges['year']['range']
+                    for month in periodic_ranges['month_of_year']['range']
+                    if min_date <= datetime.date(year, month, calendar.monthrange(year, month)[1])
+                    and datetime.date(year, month, 1) <= max_date
+                ]
+                if period_type == 'day':
+                    # Loops over the 'month' range from directly above and adds day, to make a
+                    # list of (year, month, day) tuples in order for the min_date to max_date range
+                    sequential_ranges['day']['range'] = [
+                        (year, month, day) for (year, month) in sequential_ranges['month']['range']
+                        for day in xrange(1, calendar.monthrange(year, month)[1] + 1)
+                        if min_date <= datetime.date(year, month, day)
+                        and datetime.date(year, month, day) <= max_date
+                    ]
+                elif period_type == 'week':
+                    # Using the existing lists for 'year' and 'week_of_year', builds a list of
+                    # (year, week) tuples in order for the min_date to max_date range.
+                    # Rather than figure out what week the min_date and max_date fall in, this
+                    # includes all weeks for the starting and ending months.
+                    sequential_ranges['week']['range'] = [
+                        (year, week) for year in sequential_ranges['year']['range']
+                        for week in periodic_ranges['week_of_year']['range']
+                        if min_date <= datetime.date(year, month, calendar.monthrange(year, month)[1])
+                        and datetime.date(year, month, 1) <= max_date
+                    ]
+
+            period = sequential_ranges[period_type]
         else:
             raise ParseError(detail=('row_/col_period_type must be one of {}; received {}'
-                                     .format(easy_ranges.keys() + 'year', period_type)))
+                                     .format(periodic_ranges.keys() + sequential_ranges.keys(),
+                                             period_type)))
 
         whens = []  # Eventual list of When-clause objects
-        when_lookup = 'occurred_from__{}'.format(period_type)
-        for x in period_range:
-            when_args = {'then': Value(x)}
-            when_args[when_lookup] = x
+        for x in period['range']:
+            when_args = period['lookup'](x)
+            when_args['then'] = Value(str(x))
             whens.append(When(**when_args))
 
-        labels = [{'key': str(x), 'label': period_labels(x)} for x in period_range]
-        return (Case(*whens, output_field=IntegerField()), labels)
+        labels = [{'key': str(x), 'label': period['label'](x)} for x in period['range']]
+        return (Case(*whens, output_field=CharField()), labels)
 
     def _make_boundary_case(self, boundary_id):
         """Constructs a Django Case statement for points falling within a particular polygon
@@ -458,7 +543,7 @@ class DriverRecordAuditLogViewSet(viewsets.ModelViewSet):
         except ValueError:
             raise ParseError("occurred_min and occurred_max must both be valid dates")
         # Make sure that min_date and max_date are less than 32 days apart
-        if max_date - min_date >= timedelta(days=32):
+        if max_date - min_date >= datetime.timedelta(days=32):
             raise ParseError('max_date and min_date must be less than one month apart')
         return super(DriverRecordAuditLogViewSet, self).list(request, *args, **kwargs)
 

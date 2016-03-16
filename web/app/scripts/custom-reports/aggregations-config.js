@@ -12,35 +12,50 @@
     function AggregationsConfig($q, RecordState, RecordSchemaState, GeographyState) {
         var aggregations = [
             {
-                label: 'Day of Month',
-                value: 'day',
+                label: 'Year',
+                value: 'year',
                 type: 'Time'
             },
             {
-                label: 'Day of Week',
-                value: 'week_day',
-                type: 'Time'
-            },
-            {
-                label: 'Hour of Day',
-                value: 'hour',
-                type: 'Time'
-            },
-            {
-                label: 'Month of Year',
+                label: 'Month',
                 value: 'month',
                 type: 'Time'
             },
             {
-                label: 'Week of Year',
+                label: 'Week',
                 value: 'week',
                 type: 'Time'
             },
             {
-                label: 'Year',
-                value: 'year',
+                label: 'Day',
+                value: 'day',
                 type: 'Time'
-            }
+            },
+            {
+                label: 'Month of Year',
+                value: 'month_of_year',
+                type: 'Time'
+            },
+            {
+                label: 'Week of Year',
+                value: 'week_of_year',
+                type: 'Time'
+            },
+            {
+                label: 'Day of Month',
+                value: 'day_of_month',
+                type: 'Time'
+            },
+            {
+                label: 'Day of Week',
+                value: 'day_of_week',
+                type: 'Time'
+            },
+            {
+                label: 'Hour of Day',
+                value: 'hour_of_day',
+                type: 'Time'
+            },
         ];
         var initialized = false;
 
