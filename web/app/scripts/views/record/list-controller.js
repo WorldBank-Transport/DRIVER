@@ -57,6 +57,7 @@
          * @return {promise} Promise to load records
          */
         function loadRecords(offset) {
+            ctl.loadingRecords = true;
             var newOffset;
             if (offset) {
                 newOffset = ctl.currentOffset + offset;
@@ -72,6 +73,8 @@
             .then(function(records) {
                 ctl.records = records;
                 ctl.currentOffset = newOffset;
+            }).finally(function() {
+                ctl.loadingRecords = false;
             });
         }
 
