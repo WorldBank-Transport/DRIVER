@@ -38,6 +38,7 @@
             return RecordSchemaState.get(currentSchemaId)
                 .then(function(recordSchema) {
                     ctl.recordSchema = recordSchema;
+                    return;
                 }).then(onSchemaLoaded);
         }
 
