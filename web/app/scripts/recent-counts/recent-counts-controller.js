@@ -27,7 +27,6 @@
         }
 
         function loadRecords() {
-            // TODO: implement filtering by polygon_id on the server side
             RecordAggregates.recentCounts(ctl.boundaryId).then(function(aggregate) {
                 ctl.year = aggregate.year;
                 ctl.quarter = aggregate.quarter;

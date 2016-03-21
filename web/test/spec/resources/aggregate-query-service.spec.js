@@ -30,7 +30,8 @@ describe('driver.resources: Aggregate Queries', function () {
 
     it('It should use the currently selected recordtype to query for recent counts', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        var recordTypeCountUrl = /\/api\/recordtypes\/a-very-weird-uuid\/recent_counts/;
+        var recordTypeCountUrl = new RegExp('api/records/recent_counts/' +
+                                            '\\?archived=False.*record_type=a-very-weird-uuid');
 
         RecordAggregates.recentCounts();
 

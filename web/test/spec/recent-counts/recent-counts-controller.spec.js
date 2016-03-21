@@ -36,10 +36,8 @@ describe('driver.recentCounts: RecentCountsController', function () {
         $httpBackend.expectGET(/\/api\/boundarypolygons/)
             .respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
-        var recordType = ResourcesMock.RecordType;
-        var recordTypeId = recordType.uuid;
-        var countsUrl = new RegExp('api/recordtypes/' + recordTypeId +
-                                   '/recent_counts/\\?limit=all');
+        var countsUrl = new RegExp('api/records/recent_counts/\\?archived=False' +
+                                   '.*record_type=' + ResourcesMock.RecordType.uuid);
         $httpBackend.expectGET(countsUrl).respond(200);
         $httpBackend.expectGET(countsUrl).respond(200);
 

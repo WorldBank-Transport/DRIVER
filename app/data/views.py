@@ -3,6 +3,7 @@ import logging
 import uuid
 import calendar
 import datetime
+import pytz
 
 from dateutil.parser import parse as parse_date
 from django.template.defaultfilters import date as template_date
@@ -76,6 +77,13 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         if is_admin_or_writer(self.request.user) and not requested_details_only:
             return RecordSerializer
         return DetailsReadOnlyRecordSerializer
+
+    def get_filtered_queryset(self, request):
+        """Return the queryset with the filter backends applied. Handy for aggregations."""
+        queryset = self.get_queryset()
+        for backend in list(self.filter_backends):
+            queryset = backend().filter_queryset(request, queryset, self)
+        return queryset
 
     # Change auditing
     def add_to_audit_log(self, request, instance, action):
@@ -152,9 +160,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         if year_distance > 2000:
             raise ParseError("occurred_min and occurred_max must be within 2000 years of one another")
 
-        queryset = self.get_queryset()
-        for backend in list(self.filter_backends):
-            queryset = backend().filter_queryset(request, queryset, self)
+        queryset = self.get_filtered_queryset(request)
 
         # Build SQL `case` statement to annotate with the year
         isoyear_case = Case(*[When(occurred_from__isoyear=year, then=Value(year))
@@ -179,9 +185,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         """ Return aggregations which nicely format the counts for time of day and day of week
         e.g. [{"count":1,"dow":6,"tod":1},{"count":1,"dow":3,"tod":3}]
         """
-        queryset = self.get_queryset()
-        for backend in list(self.filter_backends):
-            queryset = backend().filter_queryset(request, queryset, self)
+        queryset = self.get_filtered_queryset(request)
 
         # Build SQL `case` statement to annotate with the day of week
         dow_case = Case(*[When(occurred_from__week_day=x, then=Value(x))
@@ -196,6 +200,22 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                    .order_by('tod', 'dow')
                    .annotate(count=Count('tod')))
         return Response(counted)
+
+    @list_route(methods=['get'])
+    def recent_counts(self, request):
+        """ Return the recent record counts for 30, 90, 365 days """
+        now = datetime.datetime.now(tz=pytz.timezone(settings.TIME_ZONE))
+        qs = self.get_filtered_queryset(request).filter(occurred_from__lte=now)
+        durations = {
+            'month': 30,
+            'quarter': 90,
+            'year': 365,
+        }
+
+        counts = {label: qs.filter(occurred_from__gte=(now - datetime.timedelta(days=days))).count()
+                  for label, days in durations.items()}
+
+        return Response(counts)
 
     @list_route(methods=['get'])
     def crosstabs(self, request):
@@ -275,10 +295,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ParseError(detail='Exactly one col_* and row_* parameter required; options are {}'
                                     .format(list(valid_row_params | valid_col_params)))
 
-        # Generate filtered queryset based on other params
-        queryset = self.get_queryset()
-        for backend in list(self.filter_backends):
-            queryset = backend().filter_queryset(request, queryset, self)
+        # Get queryset, pre-filtered based on other params
+        queryset = self.get_filtered_queryset(request)
 
         # Pass parameters to case-statement generators
         row_param = row_params.pop()  # Guaranteed to be just one at this point

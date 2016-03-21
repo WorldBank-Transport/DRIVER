@@ -65,20 +65,21 @@
          */
         function recentCounts(boundaryId) {
             var deferred = $q.defer();
-            // Record Type
-            RecordState.getSelected().then(function(selected) {
-                var uuid = selected.uuid;
-                var params = { id: uuid };
-                if (boundaryId) {
-                    /* jshint camelcase: false */
-                    params.polygon_id = boundaryId;
-                    /* jshint camelcase: true */
+            QueryBuilder.assembleParams(0, false, false, true).then(
+                function (params) {
+                    if (params.limit) {
+                       delete params.limit;
+                    }
+                    if (boundaryId) {
+                        /* jshint camelcase: false */
+                        params = _.extend(params, { polygon_id: boundaryId });
+                        /* jshint camelcase: true */
+                    }
+                    Records.recentCounts(params).$promise.then(function(counts) {
+                        deferred.resolve(counts);
+                    });
                 }
-
-                RecordTypes.recentCounts(params).$promise.then(function(counts) {
-                    deferred.resolve(counts);
-                });
-            });
+            );
             return deferred.promise;
         }
     }
