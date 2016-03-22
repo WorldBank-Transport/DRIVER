@@ -31,14 +31,14 @@ describe('driver.recentCounts: RecentCountsController', function () {
 
     it('should make requests to recent_counts', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True&limit=all/;
-        $httpBackend.expectGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
-        $httpBackend.expectGET(/\/api\/boundarypolygons/)
-            .respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(/\/api\/boundaries/).respond(DriverResourcesMock.BoundaryResponse);
 
         var countsUrl = new RegExp('api/records/recent_counts/\\?archived=False' +
                                    '.*record_type=' + ResourcesMock.RecordType.uuid);
         $httpBackend.expectGET(countsUrl).respond(200);
+        $httpBackend.expectGET(/\/api\/boundarypolygons/)
+            .respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(countsUrl).respond(200);
 
         Controller = $controller('RecentCountsController', { $scope: $scope });

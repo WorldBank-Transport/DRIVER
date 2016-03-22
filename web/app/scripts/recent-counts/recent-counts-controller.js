@@ -2,17 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function RecentCountsController($scope, BoundaryState, InitialState,
-                                    RecordAggregates, RecordState) {
+    function RecentCountsController($scope, InitialState, RecordAggregates, RecordState) {
         var ctl = this;
         InitialState.ready().then(init);
         return ctl;
 
         function init() {
             RecordState.getSelected()
-                .then(BoundaryState.getSelected().then(function(selected) {
-                    ctl.boundaryId = selected.uuid;
-                }))
                 .then(function(recordType) {
                     /* jshint camelcase: false */
                     ctl.recordTypePlural = recordType.plural_label;
@@ -20,14 +16,13 @@
                     loadRecords();
                 });
 
-            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
-                ctl.boundaryId = selected.uuid;
+            $scope.$on('driver.state.boundarystate:selected', function() {
                 loadRecords();
             });
         }
 
         function loadRecords() {
-            RecordAggregates.recentCounts(ctl.boundaryId).then(function(aggregate) {
+            RecordAggregates.recentCounts().then(function(aggregate) {
                 ctl.year = aggregate.year;
                 ctl.quarter = aggregate.quarter;
                 ctl.month = aggregate.month;

@@ -57,9 +57,6 @@
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
-                .then(BoundaryState.getSelected().then(function(selected) {
-                    ctl.boundaryId = selected.uuid;
-                }))
                 .then(loadRecords);
 
             // TODO: This also needs to listen for changing filters, both from the filterbar
@@ -73,8 +70,7 @@
                 loadRecords();
             });
 
-            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
-                ctl.boundaryId = selected.uuid;
+            $scope.$on('driver.state.boundarystate:selected', function() {
                 loadRecords();
             });
         }
@@ -83,9 +79,6 @@
             /* jshint camelcase: false */
             var params = {};
 
-            if (ctl.boundaryId) {
-                params.polygon_id = ctl.boundaryId;
-            }
             /* jshint camelcase: true */
             var userDrawnPoly = MapState.getFilterGeoJSON();
             if (userDrawnPoly) {

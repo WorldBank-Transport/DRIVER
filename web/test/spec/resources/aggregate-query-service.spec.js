@@ -30,14 +30,18 @@ describe('driver.resources: Aggregate Queries', function () {
 
     it('It should use the currently selected recordtype to query for recent counts', function () {
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var boundariesUrl = /api\/boundaries/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
         var recordTypeCountUrl = new RegExp('api/records/recent_counts/' +
                                             '\\?archived=False.*record_type=a-very-weird-uuid');
 
         RecordAggregates.recentCounts();
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeCountUrl)
           .respond(200, {'plural': 'Birds', 'month': '10', 'quarter': 100, 'year': 1000});
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $rootScope.$apply();
         $httpBackend.flush();
