@@ -3,7 +3,8 @@
 
     /* ngInject */
     function Records($resource, WebConfig) {
-        return $resource(WebConfig.api.hostname + '/api/records/:id/', {
+        var baseUrl = WebConfig.api.hostname + '/api/records/';
+        return $resource(baseUrl + ':id/', {
             id: '@uuid',
             archived: 'False' // Note: a regular 'false' boolean doesn't filter properly in DRF
         }, {
@@ -22,17 +23,21 @@
                 method: 'PATCH'
             },
             toddow: {
-                url: WebConfig.api.hostname + '/api/records/toddow/',
+                url: baseUrl + 'toddow/',
                 method: 'GET',
                 isArray: true
             },
             stepwise: {
-                url: WebConfig.api.hostname + '/api/records/stepwise/',
+                url: baseUrl + 'stepwise/',
                 method: 'GET',
                 isArray: true
             },
+            recentCounts: {
+                method: 'GET',
+                url: baseUrl + 'recent_counts/'
+            },
             report: {
-                url: WebConfig.api.hostname + '/api/records/crosstabs/',
+                url: baseUrl + 'crosstabs/',
                 method: 'GET',
             },
         });

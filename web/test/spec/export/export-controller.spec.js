@@ -41,10 +41,16 @@ describe('driver.tools.export: ExportController', function () {
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
 
+
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
-        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        var boundariesUrl = /api\/boundaries/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
         var recordSchemaUrl = /\/api\/recordschemas\/\?limit=all/;
+
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchemaResponse);
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
 
         $scope.recordQueryParams = {};
         Controller = $controller('ExportController', { $scope: $scope });

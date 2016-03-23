@@ -773,17 +773,12 @@
             if (geojson) {
                 params.polygon = geojson;
             }
-            if (ctl.boundaryId) {
-                /* jshint camelcase: false */
-                params.polygon_id = ctl.boundaryId;
-                /* jshint camelcase: true */
-            }
 
             return params;
         }
 
         function getTilekeys() {
-            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams(), true, true, false).then(
+            var primary = QueryBuilder.djangoQuery(0, getAdditionalParams(), {}, false).then(
                 function(records) { ctl.tilekey = records.tilekey; }
             );
             var secondary = $q.resolve('');
@@ -792,7 +787,7 @@
                 /* jshint camelcase: false */
                 params.record_type = ctl.secondaryType.uuid;
                 /* jshint camelcase: true */
-                secondary = QueryBuilder.djangoQuery(0, params, true, false, false).then(
+                secondary = QueryBuilder.djangoQuery(0, params, {doJsonFilters: false}, false).then(
                     function(records) { ctl.secondaryTilekey = records.tilekey; }
                 );
             }

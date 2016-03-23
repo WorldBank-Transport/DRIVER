@@ -79,21 +79,19 @@
                 return TileUrlService.recTilesUrl(selected.uuid);
             // Construct Windshaft URL
             }).then(function(baseUrl) {
-                return BoundaryState.getSelected().then(function(boundary) {
-                    /* jshint camelcase: false */
-                    var params = {
-                        tilekey: true,
-                        occurred_min: occurredMin.toISOString()
-                    };
-                    if (boundary.uuid) {
-                        params.polygon_id = boundary.uuid;
-                    }
-                    /* jshint camelcase: true */
+                /* jshint camelcase: false */
+                var params = {
+                    tilekey: true,
+                    occurred_min: occurredMin.toISOString()
+                };
+                /* jshint camelcase: true */
+                var filterConfig = { doAttrFilters: false,
+                                     doBoundaryFilter: true,
+                                     doJsonFilters: false, };
 
-                    return QueryBuilder.unfilteredDjangoQuery(0, params).then(function(result) {
-                        var tilekeyParam = (baseUrl.match(/\?/) ? '&' : '?') + 'tilekey=';
-                        return baseUrl + tilekeyParam + result.tilekey;
-                    });
+                return QueryBuilder.djangoQuery(0, params, filterConfig).then(function(result) {
+                    var tilekeyParam = (baseUrl.match(/\?/) ? '&' : '?') + 'tilekey=';
+                    return baseUrl + tilekeyParam + result.tilekey;
                 });
             // Swap layers
             }).then(function(fullUrl) {

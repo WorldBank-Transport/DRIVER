@@ -16,12 +16,11 @@
         /**
          * Retrieve TODDOW data - API mirroring the query builder service
          */
-        function toddow(extraParams, doAttrFilters, doJsonFilters) {
+        function toddow(extraParams, filterConfig) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doAttrFilters = doAttrFilters !== false;
-            doJsonFilters = doJsonFilters !== false;
-            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters, true).then( // 0 for offset
+            filterConfig = filterConfig || {};
+            QueryBuilder.assembleParams(0, filterConfig, true).then( // 0 for offset
                 function(params) {
                     // toddow should never use a limit
                     params = _.extend(params, extraParams);
@@ -40,45 +39,45 @@
         /**
          * Retrieve stepwise data - API mirroring the query builder service
          */
-        function stepwise(extraParams, doAttrFilters, doJsonFilters) {
+        function stepwise(extraParams, filterConfig) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
-            doAttrFilters = doAttrFilters !== false;
-            doJsonFilters = doJsonFilters !== false;
-            QueryBuilder.assembleParams(0, doAttrFilters, doJsonFilters, true).then( // 0 for offset
+            filterConfig = filterConfig || {};
+            QueryBuilder.assembleParams(0, filterConfig, true).then( // 0 for offset
                 function(params) {
-                // stepwise should never use a limit
-                params = _.extend(params, extraParams);
-                if (params.limit) {
-                    delete params.limit;
-                }
+                    // stepwise should never use a limit
+                    params = _.extend(params, extraParams);
+                    if (params.limit) {
+                        delete params.limit;
+                    }
 
-                Records.stepwise(params).$promise.then(function(stepwiseData) {
-                    deferred.resolve(stepwiseData);
-                });
-            });
+                    Records.stepwise(params).$promise.then(function(stepwiseData) {
+                        deferred.resolve(stepwiseData);
+                    });
+                }
+            );
             return deferred.promise;
         }
 
         /**
          * Request the most recent 30, 90, 365 day counts for the currently selected record type
          */
-        function recentCounts(boundaryId) {
+        function recentCounts() {
             var deferred = $q.defer();
-            // Record Type
-            RecordState.getSelected().then(function(selected) {
-                var uuid = selected.uuid;
-                var params = { id: uuid };
-                if (boundaryId) {
-                    /* jshint camelcase: false */
-                    params.polygon_id = boundaryId;
-                    /* jshint camelcase: true */
-                }
+            var filterConfig = { doAttrFilters: false,
+                                 doBoundaryFilter: true,
+                                 doJsonFilters: false, };
+            QueryBuilder.assembleParams(0, filterConfig, true).then(
+                function (params) {
+                    if (params.limit) {
+                       delete params.limit;
+                    }
 
-                RecordTypes.recentCounts(params).$promise.then(function(counts) {
-                    deferred.resolve(counts);
-                });
-            });
+                    Records.recentCounts(params).$promise.then(function(counts) {
+                        deferred.resolve(counts);
+                    });
+                }
+            );
             return deferred.promise;
         }
     }

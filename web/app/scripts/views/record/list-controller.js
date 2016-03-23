@@ -4,9 +4,8 @@
     /* ngInject */
     function RecordListController($scope, $rootScope, $log, $modal, $state, uuid4, AuthService,
                                   FilterState, InitialState, Notifications, RecordSchemaState,
-                                  RecordState, BoundaryState, QueryBuilder, WebConfig) {
+                                  RecordState, QueryBuilder, WebConfig) {
         var ctl = this;
-        ctl.boundaryId = null;
         ctl.currentOffset = 0;
         ctl.numRecordsPerPage = WebConfig.record.limit;
         ctl.maxDataColumns = 4; // Max number of dynamic data columns to show
@@ -23,9 +22,6 @@
             ctl.isInitialized = false;
             ctl.userCanWrite = AuthService.hasWriteAccess();
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
-                .then(BoundaryState.getSelected().then(function(selected) {
-                    ctl.boundaryId = selected.uuid;
-                }))
                 .then(loadRecordSchema)
                 .then(restoreFilters);
         }
@@ -66,11 +62,7 @@
                 newOffset = 0;
             }
 
-            /* jshint camelcase: false */
-            var params = ctl.boundaryId ? { polygon_id: ctl.boundaryId } : {};
-            /* jshint camelcase: true */
-
-            return QueryBuilder.djangoQuery(newOffset, params, true, true, true)
+            return QueryBuilder.djangoQuery(newOffset)
             .then(function(records) {
                 ctl.records = records;
                 ctl.currentOffset = newOffset;
@@ -165,11 +157,10 @@
             }
         });
 
-        $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
+        $scope.$on('driver.state.boundarystate:selected', function() {
             if (!ctl.isInitialized) {
                 return;
             }
-            ctl.boundaryId = selected.uuid;
 
             loadRecords();
         });

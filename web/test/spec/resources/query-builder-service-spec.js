@@ -40,11 +40,15 @@ describe('driver.resources: QueryBuilder', function () {
         var recordsUrl = /\/api\/records\/\?archived=False&details_only=True&limit=50&occurred_min=2015-10-04T16:00:00.000Z&record_type=15460346-65d7-4f4d-944d-27324e224691/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var recordSchemaUrl = /\/api\/recordschemas/;
+        var boundariesUrl = /api\/boundaries/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
         QueryBuilder.djangoQuery();
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordSchemaUrl).respond(200, ResourcesMock.RecordSchema);
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordsUrl).respond(200, DriverResourcesMock.RecordResponse);
 
         $rootScope.$apply();

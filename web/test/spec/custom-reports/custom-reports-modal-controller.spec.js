@@ -29,13 +29,16 @@ describe('driver.customReports: CustomReportsModalController', function () {
     }));
 
     it('should initialize the modal controller and be able to close it', function () {
-        var recordId = DriverResourcesMock.RecordResponse.results[0].uuid;
         var recordSchema = ResourcesMock.RecordSchema;
         var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchema.uuid);
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var boundariesUrl = /api\/boundaries/;
+        var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
         Controller = $controller('CustomReportsModalController', {

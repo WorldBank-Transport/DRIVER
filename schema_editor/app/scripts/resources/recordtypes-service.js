@@ -16,11 +16,6 @@
                 transformResponse: function(data) { return angular.fromJson(data).results; },
                 isArray: true
             },
-            // Recent counts for a record type: monthly, quarterly, yearly totals included
-            recentCounts: {
-                method: 'GET',
-                url: url + 'recent_counts/'
-            },
             update: {
                 method: 'PATCH'
             }

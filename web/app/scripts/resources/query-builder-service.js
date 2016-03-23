@@ -8,12 +8,16 @@
     'use strict';
 
     /* ngInject */
-    function QueryBuilder($q, FilterState, RecordState, RecordSchemaState, Records, WebConfig) {
+    function QueryBuilder($q, FilterState, RecordState, RecordSchemaState, BoundaryState,
+                          Records, WebConfig) {
+        var FILTER_DEFAULTS = {
+            doAttrFilters: true,
+            doBoundaryFilter: true,
+            doJsonFilters: true,
+        };
+
         var svc = {
             djangoQuery: djangoQuery,
-            unfilteredDjangoQuery: function(offset, extraParams) {
-                return djangoQuery(offset, extraParams, false, false);
-            },
             // KEEP THESE AVAILABLE FOR TESTING
             assembleParams: assembleParams,
             assembleJsonFilterParams: assembleJsonFilterParams
@@ -36,16 +40,15 @@
                                        from FilterState service.
          * @param {bool} detailsOnly   If true: Return only the Details section of the record
          */
-        function djangoQuery(offset, extraParams, doAttrFilters, doJsonFilters, detailsOnly) {
+        function djangoQuery(offset, extraParams, filterConfig, detailsOnly) {
             var deferred = $q.defer();
             extraParams = extraParams || {};
             // Default to applying filters
-            doAttrFilters = doAttrFilters !== false;
-            doJsonFilters = doJsonFilters !== false;
+            filterConfig = _.extend({}, FILTER_DEFAULTS, filterConfig);
             // Default to include only details in response
             detailsOnly = detailsOnly !== false;
 
-            assembleParams(offset, doAttrFilters, doJsonFilters, detailsOnly).then(function(params) {
+            assembleParams(offset, filterConfig, detailsOnly).then(function(params) {
                 Records.get(_.extend(params, extraParams)).$promise.then(function(records) {
                     deferred.resolve(records);
                 });
@@ -113,12 +116,14 @@
          * @param {bool} detailsOnly   Whether or not to request only the Details section
          *
          */
-        function assembleParams(offset, doAttrFilters, doJsonFilters, detailsOnly) {
+        function assembleParams(offset, filterConfig, detailsOnly) {
+            // Default to applying filters
+            filterConfig = _.extend({}, FILTER_DEFAULTS, filterConfig);
             var deferred = $q.defer();
             var paramObj = { limit: WebConfig.record.limit };
-            var p1;
+            var boundaryPromise, jsonPromise;
             /* jshint camelcase: false */
-            if (doAttrFilters) {
+            if (filterConfig.doAttrFilters) {
                 var dateFilter = FilterState.getDateFilter();
                 paramObj = _.extend(paramObj, {
                     occurred_max: dateFilter.maxDate,
@@ -126,12 +131,24 @@
                 });
             }
 
-            if (doJsonFilters) {
-                p1 = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(
+            if (filterConfig.doBoundaryFilter) {
+                boundaryPromise = BoundaryState.getSelected().then(function(selected) {
+                    if (selected && selected.uuid) {
+                        return { polygon_id: selected.uuid };
+                    } else {
+                        return {};
+                    }
+                });
+            }
+
+            if (filterConfig.doJsonFilters) {
+                jsonPromise = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(
                     function(jsonFilters) {
                         // Handle cases where no json filters are set
                         if (!_.isEmpty(jsonFilters)) {
-                            paramObj = _.extend(paramObj, { jsonb: jsonFilters });
+                            return { jsonb: jsonFilters };
+                        } else {
+                            return {};
                         }
                     }
                 );
@@ -143,11 +160,13 @@
                 });
             }
 
-            $q.when(p1).then(function() {
+            $q.all([boundaryPromise, jsonPromise]).then(function(filters) {
                 // Pagination offset
                 if (offset) {
                     paramObj.offset = offset;
                 }
+
+                _.forEach(filters, function (filter) { _.extend(paramObj, filter); });
 
                 // Record Type
                 RecordState.getSelected().then(function(selected) {

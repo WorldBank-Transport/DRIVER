@@ -3,7 +3,7 @@
 
     /* ngInject */
     function DashboardController($scope, $state, $timeout,
-                                 BoundaryState, FilterState, InitialState, Records,
+                                 FilterState, InitialState, Records,
                                  RecordSchemaState, RecordState, RecordAggregates) {
         var ctl = this;
 
@@ -11,9 +11,6 @@
 
         function init() {
             RecordState.getSelected().then(function(selected) { ctl.recordType = selected; })
-                .then(BoundaryState.getSelected().then(function(selected) {
-                    ctl.boundaryId = selected.uuid;
-                }))
                 .then(loadRecordSchema)
                 .then(loadRecords)
                 .then(onRecordsLoaded);
@@ -23,8 +20,7 @@
                 loadRecords();
             });
 
-            $scope.$on('driver.state.boundarystate:selected', function(event, selected) {
-                ctl.boundaryId = selected.uuid;
+            $scope.$on('driver.state.boundarystate:selected', function() {
                 loadRecords();
             });
             $scope.$on('driver.savedFilters:filterSelected', function(event, selectedFilter) {
@@ -58,14 +54,17 @@
             var threeMonthsBack = new Date(now - duration).toISOString();
 
             /* jshint camelcase: false */
-            var params = ctl.boundaryId ? {polygon_id: ctl.boundaryId} : {};
-            params = angular.extend(params, {
+            var params = {
               occurred_min: threeMonthsBack,
               occurred_max: today
-            });
+            };
             /* jshint camelcase: true */
 
-            RecordAggregates.toddow(params, false, false).then(function(toddowData) {
+            var filterConfig = { doAttrFilters: false,
+                                 doBoundaryFilter: true,
+                                 doJsonFilters: false, };
+
+            RecordAggregates.toddow(params, filterConfig).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
         }

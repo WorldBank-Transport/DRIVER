@@ -66,7 +66,9 @@
         }
 
         function assembleParams() {
-            return QueryBuilder.assembleParams(0, true, true).then(
+            // TODO: if there's a boundary selected, should that filter be applied when
+            // they haven't selected a geographical aggregation? Currently it's never applied.
+            return QueryBuilder.assembleParams(0, {doBoundaryFilter: false}).then(
                 function(params) {
                     var crosstabsParams = {};
                     setRowColParam('col', ctl.colAggSelected, crosstabsParams);
