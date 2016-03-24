@@ -22,14 +22,14 @@
          * initialization
          */
         function init() {
-          selected = nullBounds;
-          options = [];
-          defaultParams = { active: 'True' };
+            selected = nullBounds;
+            options = [];
+            defaultParams = { active: 'True' };
 
-          GeographyState.getSelected().then(function(geography) {
-              var params = geography ? { boundary: geography.uuid } : {};
-              svc.updateOptions(params);
-          });
+            GeographyState.getSelected().then(function(geography) {
+                var params = geography ? { boundary: geography.uuid } : {};
+                svc.updateOptions(params);
+            });
         }
 
         /**
@@ -56,10 +56,11 @@
 
         function getOptions() {
             var deferred = $q.defer();
-            if (!options) {
+            if (_.isEmpty(options)) {
                 updateOptions().then(function() { deferred.resolve(options); });
+            } else {
+                deferred.resolve(options);
             }
-            deferred.resolve(options);
             return deferred.promise;
         }
 
