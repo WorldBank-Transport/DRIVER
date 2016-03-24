@@ -30,6 +30,10 @@
                         });
                     return dfd.promise;
                 }
+            },
+            params: {
+                next: undefined,
+                nextParams: undefined,
             }
         });
     }

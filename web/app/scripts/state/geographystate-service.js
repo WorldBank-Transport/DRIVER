@@ -50,12 +50,12 @@
         }
 
         function getOptions() {
-            if(options){
-                return $q.when(options);
-            } else {
+            if(_.isEmpty(options)) {
                 return updateOptions().then(function(){
                     return options;
                 });
+            } else {
+                return $q.when(options);
             }
         }
 
