@@ -96,6 +96,12 @@
                 schemaPromise = loadRecord().then(loadRecordSchema);
             } else {
                 schemaPromise = loadRecordSchema();
+                // Besides being friendly, setting a default works around this bug:
+                // https://github.com/angular-ui/bootstrap/issues/1114
+                ctl.occurredFrom = new Date();
+                if (ctl.isSecondary) {
+                    ctl.occurredTo = ctl.occurredFrom;
+                }
             }
 
             schemaPromise.then(function () {
@@ -360,9 +366,14 @@
                     ctl.constantFieldErrors[fieldName] = fieldName + ': Value required';
                 }
             });
+
             if (ctl.isSecondary && ctl.occurredFrom && ctl.occurredTo &&
                     ctl.occurredFrom > ctl.occurredTo) {
                 ctl.constantFieldErrors.occurredTo = 'End date cannot be before start date.';
+            }
+
+            if (ctl.occurredFrom && ctl.occurredFrom > new Date()) {
+                ctl.constantFieldErrors.occurred = 'Date and time must be in the past.';
             }
 
             // make field errors falsy if empty, for partial to check easily
