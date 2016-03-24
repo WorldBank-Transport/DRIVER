@@ -42,7 +42,7 @@
                 event.preventDefault();
                 // broadcast success to avoid infinite redirect
                 // see issue: https://github.com/angular-ui/ui-router/issues/178
-                $state.go('login', null, {notify: false}).then(function() {
+                $state.go('login', {next: to, nextParams: toParams}, {notify: false}).then(function() {
                     $rootScope.$broadcast('$stateChangeSuccess', to, toParams, from, fromParams);
                 });
                 return;

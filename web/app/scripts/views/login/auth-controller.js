@@ -4,7 +4,7 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, $window, AuthService, SSOClients, WebConfig) {
+    function AuthController ($scope, $state, $stateParams, $window, AuthService, SSOClients, WebConfig) {
 
         $scope.auth = {};
         $scope.ssoClients = SSOClients;
@@ -22,16 +22,24 @@
             $scope.authenticated = AuthService.authenticate($scope.auth);
             $scope.authenticated.then(function(result) {
                 if (result.isAuthenticated) {
-                    // redirect to dashboard, with a full page reload,
-                    // to pick up the newly set credentials
-
-                    $window.location.href = '/';
+                    // Since there's no state that's the parent of all other states, there's no way
+                    // to get $state to actually reload everything. And since various controllers
+                    // check (or assume) authentication on init and don't watch or listen for
+                    // changes, we need to do a full reload on login.
+                    // If there's no 'next' page, we can do that by setting location to '/', but
+                    // if we're redirecting to a target state, we need to use $state.go but reload
+                    // after the state transition.
+                    if ($stateParams.next && $stateParams.next.name !== $state.name &&
+                            $stateParams.next.url !== '/') {
+                        return $state.go($stateParams.next.name, $stateParams.nextParams)
+                            .then(function () { $window.location.reload(); });
+                    } else {
+                        $window.location.href = '/';
+                    }
                 } else {
                     handleError(result);
                 }
-            }, function (result) {
-                handleError(result);
-            });
+            }).catch(handleError);
         };
 
         $scope.sso = function(client) {
