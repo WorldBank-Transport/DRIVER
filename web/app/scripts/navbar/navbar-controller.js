@@ -13,9 +13,6 @@
         InitialState.ready().then(init);
 
         ctl.onLogoutButtonClicked = AuthService.logout;
-        ctl.authenticated = AuthService.isAuthenticated();
-        ctl.hasWriteAccess = AuthService.hasWriteAccess();
-        ctl.isAdmin = AuthService.isAdmin();
         ctl.onGeographySelected = onGeographySelected;
         ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
@@ -26,26 +23,28 @@
         ctl.recordTypesVisible = WebConfig.recordType.visible;
         ctl.userEmail = userDropdownDefault;
 
-        $rootScope.$on('$stateChangeSuccess', setStates);
-
         function init() {
+            setUserInfo();
             setFilters($state.current);
-            GeographyState.getOptions().then(function(opts) { ctl.geographyResults = opts; });
-            RecordState.getOptions().then(function(opts) { ctl.recordTypeResults = opts; });
             setStates();
-            UserService.getUser(AuthService.getUserId()).then(function(userInfo) {
-                if (userInfo && userInfo.email) {
-                    ctl.userEmail = userInfo.email;
-                } else {
-                    ctl.userEmail = userDropdownDefault;
-                }
-            });
+
             initialized = true;
         }
 
-        $rootScope.$on('$stateChangeSuccess', function(event, toState) {
-            ctl.authenticated = AuthService.isAuthenticated();
+        $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+            setUserInfo();
             setFilters(toState);
+            setStates();
+        });
+
+        // Update geography and record types when logging in
+        $scope.$watch('ctl.authenticated', function(newValue, oldValue) {
+            if (newValue && !oldValue) {
+                GeographyState.getOptions().then(function(opts) {
+                    ctl.geographyResults = opts; });
+                RecordState.getOptions().then(function(opts) {
+                    ctl.recordTypeResults = opts; });
+            }
         });
 
         // Record Type selections
@@ -83,11 +82,11 @@
             }
         });
 
-        // A function to set properties related to whether or not the filterbar should be instantiated for a given page
+        // A function to set properties related to whether or not the filterbar should be
+        // instantiated for a given page
         function setFilters(state) {
             var filterPages = ['Map', 'Record List'];
-            var isFilterPage = _.contains(filterPages, state.label);
-            ctl.isFilterPage = isFilterPage;
+            ctl.isFilterPage = _.contains(filterPages, state.label);
         }
 
         // Sets states that can be navigated to (exclude current state, since we're already there)
@@ -99,6 +98,19 @@
                     return state.showInNavbar && state.name !== $state.get().name;
                 })
                 .value();
+        }
+
+        function setUserInfo() {
+            ctl.authenticated = AuthService.isAuthenticated();
+            ctl.hasWriteAccess = AuthService.hasWriteAccess();
+            ctl.isAdmin = AuthService.isAdmin();
+            UserService.getUser(AuthService.getUserId()).then(function(userInfo) {
+                if (userInfo && userInfo.email) {
+                    ctl.userEmail = userInfo.email;
+                } else {
+                    ctl.userEmail = userDropdownDefault;
+                }
+            });
         }
 
         // Updates the ui router state based on selected navigation parameters

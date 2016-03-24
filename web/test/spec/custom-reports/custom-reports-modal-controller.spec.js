@@ -38,6 +38,7 @@ describe('driver.customReports: CustomReportsModalController', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(boundaryPolygonsUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
         $httpBackend.expectGET(recordSchemaIdUrl).respond(200, recordSchema);
 
