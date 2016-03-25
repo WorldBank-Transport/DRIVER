@@ -507,12 +507,14 @@
                 }
             }, function (error) {
                 $log.debug('Error while creating record:', error);
-                showErrorNotification(['<p>Error creating record</p><p>',
-                   error.status,
-                   ': ',
-                   error.statusText,
-                   '</p>'
-                ].join(''));
+                var errorMessage = '<p>Error creating record</p><p>';
+                if (error.data) {
+                    errorMessage += _.flatten(_.values(error.data)).join('<br>');
+                } else {
+                    errorMessage += (error.status + ': ' + error.statusText);
+                }
+                errorMessage += '</p>';
+                showErrorNotification(errorMessage);
             });
         }
 

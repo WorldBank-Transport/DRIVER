@@ -1,6 +1,8 @@
 import re
+import datetime
+import pytz
 
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import ModelSerializer, SerializerMethodField, ValidationError
 
 from ashlar import serializers
 from ashlar import serializer_fields
@@ -10,7 +12,15 @@ from models import RecordAuditLogEntry, RecordDuplicate
 from django.conf import settings
 
 
-class DetailsReadOnlyRecordSerializer(serializers.RecordSerializer):
+class DriverRecordSerializer(serializers.RecordSerializer):
+    def validate_occurred_from(self, value):
+        """ Require that record occurred_from be in the past. """
+        if value > datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)):
+            raise ValidationError('Occurred date must not be in the future.')
+        return value
+
+
+class DetailsReadOnlyRecordSerializer(DriverRecordSerializer):
     """Serialize records with only read-only fields included"""
     data = serializer_fields.MethodTransformJsonField('filter_details_only')
 
@@ -51,8 +61,8 @@ class RecordAuditLogEntrySerializer(ModelSerializer):
 
 
 class RecordDuplicateSerializer(ModelSerializer):
-    record = serializers.RecordSerializer(required=False, allow_null=True)
-    duplicate_record = serializers.RecordSerializer(required=False, allow_null=True)
+    record = DriverRecordSerializer(required=False, allow_null=True)
+    duplicate_record = DriverRecordSerializer(required=False, allow_null=True)
 
     class Meta:
         model = RecordDuplicate
