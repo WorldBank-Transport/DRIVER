@@ -58,10 +58,8 @@
                 detectRetina: false,
                 zIndex: 1
             };
-            TileUrlService.baseLayerUrl().then(function(url) {
-                var streets = new L.tileLayer(url, streetsOptions);
-                newMap.addLayer(streets);
-            });
+            var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetsOptions);
+            newMap.addLayer(streets);
 
             return newMap;
         }
@@ -76,9 +74,8 @@
             var occurredMin = new Date();
             occurredMin.setDate(occurredMin.getDate() - recencyCutoffDays);
             RecordState.getSelected().then(function(selected) {
-                return TileUrlService.recTilesUrl(selected.uuid);
-            // Construct Windshaft URL
-            }).then(function(baseUrl) {
+                // Construct Windshaft URL
+                var baseUrl = TileUrlService.recTilesUrl(selected.uuid);
                 /* jshint camelcase: false */
                 var params = {
                     tilekey: true,

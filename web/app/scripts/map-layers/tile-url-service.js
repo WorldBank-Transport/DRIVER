@@ -3,7 +3,7 @@
 
     // TODO: Finish refactor by changing the views/map/layers-controller.js and the embed-map
     // controller to use this.
-    function TileUrlService($q, WebConfig) {
+    function TileUrlService(WebConfig) {
         var allRecordsUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png');
         var secondaryRecordsUrl = allRecordsUrl + '?secondary=true';
@@ -60,7 +60,7 @@
         }
 
         function getBaseLayerUrl() {
-            return _makePromise(positronUrl);
+            return positronUrl;
         }
 
         /* Inserts an ID into a URL at the first occurrence of ALL
@@ -71,15 +71,9 @@
          */
         function _insertIdAtALL(url, id) {
             if (id) {
-                return _makePromise(url.replace(/ALL/, id));
+                return url.replace(/ALL/, id);
             }
-            return _makePromise(url);
-        }
-
-        function _makePromise(value) {
-            var promise = $q.defer();
-            promise.resolve(value);
-            return promise.promise;
+            return url;
         }
     }
 

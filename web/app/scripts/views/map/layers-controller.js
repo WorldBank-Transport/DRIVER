@@ -113,12 +113,10 @@
                     detectRetina: false,
                     zIndex: 1
                 };
-                TileUrlService.baseLayerUrl().then(function(streetsUrl) {
-                    var streets = new L.tileLayer(streetsUrl, streetsOptions);
-                    ctl.map.addLayer(streets);
-                    bmapDefer.resolve({
-                        'CartoDB Positron': streets
-                    });
+                var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetsOptions);
+                ctl.map.addLayer(streets);
+                bmapDefer.resolve({
+                    'CartoDB Positron': streets
                 });
             }).then(function() {
                 // add polygon draw control and layer to edit on
@@ -285,11 +283,9 @@
 
             if(ctl.layerSwitcher){
                 getBlackspotSetId()
-                    .then(getUrls)
                     .then(updateLayerGroups);
             } else {
                 getBlackspotSetId()
-                    .then(getUrls)
                     .then(updateLayerGroups)
                     .then(addBoundaryLayers)
                     .then(addLayerSwitcher);
@@ -316,51 +312,45 @@
         }
 
         /**
-         * Returns a promise which resolves to an object containing the URLs for all the layers
+         * Returns an object containing the URLs for all the layers
          */
         function getUrls(response) {
-            var blackspotUrl = $q.when('');
-            var blackspotUtfUrl = $q.when('');
-            var blackspotTileKey = false;
+            var urls = {
+                primaryRecordsUrl:    TileUrlService.recTilesUrl(ctl.recordType.uuid),
+                primaryUtfGridUrl:    TileUrlService.recUtfGridTilesUrl(ctl.recordType.uuid),
+                primaryHeatmapUrl:    TileUrlService.recHeatmapUrl(ctl.recordType.uuid),
+                blackspotsUrl:        '',
+                blackspotsUtfGridUrl: '',
+                blackspotTileKey:     false,
+                secondaryRecordsUrl:  '',
+                secondaryUtfGridUrl:  '',
+            };
             if (response && response[0] && response[0].tilekey) {
                 var data = response[0];
                 if (data.tilekey) {
-                    blackspotUrl = TileUrlService.blackspotsUrl(data.tilekey);
-                    blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(data.tilekey);
-                    blackspotTileKey = true;
+                    urls.blackspotsUrl = TileUrlService.blackspotsUrl(data.tilekey);
+                    urls.blackspotsUtfGridUrl = TileUrlService.blackspotsUtfGridUrl(data.tilekey);
+                    urls.blackspotTileKey = true;
                 }
             } else if (response && response[0] && response[0].uuid) {
                 var uuid = response[0].uuid;
-                blackspotUrl = TileUrlService.blackspotsUrl(uuid);
-                blackspotUtfUrl = TileUrlService.blackspotsUtfGridUrl(uuid);
+                urls.blackspotsUrl = TileUrlService.blackspotsUrl(uuid);
+                urls.blackspotsUtfGridUrl = TileUrlService.blackspotsUtfGridUrl(uuid);
             }
-            var secondaryRecordsUrl = $q.when('');
-            var secondaryUtfGridUrl = $q.when('');
             if (ctl.secondaryType) {
-                secondaryRecordsUrl = TileUrlService.secondaryTilesUrl(ctl.secondaryType.uuid);
-                secondaryUtfGridUrl = TileUrlService.recUtfGridTilesUrl(ctl.secondaryType.uuid);
+                urls.secondaryRecordsUrl = TileUrlService.secondaryTilesUrl(ctl.secondaryType.uuid);
+                urls.secondaryUtfGridUrl = TileUrlService.recUtfGridTilesUrl(ctl.secondaryType.uuid);
             }
 
-            return $q.all(
-                {
-                    primaryRecordsUrl:    TileUrlService.recTilesUrl(ctl.recordType.uuid),
-                    primaryUtfGridUrl:    TileUrlService.recUtfGridTilesUrl(ctl.recordType.uuid),
-                    primaryHeatmapUrl:    TileUrlService.recHeatmapUrl(ctl.recordType.uuid),
-                    blackspotsUrl:        blackspotUrl,
-                    blackspotsUtfGridUrl: blackspotUtfUrl,
-                    blackspotTileKey:     blackspotTileKey,
-                    secondaryRecordsUrl:  secondaryRecordsUrl,
-                    secondaryUtfGridUrl:  secondaryUtfGridUrl,
-                }
-            );
+            return urls;
         }
 
         /**
-         * Given the urls object returned by getUrls,
-         * updates the layer groups so that the layer switcher does not
+         * Updates the layer groups so that the layer switcher does not
          * need to be re-initialized every time layer urls change
          */
-        function updateLayerGroups(urls) {
+        function updateLayerGroups(response) {
+            var urls = getUrls(response);
             // N.B. The order in which UTF Grid layers are added to the map determines their click
             // event precedence; layers are added on top of each other, so the last layer added
             // will intercept click events first; this is apparently the case regardless of
@@ -389,24 +379,15 @@
                         zIndex: 2
                     });
 
-                    var layerPromises = options.map(function(boundary) {
-                        return TileUrlService.boundaryTilesUrl(boundary.uuid).then(
-                            function(baseBoundUrl) {
-                                var colorUrl =
-                                    (baseBoundUrl +
-                                     '?color=' +
-                                     encodeURIComponent(
-                                         boundary.color.toLowerCase()));
-                                var layer = new L.tileLayer(
-                                    colorUrl, boundaryLayerOptions);
-                                return [boundary.label, layer];
-                            }
-                        );
+                    var layerLabelPairs = options.map(function(boundary) {
+                        var colorUrl = (TileUrlService.boundaryTilesUrl(boundary.uuid) +
+                            '?color=' + encodeURIComponent(boundary.color.toLowerCase()));
+                        var layer = new L.tileLayer(colorUrl, boundaryLayerOptions);
+                        return [boundary.label, layer];
                     });
 
-                    return $q.all(layerPromises).then(function(layerLabelPairs) {
-                        ctl.boundariesLayerGroup = _.zipObject(layerLabelPairs);
-                    });
+                    ctl.boundariesLayerGroup = _.zipObject(layerLabelPairs);
+                    return ctl.boundariesLayerGroup;
                 });
         }
 

@@ -26,10 +26,9 @@
             ctl.map = leafletMap;
             ctl.isEditable = !!isEditable;
 
-            TileUrlService.baseLayerUrl().then(function(streetsUrl) {
-                var streets = new L.tileLayer(streetsUrl, {attribution: cartoDBAttribution});
-                ctl.map.addLayer(streets, {detectRetina: false});
-            });
+            var streets = new L.tileLayer(TileUrlService.baseLayerUrl(),
+                                          {attribution: cartoDBAttribution});
+            ctl.map.addLayer(streets, {detectRetina: false});
 
             if (ctl.isEditable) {
                 ctl.map.on('click', handleClick);

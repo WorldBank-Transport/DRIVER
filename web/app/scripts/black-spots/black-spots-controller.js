@@ -24,11 +24,8 @@
                 detectRetina: false,
                 zIndex: 1
             };
-
-            TileUrlService.baseLayerUrl().then(function(url) {
-                var streets = new L.tileLayer(url, streetOptions);
-                map.addLayer(streets);
-            });
+            var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetOptions);
+            map.addLayer(streets);
 
             return map;
         }
@@ -36,9 +33,8 @@
         function addBlackSpotLayer(map) {
             RecordState.getSelected().then(
                 getBlackspotSets
-            ).then(
-                getBlackspotUrl
-            ).then(function(blackspotsUrl) {
+            ).then(function(blackspotSet) {
+                var blackspotsUrl = getBlackspotUrl(blackspotSet);
                 var blackspotsLayer = new L.tileLayer(
                     blackspotsUrl, {
                         attribution: 'PRS',
