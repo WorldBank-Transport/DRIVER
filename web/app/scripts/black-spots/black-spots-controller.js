@@ -2,10 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function BlackSpotsController(
-        InitialState, TileUrlService, FilterState, RecordState, BoundaryState, BlackspotSets
-    ) {
-        var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
+    function BlackSpotsController(InitialState, TileUrlService, BaseLayersService, FilterState,
+                                  RecordState, BoundaryState, BlackspotSets) {
         var ctl = this;
         ctl.map = null;
         ctl.initMap = initMap;
@@ -18,15 +16,7 @@
         }
 
         function addBaseLayers(map) {
-            //add base layer
-            var streetOptions = {
-                attribution: cartoDBAttribution,
-                detectRetina: false,
-                zIndex: 1
-            };
-            var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetOptions);
-            map.addLayer(streets);
-
+            map.addLayer(BaseLayersService.streets());
             return map;
         }
 

@@ -5,8 +5,6 @@
      */
 
     function TileUrlService(WebConfig) {
-        var positronUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
-
         var allRecordsUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png');
         var secondaryRecordsUrl = allRecordsUrl + '?secondary=true';
@@ -26,11 +24,23 @@
             recUtfGridTilesUrl: recordsUtfGridTilesUrlForType,
             recHeatmapUrl: recordsHeatmapTilesUrl,
             boundaryTilesUrl: boundaryTilesUrl,
-            baseLayerUrl: getBaseLayerUrl,
             blackspotsUrl: blackspotTilesUrl,
             blackspotsUtfGridUrl: blackspotUtfGridTilesUrl
         };
         return module;
+
+        /* Inserts an ID into a URL at the first occurrence of ALL
+         *
+         * param {String} url The url in which to insert the id
+         * param {String} id The id to be inserted
+         * returns {String} The URL with id substituted for ALL, if id is truthy
+         */
+        function _insertIdAtALL(url, id) {
+            if (id) {
+                return url.replace(/ALL/, id);
+            }
+            return url;
+        }
 
         function recordsTilesUrlForType(typeUuid) {
             return _insertIdAtALL(allRecordsUrl, typeUuid);
@@ -59,23 +69,6 @@
 
         function blackspotUtfGridTilesUrl(blackspotSet) {
             return _insertIdAtALL(blackspotsUtfGridUrl, blackspotSet);
-        }
-
-        function getBaseLayerUrl() {
-            return positronUrl;
-        }
-
-        /* Inserts an ID into a URL at the first occurrence of ALL
-         *
-         * param {String} url The url in which to insert the id
-         * param {String} id The id to be inserted
-         * returns {String} The URL with id substituted for ALL, if id is truthy
-         */
-        function _insertIdAtALL(url, id) {
-            if (id) {
-                return url.replace(/ALL/, id);
-            }
-            return url;
         }
     }
 

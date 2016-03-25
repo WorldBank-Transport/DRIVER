@@ -33,9 +33,4 @@ describe('driver:map-layers TileUrlService', function () {
         expect(url).toEqual(jasmine.stringMatching(/notarealuuid/));
     });
 
-    it('should provide a base tile layer URL', function () {
-        var url = TileUrlService.baseLayerUrl();
-        expect(url).toEqual(jasmine.stringMatching(/\.png/));
-    });
-
 });

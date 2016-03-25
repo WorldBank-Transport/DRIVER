@@ -2,9 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function recentEventsMapLayers($q, BoundaryState, InitialState,
-                                   RecordState, TileUrlService, QueryBuilder) {
-        var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
+    function recentEventsMapLayers($q, BoundaryState, InitialState, RecordState, QueryBuilder,
+                                   TileUrlService, BaseLayersService) {
         var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
         var recencyCutoffDays = 14;
 
@@ -47,20 +46,12 @@
             });
         }
         /**
-         * Initialize layers on map.
+         * Initialize base layer (streets only)
          *
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
         function addBaseLayers(newMap) {
-            // add base layer
-            var streetsOptions = {
-                attribution: cartoDBAttribution,
-                detectRetina: false,
-                zIndex: 1
-            };
-            var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetsOptions);
-            newMap.addLayer(streets);
-
+            newMap.addLayer(BaseLayersService.streets());
             return newMap;
         }
 
