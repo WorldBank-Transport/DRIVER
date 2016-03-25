@@ -40,7 +40,7 @@ from ashlar.views import (BoundaryPolygonViewSet,
                           RecordSchemaViewSet,
                           BoundaryViewSet)
 
-from ashlar.serializers import RecordSerializer, RecordSchemaSerializer
+from ashlar.serializers import RecordSchemaSerializer
 
 from driver_auth.permissions import (IsAdminOrReadOnly,
                                      ReadersReadWritersWrite,
@@ -50,8 +50,9 @@ from data.tasks import export_csv
 
 import filters
 from models import RecordAuditLogEntry, RecordDuplicate
-from serializers import (DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer,
-                         RecordAuditLogEntrySerializer, RecordDuplicateSerializer)
+from serializers import (DriverRecordSerializer, DetailsReadOnlyRecordSerializer,
+                         DetailsReadOnlyRecordSchemaSerializer, RecordAuditLogEntrySerializer,
+                         RecordDuplicateSerializer)
 import transformers
 from driver import mixins
 
@@ -75,7 +76,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             requested_details_only = True
 
         if is_admin_or_writer(self.request.user) and not requested_details_only:
-            return RecordSerializer
+            return DriverRecordSerializer
         return DetailsReadOnlyRecordSerializer
 
     def get_filtered_queryset(self, request):
