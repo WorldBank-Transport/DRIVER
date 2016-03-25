@@ -16,7 +16,15 @@
         }
 
         function addBaseLayers(map) {
-            map.addLayer(BaseLayersService.streets());
+            var baseMaps = BaseLayersService.baseLayers();
+            map.addLayer(baseMaps[0].layer);
+
+            if(!ctl.layerSwitcher){
+                ctl.layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                ctl.layerSwitcher.addTo(map);
+            }
             return map;
         }
 

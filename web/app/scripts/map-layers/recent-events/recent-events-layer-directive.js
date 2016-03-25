@@ -8,6 +8,7 @@
         var recencyCutoffDays = 14;
 
         var recordLayers = null;
+        var layerSwitcher = null;
         var module = {
             restrict: 'A',
             scope: false,
@@ -46,12 +47,21 @@
             });
         }
         /**
-         * Initialize base layer (streets only)
+         * Initialize base layers and switcher
          *
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
         function addBaseLayers(newMap) {
-            newMap.addLayer(BaseLayersService.streets());
+            var baseMaps = BaseLayersService.baseLayers();
+            newMap.addLayer(baseMaps[0].layer);
+
+            if(!layerSwitcher){
+                layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                layerSwitcher.addTo(newMap);
+            }
+
             return newMap;
         }
 

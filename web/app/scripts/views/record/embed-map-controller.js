@@ -25,7 +25,15 @@
             ctl.map = leafletMap;
             ctl.isEditable = !!isEditable;
 
-            ctl.map.addLayer(BaseLayersService.streets());
+            var baseMaps = BaseLayersService.baseLayers();
+            ctl.map.addLayer(baseMaps[0].layer);
+
+            if(!ctl.layerSwitcher){
+                ctl.layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                ctl.layerSwitcher.addTo(ctl.map);
+            }
 
             if (ctl.isEditable) {
                 ctl.map.on('click', handleClick);

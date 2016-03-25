@@ -405,7 +405,7 @@
             var overlays = angular.extend(_.zipObject(recordLayers), ctl.boundariesLayerGroup);
 
             ctl.bMaps.then(
-                function(baseMaps){
+                function(baseMaps) {
                     // only add the layer switcher once
                     if(!ctl.layerSwitcher){
                         ctl.layerSwitcher = L.control.layers(
