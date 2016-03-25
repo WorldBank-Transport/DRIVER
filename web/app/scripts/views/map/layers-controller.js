@@ -6,7 +6,7 @@
         $q, $filter, $log, $scope, $rootScope, $timeout, $compile,
         AuthService, FilterState, RecordState, GeographyState,
         RecordSchemaState, BoundaryState, QueryBuilder,
-        MapState, TileUrlService, InitialState, BlackspotSets) {
+        MapState, TileUrlService, BaseLayersService, InitialState, BlackspotSets) {
         var ctl = this;
         var localDateTimeFilter = $filter('localDateTime');
         var dateFormat = 'M/D/YYYY, h:mm:ss A';
@@ -35,7 +35,6 @@
         ctl.blackspotLayerGroup = null;
         ctl.boundariesLayerGroup = null;
 
-        var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
         var filterStyle = {
             color: '#f357a1',
             fillColor: '#f357a1',
@@ -108,17 +107,10 @@
                 getTilekeys
             ).then(function() {
                 // add base layer
-                var streetsOptions = {
-                    attribution: cartoDBAttribution,
-                    detectRetina: false,
-                    zIndex: 1
-                };
-                var streets = new L.tileLayer(TileUrlService.baseLayerUrl(), streetsOptions);
-                ctl.map.addLayer(streets);
-                bmapDefer.resolve({
-                    'CartoDB Positron': streets
-                });
-            }).then(function() {
+                var layers = BaseLayersService.baseLayers();
+                ctl.map.addLayer(layers[0].layer);
+                bmapDefer.resolve(layers);
+
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
                 ctl.map.addLayer(ctl.editLayers);
@@ -417,7 +409,7 @@
                     // only add the layer switcher once
                     if(!ctl.layerSwitcher){
                         ctl.layerSwitcher = L.control.layers(
-                            baseMaps,
+                            _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer')),
                             overlays,
                             {
                                 autoZIndex: false

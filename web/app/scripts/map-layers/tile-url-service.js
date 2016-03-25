@@ -1,15 +1,17 @@
 (function () {
     'use strict';
 
-    // TODO: Finish refactor by changing the views/map/layers-controller.js and the embed-map
-    // controller to use this.
+    /* A service for generating URLS for tile layers, since they need to be customized by ID.
+     */
+
     function TileUrlService(WebConfig) {
+        var positronUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
+
         var allRecordsUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png');
         var secondaryRecordsUrl = allRecordsUrl + '?secondary=true';
         var allRecordsUtfGridUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json');
-        var positronUrl = 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png';
         var allBoundariesUrl = (WebConfig.windshaft.hostname +
             '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png');
         var heatmapUrl = allRecordsUrl + '?heatmap=true';
