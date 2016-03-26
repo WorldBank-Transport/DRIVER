@@ -13,6 +13,10 @@
                 <span>{{ ::modal.dateFilter.minDate | localDateTime : modal.dateFormat }}</span> -
                 <span>{{ ::modal.dateFilter.maxDate | localDateTime : modal.dateFormat }}</span>
             </div>
+            <div ng-if="modal.boundaryFilter">
+                <strong>Boundary:</strong>
+                <span>{{ ::modal.boundaryFilter }}</span>
+            </div>
             <div ng-if="modal.nonDateFilters | savedFilterAsHTML">
                 <span ng-bind-html="modal.nonDateFilters | savedFilterAsHTML: '<br />'"></span>
             </div>
