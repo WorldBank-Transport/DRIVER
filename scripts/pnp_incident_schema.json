@@ -6,7 +6,7 @@
   "definitions": {
     "Black spot": {
       "multiple": true,
-      "description": "A pre-defined black spot with which an accident is associated.",
+      "description": "A pre-defined black spot with which an incident is associated.",
       "title": "Black spot",
       "required": [
         "_localId"
@@ -32,7 +32,7 @@
       }
     },
     "Site": {
-      "description": "Details about the site where the accident took place.",
+      "description": "Details about the site where the incident took place.",
       "title": "Site",
       "required": [
         "_localId"
@@ -173,14 +173,14 @@
         }
       }
     },
-    "Accident Details": {
+    "Incident Details": {
       "multiple": false,
-      "description": "Details for Accident",
-      "title": "Accident Details",
+      "description": "Details for Incident",
+      "title": "Incident Details",
       "required": [
         "_localId"
       ],
-      "plural_title": "Accident Details",
+      "plural_title": "Incident Details",
       "definitions": {},
       "type": "object",
       "details": true,
@@ -257,7 +257,7 @@
           "fieldType": "text",
           "format": "number"
         },
-        "Accident number": {
+        "Incident number": {
           "isSearchable": false,
           "propertyOrder": 0,
           "type": "string",
@@ -400,8 +400,8 @@
     "Site": {
       "$ref": "#/definitions/Site"
     },
-    "Accident Details": {
-      "$ref": "#/definitions/Accident Details"
+    "Incident Details": {
+      "$ref": "#/definitions/Incident Details"
     }
   }
 }

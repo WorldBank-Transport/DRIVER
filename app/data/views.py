@@ -230,7 +230,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             - row_boundary_id: Id of a Boundary whose BoundaryPolygons should be used as rows
             - row_choices_path: Path components to a schema property whose choices should be used
                                 as rows, separated by commas
-                                e.g. &row_choices_path=accidentDetails,properties,Collision%20type
+                                e.g. &row_choices_path=incidentDetails,properties,Collision%20type
                                 Note that ONLY properties which have an 'enum' key are valid here.
         - Exactly one column specification parameter chosen from:
             - col_period_type
@@ -533,7 +533,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             filter_rule = dict(_rule_type='containment', contains=[choice])
             for component in filter_path:
                 # Nest filter inside itself so we eventually get something like:
-                # {"accidentDetails": {"severity": {"_rule_type": "containment"}}}
+                # {"incidentDetails": {"severity": {"_rule_type": "containment"}}}
                 tmp = dict()
                 tmp[component] = filter_rule
                 filter_rule = tmp

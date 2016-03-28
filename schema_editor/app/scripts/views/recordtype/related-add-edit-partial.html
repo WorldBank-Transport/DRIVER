@@ -12,7 +12,7 @@
                 <label for="single-title">Single Title</label>
                 <input required type="text" name="label" ng-model="rtRelated.definition.title"
                        ng-readonly="!!rtRelated.schemaKey"
-                       class="form-control" id="single-title" placeholder="Accident"
+                       class="form-control" id="single-title" placeholder="Incident"
                        ng-minlength="3" ng-maxlength="64" />
                 <p ng-show="rtForm.title.$invalid && !rtForm.title.$pristine" class="help-block">
                     Single Title is required
@@ -23,7 +23,7 @@
             <div class="form-group col-sm-6">
                 <label for="plural-title">Plural Title</label>
                 <input required type="text" name="plural_label" ng-model="rtRelated.definition.plural_title"
-                       class="form-control" id="plural-title" placeholder="Accidents"
+                       class="form-control" id="plural-title" placeholder="Incidents"
                        ng-minlength="3" ng-maxlength="64" />
                 <p ng-show="rtForm.plural_title.$invalid && !rtForm.plural_title.$pristine" class="help-block">
                     Plural Title is required

@@ -35,9 +35,9 @@ describe('ase.views.recordtype: AddController', function () {
 
         /* jshint camelcase: false */
         var recordType = {
-            label: 'Accident',
-            plural_label: 'Accidents',
-            description: 'An Accident'
+            label: 'Incident',
+            plural_label: 'Incidents',
+            description: 'An Incident'
         };
 
         var recordSchema = {
@@ -48,19 +48,19 @@ describe('ase.views.recordtype: AddController', function () {
                 plural_title: '',
                 description: '',
                 properties: {
-                    'accidentDetails': {
-                        $ref: '#/definitions/accidentDetails',
+                    'incidentDetails': {
+                        $ref: '#/definitions/incidentDetails',
                         options: {
                             collapsed: true
                         }
                     }
                 },
                 definitions: {
-                    'accidentDetails': {
+                    'incidentDetails': {
                         type: 'object',
-                        title: 'Accident Details',
-                        plural_title: 'Accident Details',
-                        description: 'Details for Accident',
+                        title: 'Incident Details',
+                        plural_title: 'Incident Details',
+                        description: 'Details for Incident',
                         multiple: false,
                         propertyOrder: 0,
                         properties: {},

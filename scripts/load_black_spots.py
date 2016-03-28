@@ -92,7 +92,7 @@ def main():
     parser.add_argument('--api-url', help='API host / path to target for loading data',
                         default='http://localhost:7000/api')
     parser.add_argument('--record-type-label', help='Label of the desired record type',
-                        default='Accident')
+                        default='Incident')
     parser.add_argument('--authz', help='Authorization header')
     args = parser.parse_args()
 

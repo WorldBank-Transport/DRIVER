@@ -50,7 +50,7 @@ describe('driver.views.duplicates: ResolveDuplicateController', function () {
                 recordType: ResourcesMock.RecordType,
                 recordSchema: ResourcesMock.RecordSchema,
                 properties: {},
-                propertyName: 'Accident Details'
+                propertyName: 'Incident Details'
             }
         });
         $scope.$apply();

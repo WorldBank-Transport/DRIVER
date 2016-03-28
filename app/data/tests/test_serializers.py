@@ -26,10 +26,10 @@ class DetailsReadOnlyRecordSchemaSerializerTestCase(TestCase):
 
     def test_transform_details_only(self):
         """Test that non-read-only keys are removed from 'properties' and 'definitions'"""
-        test_value = {'Accident Details': {}, 'Related Info 1': {}, 'Related Info 2': {}}
-        self.assertEqual(('definitions', {'Accident Details': {}}),
+        test_value = {'Incident Details': {}, 'Related Info 1': {}, 'Related Info 2': {}}
+        self.assertEqual(('definitions', {'Incident Details': {}}),
                          self.serializer.make_read_only_schema('definitions', test_value))
-        self.assertEqual(('properties', {'Accident Details': {}}),
+        self.assertEqual(('properties', {'Incident Details': {}}),
                          self.serializer.make_read_only_schema('properties', test_value))
         self.assertEqual(('no_transform', test_value),
                          self.serializer.make_read_only_schema('no_transform', test_value))

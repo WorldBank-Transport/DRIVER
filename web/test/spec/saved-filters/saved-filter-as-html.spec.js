@@ -14,7 +14,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render single containment', function () {
         var testObj = {
-            'Accident Details#Severity': {
+            'Incident Details#Severity': {
                 'contains': [
                     'Injury'
                 ],
@@ -27,7 +27,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render multiple containment', function () {
         var testObj = {
-            'Accident Details#Severity': {
+            'Incident Details#Severity': {
                 'contains': [
                     'Injury',
                     'Fatality'
@@ -41,7 +41,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render min range', function () {
         var testObj = {
-            'Accident Details#Num driver casualties': {
+            'Incident Details#Num driver casualties': {
                 '_rule_type': 'intrange',
                 'min': 2
             }
@@ -52,7 +52,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render max range', function () {
         var testObj = {
-            'Accident Details#Num driver casualties': {
+            'Incident Details#Num driver casualties': {
                 '_rule_type': 'intrange',
                 'max': 2
             }
@@ -63,7 +63,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render min and max range', function () {
         var testObj = {
-            'Accident Details#Num driver casualties': {
+            'Incident Details#Num driver casualties': {
                 '_rule_type': 'intrange',
                 'min': 1,
                 'max': 2
@@ -75,7 +75,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should not render empty min and max', function () {
         var testObj = {
-            'Accident Details#Num driver casualties': {
+            'Incident Details#Num driver casualties': {
                 '_rule_type': 'intrange',
                 'min': null,
                 'max': null
@@ -87,30 +87,30 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     it('should render a complex set of filters', function () {
         var testObj = {
-            'Accident Details#Main cause': {
+            'Incident Details#Main cause': {
                 'contains': [
                     'Vehicle defect'
                 ],
                 '_rule_type': 'containment'
             },
-            'Accident Details#Weather': {
+            'Incident Details#Weather': {
                 'contains': [
                     'Wind'
                 ],
                 '_rule_type': 'containment'
             },
-            'Accident Details#Num driver casualties': {
+            'Incident Details#Num driver casualties': {
                 'max': 4,
                 '_rule_type': 'intrange',
                 'min': 1
             },
-            'Accident Details#Severity': {
+            'Incident Details#Severity': {
                 'contains': [
                     'Injury'
                 ],
                 '_rule_type': 'containment'
             },
-            'Accident Details#Collision type': {
+            'Incident Details#Collision type': {
                 'contains': [
                     'Right angle'
                 ],

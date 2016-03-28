@@ -21,7 +21,7 @@
         },
         recordType: {
             visible: false,
-            primaryLabel: 'Accident',
+            primaryLabel: 'Incident',
             secondaryLabel: 'Intervention'
         },
         localization: {

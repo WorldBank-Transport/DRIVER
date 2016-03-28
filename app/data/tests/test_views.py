@@ -176,7 +176,7 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         post_data = {
             'data': {
                 'Person': [],
-                'Accident Details': {
+                'Incident Details': {
                     'Num passenger casualties': '',
                     'Num driver casualties': '',
                     'Num pedestrian casualties': '',

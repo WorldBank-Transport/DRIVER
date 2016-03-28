@@ -5,7 +5,7 @@
     "definitions": {
         "photo": {
             "multiple": true,
-            "description": "Pictures of the accident",
+            "description": "Pictures of the incident",
             "title": "Photo",
             "required": [
                 "_localId",
@@ -42,7 +42,7 @@
         },
         "vehicle": {
             "multiple": true,
-            "description": "A vehicle involved in the accident",
+            "description": "A vehicle involved in the incident",
             "title": "Vehicle",
             "required": [
                 "_localId"
@@ -200,14 +200,14 @@
                 }
             }
         },
-        "accidentDetails": {
+        "incidentDetails": {
             "multiple": false,
-            "description": "Details for Accident",
-            "title": "Accident Details",
+            "description": "Details for Incident",
+            "title": "Incident Details",
             "required": [
                 "_localId"
             ],
-            "plural_title": "Accident Details",
+            "plural_title": "Incident Details",
             "propertyOrder": 0,
             "details": true,
             "definitions": {},
@@ -356,7 +356,7 @@
         },
         "person": {
             "multiple": true,
-            "description": "A person involved in the accident",
+            "description": "A person involved in the incident",
             "title": "Person",
             "required": [
                 "_localId"
@@ -525,12 +525,12 @@
             },
             "propertyOrder": 1
         },
-        "accidentDetails": {
+        "incidentDetails": {
             "propertyOrder": 0,
             "options": {
                 "collapsed": true
             },
-            "$ref": "#/definitions/accidentDetails"
+            "$ref": "#/definitions/incidentDetails"
         },
         "person": {
             "items": {

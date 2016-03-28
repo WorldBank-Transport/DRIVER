@@ -61,10 +61,10 @@
                         'title': '',
                         'plural_title': '',
                         'definitions': {
-                            'Accident Details': {
-                                'description': 'Details of accident',
-                                'title': 'Accident Details',
-                                'plural_title': 'Accident Details',
+                            'Incident Details': {
+                                'description': 'Details of incident',
+                                'title': 'Incident Details',
+                                'plural_title': 'Incident Details',
                                 'definitions': {},
                                 'type': 'object',
                                 'properties': {
@@ -89,8 +89,8 @@
                         },
                         'type': 'object',
                         'properties': {
-                            'Accident Details': {
-                                '$ref': '#/definitions/Accident Details'
+                            'Incident Details': {
+                                '$ref': '#/definitions/Incident Details'
                             },
                             'Firearm': {
                                 '$ref': '#/definitions/Firearm'
@@ -116,9 +116,9 @@
                     'current_schema':'80c10057-2cfc-4a32-8e3c-0573e8bf8f3f',
                     'created':'2015-05-13T21:43:29.227598Z',
                     'modified':'2015-05-13T21:43:29.227639Z',
-                    'label':'Accident',
-                    'plural_label':'Accidents',
-                    'description':'An accident.',
+                    'label':'Incident',
+                    'plural_label':'Incidents',
+                    'description':'An incident.',
                     'active':true
                 },
                 {
@@ -150,11 +150,11 @@
 
         var RecordSchemaRequest = angular.extend({}, RecordType, {
             definitions: {
-                'Accident Details': {
+                'Incident Details': {
                     type: 'object',
-                    title: 'Accident Details',
-                    plural_title: 'Accident Details',
-                    description: 'Details for Accident',
+                    title: 'Incident Details',
+                    plural_title: 'Incident Details',
+                    description: 'Details for Incident',
                     multiple: false,
                     propertyOrder: 0,
                     details: true

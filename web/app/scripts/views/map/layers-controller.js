@@ -652,7 +652,7 @@
             var str = '<div id="blackspot-popup" class="blackspot-popup">';
             str += '<div><h4>Blackspot</h4></div>';
             str += '<div><h6>Severity score: ' + blackspot.severity_score + '</h6></div>';
-            str += '<div><h6>Accidents: ' + blackspot.num_records + '</h6></div>';
+            str += '<div><h6>Incidents: ' + blackspot.num_records + '</h6></div>';
             str += '<div><h6>Fatilities: ' + blackspot.num_severe + '</h6></div>';
             /* jshint camelcase: true */
             return str;

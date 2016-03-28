@@ -40,11 +40,11 @@ describe('ase.views.recordtype: RelatedAddController', function () {
                 description: '',
                 properties: {},
                 definitions: {
-                    'Accident Details': {
+                    'Incident Details': {
                         type: 'object',
-                        title: 'Accident Details',
-                        plural_title: 'Accident Details',
-                        description: 'Details for Accident',
+                        title: 'Incident Details',
+                        plural_title: 'Incident Details',
+                        description: 'Details for Incident',
                         multiple: false,
                         properties: {},
                         definitions: {}
