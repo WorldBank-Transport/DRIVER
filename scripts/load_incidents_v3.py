@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Loads accidents from multiple accident database dumps (schema v3)"""
+"""Loads incidents from multiple incident database dumps (schema v3)"""
 import argparse
 import csv
 from dateutil import parser
@@ -48,7 +48,7 @@ def transform(record, schema_id):
     }
     obj = {
         'data': {
-            'accidentDetails': dict(),
+            'incidentDetails': dict(),
             'person': [],
             'vehicle': []
         },
@@ -60,13 +60,13 @@ def transform(record, schema_id):
     data = obj['data']
     for key, value in details_mapping.iteritems():
         if key in record:
-            data['accidentDetails'][value] = record[key]
+            data['incidentDetails'][value] = record[key]
 
     # Add in the _localId field; they're not used here but the schema requires them
     def _add_local_id(dictionary):
         dictionary['_localId'] = str(uuid.uuid4())
 
-    _add_local_id(data['accidentDetails'])
+    _add_local_id(data['incidentDetails'])
 
     # Set the occurred_from/to fields
     occurred_date = parser.parse(record['record_date'])
@@ -118,9 +118,9 @@ def create_schema(schema_path, api, headers=None):
     """Create a recordtype/schema into which to load all new objects"""
     # Create record type
     response = requests.post(api + '/recordtypes/',
-                             data={'label': 'Accident',
-                                   'plural_label': 'Accidents',
-                                   'description': 'Historical accident data',
+                             data={'label': 'Incident',
+                                   'plural_label': 'Incidents',
+                                   'description': 'Historical incident data',
                                    'active': True},
                              headers=headers)
     response.raise_for_status()
@@ -141,11 +141,11 @@ def create_schema(schema_path, api, headers=None):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Load accidents data (v3)')
-    parser.add_argument('accidents_csv_dir', help='Path to directory containing accidents CSVs')
+    parser = argparse.ArgumentParser(description='Load incidents data (v3)')
+    parser.add_argument('incidents_csv_dir', help='Path to directory containing incidents CSVs')
     parser.add_argument('--schema-path', help='Path to JSON file defining schema',
                         default=os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                                             'accident_schema_v3.json'))
+                                             'incident_schema_v3.json'))
     parser.add_argument('--api-url', help='API host / path to target for loading data',
                         default='http://localhost:7000/api')
     parser.add_argument('--authz', help='Authorization header')
@@ -162,7 +162,7 @@ def main():
     count = 1
 
     # Load all files in the directory, ordered by file size
-    files = sorted(glob.glob(args.accidents_csv_dir + '/*.csv'), key=os.path.getsize)
+    files = sorted(glob.glob(args.incidents_csv_dir + '/*.csv'), key=os.path.getsize)
     logger.info("Files to process: {}".format(files))
 
     for csv_file in files:

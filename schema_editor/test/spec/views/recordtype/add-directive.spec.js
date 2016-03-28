@@ -38,11 +38,11 @@ describe('ase.views.recordtype: RTAdd', function () {
 
         // Save button should be disabled until all the required fields are entered
         checkSaveButtonDisabled(true);
-        element.find('#single-title').val('Accident').change();
+        element.find('#single-title').val('Incident').change();
         checkSaveButtonDisabled(true);
-        element.find('#plural-title').val('Accidents').change();
+        element.find('#plural-title').val('Incidents').change();
         checkSaveButtonDisabled(true);
-        element.find('#description').val('An accident').change();
+        element.find('#description').val('An incident').change();
         checkSaveButtonDisabled(false);
 
         // All required fields are entered, press Save and verify it's submitted

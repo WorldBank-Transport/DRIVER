@@ -3,15 +3,15 @@
     "title": "",
     "plural_title": "",
     "definitions": {
-        "Accident Details": {
+        "Incident Details": {
             "multiple": false,
-            "description": "Details for Accident",
-            "title": "Accident Details",
+            "description": "Details for Incident",
+            "title": "Incident Details",
             "required": [
                 "_localId",
                 "Severity"
             ],
-            "plural_title": "Accident Details",
+            "plural_title": "Incident Details",
             "details": true,
             "definitions": {},
             "type": "object",
@@ -83,8 +83,8 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
-        "Accident Details": {
-            "$ref": "#/definitions/Accident Details"
+        "Incident Details": {
+            "$ref": "#/definitions/Incident Details"
         },
         "Vehicle": {
             "items": {

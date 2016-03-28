@@ -31,7 +31,7 @@ describe('driver.views.account: AccountController', function () {
                             then: function(callback) {
                                 return callback(false); // read only
                             }
-                        }
+                        };
                     },
                     isAdmin: function() { return {
                             then: function(callback) {

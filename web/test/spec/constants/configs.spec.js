@@ -50,6 +50,6 @@ describe('driver.views.map: WebConfig and ASEConfig', function () {
 
     it('should reference the same API endpoint from both app configs', function() {
         expect(ASEConfig.api.hostname).toEqual(WebConfig.api.hostname);
-    })
+    });
 
 });
