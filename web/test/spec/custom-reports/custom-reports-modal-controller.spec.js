@@ -35,6 +35,7 @@ describe('driver.customReports: CustomReportsModalController', function () {
         var boundariesUrl = /api\/boundaries/;
         var boundaryPolygonsUrl = /api\/boundarypolygons/;
 
+        $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(boundariesUrl).respond(200, ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);

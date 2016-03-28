@@ -3,7 +3,7 @@
 
     /* ngInject */
     function CustomReportsModalController($log, $modalInstance, $state, $window,
-                                          FilterState, GeographyState, QueryBuilder,
+                                          FilterState, GeographyState, BoundaryState, QueryBuilder,
                                           AggregationsConfig) {
         var ctl = this;
         ctl.closeModal = closeModal;
@@ -18,7 +18,6 @@
         ctl.rowAggSelected = null;
         ctl.geoAggSelected = null;
 
-
         init();
 
         function init() {
@@ -27,6 +26,18 @@
             // Add the active filters for display
             ctl.nonDateFilters = _.omit(FilterState.filters, '__dateRange');
             ctl.dateFilter = FilterState.getDateFilter();
+
+            GeographyState.getSelected().then(function (geography) {
+                BoundaryState.getSelected().then(function (boundary) {
+                    if (boundary && boundary.data) {
+                        /* jshint camelcase: false */
+                        ctl.boundaryFilter = boundary.data[geography.display_field];
+                        /* jshint camelcase: true */
+                    } else {
+                        ctl.boundaryFilter = null;
+                    }
+                });
+            });
 
             AggregationsConfig.getOptions().then(function (options) {
                 ctl.rowColAggs = options;
@@ -66,9 +77,7 @@
         }
 
         function assembleParams() {
-            // TODO: if there's a boundary selected, should that filter be applied when
-            // they haven't selected a geographical aggregation? Currently it's never applied.
-            return QueryBuilder.assembleParams(0, {doBoundaryFilter: false}).then(
+            return QueryBuilder.assembleParams(0).then(
                 function(params) {
                     var crosstabsParams = {};
                     setRowColParam('col', ctl.colAggSelected, crosstabsParams);
