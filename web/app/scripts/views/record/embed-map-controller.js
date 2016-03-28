@@ -1,13 +1,12 @@
 (function () {
     'use strict';
 
-    var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
-
     // Default level to zoom to when a location is selected or a marker is dropped
     var zoomInLevel = 17;
 
     /* ngInject */
-    function EmbedMapController($log, $timeout, $scope, $rootScope, TileUrlService) {
+    function EmbedMapController($log, $timeout, $scope, $rootScope, TileUrlService,
+                                BaseLayersService) {
         var dblClickTimeout = null;
         var ctl = this;
 
@@ -26,10 +25,15 @@
             ctl.map = leafletMap;
             ctl.isEditable = !!isEditable;
 
-            TileUrlService.baseLayerUrl().then(function(streetsUrl) {
-                var streets = new L.tileLayer(streetsUrl, {attribution: cartoDBAttribution});
-                ctl.map.addLayer(streets, {detectRetina: false});
-            });
+            var baseMaps = BaseLayersService.baseLayers();
+            ctl.map.addLayer(baseMaps[0].layer);
+
+            if(!ctl.layerSwitcher){
+                ctl.layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                ctl.layerSwitcher.addTo(ctl.map);
+            }
 
             if (ctl.isEditable) {
                 ctl.map.on('click', handleClick);

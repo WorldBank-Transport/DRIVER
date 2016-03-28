@@ -2,13 +2,13 @@
     'use strict';
 
     /* ngInject */
-    function recentEventsMapLayers($q, BoundaryState, InitialState,
-                                   RecordState, TileUrlService, QueryBuilder) {
-        var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
+    function recentEventsMapLayers($q, BoundaryState, InitialState, RecordState, QueryBuilder,
+                                   TileUrlService, BaseLayersService) {
         var defaultLayerOptions = {attribution: 'PRS', detectRetina: true};
         var recencyCutoffDays = 14;
 
         var recordLayers = null;
+        var layerSwitcher = null;
         var module = {
             restrict: 'A',
             scope: false,
@@ -47,21 +47,20 @@
             });
         }
         /**
-         * Initialize layers on map.
+         * Initialize base layers and switcher
          *
          * @param {Object} map Leaflet map returned by leaflet directive initialization.
          */
         function addBaseLayers(newMap) {
-            // add base layer
-            var streetsOptions = {
-                attribution: cartoDBAttribution,
-                detectRetina: false,
-                zIndex: 1
-            };
-            TileUrlService.baseLayerUrl().then(function(url) {
-                var streets = new L.tileLayer(url, streetsOptions);
-                newMap.addLayer(streets);
-            });
+            var baseMaps = BaseLayersService.baseLayers();
+            newMap.addLayer(baseMaps[0].layer);
+
+            if(!layerSwitcher){
+                layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                layerSwitcher.addTo(newMap);
+            }
 
             return newMap;
         }
@@ -76,9 +75,8 @@
             var occurredMin = new Date();
             occurredMin.setDate(occurredMin.getDate() - recencyCutoffDays);
             RecordState.getSelected().then(function(selected) {
-                return TileUrlService.recTilesUrl(selected.uuid);
-            // Construct Windshaft URL
-            }).then(function(baseUrl) {
+                // Construct Windshaft URL
+                var baseUrl = TileUrlService.recTilesUrl(selected.uuid);
                 /* jshint camelcase: false */
                 var params = {
                     tilekey: true,

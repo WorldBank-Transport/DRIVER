@@ -2,10 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function BlackSpotsController(
-        InitialState, TileUrlService, FilterState, RecordState, BoundaryState, BlackspotSets
-    ) {
-        var cartoDBAttribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
+    function BlackSpotsController(InitialState, TileUrlService, BaseLayersService, FilterState,
+                                  RecordState, BoundaryState, BlackspotSets) {
         var ctl = this;
         ctl.map = null;
         ctl.initMap = initMap;
@@ -18,27 +16,23 @@
         }
 
         function addBaseLayers(map) {
-            //add base layer
-            var streetOptions = {
-                attribution: cartoDBAttribution,
-                detectRetina: false,
-                zIndex: 1
-            };
+            var baseMaps = BaseLayersService.baseLayers();
+            map.addLayer(baseMaps[0].layer);
 
-            TileUrlService.baseLayerUrl().then(function(url) {
-                var streets = new L.tileLayer(url, streetOptions);
-                map.addLayer(streets);
-            });
-
+            if(!ctl.layerSwitcher){
+                ctl.layerSwitcher = L.control.layers(
+                    _.zipObject(_.map(baseMaps, 'label'), _.map(baseMaps, 'layer'))
+                );
+                ctl.layerSwitcher.addTo(map);
+            }
             return map;
         }
 
         function addBlackSpotLayer(map) {
             RecordState.getSelected().then(
                 getBlackspotSets
-            ).then(
-                getBlackspotUrl
-            ).then(function(blackspotsUrl) {
+            ).then(function(blackspotSet) {
+                var blackspotsUrl = getBlackspotUrl(blackspotSet);
                 var blackspotsLayer = new L.tileLayer(
                     blackspotsUrl, {
                         attribution: 'PRS',
