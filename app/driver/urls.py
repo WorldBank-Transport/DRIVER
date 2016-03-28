@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
     # get token for given username/password
     url(r'^api-token-auth/', auth_views.obtain_auth_token),
+    url(r'^api/sso-token-auth/', auth_views.sso_auth_token),
     url(r'^openid/clientlist/', auth_views.get_oidc_client_list, name='openid_client_list'),
     # override openid login callback endpoint by adding url here before djangooidc include
     url(r'^openid/callback/login/?$', auth_views.authz_cb, name='openid_login_cb'),
