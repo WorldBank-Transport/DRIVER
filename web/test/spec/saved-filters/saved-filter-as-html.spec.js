@@ -85,6 +85,14 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
+    it('should render a text filter', function() {
+        var testObj = {
+            __searchText: 'This is a text filter'
+        };
+        var expected = '<strong>Text Search:</strong> This is a text filter';
+        expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
+    });
+
     it('should render a complex set of filters', function () {
         var testObj = {
             'Accident Details#Main cause': {
