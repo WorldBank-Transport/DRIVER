@@ -699,7 +699,7 @@ class RecordCsvExportViewSet(viewsets.ViewSet):
             return Response({'errors': {'tilekey': 'This parameter is required'}},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        task = export_csv.delay(filter_key)
+        task = export_csv.delay(filter_key, request.user.pk)
         return Response({'success': True, 'taskid': task.id}, status=status.HTTP_201_CREATED)
 
     # TODO: If we switch to a Django/ORM database backend, we can subclass AbortableTask
