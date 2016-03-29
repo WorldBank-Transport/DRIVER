@@ -1,7 +1,8 @@
 import csv
 import os
-import tarfile
+import zipfile
 import tempfile
+import time
 
 from django.conf import settings
 
@@ -40,32 +41,35 @@ def export_csv(query_key):
     # Write records to files
     for rec in records:
         record_writer.write_record(rec)
+    record_writer.finish()
 
-    # Compress files into a single tarball.
+    # Compress files into a single zipfile.
     # TODO: Figure out how to transfer files to web users from celery workers
-    def set_permission_bits(tarinfo):
-        # Will be used to set permissions on all files going into the tarball.
-        tarinfo.mode = 0755
-        return tarinfo
 
+    # external_attr is 4 bytes ins size. The high order two bytes represend UNIX permission and
+    # file type bits, while the low order two contain MS-DOS FAT file attributes, most notably
+    # bit 4 marking directories
+    # For information on setting file permissions in zipfile, see
+    # http://stackoverflow.com/questions/434641/how-do-i-set-permissions-attributes-on-a-file-in-a-zip-file-using-pythons-zip
     filename = os.path.join(settings.CELERY_EXPORTS_FILE_PATH,
-                            "{}-{}.tar.gz".format(record_type.plural_label, query_key[:8]))
-    archive = tarfile.open(filename, mode='w:gz')
+                            "{}-{}.zip".format(record_type.plural_label, query_key[:8]))
+    archive = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
     # Add a directory for the schema we're outputting
-    dir = tarfile.TarInfo('schema-' + str(schema.pk))
-    dir.type = tarfile.DIRTYPE
-    dir.mode = 0755
-    archive.addfile(dir)
-    # Then add all files associated with this schema to the tarball
-    record_writer.finish()  # Closes files
+    dirname = 'schema-' + str(schema.pk) + '/'
     for f, name in record_writer.get_files_and_names():
-        archive.add(f.name, arcname=os.path.join(dir.name, name), filter=set_permission_bits)
+        t = time.struct_time(time.localtime(time.time()))
+        info = zipfile.ZipInfo(filename=dirname + name, date_time=(
+            t.tm_year, t.tm_month, t.tm_day, t.tm_hour, t.tm_min, t.tm_sec
+        ))
+        info.external_attr = 0755 << 16L
+        with open(f.name, 'r') as z:
+            archive.writestr(info, z.read())
     archive.close()
 
     # Cleanup
     record_writer.cleanup()
 
-    return os.path.basename(archive.name)
+    return os.path.basename(archive.filename)
 
 
 def get_sql_string_by_key(key):
