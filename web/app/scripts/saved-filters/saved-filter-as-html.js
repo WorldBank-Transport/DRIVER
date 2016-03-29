@@ -51,7 +51,11 @@
                         break;
 
                     default:
-                        htmlBlocks.push('Unknown rule type: ' + val._rule_type);
+                        if (key === '__searchText') {
+                            htmlBlocks.push('<strong>Text Search:</strong> ' + val);
+                        } else {
+                            htmlBlocks.push('Unknown rule type: ' + val._rule_type);
+                        }
                         break;
                 }
                 /* jshint camelcase: true */
