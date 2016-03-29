@@ -3,6 +3,7 @@ djangorestframework-gis==0.9.1
 django-filter==0.11.0
 django-extensions==1.6.1
 django-cors-headers==1.0.0
+google-api-python-client==1.5.0
 git+https://github.com/rohe/pyoidc.git@c9880cac2e5435f4197bda4364ace82206795f92#egg=oic
 # TODO: revert to marcanpilami django-oidc when https://github.com/rohe/pyoidc/issues/161 fixed
 git+https://github.com/flibbertigibbet/django-oidc.git
