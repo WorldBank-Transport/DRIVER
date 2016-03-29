@@ -53,11 +53,11 @@ class RecordAuditLogEntrySerializer(ModelSerializer):
     record_url = SerializerMethodField()
 
     def get_record_url(self, obj):
-        return settings.HOST_URL + '/#!/record/{}/details'.format(str(obj.uuid))
+        return settings.HOST_URL + '/#!/record/{}/details'.format(str(obj.record_uuid))
 
     class Meta:
         model = RecordAuditLogEntry
-        fields = ['date', 'username', 'action', 'record_uuid', 'record_url', 'uuid']
+        fields = ['date', 'username', 'action', 'record_url']
 
 
 class RecordDuplicateSerializer(ModelSerializer):
