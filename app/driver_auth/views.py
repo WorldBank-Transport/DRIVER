@@ -68,9 +68,9 @@ def authz_cb(request):
             # authentication failed
             # return 403 here instead of raising error
             return JsonResponse({'error': 'This login is not valid in this application'},
-                            status=403)
+                            status=status.HTTP_403_FORBIDDEN)
     except OIDCError as err:
-        return JsonResponse({'error': err, 'callback': query}, status=400)
+        return JsonResponse({'error': err, 'callback': query}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # helper to return list of available SSO clients
@@ -87,7 +87,7 @@ class DriverSsoAuthToken(APIView):
         if token:
             return validate_oauth_token(token)
         else:
-            return JsonResponse({'error': 'Token parameter is required'}, status=400)
+            return JsonResponse({'error': 'Token parameter is required'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def validate_oauth_token(token):
@@ -99,9 +99,9 @@ def validate_oauth_token(token):
     try:
         idinfo = client.verify_id_token(token, settings.GOOGLE_OAUTH_CLIENT_ID)
         if idinfo['aud'] not in [settings.GOOGLE_OAUTH_CLIENT_ID]:
-            return JsonResponse({'error': 'Unrecognized client.'}, status=403)
+            return JsonResponse({'error': 'Unrecognized client.'}, status=status.HTTP_403_FORBIDDEN)
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
-            return JsonResponse({'error': 'Wrong issuer.'}, status=403)
+            return JsonResponse({'error': 'Wrong issuer.'}, status=status.HTTP_403_FORBIDDEN)
         # have a good token; get API token now
         user = authenticate(**idinfo)
         if user:
@@ -109,9 +109,9 @@ def validate_oauth_token(token):
             token, created = Token.objects.get_or_create(user=user)
             return Response({'token': token.key, 'user': token.user_id})
         else:
-            return JsonResponse({'error': 'This login is not valid in this application'}, status=403)
+            return JsonResponse({'error': 'This login is not valid in this application'}, status=status.HTTP_403_FORBIDDEN)
     except crypt.AppIdentityError:
-        return JsonResponse({'error': 'Invalid token'}, status=403)
+        return JsonResponse({'error': 'Invalid token'}, status=status.HTTP_403_FORBIDDEN)
 
 
 class UserViewSet(viewsets.ModelViewSet):
