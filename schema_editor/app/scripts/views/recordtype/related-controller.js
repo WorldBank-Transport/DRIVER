@@ -19,6 +19,7 @@
         function deleteSchema(key) {
             if (ctl.currentSchema.schema.definitions[key]) {
                 delete ctl.currentSchema.schema.definitions[key];
+                delete ctl.currentSchema.schema.properties[key];
                 // TODO: Error handle and revert delete if failure
                 RecordSchemas.create({
                     /* jshint camelcase:false */
