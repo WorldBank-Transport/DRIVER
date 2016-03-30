@@ -43,4 +43,37 @@ describe('ase.views.recordtype: RelatedController', function () {
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
     });
+
+    it('should correctly delete related content types', function() {
+        $httpBackend.whenGET(new RegExp('api\/recordtypes\/*')).respond(
+            200, {'current_schema': 'irrelevant'}
+        );
+        $httpBackend.whenGET(new RegExp('api\/recordschemas\/*')).respond(
+            200,
+            {
+                'schema': {
+                    'definitions': {
+                        'keyToDelete': 'should be gone',
+                        'keyToRemain': 'should remain'
+                    },
+                    'properties': {
+                        'keyToDelete': 'should be gone',
+                        'keyToRemain': 'should remain'
+                    }
+                }
+            }
+        );
+        Controller = $controller('RTRelatedController', {
+            $scope: $scope, $stateParams: { uuid: 'irrelevant' }
+        });
+
+        $scope.$apply();
+        $httpBackend.flush();
+
+        Controller.deleteSchema('keyToDelete');
+        expect(Controller.currentSchema.schema.definitions.keyToDelete).not.toBeDefined();
+        expect(Controller.currentSchema.schema.properties.keyToDelete).not.toBeDefined();
+        expect(Controller.currentSchema.schema.definitions.keyToRemain).toBeDefined();
+        expect(Controller.currentSchema.schema.properties.keyToRemain).toBeDefined();
+    });
 });
