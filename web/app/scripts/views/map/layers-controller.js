@@ -395,7 +395,7 @@
         function addLayerSwitcher() {
             /* jshint camelcase: false */
             var recordLayers = [[ctl.recordType.plural_label, ctl.primaryLayerGroup]];
-            if (ctl.userCanWrite && ctl.secondaryType) {
+            if (ctl.secondaryType) {
                 recordLayers.push([ctl.secondaryType.plural_label, ctl.secondaryLayerGroup]);
             }
             /* jshint camelcase: true */
