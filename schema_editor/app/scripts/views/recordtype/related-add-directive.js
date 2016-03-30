@@ -36,9 +36,9 @@
                     items: {
                         $ref: ref
                     },
-                    title: ctl.currentSchema.definition.title,
+                    title: ctl.definition.title,
                     /* jshint camelcase:false */
-                    plural_title: ctl.currentSchema.definition.plural_title
+                    plural_title: ctl.definition.plural_title
                     /* jshint camelcase:true */
                 };
             } else {
