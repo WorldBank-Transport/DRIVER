@@ -3,23 +3,25 @@ import os
 import zipfile
 import tempfile
 import time
+import StringIO
 
 from django.conf import settings
+from django.contrib.auth.models import User
 
-from celery import current_task
 from celery import shared_task
-from celery import states
 from celery.utils.log import get_task_logger
 
 from django_redis import get_redis_connection
 
 from ashlar.models import Record
 
+from driver_auth.permissions import is_admin_or_writer
+
 logger = get_task_logger(__name__)
 
 
 @shared_task(track_started=True)
-def export_csv(query_key):
+def export_csv(query_key, user_id):
     """Exports a set of records to a series of CSV files and places them in a compressed tarball
     :param query_key: A UUID corresponding to a cached SQL query which will be used to filter
                       which records are returned. This is the same key used to generate filtered
@@ -35,8 +37,14 @@ def export_csv(query_key):
         schema = record_type.get_current_schema()
     except IndexError:
         raise Exception('Filter includes no records')
+
+    # Get user
+    user = User.objects.get(pk=user_id)
     # Create files and CSV Writers from Schema
-    record_writer = AshlarRecordExporter(schema)
+    if is_admin_or_writer(user):
+        record_writer = AshlarRecordExporter(schema)
+    else:
+        record_writer = ReadOnlyRecordExporter(schema)
 
     # Write records to files
     for rec in records:
@@ -59,7 +67,7 @@ def export_csv(query_key):
     for f, name in record_writer.get_files_and_names():
         t = time.struct_time(time.localtime(time.time()))
         info = zipfile.ZipInfo(filename=dirname + name, date_time=(
-            t.tm_year, t.tm_month, t.tm_day, t.tm_hour, t.tm_min, t.tm_sec
+            t.tm_year, t.tm_mon, t.tm_mday, t.tm_hour, t.tm_min, t.tm_sec
         ))
         info.external_attr = 0755 << 16L
         with open(f.name, 'r') as z:
@@ -96,15 +104,28 @@ class AshlarRecordExporter(object):
         self.schema = schema_obj.schema
 
         # Make output writers and output files
-        self.rec_writer = self.make_constants_csv_writer()
+        self.rec_writer = self.make_record_and_details_writer()
+        # All non-details related info types
         self.writers = {related: self.make_related_info_writer(related, subschema)
-                        for related, subschema in self.schema['definitions'].viewitems()}
+                        for related, subschema in self.schema['definitions'].viewitems()
+                        if 'details' not in subschema or subschema['details'] is False}
+
+        self.rec_outfile, self.outfiles = self.setup_output_files()
+        self.write_headers()
+
+    def setup_output_files(self):
+        """Create the output files necessary for writing CSVs"""
         # Using NamedTemporaryFiles is necessary for creating tarballs containing temp files
         # https://bugs.python.org/issue21044
-        self.rec_outfile = tempfile.NamedTemporaryFile(delete=False)
-        self.outfiles = {related: tempfile.NamedTemporaryFile(delete=False)
-                         for related in self.schema['definitions']}
+        rec_outfile = tempfile.NamedTemporaryFile(delete=False)
+        outfiles = {related: tempfile.NamedTemporaryFile(delete=False)
+                    for related in self.schema['definitions']
+                    if ('details' not in self.schema['definitions'][related] or
+                        self.schema['definitions'][related]['details'] is False)}
+        return (rec_outfile, outfiles)
 
+    def write_headers(self):
+        """Write CSV headers to output files"""
         # Write CSV header to all files
         self.rec_writer.write_header(self.rec_outfile)
         for related_name, writer in self.writers.viewitems():
@@ -144,7 +165,7 @@ class AshlarRecordExporter(object):
                                          self.outfiles[related_name])
 
     def make_constants_csv_writer(self):
-        """Generate a CSV Writer capable of writing out the non-json fields of a Record"""
+        """Generate a Record Writer capable of writing out the non-json fields of a Record"""
         # TODO: Currently this is hard-coded; it may be worthwhile to make this introspect Record
         # to figure out which fields to use, but that will be somewhat involved.
         csv_columns = ['record_id', 'created', 'modified', 'occurred_from',
@@ -166,9 +187,9 @@ class AshlarRecordExporter(object):
             'lat': lambda geom: geom.y,
             'lon': lambda geom: geom.x,
         }
-        return RecordModelExporter(csv_columns, source_fields, value_transforms)
+        return RecordModelWriter(csv_columns, source_fields, value_transforms)
 
-    def make_related_info_writer(self, info_name, info_definition):
+    def make_related_info_writer(self, info_name, info_definition, include_record_id=True):
         """Generate a RelatedInfoExporter capable of writing out a particular related info field
         :param info_definition: The definitions entry providing the sub-schema to write out.
         """
@@ -177,10 +198,43 @@ class AshlarRecordExporter(object):
         for prop in info_definition['properties']:
             if 'media' in info_definition['properties'][prop]:
                 drop_keys[prop] = None
-        return RelatedInfoExporter(info_name, info_definition, field_transform=drop_keys)
+        return RelatedInfoWriter(info_name, info_definition, field_transform=drop_keys,
+                                 include_record_id=include_record_id)
+
+    def make_record_and_details_writer(self):
+        """Generate a writer to put record fields and details in one CSV"""
+        model_writer = self.make_constants_csv_writer()
+        details = {key: subschema for key, subschema in self.schema['definitions'].viewitems()
+                   if 'details' in subschema and subschema['details'] is True}
+        details_key = details.keys()[0]
+        details_writer = self.make_related_info_writer(details_key, details[details_key],
+                                                       include_record_id=False)
+        return ModelAndDetailsWriter(model_writer, details_writer, details_key)
 
 
-class BaseRecordExporter(object):
+class ReadOnlyRecordExporter(AshlarRecordExporter):
+    """Export only fields which read-only users are allow to access"""
+    def __init__(self, schema_obj):
+        # Don't write any related info fields, just details only.
+        self.schema = schema_obj.schema
+
+        # Make output writers and output files
+        self.rec_writer = self.make_record_and_details_writer()
+        self.writers = dict()
+
+        self.rec_outfile, self.outfiles = self.setup_output_files()
+        self.write_headers()
+
+    def setup_output_files(self):
+        """Create the output files necessary for writing CSVs"""
+        # Using NamedTemporaryFiles is necessary for creating tarballs containing temp files
+        # https://bugs.python.org/issue21044
+        rec_outfile = tempfile.NamedTemporaryFile(delete=False)
+        outfiles = dict()
+        return (rec_outfile, outfiles)
+
+
+class BaseRecordWriter(object):
     """Base class for some common functions that exporters need"""
     # From https://github.com/azavea/django-queryset-csv/blob/master/djqscsv/djqscsv.py#L174
     def _utf8(self, value):
@@ -197,7 +251,38 @@ class BaseRecordExporter(object):
         writer.writeheader()
 
 
-class RecordModelExporter(BaseRecordExporter):
+class ModelAndDetailsWriter(BaseRecordWriter):
+    """Exports records' model fields, and the *Details field, to a single CSV"""
+    def __init__(self, model_writer, details_writer, details_key):
+        """Creates a combined writer
+        :param model_writer: A RecordModelWriter instance that will be used to write model fields
+        :param details_writer: A RelatedInfoWriter instance that will be used to write Details
+        """
+        self.model_writer = model_writer
+        self.details_writer = details_writer
+        self.details_key = details_key
+
+    def merge_lines(self, lines_str):
+        """Merge lines written by separate CSV writers to a single line by replacing '\r\n' with ','
+        """
+        return lines_str.replace('\r\n', ',').rstrip(',') + '\r\n'
+
+    def write_header(self, csv_file):
+        """Write writer headers to a CSV file"""
+        output = StringIO.StringIO()
+        self.model_writer.write_header(output)
+        self.details_writer.write_header(output)
+        csv_file.write(self.merge_lines(output.getvalue()))
+
+    def write_record(self, record, csv_file):
+        """Pull data from a record, send to appropriate writers, and then combine output"""
+        output = StringIO.StringIO()
+        self.model_writer.write_record(record, output)
+        self.details_writer.write_related(record.pk, record.data[self.details_key], output)
+        csv_file.write(self.merge_lines(output.getvalue()))
+
+
+class RecordModelWriter(BaseRecordWriter):
     """Exports records' model fields to CSV"""
     def __init__(self, csv_columns, source_fields=dict(), value_transforms=dict()):
         """Creates a record exporter
@@ -244,9 +329,9 @@ class RecordModelExporter(BaseRecordExporter):
         return val_transform(value)
 
 
-class RelatedInfoExporter(BaseRecordExporter):
+class RelatedInfoWriter(BaseRecordWriter):
     """Exports related info properties to CSV"""
-    def __init__(self, info_name, info_definition, field_transform=dict()):
+    def __init__(self, info_name, info_definition, field_transform=dict(), include_record_id=True):
         # Construct a field name mapping; this allows dropping Media fields from CSVs and
         # allows renaming _localid to something more useful. The final output will be a mapping
         # of all fields in the related info definition to the corresponding field that should
@@ -260,8 +345,12 @@ class RelatedInfoExporter(BaseRecordExporter):
             raise ValueError("Related info definition has no 'properties'; can't detect fields")
         self.property_transform['_localId'] = info_name + '_id'
         info_columns = [col for col in self.property_transform.values() if col is not None]
-        # Need to label every row with the id of the record it relates to
-        self.csv_columns = ['record_id'] + info_columns
+        self.output_record_id = include_record_id
+        if self.output_record_id:
+            # Need to label every row with the id of the record it relates to
+            self.csv_columns = ['record_id'] + info_columns
+        else:
+            self.csv_columns = info_columns
         self.is_multiple = info_definition.get('multiple', False)
 
     def write_related(self, record_id, related_info, csv_file):
@@ -270,7 +359,8 @@ class RelatedInfoExporter(BaseRecordExporter):
         output_data = self.transform_value_keys(related_info)
 
         # Append record_id
-        output_data['record_id'] = record_id
+        if self.output_record_id:
+            output_data['record_id'] = record_id
 
         # Write
         writer = csv.DictWriter(csv_file, fieldnames=self.csv_columns)
