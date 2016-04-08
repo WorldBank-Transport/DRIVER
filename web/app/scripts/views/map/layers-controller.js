@@ -125,6 +125,15 @@
                   ctl.map.fire('click', e);
                 });
 
+                // The datepicker calendar div gets added to the end of <body> where it doesn't
+                // get to hear all the clicks that Leaflet swallows. This crappy workaround still
+                // leaves some bad behavior when clicks don't make it through to the map (e.g.
+                // they're on the layer switcher or an incident pop-up) but it handles the most
+                // common case of clicking in empty map space.
+                ctl.map.on('click', function() {
+                    angular.element('.datepicker').hide();
+                });
+
                 ctl.drawControl = new L.Control.Draw({
                     draw: {
                         // TODO: figure out a good way to export circles.
