@@ -106,10 +106,15 @@
             }).then(
                 getTilekeys
             ).then(function() {
-                // add base layer
+                // load base layers
                 var layers = BaseLayersService.baseLayers();
-                ctl.map.addLayer(layers[0].layer);
                 bmapDefer.resolve(layers);
+
+                // set the base layer to the one selected in MapState
+                var baseLayer = _.find(layers, function (l) {
+                    return l.label === MapState.getBaseLayerName();
+                });
+                ctl.map.addLayer(baseLayer.layer);
 
                 // add polygon draw control and layer to edit on
                 ctl.editLayers = new L.FeatureGroup();
@@ -191,6 +196,10 @@
 
                 ctl.map.on('moveend', function() {
                     MapState.setLocation(ctl.map.getCenter());
+                });
+
+                ctl.map.on('baselayerchange', function(e) {
+                    MapState.setBaseLayerName(e.name);
                 });
 
                 // TODO: Find a better way to ensure this doesn't happen until filterbar ready

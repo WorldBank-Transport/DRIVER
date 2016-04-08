@@ -4,26 +4,57 @@ describe('driver.state: Map', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.state'));
+    beforeEach(module('driver.map-layers'));
 
     var $rootScope;
     var $httpBackend;
     var MapState;
+    var BaseLayersService;
+    var LocalStorageService;
 
-    beforeEach(inject(function (_$rootScope_, _$httpBackend_, _MapState_) {
+    beforeEach(inject(function (_$rootScope_, _$httpBackend_, _MapState_, _BaseLayersService_,
+                                _localStorageService_) {
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
         MapState = _MapState_;
+        BaseLayersService = _BaseLayersService_;
+        LocalStorageService = _localStorageService_;
     }));
 
-    it('should make a request for state options on call to "updateOptions"', function () {
+    it('should set and get FilterGeoJSON', function () {
+        expect(MapState.getFilterGeoJSON()).toBeUndefined();
         MapState.setFilterGeoJSON('asdf');
         expect(MapState.getFilterGeoJSON()).toBe('asdf');
+    });
 
+    it('should return default zoomlevel when none has been set', function () {
+        expect(MapState.getZoom()).toEqual(5);
+    });
+
+    it('should set and get zoomlevel', function () {
         MapState.setZoom(1);
         expect(MapState.getZoom()).toBe(1);
+    });
 
+    it('should set and get location', function () {
+        expect(MapState.getLocation()).toBeUndefined();
         MapState.setLocation({'loc': 1});
         expect(MapState.getLocation()).toEqual({'loc': 1});
+    });
+
+    it('should have a local storage provider', function () {
+        expect(LocalStorageService).toBeDefined();
+    });
+
+    it('should return a default base map selection when none is set', function () {
+        expect(LocalStorageService.get('map.baseLayerName')).toBeNull();
+        expect(MapState.getBaseLayerName()).toEqual(BaseLayersService.baseLayers()[0].label);
+    });
+
+    it('should set, get, and store base map selection', function () {
+        MapState.setBaseLayerName('Satellite');
+        expect(MapState.getBaseLayerName()).toEqual('Satellite');
+        expect(LocalStorageService.get('map.baseLayerName')).toEqual('Satellite');
     });
 
 });

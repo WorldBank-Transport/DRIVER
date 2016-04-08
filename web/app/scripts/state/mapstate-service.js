@@ -5,15 +5,20 @@
     'use strict';
 
     /* ngInject */
-    function MapState() {
-        var filterGeoJSON, zoom, location;
+    function MapState(BaseLayersService, localStorageService) {
+        var filterGeoJSON, zoom, location, baseLayer;
+        var baseLayers = _.map(BaseLayersService.baseLayers(), 'label');
+        var baseLayerStorageName = 'map.baseLayerName';
+
         var svc = {
             setFilterGeoJSON: setFilterGeoJSON,
             getFilterGeoJSON: getFilterGeoJSON,
             setZoom: setZoom,
             getZoom: getZoom,
             setLocation: setLocation,
-            getLocation: getLocation
+            getLocation: getLocation,
+            setBaseLayerName: setBaseLayerName,
+            getBaseLayerName: getBaseLayerName
         };
 
         return svc;
@@ -61,9 +66,26 @@
          */
         function getLocation() {
             return location;
-
         }
 
+        /**
+         * Set base map selection (by name) and save it in local storage
+         */
+        function setBaseLayerName(layerName) {
+            baseLayer = layerName;
+            localStorageService.set(baseLayerStorageName, layerName);
+        }
+
+        /**
+         * Get base map selection (by name), from local storage if not initialized, falling
+         * back to the first basemap if local storage doesn't have one set.
+         */
+        function getBaseLayerName() {
+            if (!baseLayer) {
+                baseLayer = localStorageService.get(baseLayerStorageName);
+            }
+            return baseLayer || baseLayers[0];
+        }
     }
 
     angular.module('driver.state')
