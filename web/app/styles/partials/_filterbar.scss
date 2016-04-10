@@ -19,6 +19,12 @@
             max-width: 85%;
         }
     }
+    > .pull-right {
+        position: absolute;
+        right: 10px;
+        top: 6px;
+    }
+
     .navbar-nav {
          margin: 0 5px 0 0;
 
