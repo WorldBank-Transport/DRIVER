@@ -159,8 +159,8 @@ def get_intersection_parts(roads, int_buffers, max_line_units):
     return (int_multilines, split_non_int_lines)
 
 
-def read_records(records_csv, road_projection, record_projection, tz,
-                 col_id, col_x, col_y, col_occurred, col_severe):
+def read_records(records_csv, road_projection, record_projection, tz, col_id, col_x, col_y,
+                 col_occurred, col_severe, severe_vals, col_precip, precip_vals):
     """Reads records csv, projects points, and localizes datetimes
     :param records_csv: Path to CSV containing record data
     :param road_projection: Projection CRS for road data
@@ -170,7 +170,10 @@ def read_records(records_csv, road_projection, record_projection, tz,
     :param col_x: Record x-coordinate column name
     :param col_y: Record y-coordinate column name
     :param col_occurred: Record occurred datetime column name
-    :param col_severe: Record severe column name. This column is optional.
+    :param col_severe: Record severe column name
+    :param severe_vals: List of string values indicating a severe record
+    :param col_precip: Record precip column name
+    :param precip_vals: List of string values indicating a record w/precipitation
     """
 
     # Create a function for projecting a point
@@ -188,7 +191,10 @@ def read_records(records_csv, road_projection, record_projection, tz,
         for row in csv_reader:
             # Collect min and max occurred datetimes, as they'll be used later on
             try:
-                occurred = tz.localize(parser.parse(row[col_occurred]))
+                parsed_dt = parser.parse(row[col_occurred])
+
+                # Localize datetimes that aren't timezone-aware
+                occurred = parsed_dt if parsed_dt.tzinfo else tz.localize(parsed_dt)
             except:
                 # Skip the record if it has an invalid datetime
                 continue
@@ -202,7 +208,8 @@ def read_records(records_csv, road_projection, record_projection, tz,
                 'id': row[col_id],
                 'point': transform(project, Point(float(row[col_x]), float(row[col_y]))),
                 'occurred': occurred,
-                'severe': bool(int(row[col_severe])) if col_severe in row else 0
+                'severe': row[col_severe] in severe_vals if col_severe in row else False,
+                'precip': row[col_precip] in precip_vals if col_precip in row else False
             })
 
     return records, min_occurred, max_occurred
@@ -353,8 +360,8 @@ def write_segments_shp(segments_shp_path, road_projection, segments_with_data, s
             })
 
 
-def write_segments_csv(segments_csv_path, segments_with_data, schema):
-    """Writes all segments containing record data to csv
+def write_black_spot_training_csv(segments_csv_path, segments_with_data, schema):
+    """Writes all segments containing record data to csv for black spot training
     :param segments_csv_path: Path to CSV to write
     :param segments_with_data: List of tuples containing segments and segment data
     :param schema: Schema to use for writing CSV
@@ -369,6 +376,34 @@ def write_segments_csv(segments_csv_path, segments_with_data, schema):
                 csv_writer.writerow(data)
 
 
+def write_load_forecast_training_csv(segments_csv_path, segments_with_data_precip,
+                                     segments_with_data_no_precip, schema):
+    """Writes segments containing record data (with and without precip) to csv for load forecasting
+    :param segments_csv_path: Path to CSV to write
+    :param segments_with_data_precip: List of tuples containing segments and data (w/precip)
+    :param segments_with_data_no_precip: List of tuples containing segments and data (no precip)
+    :param schema: Schema to use for writing CSV
+    """
+    field_names = sorted(schema['properties'].keys())
+    with open(segments_csv_path, 'w') as csv_file:
+        csv_writer = csv.DictWriter(csv_file, fieldnames=field_names)
+        csv_writer.writeheader()
+
+        def write_data(data_list, precip_val):
+            """Helper for writing out a list of data to the file
+            :param data_list: List of tuples containing segments and data
+            :param precip_val: Value to write out for the precip column
+            """
+            for segment_with_data in data_list:
+                _, data = segment_with_data
+                if data['records'] > 0:
+                    data['precip'] = precip_val
+                    csv_writer.writerow(data)
+
+        write_data(segments_with_data_precip, 1)
+        write_data(segments_with_data_no_precip, 0)
+
+
 def main():
     """Main entry point of script"""
     parser = argparse.ArgumentParser(description='Generate black spots input')
@@ -380,22 +415,36 @@ def main():
     parser.add_argument('--output-dir', help='Directory where files are output', default='.')
     parser.add_argument('--combined-segments-shp-name', help='Combined segments output .shp name',
                         default='combined_segments.shp')
-    parser.add_argument('--combined-segments-csv-name', help='Combined segments output .csv name',
-                        default='combined_segments.csv')
+    parser.add_argument('--black-spots-training-csv-name',
+                        help='Black spots training output .csv name',
+                        default='black_spots_training.csv')
+    parser.add_argument('--load-forecast-training-csv-name',
+                        help='Load forecast training .csv name',
+                        default='load_forecast_training.csv')
     parser.add_argument('--intersection-buffer-units', help='Units to buffer each intersection',
                         default=5)
     parser.add_argument('--max_line_units', help='Maximum units allowed for line segment',
                         default=200)
-    parser.add_argument('--time-zone', help='Time zone of records', default='America/New_York')
+    parser.add_argument('--time-zone', help='Time zone of records', default='Asia/Manila')
     parser.add_argument('--match-tolerance', help='Units to buffer when matching records to roads',
                         default=5)
     parser.add_argument('--record-projection', help='Projection id of records', default='epsg:4326')
-    parser.add_argument('--record-col-id', help='Record column: id', default='CRN')
-    parser.add_argument('--record-col-x', help='Record column: x-coordinate', default='LNG')
-    parser.add_argument('--record-col-y', help='Record column: y-coordinate', default='LAT')
-    parser.add_argument('--record-col-occurred', help='Record column: occurred', default='DATETIME')
-    parser.add_argument('--record-col-severe', help='(Optional) Record column: severe',
-                        default='FATAL')
+    parser.add_argument('--record-col-id', help='Record column: id', default='record_id')
+    parser.add_argument('--record-col-x', help='Record column: x-coordinate', default='lon')
+    parser.add_argument('--record-col-y', help='Record column: y-coordinate', default='lat')
+    parser.add_argument('--record-col-occurred', help='Record column: occurred',
+                        default='occurred_from')
+    parser.add_argument('--record-col-severe', help='Record column: severe',
+                        default='Severity')
+    parser.add_argument('--record-col-severe-vals',
+                        help='Comma-separated indicators for a severe record',
+                        default='Fatal,Inury')
+    parser.add_argument('--record-col-precip', help='Record column: precipitation',
+                        default='weather')
+    parser.add_argument('--record-col-precip-vals',
+                        help='Comma-separated indicators for a record with precipitation',
+                        default='rain,hail,sleet,snow,thunderstorm,tornado')
+
     args = parser.parse_args()
 
     logger.info('Reading shapefile from {}'.format(args.roads_shp))
@@ -405,18 +454,23 @@ def main():
     logger.info('Reading records from {}'.format(args.records_csv))
     tz = pytz.timezone(args.time_zone)
     record_projection = {'init': args.record_projection}
+    severe_vals = args.record_col_severe_vals.split(',')
+    precip_vals = args.record_col_precip_vals.split(',')
     records, min_occurred, max_occurred = read_records(
         args.records_csv, road_projection, record_projection, tz,
         args.record_col_id, args.record_col_x, args.record_col_y,
-        args.record_col_occurred, args.record_col_severe
+        args.record_col_occurred, args.record_col_severe, severe_vals,
+        args.record_col_precip, precip_vals
     )
     logger.info('Found {:,} records between {} and {}'.format(
         len(records), min_occurred.date(), max_occurred.date())
     )
+    records_with_precip = [record for record in records if record['precip']]
+    records_without_precip = [record for record in records if not record['precip']]
+    logger.info('Found {:,} records with precipitation'.format(len(records_with_precip)))
+    logger.info('Found {:,} records without precipitation'.format(len(records_without_precip)))
 
     int_buffers = get_intersection_buffers(roads, args.intersection_buffer_units)
-    logger.info('Found {:,} intersections'.format(len(int_buffers)))
-
     int_multilines, non_int_lines = get_intersection_parts(roads, int_buffers, args.max_line_units)
     combined_segments = int_multilines + non_int_lines
     logger.info('Found {:,} intersection multilines'.format(len(int_multilines)))
@@ -424,11 +478,26 @@ def main():
     logger.info('Found {:,} combined segments'.format(len(combined_segments)))
 
     match_tolerance = args.match_tolerance
-    segments_with_records = match_records_to_segments(records, combined_segments, match_tolerance)
+    segments_with_records = match_records_to_segments(
+        records, combined_segments, match_tolerance)
     logger.info('Found {:,} segments with records'.format(len(segments_with_records)))
+    segments_with_records_precip = match_records_to_segments(
+        records_with_precip, combined_segments, match_tolerance)
+    logger.info('Found {:,} segments with records w/precip'.format(
+        len(segments_with_records_precip)))
+    segments_with_records_no_precip = match_records_to_segments(
+        records_without_precip, combined_segments, match_tolerance)
+    logger.info('Found {:,} segments with records without precip'.format(
+        len(segments_with_records_no_precip)))
 
     schema, segments_with_data = get_segments_with_data(
         combined_segments, segments_with_records, min_occurred, max_occurred
+    )
+    _, segments_with_data_precip = get_segments_with_data(
+        combined_segments, segments_with_records_precip, min_occurred, max_occurred
+    )
+    _, segments_with_data_no_precip = get_segments_with_data(
+        combined_segments, segments_with_records_no_precip, min_occurred, max_occurred
     )
     logger.info('Compiled data for {:,} segments'.format(len(segments_with_data)))
 
@@ -436,9 +505,19 @@ def main():
     write_segments_shp(segments_shp_path, road_projection, segments_with_data, schema)
     logger.info('Generated shapefile')
 
-    segments_csv_path = os.path.join(args.output_dir, args.combined_segments_csv_name)
-    write_segments_csv(segments_csv_path, segments_with_data, schema)
-    logger.info('Generated csv')
+    black_spots_training_csv_path = os.path.join(args.output_dir,
+                                                 args.black_spots_training_csv_name)
+    write_black_spot_training_csv(black_spots_training_csv_path, segments_with_data, schema)
+    logger.info('Generated csv for black spot training')
+
+    load_forecast_training_csv_path = os.path.join(args.output_dir,
+                                                   args.load_forecast_training_csv_name)
+    load_forecast_schema = schema.copy()
+    load_forecast_schema['properties']['precip'] = 'int'
+    write_load_forecast_training_csv(load_forecast_training_csv_path,
+                                     segments_with_data_precip, segments_with_data_no_precip,
+                                     load_forecast_schema)
+    logger.info('Generated csv for load forecast training')
 
 if __name__ == '__main__':
     main()

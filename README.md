@@ -76,7 +76,7 @@ To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token
 
 To load mock interventions, run `python scripts/load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/interventions_sample_pts.geojson`.
 
-To generate black spot inputs, run `python scripts/generate_black_spots_training_input.py /path/to/roads.shp /path/to/records.csv`.
+To generate black spot and load forecast training inputs, run `python scripts/generate_training_input.py /path/to/roads.shp /path/to/records.csv`.
 
 ## Production
 
