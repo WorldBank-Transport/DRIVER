@@ -6,7 +6,7 @@
 
     /* ngInject */
     function EmbedMapController($log, $timeout, $scope, $rootScope, TileUrlService,
-                                BaseLayersService) {
+                                BaseLayersService, MapState) {
         var dblClickTimeout = null;
         var ctl = this;
 
@@ -26,7 +26,6 @@
             ctl.isEditable = !!isEditable;
 
             var baseMaps = BaseLayersService.baseLayers();
-            ctl.map.addLayer(baseMaps[0].layer);
 
             if(!ctl.layerSwitcher){
                 ctl.layerSwitcher = L.control.layers(
@@ -35,6 +34,12 @@
                 ctl.layerSwitcher.addTo(ctl.map);
             }
 
+            // set the base layer to the one selected in MapState
+            var baseLayer = _.find(baseMaps, function (l) {
+                return l.label === MapState.getBaseLayerName();
+            });
+            ctl.map.addLayer(baseLayer.layer);
+
             if (ctl.isEditable) {
                 ctl.map.on('click', handleClick);
                 ctl.map.on('moveend', function(e) {
@@ -42,8 +47,12 @@
                 });
             }
 
+            // If a location was passed in, center and zoom to that. Otherwise load from MapState
+            // but zoom out one level to adjust for the smaller field of view.
             if (lat && lng) {
                 setMarker(L.latLng(lat, lng));
+            } else if (MapState.getLocation() && MapState.getZoom()) {
+                ctl.map.setView(MapState.getLocation(), MapState.getZoom() - 1);
             }
         };
 
