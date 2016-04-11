@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     libffi-dev \
     python-dev
 
-# install dependencies for generate_black_spots_training_input script
+# install dependencies for generate_training_input script
 RUN apt-get update && apt-get install -y \
     libgeos-dev \
     libspatialindex-dev \
