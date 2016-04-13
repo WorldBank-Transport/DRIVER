@@ -31,6 +31,30 @@
     }
 
     /* ngInject */
+    function TranslationConfig($translateProvider, $windowProvider) {
+        // Configure the location of the translation json files on the server
+        $translateProvider.useStaticFilesLoader({
+            prefix: 'i18n/',
+            suffix: '.json'
+        });
+
+        // Log untranslated tokens to console
+        $translateProvider.useMissingTranslationHandlerLog();
+
+        // Enable sanitization of token
+        $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
+
+        // Get the browser's navigator object and use for determining preferred language
+        var navigator = $windowProvider.$get().navigator;
+        var language = (navigator.languages ? navigator.languages[0] :
+                        (navigator.language || navigator.userLanguage)).substring(0,2);
+
+        // Interpret Zulu ('zu') to request dev language ('exclaim')
+        $translateProvider.preferredLanguage(language === 'zu' ? 'exclaim' : language);
+        $translateProvider.fallbackLanguage('en');
+    }
+
+    /* ngInject */
     function RunConfig($cookies, $http, $rootScope, $state, AuthService, LogoutInterceptor) {
         // Django CSRF Token compatibility
         $http.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -88,11 +112,13 @@
         'driver.views.record',
         'driver.views.duplicates',
         'ui.router',
-        'LocalStorageModule'
+        'LocalStorageModule',
+        'pascalprecht.translate'
     ])
     .config(DefaultRoutingConfig)
     .config(LogConfig)
     .config(LeafletDefaultsConfig)
     .config(LocalStorageConfig)
+    .config(TranslationConfig)
     .run(RunConfig);
 })();

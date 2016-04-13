@@ -6,7 +6,7 @@
         $stateProvider.state('map', {
             url: '/map',
             template: '<driver-map></driver-map>',
-            label: 'Map',
+            label: 'NAV.MAP',
             showInNavbar: true
         });
     }

@@ -6,7 +6,7 @@
         $stateProvider.state('dashboard', {
             url: '/',
             template: '<driver-dashboard></driver-dashboard>',
-            label: 'Dashboard',
+            label: 'NAV.DASHBOARD',
             showInNavbar: true
         });
     }

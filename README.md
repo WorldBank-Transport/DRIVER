@@ -44,6 +44,19 @@ Both Angular apps can be run in development mode via:
 The frontend app will be available on port 7002 and the schema editor will be available on port
 7001. Both will reload automatically as changes are made.
 
+#### Updating existing translation files
+New angular translation tokens should be added to i18n/exclaim.json with a value of "!<english>".
+The English translation (en.json) is automatically built from exclaim.json. New tokens are also
+propagated to other translations via a grunt task:
+
+```
+./scripts/grunt.sh web translate
+```
+
+#### Adding a new translation file
+Place the new JSON file in the i18n folder. Add the file to the i18nForeignLanguages var in Gruntfile.js
+
+
 ## Docker
 
 As a shortcut to building the Docker container images contained within the `app`

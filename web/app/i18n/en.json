@@ -1,0 +1,13 @@
+{
+    "LANG": "English",
+    "NAV": {
+        "DASHBOARD": "Dashboard",
+        "MAP": "Map",
+        "RECORD_LIST": "Record List"
+    },
+    "LOGIN": {
+        "USERNAME": "Username",
+        "PASSWORD": "Password",
+        "SIGN_IN": "Sign-in"
+    }
+}
