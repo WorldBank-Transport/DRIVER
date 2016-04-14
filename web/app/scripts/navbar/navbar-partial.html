@@ -9,12 +9,12 @@
             <ul class="nav navbar-nav" ng-if="ctl.authenticated">
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button">
-                        {{ ctl.stateSelected.label }}
+                        {{ ctl.stateSelected.label | translate }}
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="nav-page-item" ng-repeat="navState in ctl.availableStates">
                             <a ng-click="ctl.onStateSelected(navState)">
-                                {{ navState.label }}
+                                {{ navState.label | translate }}
                             </a>
                         </li>
                     </ul>

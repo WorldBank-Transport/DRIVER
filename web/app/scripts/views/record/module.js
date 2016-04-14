@@ -24,7 +24,7 @@
         $stateProvider.state('record.list', {
             url: '/list',
             template: '<driver-record-list></driver-record-list>',
-            label: 'Record List',
+            label: 'NAV.RECORD_LIST',
             showInNavbar: true
         });
         $stateProvider.state('record.edit', {

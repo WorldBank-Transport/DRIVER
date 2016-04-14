@@ -9,6 +9,10 @@
 
 module.exports = function (grunt) {
 
+  // Add new languages here
+  // Do not put en or exclaim in this list
+  var i18nForeignLanguages = ['app/i18n/ar.json'];
+
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
 
@@ -429,9 +433,41 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
-    }
-  });
+    },
 
+    // Lint the translation json files
+    jsonlint: {
+      i18n: {
+        src: ['app/i18n/*.json']
+      }
+    },
+
+    // Use the exclaim translations to generate English translations
+    replace: {
+      i18nGenEnglish: {
+        src: ['app/i18n/exclaim.json'],
+        dest: 'app/i18n/en.json',
+        replacements: [{
+          from: /: +"!/g,
+          to: ': "'
+        }]
+      }
+    },
+
+    // Sync up other translation files to the keys available in exclaim.json
+    /* jshint camelcase: false */
+    translate_sync: {
+      options: {
+        keepKeyOrder: true,
+        indent: 4
+      },
+      all: {
+        source: 'app/i18n/exclaim.json',
+        targets: i18nForeignLanguages
+      }
+    }
+    /* jshint camelcase: true */
+  });
 
   grunt.registerTask('serve', 'Compile then start a connect web server', function (target) {
     if (target === 'dist') {
@@ -452,6 +488,14 @@ module.exports = function (grunt) {
     grunt.log.warn('The `server` task has been deprecated. Use `grunt serve` to start a server.');
     grunt.task.run(['serve:' + target]);
   });
+
+  /* jshint camelcase: false */
+  grunt.registerTask('translate', [
+    'jsonlint:i18n',
+    'replace:i18nGenEnglish',
+    'translate_sync:all'
+  ]);
+  /* jshint camelcase: true */
 
   grunt.registerTask('travis', [
     'jshint:all',
