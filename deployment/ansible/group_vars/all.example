@@ -53,6 +53,7 @@ oauth_client_secret: ''
 local_time_zone_id: 'Asia/Manila'
 local_country_code: 'ph'
 local_center_lat_lon: [12.375, 121.5]
+osm_extract_url: 'https://download.geofabrik.de/asia/philippines-latest.osm.pbf'
 
 ## Forecast.io settings
 forecast_io_api_key: ''

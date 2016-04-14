@@ -123,6 +123,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+OSM_EXTRACT_URL = os.environ.get('DRIVER_OSM_EXTRACT_URL',
+                                 'https://download.geofabrik.de/asia/philippines-latest.osm.pbf')
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
