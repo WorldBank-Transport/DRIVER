@@ -5,7 +5,7 @@
     function StateConfig($stateProvider) {
         $stateProvider.state('account', {
             url: '/account',
-            label: 'Account',
+            label: 'NAV.ACCOUNT',
             templateUrl: 'scripts/views/account/account-partial.html',
             controller: 'AccountController',
             showInNavbar: false,

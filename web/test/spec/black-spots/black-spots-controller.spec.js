@@ -10,6 +10,7 @@ describe('driver.blackSpots: BlackSpotsController', function() {
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.map'));
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $rootScope;
@@ -56,7 +57,7 @@ describe('driver.blackSpots: BlackSpotsController', function() {
             .respond(200, ResourcesMock.RecordTypeResponse);
 
         $httpBackend.expectGET(boundaryUrl)
-            .respond(200, DriverResourcesMock.BoundaryResponse);        
+            .respond(200, DriverResourcesMock.BoundaryResponse);
 
         $httpBackend.expectGET(recordTypeUrl)
             .respond(200, ResourcesMock.RecordTypeResponse);

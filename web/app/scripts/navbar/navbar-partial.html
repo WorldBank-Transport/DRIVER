@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default {{ctl.isFilterPage ? '' : 'drop-shadow' }}">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" ui-sref="dashboard">Road Incident Data System</a>
+            <a class="navbar-brand" ui-sref="dashboard">{{ 'COMMON.APP_BRAND' | translate }}</a>
         </div>
 
         <div class="collapse navbar-collapse">
@@ -49,7 +49,7 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li class="nav-rt-item">
-                            <a ng-click="ctl.onBoundarySelected({ uuid: '' })">All</a>
+                            <a ng-click="ctl.onBoundarySelected({ uuid: '' })">{{ 'NAV.ALL' | translate }}</a>
                         </li>
                         <li class="nav-rt-item"
                             ng-repeat="boundary in ctl.boundaryResults | orderBy:ctl.getBoundaryLabel"
@@ -67,10 +67,26 @@
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" role="button">{{ ctl.userEmail }} <span class="glyphicon glyphicon-option-vertical"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a ng-click="ctl.navigateToStateName('account')">My Account</a></li>
-                        <li ng-if="ctl.isAdmin"><a ng-click="ctl.showAuditDownloadModal()">Download audit logs</a></li>
-                        <li ng-if="ctl.hasWriteAccess"><a ng-click="ctl.navigateToStateName('duplicates')">Manage Duplicate Records</a></li>
-                        <li><a ng-click="ctl.onLogoutButtonClicked()">Log Out</a></li>
+                        <li>
+                            <a ng-click="ctl.navigateToStateName('account')">
+                                {{ 'NAV.MY_ACCOUNT' | translate }}
+                            </a>
+                        </li>
+                        <li ng-if="ctl.isAdmin">
+                            <a ng-click="ctl.showAuditDownloadModal()">
+                                {{ 'NAV.DOWNLOAD_AUDIT_LOGS' | translate }}
+                            </a>
+                        </li>
+                        <li ng-if="ctl.hasWriteAccess">
+                            <a ng-click="ctl.navigateToStateName('duplicates')">
+                                {{ 'NAV.MANAGE_DUPLICATE_RECORDS' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="ctl.onLogoutButtonClicked()">
+                                {{ 'NAV.LOG_OUT' | translate }}
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

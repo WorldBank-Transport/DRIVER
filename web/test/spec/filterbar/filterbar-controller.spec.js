@@ -8,6 +8,7 @@ describe('driver.filterbar: FilterbarController', function () {
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('ase.templates'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $controller;

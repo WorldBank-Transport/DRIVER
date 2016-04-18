@@ -3,30 +3,30 @@
         &times;
     </div>
     <div class="modal-header">
-        <h3>Custom Report</h3>
+        <h3>{{ 'REPORT.TITLE' | translate }}</h3>
     </div>
     <div class="modal-body">
         <div class="well">
-            <h4>Active Filters</h4>
+            <h4>{{ 'REPORT.ACTIVE_FILTERS' | translate }}</h4>
             <div>
-                <strong>Date Range:</strong>
+                <strong>{{ 'COMMON.DATE_RANGE' | translate }}:</strong>
                 <span>{{ ::modal.dateFilter.minDate | localDateTime : modal.dateFormat }}</span> -
                 <span>{{ ::modal.dateFilter.maxDate | localDateTime : modal.dateFormat }}</span>
             </div>
             <div ng-if="modal.boundaryFilter">
-                <strong>Boundary:</strong>
+                <strong>{{ 'REPORT.BOUNDARY' | translate }}:</strong>
                 <span>{{ ::modal.boundaryFilter }}</span>
             </div>
             <div ng-if="modal.nonDateFilters | savedFilterAsHTML">
                 <span ng-bind-html="modal.nonDateFilters | savedFilterAsHTML: '<br />'"></span>
             </div>
             <h6>
-                <em>* To modify these filters, cancel and make adjustments on the page</em>
+                <em>{{ 'REPORT.FILTER_NOTICE' | translate }}</em>
             </h6>
         </div>
 
         <div class="col-md-6">
-            <label class="control-label">Organize Report By (rows)</label>
+            <label class="control-label">{{ 'REPORT.ORGANIZE_ROWS' | translate }}</label>
             <select ng-options="agg as agg.label
                                 group by agg.type
                                 for agg in modal.rowColAggs
@@ -38,7 +38,7 @@
         </div>
 
         <div class="col-md-6">
-            <label class="control-label">Organize Report By (columns)</label>
+            <label class="control-label">{{ 'REPORT.ORGANIZE_COLUMNS' | translate }}</label>
             <select ng-options="agg as agg.label
                                 group by agg.type
                                 for agg in modal.rowColAggs
@@ -54,7 +54,8 @@
                     && modal.colAggSelected.type !== 'Geography'
                     && modal.rowAggSelected.type !== 'Geography'">
             <label class="control-label">
-                Geographic Aggregation (pages &mdash; <em>optional</em>)
+                {{ 'REPORT.GEO_AGG' | translate }} ({{ 'REPORT.PAGES' | translate }} &mdash;
+                <em>{{ 'REPORT.OPTIONAL' | translate }}</em>)
             </label>
             <select ng-options="agg as agg.label for agg in modal.rowColAggs
                                 | filter: { type: 'Geography' }
@@ -69,12 +70,12 @@
     <div class="modal-footer">
         <button class="btn btn-default"
                 ng-click="modal.closeModal()">
-            Cancel
+            {{ 'COMMON.CANCEL' | translate }}
         </button>
         <button class="btn btn-default"
                 ng-click="modal.createReport()"
                 ng-disabled="!modal.ready">
-                Custom Report
+                {{ 'REPORT.TITLE' | translate }}
         </button>
     </div>
 </div>

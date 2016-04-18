@@ -4,6 +4,7 @@ describe('driver.tools.charts: Charts', function () {
 
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.tools.charts'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;

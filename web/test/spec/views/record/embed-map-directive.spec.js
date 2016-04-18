@@ -8,6 +8,7 @@ describe('driver.views.record: Embedded Map Directive', function () {
     beforeEach(module('driver.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

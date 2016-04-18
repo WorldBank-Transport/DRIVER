@@ -7,8 +7,8 @@
     /* ngInject */
     function MapState(BaseLayersService, localStorageService) {
         var filterGeoJSON, zoom, location, baseLayer;
-        var baseLayers = _.map(BaseLayersService.baseLayers(), 'label');
-        var baseLayerStorageName = 'map.baseLayerName';
+        var baseLayers = _.map(BaseLayersService.baseLayers(), 'slugLabel');
+        var baseLayerStorageName = 'map.baseLayerSlugLabel';
 
         var svc = {
             setFilterGeoJSON: setFilterGeoJSON,
@@ -17,8 +17,8 @@
             getZoom: getZoom,
             setLocation: setLocation,
             getLocation: getLocation,
-            setBaseLayerName: setBaseLayerName,
-            getBaseLayerName: getBaseLayerName
+            setBaseLayerSlugLabel: setBaseLayerSlugLabel,
+            getBaseLayerSlugLabel: getBaseLayerSlugLabel
         };
 
         return svc;
@@ -69,18 +69,18 @@
         }
 
         /**
-         * Set base map selection (by name) and save it in local storage
+         * Set base map selection (by slug label) and save it in local storage
          */
-        function setBaseLayerName(layerName) {
-            baseLayer = layerName;
-            localStorageService.set(baseLayerStorageName, layerName);
+        function setBaseLayerSlugLabel(layerSlugLabel) {
+            baseLayer = layerSlugLabel;
+            localStorageService.set(baseLayerStorageName, layerSlugLabel);
         }
 
         /**
-         * Get base map selection (by name), from local storage if not initialized, falling
+         * Get base map selection (by slug label), from local storage if not initialized, falling
          * back to the first basemap if local storage doesn't have one set.
          */
-        function getBaseLayerName() {
+        function getBaseLayerSlugLabel() {
             if (!baseLayer) {
                 baseLayer = localStorageService.get(baseLayerStorageName);
             }

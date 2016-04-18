@@ -2,9 +2,9 @@
     <div class="block block-1x2 quick-map">
         <div class="block-inner">
             <div class="map" driver-black-spots leaflet-map zoom-to-boundary></div>
-            <h3><span>Black Spots by Severity</span>
+            <h3><span>{{ 'DASHBOARD.BLACK_SPOTS_BY_SEVERITY' | translate }}</span>
                 <a ui-sref="map" class="small pull-right">
-                    Analyze &amp; filter »
+                    {{ 'DASHBOARD.ANALYZE_AND_FILTER' | translate }} »
                 </a>
             </h3>
         </div>
@@ -12,9 +12,9 @@
     <div class="block block-1x2 quick-map">
         <div class="block-inner">
             <div class="map" leaflet-map recent-events zoom-to-boundary></div>
-            <h3><span>{{ ctl.recordType.plural_label }} during the past two weeks</span>
+            <h3><span>{{ ctl.recordType.plural_label }} {{ 'DASHBOARD.RECENT_EVENTS_PERIOD' | translate }}</span>
                 <a ui-sref="map" class="small pull-right">
-                    View all {{ ctl.recordType.plural_label | lowercase }} »
+                    {{ 'DASHBOARD.VIEW_ALL' | translate }} {{ ctl.recordType.plural_label | lowercase }} »
                 </a>
             </h3>
         </div>
@@ -28,7 +28,7 @@
     <div class="block block-2x1 toddow">
         <div class="block-inner">
             <driver-toddow chart-data="ctl.toddow"></driver-toddow>
-            <h3>Time of Day, Day of Week: The Last 90 Days</h3>
+            <h3>{{ 'DASHBOARD.TODDOW_TITLE' | translate }}</h3>
         </div>
     </div>
     <div class="block block-2x1 filters">

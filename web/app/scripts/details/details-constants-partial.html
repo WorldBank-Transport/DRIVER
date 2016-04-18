@@ -1,6 +1,6 @@
 <div class="col-sm-6">
     <label>
-        Occurred
+        {{ 'RECORD.OCCURRED' | translate }}
     </label>
     <div class="value constant date occurred">
         {{ ::ctl.record.occurred_from | localDateTime : ctl.dateFormat }}
@@ -11,7 +11,7 @@
 </div>
 <div class="col-sm-6">
     <label>
-        Created
+        {{ 'RECORD.CREATED' | translate }}
     </label>
     <div class="value constant date created">
         {{ ::ctl.record.created | localDateTime: ctl.dateFormat }}
@@ -19,7 +19,7 @@
 </div>
 <div class="col-sm-12">
     <label>
-        Location
+        {{ 'RECORD.LOCATION' | translate }}
     </label>
     <div class="value constant">
         {{ ::ctl.record.location_text }}
@@ -33,7 +33,7 @@
 </div>
 <div class="col-sm-6">
     <label>
-        Latitude
+        {{ 'RECORD.LATITUDE' | translate }}
     </label>
     <div class="value constant float latitude">
         {{ ::ctl.record.geom.coordinates[1] | number:5 }}
@@ -41,7 +41,7 @@
 </div>
 <div class="col-sm-6">
     <label>
-        Longitude
+        {{ 'RECORD.LONGITUDE' | translate }}
     </label>
     <div class="value constant float longitude">
         {{ ::ctl.record.geom.coordinates[0] | number:5 }}
@@ -49,7 +49,7 @@
 </div>
 <div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
     <label>
-        Weather
+        {{ 'RECORD.WEATHER' | translate }}
     </label>
     <div>
         <i ng-if="ctl.record.weather" class="wi wi-forecast-io-{{ ::ctl.record.weather }}"></i>
@@ -58,12 +58,12 @@
         </span>
     </div>
     <a href="http://forecast.io" ng-if="ctl.record.weather" target="_blank">
-        Powered by Forecast
+        {{ 'RECORD.POWERED_BY_FORECAST' | translate }}
     </a>
 </div>
 <div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
     <label>
-        Light
+        {{ 'RECORD.LIGHT' | translate }}
     </label>
     <div class="value constant string light">
         {{ ::ctl.record.light | weatherLabel }}

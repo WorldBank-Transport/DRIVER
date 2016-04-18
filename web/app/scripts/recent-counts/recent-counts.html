@@ -12,7 +12,13 @@
 <h2>{{ recent.recordTypePlural }}</h2>
 
 <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" class="active"><a href="#30d" role="tab" data-toggle="tab">30 Days</a></li>
-    <li role="presentation"><a href="#90d" role="tab" data-toggle="tab">90 Days</a></li>
-    <li role="presentation"><a href="#365d" role="tab" data-toggle="tab">365 Days</a></li>
+    <li role="presentation" class="active"><a href="#30d" role="tab" data-toggle="tab">
+        30 {{ 'DASHBOARD.DAYS' | translate }}
+    </a></li>
+    <li role="presentation"><a href="#90d" role="tab" data-toggle="tab">
+        90 {{ 'DASHBOARD.DAYS' | translate }}
+    </a></li>
+    <li role="presentation"><a href="#365d" role="tab" data-toggle="tab">
+        365 {{ 'DASHBOARD.DAYS' | translate }}
+    </a></li>
 </ul>

@@ -4,7 +4,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Date &amp; Time</th>
+                        <th>{{ 'RECORD.DATE_AND_TIME' | translate }}</th>
 
                         <th ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
                             {{ ::headerKey }}
@@ -33,11 +33,11 @@
 
                         <td class="links">
                             <a ng-click="ctl.showDetailsModal(record)">
-                                <span class="glyphicon glyphicon-log-in"></span> View
+                                <span class="glyphicon glyphicon-log-in"></span> {{ 'COMMON.VIEW' | translate }}
                             </a>
                             <a ng-if="::ctl.userCanWrite"
                                 ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">
-                                <span class="glyphicon glyphicon-pencil"></span> Edit
+                                <span class="glyphicon glyphicon-pencil"></span> {{ 'COMMON.EDIT' | translate }}
                             </a>
                         </td>
                     </tr>
@@ -47,19 +47,19 @@
                 <ul class="pager" ng-if="!ctl.loadingRecords">
                     <li class="previous" ng-if="ctl.records.previous">
                         <a type="button" class="btn btn-default" ng-click="ctl.getPreviousRecords()">
-                            <span aria-hidden="true">&larr;</span> Previous</a>
+                            <span aria-hidden="true">&larr;</span> {{ 'COMMON.PREVIOUS' | translate }}</a>
                     </li>
                     <li ng-if="ctl.records.count" class="text-center">
                         <i>
-                            Showing results
+                            {{ 'RECORD.SHOWING_RESULTS' | translate }}
                             {{ ctl.currentOffset + 1}} -
-                            {{ ctl.currentOffset + ctl.records.results.length }} of
+                            {{ ctl.currentOffset + ctl.records.results.length }} {{ 'COMMON.OF' | translate }}
                             {{ ctl.records.count }}
                         </i>
                     </li>
                     <li class="next" ng-if="ctl.records.next">
                         <a type="button" class="btn btn-default" ng-click="ctl.getNextRecords()">
-                            Next <span aria-hidden="true">&rarr;</span></a>
+                            {{ 'COMMON.NEXT' | translate }} <span aria-hidden="true">&rarr;</span></a>
                     </li>
                 </ul>
             </nav>

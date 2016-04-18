@@ -3,6 +3,7 @@
 describe('driver.views.record: Embedded Map Controller', function () {
 
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $controller;

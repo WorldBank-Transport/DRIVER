@@ -4,6 +4,7 @@ describe('driver.map-layers.recent-events: Recent Events Layer Directive', funct
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.map-layers.recent-events'));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;

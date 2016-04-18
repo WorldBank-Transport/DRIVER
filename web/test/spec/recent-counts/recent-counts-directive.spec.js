@@ -7,6 +7,7 @@ describe('driver.recentCounts: RecentCounts', function () {
     beforeEach(module('driver.recentCounts'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('ase.templates'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var RecordAggregates;

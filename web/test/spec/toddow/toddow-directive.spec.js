@@ -5,6 +5,7 @@ describe('driver.toddow: ToDDoW', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.toddow'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

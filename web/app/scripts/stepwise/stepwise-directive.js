@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function Stepwise() {
+    function Stepwise($translate) {
         var module = {
             restrict: 'E',
             scope: {
@@ -30,7 +30,15 @@
                 var y = d3.scale.linear().range([height, 0]);
 
                 var tooltip = d3.tip().html(function(d) {
-                    return '<strong>Week of: </strong>' + d.dt.toLocaleDateString() + '</br><strong>Event Count:</strong> <span>' + d.count + '</span>';
+                    return '<strong>' +
+                        $translate.instant('RECORD.WEEK_OF') +
+                        ': </strong>' +
+                        d.dt.toLocaleDateString() +
+                        '</br><strong>' +
+                        $translate.instant('RECORD.EVENT_COUNT') +
+                        ':</strong> <span>' +
+                        d.count +
+                        '</span>';
                 }).offset([-20,-15]);
                 init();
 

@@ -6,6 +6,7 @@ describe('driver.details: DetailsTabsController', function () {
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.details'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

@@ -17,6 +17,7 @@ describe('driver.views.map: Layers Directive', function () {
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.map'));
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;
