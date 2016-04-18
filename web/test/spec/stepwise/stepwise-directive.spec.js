@@ -5,6 +5,7 @@ describe('driver.stepwise: Stepwise graph directive', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('ase.resources'));
     beforeEach(module('driver.stepwise'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

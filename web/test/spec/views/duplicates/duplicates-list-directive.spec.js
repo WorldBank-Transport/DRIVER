@@ -7,6 +7,7 @@ describe('driver.views.duplicates: Duplicates List Directive', function () {
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.duplicates'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

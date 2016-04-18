@@ -1,14 +1,14 @@
 <div class="block-inner">
-    <h3 ng-if="filters.compact">Saved Filters</h3>
+    <h3 ng-if="filters.compact">{{ 'SAVED_FILTERS.TITLE' | translate }}</h3>
     <div class="report-content tab-content filters-table">
         <div ng-show="!filters.savedFilters.length">
-            <i>No filters have been saved</i>
+            <i>{{ 'SAVED_FILTERS.NO_FILTERS_SAVED' | translate }}</i>
         </div>
         <table ng-show="filters.savedFilters.length" class="table table-hover">
             <thead ng-if="!filters.compact">
                 <tr>
-                    <td>Name</td>
-                    <td>Filters</td>
+                    <td>{{ 'SAVED_FILTERS.NAME' | translate }}</td>
+                    <td>{{ 'SAVED_FILTERS.FILTERS' | translate }}</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -22,12 +22,12 @@
                     </td>
                     <td width="10%">
                         <a ng-click="filters.viewFilter(sf)">
-                            View&nbsp;&raquo;
+                            {{ 'COMMON.VIEW' | translate }}&nbsp;&raquo;
                         </a>
                     </td>
                     <td width="10%" ng-if="!filters.compact">
                         <a ng-click="filters.deleteFilter(sf)">
-                            Delete
+                            {{ 'COMMON.DELETE' | translate }}
                         </a>
                     </td>
                 </tr>

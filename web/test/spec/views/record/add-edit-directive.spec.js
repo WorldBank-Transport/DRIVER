@@ -17,6 +17,7 @@ describe('driver.views.record: RecordAddEdit', function () {
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.record'));
     beforeEach(module('ase.templates'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

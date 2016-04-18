@@ -7,15 +7,15 @@
             <h3 class="modal-title">
                 <small ng-if="modal.userCanWrite" class="pull-right">
                     <a ui-sref="record.edit({ recorduuid: modal.record.uuid })" target="_blank">
-                        <span class="glyphicon glyphicon-share"></span> Edit
+                        <span class="glyphicon glyphicon-share"></span> {{ 'COMMON.EDIT' | translate }}
                     </a>
                 </small>
                 <small class="pull-right">
                     <a ui-sref="record.details({ recorduuid: modal.record.uuid })" target="_blank">
-                        <span class="glyphicon glyphicon-share"></span> View
+                        <span class="glyphicon glyphicon-share"></span> {{ 'COMMON.VIEW' | translate }}
                     </a>
                 </small>
-                {{ modal.recordType.label }} Details
+                {{ modal.recordType.label }} {{ 'RECORD.DETAILS' | translate }}
             </h3>
         </div>
         <driver-details-tabs
@@ -26,7 +26,7 @@
         </driver-details-tabs>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="modal.close()">
-                Close
+                {{ 'COMMON.CLOSE' | translate }}
             </button>
         </div>
     </div>

@@ -8,6 +8,7 @@ describe('driver.views.map: Map', function () {
     beforeEach(module('driver.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.map'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

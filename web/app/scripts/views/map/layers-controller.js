@@ -3,7 +3,7 @@
 
     /* ngInject */
     function DriverLayersController(
-        $q, $filter, $log, $scope, $rootScope, $timeout, $compile,
+        $q, $filter, $log, $scope, $rootScope, $timeout, $translate, $compile,
         AuthService, FilterState, RecordState, GeographyState,
         RecordSchemaState, BoundaryState, QueryBuilder,
         MapState, TileUrlService, BaseLayersService, InitialState, BlackspotSets) {
@@ -112,8 +112,11 @@
 
                 // set the base layer to the one selected in MapState
                 var baseLayer = _.find(layers, function (l) {
-                    return l.label === MapState.getBaseLayerName();
+                    return l.slugLabel === MapState.getBaseLayerSlugLabel();
                 });
+
+                // use the first layer if a match could not be made
+                baseLayer = baseLayer || layers[0];
                 ctl.map.addLayer(baseLayer.layer);
 
                 // add polygon draw control and layer to edit on
@@ -199,7 +202,14 @@
                 });
 
                 ctl.map.on('baselayerchange', function(e) {
-                    MapState.setBaseLayerName(e.name);
+                    var baseLayers = BaseLayersService.baseLayers();
+                    var baseLayer = _.find(baseLayers, function(l) {
+                        return l.label === e.name;
+                    });
+
+                    // use the first layer if a match could not be made
+                    baseLayer = baseLayer || baseLayers[0];
+                    MapState.setBaseLayerSlugLabel(baseLayer.slugLabel);
                 });
 
                 // TODO: Find a better way to ensure this doesn't happen until filterbar ready
@@ -418,8 +428,8 @@
             }
             /* jshint camelcase: true */
 
-            recordLayers.push(['Heatmap', ctl.heatmapLayerGroup]);
-            recordLayers.push(['Blackspots', ctl.blackspotLayerGroup]);
+            recordLayers.push([$translate.instant('MAP.HEATMAP'), ctl.heatmapLayerGroup]);
+            recordLayers.push([$translate.instant('MAP.BLACKSPOTS'), ctl.blackspotLayerGroup]);
             var overlays = angular.extend(_.zipObject(recordLayers), ctl.boundariesLayerGroup);
 
             ctl.bMaps.then(

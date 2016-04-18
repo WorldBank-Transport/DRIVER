@@ -5,29 +5,29 @@
         <cube-grid-spinner ng-if="!ctl.isOpen && ctl.pending"></cube-grid-spinner>
         <span class="glyphicon glyphicon-download-alt"
               ng-if="!ctl.isOpen && ctl.downloadURL && !ctl.pending"></span>
-        Export
+        {{ 'COMMON.EXPORT' | translate }}
     </div>
     <div class="tool-content">
         <div class="tool-body">
             <div class="tool-item clickable" ng-click="ctl.showCustomReportsModal()">
                 <span class="glyphicon glyphicon-th-list"></span>
-                Custom Report
+                {{ 'REPORT.TITLE' | translate }}
             </div>
             <div class="tool-item" ng-class="{ 'clickable': !ctl.pending }">
                 <div ng-if="!ctl.pending" ng-click="ctl.exportCSV()">
                     <span class="glyphicon glyphicon-export"></span>
-                    <span ng-if="!ctl.downloadURL">Export CSV</span>
-                    <span ng-if="ctl.downloadURL">Export New CSV</span>
+                    <span ng-if="!ctl.downloadURL">{{ 'COMMON.EXPORT_CSV' | translate }}</span>
+                    <span ng-if="ctl.downloadURL">{{ 'COMMON.EXPORT_NEW_CSV' | translate }}</span>
                 </div>
                 <div ng-if="ctl.pending">
                     <cube-grid-spinner></cube-grid-spinner>
-                    Exporting CSV
+                    {{ 'COMMON.EXPORTING_CSV' | translate }}
                 </div>
                 <div class="error" ng-if="ctl.error">{{ ctl.error }}</div>
             </div>
             <div class="tool-item" ng-if="ctl.downloadURL && !ctl.pending">
                 <span class="glyphicon glyphicon-download-alt"></span>
-                <a href="{{ ctl.downloadURL }}" download>Download CSV</a>
+                <a href="{{ ctl.downloadURL }}" download>{{ 'COMMON.DOWNLOAD_CSV' | translate }}</a>
             </div>
         </div>
     </div>

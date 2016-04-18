@@ -5,6 +5,7 @@ describe('driver.details: DetailsConstants', function () {
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.details'));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

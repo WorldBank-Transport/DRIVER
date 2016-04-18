@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function ToDDoW() {
+    function ToDDoW($translate) {
         // The color ramp to use
         var rampValues = ['#FDFBED', '#f6edb1', '#f7da22', '#ecbe1d', '#e77124',
                           '#d54927', '#cf3a27', '#a33936', '#7f182a', '#68101a'];
@@ -121,7 +121,7 @@
                     svg.call(tooltip);
                     tooltip.html(function(d) {
                       var tooltipText = data[d] || '0';
-                      return 'Event count: ' + tooltipText;
+                      return $translate.instant('RECORD.EVENT_COUNT') + ': ' + tooltipText;
                     });
                     rect.attr('fill', '#f1f2f2');
                     rect.filter(function(d) { return data.hasOwnProperty(d); })

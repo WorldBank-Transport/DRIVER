@@ -6,6 +6,7 @@ describe('driver.filterbar: Numeric Range', function () {
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;

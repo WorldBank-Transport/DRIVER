@@ -6,6 +6,7 @@ describe('driver.views.dashboard: Dashboard', function () {
     beforeEach(module('ase.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.views.dashboard'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

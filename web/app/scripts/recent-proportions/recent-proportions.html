@@ -1,12 +1,24 @@
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="insight01">
-        <h1><b>{{ recent.proportions[0].proportion }}%</b> of all traffic incidents involved <b>{{ recent.proportions[0].label | lowercase }} last week</b>.</h1>
+        <h1>
+            <b>{{ recent.proportions[0].proportion }}%</b>
+            {{ 'DASHBOARD.RECENT_PROPORTIONS_TEXT' | translate }}
+            <b>{{ recent.proportions[0].label | lowercase }} {{ 'DASHBOARD.LAST_WEEK' | translate }}</b>.
+        </h1>
     </div>
     <div role="tabpanel" class="tab-pane" id="insight02">
-        <h1><b>{{ recent.proportions[1].proportion }}%</b> of all traffic incidents involved <b>{{ recent.proportions[1].label | lowercase }} last week</b>.</h1>
+        <h1>
+            <b>{{ recent.proportions[1].proportion }}%</b>
+            {{ 'DASHBOARD.RECENT_PROPORTIONS_TEXT' | translate }}
+            <b>{{ recent.proportions[1].label | lowercase }} {{ 'DASHBOARD.LAST_WEEK' | translate }}</b>.
+        </h1>
     </div>
     <div role="tabpanel" class="tab-pane" id="insight03">
-        <h1><b>{{ recent.proportions[2].proportion }}%</b> of all traffic incidents involved <b>{{ recent.proportions[2].label | lowercase }} last week</b>.</h1>
+        <h1>
+            <b>{{ recent.proportions[2].proportion }}%</b>
+            {{ 'DASHBOARD.RECENT_PROPORTIONS_TEXT' | translate }}
+            <b>{{ recent.proportions[2].label | lowercase }} {{ 'DASHBOARD.LAST_WEEK' | translate }}</b>.
+        </h1>
     </div>
 </div>
 

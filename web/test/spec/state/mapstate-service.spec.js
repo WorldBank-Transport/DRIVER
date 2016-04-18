@@ -5,6 +5,7 @@ describe('driver.state: Map', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.state'));
     beforeEach(module('driver.map-layers'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $rootScope;
     var $httpBackend;
@@ -48,13 +49,13 @@ describe('driver.state: Map', function () {
 
     it('should return a default base map selection when none is set', function () {
         expect(LocalStorageService.get('map.baseLayerName')).toBeNull();
-        expect(MapState.getBaseLayerName()).toEqual(BaseLayersService.baseLayers()[0].label);
+        expect(MapState.getBaseLayerSlugLabel()).toEqual(BaseLayersService.baseLayers()[0].slugLabel);
     });
 
     it('should set, get, and store base map selection', function () {
-        MapState.setBaseLayerName('Satellite');
-        expect(MapState.getBaseLayerName()).toEqual('Satellite');
-        expect(LocalStorageService.get('map.baseLayerName')).toEqual('Satellite');
+        MapState.setBaseLayerSlugLabel('satellite');
+        expect(MapState.getBaseLayerSlugLabel()).toEqual('satellite');
+        expect(LocalStorageService.get('map.baseLayerSlugLabel')).toEqual('satellite');
     });
 
 });

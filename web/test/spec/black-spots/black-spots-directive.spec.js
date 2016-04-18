@@ -4,6 +4,7 @@ describe('driver.blackSpots: BlackSpots', function () {
 
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.blackSpots'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;

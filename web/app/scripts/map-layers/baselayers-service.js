@@ -4,7 +4,8 @@
     /* Service for sharing baselayer configuration.
      */
 
-    function BaseLayersService() {
+    /* ngInject */
+    function BaseLayersService($translate) {
 
         var module = {
             streets: streets,
@@ -17,7 +18,7 @@
             var layer = new L.tileLayer(
                 'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
                 {
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+                    attribution: $translate.instant('MAP.CDB_ATTRIBUTION'),
                     detectRetina: false,
                     zIndex: 1
                 }
@@ -29,7 +30,7 @@
             var layer = new L.tileLayer(
                 '//server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                 {
-                    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                    attribution: $translate.instant('MAP.ESRI_ATTRIBUTION'),
                     detectRetina: false,
                     zIndex: 1
                 }            );
@@ -38,8 +39,16 @@
 
         function baseLayers() {
             return [
-                { label: 'Streets', layer: streets() },
-                { label: 'Satellite', layer: satellite() },
+                {
+                    slugLabel: 'streets',
+                    label: $translate.instant('MAP.STREETS'),
+                    layer: streets()
+                },
+                {
+                    slugLabel: 'satellite',
+                    label: $translate.instant('MAP.SATELLITE'),
+                    layer: satellite()
+                }
             ];
         }
     }

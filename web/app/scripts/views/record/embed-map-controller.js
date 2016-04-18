@@ -36,8 +36,11 @@
 
             // set the base layer to the one selected in MapState
             var baseLayer = _.find(baseMaps, function (l) {
-                return l.label === MapState.getBaseLayerName();
+                return l.slugLabel === MapState.getBaseLayerSlugLabel();
             });
+
+            // use the first layer if a match could not be made
+            baseLayer = baseLayer || baseMaps[0];
             ctl.map.addLayer(baseLayer.layer);
 
             if (ctl.isEditable) {

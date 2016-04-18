@@ -4,6 +4,7 @@ describe('driver.recentProportions: RecentProportions', function () {
 
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.recentProportions'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;

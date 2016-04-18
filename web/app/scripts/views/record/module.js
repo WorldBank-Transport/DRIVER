@@ -11,13 +11,13 @@
         $stateProvider.state('record.add', {
             url: '/add',
             template: '<driver-record-add-edit></driver-record-add-edit>',
-            label: 'Add a Record',
+            label: 'NAV.ADD_A_RECORD',
             showInNavbar: false
         });
         $stateProvider.state('record.addSecondary', {
             url: '/addsecondary',
             template: '<driver-record-add-edit></driver-record-add-edit>',
-            label: 'Add a Record',
+            label: 'NAV.ADD_A_RECORD',
             showInNavbar: false,
             secondary: true
         });
@@ -30,13 +30,13 @@
         $stateProvider.state('record.edit', {
             url: '/record/:recorduuid/edit',
             template: '<driver-record-add-edit></driver-record-add-edit>',
-            label: 'Edit a Record',
+            label: 'NAV.EDIT_A_RECORD',
             showInNavbar: false
         });
         $stateProvider.state('record.details', {
             url: '/record/:recorduuid/details',
             template: '<driver-record-details></driver-record-details>',
-            label: 'Record Details',
+            label: 'NAV.RECORD_DETAILS',
             showInNavbar: false
         });
     }

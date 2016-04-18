@@ -5,6 +5,7 @@ describe('driver.customReports: CustomReportsModalController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.customReports'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;

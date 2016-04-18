@@ -1,14 +1,14 @@
-<div class="duplicates-title drop-shadow"><h3>Potential Duplicate Records</h3></div>
+<div class="duplicates-title drop-shadow"><h3>{{ 'MANAGEMENT.POTENTIAL_DUPLICATES' | translate }}</h3></div>
 <div class="table-view">
     <div class="table-view-container">
         <div class="overflow">
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="date">Date &amp; Time</th>
-                        <th class="detail">Location</th>
-                        <th class="date">Date &amp; Time</th>
-                        <th class="detail">Location</th>
+                        <th class="date">{{ 'RECORD.DATE_AND_TIME' | translate }}</th>
+                        <th class="detail">{{ 'RECORD.LOCATION' | translate }}</th>
+                        <th class="date">{{ 'RECORD.DATE_AND_TIME' | translate }}</th>
+                        <th class="detail">{{ 'RECORD.LOCATION' | translate }}</th>
                         <!-- Resolve link -->
                         <th class="links"></th>
                     </tr>
@@ -24,7 +24,7 @@
                         <td class="links">
                             <a ng-if="ctl.userCanWrite &amp;&amp; !dup.resolved"
                                ng-click="ctl.showResolveModal(dup)">
-                                <span class="glyphicon glyphicon-pencil"></span> Resolve
+                                <span class="glyphicon glyphicon-pencil"></span> {{ 'MANAGEMENT.RESOLVE' | translate }}
                             </a>
                         </td>
                     </tr>
@@ -34,19 +34,19 @@
                 <ul class="pager">
                     <li class="previous" ng-if="ctl.duplicates.previous">
                         <a type="button" class="btn btn-default" ng-click="ctl.getPreviousDuplicates()">
-                            <span aria-hidden="true">&larr;</span> Previous</a>
+                            <span aria-hidden="true">&larr;</span> {{ 'COMMON.PREVIOUS' | translate }}</a>
                     </li>
                     <li ng-if="ctl.duplicates.count" class="text-center">
                         <i>
-                            Showing results
+                            {{ 'RECORD.SHOWING_RESULTS' | translate }}
                             {{ ctl.currentOffset + 1}} -
-                            {{ ctl.currentOffset + ctl.duplicates.results.length }} of
+                            {{ ctl.currentOffset + ctl.duplicates.results.length }} {{ 'COMMON.OF' | translate }}
                             {{ ctl.duplicates.count }}
                         </i>
                     </li>
                     <li class="next" ng-if="ctl.duplicates.next">
                         <a type="button" class="btn btn-default" ng-click="ctl.getNextDuplicates()">
-                            Next <span aria-hidden="true">&rarr;</span></a>
+                            {{ 'COMMON.NEXT' | translate }} <span aria-hidden="true">&rarr;</span></a>
                     </li>
                 </ul>
             </nav>

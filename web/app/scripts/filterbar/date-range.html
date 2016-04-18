@@ -5,7 +5,7 @@
    data-toggle="dropdown"
    aria-haspopup="true"
    aria-expanded="true">
-  Date Range <span class="caret"></span>
+  {{ 'COMMON.DATE_RANGE' | translate }} <span class="caret"></span>
 </button>
 <ul class="dropdown-menu alert date-range"
     ng-class="error.classes"
@@ -13,8 +13,8 @@
     aria-labelledby="record-type"
     ng-click="$event.stopPropagation()">
     <li class="nav-rt-item ng-scope" role="menuitem">
-        <span ng-show="isMinMaxValid()">Filter events by date of occurence.</span>
-        <span ng-hide="isMinMaxValid()">Maximum must be at least as large as minimum value</span>
+        <span ng-show="isMinMaxValid()">{{ 'RECORD.DATE_FILTER' | translate }}</span>
+        <span ng-hide="isMinMaxValid()">{{ 'ERRORS.INVALID_RANGE' | translate }}</span>
         <div class="ng-binding pull-right form-inline">
             <div class="input-group input-daterange">
                 <input name="minimum"
@@ -23,7 +23,7 @@
                        ng-change="onDtRangeChange()"
                        type="text"
                        class="form-control date-range-style">
-                <span class="input-group-addon">to</span>
+                <span class="input-group-addon">{{ 'COMMON.TO' | translate }}</span>
                 <input name="maximum"
                        id="dtMaxField"
                        ng-model="dtMax"

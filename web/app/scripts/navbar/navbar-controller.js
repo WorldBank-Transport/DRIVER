@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function NavbarController($rootScope, $scope, $state, $modal,
+    function NavbarController($rootScope, $scope, $state, $modal, $translate,
                               AuthService, BoundaryState, GeographyState, InitialState,
                               MapState, RecordState, UserService, WebConfig) {
         var ctl = this;
@@ -150,7 +150,7 @@
         // TODO: this should eventually be moved to an angular filter if needed elsewhere
         function getBoundaryLabel(boundary) {
             if (!boundary || !boundary.data || !ctl.geographySelected) {
-                return 'All';
+                return $translate.instant('NAV.ALL');
             }
             /* jshint camelcase: false */
             return boundary.data[ctl.geographySelected.display_field];
@@ -163,7 +163,7 @@
                 templateUrl: 'scripts/audit/audit-download-modal-partial.html',
                 controller: 'AuditDownloadModalController as modal',
                 size: 'sm',
-                backdrop: 'static',
+                backdrop: 'static'
             });
         }
     }

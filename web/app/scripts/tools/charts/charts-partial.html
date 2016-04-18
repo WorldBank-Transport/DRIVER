@@ -1,6 +1,6 @@
 <div class="tool graphs" ng-class="{ 'open': ctl.isOpen }">
     <div class="tool-tab" ng-click="ctl.toggle()" >
-        <span class="glyphicon glyphicon-list-alt"></span> Graphs
+        <span class="glyphicon glyphicon-list-alt"></span> {{ 'COMMON.GRAPHS' | translate }}
     </div>
     <div class="tool-content" ng-init="activeChart = 'toddow'">
         <div class="tool-header">
@@ -15,7 +15,7 @@
                       ng-class="{ 'active': activeChart === 'stepwise' }">
                 </span>
             </span>
-            <h4>Graphs</h4>
+            <h4>{{ 'COMMON.GRAPHS' | translate }}</h4>
         </div>
         <hr />
         <div class="tool-body">

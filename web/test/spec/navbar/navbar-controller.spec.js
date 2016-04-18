@@ -7,6 +7,7 @@ describe('driver.navbar: NavbarController', function () {
     beforeEach(module('driver.navbar'));
     beforeEach(module('driver.views.account'));
     beforeEach(module('driver.views.dashboard'));
+    beforeEach(module('pascalprecht.translate'));
     beforeEach(module('ui.router'));
 
     var $controller;

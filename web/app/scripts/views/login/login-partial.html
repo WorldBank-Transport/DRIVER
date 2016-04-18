@@ -2,8 +2,8 @@
     <div class="login-panel">
         <section class="sso active text-center">
             <form ng-submit="authenticate()" autocomplete="off">
-                <h6>ROAD INCIDENT DATA SYSTEM</h6>
-                <h1>Log in to DRIVER</h1>
+                <h6>{{ 'COMMON.APP_BRAND' | translate }}</h6>
+                <h1>{{ 'LOGIN.LOG_IN_TO' | translate }} {{ 'COMMON.APP_NAME' | translate }}</h1>
                 <hr class="divider" />
                 <div class="form-group" ng-class="{true: 'login-field-error', false: ''}[auth.failure]">
                     <label for="username">{{ 'LOGIN.USERNAME' | translate }}:</label>
@@ -21,7 +21,7 @@
                 <div class="row" ng-repeat="client in ssoClients">
                     <div class="col-12 loginmodal-field">
                         <a type="button" class="btn btn-default btn-lg"
-                           ng-click="sso(client)">Log in with {{client}}</a>
+                           ng-click="sso(client)">{{ 'LOGIN.LOG_IN_WITH' | translate }} {{ client }}</a>
                     </div>
                 </div>
             </form>

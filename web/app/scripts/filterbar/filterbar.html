@@ -27,12 +27,12 @@
             tooltip-placement="left"
             tooltip-append-to-body
             tooltip-animation="false"
-            tooltip="Saved Filters"><span class="glyphicon glyphicon-filter"></span></a>
+            tooltip="{{ 'SAVED_FILTERS.TITLE' | translate }}"><span class="glyphicon glyphicon-filter"></span></a>
         <a
             class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="left"
-            tooltip="Clear Filters"
+            tooltip="{{ 'SAVED_FILTERS.CLEAR' | translate }}"
             tooltip-append-to-body
             tooltip-animation="false"
             ng-click="filterbar.reset()"><span class="glyphicon glyphicon-remove"></span></a>
@@ -41,7 +41,7 @@
             class="btn btn-default btn-icon"
             tooltip-trigger
             tooltip-placement="left"
-            tooltip="Add New Record"
+            tooltip="{{ 'NAV.ADD_A_RECORD' | translate }}"
             tooltip-append-to-body
             tooltip-animation="false"
             ui-sref="record.add()"><span class="glyphicon glyphicon-plus-sign"></span></a>

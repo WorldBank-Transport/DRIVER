@@ -9,58 +9,62 @@
      */
 
     /* ngInject */
-    function AggregationsConfig($q, RecordState, RecordSchemaState, GeographyState) {
+    function AggregationsConfig($translate, $q, RecordState, RecordSchemaState, GeographyState) {
+        var timeType = $translate.instant('AGG.TIME');
+        var geographyType = $translate.instant('AGG.GEOGRAPHY');
+        var filterType = $translate.instant('AGG.FILTER');
+
         var aggregations = [
             {
-                label: 'Year',
+                label: $translate.instant('AGG.YEAR'),
                 value: 'year',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Month',
+                label: $translate.instant('AGG.MONTH'),
                 value: 'month',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Week',
+                label: $translate.instant('AGG.WEEK'),
                 value: 'week',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Day',
+                label: $translate.instant('AGG.DAY'),
                 value: 'day',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Month of Year',
+                label: $translate.instant('AGG.MONTH_OF_YEAR'),
                 value: 'month_of_year',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Week of Year',
+                label: $translate.instant('AGG.WEEK_OF_YEAR'),
                 value: 'week_of_year',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Day of Month',
+                label: $translate.instant('AGG.DAY_OF_MONTH'),
                 value: 'day_of_month',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Day of Week',
+                label: $translate.instant('AGG.DAY_OF_WEEK'),
                 value: 'day_of_week',
-                type: 'Time'
+                type: timeType
             },
             {
-                label: 'Hour of Day',
+                label: $translate.instant('AGG.HOUR_OF_DAY'),
                 value: 'hour_of_day',
-                type: 'Time'
-            },
+                type: timeType
+            }
         ];
         var initialized = false;
 
         var svc = {
-            getOptions: getOptions,
+            getOptions: getOptions
         };
         return svc;
 
@@ -105,7 +109,7 @@
                         aggregations.push({
                             label: propName,
                             value: [defName, 'properties', propName].join(','),
-                            type: 'Filter'
+                            type: filterType
                         });
                     }
                 });
@@ -118,7 +122,7 @@
                 aggregations.push({
                     label: geography.label,
                     value: geography.uuid,
-                    type: 'Geography'
+                    type: geographyType
                 });
             });
         }

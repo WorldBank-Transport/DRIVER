@@ -4,6 +4,7 @@ describe('driver.savedFilters: SavedFilters', function () {
 
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.savedFilters'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $rootScope;
