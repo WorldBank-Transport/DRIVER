@@ -1,0 +1,110 @@
+body.rtl {
+  direction: RTL !important;
+
+  .quick-map {
+    left: 2%;
+  }
+
+  .dashboard .block.quick-map h3 .small {
+    float: left !important;
+  }
+
+  .navbar-header {
+    float: right;
+  }
+
+  .navbar-nav {
+    float: right !important;
+  }
+
+  .filterbar .navbar-nav {
+    padding-right: 0;
+    &:first-child {
+      padding-right: 0;
+      margin-right: 0;
+    }
+    &:last-child {
+      padding-right: 10px;
+      margin-right: 0;
+    }
+  }
+
+  .navbar-right {
+    float: left !important;
+  }
+
+  .navbar-brand {
+    border-left: 1px solid #68748A;
+    border-right: 0;
+  }
+
+  .pull-right {
+    float: left !important;
+  }
+
+  .pull-left {
+    float: right !important;
+  }
+
+  .dropdown-menu {
+    text-align: right;
+  }
+
+  .navbar-right .dropdown-menu:not(.datepicker) {
+    left: 0;
+    right: auto;
+  }
+
+  .dropdown-menu:not(.datepicker) {
+    left: auto;
+    right: 0;
+  }
+
+  table th {
+    text-align: right;
+  }
+
+  .bootstrap-select>.dropdown-toggle {
+    padding-right: 12px;
+    padding-left: 25px;
+  }
+
+  .bootstrap-select.btn-group .dropdown-toggle .caret {
+    right: auto;
+    left: 12px;
+  }
+
+  .table-view .table-view-container .links a {
+    float: right;
+  }
+
+  .modal .close {
+    left: -15px;
+    right: auto;
+  }
+
+  .leaflet-draw-tooltip {
+    margin-right: 20px;
+    margin-left: auto;
+    &:before {
+      border-left: 6px solid #000;
+      border-left-color: rgba(0,0,0,.5);
+      right: -13px;
+      border-right-color: transparent;
+      border-left: 6px solid #000;
+      border-left-color: rgba(0,0,0,.5);
+      left: auto;
+    }
+  }
+
+  .leaflet-draw-actions li:last-child a {
+    border-right: 1px solid rgba(255,255,255,0.5);
+    border-radius: 0;
+  }
+
+  .form-inline .input-group > .form-control.num-range-style {
+    border-radius: 0;
+  }
+
+}
+
