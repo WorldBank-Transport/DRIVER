@@ -10,8 +10,8 @@
 module.exports = function (grunt) {
 
   // Add new languages here
-  // Do not put en or exclaim in this list
-  var i18nForeignLanguages = ['app/i18n/ar.json'];
+  // Do not put en-us or exclaim in this list
+  var i18nForeignLanguages = ['app/i18n/ar-sa.json'];
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);
@@ -447,7 +447,7 @@ module.exports = function (grunt) {
     replace: {
       i18nGenEnglish: {
         src: ['app/i18n/exclaim.json'],
-        dest: 'app/i18n/en.json',
+        dest: 'app/i18n/en-us.json',
         replacements: [{
           from: /: +"!/g,
           to: ': "'
@@ -475,7 +475,7 @@ module.exports = function (grunt) {
       return grunt.task.run(['build', 'connect:dist:keepalive']);
     }
 
-    grunt.task.run([
+    return grunt.task.run([
       'clean:server',
       'wiredep',
       'concurrent:server',

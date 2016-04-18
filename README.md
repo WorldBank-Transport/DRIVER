@@ -46,7 +46,7 @@ The frontend app will be available on port 7002 and the schema editor will be av
 
 #### Updating existing translation files
 New angular translation tokens should be added to i18n/exclaim.json with a value of "!<english>".
-The English translation (en.json) is automatically built from exclaim.json. New tokens are also
+The English translation (en-us.json) is automatically built from exclaim.json. New tokens are also
 propagated to other translations via a grunt task:
 
 ```
@@ -54,7 +54,9 @@ propagated to other translations via a grunt task:
 ```
 
 #### Adding a new translation file
-Place the new JSON file in the i18n folder. Add the file to the i18nForeignLanguages var in Gruntfile.js
+Place the new JSON file in the i18n folder. Add the file to the i18nForeignLanguages var in Gruntfile.js.
+To enable the language to be selected via the language picker, add an item to the `languages` list in
+`deployment/ansible/group_vars/all`. Setting `rtl` to true will enable right-to-left CSS changes.
 
 
 ## Docker

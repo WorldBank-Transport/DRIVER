@@ -31,7 +31,7 @@
     }
 
     /* ngInject */
-    function TranslationConfig($translateProvider, $windowProvider) {
+    function TranslationConfig($translateProvider, LanguageStateProvider) {
         // Configure the location of the translation json files on the server
         $translateProvider.useStaticFilesLoader({
             prefix: 'i18n/',
@@ -44,14 +44,9 @@
         // Enable sanitization of token
         $translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 
-        // Get the browser's navigator object and use for determining preferred language
-        var navigator = $windowProvider.$get().navigator;
-        var language = (navigator.languages ? navigator.languages[0] :
-                        (navigator.language || navigator.userLanguage)).substring(0,2);
-
-        // Interpret Zulu ('zu') to request dev language ('exclaim')
-        $translateProvider.preferredLanguage(language === 'zu' ? 'exclaim' : language);
-        $translateProvider.fallbackLanguage('en');
+        // Set the language. It's important to do this in this file, before everything else
+        // is loaded in order to prevent flashes of untranslated content.
+        $translateProvider.use(LanguageStateProvider.$get().getSelected().id);
     }
 
     /* ngInject */

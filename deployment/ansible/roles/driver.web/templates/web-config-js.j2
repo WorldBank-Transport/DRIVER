@@ -37,7 +37,10 @@
         localization: {
             timeZone: '{{ local_time_zone_id }}',
             countryCode: '{{ local_country_code }}',
-            centerLatLon: {{ local_center_lat_lon }}
+            centerLatLon: {{ local_center_lat_lon }},
+            /*jshint quotmark: double */
+            languages: {{ languages | to_json }}
+            /*jshint quotmark: single */
         }
     };
 

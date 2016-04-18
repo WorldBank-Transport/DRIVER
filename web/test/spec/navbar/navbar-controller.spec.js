@@ -32,7 +32,7 @@ describe('driver.navbar: NavbarController', function () {
         spyOn($state, 'go');
     }));
 
-    it('should have record types, boundaries, and available states', function () {
+    it('should have record types, boundaries, available states, and languages', function () {
         var geographiesUrl = /\/api\/boundaries/;
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundaryUrl = /\/api\/boundarypolygons/;
@@ -54,6 +54,7 @@ describe('driver.navbar: NavbarController', function () {
         expect(Controller.recordTypeResults.length).toBeGreaterThan(0);
         expect(Controller.geographyResults.length).toBeGreaterThan(0);
         expect(Controller.boundaryResults.length).toBeGreaterThan(0);
+        expect(Controller.languages.length).toBeGreaterThan(0);
     });
 
     it('should not have current state as an option', function () {
@@ -107,5 +108,33 @@ describe('driver.navbar: NavbarController', function () {
 
         Controller.onStateSelected($state.get('dashboard'));
         expect($state.go).toHaveBeenCalledWith('dashboard');
+    });
+
+    it('should reload when language is changed', function () {
+        var geographiesUrl = /\/api\/boundaries/;
+        var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
+        var boundaryUrl = /\/api\/boundarypolygons/;
+        var userInfoUrl = /\/api\/users/;
+        var mockWindow = {
+            location: {
+                reload: jasmine.createSpy('location.reload')
+            }
+        };
+
+        $httpBackend.expectGET(geographiesUrl).respond(200, ResourcesMock.GeographyResponse);
+        $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(boundaryUrl).respond(200, ResourcesMock.BoundaryNoGeomResponse);
+        $httpBackend.expectGET(userInfoUrl).respond(200, ResourcesMock.UserInfoResponse);
+
+        Controller = $controller('NavbarController', {
+            $scope: $scope,
+            $window: mockWindow
+        });
+
+        $httpBackend.flush();
+        $httpBackend.verifyNoOutstandingRequest();
+
+        Controller.onLanguageSelected({ id: 'ar-sa' });
+        expect(mockWindow.location.reload).toHaveBeenCalled();
     });
 });
