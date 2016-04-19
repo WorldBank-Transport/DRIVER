@@ -43,6 +43,7 @@ INSTALLED_APPS = (
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
+    'storages',
 
     'django_extensions',
     'djangooidc',
@@ -109,6 +110,9 @@ DATABASES = {
 POSTGIS_VERSION = tuple(
     map(int, os.environ.get('DJANGO_POSTGIS_VERSION', '2.1.3').split("."))
 )
+
+# File storage
+DEFAULT_FILE_STORAGE = 'storages.backends.overwrite.OverwriteStorage'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/

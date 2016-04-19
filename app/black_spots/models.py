@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.gis.db import models
-
 from ashlar.models import AshlarModel
 
 
@@ -37,3 +36,7 @@ class BlackSpotSet(AshlarModel):
 
     #: The record type these black spots are associated with
     record_type = models.ForeignKey('ashlar.RecordType')
+
+
+class BlackspotRecordsFile(AshlarModel):
+    csv = models.FileField(upload_to='blackspot_records/')
