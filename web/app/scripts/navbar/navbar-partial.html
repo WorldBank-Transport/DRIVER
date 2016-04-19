@@ -90,6 +90,21 @@
                     </ul>
                 </li>
             </ul>
+
+            <ul class="nav navbar-nav navbar-right" ng-if="ctl.languages.length > 1">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.selectedLanguage.label }} <span class="glyphicon glyphicon-globe"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="language in ctl.languages">
+                            <a ng-click="ctl.onLanguageSelected(language)">
+                                {{ language.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </nav>

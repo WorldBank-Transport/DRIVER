@@ -55,6 +55,16 @@ local_country_code: 'ph'
 local_center_lat_lon: [12.375, 121.5]
 osm_extract_url: 'https://download.geofabrik.de/asia/philippines-latest.osm.pbf'
 
+# List of languages to allow in the application. There must be at least one defined,
+# and the first one in the list is used as the application's default language.
+# If there is only one language defined, the drop-down will not be displayed.
+languages:
+    - { id: 'en-us', label: 'English (US)', rtl: false  }
+
+## The following options may also be added to languages for display in the language picker
+## - { id: 'ar-sa', label: 'Arabic (Saudi Arabia)', rtl: true }
+## - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
+
 ## Forecast.io settings
 forecast_io_api_key: ''
 

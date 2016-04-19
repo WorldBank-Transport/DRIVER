@@ -2,9 +2,9 @@
     'use strict';
 
     /* ngInject */
-    function NavbarController($rootScope, $scope, $state, $modal, $translate,
+    function NavbarController($rootScope, $scope, $state, $modal, $translate, $window,
                               AuthService, BoundaryState, GeographyState, InitialState,
-                              MapState, RecordState, UserService, WebConfig) {
+                              LanguageState, MapState, RecordState, UserService, WebConfig) {
         var ctl = this;
         var initialized = false;
 
@@ -17,6 +17,7 @@
         ctl.onBoundarySelected = onBoundarySelected;
         ctl.onRecordTypeSelected = onRecordTypeSelected;
         ctl.onStateSelected = onStateSelected;
+        ctl.onLanguageSelected = onLanguageSelected;
         ctl.navigateToStateName = navigateToStateName;
         ctl.showAuditDownloadModal = showAuditDownloadModal;
         ctl.getBoundaryLabel = getBoundaryLabel;
@@ -24,6 +25,7 @@
         ctl.userEmail = userDropdownDefault;
 
         function init() {
+            setLanguageInfo();
             setUserInfo();
             setFilters($state.current);
             setStates();
@@ -32,6 +34,7 @@
         }
 
         $rootScope.$on('$stateChangeSuccess', function (event, toState) {
+            setLanguageInfo();
             setUserInfo();
             setFilters(toState);
             setStates();
@@ -100,6 +103,13 @@
                 .value();
         }
 
+        // Initializes the language picker and possible right-to-left styling
+        function setLanguageInfo() {
+            ctl.languages = LanguageState.getAvailableLanguages();
+            ctl.selectedLanguage = LanguageState.getSelected();
+            $rootScope.isRightToLeft = ctl.selectedLanguage.rtl;
+        }
+
         function setUserInfo() {
             ctl.authenticated = AuthService.isAuthenticated();
             ctl.hasWriteAccess = AuthService.hasWriteAccess();
@@ -139,6 +149,18 @@
         function onStateSelected(navState) {
             ctl.stateSelected = navState;
             updateState();
+        }
+
+        // Handler for when a language is selected from the dropdown
+        function onLanguageSelected(language) {
+            ctl.selectedLanguage = language;
+            LanguageState.setSelected(language);
+
+            // Need to reload the page after the language changes in order to propagate
+            // new translations for everything that was translated in javascript, and
+            // to reset the page for possible right-to-left styling -- switching from rtl
+            // to ltr and back without a page refresh wreaks havoc on the renderer.
+            $window.location.reload();
         }
 
         // Handler for when a navigation state is selected from the dropdown

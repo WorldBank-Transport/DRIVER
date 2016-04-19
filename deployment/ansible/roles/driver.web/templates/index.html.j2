@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="driver">
+  <body ng-app="driver" ng-class="{ 'rtl': isRightToLeft }">
 
     <!-- Google Tag Manager -->
     <noscript><iframe src="//www.googletagmanager.com/ns.html?id={{ google_analytics_id }}"height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -126,6 +126,7 @@
     <script src="scripts/state/boundarystate-service.js"></script>
     <script src="scripts/state/geographystate-service.js"></script>
     <script src="scripts/state/zoom-to-boundary-directive.js"></script>
+    <script src="scripts/state/languagestate-service.js"></script>
 
     <script src="scripts/nominatim/module.js"></script>
     <script src="scripts/nominatim/nominatim-service.js"></script>
