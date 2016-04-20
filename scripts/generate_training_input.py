@@ -9,11 +9,13 @@ import fiona
 from functools import partial
 import itertools
 import logging
+from math import ceil
+import multiprocessing
 import os
 import pyproj
 import pytz
 import rtree
-from shapely.geometry import mapping, shape, LineString, Point
+from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
 from shapely.ops import transform, unary_union
 
 
@@ -35,20 +37,15 @@ def read_roads(roads_shp):
             and road['properties']['bridge'] == 0
             and road['properties']['tunnel'] == 0)
     ]
-    return (roads, shp_file.crs)
+    return (roads, shp_file.crs, shp_file.bounds)
 
 
-def get_intersections(roads, skip_logging=False):
+def get_intersections(roads):
     """Calculates the intersection points of all roads
     :param roads: List of shapely geometries representing road segments
     :param skip_logging: Whether or not to log status. Recursive calls don't log to avoid confusion.
     """
     intersections = []
-    num_combinations = (len(roads) * (len(roads) - 1)) / 2.0
-    if not skip_logging:
-        logger.info('Finding intersections for {:,} combinations'.format(int(num_combinations)))
-
-    combination_count = 0
     for road1, road2 in itertools.combinations(roads, 2):
         if road1.intersects(road2):
             intersection = road1.intersection(road2)
@@ -63,31 +60,70 @@ def get_intersections(roads, skip_logging=False):
                 intersections.append(Point(first_coords[0], first_coords[1]))
                 intersections.append(Point(last_coords[0], last_coords[1]))
             elif 'GeometryCollection' == intersection.type:
-                intersections.extend(get_intersections(intersection, True))
-
-        # Log every million combinations processed to provide feedback.
-        # This is the most time-consuming part of the script.
-        combination_count += 1
-        if not skip_logging and combination_count % 1000000 == 0:
-            logger.info('Processed {} million combinations ({:.1f}% complete)'.format(
-                combination_count / 1000000, (combination_count / num_combinations) * 100
-            ))
-
-    if not skip_logging:
-        logger.info('Processed {:,} combinations (100% complete)'.format(combination_count))
+                intersections.extend(get_intersections(intersection))
 
     # The unary_union removes duplicate points
-    return unary_union(intersections)
+    unioned = unary_union(intersections)
+
+    # Ensure the result is a MultiPoint, since calling functions expect an iterable
+    if 'Point' == unioned.type:
+        unioned = MultiPoint([unioned])
+
+    return unioned
 
 
-def get_intersection_buffers(roads, intersection_buffer_units):
+def get_intersection_buffers(roads, road_bounds, intersection_buffer_units, tile_max_units):
     """Buffers all intersections
     :param roads: List of shapely geometries representing road segments
+    :param road_bounds: Bounding box of the roads shapefile
     :param intersection_buffer_units: Number of units to use for buffer radius
+    :param tile_max_units: Maxium number of units for each side of a tile
     """
+    # As an optimization, the road network is divided up into a grid of tiles,
+    # and intersections are calculated within each tile.
+    def roads_per_tile_iter():
+        """Generator which yields a set of roads for each tile"""
+        min_x, min_y, max_x, max_y = road_bounds
+        bounds_width = max_x - min_x
+        bounds_height = max_y - min_y
+        x_divisions = ceil(bounds_width / tile_max_units)
+        y_divisions = ceil(bounds_height / tile_max_units)
+        tile_width = bounds_width / x_divisions
+        tile_height = bounds_height / y_divisions
+
+        # Create a spatial index for roads to efficiently match up roads to tiles
+        logger.info('Generating spatial index for intersections')
+        roads_index = rtree.index.Index()
+        for idx, road in enumerate(roads):
+            roads_index.insert(idx, road.bounds)
+
+        logger.info('Number of tiles: {}'.format(int(x_divisions * y_divisions)))
+        for x_offset in range(0, int(x_divisions)):
+            for y_offset in range(0, int(y_divisions)):
+                road_ids_in_tile = roads_index.intersection([
+                    min_x + x_offset * tile_width,
+                    min_y + y_offset * tile_height,
+                    min_x + (1 + x_offset) * tile_width,
+                    min_y + (1 + y_offset) * tile_height
+                ])
+                roads_in_tile = [roads[road_id] for road_id in road_ids_in_tile]
+                if len(roads_in_tile) > 1:
+                    yield roads_in_tile
+
+    # Allocate one worker per core, and parallelize the discovery of intersections
+    pool = multiprocessing.Pool(multiprocessing.cpu_count())
+    tile_intersections = pool.imap(get_intersections, roads_per_tile_iter())
+    pool.close()
+    pool.join()
+
+    logger.info('Buffering intersections')
+    # Note: tile_intersections is a list of multipoints (which is a list of points).
+    # itertools.chain.from_iterable flattens the list into a list of single points.
     buffered_intersections = [intersection.buffer(intersection_buffer_units)
-                              for intersection in get_intersections(roads)]
+                              for intersection in itertools.chain.from_iterable(tile_intersections)]
+
     # If intersection buffers overlap, union them to treat them as one
+    logger.info('Performing unary union on buffered intersections')
     return unary_union(buffered_intersections)
 
 
@@ -423,6 +459,8 @@ def main():
                         default='load_forecast_training.csv')
     parser.add_argument('--intersection-buffer-units', help='Units to buffer each intersection',
                         default=5)
+    parser.add_argument('--tile-max-units', help='Maximum units for each side of a tile',
+                        default=3000)
     parser.add_argument('--max_line_units', help='Maximum units allowed for line segment',
                         default=200)
     parser.add_argument('--time-zone', help='Time zone of records', default='Asia/Manila')
@@ -448,7 +486,7 @@ def main():
     args = parser.parse_args()
 
     logger.info('Reading shapefile from {}'.format(args.roads_shp))
-    roads, road_projection = read_roads(args.roads_shp)
+    roads, road_projection, road_bounds = read_roads(args.roads_shp)
     logger.info('Found {:,} roads in projection: {}'.format(len(roads), road_projection['init']))
 
     logger.info('Reading records from {}'.format(args.records_csv))
@@ -470,7 +508,11 @@ def main():
     logger.info('Found {:,} records with precipitation'.format(len(records_with_precip)))
     logger.info('Found {:,} records without precipitation'.format(len(records_without_precip)))
 
-    int_buffers = get_intersection_buffers(roads, args.intersection_buffer_units)
+    logger.info('Calculating intersections')
+    int_buffers = get_intersection_buffers(roads, road_bounds, args.intersection_buffer_units,
+                                           args.tile_max_units)
+
+    logger.info('Getting intersection parts')
     int_multilines, non_int_lines = get_intersection_parts(roads, int_buffers, args.max_line_units)
     combined_segments = int_multilines + non_int_lines
     logger.info('Found {:,} intersection multilines'.format(len(int_multilines)))
