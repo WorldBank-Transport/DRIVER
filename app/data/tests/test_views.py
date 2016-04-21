@@ -62,6 +62,13 @@ class ViewTestSetUpMixin(object):
                         "Itness": {
                             "displayType": "select",
                             "enum": ["It", "Not it"]
+                        },
+                        "ItnessMultiple": {
+                            "displayType": "select",
+                            "format": "checkbox",
+                            "items": {
+                                "enum": ["It multi", "Not it multi"]
+                            }
                         }
                     }
                 },
@@ -215,7 +222,7 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
 
         self.date1 = datetime(2015, 12, 12, 2, 0, 0, 0, pytz.timezone('Asia/Manila'))
         self.date2 = datetime(2016, 2, 29, 13, 0, 0, 0, pytz.timezone('Asia/Manila'))
-        data = {'objectDetails': {'Itness': 'It'}}
+        data = {'objectDetails': {'Itness': 'It', 'ItnessMultiple': 'It multi'}}
 
         Record.objects.create(occurred_from=self.date1, occurred_to=self.date1,
                               geom='POINT (120.97 14.62)', location_text='Manila',
@@ -252,6 +259,15 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
                                   max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
         response = json.loads(self.admin_client.get(url).content)
         self.assertEqual(response['tables'][0]['data']['2016']['It'], 1)
+
+    def test_year_by_property_with_items(self):
+        url_template = (self.url + '&row_period_type=year' +
+                        '&col_choices_path=objectDetails,properties,ItnessMultiple,items')
+        url = url_template.format(record_type=str(self.record_type.uuid),
+                                  min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
+                                  max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
+        response = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response['tables'][0]['data']['2016']['It multi'], 1)
 
 
 class DriverRecordSchemaViewTestCase(APITestCase):
