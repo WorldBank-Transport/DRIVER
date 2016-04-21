@@ -79,6 +79,11 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             return DriverRecordSerializer
         return DetailsReadOnlyRecordSerializer
 
+    def get_queryset(self):
+        """Override default model ordering"""
+        qs = super(DriverRecordViewSet, self).get_queryset()
+        return qs.order_by('-occurred_from')
+
     def get_filtered_queryset(self, request):
         """Return the queryset with the filter backends applied. Handy for aggregations."""
         queryset = self.get_queryset()
