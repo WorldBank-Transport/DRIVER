@@ -52,19 +52,18 @@
         function onSchemaReady() {
             // Get a list of the titles of all relatedContentTypes which have '_localId' as
             // a property.
-            var referable = _.pluck(
-                _.filter(ctl.recordSchema.schema.definitions, function(definition) {
-                    return !!definition.properties._localId;
-                }), 'title');
+            var referable = _.pick(ctl.recordSchema.schema.definitions, function(definition) {
+                return !!definition.properties._localId;
+            });
             // Don't allow referring to the type currently being edited
-            referable = _.filter(referable, function(targetName) {
-                return targetName !== ctl.schemaKey;
+            referable = _.pick(referable, function(definition, key) {
+                return key !== ctl.schemaKey;
             });
             // Map referable to objects -- needed in newer versions of json-editor
-            referable = _.map(referable, function(name) {
+            referable = _.map(referable, function(definition, key) {
                 return {
-                    value: name,
-                    title: name
+                    value: key,
+                    title: definition.title
                 };
             });
 
