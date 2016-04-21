@@ -106,9 +106,17 @@
             _.forEach(schema.schema.definitions, function(definition, defName) {
                 _.forEach(definition.properties, function(property, propName) {
                     if (property.fieldType === 'selectlist') {
+                        var aggregationValues = [defName, 'properties', propName];
+
+                        // Checkbox types have an additional nested 'items' property
+                        // that must be used for searching the enumerated fields.
+                        if (property.format && property.format === 'checkbox') {
+                            aggregationValues.push('items');
+                        }
+
                         aggregations.push({
                             label: propName,
-                            value: [defName, 'properties', propName].join(','),
+                            value: aggregationValues.join(','),
                             type: filterType
                         });
                     }

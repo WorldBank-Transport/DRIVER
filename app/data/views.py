@@ -525,9 +525,10 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         choices = obj.get('enum', None)
         if not choices:
             raise ParseError(detail="The property at choices_path is missing required 'enum' field")
-        # Build the djsonb filter specification from the inside out, and skip 'properties' -- it's
-        # only for Schemas.
-        filter_path = [component for component in reversed(path) if component != 'properties']
+        # Build the djsonb filter specification from the inside out, and skip schema-only keys, i.e.
+        # 'properties' and 'items'.
+        filter_path = [component for component in reversed(path)
+                       if component not in ['properties', 'items']]
         whens = []
         for choice in choices:
             filter_rule = dict(_rule_type='containment', contains=[choice])
