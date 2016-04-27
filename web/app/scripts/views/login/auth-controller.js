@@ -31,7 +31,7 @@
                     // if we're redirecting to a target state, we need to use $state.go but reload
                     // after the state transition.
                     if ($stateParams.next && $stateParams.next.name !== $state.name &&
-                            $stateParams.next.url !== '/') {
+                            !_.contains(['/', '/login'], $stateParams.next.url)) {
                         return $state.go($stateParams.next.name, $stateParams.nextParams)
                             .then(function () { $window.location.reload(); });
                     } else {
