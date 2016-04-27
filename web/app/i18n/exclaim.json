@@ -16,10 +16,8 @@
     },
     "COMMON": {
         "ADD": "!Add",
-        "AND": "!and",
         "APP_BRAND": "!Road Incident Data System",
         "APP_NAME": "!DRIVER",
-        "BY": "!by",
         "CANCEL": "!Cancel",
         "CLOSE": "!Close",
         "DATE_RANGE": "!Date Range",
@@ -33,7 +31,6 @@
         "EXPORT_NEW_CSV": "!Export New CSV",
         "EXPORTING": "!Exporting",
         "EXPORTING_CSV": "!Exporting CSV",
-        "FOR": "!for",
         "FROM": "!From",
         "GRAPHS": "!Graphs",
         "MAX": "!Max",
