@@ -2,9 +2,10 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, uuid4,
-                                     AuthService, Nominatim, Notifications, Records, RecordState,
-                                     RecordSchemaState, RecordTypes, WeatherService, WebConfig) {
+    function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, $translate,
+                                     uuid4, AuthService, Nominatim, Notifications, Records,
+                                     RecordState, RecordSchemaState, RecordTypes, WeatherService,
+                                     WebConfig) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -110,8 +111,6 @@
                     // Weather
                     ctl.lightValues = WeatherService.lightValues;
                     ctl.weatherValues = WeatherService.weatherValues;
-                    ctl.weather = '';
-                    ctl.light = '';
                 }
                 onSchemaReady();
             });
@@ -230,7 +229,7 @@
                     /* jshint camelcase: true */
                         .then(function(recordSchema) { ctl.recordSchema = recordSchema; });
                 } else {
-                    ctl.error = 'Unable to load record schema.';
+                    ctl.error = $translate.instant('ERRORS.RECORD_SCHEMA_LOAD');
                     return $q.reject(ctl.error);
                 }
             });
@@ -363,17 +362,18 @@
             angular.forEach(required, function(value, fieldName) {
                 if (!value) {
                     // message formatted to match errors from json-editor
-                    ctl.constantFieldErrors[fieldName] = fieldName + ': Value required';
+                    ctl.constantFieldErrors[fieldName] = fieldName + ': ' +
+                        $translate.instant('ERRORS.VALUE_REQUIRED');
                 }
             });
 
             if (ctl.isSecondary && ctl.occurredFrom && ctl.occurredTo &&
                     ctl.occurredFrom > ctl.occurredTo) {
-                ctl.constantFieldErrors.occurredTo = 'End date cannot be before start date.';
+                ctl.constantFieldErrors.occurredTo = $translate.instant('ERRORS.END_BEFORE_START');
             }
 
             if (ctl.occurredFrom && ctl.occurredFrom > new Date()) {
-                ctl.constantFieldErrors.occurred = 'Date and time must be in the past.';
+                ctl.constantFieldErrors.occurred = $translate.instant('ERRORS.FUTURE_DATES');
             }
 
             // make field errors falsy if empty, for partial to check easily
@@ -393,7 +393,7 @@
         }
 
         function onDeleteClicked() {
-            if ($window.confirm('Do you really want to delete? This cannot be undone.')) {
+            if ($window.confirm($translate.instant('RECORD.REALLY_DELTE'))) {
                 var patchData = {
                     archived: true,
                     uuid: ctl.record.uuid
@@ -404,11 +404,14 @@
                     $state.go('record.list');
                 }, function (error) {
                     $log.debug('Error while deleting record:', error);
-                    showErrorNotification(['<p>Error creating record</p><p>',
-                       error.status,
-                       ': ',
-                       error.statusText,
-                       '</p>'
+                    showErrorNotification([
+                        '<p>',
+                        $translate.instant('ERRORS.CREATING_RECORD'),
+                        '</p><p>',
+                        error.status,
+                        ': ',
+                        error.statusText,
+                        '</p>'
                     ].join(''));
                 });
             }
@@ -507,7 +510,7 @@
                 }
             }, function (error) {
                 $log.debug('Error while creating record:', error);
-                var errorMessage = '<p>Error creating record</p><p>';
+                var errorMessage = '<p>' + $translate.instant('ERRORS.CREATING_RECORD') + '</p><p>';
                 if (error.data) {
                     errorMessage += _.flatten(_.values(error.data)).join('<br>');
                 } else {
@@ -522,7 +525,7 @@
         function showErrorNotification(message) {
             Notifications.show({
                 displayClass: 'alert-danger',
-                header: 'Record Not Saved',
+                header: $translate.instant('ERRORS.RECORD_NOT_SAVED'),
                 html: message
             });
         }

@@ -26,10 +26,6 @@ describe('driver.filterbar: Options', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
-        var recordSchema = ResourcesMock.RecordSchema;
-        var recordSchemaId = recordSchema.uuid;
-        var recordSchemaIdUrl = new RegExp('api/recordschemas/' + recordSchemaId);
-
         var $filterbarScope = $rootScope.$new();
         Element = $compile('<driver-filterbar></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();

@@ -9,13 +9,21 @@
         MapState, TileUrlService, BaseLayersService, InitialState, BlackspotSets) {
         var ctl = this;
         var localDateTimeFilter = $filter('localDateTime');
+        // TODO: date format needs localization
         var dateFormat = 'M/D/YYYY, h:mm:ss A';
+
+        var blackSpotLabel = $translate.instant('MAP.BLACKSPOT');
+        var severityScoreLabel = $translate.instant('MAP.SEVERITY_SCORE');
+        var numSevereLabel = $translate.instant('MAP.NUM_SEVERE');
+        var detailsLabel = $translate.instant('RECORD.DETAILS');
+        var viewLabel = $translate.instant('COMMON.VIEW');
+        var editLabel = $translate.instant('COMMON.EDIT');
 
         /* jshint camelcase: false */
         ctl.recordType = {
             uuid: 'ALL',
-            label: 'Record',
-            plural_label: 'Records'
+            label: $translate.instant('RECORD.RECORD'),
+            plural_label: $translate.instant('RECORD.RECORDS')
         };
         /* jshint camelcase: true */
         ctl.layerSwitcher = null;
@@ -91,8 +99,8 @@
                     ctl.recordSchemaFilterables = [];
                     ctl.recordType = {
                         uuid: 'ALL',
-                        label: 'Record',
-                        plural_label: 'Records'
+                        label: $translate.instant('RECORD.RECORD'),
+                        plural_label: $translate.instant('RECORD.RECORDS')
                     };
                     /* jshint camelcase: true */
                     ctl.secondaryType = null;
@@ -343,7 +351,7 @@
                 blackspotsUtfGridUrl: '',
                 blackspotTileKey:     false,
                 secondaryRecordsUrl:  '',
-                secondaryUtfGridUrl:  '',
+                secondaryUtfGridUrl:  ''
             };
             if (response && response[0] && response[0].tilekey) {
                 var data = response[0];
@@ -678,10 +686,11 @@
         ctl.buildBlackspotPopup = function(blackspot) {
             /* jshint camelcase: false */
             var str = '<div id="blackspot-popup" class="blackspot-popup">';
-            str += '<div><h4>Blackspot</h4></div>';
-            str += '<div><h6>Severity score: ' + blackspot.severity_score + '</h6></div>';
-            str += '<div><h6>Incidents: ' + blackspot.num_records + '</h6></div>';
-            str += '<div><h6>Fatilities: ' + blackspot.num_severe + '</h6></div>';
+            str += '<div><h4>' + blackSpotLabel + '</h4></div>';
+            str += '<div><h6>' + severityScoreLabel + ': ' + blackspot.severity_score + '</h6></div>';
+            str += '<div><h6>' + ctl.recordType.plural_label + ': ' +
+                blackspot.num_records + '</h6></div>';
+            str += '<div><h6>' + numSevereLabel + ': ' + blackspot.num_severe + '</h6></div>';
             /* jshint camelcase: true */
             return str;
         };
@@ -698,17 +707,18 @@
             // DateTimes come back from Windshaft without tz information, but they're all UTC
             var occurredStr = localDateTimeFilter(moment.utc(record.occurred_from), dateFormat);
             var str = '<div id="record-popup" class="record-popup">';
-            str += '<div><h5>' + popupParams.label + ' Details</h5><h3>' + occurredStr + '</h3>';
+            str += '<div><h5>' + popupParams.label + ' ' + detailsLabel +
+                '</h5><h3>' + occurredStr + '</h3>';
             /* jshint camelcase: true */
 
             // The ng-click here refers to a function which sits on the map-controller's scope
             str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')">';
-            str += '<span class="glyphicon glyphicon-log-in"></span> View</a>';
+            str += '<span class="glyphicon glyphicon-log-in"></span> ' + viewLabel + '</a>';
             // Hardcoded href because dynamically added
             if (ctl.userCanWrite) {
                 str += '<a href="/#!/record/' + record.uuid + '/edit" target="_blank">';
                 str += '<span class="glyphicon glyphicon-pencil"></span> ';
-                str += 'Edit</a>';
+                str += editLabel + '</a>';
             }
             str += '</div></div>';
             return str;

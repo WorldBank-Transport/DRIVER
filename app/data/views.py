@@ -377,31 +377,61 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             record's occurred_from falls, and labels is a dict mapping Case values to period labels
         """
         # Most date-related things are 1-indexed.
+        # TODO: these dates will need to be localized (which will include passing in the language).
         periodic_ranges = {
             'month_of_year': {
                 'range': xrange(1, 13),
                 'lookup': lambda x: {'occurred_from__month': x},
-                'label': lambda x: calendar.month_name[x]
+                'label': lambda x: [
+                    {
+                        'text': 'MONTH.{}'.format(calendar.month_name[x].upper()),
+                        'translate': True
+                    }
+                ]
             },
             'week_of_year': {
                 'range': xrange(1, 54),  # Up to 53 weeks in a year
                 'lookup': lambda x: {'occurred_from__week': x},
-                'label': lambda x: 'Week {}'.format(str(x))
+                'label': lambda x: [
+                    {
+                        'text': 'AGG.WEEK',
+                        'translate': True
+                    },
+                    {
+                        'text': str(x),
+                        'translate': False
+                    }
+                ]
             },
             'day_of_week': {
                 'range': xrange(1, 8),
                 'lookup': lambda x: {'occurred_from__week_day': x},
-                'label': lambda x: calendar.day_name[x-1]
+                'label': lambda x: [
+                    {
+                        'text': 'DAY.{}'.format(calendar.day_name[x-1].upper()),
+                        'translate': True
+                    }
+                ]
             },
             'day_of_month': {
                 'range': xrange(1, 32),
                 'lookup': lambda x: {'occurred_from__day': x},
-                'label': lambda x: str(x)
+                'label': lambda x: [
+                    {
+                        'text': str(x),
+                        'translate': False
+                    }
+                ]
             },
             'hour_of_day': {
                 'range': xrange(0, 24),
                 'lookup': lambda x: {'occurred_from__hour': x},
-                'label': lambda x: '{}:00'.format(x)
+                'label': lambda x: [
+                    {
+                        'text': '{}:00'.format(x),
+                        'translate': False
+                    }
+                ]
             },
         }
 
@@ -410,24 +440,52 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             'year': {
                 'range': [],
                 'lookup': lambda x: {'occurred_from__year': x},
-                'label': lambda x: str(x)
+                'label': lambda x: [
+                    {
+                        'text': str(x),
+                        'translate': False
+                    }
+                ]
             },
             'month': {
                 'range': [],
                 'lookup': lambda (yr, mo): {'occurred_from__month': mo, 'occurred_from__year': yr},
-                'label': lambda (yr, mo): '{}, {}'.format(calendar.month_name[mo], str(yr))
+                'label': lambda (yr, mo): [
+                    {
+                        'text': '{}, {}'.format(calendar.month_name[mo], str(yr)),
+                        'translate': False
+                    }
+                ]
             },
             'week': {
                 'range': [],
                 'lookup': lambda (yr, wk): {'occurred_from__week': wk, 'occurred_from__year': yr},
-                'label': lambda (yr, wk): '{} Week {}'.format(str(yr), str(wk))
+                'label': lambda (yr, wk): [
+                    {
+                        'text': str(yr),
+                        'translate': False
+                    },
+                    {
+                        'text': 'AGG.WEEK',
+                        'translate': True
+                    },
+                    {
+                        'text': str(wk),
+                        'translate': False
+                    }
+                ]
             },
             'day': {
                 'range': [],
                 'lookup': lambda (yr, wk, day): {'occurred_from__week': wk,
                                                  'occurred_from__year': yr,
                                                  'occurred_from__day': day},
-                'label': lambda (yr, wk, day): template_date(datetime.date(yr, wk, day))
+                'label': lambda (yr, wk, day): [
+                    {
+                        'text': template_date(datetime.date(yr, wk, day)),
+                        'translate': False
+                    }
+                ]
             },
         }
 

@@ -15,15 +15,13 @@ describe('driver.filterbar: FilterbarController', function () {
     var $httpBackend;
     var $rootScope;
     var $scope;
-    var $state;
     var $timeout;
 
-    var Controller;
     var DriverResourcesMock;
     var RecordTypes;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$state_, _$timeout_,
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _$timeout_,
                                 _DriverResourcesMock_, _RecordTypes_, _ResourcesMock_) {
         $httpBackend = _$httpBackend_;
         $compile = _$compile_;

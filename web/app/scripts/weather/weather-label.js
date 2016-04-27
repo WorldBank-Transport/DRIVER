@@ -1,20 +1,15 @@
 (function () {
     'use strict';
 
-    // Angular filter for converting a weather/light id to a label
+    // Angular filter for converting a weather/light id to a translation string
     function WeatherLabel() {
-        // Simple filter: just converts hyphens to spaces and capitalizes first letter
+        // Simple filter: just converts hyphens to underscores, adds suffix, and uses all-caps
         return function(id) {
-            if (!id || !_.isString(id)) {
+            if (!_.isString(id)) {
                 return id;
             }
 
-            var label = id.charAt(0).toUpperCase();
-            if (id.length > 1) {
-                label += id.slice(1).replace(/-/g, ' ');
-            }
-
-            return label;
+            return 'WEATHER.' + (id ? id.toUpperCase().replace(/-/g, '_') : 'EMPTY');
         };
     }
 

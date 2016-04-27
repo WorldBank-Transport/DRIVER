@@ -12,7 +12,14 @@
   "undef": true,
   "unused": true,
   "globals": {
+    "_": true,
+    "$": true,
     "angular": false,
-    "inject": false
+    "d3": true,
+    "inject": false,
+    "moment": true,
+    "angular": true,
+    "JSONEditor": true,
+    "L": false
   }
 }

@@ -9,14 +9,23 @@
      */
 
     /* ngInject */
-    function CustomReportController($state, $stateParams, $q, Records, AggregationsConfig) {
+    function CustomReportController($state, $stateParams, $q, $translate,
+                                    Records, RecordState, AggregationsConfig) {
         var ctl = this;
+        // TODO: date format needs localization
         ctl.dateFormat = 'MMM D, YYYY';
+
+        var totalString = $translate.instant('COMMON.TOTAL');
+
         init();
 
         function init() {
             ctl.loading = true;
             ctl.params = $stateParams;
+
+            RecordState.getSelected().then(function(selected) {
+                ctl.recordType = selected;
+            });
 
             $q.all([getCategoryLabels(), Records.report(ctl.params).$promise]).then(
                 function (data) {
@@ -62,6 +71,14 @@
             });
         }
 
+        // Helper to generate a label given a list of label objects
+        function makeLabel(labelObjList) {
+            // Takes an array of text, translates as necessary, and joins to a single string
+            return _.map(labelObjList, function(labelObj) {
+                return labelObj.translate ? $translate.instant(labelObj.text) : labelObj.text;
+            }).join(' ');
+        }
+
         // Since ng-repeat is so slow, this builds the table HTML by hand, which then gets
         // crammed right into the view with a <table-data-string> directive.
         function composeTables() {
@@ -69,13 +86,13 @@
             var header = '<tr><th>' + ctl.rowCategoryLabel + '</th>';
             _.forEach(ctl.report.col_labels, function(col) {
                 header += '<th>' + col.label + '</th>'; });
-            header += '<th>Total</th>' + '</tr>';
+            header += '<th>' + totalString + '</th>' + '</tr>';
             ctl.headerHTML = header;
 
             _.forEach(ctl.report.tables, function (table) {
                 var body = '';
                 _.forEach(ctl.report.row_labels, function (rowLabel) {
-                    body += '<tr><td>' + rowLabel.label + '</td>';
+                    body += '<tr><td>' + makeLabel(rowLabel.label) + '</td>';
                     if (table.data[rowLabel.key]) {
                         _.forEach(ctl.report.col_labels, function (colLabel) {
                             body += '<td>' + (table.data[rowLabel.key][colLabel.key] || 0) + '</td>';

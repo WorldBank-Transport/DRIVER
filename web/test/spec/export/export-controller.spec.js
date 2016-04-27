@@ -5,6 +5,7 @@ describe('driver.tools.export: ExportController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.tools.export'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;

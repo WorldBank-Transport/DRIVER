@@ -14,19 +14,19 @@ describe('driver.weather: WeatherLabel', function () {
 
     it('should convert simple weather id', function () {
         var testVal = 'clear-night';
-        var expected = 'Clear night';
+        var expected = 'WEATHER.CLEAR_NIGHT';
         expect($filter('weatherLabel')(testVal)).toBe(expected);
     });
 
     it('should work with multiple hyphens', function () {
         var testVal = 'partly-cloudy-night';
-        var expected = 'Partly cloudy night';
+        var expected = 'WEATHER.PARTLY_CLOUDY_NIGHT';
         expect($filter('weatherLabel')(testVal)).toBe(expected);
     });
 
     it('should work with no hyphens', function () {
         var testVal = 'cloudy';
-        var expected = 'Cloudy';
+        var expected = 'WEATHER.CLOUDY';
         expect($filter('weatherLabel')(testVal)).toBe(expected);
     });
 
@@ -37,10 +37,6 @@ describe('driver.weather: WeatherLabel', function () {
 
         testVal = null;
         expected = null;
-        expect($filter('weatherLabel')(testVal)).toBe(expected);
-
-        testVal = 'a';
-        expected = 'A';
         expect($filter('weatherLabel')(testVal)).toBe(expected);
     });
 

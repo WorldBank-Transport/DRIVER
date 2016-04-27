@@ -4,6 +4,7 @@ describe('driver.details: DetailsReference', function () {
 
     beforeEach(module('ase.templates'));
     beforeEach(module('driver.details'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

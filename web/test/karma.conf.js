@@ -68,6 +68,14 @@ module.exports = function(config) {
       'app/scripts/config.js',
       'app/scripts/**/*.html',
 
+      // leaflet image resources
+      {
+          pattern: 'bower_components/leaflet/dist/images/*.png',
+          watched: false,
+          included: false,
+          served: true
+      },
+
       // schema editor scripts
       'app/ase-scripts/config.js',
       'app/ase-scripts/**/*.html',

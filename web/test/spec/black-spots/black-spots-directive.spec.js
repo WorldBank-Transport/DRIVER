@@ -16,7 +16,7 @@ describe('driver.blackSpots: BlackSpots', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-black-spots></driver-black-spots>')(scope);
+        $compile('<driver-black-spots></driver-black-spots>')(scope);
         $rootScope.$apply();
     });
 });

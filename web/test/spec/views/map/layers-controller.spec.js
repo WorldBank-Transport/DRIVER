@@ -97,7 +97,7 @@ describe('driver.views.map: Layers Controller', function () {
         // JSONB from record is returned as string from UTFGrid
         record.data = JSON.stringify(record.data);
 
-        var expected = '<div id="record-popup" class="record-popup"><div><h5>Incident Details</h5><h3>7/31/2015, 1:36:29 AM</h3><a ng-click="showDetailsModal(\'35d74ce1-7b08-486b-b791-da9bc1e93cfb\')"><span class="glyphicon glyphicon-log-in"></span> View</a></div></div>';
+        var expected = '<div id="record-popup" class="record-popup"><div><h5>Incident RECORD.DETAILS</h5><h3>7/31/2015, 1:36:29 AM</h3><a ng-click="showDetailsModal(\'35d74ce1-7b08-486b-b791-da9bc1e93cfb\')"><span class="glyphicon glyphicon-log-in"></span> COMMON.VIEW</a></div></div>';
 
         var popup = Controller.buildRecordPopup(record, { label: Controller.recordType.label });
         expect(popup).toEqual(expected);
@@ -110,7 +110,7 @@ describe('driver.views.map: Layers Controller', function () {
         // JSONB from record is returned as string from UTFGrid
         blackspot.data = JSON.stringify(blackspot.data);
 
-        var expected = '<div id="blackspot-popup" class="blackspot-popup"><div><h4>Blackspot</h4></div><div><h6>Severity score: severity_score</h6></div><div><h6>Incidents: num_records</h6></div><div><h6>Fatilities: num_severe</h6></div>';
+        var expected = '<div id="blackspot-popup" class="blackspot-popup"><div><h4>MAP.BLACKSPOT</h4></div><div><h6>MAP.SEVERITY_SCORE: severity_score</h6></div><div><h6>Incidents: num_records</h6></div><div><h6>MAP.NUM_SEVERE: num_severe</h6></div>';
 
         var popup = Controller.buildBlackspotPopup(blackspot);
         expect(popup).toEqual(expected);

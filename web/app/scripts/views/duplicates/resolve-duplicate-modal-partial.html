@@ -3,7 +3,7 @@
         &times;
     </div>
     <div class="modal-header">
-        <h3>Resolve duplicate entries</h3>
+        <h3>{{ 'MANAGEMENT.RESOLVE_DUPLICATE_ENTRIES' | translate }}</h3>
     </div>
     <div class="modal-body">
         <div class="duplicate-details"
@@ -17,13 +17,13 @@
     </div>
     <div class="modal-footer">
         <div class="select-record" ng-click="modal.selectRecord(modal.params.duplicate.record.uuid)">
-            Use this record
+            {{ 'MANAGEMENT.USE_THIS_RECORD' | translate }}
         </div>
         <div class="select-record" ng-click="modal.selectRecord(modal.params.duplicate.duplicate_record.uuid)">
-            Use this record
+            {{ 'MANAGEMENT.USE_THIS_RECORD' | translate }}
         </div>
         <div class="keep-both" ng-click="modal.keepBoth()">
-          Keep both unique records
+            {{ 'MANAGEMENT.KEEP_BOTH_RECORDS' | translate }}
         </div>
     </div>
 </div>

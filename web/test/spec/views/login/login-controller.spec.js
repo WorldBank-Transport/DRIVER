@@ -16,6 +16,7 @@ describe('driver.views:AuthController', function () {
     beforeEach(module('ase.auth'));
     beforeEach(module('driver.resources'));
     beforeEach(module('driver.views.login'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $httpBackend;
     var $q;

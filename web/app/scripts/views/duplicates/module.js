@@ -6,7 +6,7 @@
         $stateProvider.state('duplicates', {
             url: '/duplicates',
             template: '<driver-duplicates-list></driver-duplicates-list>',
-            label: 'Potential Duplicates',
+            label: 'NAV.DUPLICATES',
             showInNavbar: false
         });
     }

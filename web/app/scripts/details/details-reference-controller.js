@@ -2,8 +2,10 @@
     'use strict';
 
     /* ngInject */
-    function DetailsReferenceController() {
+    function DetailsReferenceController($translate) {
         var ctl = this;
+
+        var ellipsis = $translate.instant('COMMON.ELLIPSIS');
 
         // Find the referenced object
         if (ctl.record) {
@@ -22,7 +24,9 @@
                     if (reference[key].length < maxKeyLength) {
                         return reference[key];
                     }
-                    return reference[key].substring(0, maxKeyLength) + '...';
+                    // TODO: do we need to make changes for any displayed substrings
+                    // (and limitTo filters) in the app for right-to-left languages?
+                    return reference[key].substring(0, maxKeyLength) + ellipsis;
                 }).join(' ');
             }
         }

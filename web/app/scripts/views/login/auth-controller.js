@@ -4,7 +4,8 @@
     /**
      * @ngInject
      */
-    function AuthController ($scope, $state, $stateParams, $window, AuthService, SSOClients, WebConfig) {
+    function AuthController ($scope, $state, $stateParams, $translate, $window,
+                             AuthService, SSOClients, WebConfig) {
 
         $scope.auth = {};
         $scope.ssoClients = SSOClients;
@@ -48,7 +49,8 @@
 
         var handleError = function(result) {
             $scope.auth.failure = true;
-            var msg = result.error || (result.status + ': Unknown Error.');
+            var msg = result.error ||
+                    result.status + ': ' + $translate.instant('ERRORS.UNKNOWN_ERROR') + '.';
             $scope.addAlert({
                 type: 'danger',
                 msg: msg

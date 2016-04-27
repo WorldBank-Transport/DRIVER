@@ -54,7 +54,7 @@
     <div>
         <i ng-if="ctl.record.weather" class="wi wi-forecast-io-{{ ::ctl.record.weather }}"></i>
         <span class="value constant string weather">
-            {{ ::ctl.record.weather | weatherLabel }}
+            {{ ::ctl.record.weather | weatherLabel | translate }}
         </span>
     </div>
     <a href="http://forecast.io" ng-if="ctl.record.weather" target="_blank">
@@ -66,6 +66,6 @@
         {{ 'RECORD.LIGHT' | translate }}
     </label>
     <div class="value constant string light">
-        {{ ::ctl.record.light | weatherLabel }}
+        {{ ::ctl.record.light | weatherLabel | translate }}
     </div>
 </div>

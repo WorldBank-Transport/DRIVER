@@ -57,11 +57,19 @@
                         .style('text-anchor', 'middle')
                         .text(function(d) { return d; });
 
-                    var theDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-                    var theHours = ['0', '1', '2', '3', '4', '5',
-                                    '6', '7', '8', '9', '10', '11',
-                                    '12', '13', '14', '15', '16', '17',
-                                    '18', '19', '20', '21', '22', '23'];
+                    var theDays = _.map([
+                        'DAY.SUN',
+                        'DAY.MON',
+                        'DAY.TUE',
+                        'DAY.WED',
+                        'DAY.THU',
+                        'DAY.FRI',
+                        'DAY.SAT'
+                    ], function(dayKey) {
+                        return $translate.instant(dayKey);
+                    });
+
+                    var theHours = _.range(24);
                     rect = svg.selectAll('.day')
                         .data(theDays)
                             .enter().append('g')

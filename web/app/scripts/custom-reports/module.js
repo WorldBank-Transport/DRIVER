@@ -9,10 +9,10 @@
                                 'aggregation_boundary', 'occurred_max', 'occurred_min',
                                 'jsonb', 'record_type'].join('&'),
             templateUrl: 'scripts/custom-reports/custom-report-partial.html',
-            label: 'Custom Report',
+            label: 'NAV.CUSTOM_REPORT',
             controller: 'CustomReportController',
             controllerAs: 'ctl',
-            showInNavbar: false,
+            showInNavbar: false
         });
     }
 
