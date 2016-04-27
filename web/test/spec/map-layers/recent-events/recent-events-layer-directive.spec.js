@@ -24,7 +24,6 @@ describe('driver.map-layers.recent-events: Recent Events Layer Directive', funct
     it('should create a leaflet map', function () {
         var scope = $rootScope.$new();
         var element = $compile('<div leaflet-map recent-events></div>')(scope);
-        var recordSchemaUrl = /\/api\/recordschemas/;
 
         $httpBackend.expectGET(/\/api\/recordtypes\/\?active=True/)
             .respond(200, ResourcesMock.RecordTypeResponse);

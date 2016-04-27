@@ -2,12 +2,15 @@
     'use strict';
 
     /* ngInject */
-    function SavedFiltersModalController($modalInstance, $rootScope, $scope,
+    function SavedFiltersModalController($modalInstance, $rootScope, $scope, $translate,
                                          FilterState, Notifications, SavedFilters) {
         var ctl = this;
         ctl.label = '';
         ctl.save = save;
         ctl.closeModal = closeModal;
+
+        var errorSavingFilter = $translate.instant('ERRORS.SAVING_FILTER_ERROR');
+        var errorFilterNotSaved = $translate.instant('ERRORS.FILTER_NOT_SAVED');
 
         init();
 
@@ -46,7 +49,7 @@
                 ctl.label = '';
                 $rootScope.$broadcast('driver.state.savedfilter:refresh');
             }, function (error) {
-                showErrorNotification(['<p>Error saving filter</p><p>',
+                showErrorNotification(['<p>' + errorSavingFilter + '</p><p>',
                    error.status,
                    ': ',
                    error.statusText,
@@ -65,7 +68,7 @@
         function showErrorNotification(message) {
             Notifications.show({
                 displayClass: 'alert-danger',
-                header: 'Filter Not Saved',
+                header: errorFilterNotSaved,
                 html: message
             });
         }

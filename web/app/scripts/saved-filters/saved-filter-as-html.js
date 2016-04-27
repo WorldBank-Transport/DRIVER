@@ -3,7 +3,12 @@
 
     // Angular filter for  transforming a saved filter object to an HTML representation.
     // Note: if a new filter rule type is implemented, a new case must be added here for display.
-    function SavedFilterAsHTML() {
+    /* ngInject */
+    function SavedFilterAsHTML($translate) {
+        var searchTextLabel = $translate.instant('SAVED_FILTERS.SEARCH_TEXT');
+        var textSearchLabel = $translate.instant('SAVED_FILTERS.TEXT_SEARCH');
+        var unknownRuleType = $translate.instant('ERRORS.UNKNOWN_RULE_TYPE');
+
         // Helper for determining if a value is a number
         function isNumeric(n) {
             return !isNaN(parseFloat(n)) && isFinite(n);
@@ -25,7 +30,7 @@
                     case 'containment_multiple':
                     case 'containment':
                         if (val.pattern) {  // If text search
-                            htmlBlocks.push('Search text: ' + val.pattern);
+                            htmlBlocks.push(searchTextLabel + ': ' + val.pattern);
                         } else {
                             htmlBlocks.push(label + val.contains.join(', '));
                         }
@@ -52,9 +57,9 @@
 
                     default:
                         if (key === '__searchText') {
-                            htmlBlocks.push('<strong>Text Search:</strong> ' + val);
+                            htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
                         } else {
-                            htmlBlocks.push('Unknown rule type: ' + val._rule_type);
+                            htmlBlocks.push(unknownRuleType + ': ' + val._rule_type);
                         }
                         break;
                 }

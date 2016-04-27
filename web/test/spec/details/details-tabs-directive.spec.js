@@ -12,7 +12,6 @@ describe('driver.details: DetailsTabs', function () {
     var $httpBackend;
     var $rootScope;
     var DriverResourcesMock;
-    var Records;
     var ResourcesMock;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_,

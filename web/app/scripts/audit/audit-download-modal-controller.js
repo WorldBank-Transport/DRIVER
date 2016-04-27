@@ -2,13 +2,29 @@
     'use strict';
 
     /* ngInject */
-    function AuditDownloadModalController($modalInstance, $scope, WebConfig, AuditLogs,
+    function AuditDownloadModalController($modalInstance, $scope, $translate, WebConfig, AuditLogs,
                                           FileSaver, Blob) {
         var defaultDate = new Date();
         var timeZone = WebConfig.localization.timeZone;
         var ctl = this;
-        var monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-                          'September', 'October', 'November', 'December'];
+
+        // TODO: revisit when implementing Hijri calendar.
+        // These translations will probably also be sufficient the Hijri calendar, since there are
+        // also 12 months, but the date calculalation logic below will likely need to be altered.
+        var monthList = [
+            'MONTH.JANUARY',
+            'MONTH.FEBRUARY',
+            'MONTH.MARCH',
+            'MONTH.APRIL',
+            'MONTH.MAY',
+            'MONTH.JUNE',
+            'MONTH.JULY',
+            'MONTH.AUGUST',
+            'MONTH.SEPTEMBER',
+            'MONTH.OCTOBER',
+            'MONTH.NOVEMBER',
+            'MONTH.DECEMBER'
+        ];
 
         initialize();
 
@@ -62,7 +78,7 @@
             AuditLogs.csv({ min_date: startDate, max_date: endDate }).$promise.then(function (data) {
                 /* jshint camelcase: true */
                 if (data.data === '') {
-                    ctl.error = 'No audit records exist for the selected month.';
+                    ctl.error = $translate.instant('ERRORS.NO_AUDIT_RECORDS');
                 } else {
                     FileSaver.saveAs(new Blob([data.data], {type: 'application/csv'}),
                                      csvFilename(year, apiMonth));

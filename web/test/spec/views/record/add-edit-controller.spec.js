@@ -6,6 +6,8 @@ describe('driver.views.record: AddEditController', function () {
     beforeEach(module('nominatim.mock'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
+
 
     var $controller;
     var $httpBackend;

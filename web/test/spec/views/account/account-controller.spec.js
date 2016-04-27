@@ -53,8 +53,7 @@ describe('driver.views.account: AccountController', function () {
         });
 
         inject(function (_$controller_, _$httpBackend_, _$rootScope_, _$window_,
-                                _DriverResourcesMock_, _ResourcesMock_, _AuthService_,
-                                _UserService_) {
+                                _DriverResourcesMock_, _ResourcesMock_, _AuthService_) {
             $controller = _$controller_;
             $httpBackend = _$httpBackend_;
             $rootScope = _$rootScope_;

@@ -26,7 +26,7 @@ describe('driver.filterbar: Numeric Range', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var $filterbarScope = $rootScope.$new();
-        Element = $compile('<driver-filterbar><numeric-range-field></numeric-range-field></driver-filterbar>')($filterbarScope);
+        var Element = $compile('<driver-filterbar><numeric-range-field></numeric-range-field></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();
         var filterbarController = Element.controller('driverFilterbar');
 

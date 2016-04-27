@@ -8,7 +8,7 @@
      */
 
     /* ngInject */
-    function RecordExports($resource, $q, $interval, WebConfig) {
+    function RecordExports($resource, $q, $translate, $interval, WebConfig) {
         var pollingInterval;
         var POLLING_INTERVAL_MS = 1500;
         var MAX_POLLING_TIME_S = 100;
@@ -19,12 +19,12 @@
             },
             get: {
                 method: 'GET'
-            },
+            }
         });
 
         var module = {
             exportCSV: exportCSV,
-            cancelPolling: cancelPolling,
+            cancelPolling: cancelPolling
         };
         return module;
 
@@ -60,10 +60,12 @@
                     // The interval's promise resolves if it hits the limit without being cancelled
                     pollingInterval.then(function () {
                         cancelPolling();
-                        deferred.reject('Export request timed out.');
+                        deferred.reject($translate.instant('ERRORS.EXPORT_TIMED_OUT'));
                     });
                 },
-                function () { deferred.reject('Error initializing export.'); }
+                function () {
+                    deferred.reject($translate.instant('ERRORS.EXPORT_INITIALIZATION_ERROR'));
+                }
             );
             return deferred;
         }

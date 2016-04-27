@@ -25,7 +25,7 @@ describe('driver.views.record: Embedded Map Controller', function () {
         $rootScope = _$rootScope_;
         $timeout = _$timeout_;
 
-        Element = $compile(snippet)($scope);
+        var Element = $compile(snippet)($scope);
         $rootScope.$apply();
 
         // find the controller by name

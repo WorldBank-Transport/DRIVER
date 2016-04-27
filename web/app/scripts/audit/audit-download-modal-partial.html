@@ -10,7 +10,7 @@
              ng-change="modal.onDateChange()">
       <select class="month-select"
               ng-model="modal.selectedMonth"
-              ng-options="+index as month for (index, month) in modal.months"
+              ng-options="+index as month | translate for (index, month) in modal.months"
               ng-change="modal.onDateChange()">
       </select>
       <div ng-if="modal.error" class="error">{{ modal.error }}</div>

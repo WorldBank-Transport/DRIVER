@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function CustomReportsModalController($log, $modalInstance, $state, $window,
+    function CustomReportsModalController($log, $modalInstance, $state, $translate, $window,
                                           FilterState, GeographyState, BoundaryState, QueryBuilder,
                                           AggregationsConfig) {
         var ctl = this;
@@ -17,6 +17,11 @@
         ctl.colAggSelected = null;
         ctl.rowAggSelected = null;
         ctl.geoAggSelected = null;
+
+        // Translated types used for determining how to set parameters appropriately
+        var timeType = $translate.instant('AGG.TIME');
+        var geographyType = $translate.instant('AGG.GEOGRAPHY');
+        var filterType = $translate.instant('AGG.FILTER');
 
         init();
 
@@ -56,11 +61,11 @@
          */
         function setRowColParam(rowOrCol, aggObj, params) {
             var key = rowOrCol + '_';
-            if (aggObj.type === 'Time') {
+            if (aggObj.type === timeType) {
                 key += 'period_type';
-            } else if (aggObj.type === 'Filter') {
+            } else if (aggObj.type === filterType) {
                 key += 'choices_path';
-            } else if (aggObj.type === 'Geography') {
+            } else if (aggObj.type === geographyType) {
                 key += 'boundary_id';
             } else {
                 $log.error('Cannot set row/col param with type: ', aggObj.type);

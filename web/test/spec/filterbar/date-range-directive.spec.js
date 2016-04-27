@@ -28,9 +28,7 @@ describe('driver.filterbar: Date Range', function () {
         $httpBackend.expectGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);
 
         var $filterbarScope = $rootScope.$new();
-        Element = $compile('<driver-filterbar></driver-filterbar>')($filterbarScope);
-        $rootScope.$apply();
-        var filterbarController = Element.controller('driverFilterbar');
+        var Element = $compile('<driver-filterbar></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();
 
         // should have no maximum set yet

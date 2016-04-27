@@ -2,6 +2,7 @@
 
 describe('driver.audit: AuditDownloadModalController', function () {
     beforeEach(module('driver.audit'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $rootScope;

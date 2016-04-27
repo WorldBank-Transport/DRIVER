@@ -77,11 +77,11 @@ describe('driver.navbar: NavbarController', function () {
         $httpBackend.flush();
         $httpBackend.verifyNoOutstandingRequest();
 
-        var matches = _.filter(Controller.availableStates, function(state) {
-            return state.name === 'dashboard';
-        });
         expect(Controller.availableStates.length).toBeGreaterThan(0);
         // TODO: add this back in - $state.current isn't working properly in the test context
+        // var matches = _.filter(Controller.availableStates, function(state) {
+        //     return state.name === 'dashboard';
+        // });
         // expect(matches.length).toBe(0);
     });
 

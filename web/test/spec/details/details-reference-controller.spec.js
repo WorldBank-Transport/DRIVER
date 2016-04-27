@@ -3,6 +3,7 @@
 describe('driver.details: DetailsReferenceController', function () {
 
     beforeEach(module('driver.details'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $rootScope;

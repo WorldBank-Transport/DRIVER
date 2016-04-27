@@ -4,6 +4,7 @@
     /* ngInject */
     function DateRangeController() {
         var ctl = this;
+        // TODO: date format needs localization
         ctl.dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
         ctl.error = {};
 

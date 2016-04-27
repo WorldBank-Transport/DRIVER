@@ -7,14 +7,20 @@
                 <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
             </h2>
             <h3>
-                Incidents
-                <span ng-if="ctl.params.aggregation_boundary"> for {{ ::ctl.report.table_labels[table.tablekey] }}</span>
-                by {{ ::ctl.rowCategoryLabel }} and {{ ::ctl.colCategoryLabel }}
+                {{ ctl.recordType.plural_label }}
+                <span ng-if="ctl.params.aggregation_boundary">
+                  {{ 'REPORT.AREA_FOR' | translate }}
+                  {{ ::ctl.report.table_labels[table.tablekey] }}
+                </span>
+                {{ 'REPORT.CATEGORY_BY' | translate }}
+                {{ ::ctl.rowCategoryLabel }}
+                {{ 'REPORT.CATEGORY_AND' | translate }}
+                {{ ::ctl.colCategoryLabel }}
             </h3>
         </caption>
         <thead table-data-string="ctl.headerHTML"></thead>
         <tbody table-data-string="table.bodyHTML"></tbody>
     </table>
 
-    <div ng-if="ctl.error" class="error">Error: {{ ctl.error }}</div>
+    <div ng-if="ctl.error" class="error">{{ 'ERRORS.ERROR' | translate }}: {{ ctl.error }}</div>
 </div>

@@ -6,6 +6,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
 
     beforeEach(function () {
         module('driver.savedFilters');
+        module('pascalprecht.translate');
 
         inject(function (_$filter_) {
             $filter = _$filter_;
@@ -89,7 +90,7 @@ describe('driver.savedFilters: SavedFiltersAsHTML', function () {
         var testObj = {
             __searchText: 'This is a text filter'
         };
-        var expected = '<strong>Text Search:</strong> This is a text filter';
+        var expected = '<strong>SAVED_FILTERS.TEXT_SEARCH:</strong> This is a text filter';
         expect($filter('savedFilterAsHTML')(testObj)).toBe(expected);
     });
 
