@@ -40,3 +40,10 @@ class BlackSpotSet(AshlarModel):
 
 class BlackspotRecordsFile(AshlarModel):
     csv = models.FileField(upload_to='blackspot_records/')
+
+
+class RoadSegmentsShapefile(AshlarModel):
+    """Model to track gzipped shapefile for road segments training input"""
+
+    #: Path to gzipped shapefile
+    shp_tgz = models.FileField(upload_to='road_segments/')
