@@ -5,6 +5,7 @@ describe('driver.recentCounts: RecentCountsController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.recentCounts'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;
@@ -27,6 +28,7 @@ describe('driver.recentCounts: RecentCountsController', function () {
         InitialState = _InitialState_;
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
     }));
 
     it('should make requests to recent_counts', function () {

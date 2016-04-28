@@ -5,6 +5,7 @@ describe('driver.views.record: RecordDetailsModalController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;

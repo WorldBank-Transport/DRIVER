@@ -31,6 +31,7 @@ describe('driver.views.duplicates: Duplicates List Directive', function () {
         InitialState.setRecordTypeInitialized();
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 

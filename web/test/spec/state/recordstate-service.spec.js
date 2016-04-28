@@ -4,6 +4,7 @@ describe('driver.state: Records', function () {
 
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $rootScope;
     var $httpBackend;

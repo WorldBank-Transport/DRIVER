@@ -17,6 +17,7 @@ describe('driver.resources: QueryBuilder', function () {
         $provide.value('FilterState', mockFilterState);
     }));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('pascalprecht.translate'));
 
     var QueryBuilder;
     var $rootScope;

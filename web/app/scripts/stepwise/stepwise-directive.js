@@ -29,28 +29,10 @@
                 var x = d3.scale.ordinal().rangeBands([0, width], 0.05);
                 var y = d3.scale.linear().range([height, 0]);
 
-                var tooltip = d3.tip().html(function(d) {
-                    return '<strong>' +
-                        $translate.instant('RECORD.WEEK_OF') +
-                        ': </strong>' +
-                        d.dt.toLocaleDateString() +
-                        '</br><strong>' +
-                        $translate.instant('RECORD.EVENT_COUNT') +
-                        ':</strong> <span>' +
-                        d.count +
-                        '</span>';
-                }).offset([-20,-15]);
-                init();
+                // Need to set after initialization to guarantee translations are available
+                var tooltip = null;
 
-                /**
-                 * Watch for changes to chartData and redraw and redraw and redraw
-                 */
-                scope.$watch('chartData', function(newVal) {
-                    if (newVal) {
-                        var data = formatData(newVal);
-                        updateChart(data);
-                    }
-                });
+                $translate.onReady(init);
 
                 /**
                  * Initialize graph to make clean updates possible in a separate, 'updateChart',
@@ -58,6 +40,28 @@
                  *  elements together under `rect`.
                  */
                 function init() {
+                    /**
+                     * Watch for changes to chartData and redraw
+                     */
+                    scope.$watch('chartData', function(newVal) {
+                        if (newVal) {
+                            var data = formatData(newVal);
+                            updateChart(data);
+                        }
+                    });
+
+                    tooltip = d3.tip().html(function(d) {
+                        return '<strong>' +
+                            $translate.instant('RECORD.WEEK_OF') +
+                            ': </strong>' +
+                            d.dt.toLocaleDateString() +
+                            '</br><strong>' +
+                            $translate.instant('RECORD.EVENT_COUNT') +
+                            ':</strong> <span>' +
+                            d.count +
+                            '</span>';
+                    }).offset([-20,-15]);
+
                     var rawSvg = elem.find('svg')[0];
                     var bufferedWidth = width + margin.left + margin.right;
                     var bufferedHeight = height + margin.top + margin.bottom;

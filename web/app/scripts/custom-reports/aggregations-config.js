@@ -80,7 +80,8 @@
                     return RecordSchemaState.get(recordType.current_schema);
                     /* jshint camelcase: false */
                 });
-                return $q.all([filtersPromise, GeographyState.getOptions()]).then(function (data) {
+                var promises = [filtersPromise, GeographyState.getOptions(), $translate.onReady()];
+                return $q.all(promises).then(function (data) {
                     var schema = data[0];
                     var geographies = data[1];
 

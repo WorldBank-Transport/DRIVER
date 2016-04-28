@@ -41,6 +41,7 @@ describe('driver.blackSpots: BlackSpotsController', function() {
         InitialState.setRecordTypeInitialized();
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
 
         MapState.setLocation({
             lat: 123,

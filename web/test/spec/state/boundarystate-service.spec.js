@@ -4,6 +4,7 @@ describe('driver.state: BoundaryState', function () {
 
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $rootScope;
     var $httpBackend;

@@ -4,6 +4,7 @@ describe('driver.state: Zoom to Boundary Directive', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.state'));
     beforeEach(module('Leaflet'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $compile;
     var $httpBackend;

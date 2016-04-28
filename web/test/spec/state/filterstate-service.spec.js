@@ -3,6 +3,7 @@
 describe('driver.state: Records', function () {
 
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $rootScope;
     var $timeout;
