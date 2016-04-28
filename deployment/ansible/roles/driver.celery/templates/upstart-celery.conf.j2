@@ -23,6 +23,7 @@ end script
 exec /usr/bin/docker run \
   --name driver-celery \
   --publish 4000:4000 \
+  --volume /var/run/docker.sock:/var/run/docker.sock \
   --volume {{ root_static_dir }}:{{ root_static_dir }} \
   --volume {{ root_media_dir }}:{{ root_media_dir }} \
   {% if 'development' in group_names -%}

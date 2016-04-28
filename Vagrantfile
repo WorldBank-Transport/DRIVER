@@ -132,6 +132,7 @@ Vagrant.configure("2") do |config|
 
     celery.vm.synced_folder "./app", "/opt/app", type: "nfs", mount_options: MOUNT_OPTIONS
     celery.vm.synced_folder "./web", "/opt/web", type: "nfs", mount_options: MOUNT_OPTIONS
+    celery.vm.synced_folder "./analysis_tasks", "/opt/analysis_tasks", type: "nfs", mount_options: MOUNT_OPTIONS
     celery.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs", mount_options: MOUNT_OPTIONS
     celery.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs", mount_options: MOUNT_OPTIONS
     # jar build task on celery vm
