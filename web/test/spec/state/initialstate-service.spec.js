@@ -3,6 +3,7 @@
 describe('driver.state: InitialState', function () {
 
     beforeEach(module('driver.state'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $timeout;
     var InitialState;
@@ -41,6 +42,7 @@ describe('driver.state: InitialState', function () {
         expect(testVar3).toEqual(false);
 
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
 
         $timeout(function() {
             expect(testVar1).toEqual(true);

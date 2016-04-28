@@ -4,6 +4,7 @@ describe('driver.savedFilters: SavedFiltersController', function () {
 
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.savedFilters'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;

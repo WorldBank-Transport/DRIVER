@@ -26,20 +26,8 @@
                 var rect, color, svg;  // GLOBAL
                 var tooltip = d3.tip();
                 tooltip.offset(function() { return [-16, -18]; });
-                init();
 
-                /**
-                 * Watch for changes to chartData and redraw and redraw and redraw
-                 */
-                scope.$watch('chartData', function(val) {
-                    if (val) {
-                        var data = formatData(val);
-                        color = d3.scale.quantile()
-                            .domain([0, _.max(val, function(x) { return x.count; }).count])
-                            .range(rampValues);
-                        updateChart(data);
-                    }
-                });
+                $translate.onReady(init);
 
                 /**
                  * Initialize graph to make clean updates possible in a separate, 'updateChart',
@@ -47,6 +35,19 @@
                  *  elements together under `rect`.
                  */
                 function init() {
+                    /**
+                     * Watch for changes to chartData and redraw
+                     */
+                    scope.$watch('chartData', function(val) {
+                        if (val) {
+                            var data = formatData(val);
+                            color = d3.scale.quantile()
+                                .domain([0, _.max(val, function(x) { return x.count; }).count])
+                                .range(rampValues);
+                            updateChart(data);
+                        }
+                    });
+
                     svg = d3.select(rawSvg)
                         .attr('viewBox', '0 0 ' + width + ' ' + height)
                         .attr('preserveAspectRatio', 'xMinYMin')

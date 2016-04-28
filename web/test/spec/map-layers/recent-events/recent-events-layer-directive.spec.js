@@ -10,15 +10,19 @@ describe('driver.map-layers.recent-events: Recent Events Layer Directive', funct
     var $rootScope;
     var $httpBackend;
     var DriverResourcesMock;
+    var InitialState;
     var ResourcesMock;
 
-    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_,
-                                _DriverResourcesMock_, _ResourcesMock_) {
+    beforeEach(inject(function (_$compile_, _$rootScope_, _$httpBackend_, _DriverResourcesMock_,
+                                _InitialState_, _ResourcesMock_) {
         $compile = _$compile_;
         $rootScope = _$rootScope_;
         $httpBackend = _$httpBackend_;
         DriverResourcesMock = _DriverResourcesMock_;
+        InitialState = _InitialState_;
         ResourcesMock = _ResourcesMock_;
+
+        InitialState.setLanguageInitialized();
     }));
 
     it('should create a leaflet map', function () {

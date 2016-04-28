@@ -5,6 +5,7 @@ describe('driver.resources: Aggregate Queries', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.resources'));
     beforeEach(module('driver.mock.resources'));
+    beforeEach(module('pascalprecht.translate'));
 
     var RecordAggregates;
     var $rootScope;

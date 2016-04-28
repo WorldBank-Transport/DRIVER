@@ -41,7 +41,7 @@ describe('driver.tools.export: ExportController', function () {
         InitialState.setRecordTypeInitialized();
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
-
+        InitialState.setLanguageInitialized();
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         var boundariesUrl = /api\/boundaries/;

@@ -15,17 +15,22 @@ describe('driver.views.record: RecordList', function () {
     var localStorageService;
     var recordState;
     var DriverResourcesMock;
+    var InitialState;
     var ResourcesMock;
 
     beforeEach(inject(function (_$compile_, _$httpBackend_, _$rootScope_, _localStorageService_,
-                                _RecordState_, _DriverResourcesMock_, _ResourcesMock_) {
+                                _RecordState_, _DriverResourcesMock_, _InitialState_,
+                                _ResourcesMock_) {
         $compile = _$compile_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         localStorageService = _localStorageService_;
         recordState = _RecordState_;
         DriverResourcesMock = _DriverResourcesMock_;
+        InitialState = _InitialState_;
         ResourcesMock = _ResourcesMock_;
+
+        InitialState.setLanguageInitialized();
 
         spyOn(localStorageService, 'get');
     }));

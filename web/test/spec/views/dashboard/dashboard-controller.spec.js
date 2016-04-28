@@ -5,6 +5,7 @@ describe('driver.views.dashboard: DashboardController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.dashboard'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;

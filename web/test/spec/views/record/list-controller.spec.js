@@ -5,6 +5,7 @@ describe('driver.views.record: ListController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.record'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;
@@ -12,20 +13,24 @@ describe('driver.views.record: ListController', function () {
     var $scope;
     var Controller;
     var DriverResourcesMock;
+    var InitialState;
     var ResourcesMock;
     var FilterState;
 
     // Initialize the controller and a mock scope
-    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_,
-                                _DriverResourcesMock_, _ResourcesMock_, _FilterState_) {
+    beforeEach(inject(function (_$controller_, _$httpBackend_, _$rootScope_, _DriverResourcesMock_,
+                                _FilterState_, _InitialState_, _ResourcesMock_) {
         $controller = _$controller_;
         $httpBackend = _$httpBackend_;
         $rootScope = _$rootScope_;
         $scope = $rootScope.$new();
         DriverResourcesMock = _DriverResourcesMock_;
-        ResourcesMock = _ResourcesMock_;
         FilterState = _FilterState_;
+        InitialState = _InitialState_;
+        ResourcesMock = _ResourcesMock_;
+
         FilterState.reset();
+        InitialState.setLanguageInitialized();
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 

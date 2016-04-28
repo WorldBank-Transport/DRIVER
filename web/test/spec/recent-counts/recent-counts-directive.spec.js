@@ -44,6 +44,7 @@ describe('driver.recentCounts: RecentCounts', function () {
         InitialState = _InitialState_;
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
     }));
 
     it('It should construct the dom when given the appropriate object', function () {

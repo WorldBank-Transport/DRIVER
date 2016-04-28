@@ -42,6 +42,7 @@ describe('driver.views.map: Layers Directive', function () {
         InitialState.setRecordTypeInitialized();
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
         $httpBackend.whenGET(recordTypeUrl).respond(200, ResourcesMock.RecordTypeResponse);

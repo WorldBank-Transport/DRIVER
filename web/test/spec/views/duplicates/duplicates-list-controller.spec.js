@@ -5,6 +5,7 @@ describe('driver.views.duplicates: DuplicatesListController', function () {
     beforeEach(module('ase.mock.resources'));
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('driver.views.duplicates'));
+    beforeEach(module('pascalprecht.translate'));
 
     var $controller;
     var $httpBackend;
@@ -29,6 +30,7 @@ describe('driver.views.duplicates: DuplicatesListController', function () {
         InitialState.setRecordTypeInitialized();
         InitialState.setBoundaryInitialized();
         InitialState.setGeographyInitialized();
+        InitialState.setLanguageInitialized();
 
         var recordTypeUrl = /\/api\/recordtypes\/\?active=True/;
 

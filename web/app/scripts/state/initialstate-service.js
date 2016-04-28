@@ -7,11 +7,12 @@
     'use strict';
 
     /* ngInject */
-    function InitialState($q) {
+    function InitialState($translate, $q) {
 
         var recordTypeInitialized = false;
         var boundaryInitialized = false;
         var geographyInitialized = false;
+        var languageInitialized = false;
 
         var deferreds = [];
 
@@ -19,8 +20,13 @@
             ready: ready,
             setRecordTypeInitialized: setRecordTypeInitialized,
             setBoundaryInitialized: setBoundaryInitialized,
-            setGeographyInitialized: setGeographyInitialized
+            setGeographyInitialized: setGeographyInitialized,
+            setLanguageInitialized: setLanguageInitialized
         };
+
+        // Ensure the translation file is available, since many components that
+        // use InitialState also rely on instant translations.
+        $translate.onReady(setLanguageInitialized);
 
         return svc;
 
@@ -55,7 +61,8 @@
          * Returns true when all state values are available
          */
         function allInitialized() {
-            return recordTypeInitialized && boundaryInitialized && geographyInitialized;
+            return recordTypeInitialized && boundaryInitialized &&
+                geographyInitialized && languageInitialized;
         }
 
         /**
@@ -79,6 +86,14 @@
          */
         function setGeographyInitialized() {
             geographyInitialized = true;
+            resolveDeferreds();
+        }
+
+        /**
+         * Sets the language initialized state value to true
+         */
+        function setLanguageInitialized() {
+            languageInitialized = true;
             resolveDeferreds();
         }
 
