@@ -97,7 +97,7 @@ def create_tarball(shp_dir, tar_dir):
     filename = 'road_segments.tar'
     tar_path = os.path.join(tar_dir, filename)
     tarball = t.TarFile(tar_path, 'w')
-    tarball.add(shp_dir)
+    tarball.add(shp_dir, arcname='segments')
     tarball.close()
 
     command = ['gzip', tar_path]
