@@ -1,5 +1,5 @@
 {
-    "LANG": "!English",
+    "LANG": "العربية",
     "AGG": {
         "DAY": "يوم",
         "DAY_OF_MONTH": "!Day of Month",
@@ -27,10 +27,10 @@
         "EDIT": "تعديل",
         "ELLIPSIS": "!...",
         "EXPORT": "تصدير",
-        "EXPORT_CSV": "تصدير CVS",
+        "EXPORT_CSV": "CSV تصدير",
         "EXPORT_NEW_CSV": "!Export New CSV",
         "EXPORTING": "تصدير",
-        "EXPORTING_CSV": "تصدير CVS",
+        "EXPORTING_CSV": "CSV تصدير",
         "FROM": "!From",
         "GRAPHS": "الرسوم البيانية",
         "MAX": "!Max",
