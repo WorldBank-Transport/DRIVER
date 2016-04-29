@@ -23,4 +23,5 @@
   roles:
     - { role: "driver.celery" }
     - { role: "driver-celery.nginx" }
+    - { role: "driver.r-docker" }
     - { role: "driver.gradle" }
