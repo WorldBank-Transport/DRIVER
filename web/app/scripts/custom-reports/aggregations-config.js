@@ -10,57 +10,13 @@
 
     /* ngInject */
     function AggregationsConfig($translate, $q, RecordState, RecordSchemaState, GeographyState) {
-        var timeType = $translate.instant('AGG.TIME');
-        var geographyType = $translate.instant('AGG.GEOGRAPHY');
-        var filterType = $translate.instant('AGG.FILTER');
+        // Translation strings need to wait for the translations file to be available
+        // before performing instant translations.
+        var timeType;
+        var geographyType;
+        var filterType;
+        var aggregations;
 
-        var aggregations = [
-            {
-                label: $translate.instant('AGG.YEAR'),
-                value: 'year',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.MONTH'),
-                value: 'month',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.WEEK'),
-                value: 'week',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.DAY'),
-                value: 'day',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.MONTH_OF_YEAR'),
-                value: 'month_of_year',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.WEEK_OF_YEAR'),
-                value: 'week_of_year',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.DAY_OF_MONTH'),
-                value: 'day_of_month',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.DAY_OF_WEEK'),
-                value: 'day_of_week',
-                type: timeType
-            },
-            {
-                label: $translate.instant('AGG.HOUR_OF_DAY'),
-                value: 'hour_of_day',
-                type: timeType
-            }
-        ];
         var initialized = false;
 
         var svc = {
@@ -84,6 +40,57 @@
                 return $q.all(promises).then(function (data) {
                     var schema = data[0];
                     var geographies = data[1];
+
+                    timeType = $translate.instant('AGG.TIME');
+                    geographyType = $translate.instant('AGG.GEOGRAPHY');
+                    filterType = $translate.instant('AGG.FILTER');
+                    aggregations = [
+                        {
+                            label: $translate.instant('AGG.YEAR'),
+                            value: 'year',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.MONTH'),
+                            value: 'month',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.WEEK'),
+                            value: 'week',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.DAY'),
+                            value: 'day',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.MONTH_OF_YEAR'),
+                            value: 'month_of_year',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.WEEK_OF_YEAR'),
+                            value: 'week_of_year',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.DAY_OF_MONTH'),
+                            value: 'day_of_month',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.DAY_OF_WEEK'),
+                            value: 'day_of_week',
+                            type: timeType
+                        },
+                        {
+                            label: $translate.instant('AGG.HOUR_OF_DAY'),
+                            value: 'hour_of_day',
+                            type: timeType
+                        }
+                    ];
 
                     loadFilters(schema);
                     loadGeographies(geographies);
