@@ -38,7 +38,9 @@ class BlackSpotSet(AshlarModel):
     record_type = models.ForeignKey('ashlar.RecordType')
 
 
-class BlackspotRecordsFile(AshlarModel):
+class BlackSpotRecordsFile(AshlarModel):
+    """Model to track blackspot record csvs"""
+    #: Path to csvs
     csv = models.FileField(upload_to='blackspot_records/')
 
 
@@ -47,3 +49,16 @@ class RoadSegmentsShapefile(AshlarModel):
 
     #: Path to gzipped shapefile
     shp_tgz = models.FileField(upload_to='road_segments/')
+
+
+class BlackSpotTrainingCsv(AshlarModel):
+    """Model to track blackspot training csvs"""
+
+    #: Path to csvs
+    csv = models.FileField(upload_to='training/blackspot/')
+
+
+class LoadForecastTrainingCsv(AshlarModel):
+    """Model to track forecast training csvs"""
+    #: Path to csvs
+    csv = models.FileField(upload_to='training/forecast')

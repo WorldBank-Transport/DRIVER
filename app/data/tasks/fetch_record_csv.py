@@ -7,7 +7,7 @@ import re
 from celery import shared_task
 
 from ashlar.models import Record
-from black_spots.models import BlackspotRecordsFile
+from black_spots.models import BlackSpotRecordsFile
 
 
 # Keys which cannot be usefully exported to csv
@@ -105,7 +105,7 @@ def export_records(occurred_min, occurred_max, record_type_id):
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
         writer.writeheader()
         writer.writerows(row_dicts)
-        store = BlackspotRecordsFile()
+        store = BlackSpotRecordsFile()
         #  seek to the beginning of file so it can be read into the store
         csvfile.seek(0, 0)
         saved_filename = '{}.csv'.format(store.uuid)
