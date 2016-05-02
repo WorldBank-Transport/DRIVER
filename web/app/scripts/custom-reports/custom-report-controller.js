@@ -15,11 +15,12 @@
         // TODO: date format needs localization
         ctl.dateFormat = 'MMM D, YYYY';
 
-        var totalString = $translate.instant('COMMON.TOTAL');
+        var totalString;
 
-        init();
+        $translate.onReady(init);
 
         function init() {
+            totalString = $translate.instant('COMMON.TOTAL');
             ctl.loading = true;
             ctl.params = $stateParams;
 
