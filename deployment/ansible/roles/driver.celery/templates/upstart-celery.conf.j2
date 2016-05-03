@@ -39,7 +39,8 @@ exec /usr/bin/docker run \
   quay.io/azavea/driver-app:latest \
   -A driver worker --queue=taskworker \
   --loglevel={% if 'development' in group_names %}debug{% else %}info{% endif %} \
-  --concurrency=4
+  --concurrency=4 \
+  --maxtasksperchild=1
 
 post-stop script
   /usr/bin/docker kill driver-celery

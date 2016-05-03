@@ -43,22 +43,22 @@ RECORD_COL_PRECIP = os.getenv('RECORD_COL_PRECIP', 'weather')
 RECORD_COL_PRECIP_VALS = os.getenv('RECORD_COL_PRECIP_VALS', 'rain,hail,sleet,snow,thunderstorm,tornado')
 TILE_MAX_UNITS = int(os.getenv('TILE_MAX_UNITS', '3000'))
 COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_segments.shp')
-ROAD_PROJECTION = os.getenv('ROAD_PROJECTION', 'epsg:32651')
 
 
 @shared_task
-def get_training_noprecip(segments_shp_uuid, records_csv_uuid):
+def get_training_noprecip(segments_shp_uuid, records_csv_uuid, road_srid):
     """Generate training input without precipitation data
 
     Args:
     :param segments_tar_uuid: (str) UUID for the RoadSegmentsShapefile to use
     :param records_csv_uuid: (str) UUID for the BlackSpotRecordsFile
+    :param road_srid: (int) EPSG code of Roads shapefile
 
     Returns:
     str: uuid for a BlackSpotTrainingCsv
     """
     records, segments, index, min_occurred, max_occurred = get_data(
-        records_csv_uuid, segments_shp_uuid
+        records_csv_uuid, segments_shp_uuid, road_srid
     )
     segments_with_records = match_records_to_segments(
         records, index, segments, MATCH_TOLERANCE
@@ -70,23 +70,24 @@ def get_training_noprecip(segments_shp_uuid, records_csv_uuid):
     )
     black_spot_training_uuid = write_black_spot_training_csv(segments_with_data, schema)
     logger.info('Generated csv for black spot training')
-    return black_spot_training_uuid
+    return str(black_spot_training_uuid)
 
 
 @shared_task
-def get_training_precip(segments_shp_uuid, records_csv_uuid):
+def get_training_precip(segments_shp_uuid, records_csv_uuid, road_srid):
     """Generate training input
 
     Args:
     :param segments_tar_uuid: (str) UUID for the RoadSegmentsShapefile to use
     :param records_csv_uuid: (str) UUID for the BlackSpotRecordsFile
+    :param road_srid: (int) EPSG code of Roads shapefile
 
     Returns:
     str: uuid for a LoadForecastTrainingCsv
     """
 
     records, segments, index, min_occurred, max_occurred = get_data(
-        records_csv_uuid, segments_shp_uuid
+        records_csv_uuid, segments_shp_uuid, road_srid
     )
 
     records_with_precip = [record for record in records if record['precip']]
@@ -112,10 +113,10 @@ def get_training_precip(segments_shp_uuid, records_csv_uuid):
         segments_with_data_precip, segments_with_data_no_precip, load_forecast_schema
     )
     logger.info('Generated csv for load forecast training')
-    return forecast_training_uuid
+    return str(forecast_training_uuid)
 
 
-def get_data(records_csv_uuid, segments_shp_uuid):
+def get_data(records_csv_uuid, segments_shp_uuid, road_srid):
     """Does all common data processing for the training file generation
 
     Reads in data from the records csv and segments shapefile and converts them into
@@ -124,6 +125,7 @@ def get_data(records_csv_uuid, segments_shp_uuid):
     Args:
     :param records_csv_uuid: (str) UUID for the RoadSegmentsShapefile to use
     :param segments_shp_uuid: (str) UUID for the BlackSpotRecordsFile to use
+    :param road_srid: (int) EPSG code of Roads shapefile
 
     Returns:
     Data namedtuple: [
@@ -133,7 +135,8 @@ def get_data(records_csv_uuid, segments_shp_uuid):
     """
     with BlackSpotRecordsFile.objects.get(uuid=records_csv_uuid).csv as records_csv:
         records, min_occurred, max_occurred = read_records(
-            records_csv, {'init': ROAD_PROJECTION}, {'init': RECORD_PROJECTION}, TIMEZONE,
+            records_csv, {'init': 'epsg:{}'.format(road_srid)}, {'init': RECORD_PROJECTION},
+            TIMEZONE,
             RECORD_COL_ID, RECORD_COL_X, RECORD_COL_Y,
             RECORD_COL_OCCURRED, RECORD_COL_SEVERE, RECORD_COL_SEVERE_VALS,
             RECORD_COL_PRECIP, RECORD_COL_PRECIP_VALS

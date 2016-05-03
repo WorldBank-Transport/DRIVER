@@ -1,13 +1,64 @@
-from django.conf import settings
+import datetime
+import os
+import shutil
+import tarfile
+import tempfile
 
-from celery import shared_task
+from django.conf import settings
+from django.utils import timezone
+
+from celery import shared_task, chain
 from celery.utils.log import get_task_logger
+
+from ashlar.models import RecordType
+
+from black_spots.tasks import (forecast_segment_incidents, load_blackspot_geoms,
+                               load_road_network, get_training_noprecip)
+from black_spots.tasks.get_segments import get_segments_shp, create_segments_tar
+from black_spots.models import BlackSpotRecordsFile, RoadSegmentsShapefile
+from data.tasks.fetch_record_csv import export_records
 
 logger = get_task_logger(__name__)
 
 
 @shared_task
-def calculate_black_spots():
-    pass
-
-
+def calculate_black_spots(history_length=datetime.timedelta(days=4 * 365 + 1), roads_srid=3395):
+    """Integrates all black spot tasks into a pipeline
+    Args:
+        roads_srid (int): SRID in which to deal with the Roads data
+    """
+    # Get the parameters we'll use to filter down the records we want
+    now = timezone.now()
+    oldest = now - history_length
+    # Note that this assumes that there is only one RecordType with this label; there's
+    # no straightforward way to auto-detect this otherwise.
+    record_type = RecordType.objects.filter(label=settings.BLACKSPOT_RECORD_TYPE_LABEL).first()
+    segments_shp_obj = RoadSegmentsShapefile.objects.all().order_by('-created').first()
+    # Refresh road segments if the most recent one is more than 30 days out of date
+    if not segments_shp_obj or (now - segments_shp_obj.created > datetime.timedelta(days=30)):
+        # Celery callbacks prepend the result of the parent function to the callback's arg list
+        segments_chain = chain(load_road_network.s(output_srid='EPSG:{}'.format(roads_srid)),
+                               get_segments_shp.s(roads_srid),
+                               create_segments_tar.s())()
+        segments_shp_obj = segments_chain.get()
+    # - Get events CSV
+    records_csv_obj_id = export_records(oldest, now, record_type.pk)
+    # - Match events to segments shapefile
+    # TODO: This runs out of memory; we haven't been able to progress past this point.
+    blackspots_output = get_training_noprecip.delay(str(segments_shp_obj.uuid),
+                                                    records_csv_obj_id,
+                                                    roads_srid).get()
+    # - Run Rscript to output CSV
+    segments_csv = BlackSpotRecordsFile.objects.get(blackspots_output).csv.path
+    forecasts_csv = forecast_segment_incidents(segments_csv, '/opt/app/forecasts.csv')
+    # - Load blackspot geoms from shapefile and CSV
+    # The shapefile is stored as a gzipped tarfile so we need to extract it
+    tar_output_dir = tempfile.mkdtemp()
+    try:
+        shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_obj.pk).shp_tgz.path
+        with tarfile.open(shp_tar, "r:gz") as tar:
+            tar.extractall(tar_output_dir)
+            load_blackspot_geoms(os.path.join(tar_output_dir, 'segments', 'combined_segments.shp'),
+                                 forecasts_csv, record_type.pk, roads_srid)
+    finally:
+        shutil.rmtree(tar_output_dir)

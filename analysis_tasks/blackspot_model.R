@@ -38,7 +38,9 @@ option_list = list(
               metavar="number"),
   make_option(c("--cores"), type="integer", default=4,
               help="Number of cores to use for parallel operations. [default %default]",
-              metavar="number")
+              metavar="number"),
+  make_option(c("--outputfile"), type="character", default="forecasts.csv",
+              help="Path to file to which to write output")
 )
 
 # parse the options
@@ -255,7 +257,7 @@ for(et in event.types) {
 }
 
 PrintStatus(1, "Writing CSV with forecasts...")
-write.csv(forecasts, file="forecasts.csv", row.names=FALSE)
+write.csv(forecasts, file=opt$outputfile, row.names=FALSE)
 
 
 ####

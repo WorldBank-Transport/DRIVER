@@ -1,4 +1,6 @@
 import fiona
+from fiona.crs import from_epsg
+import gc
 import itertools
 import logging
 import os
@@ -9,7 +11,7 @@ from math import ceil
 import tarfile as t
 import subprocess
 import tempfile
-import multiprocessing
+import billiard as multiprocessing
 from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
 from shapely.ops import unary_union
 
@@ -38,52 +40,72 @@ RECORD_COL_OCCURRED = os.getenv('RECORD_COL_OCCURRED', 'occurred_from')
 RECORD_COL_SEVERE = os.getenv('RECORD_COL_SEVERE', 'Severity')
 RECORD_COL_SEVERE_VALS = os.getenv('RECORD_COL_SEVERE_VALS', 'Fatal,Injury')
 RECORD_COL_PRECIP = os.getenv('RECORD_COL_PRECIP', 'weather')
-RECORD_COL_PRECIP_VALS = os.getenv('RECORD_COL_PRECIP_VALS', 'rain,hail,sleet,snow,thunderstorm,tornado')
+RECORD_COL_PRECIP_VALS = os.getenv('RECORD_COL_PRECIP_VALS',
+                                   'rain,hail,sleet,snow,thunderstorm,tornado')
 COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_segments.shp')
 TILE_MAX_UNITS = int(os.getenv('TILE_MAX_UNITS', '3000'))
 
 
 @shared_task
-def get_segments_shp(path_to_roads_shp):
+def cleanup(shp_dir, tar_dir):
+    """Cleanup shapefile and tarfile; call as errback"""
+    try:
+        shutil.rmtree(shp_dir, True)
+    except UnboundLocalError:
+        pass
+    try:
+        shutil.rmtree(tar_dir, True)
+    except UnboundLocalError:
+        pass
+
+
+@shared_task
+def create_segments_tar(combined_segments_shp_dir):
+    """Create a RoadSegmentsShapefile out of a shpfile"""
+    logger.info('Creating tar file from shapefile segments')
+    tar_output_dir = tempfile.mkdtemp()
+    tarball_path = create_tarball(combined_segments_shp_dir, tar_output_dir)
+
+    road_segments_shpfile = RoadSegmentsShapefile.objects.create()
+    logger.info('Created database record: %s', road_segments_shpfile.uuid)
+
+    with open(tarball_path, 'rb') as f:
+        tarball_file = File(f)
+        save_name = '{}.tgz'.format(road_segments_shpfile.uuid)
+        logger.info('Saving tarball with django-storages: %s', tarball_path)
+        road_segments_shpfile.shp_tgz.save(save_name, tarball_file)
+    return str(road_segments_shpfile.pk)
+
+
+@shared_task
+def get_segments_shp(path_to_roads_shp, road_srid):
     """Save segments to a shapefile and save in model
 
     Args:
     :param path_to_roads_shp: (str) path to shapefile
+    :param road_srid: (int) EPSG ID of roads shapefile projection
     """
     try:
         logger.info('Reading Roads Shapefile: %s', path_to_roads_shp)
-        roads, road_projection, road_bounds = read_roads(path_to_roads_shp)
-
+        roads, road_bounds = read_roads(path_to_roads_shp)
         logger.info('Obtaining intersection buffers')
-        int_buffers = get_intersection_buffers(roads, road_bounds, INTERSECTION_BUFFER_UNITS, TILE_MAX_UNITS)
-
+        int_buffers = get_intersection_buffers(roads, road_bounds, INTERSECTION_BUFFER_UNITS,
+                                               TILE_MAX_UNITS)
         logger.info('Obtaining intersections')
-        int_multilines, non_int_lines = get_intersection_parts(roads, int_buffers, MAX_LINE_UNITS)
-        combined_segments = int_multilines + non_int_lines
+        combined_segments = get_intersection_parts(roads, int_buffers, MAX_LINE_UNITS)
+        logger.info('Deleting buffers; no longer used')
+        del int_buffers  # Free mem, this is a big 'un.
+        gc.collect()
 
         logger.info('Writing shapefile segments')
         shp_output_dir = tempfile.mkdtemp()
-        tar_output_dir = tempfile.mkdtemp()
 
         segments_shp_path = os.path.join(shp_output_dir, COMBINED_SEGMENTS_SHP_NAME)
-        write_segments_shp(segments_shp_path, road_projection, combined_segments)
-        tarball_path = create_tarball(shp_output_dir, tar_output_dir)
-
-        road_segments_shpfile = RoadSegmentsShapefile.objects.create()
-        logger.info('Created database record: %s', road_segments_shpfile.uuid)
-
-        with open(tarball_path, 'rb') as f:
-            tarball_file = File(f)
-            save_name = '{}.tgz'.format(road_segments_shpfile.uuid)
-            logger.info('Saving tarball with django-storages: %s', tarball_path)
-            road_segments_shpfile.shp_tgz.save(save_name, tarball_file)
+        write_segments_shp(segments_shp_path, road_srid, combined_segments)
     except:
         logger.exception('Error generating segments shapefile')
         raise
-    finally:
-        shutil.rmtree(shp_output_dir, True)
-        shutil.rmtree(tar_output_dir, True)
-    return road_segments_shpfile.uuid
+    return shp_output_dir
 
 
 def create_tarball(shp_dir, tar_dir):
@@ -119,7 +141,7 @@ def get_intersections(roads):
             elif 'MultiLineString' == intersection.type:
                 multiLine = [line for line in intersection]
                 first_coords = multiLine[0].coords[0]
-                last_coords = multiLine[len(multiLine)-1].coords[1]
+                last_coords = multiLine[len(multiLine) - 1].coords[1]
                 intersections.append(Point(first_coords[0], first_coords[1]))
                 intersections.append(Point(last_coords[0], last_coords[1]))
             elif 'GeometryCollection' == intersection.type:
@@ -135,6 +157,22 @@ def get_intersections(roads):
     return unioned
 
 
+def should_keep_road(road):
+    """Returns true if road should be considered for segmentation"""
+    if ('highway' in road['properties']
+            and road['properties']['highway'] is not None
+            and road['properties']['highway'] != 'path'
+            and road['properties']['highway'] != 'footway'):
+        return True
+    # We're only interested in non-bridge, non-tunnel highways
+    # 'class' is optional, so only consider it when it's available.
+    if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
+            and road['properties']['bridge'] == 0
+            and road['properties']['tunnel'] == 0):
+        return True
+    return False
+
+
 def read_roads(roads_shp):
     """Reads shapefile and extracts roads and projection
     :param roads_shp: Path to the shapefile containing roads
@@ -143,13 +181,10 @@ def read_roads(roads_shp):
     roads = [
         shape(road['geometry'])
         for road in shp_file
-        # We're only interested in non-bridge, non-tunnel highways
-        # 'class' is optional, so only consider it when it's available.
-        if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
-            and road['properties']['bridge'] == 0
-            and road['properties']['tunnel'] == 0)
+
+        if should_keep_road(road)
     ]
-    return (roads, shp_file.crs, shp_file.bounds)
+    return (roads, shp_file.bounds)
 
 
 def get_intersection_buffers(roads, road_bounds, intersection_buffer_units, tile_max_units):
@@ -273,13 +308,13 @@ def get_intersection_parts(roads, int_buffers, max_line_units):
         split_non_int_lines.extend(split_line(line, max_line_units))
 
     # Return a tuple of intersection multilines and non-intersecting segments
-    return (int_multilines, split_non_int_lines)
+    return int_multilines + split_non_int_lines
 
 
-def write_segments_shp(segments_shp_path, road_projection, segments):
+def write_segments_shp(segments_shp_path, road_srid, segments):
     """Writes all segments to shapefile (both intersections and individual segments)
     :param segments_shp_path: Path to shapefile to write
-    :param road_projection: Projection of road data
+    :param road_srid: EPSG ID of projection of road data
     :param segments_with_data: List of tuples containing segments and segment data
     """
 
@@ -301,9 +336,11 @@ def write_segments_shp(segments_shp_path, road_projection, segments):
         }
     }
 
+    count = 0
+    logger.info("Opening shapefile for output")
     with fiona.open(segments_shp_path, 'w', driver='ESRI Shapefile',
-                    schema=schema, crs=road_projection) as output:
-
+                    schema=schema, crs=from_epsg(road_srid)) as output:
+        logger.info("Beginning to write segments")
         for idx, segment in enumerate(segments):
             is_intersection = 'MultiLineString' == segment.type
             data = {
@@ -318,3 +355,6 @@ def write_segments_shp(segments_shp_path, road_projection, segments):
                 'geometry': mapping(segment),
                 'properties': data
             })
+            if count % 1000 == 0:
+                logger.debug("Wrote {} segments".format(count))
+            count += 1
