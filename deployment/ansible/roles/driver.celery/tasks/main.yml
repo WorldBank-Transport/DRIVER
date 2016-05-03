@@ -29,14 +29,25 @@
 - name: Ensure Driver celery service is running
   service: name=driver-celery state=started
 
+# TODO: uncomment and modify this when the final script is ready
 # - name: Add black spot calculation cronjob
 #   cron: name="black spot calculation"
-#         job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots"
+#         job="/usr/local/bin/heimdall
+#         --database '{{ heimdall_db_connection }}'
+#         --namespace records
+#         --name find_duplicates
+#         --timeout 300
+#         docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots"
 #         hour=19 minute=10  # 3:10am in UTC+8
 
 - name: Add find duplicate records cronjob
   cron: name="find duplicate records"
-        job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py find_duplicate_records"
+        job="/usr/local/bin/heimdall
+        --database '{{ heimdall_db_connection }}'
+        --namespace records
+        --name find_duplicates
+        --timeout 300
+        docker exec $(docker ps -q -f name=driver-celery) ./manage.py find_duplicate_records"
         hour=17 minute=10  # 1:10am in UTC+8
 
 - name: Clean up CSV export files cronjob

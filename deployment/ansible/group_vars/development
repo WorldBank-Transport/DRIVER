@@ -9,6 +9,9 @@ postgresql_username: driver
 postgresql_password: driver
 windshaft_db_username: windshaft
 windshaft_db_password: windshaft
+heimdall_db_username: heimdall
+heimdall_db_password: heimdall
+heimdall_lock_db: lockspace
 postgresql_database: driver
 postgresql_hba_mapping:
   - { type: "host", database: "all", user: "all", address: "192.168.12.1/24", method: "md5" }

@@ -9,6 +9,7 @@ env:
   - secure: rxJHlPjag0Ie6mFk5p40Rc+v0yegXXn+JLDwVJB5koZNOH4KNvDis+KG/VyZpLAXohd7Mrdqd87Z8xfzExur4Q10ubHyMMdLrgMDOTEx5j2S+8tt0kek+iFyTM4tsMi9H5MnS+zQ0MRNoF+Ay1tVi7XeHODMz/TKWGWsWzf+cvg=
   - secure: wc2LNYrPX8OfaytX9iQi4Wp9CBdMzBEt2PGiJIzcxALl8CS/PnP4/efnSuuAW49zaKvtSZ2kwqXObH0E0PamcCufkR3QCbnG+pxuq+Zxu11152inz3FO8UiaYksmzBcO3tidGuehWFPr+ULinlbT3RYaItXmPoPTAfO5l/0r1F4=
   - secure: hZNrcEi/XfMpdjegA9AAFm/XDM6+aP+NV7NfQAo4/P5IN2rBz20TEHcLmtDs0YODPnT0mneoqWaEM1V55VFZIp4FhDJetOA3nk+MhKpo6jAy+E5au+jJ8R5yWkwGAosedBBEYhU5T6iF073SpYcjfyun4fgC58o7yuYNoBISWVg=
+  - secure: fcgtvICGfCMqxgbF2A0i+FCImh/vNC5lTyBvwztPLShhIg0z/SxE1aDcHRGEFu5hkqw04B4kQN17XPpcRS2CKgne/Fv7n+k/7mPiVImTVk oWL/TZHPplmYFm9szQKR5RWnAVKcejjC4PK6E1w9jgwK+7U6usnPHF9BcvPpKOYN8=
 language: bash
 services:
 - docker
