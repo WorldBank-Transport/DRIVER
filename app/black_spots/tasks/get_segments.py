@@ -43,8 +43,6 @@ COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_s
 TILE_MAX_UNITS = int(os.getenv('TILE_MAX_UNITS', '3000'))
 
 
-
-
 @shared_task
 def get_segments_shp(path_to_roads_shp):
     """Save segments to a shapefile and save in model
@@ -71,7 +69,6 @@ def get_segments_shp(path_to_roads_shp):
         write_segments_shp(segments_shp_path, road_projection, combined_segments)
         tarball_path = create_tarball(shp_output_dir, tar_output_dir)
 
-
         road_segments_shpfile = RoadSegmentsShapefile.objects.create()
         logger.info('Created database record: %s', road_segments_shpfile.uuid)
 
@@ -86,6 +83,7 @@ def get_segments_shp(path_to_roads_shp):
     finally:
         shutil.rmtree(shp_output_dir, True)
         shutil.rmtree(tar_output_dir, True)
+    return road_segments_shpfile.uuid
 
 
 def create_tarball(shp_dir, tar_dir):
