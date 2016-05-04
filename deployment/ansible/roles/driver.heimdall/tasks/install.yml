@@ -1,0 +1,11 @@
+---
+- name: Download Heimdall
+  get_url: dest=/tmp/heimdall.tar.gz
+           url="https://github.com/hectcastro/heimdall/releases/download/{{ heimdall_version }}/linux_amd64_heimdall.tar.gz"
+
+- name: Expand Heimdall
+  unarchive: src="/tmp/heimdall.tar.gz" dest=/tmp/ copy=no creates=/tmp/heimdall
+
+- name: Install Heimdall
+  command: cp /tmp/heimdall {{ heimdall_install_path }} creates={{ heimdall_install_path }}
+  register: heimdall_install

@@ -27,3 +27,16 @@
                    role_attr_flags=LOGIN
                    db="{{ postgresql_database }}"
                    state=present
+
+- name: Create PostgreSQL user for Heimdall
+  become_user: postgres
+  postgresql_user: name="{{ heimdall_db_username }}"
+                   password="{{ heimdall_db_password }}"
+                   role_attr_flags=LOGIN
+                   db="{{ postgresql_database }}"
+                   state=present
+
+- name: Create PostgreSQL database for Heimdall
+  become_user: postgres
+  postgresql_db: name="{{ heimdall_lock_db }}"
+                 owner="{{ heimdall_db_username }}"
