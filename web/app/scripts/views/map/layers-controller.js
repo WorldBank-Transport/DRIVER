@@ -4,7 +4,7 @@
     /* ngInject */
     function DriverLayersController(
         $q, $filter, $log, $scope, $rootScope, $timeout, $translate, $compile,
-        AuthService, FilterState, RecordState, GeographyState,
+        AuthService, WebConfig, FilterState, RecordState, GeographyState,
         RecordSchemaState, BoundaryState, QueryBuilder,
         MapState, TileUrlService, BaseLayersService, InitialState, BlackspotSets) {
         var ctl = this;
@@ -383,11 +383,15 @@
             // event precedence; layers are added on top of each other, so the last layer added
             // will intercept click events first; this is apparently the case regardless of
             // whether a z-index has been set on some or all of the UTF Grid layers.
-            updateBlackspotLayer(urls.blackspotsUrl, urls.blackspotsUtfGridUrl,
-                                 urls.blackspotTileKey);
+            if (WebConfig.blackSpots.visible) {
+                updateBlackspotLayer(urls.blackspotsUrl, urls.blackspotsUtfGridUrl,
+                                     urls.blackspotTileKey);
+            }
             updateSecondaryLayer(urls.secondaryRecordsUrl, urls.secondaryUtfGridUrl);
             updatePrimaryLayer(urls.primaryRecordsUrl, urls.primaryUtfGridUrl);
-            updateHeatmapLayer(urls.primaryHeatmapUrl);
+            if (WebConfig.heatmap.visible) {
+                updateHeatmapLayer(urls.primaryHeatmapUrl);
+            }
         }
 
         /**
@@ -436,8 +440,12 @@
             }
             /* jshint camelcase: true */
 
-            recordLayers.push([$translate.instant('MAP.HEATMAP'), ctl.heatmapLayerGroup]);
-            recordLayers.push([$translate.instant('MAP.BLACKSPOTS'), ctl.blackspotLayerGroup]);
+            if (WebConfig.heatmap.visible) {
+                recordLayers.push([$translate.instant('MAP.HEATMAP'), ctl.heatmapLayerGroup]);
+            }
+            if (WebConfig.blackSpots.visible) {
+                recordLayers.push([$translate.instant('MAP.BLACKSPOTS'), ctl.blackspotLayerGroup]);
+            }
             var overlays = angular.extend(_.zipObject(recordLayers), ctl.boundariesLayerGroup);
 
             ctl.bMaps.then(

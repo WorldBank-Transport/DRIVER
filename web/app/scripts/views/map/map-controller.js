@@ -3,10 +3,11 @@
 
     /* ngInject */
     function MapController($rootScope, $scope, $modal, AuthService, BoundaryState,
-                           InitialState, FilterState, Records, RecordTypes,
+                           WebConfig, InitialState, FilterState, Records, RecordTypes,
                            RecordState, RecordSchemaState, MapState, RecordAggregates) {
         var ctl = this;
         ctl.userCanWrite = false;
+        ctl.showInterventions = WebConfig.interventions.visible;
 
         /** This is one half of some fairly ugly code which serves to wire up a click
          *  handling event on top of some dynamically generated HTML. The other half is in
