@@ -3,9 +3,9 @@
 
     /* ngInject */
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, $translate,
-                                     uuid4, AuthService, Nominatim, Notifications, Records,
-                                     RecordState, RecordSchemaState, RecordTypes, WeatherService,
-                                     WebConfig) {
+                                     uuid4, AuthService, JsonEditorDefaults, Nominatim,
+                                     Notifications, Records, RecordState, RecordSchemaState,
+                                     RecordTypes, WeatherService, WebConfig) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
@@ -112,7 +112,7 @@
                     ctl.lightValues = WeatherService.lightValues;
                     ctl.weatherValues = WeatherService.weatherValues;
                 }
-                onSchemaReady();
+                $translate.onReady(onSchemaReady);
             });
         }
 
@@ -292,6 +292,16 @@
         function onSchemaReady() {
             fixEmptyFields();
 
+            // Add json-editor translations for button titles (shown on hover)
+            JsonEditorDefaults.addTranslation('button_add_row_title',
+                                              $translate.instant('RECORD.BUTTON_ADD_ROW_TITLE'));
+            JsonEditorDefaults.addTranslation('button_collapse',
+                                              $translate.instant('RECORD.BUTTON_COLLAPSE'));
+            JsonEditorDefaults.addTranslation('button_delete_row_title',
+                                              $translate.instant('RECORD.BUTTON_DELETE_ROW_TITLE'));
+            JsonEditorDefaults.addTranslation('button_expand',
+                                              $translate.instant('RECORD.BUTTON_EXPAND'));
+
             /* jshint camelcase: false */
             ctl.editor = {
                 id: 'new-record-editor',
@@ -299,10 +309,12 @@
                     schema: ctl.recordSchema.schema,
                     disable_edit_json: true,
                     disable_properties: true,
-                    disable_array_add: false,
-                    disable_array_reorder: false,
+                    disable_array_delete_all_rows: true,
+                    disable_array_delete_last_row: true,
+                    disable_array_reorder: true,
                     collapsed: true,
                     theme: 'bootstrap3',
+                    iconlib: 'bootstrap3',
                     show_errors: 'change',
                     no_additional_properties: true,
                     startval: ctl.record ? ctl.record.data : null

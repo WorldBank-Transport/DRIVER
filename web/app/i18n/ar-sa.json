@@ -155,6 +155,10 @@
         "RECORD_LIST": "كل السجلات"
     },
     "RECORD": {
+        "BUTTON_ADD_ROW_TITLE": "!Add \\{\\{0\\}\\}",
+        "BUTTON_COLLAPSE": "!Collapse",
+        "BUTTON_DELETE_ROW_TITLE": "!Delete \\{\\{0\\}\\}",
+        "BUTTON_EXPAND": "!Expand",
         "CREATED": "!Created",
         "DATE_AND_TIME": "اليوم والوقت",
         "DATE_FILTER": "!Filter events by date of occurence",

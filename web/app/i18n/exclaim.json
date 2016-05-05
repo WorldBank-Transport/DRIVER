@@ -136,7 +136,7 @@
         "SEPTEMBER": "!September",
         "OCTOBER": "!October",
         "NOVEMBER": "!November",
-        "DECEMBER":"!December"
+        "DECEMBER": "!December"
     },
     "NAV": {
         "ACCOUNT": "!Account",
@@ -155,6 +155,10 @@
         "RECORD_LIST": "!Record List"
     },
     "RECORD": {
+        "BUTTON_ADD_ROW_TITLE": "!Add \\{\\{0\\}\\}",
+        "BUTTON_COLLAPSE": "!Collapse",
+        "BUTTON_DELETE_ROW_TITLE": "!Delete \\{\\{0\\}\\}",
+        "BUTTON_EXPAND": "!Expand",
         "CREATED": "!Created",
         "DATE_AND_TIME": "!Date & Time",
         "DATE_FILTER": "!Filter events by date of occurence",
