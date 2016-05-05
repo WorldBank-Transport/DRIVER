@@ -16,6 +16,15 @@
         nominatim: {
             key: 'abc123'
         },
+        blackSpots: {
+            visible: true
+        },
+        heatmap: {
+            visible: true
+        },
+        interventions: {
+            visible: true
+        },
         record: {
             limit: 50
         },

@@ -8,7 +8,7 @@
         </driver-charts>
 
         <driver-interventions
-            ng-if="ctl.userCanWrite" params="ctl.recordQueryParams">
+            ng-if="ctl.userCanWrite && ctl.showInterventions" params="ctl.recordQueryParams">
         </driver-interventions>
 
         <driver-export params="ctl.recordQueryParams"></driver-export>
