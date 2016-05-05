@@ -8,7 +8,8 @@
                 push: pushCustomValidator,
                 pop: popCustomValidator,
                 clear: clearCustomValidators
-            }
+            },
+            addTranslation: addTranslation
         };
 
         /* jshint camelcase: false */
@@ -22,6 +23,12 @@
 
         function clearCustomValidators() {
             JSONEditor.defaults.custom_validators = [];
+        }
+
+        // Adds a translation mapping for the json-editor to use.
+        // To see the available keys, see `src/defaults.json` in the json-editor repo.
+        function addTranslation(key, val) {
+            JSONEditor.defaults.languages.en[key] = val;
         }
         /* jshint camelcase: true */
 
