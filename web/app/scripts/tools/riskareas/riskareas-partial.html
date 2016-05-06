@@ -1,0 +1,24 @@
+<div class="tool riskareas" ng-if="ctl.recordType" ng-class="{ 'open': ctl.isOpen }">
+    <div class="tool-tab" ng-click="ctl.toggle()" >
+        <span class="glyphicon glyphicon-alert"></span> Risk Zones
+    </div>
+    <div class="tool-content">
+        <div class="tool-header">
+            <h4>Risk Zones</h4>
+        </div>
+        <hr />
+        <div class="tool-body">
+            <label># of Zones</label>
+            <input type="text" class="form-control" />
+            <label>Time of Day</label>
+            <select class="form-control">
+                <option>00:00Ð06:00</option>
+                <option>06:00Ð12:00</option>
+                <option>12:00Ð18:00</option>
+                <option>18:00Ð24:00</option>
+            </select>
+            <label>Date of Shift</label>
+            <input type="text" class="form-control date-range-style" />
+        </div>
+    </div>
+</div>

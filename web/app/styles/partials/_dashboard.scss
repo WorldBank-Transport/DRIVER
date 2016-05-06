@@ -40,6 +40,9 @@
             @media screen and (max-width: 1024px) {
                 height: 30%;
             }
+            @media screen and (max-height: 768px) {
+                height: 32%;
+            }
 
             &:nth-child(2n) {
                 left: 72%;
@@ -54,6 +57,16 @@
             &:nth-child(2n) {
                 top: 78%;
                 height: 18%;
+
+                @media screen and (max-height: 768px) {
+                    top: 72%;
+                    height: 24%;
+                }
+            }
+            
+            @media screen and (max-height: 768px) {
+                height: 32%;
+                top: 38%;
             }
         }
 
@@ -117,7 +130,13 @@
 
                 b { font-weight: 700; color: #266DD3; }
 
-                @media screen and (max-width: 1024px) {
+                @media screen and (max-width: 768px) {
+                    font-size: 21px;
+                }
+                @media screen and (max-width: 960px) {
+                    font-size: 24px;
+                }
+                @media screen and (max-height: 768px) {
                     font-size: 24px;
                 }
             }
@@ -137,8 +156,14 @@
                 font-weight: 700;
                 margin: 30px 0 10px;
                 color: #266DD3;
-
-                @media screen and (max-width: 1024px) {
+                
+                @media screen and (max-width: 768px) {
+                    font-size: 48px;
+                }
+                @media screen and (max-width: 960px) {
+                    font-size: 54px;
+                }
+                @media screen and (max-height: 768px) {
                     font-size: 54px;
                 }
             }
@@ -152,7 +177,14 @@
                 background: #266DD3;
             }
 
-            @media screen and (max-width: 1024px) {
+            @media screen and (max-width: 960px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+            @media screen and (max-height: 768px) {
                 .nav>li>a {
                     padding: 4px 8px;
                     font-size: 12px;
