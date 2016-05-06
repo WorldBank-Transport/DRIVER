@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function ToDDoW($translate) {
+    function ToDDoW($translate, LanguageState) {
         // The color ramp to use
         var rampValues = ['#FDFBED', '#f6edb1', '#f7da22', '#ecbe1d', '#e77124',
                           '#d54927', '#cf3a27', '#a33936', '#7f182a', '#68101a'];
@@ -35,6 +35,8 @@
                  *  elements together under `rect`.
                  */
                 function init() {
+                    var isRightToLeft = LanguageState.getSelected().rtl;
+
                     /**
                      * Watch for changes to chartData and redraw
                      */
@@ -71,6 +73,7 @@
                     });
 
                     var theHours = _.range(24);
+
                     rect = svg.selectAll('.day')
                         .data(theDays)
                             .enter().append('g')
@@ -104,14 +107,16 @@
                         .append('text')
                           .text(function(d, i) { return theDays[i]; })
                           .attr('class', 'label')
-                          .attr('x', 0)
+                          .attr('x', isRightToLeft ? 27 : 0)
                           .attr('y', function(d, i) { return i * cellSize + 40; });
 
                     svg.select('.day').selectAll('g')
                         .append('text')
                             .text(function(d, i) { return theHours[i]; })
                             .attr('class', 'label hours')
-                            .attr('x', function(d, i) { return i * cellSize + 37; })
+                            .attr('x', function(d, i) {
+                                return i * cellSize + (isRightToLeft ? 47 : 37);
+                            })
                             .attr('y', 10);
 
                     // Use try/catch pattern here to prevent unecessary logging before data loads

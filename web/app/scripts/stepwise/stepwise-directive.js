@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function Stepwise($translate) {
+    function Stepwise($translate, LanguageState) {
         var module = {
             restrict: 'E',
             scope: {
@@ -40,13 +40,15 @@
                  *  elements together under `rect`.
                  */
                 function init() {
+                    var isRightToLeft = LanguageState.getSelected().rtl;
+
                     /**
                      * Watch for changes to chartData and redraw
                      */
                     scope.$watch('chartData', function(newVal) {
                         if (newVal) {
                             var data = formatData(newVal);
-                            updateChart(data);
+                            updateChart(data, isRightToLeft);
                         }
                     });
 
@@ -99,7 +101,7 @@
                  *
                  * @param data {array} the data to change our chart with
                  */
-                function updateChart(data) {
+                function updateChart(data, isRightToLeft) {
                     svg.call(tooltip);
 
                     // Get the max count and use it for the number of ticks.
@@ -133,15 +135,16 @@
                         .selectAll('text')
                             .attr('class', 'label')
                             .style('text-anchor', 'end')
-                            .attr('dx', '-0.8em')
-                            .attr('dy', '0.15em')
+                            .attr('dx', isRightToLeft ? '-3.9em' : '-0.8em')
+                            .attr('dy', isRightToLeft ? '0.3em' : '0.15em')
                             .attr('transform', 'rotate(-50)');
 
                     svg.select('.yAxis')
                         .transition()
                         .call(yAxis)
                         .selectAll('text')
-                            .attr('class', 'label');
+                            .attr('class', 'label')
+                            .attr('x', isRightToLeft ? -20 : -2);
                 }
 
                 function getWeek(datetimeISO) {
