@@ -63,7 +63,7 @@
                     height: 24%;
                 }
             }
-            
+
             @media screen and (max-height: 768px) {
                 height: 32%;
                 top: 38%;
@@ -99,7 +99,7 @@
                 right: 10px;
                 width: auto;
                 margin: 14px 0;
-                font-size: 21px;
+                font-size: 20px;
 
                 span {
                     max-width: 65%;
@@ -156,7 +156,7 @@
                 font-weight: 700;
                 margin: 30px 0 10px;
                 color: #266DD3;
-                
+
                 @media screen and (max-width: 768px) {
                     font-size: 48px;
                 }
@@ -192,10 +192,10 @@
                 }
             }
         }
-        &.toddow {
+        &.toddow, &.stepwise {
             h3 {
                 margin: 0;
-                font-size: 21px;
+                font-size: 20px;
                 font-weight: 400;
             }
         }
@@ -235,6 +235,33 @@
         }
         a {
             cursor: pointer;
+        }
+    }
+
+    .blackspots-disabled {
+        .block {
+            &.block-1x2 {
+                width: 54%;
+            }
+
+            &.block-1x1 {
+                width: 40%;
+                left: 58%;
+
+                &:nth-child(3) {
+                    height: 25%;
+                }
+
+                &:nth-child(4) {
+                    top: 31%;
+                    height: 35%;
+                }
+
+                &:nth-child(5) {
+                    top: 68%;
+                    height: 28%;
+                }
+            }
         }
     }
 }

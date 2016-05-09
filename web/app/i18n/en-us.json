@@ -50,9 +50,10 @@
         "BLACK_SPOTS_BY_SEVERITY": "Black Spots by Severity",
         "DAYS": "Days",
         "LAST_WEEK": "last week",
-        "RECENT_EVENTS_PERIOD": "during the past two weeks",
+        "RECENT_EVENTS_PERIOD": "Last Two Weeks",
         "RECENT_PROPORTIONS_TEXT": "of all traffic incidents involved",
-        "TODDOW_TITLE": "Time of Day, Day of Week: The Last 90 Days",
+        "STEPWISE_TITLE": "Weekly Counts: Last 90 Days",
+        "TODDOW_TITLE": "Time of Day, Day of Week: Last 90 Days",
         "VIEW_ALL": "View all"
     },
     "DAY": {
