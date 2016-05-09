@@ -9,6 +9,16 @@ body.rtl {
     float: left !important;
   }
 
+  .dashboard {
+      .blackspots-disabled {
+          .block {
+              &.block-1x1 {
+                  left: 2%;
+              }
+          }
+      }
+  }
+
   .navbar-header {
     float: right;
   }
@@ -107,4 +117,3 @@ body.rtl {
   }
 
 }
-
