@@ -27,10 +27,10 @@ describe('driver.views.dashboard: Dashboard', function () {
         var scope = $rootScope.$new();
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
 
-        $httpBackend.expectGET(/\/api\/boundaries/)
-            .respond(ResourcesMock.GeographyResponse);
         $httpBackend.expectGET(/\/api\/recordtypes\//)
             .respond(200, ResourcesMock.RecordTypeResponse);
+        $httpBackend.expectGET(/\/api\/boundaries/)
+            .respond(ResourcesMock.GeographyResponse);
         $httpBackend.whenGET(/api\/boundarypolygons/)
             .respond(200, ResourcesMock.BoundaryNoGeomResponse);
 

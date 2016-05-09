@@ -4,8 +4,9 @@
     /* ngInject */
     function DashboardController($scope, $state, $timeout,
                                  FilterState, InitialState, Records,
-                                 RecordSchemaState, RecordState, RecordAggregates) {
+                                 RecordSchemaState, RecordState, RecordAggregates, WebConfig) {
         var ctl = this;
+        ctl.showBlackSpots = WebConfig.blackSpots.visible;
 
         InitialState.ready().then(init);
 
@@ -43,13 +44,13 @@
         }
 
         /*
-         * Loads records for toddow
+         * Loads records for charts
          * @return {promise} Promise to load records
          */
         function loadRecords() {
             // We want to see only the last 90 days worth of records on the dashboard
             var now = new Date();
-            var duration = moment.duration({ days:90 });
+            var duration = moment.duration({ days: 90 });
             var today = now.toISOString();
             var threeMonthsBack = new Date(now - duration).toISOString();
 
@@ -60,13 +61,24 @@
             };
             /* jshint camelcase: true */
 
-            var filterConfig = { doAttrFilters: false,
-                                 doBoundaryFilter: true,
-                                 doJsonFilters: false, };
+            var filterConfig = {
+                doAttrFilters: false,
+                doBoundaryFilter: true,
+                doJsonFilters: false
+            };
 
             RecordAggregates.toddow(params, filterConfig).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
+
+            // The stepwise widget is only displayed when black spots are not visible
+            if (!ctl.showBlackSpots) {
+                RecordAggregates.stepwise(params).then(function(stepwiseData) {
+                    ctl.minDate = threeMonthsBack;
+                    ctl.maxDate = now;
+                    ctl.stepwise = stepwiseData;
+                });
+            }
         }
 
         function onRecordsLoaded() {
