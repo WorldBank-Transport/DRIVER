@@ -24,10 +24,11 @@
 
                 // GLOBALS
                 var svg, xAxis, yAxis;  // GLOBAL
-                // scales
-                var tScale = d3.time.scale().range([0, width]);
-                var x = d3.scale.ordinal().rangeBands([0, width], 0.05);
-                var y = d3.scale.linear().range([height, 0]);
+                // scales -- set in init
+                var xRange;
+                var tScale;
+                var x;
+                var y;
 
                 // Need to set after initialization to guarantee translations are available
                 var tooltip = null;
@@ -41,6 +42,11 @@
                  */
                 function init() {
                     var isRightToLeft = LanguageState.getSelected().rtl;
+
+                    xRange = isRightToLeft ? [width, 0] : [0, width];
+                    tScale = d3.time.scale().range(xRange);
+                    x = d3.scale.ordinal().rangeBands(xRange, 0.05);
+                    y = d3.scale.linear().range([height, 0]);
 
                     /**
                      * Watch for changes to chartData and redraw
@@ -88,6 +94,7 @@
 
                     svg.append('g')
                       .attr('class', 'yAxis')
+                      .attr('transform', 'translate(' + (isRightToLeft ? width : 0) + ',0)')
                       .call(yAxis)
                       .attr('x', -100)
                       .selectAll('text')
@@ -144,7 +151,7 @@
                         .call(yAxis)
                         .selectAll('text')
                             .attr('class', 'label')
-                            .attr('x', isRightToLeft ? -20 : -2);
+                            .attr('x', isRightToLeft ? 2 : -2);
                 }
 
                 function getWeek(datetimeISO) {

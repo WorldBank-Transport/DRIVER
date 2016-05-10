@@ -42,7 +42,7 @@
                      */
                     scope.$watch('chartData', function(val) {
                         if (val) {
-                            var data = formatData(val);
+                            var data = formatData(val, isRightToLeft);
                             color = d3.scale.quantile()
                                 .domain([0, _.max(val, function(x) { return x.count; }).count])
                                 .range(rampValues);
@@ -73,6 +73,9 @@
                     });
 
                     var theHours = _.range(24);
+                    if (isRightToLeft) {
+                        theHours = _(theHours).reverse().value();
+                    }
 
                     rect = svg.selectAll('.day')
                         .data(theDays)
@@ -99,7 +102,9 @@
                             .attr('stroke', 'white')
                             .attr('width', cellSize)
                             .attr('height', cellSize)
-                            .attr('x', function(d, i) { return cellSize * i + 30; })
+                            .attr('x', function(d, i) {
+                                return cellSize * i + (isRightToLeft ? 0 : 30);
+                            })
                             .attr('y', function(d, i, j) { return j * cellSize + 20; });
 
                     // Day labels
@@ -107,7 +112,7 @@
                         .append('text')
                           .text(function(d, i) { return theDays[i]; })
                           .attr('class', 'label')
-                          .attr('x', isRightToLeft ? 27 : 0)
+                          .attr('x', isRightToLeft ? 652 : 0)
                           .attr('y', function(d, i) { return i * cellSize + 40; });
 
                     svg.select('.day').selectAll('g')
@@ -115,7 +120,7 @@
                             .text(function(d, i) { return theHours[i]; })
                             .attr('class', 'label hours')
                             .attr('x', function(d, i) {
-                                return i * cellSize + (isRightToLeft ? 47 : 37);
+                                return i * cellSize + (isRightToLeft ? 17 : 37);
                             })
                             .attr('y', 10);
 
@@ -152,10 +157,11 @@
                 /**
                  * Helper function to gather data together into a format more friendly to D3
                  */
-                function formatData(events) {
+                function formatData(events, isRightToLeft) {
                     var holder = {};
                     _.each(events, function(val) {
-                        holder[val.tod + ':' + val.dow] = val.count;
+                        var tod = isRightToLeft ? 23 - val.tod : val.tod;
+                        holder[tod + ':' + val.dow] = val.count;
                     });
                     return holder;
                 }
