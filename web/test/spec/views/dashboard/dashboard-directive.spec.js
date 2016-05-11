@@ -25,6 +25,7 @@ describe('driver.views.dashboard: Dashboard', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
+        scope.isRightToLeft = false;
         var element = $compile('<driver-dashboard></driver-dashboard>')(scope);
 
         $httpBackend.expectGET(/\/api\/recordtypes\//)
