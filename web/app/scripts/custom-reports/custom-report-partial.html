@@ -1,10 +1,14 @@
 <cube-grid-spinner ng-if="ctl.loading"></cube-grid-spinner>
 <div class="table-view custom-report" ng-if="!ctl.loading">
     <table class="table" ng-repeat="table in ctl.report.tables">
-        <caption>
-            <h2>
+        <caption class="text-right-on-rtl">
+            <h2 ng-if="!isRightToLeft">
                 <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span> -
                 <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
+            </h2>
+            <h2 ng-if="isRightToLeft">
+                <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span> -
+                <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span>
             </h2>
             <h3>
                 {{ ctl.recordType.plural_label }}

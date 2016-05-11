@@ -39,6 +39,11 @@ body.rtl {
     }
   }
 
+  .filterbar > .pull-right {
+    right: auto;
+    left: 10px;
+  }
+
   .navbar-right {
     float: left !important;
   }
@@ -116,4 +121,10 @@ body.rtl {
     border-radius: 0;
   }
 
+}
+
+.text-right-on-rtl {
+  .rtl & {
+    text-align: right !important;
+  }
 }

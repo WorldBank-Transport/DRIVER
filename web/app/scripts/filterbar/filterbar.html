@@ -24,14 +24,14 @@
         <a ng-click="filterbar.showSavedFiltersModal()"
             class="btn btn-default btn-icon"
             tooltip-trigger
-            tooltip-placement="left"
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
             tooltip-append-to-body
             tooltip-animation="false"
             tooltip="{{ 'SAVED_FILTERS.TITLE' | translate }}"><span class="glyphicon glyphicon-filter"></span></a>
         <a
             class="btn btn-default btn-icon"
             tooltip-trigger
-            tooltip-placement="left"
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
             tooltip="{{ 'SAVED_FILTERS.CLEAR' | translate }}"
             tooltip-append-to-body
             tooltip-animation="false"
@@ -40,7 +40,7 @@
             ng-if="::filterbar.userCanAdd"
             class="btn btn-default btn-icon"
             tooltip-trigger
-            tooltip-placement="left"
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
             tooltip="{{ 'NAV.ADD_A_RECORD' | translate }}"
             tooltip-append-to-body
             tooltip-animation="false"
