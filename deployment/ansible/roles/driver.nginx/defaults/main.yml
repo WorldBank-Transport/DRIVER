@@ -22,6 +22,7 @@ driver_conf:
   DJANGO_POSTGIS_VERSION: "{{ driver_postgis_version }}"
   DJANGO_SECRET_KEY: "{{ postgresql_password | md5 }}"
   DJANGO_ENV: "{% if developing %}development{% elif staging %}staging{% else %}production{% endif %}"
+  ALLOWED_HOST: "{{ allowed_host }}"
 
 driver_postgis_version: 2.1.3
 

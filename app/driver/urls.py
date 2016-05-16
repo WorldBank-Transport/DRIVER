@@ -41,6 +41,5 @@ urlpatterns = [
     url(r'openid/', include('djangooidc.urls')),
 ]
 
-# Allow login to the browseable API if in debug mode
-if settings.DEVELOP:
-    urlpatterns.append(url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')))
+# Allow login to the browseable API
+urlpatterns.append(url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')))
