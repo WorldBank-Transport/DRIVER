@@ -25,6 +25,7 @@ driver_conf:
   DJANGO_SECRET_KEY: "{{ postgresql_password | md5 }}"
   DJANGO_ENV: "{% if developing %}development{% elif staging %}staging{% else %}production{% endif %}"
   DRIVER_OSM_EXTRACT_URL: "{{ osm_extract_url }}"
+  ALLOWED_HOST: "{{ allowed_host }}"
 
 driver_postgis_version: 2.1.3
 

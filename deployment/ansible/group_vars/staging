@@ -42,3 +42,6 @@ google_analytics_id: "GTM-5B5G65"
 local_time_zone_id: 'Asia/Manila'
 local_country_code: 'ph'
 local_center_lat_lon: [12.375, 121.5]
+
+## Django allowed hosts setting. Overridden since staging runs in non-DEBUG mode.
+allowed_host: 'prs.azavea.com'
