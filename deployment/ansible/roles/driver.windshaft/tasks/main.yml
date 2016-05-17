@@ -4,7 +4,7 @@
         owner={{ansible_ssh_user}}
         group={{ansible_ssh_user}}
         state=directory
-  when: staging
+  when: staging or production
 
 - name: Synchronize Windshaft configuration
   synchronize: archive=no
@@ -16,7 +16,7 @@
                src="../../windshaft/"
                dest="/opt/windshaft"
   become: False
-  when: staging
+  when: staging or production
   notify:
     - Restart Windshaft
 

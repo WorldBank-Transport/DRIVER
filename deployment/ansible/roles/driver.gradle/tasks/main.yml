@@ -23,7 +23,7 @@
 
 - name: Pull gradle Docker image
   command: /usr/bin/docker pull quay.io/azavea/driver-gradle:latest
-  when: staging
+  when: staging or production
 
 - name: Configure gradle service definition
   template: src=upstart-gradle.conf.j2 dest=/etc/init/driver-gradle.conf

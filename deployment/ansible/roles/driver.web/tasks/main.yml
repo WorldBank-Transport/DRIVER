@@ -15,4 +15,4 @@
   become: False
 
 - { include: development.yml, when: developing }
-- { include: staging.yml, when: staging }
+- { include: staging_or_production.yml, when: staging or production }

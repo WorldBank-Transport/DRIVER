@@ -31,7 +31,7 @@
 
 - name: Pull application Docker image
   command: /usr/bin/docker pull quay.io/azavea/driver-app:latest
-  when: staging
+  when: staging or production
   notify:
     - Restart driver-app
 
