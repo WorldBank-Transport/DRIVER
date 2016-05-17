@@ -110,4 +110,4 @@ def export_records(occurred_min, occurred_max, record_type_id):
         csvfile.seek(0, 0)
         saved_filename = '{}.csv'.format(store.uuid)
         store.csv.save(saved_filename, File(csvfile))
-        return store.uuid
+        return str(store.uuid)

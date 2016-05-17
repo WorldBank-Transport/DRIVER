@@ -132,6 +132,7 @@ USE_TZ = True
 OSM_EXTRACT_URL = os.environ.get('DRIVER_OSM_EXTRACT_URL',
                                  'https://download.geofabrik.de/asia/philippines-latest.osm.pbf')
 
+BLACKSPOT_RECORD_TYPE_LABEL = os.environ.get('BLACKSPOT_RECORD_TYPE_LABEL', 'Accident')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
@@ -289,8 +290,16 @@ CELERY_ACCEPT_CONTENT = ['json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ROUTES = {
     'black_spots.tasks.calculate_black_spots.calculate_black_spots': {'queue': 'taskworker'},
+    'black_spots.tasks.get_segments.cleanup': {'queue': 'taskworker'},
+    'black_spots.tasks.get_segments.create_segments_tar': {'queue': 'taskworker'},
+    'black_spots.tasks.get_segments.get_segments_shp': {'queue': 'taskworker'},
+    'black_spots.tasks.load_road_network.load_road_network': {'queue': 'taskworker'},
+    'black_spots.tasks.load_blackspot_geoms.load_blackspot_geoms': {'queue': 'taskworker'},
+    'black_spots.tasks.generate_training_input.get_training_noprecip': {'queue': 'taskworker'},
+    'black_spots.tasks.generate_training_input.get_training_precip': {'queue': 'taskworker'},
     'data.tasks.remove_duplicates.remove_duplicates': {'queue': 'taskworker'},
     'data.tasks.export_csv.export_csv': {'queue': 'taskworker'},
+    'data.tasks.fetch_record_csv.export_records': {'queue': 'taskworker'}
 }
 # This needs to match the proxy configuration in nginx so that requests for files generated
 # by celery jobs go to the right place.
