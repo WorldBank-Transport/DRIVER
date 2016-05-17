@@ -9,4 +9,4 @@
 
 - name: Pull application Docker image
   command: /usr/bin/docker pull quay.io/azavea/driver-analysis:latest
-  when: staging
+  when: staging or production
