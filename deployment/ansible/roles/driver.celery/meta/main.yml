@@ -2,3 +2,4 @@
 dependencies:
   - { role: "driver.docker" }
   - { role: "driver.heimdall" }
+  - { role: "driver.monit" }

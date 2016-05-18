@@ -1,0 +1,49 @@
+---
+- name: Download monit
+  get_url: >
+    url=https://mmonit.com/monit/dist/binary/{{ monit_version }}/monit-{{ monit_version }}-linux-x64.tar.gz
+    dest=/usr/local/src/monit-{{ monit_version }}-linux-x64.tar.gz
+
+- name: Extract monit
+  unarchive: src=/usr/local/src/monit-{{ monit_version }}-linux-x64.tar.gz
+             dest=/usr/local/src
+             copy=no
+             creates=/usr/local/src/monit-{{ monit_version }}
+
+- name: Symlink monit into /usr/bin
+  file: >
+    src=/usr/local/src/monit-{{ monit_version }}/bin/monit
+    dest=/usr/bin/monit
+    state=link
+
+- name: Create necessary monit directories
+  file: path={{ item }} state=directory
+  with_items:
+    - /etc/monit
+    - /etc/monit/conf.d
+    - /var/lib/monit
+
+# We normally use upstart, but in the interest of time, this reuses
+# the init script that is packaged with the Trusty package for monit.
+- name: Create monit init script
+  template: src=init-monit.j2
+    dest=/etc/init.d/monit
+    mode=0755
+
+- name: Create monit init script defaults file
+  template: src=defaults-monit.j2 dest=/etc/default/monit
+
+- name: Create monit default configuration file
+  template: src=monitrc.j2 dest=/etc/monit/monitrc
+    mode=0600
+  notify:
+    - Restart monit
+
+- name: Symlink monit configuration to path expected by monit
+  file: src=/etc/monit/monitrc dest=/etc/monitrc state=link
+
+- name: Configure monit web interface
+  template: src=monit-enable-httpd.cfg.j2 dest=/etc/monit/conf.d/monit-enable-httpd.cfg
+  when: "{{ monit_enable_web_access }}"
+  notify:
+    - Restart monit

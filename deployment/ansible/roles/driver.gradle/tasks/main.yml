@@ -32,3 +32,8 @@
 
 - name: Ensure gradle service is running
   service: name=driver-gradle state=started
+
+- name: Set up monit monitoring of driver-gradle container
+  template: src=monit-driver-gradle.cfg.j2 dest=/etc/monit/conf.d/driver-gradle.cfg
+  notify:
+    - Restart monit

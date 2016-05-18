@@ -40,3 +40,8 @@
   become_user: postgres
   postgresql_db: name="{{ heimdall_lock_db }}"
                  owner="{{ heimdall_db_username }}"
+
+- name: Set up monit monitoring of PostgreSQL
+  template: src=monit-postgresql.cfg.j2 dest=/etc/monit/conf.d/postgresql.cfg
+  notify:
+    - Restart monit

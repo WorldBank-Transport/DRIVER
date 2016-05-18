@@ -1,0 +1,5 @@
+---
+- name: Set up monit monitoring of Redis
+  template: src=monit-redis.cfg.j2 dest=/etc/monit/conf.d/redis.cfg
+  notify:
+    - Restart monit

@@ -17,3 +17,8 @@
             dest=/etc/nginx/conf.d/log-format.conf
   notify:
     - Restart Nginx
+
+- name: Set up monit monitoring of celery nginx server
+  template: src=monit-driver-nginx-celery.cfg.j2 dest=/etc/monit/conf.d/driver-celery-nginx.cfg
+  notify:
+    - Restart monit

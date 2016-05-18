@@ -1,0 +1,36 @@
+###############################################################################
+## Monit control file
+###############################################################################
+##
+## Comments begin with a '#' and extend through the end of the line. Keywords
+## are case insensitive. All path's MUST BE FULLY QUALIFIED, starting with '/'.
+##
+## Below you will find examples of some frequently used statements. For 
+## information about the control file and a complete list of statements and 
+## options, please have a look in the Monit manual.
+  set daemon 120            # check services at 2-minute intervals
+#   with start delay 240    # optional: delay the first check by 4-minutes (by 
+#                           # default Monit check immediately after Monit start)
+#
+# set logfile syslog facility log_daemon
+  set logfile /var/log/monit.log
+#
+# set idfile /var/.monit.id
+  set idfile /var/lib/monit/id
+#
+  set statefile /var/lib/monit/state
+#
+#
+  set eventqueue
+      basedir /var/lib/monit/events # set the base directory where events will be stored
+      slots 100                     # optionally limit the queue size
+#
+###############################################################################
+## Includes
+###############################################################################
+##
+## It is possible to include additional configuration parts from other files or
+## directories.
+#
+   include /etc/monit/conf.d/*
+#

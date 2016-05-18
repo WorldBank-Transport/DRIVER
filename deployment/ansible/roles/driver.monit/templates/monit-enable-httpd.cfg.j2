@@ -1,0 +1,7 @@
+set httpd port {{ monit_httpd_port }}
+  allow localhost
+  {% for host in monit_allow_hosts -%}
+  allow {{ host }}
+  {% endfor -%}
+  allow {{ monit_allow_user }}:"{{ monit_allow_password }}"
+

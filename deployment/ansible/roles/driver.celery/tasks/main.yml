@@ -29,6 +29,11 @@
 - name: Ensure Driver celery service is running
   service: name=driver-celery state=started
 
+- name: Set up monit monitoring of driver-celery container
+  template: src=monit-driver-celery.cfg.j2 dest=/etc/monit/conf.d/driver-celery.cfg
+  notify:
+    - Restart monit
+
 # TODO: uncomment and modify this when the final script is ready
 # - name: Add black spot calculation cronjob
 #   cron: name="black spot calculation"
