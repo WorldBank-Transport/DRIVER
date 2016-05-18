@@ -15,24 +15,32 @@ from ashlar.models import RecordType
 from black_spots.tasks import (forecast_segment_incidents, load_blackspot_geoms,
                                load_road_network, get_training_noprecip)
 from black_spots.tasks.get_segments import get_segments_shp, create_segments_tar
-from black_spots.models import BlackSpotRecordsFile, RoadSegmentsShapefile
+from black_spots.models import BlackSpotTrainingCsv, RoadSegmentsShapefile
 from data.tasks.fetch_record_csv import export_records
 
 logger = get_task_logger(__name__)
 
 
 @shared_task
-def calculate_black_spots(history_length=datetime.timedelta(days=4 * 365 + 1), roads_srid=3395):
+def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), roads_srid=3395):
     """Integrates all black spot tasks into a pipeline
     Args:
+        history_length (timedelta): Length of time to use for querying for historic records.
+                                    Note: the R script will fail if it doesn't have a certain
+                                    amount of data, which is why this is set to 5 years.
+                                    TODO: make the R script more robust, so it can handle a
+                                    dynamic number of years without failure.
         roads_srid (int): SRID in which to deal with the Roads data
     """
     # Get the parameters we'll use to filter down the records we want
     now = timezone.now()
     oldest = now - history_length
-    # Note that this assumes that there is only one RecordType with this label; there's
-    # no straightforward way to auto-detect this otherwise.
-    record_type = RecordType.objects.filter(label=settings.BLACKSPOT_RECORD_TYPE_LABEL).first()
+    # Note that this assumes that the RecordType with this label to be used will also be marked as
+    # `active`. The `load_incidents` script ensures only the most recent record type is set as such.
+    record_type = RecordType.objects.filter(
+        label=settings.BLACKSPOT_RECORD_TYPE_LABEL,
+        active=True
+    ).first()
     segments_shp_obj = RoadSegmentsShapefile.objects.all().order_by('-created').first()
     # Refresh road segments if the most recent one is more than 30 days out of date
     if not segments_shp_obj or (now - segments_shp_obj.created > datetime.timedelta(days=30)):
@@ -49,7 +57,7 @@ def calculate_black_spots(history_length=datetime.timedelta(days=4 * 365 + 1), r
                                                     records_csv_obj_id,
                                                     roads_srid).get()
     # - Run Rscript to output CSV
-    segments_csv = BlackSpotRecordsFile.objects.get(blackspots_output).csv.path
+    segments_csv = BlackSpotTrainingCsv.objects.get(pk=blackspots_output).csv.path
     forecasts_csv = forecast_segment_incidents(segments_csv, '/opt/app/forecasts.csv')
     # - Load blackspot geoms from shapefile and CSV
     # The shapefile is stored as a gzipped tarfile so we need to extract it
