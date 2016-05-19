@@ -1,7 +1,7 @@
 {
     "LANG": "العربية",
     "AGG": {
-        "DAY": "يوم",
+        "DAY": "يوماً",
         "DAY_OF_MONTH": "يوم من شهر",
         "DAY_OF_WEEK": "يوم من أسبوع",
         "FILTER": "تصنيف",
@@ -52,7 +52,7 @@
         "LAST_WEEK": "الأسبوع الماضي",
         "RECENT_EVENTS_PERIOD": "خلال الأسبوعين الماضيين",
         "RECENT_PROPORTIONS_TEXT": "من جميع الحوادث المرورية المعنية",
-        "STEPWISE_TITLE": "!Weekly Counts: Last 90 Days",
+        "STEPWISE_TITLE": "عدد الحوادث إسبوعياً: آخر 90 يوماً",
         "TODDOW_TITLE": "الوقت من اليوم، يوم من الأسبوع:خلال ال90 يوم الأخيرة",
         "VIEW_ALL": "عرض الجميع"
     },
@@ -176,7 +176,7 @@
         "OCCURRED": "حدث",
         "OCCURRED_FROM": "تاريخ البدء",
         "OCCURRED_TO": "تاريخ الإنتهاء",
-        "POWERED_BY_FORECAST": "!Powered by Forecast",
+        "POWERED_BY_FORECAST": "مدعوم من \"Forecast.io\"",
         "REALLY_DELETE": "هل  تريد تحذف حقاً؟ لا يمكن تدارك هذه العملية",
         "RECORD": "السجل",
         "RECORDS": "السجلات",
