@@ -37,3 +37,5 @@ root_static_dir: "{{ root_www_dir }}/static"
 root_media_dir: "{{ root_www_dir }}/media"
 
 heimdall_db_connection: "postgres://{{ heimdall_db_user }}:{{ heimdall_db_password }}@{{ postgresql_host }}:{{ postgresql_port }}/{{ heimdall_lock_db }}"
+
+driver_cron_log_dir: "/var/log/driver-tasks"

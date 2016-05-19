@@ -34,6 +34,9 @@
   notify:
     - Restart monit
 
+- name: Create a directory for scheduled task logs
+  file: path={{ driver_cron_log_dir }} state=directory
+
 # TODO: uncomment and modify this when the final script is ready
 # - name: Add black spot calculation cronjob
 #   cron: name="black spot calculation"
@@ -42,7 +45,8 @@
 #         --namespace records
 #         --name find_duplicates
 #         --timeout 300
-#         docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots"
+#         docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots
+#         >> {{ driver_cron_log_dir }}/calculate_black_spots.log 2>&1"
 #         hour=19 minute=10  # 3:10am in UTC+8
 
 - name: Add find duplicate records cronjob
@@ -52,10 +56,12 @@
         --namespace records
         --name find_duplicates
         --timeout 300
-        docker exec $(docker ps -q -f name=driver-celery) ./manage.py find_duplicate_records"
+        docker exec $(docker ps -q -f name=driver-celery) ./manage.py find_duplicate_records
+        >> {{ driver_cron_log_dir }}/find_duplicates.log 2>&1"
         hour=17 minute=10  # 1:10am in UTC+8
 
 - name: Clean up CSV export files cronjob
   cron: name="export file cleanup"
-        job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py remove_old_exports"
+        job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py remove_old_exports
+        >> {{ driver_cron_log_dir }}/remove_old_exports.log 2>&1"
         minute=10
