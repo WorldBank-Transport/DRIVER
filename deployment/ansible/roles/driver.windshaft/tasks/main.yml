@@ -27,3 +27,8 @@
 
 - name: Ensure Windshaft application is running
   service: name=windshaft state=started
+
+- name: Set up monit monitoring
+  template: src=monit-windshaft.cfg.j2 dest=/etc/monit/conf.d/windshaft.cfg
+  notify:
+    - Restart monit

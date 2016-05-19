@@ -79,3 +79,14 @@ keystore_password: 'driverkeystore'
 
 ## Django allowed hosts setting. Override when not in DEBUG mode.
 allowed_host: ''
+
+## Access settings for Monit admin interface. Note that this is
+## insecure; ideally, SSL should be used (which Monit supports).
+## An intermediate step would be to restrict the IPs from which
+## monit can be accessed via monit_allow_hosts
+## Username and Password MUST be defined in order for monit to work
+## but monit is restricted to requests coming from localhost by default
+monit_allow_hosts: []
+monit_allow_user: 'test'
+monit_allow_password: 'test'
+monit_enable_web_access: yes

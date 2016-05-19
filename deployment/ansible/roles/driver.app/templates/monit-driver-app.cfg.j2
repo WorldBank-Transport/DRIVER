@@ -1,0 +1,4 @@
+check program driver-app with path "/bin/sh -c 'docker top driver-app'"
+  if status != 0 then alert
+  start program = "/usr/sbin/service driver-app start"
+  stop program = "/usr/sbin/service driver-app stop"
