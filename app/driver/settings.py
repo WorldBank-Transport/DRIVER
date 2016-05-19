@@ -132,7 +132,7 @@ USE_TZ = True
 OSM_EXTRACT_URL = os.environ.get('DRIVER_OSM_EXTRACT_URL',
                                  'https://download.geofabrik.de/asia/philippines-latest.osm.pbf')
 
-BLACKSPOT_RECORD_TYPE_LABEL = os.environ.get('BLACKSPOT_RECORD_TYPE_LABEL', 'Accident')
+BLACKSPOT_RECORD_TYPE_LABEL = os.environ.get('BLACKSPOT_RECORD_TYPE_LABEL', 'Incident')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
