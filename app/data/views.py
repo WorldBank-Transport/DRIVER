@@ -343,7 +343,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         for value in (annotated_qs.values('row', 'col')
                       .order_by('row', 'col')
                       .annotate(count=Count('row'))):
-            data.setdefault(str(value['row']), {})[str(value['col'])] = value['count']
+            data.setdefault(unicode(value['row']), {})[unicode(value['col'])] = value['count']
 
         row_totals = {row: sum(cols.values()) for (row, cols) in data.items()}
 
