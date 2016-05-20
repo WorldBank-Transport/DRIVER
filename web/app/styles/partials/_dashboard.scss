@@ -240,26 +240,40 @@
 
     .blackspots-disabled {
         .block {
+            &.block-2x1 {
+                width: 47%;
+                height: 94%;
+                left: 2%;
+                top: 3%;
+            }
+
             &.block-1x2 {
-                width: 54%;
+                width: 48%;
+                height: 33%;
+                right: 2%;
+
+                &:nth-child(2) {
+                    top: 3%;
+                }
+
+                &:nth-child(3) {
+                    top: 38%;
+                }
             }
 
             &.block-1x1 {
-                width: 40%;
-                left: 58%;
-
-                &:nth-child(3) {
-                    height: 25%;
-                }
+                top: 73%;
+                height: 24%;
+                right: 35%;
 
                 &:nth-child(4) {
-                    top: 31%;
-                    height: 35%;
+                    left: 50%;
+                    width: 21%;
                 }
 
                 &:nth-child(5) {
-                    top: 68%;
-                    height: 28%;
+                    left: 72%;
+                    width: 26%;
                 }
             }
         }
