@@ -121,6 +121,60 @@ body.rtl {
     border-radius: 0;
   }
 
+  .input-group-addon:last-child {
+    border-left: 1px solid #ccc;
+  }
+
+  .json-editor-form {
+    json-editor {
+      > div > .well > div > div > .row {
+        > div {
+          > h3 {
+            .btn-group {
+              float: left;
+            }
+          }
+
+          &[data-schematype="array"] > .well.well-sm > div > [data-schematype="object"] {
+            h3 .btn-group {
+              float: left;
+            }
+          }
+        }
+      }
+      .jse-Checkbox {
+        float: right !important;
+        margin-left: 2px;
+      }
+      .glyphicon-chevron-right:before {
+        content: "\e079";
+      }
+    }
+  }
+
+  .blackspots-disabled {
+    .block {
+      &.block-2x1 {
+        right: 2%;
+      }
+
+      &.block-1x2 {
+        right: 50%;
+      }
+
+      &.block-1x1 {
+        left: 35%;
+
+        &:nth-child(4) {
+          right: 50%;
+        }
+
+        &:nth-child(5) {
+          right: 72%;
+        }
+      }
+    }
+  }
 }
 
 .text-right-on-rtl {
