@@ -3,7 +3,7 @@
     'use strict';
 
     /* ngInject */
-    function RTRelatedEditController($log, $state, $stateParams, RecordSchemas, RecordTypes) {
+    function RTRelatedEditController($log, $state, $stateParams, RecordSchemas, RecordTypes, Schemas) {
         var ctl = this;
         var currentSchema = null;
         ctl.submitForm = submitForm;
@@ -24,7 +24,7 @@
         }
 
         function submitForm() {
-            var key = ctl.definition.title;
+            var key = Schemas.generateFieldName(ctl.definition.title);
             currentSchema.schema.definitions[key] = ctl.definition;
             RecordSchemas.create({
                 /* jshint camelcase: false */
