@@ -2,8 +2,8 @@
     'use strict';
 
     /* ngInject */
-    function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, $translate,
-                                     uuid4, AuthService, JsonEditorDefaults, Nominatim,
+    function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, $timeout,
+                                     $translate, uuid4, AuthService, JsonEditorDefaults, Nominatim,
                                      Notifications, Records, RecordState, RecordSchemaState,
                                      RecordTypes, WeatherService, WebConfig) {
         var ctl = this;
@@ -401,7 +401,21 @@
         }
 
         function goBack() {
+            var prevPage = $window.location.href;
             $window.history.back();
+
+            // If going back to the previous page didn't result in any change, then it means
+            // this was opened by the edit link which targets a new window. In this case we
+            // want the window to be closed.
+            // There is not a reliable way to check if this was navigated to via a normal link
+            // or a new window link (the referrer value isn't useful due to the way angular loads),
+            // so this is just checking to see if going back in history changed anything, and if
+            // not it closes the window.
+            $timeout(function() {
+                if ($window.location.href === prevPage) {
+                    $window.close();
+                }
+            }, 200);
         }
 
         function onDeleteClicked() {
