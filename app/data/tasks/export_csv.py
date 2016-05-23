@@ -247,7 +247,9 @@ class BaseRecordWriter(object):
 
     def write_header(self, csv_file):
         """Write the CSV header to csv_file"""
-        writer = csv.DictWriter(csv_file, fieldnames=self.csv_columns)
+        # Need to sanitize CSV columns to utf-8 before writing
+        header_columns = [self._utf8(col) for col in self.csv_columns]
+        writer = csv.DictWriter(csv_file, fieldnames=header_columns)
         writer.writeheader()
 
 
