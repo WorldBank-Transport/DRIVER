@@ -405,7 +405,7 @@
         }
 
         function onDeleteClicked() {
-            if ($window.confirm($translate.instant('RECORD.REALLY_DELTE'))) {
+            if ($window.confirm($translate.instant('RECORD.REALLY_DELETE'))) {
                 var patchData = {
                     archived: true,
                     uuid: ctl.record.uuid
