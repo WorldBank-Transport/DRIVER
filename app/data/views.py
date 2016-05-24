@@ -49,10 +49,10 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
 from data.tasks import export_csv
 
 import filters
-from models import RecordAuditLogEntry, RecordDuplicate
+from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 from serializers import (DriverRecordSerializer, DetailsReadOnlyRecordSerializer,
                          DetailsReadOnlyRecordSchemaSerializer, RecordAuditLogEntrySerializer,
-                         RecordDuplicateSerializer)
+                         RecordDuplicateSerializer, RecordCostConfigSerializer)
 import transformers
 from driver import mixins
 
@@ -738,6 +738,11 @@ class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
             resolved_ids = [str(uuid) for uuid in resolved_dup_qs.values_list('pk', flat=True)]
             resolved_dup_qs.update(resolved=True)
         return Response({'resolved': resolved_ids})
+
+
+class DriverRecordCostConfigViewSet(viewsets.ModelViewSet):
+    queryset = RecordCostConfig.objects.all()
+    serializer_class = RecordCostConfigSerializer
 
 
 class RecordCsvExportViewSet(viewsets.ViewSet):

@@ -7,7 +7,7 @@ from rest_framework.serializers import ModelSerializer, SerializerMethodField, V
 from ashlar import serializers
 from ashlar import serializer_fields
 
-from models import RecordAuditLogEntry, RecordDuplicate
+from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 
 from django.conf import settings
 
@@ -66,3 +66,8 @@ class RecordDuplicateSerializer(ModelSerializer):
 
     class Meta:
         model = RecordDuplicate
+
+
+class RecordCostConfigSerializer(ModelSerializer):
+    class Meta:
+        model = RecordCostConfig
