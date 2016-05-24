@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 
-from black_spots.models import (BlackSpot, BlackSpotSet)
+from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
 
 
 class BlackSpotSerializer(ModelSerializer):
@@ -15,3 +15,9 @@ class BlackSpotSetSerializer(ModelSerializer):
     class Meta:
         model = BlackSpotSet
         read_only_fields = ('uuid',)
+
+
+class BlackSpotConfigSerializer(ModelSerializer):
+    """Serializer for singleton BlackSpotConfig object"""
+    class Meta:
+        model = BlackSpotConfig

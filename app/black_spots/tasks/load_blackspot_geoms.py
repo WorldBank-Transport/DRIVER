@@ -44,7 +44,7 @@ def load_blackspot_geoms(segments_shp, black_spots_csv, record_type_id, src_srid
     logger.info('Reading black spots...')
     black_spot_recs = read_black_spots(black_spots_csv, forecast_column)
 
-    logger.info('Filtering to percentile {}...'.format(percentile))
+    logger.info('Filtering to percentile {}...'.format(output_percentile))
     cutoff = percentile(sorted(map(lambda bsp: float(bsp[forecast_column]), black_spot_recs)),
                         output_percentile)
     output_spots = filter(lambda spot: float(spot[forecast_column]) >= cutoff, black_spot_recs)

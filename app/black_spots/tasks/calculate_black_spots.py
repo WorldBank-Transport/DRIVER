@@ -15,7 +15,7 @@ from ashlar.models import RecordType
 from black_spots.tasks import (forecast_segment_incidents, load_blackspot_geoms,
                                load_road_network, get_training_noprecip)
 from black_spots.tasks.get_segments import get_segments_shp, create_segments_tar
-from black_spots.models import BlackSpotTrainingCsv, RoadSegmentsShapefile
+from black_spots.models import BlackSpotTrainingCsv, RoadSegmentsShapefile, BlackSpotConfig
 from data.tasks.fetch_record_csv import export_records
 
 logger = get_task_logger(__name__)
@@ -32,6 +32,10 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
                                     dynamic number of years without failure.
         roads_srid (int): SRID in which to deal with the Roads data
     """
+    config = BlackSpotConfig.objects.all().order_by('pk').first()
+    if not config:
+        logger.warn('BlackSpots are not fully configured; set a percentile cutoff first.')
+        return
     # Get the parameters we'll use to filter down the records we want
     now = timezone.now()
     oldest = now - history_length
@@ -67,6 +71,7 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
         with tarfile.open(shp_tar, "r:gz") as tar:
             tar.extractall(tar_output_dir)
             load_blackspot_geoms(os.path.join(tar_output_dir, 'segments', 'combined_segments.shp'),
-                                 forecasts_csv, record_type.pk, roads_srid)
+                                 forecasts_csv, record_type.pk, roads_srid,
+                                 output_percentile=config.severity_percentile_threshold)
     finally:
         shutil.rmtree(tar_output_dir)
