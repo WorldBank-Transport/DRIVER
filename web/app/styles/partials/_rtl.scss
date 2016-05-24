@@ -25,6 +25,10 @@ body.rtl {
 
   .navbar-nav {
     float: right !important;
+
+    > li {
+      float: right !important;
+    }
   }
 
   .filterbar .navbar-nav {

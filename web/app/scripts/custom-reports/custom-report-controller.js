@@ -86,7 +86,7 @@
             /* jshint camelcase: false */
             var header = '<tr><th>' + ctl.rowCategoryLabel + '</th>';
             _.forEach(ctl.report.col_labels, function(col) {
-                header += '<th>' + col.label + '</th>'; });
+                header += '<th>' + makeLabel(col.label) + '</th>'; });
             header += '<th>' + totalString + '</th>' + '</tr>';
             ctl.headerHTML = header;
 
