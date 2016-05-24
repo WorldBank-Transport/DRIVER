@@ -31,7 +31,7 @@ exec /usr/bin/docker run \
   --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
   {% endif -%}
   {% for k,v in driver_conf.items() -%}
-  --env {{ k }}={{ v }} \
+  --env {{ k }}="{{ v }}" \
   {% endfor -%}
   --log-driver syslog \
 {% if celery %} --entrypoint '/bin/bash -c' \
@@ -39,7 +39,7 @@ exec /usr/bin/docker run \
   celery -A driver worker --queue=path --loglevel=info --concurrency=4
 {% endif %}
 
-post-stop script    
+post-stop script
   /usr/bin/docker kill driver-app
   /usr/bin/docker rm driver-app
 end script
