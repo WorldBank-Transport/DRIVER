@@ -602,7 +602,11 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 tmp[component] = filter_rule
                 filter_rule = tmp
             whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
-        labels = [{'key': choice, 'label': choice} for choice in choices]
+        labels = [
+            {'key': choice, 'label': [{'text': choice, 'translate': False}]}
+            for choice in choices
+        ]
+
         return (Case(*whens, output_field=CharField()), labels)
 
 
