@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.gis.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from ashlar.models import AshlarModel
 
 
@@ -36,6 +37,15 @@ class BlackSpotSet(AshlarModel):
 
     #: The record type these black spots are associated with
     record_type = models.ForeignKey('ashlar.RecordType')
+
+
+class BlackSpotConfig(models.Model):
+    """Holds user-configurable settings for how black spot generation should work"""
+    #: Blackspot severity percentile cutoff; segments with forecast severity above this threshold
+    #: will be considered blackspots.
+    severity_percentile_threshold = models.FloatField(default=0.95,
+                                                      validators=[MaxValueValidator(1.0),
+                                                                  MinValueValidator(0.0)])
 
 
 class BlackSpotRecordsFile(AshlarModel):

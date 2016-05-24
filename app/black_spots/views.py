@@ -1,10 +1,11 @@
 from rest_framework import viewsets
+from rest_framework import mixins as drf_mixins
 from rest_framework.response import Response
 from django_redis import get_redis_connection
-from django.db import connection
 
-from black_spots.models import (BlackSpot, BlackSpotSet)
-from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer)
+from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
+from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer,
+                                     BlackSpotConfigSerializer)
 from black_spots.filters import (BlackSpotFilter, BlackSpotSetFilter)
 
 from driver_auth.permissions import IsAdminOrReadOnly
@@ -56,3 +57,20 @@ class BlackSpotSetViewSet(viewsets.ModelViewSet):
             # return tile_token instead of the BlackspotSet uuid
             response = Response({'count': 1, 'results': [{'tilekey': tile_token}]})
         return response
+
+
+class BlackSpotConfigViewSet(drf_mixins.ListModelMixin, drf_mixins.RetrieveModelMixin,
+                             drf_mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """ViewSet for BlackSpot configuration
+    The BlackSpotConfig object is designed to be a singleton, so POST and DELETE are disabled.
+    """
+    serializer_class = BlackSpotConfigSerializer
+
+    def get_queryset(self):
+        """Ensure that we always return a single config object"""
+        # This is a bit roundabout, but we have to return a queryset rather than an object.
+        config = BlackSpotConfig.objects.all().order_by('pk').first()
+        if not config:
+            BlackSpotConfig.objects.create()
+            config = BlackSpotConfig.objects.all().order_by('pk').first()
+        return BlackSpotConfig.objects.filter(pk__in=[config.pk])
