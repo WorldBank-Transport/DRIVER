@@ -44,6 +44,10 @@ Both Angular apps can be run in development mode via:
 The frontend app will be available on port 7002 and the schema editor will be available on port
 7001. Both will reload automatically as changes are made.
 
+To make requests to a Django runserver directly (for example, to perform interactive debugging in
+the request-response cycle), run `./scripts/manage.sh runserver 0.0.0.0:8000`. You should then be
+able to access the Django runserver on port 3001 of the `app` VM.
+
 #### Updating existing translation files
 New angular translation tokens should be added to i18n/exclaim.json with a value of "!<english>".
 The English translation (en-us.json) is automatically built from exclaim.json. New tokens are also

@@ -23,6 +23,9 @@ end script
 exec /usr/bin/docker run \
   --name driver-app \
   --publish 4000:4000 \
+  {% if 'development' in group_names -%}
+  --publish 8000:8000 \
+  {% endif %}
   --volume {{ root_static_dir }}:{{ root_static_dir }} \
   --volume {{ root_media_dir }}:{{ root_media_dir }} \
   {% if 'development' in group_names -%}
