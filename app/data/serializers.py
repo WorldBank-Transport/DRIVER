@@ -2,7 +2,7 @@ import re
 import datetime
 import pytz
 
-from rest_framework.serializers import ModelSerializer, SerializerMethodField, ValidationError
+from rest_framework.serializers import (ModelSerializer, SerializerMethodField, ValidationError)
 
 from ashlar import serializers
 from ashlar import serializer_fields
@@ -69,5 +69,30 @@ class RecordDuplicateSerializer(ModelSerializer):
 
 
 class RecordCostConfigSerializer(ModelSerializer):
+    def validate(self, data):
+        """Check that the most recent schema for the record type matches the passed enum fields"""
+        # Object-level validation and partial updates do not go well together:
+        # https://github.com/tomchristie/django-rest-framework/issues/3070
+        cost_keys = set(data.get('enum_costs', self.instance.enum_costs).keys())
+        schema = data.get('record_type', self.instance.record_type).get_current_schema()
+        # TODO: This snippet also appears in data/views.py and should be refactored into the Ashlar
+        # RecordSchema model
+        path = [data.get('content_type_key', self.instance.content_type_key), 'properties',
+                data.get('property_key', self.instance.property_key)]
+        obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths
+        for key in path:
+            try:
+                obj = obj[key]
+            except KeyError:
+                raise ValidationError("The property '{}' does not exist on the schema".format(key))
+        choices = obj.get('enum', None)
+        if not choices:
+            raise ValidationError("The specified property must have choices (be an enum).")
+
+        choice_keys = set(choices)
+        if len(cost_keys.symmetric_difference(choice_keys)) != 0:
+            raise ValidationError('The costs specified don\'t match the choices in the schema')
+        return data
+
     class Meta:
         model = RecordCostConfig

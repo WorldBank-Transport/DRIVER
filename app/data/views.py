@@ -257,7 +257,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             return Response({'record_type': 'No cost configuration found for this record type.'},
                             status_code=status.HTTP_404_NOT_FOUND)
         schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
-        path = [cost_config.content_type_key, 'properties', cost_config.property_key]
+        path = cost_config.path
         choices = self._get_schema_enum_choices(schema, path)
         # `choices` may include user-entered data; to prevent users from entering column names
         # that conflict with existing Record fields, we're going to use each choice's index as an
@@ -265,7 +265,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         choice_indices = {str(idx): choice for idx, choice in enumerate(choices)}
         counts_queryset = self.get_filtered_queryset(request)
         for idx, choice in choice_indices.items():
-            filter_rule = self.make_djsonb_containment_filter(path, choice)
+            filter_rule = self._make_djsonb_containment_filter(path, choice)
             # We want a column for each enum choice with a binary 1/0 indication of whether the row
             # in question has that enum choice. This is to support checkbox fields which can have
             # more than one selection from the enum per field. Then we're going to sum those to get
@@ -675,7 +675,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         choices = self._get_schema_enum_choices(schema, path)
         whens = []
         for choice in choices:
-            filter_rule = self.make_djsonb_containment_filter(path, choice)
+            filter_rule = self._make_djsonb_containment_filter(path, choice)
             whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
         labels = [
             {'key': choice, 'label': [{'text': choice, 'translate': False}]}
@@ -683,6 +683,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         ]
         return (Case(*whens, output_field=CharField()), labels)
 
+    # TODO: This snippet also appears in data/serializers.py and should be refactored into the Ashlar
+    # RecordSchema model
     def _get_schema_enum_choices(self, schema, path):
         """Returns the choices in a schema enum field at path
 
@@ -706,7 +708,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ParseError(detail="The property at choices_path is missing required 'enum' field")
         return choices
 
-    def make_djsonb_containment_filter(self, path, value):
+    def _make_djsonb_containment_filter(self, path, value):
         """Returns a djsonb containment filter for a path to contain a value
 
         Args:

@@ -100,6 +100,11 @@ class RecordCostConfig(AshlarModel):
     # This will need to be filtered on the front-end to enums.
     property_key = models.TextField()
 
+    @property
+    def path(self):
+        """Gets the field path specified by this object within a schema"""
+        return [self.content_type_key, 'properties', self.property_key]
+
     #: Mappings between enumerations and cost values (e.g. {'Fatal': 1000000,
     #                                                       'Serious injury': 50000, ...})
     # This should be auto-populated by the front-end once a property_key is selected.
