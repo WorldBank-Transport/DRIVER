@@ -39,7 +39,7 @@ class BlackSpotSet(AshlarModel):
     record_type = models.ForeignKey('ashlar.RecordType')
 
 
-class BlackSpotConfig(models.Model):
+class BlackSpotConfig(AshlarModel):
     """Holds user-configurable settings for how black spot generation should work"""
     #: Blackspot severity percentile cutoff; segments with forecast severity above this threshold
     #: will be considered blackspots.
