@@ -20,6 +20,30 @@ from driver_auth.permissions import is_admin_or_writer
 logger = get_task_logger(__name__)
 
 
+def _utf8(value):
+    """
+    Helper for properly encoding values that may contain unicode characters.
+    From https://github.com/azavea/django-queryset-csv/blob/master/djqscsv/djqscsv.py#L174
+
+    :param value: The string to encode
+    """
+    if isinstance(value, str):
+        return value
+    elif isinstance(value, unicode):
+        return value.encode('utf-8')
+    else:
+        return unicode(value).encode('utf-8')
+
+def _sanitize(value):
+    """
+    Helper for sanitizing the record type label to ensure it doesn't contain characters that are
+    invalid in filenames such as slashes.
+    This keeps spaces, periods, underscores, and all unicode characters.
+
+    :param value: The string to sanitize
+    """
+    return ''.join(char for char in value if char.isalnum() or char in [' ', '.', '_']).rstrip()
+
 @shared_task(track_started=True)
 def export_csv(query_key, user_id):
     """Exports a set of records to a series of CSV files and places them in a compressed tarball
@@ -59,9 +83,11 @@ def export_csv(query_key, user_id):
     # bit 4 marking directories
     # For information on setting file permissions in zipfile, see
     # http://stackoverflow.com/questions/434641/how-do-i-set-permissions-attributes-on-a-file-in-a-zip-file-using-pythons-zip
-    filename = os.path.join(settings.CELERY_EXPORTS_FILE_PATH,
-                            "{}-{}.zip".format(record_type.plural_label, query_key[:8]))
-    archive = zipfile.ZipFile(filename, 'w', zipfile.ZIP_DEFLATED)
+
+    filename = "{}-{}.zip".format(_utf8(_sanitize(record_type.plural_label)), query_key[:8])
+    path = os.path.join(settings.CELERY_EXPORTS_FILE_PATH, filename)
+
+    archive = zipfile.ZipFile(path, 'w', zipfile.ZIP_DEFLATED)
     # Add a directory for the schema we're outputting
     dirname = 'schema-' + str(schema.pk) + '/'
     for f, name in record_writer.get_files_and_names():
@@ -236,19 +262,11 @@ class ReadOnlyRecordExporter(AshlarRecordExporter):
 
 class BaseRecordWriter(object):
     """Base class for some common functions that exporters need"""
-    # From https://github.com/azavea/django-queryset-csv/blob/master/djqscsv/djqscsv.py#L174
-    def _utf8(self, value):
-        if isinstance(value, str):
-            return value
-        elif isinstance(value, unicode):
-            return value.encode('utf-8')
-        else:
-            return unicode(value).encode('utf-8')
 
     def write_header(self, csv_file):
         """Write the CSV header to csv_file"""
         # Need to sanitize CSV columns to utf-8 before writing
-        header_columns = [self._utf8(col) for col in self.csv_columns]
+        header_columns = [_utf8(col) for col in self.csv_columns]
         writer = csv.DictWriter(csv_file, fieldnames=header_columns)
         writer.writeheader()
 
@@ -309,7 +327,7 @@ class RecordModelWriter(BaseRecordWriter):
         for column in self.csv_columns:
             model_value = self.get_model_value_for_column(record, column)
             csv_val = self.transform_model_value(model_value, column)
-            output_data[column] = self._utf8(csv_val)
+            output_data[column] = _utf8(csv_val)
         writer = csv.DictWriter(csv_file, fieldnames=self.csv_columns)
         writer.writerow(output_data)
 
@@ -375,7 +393,7 @@ class RelatedInfoWriter(BaseRecordWriter):
             if out_key is not None:
                 try:
                     # Assign the value of the input data to the renamed key in the output data
-                    output_data[out_key] = self._utf8(related_info.pop(in_key))
+                    output_data[out_key] = _utf8(related_info.pop(in_key))
                 except KeyError:
                     # in_key doesn't exist in input; this is fine, the CSV writer will handle it
                     pass
