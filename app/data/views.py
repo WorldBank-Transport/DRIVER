@@ -761,10 +761,10 @@ class RecordCsvExportViewSet(viewsets.ViewSet):
             # TODO: This won't work with multiple celery workers
             # TODO: We should add a cleanup task to prevent result files from accumulating
             # on the celery worker.
-            uri = '{scheme}://{host}{prefix}{file}'.format(scheme=request.scheme,
+            uri = u'{scheme}://{host}{prefix}{file}'.format(scheme=request.scheme,
                                                            host=request.get_host(),
                                                            prefix=settings.CELERY_DOWNLOAD_PREFIX,
-                                                           file=str(job_result.get()))
+                                                           file=job_result.get())
             return Response({'status': job_result.state, 'result': uri})
         return Response({'status': job_result.state, 'info': job_result.info})
 
