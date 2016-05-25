@@ -97,8 +97,7 @@ class RecordCostConfig(AshlarModel):
     content_type_key = models.TextField()
 
     #: Key of the content type property to access (e.g. 'Severity')
-    # This will need to be filtered on the front-end to enums which use select dropdowns (not
-    # checkbox).
+    # This will need to be filtered on the front-end to enums.
     property_key = models.TextField()
 
     #: Mappings between enumerations and cost values (e.g. {'Fatal': 1000000,
