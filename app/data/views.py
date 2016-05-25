@@ -561,8 +561,20 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         """
         boundary = Boundary.objects.get(pk=boundary_id)
         polygons = BoundaryPolygon.objects.filter(boundary=boundary)
-        labels = [{'key': str(poly.pk), 'label': poly.data[boundary.display_field]}
-                  for poly in polygons]
+
+        # Sort the polygons by display_field and remove any items that have an empty label
+        polygons = sorted([p for p in polygons if p.data[boundary.display_field]],
+                          key=lambda p: p.data[boundary.display_field])
+        labels = [
+            {
+                'key': str(poly.pk),
+                'label': [
+                    {'text': poly.data[boundary.display_field], 'translate': False}
+                ]
+            }
+            for poly in polygons
+        ]
+
         return (Case(*[When(geom__within=poly.geom, then=Value(poly.pk)) for poly in polygons],
                      output_field=UUIDField()), labels)
 
