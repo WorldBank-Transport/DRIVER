@@ -73,12 +73,18 @@ class RecordCostConfigSerializer(ModelSerializer):
         """Check that the most recent schema for the record type matches the passed enum fields"""
         # Object-level validation and partial updates do not go well together:
         # https://github.com/tomchristie/django-rest-framework/issues/3070
-        cost_keys = set(data.get('enum_costs', self.instance.enum_costs).keys())
-        schema = data.get('record_type', self.instance.record_type).get_current_schema()
+
+        # Helper for getting the value of a key and falling back to the instance value if available
+        def get_from_data(key):
+            if self.instance:
+                return data.get(key, getattr(self.instance, key))
+            return data.get(key)
+
+        cost_keys = set(get_from_data('enum_costs').keys())
+        schema = get_from_data('record_type').get_current_schema()
         # TODO: This snippet also appears in data/views.py and should be refactored into the Ashlar
         # RecordSchema model
-        path = [data.get('content_type_key', self.instance.content_type_key), 'properties',
-                data.get('property_key', self.instance.property_key)]
+        path = [get_from_data('content_type_key'), 'properties', get_from_data('property_key')]
         obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths
         for key in path:
             try:
