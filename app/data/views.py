@@ -20,6 +20,7 @@ from django.db.models import (Case,
                               UUIDField,
                               Value,
                               Count,
+                              Sum,
                               Q)
 from django_redis import get_redis_connection
 
@@ -33,7 +34,7 @@ from rest_framework import renderers, status
 
 from rest_framework_csv import renderers as csv_renderer
 
-from ashlar.models import RecordSchema, RecordType, Record, BoundaryPolygon, Boundary
+from ashlar.models import RecordSchema, RecordType, BoundaryPolygon, Boundary
 from ashlar.views import (BoundaryPolygonViewSet,
                           RecordViewSet,
                           RecordTypeViewSet,
@@ -49,10 +50,10 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
 from data.tasks import export_csv
 
 import filters
-from models import RecordAuditLogEntry, RecordDuplicate
+from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 from serializers import (DriverRecordSerializer, DetailsReadOnlyRecordSerializer,
                          DetailsReadOnlyRecordSchemaSerializer, RecordAuditLogEntrySerializer,
-                         RecordDuplicateSerializer)
+                         RecordDuplicateSerializer, RecordCostConfigSerializer)
 import transformers
 from driver import mixins
 
@@ -222,6 +223,89 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                   for label, days in durations.items()}
 
         return Response(counts)
+
+    @list_route(methods=['get'])
+    def costs(self, request):
+        """Return the costs for a set of records of a certain type
+
+        This endpoint requires the record_type query parameter. All other query parameters will be
+        used to filter the queryset before calculating costs.
+
+        There must be a RecordCostConfig associated with the RecordType passed, otherwise a 404
+        will be returned. If there are multiple RecordCostConfigs associated with a RecordType, the
+        most recently created one will be used.
+
+        Uses the most recent schema for the RecordType; if this doesn't match the fields in the
+        RecordCostConfig associated with the RecordType, an exception may be raised.
+
+        Returns a response of the form:
+        {
+            total: X,
+            subtotals: {
+                enum_choice1: A,
+                enum_choice2: B,
+                ...
+            }
+        }
+        """
+        record_type_id = request.query_params.get('record_type', None)
+        if not record_type_id:
+            raise ParseError(detail="The 'record_type' parameter is required")
+        cost_config = (RecordCostConfig.objects.filter(record_type_id=record_type_id)
+                       .order_by('-created').first())
+        if not cost_config:
+            return Response({'record_type': 'No cost configuration found for this record type.'},
+                            status_code=status.HTTP_404_NOT_FOUND)
+        schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
+        path = cost_config.path
+        choices = self._get_schema_enum_choices(schema, path)
+        # `choices` may include user-entered data; to prevent users from entering column names
+        # that conflict with existing Record fields, we're going to use each choice's index as an
+        # alias instead.
+        choice_indices = {str(idx): choice for idx, choice in enumerate(choices)}
+        counts_queryset = self.get_filtered_queryset(request)
+        for idx, choice in choice_indices.items():
+            filter_rule = self._make_djsonb_containment_filter(path, choice)
+            # We want a column for each enum choice with a binary 1/0 indication of whether the row
+            # in question has that enum choice. This is to support checkbox fields which can have
+            # more than one selection from the enum per field. Then we're going to sum those to get
+            # aggregate counts for each enum choice.
+            choice_case = Case(When(data__jsonb=filter_rule, then=Value(1)), default=Value(0),
+                               output_field=IntegerField())
+            annotate_params = dict()
+            annotate_params[idx] = choice_case
+            counts_queryset = counts_queryset.annotate(**annotate_params)
+
+        # Do the summation
+        sum_ops = [Sum(key) for key in choice_indices.keys()]
+        sum_qs = counts_queryset.values(*choice_indices.keys()).aggregate(*sum_ops)
+        # sum_qs will now look something like this: {'0__sum': 20, '1__sum': 45, ...}
+        # so now we need to slot in the corresponding label from `choices` by pulling the
+        # corresponding value out of choices_indices.
+        sums = {}
+        for key, choice_sum in sum_qs.items():
+            index = key.split('_')[0]
+            choice = choice_indices[index]
+            sums[choice] = choice_sum
+        # Multiply sums by per-incident costs to get subtotal costs broken out by type
+        subtotals = dict()
+        # This is going to be extremely easy for users to break if they update a schema without
+        # updating the corresponding cost configuration; if things are out of sync, degrade
+        # gracefully by providing zeroes for keys that don't match and set a flag so that the
+        # front-end can alert users if needed.
+        found_missing_choices = False
+        for key, value in sums.items():
+            try:
+                subtotals[key] = value * int(cost_config.enum_costs[key])
+            except KeyError:
+                logger.warn('Schema and RecordCostConfig out of sync; %s missing from cost config',
+                            key)
+                found_missing_choices = True
+                subtotals[key] = 0
+        total = sum(subtotals.values())
+        # Return breakdown costs and sum
+        return Response({'total': total, 'subtotals': subtotals,
+                         'outdated_cost_config': found_missing_choices})
 
     @list_route(methods=['get'])
     def crosstabs(self, request):
@@ -408,7 +492,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 'lookup': lambda x: {'occurred_from__week_day': x},
                 'label': lambda x: [
                     {
-                        'text': 'DAY.{}'.format(calendar.day_name[x-1].upper()),
+                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
                         'translate': True
                     }
                 ]
@@ -588,6 +672,28 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             (Case, labels), where Case is a Django Case object with the choice of each record,
             and labels is a dict matching choices to their labels (currently the same).
         """
+        choices = self._get_schema_enum_choices(schema, path)
+        whens = []
+        for choice in choices:
+            filter_rule = self._make_djsonb_containment_filter(path, choice)
+            whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
+        labels = [
+            {'key': choice, 'label': [{'text': choice, 'translate': False}]}
+            for choice in choices
+        ]
+        return (Case(*whens, output_field=CharField()), labels)
+
+    # TODO: This snippet also appears in data/serializers.py and should be refactored into the Ashlar
+    # RecordSchema model
+    def _get_schema_enum_choices(self, schema, path):
+        """Returns the choices in a schema enum field at path
+
+        Args:
+            schema (RecordSchema): A RecordSchema to get properties from
+            path (list): A list of path fragments to navigate to the desired property
+        Returns:
+            choices, where choices is a list of strings representing the valid values of the enum.
+        """
         # Walk down the schema using the path components
         obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths
         try:
@@ -600,26 +706,30 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         choices = obj.get('enum', None)
         if not choices:
             raise ParseError(detail="The property at choices_path is missing required 'enum' field")
+        return choices
+
+    def _make_djsonb_containment_filter(self, path, value):
+        """Returns a djsonb containment filter for a path to contain a value
+
+        Args:
+            path (list): A list of strings denoting the path
+            value (String): The value to match on
+        Returns:
+            A dict representing a valid djsonb containment filter specification that matches if the
+            field at path contains value
+        """
         # Build the djsonb filter specification from the inside out, and skip schema-only keys, i.e.
         # 'properties' and 'items'.
         filter_path = [component for component in reversed(path)
                        if component not in ['properties', 'items']]
-        whens = []
-        for choice in choices:
-            filter_rule = dict(_rule_type='containment', contains=[choice])
-            for component in filter_path:
-                # Nest filter inside itself so we eventually get something like:
-                # {"incidentDetails": {"severity": {"_rule_type": "containment"}}}
-                tmp = dict()
-                tmp[component] = filter_rule
-                filter_rule = tmp
-            whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
-        labels = [
-            {'key': choice, 'label': [{'text': choice, 'translate': False}]}
-            for choice in choices
-        ]
-
-        return (Case(*whens, output_field=CharField()), labels)
+        filter_rule = dict(_rule_type='containment', contains=[value])
+        for component in filter_path:
+            # Nest filter inside itself so we eventually get something like:
+            # {"incidentDetails": {"severity": {"_rule_type": "containment"}}}
+            tmp = dict()
+            tmp[component] = filter_rule
+            filter_rule = tmp
+        return filter_rule
 
 
 class DriverRecordAuditLogViewSet(viewsets.ModelViewSet):
@@ -738,6 +848,11 @@ class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
             resolved_ids = [str(uuid) for uuid in resolved_dup_qs.values_list('pk', flat=True)]
             resolved_dup_qs.update(resolved=True)
         return Response({'resolved': resolved_ids})
+
+
+class DriverRecordCostConfigViewSet(viewsets.ModelViewSet):
+    queryset = RecordCostConfig.objects.all()
+    serializer_class = RecordCostConfigSerializer
 
 
 class RecordCsvExportViewSet(viewsets.ViewSet):

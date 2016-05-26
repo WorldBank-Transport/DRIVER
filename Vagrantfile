@@ -96,6 +96,8 @@ Vagrant.configure("2") do |config|
     app.vm.network "forwarded_port", guest: 80, host: Integer(ENV.fetch("DRIVER_WEB_PORT_80", 7000))
     # Runserver
     app.vm.network "forwarded_port", guest: 4000, host: Integer(ENV.fetch("DRIVER_DJANGO_PORT_3000", 3000))
+    # Runserver interactive
+    app.vm.network "forwarded_port", guest: 8000, host: Integer(ENV.fetch("DRIVER_DJANGO_PORT_8000", 3001))
     # Grunt serve - schema editor
     app.vm.network "forwarded_port", guest: 9000, host: Integer(ENV.fetch("DRIVER_GRUNT_PORT_7001", 7001))
     # Grunt serve - web app

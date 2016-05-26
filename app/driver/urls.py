@@ -21,6 +21,7 @@ router.register('jars', data_views.AndroidSchemaModelsViewSet, base_name='jars')
 router.register('records', data_views.DriverRecordViewSet)
 router.register('recordschemas', data_views.DriverRecordSchemaViewSet)
 router.register('recordtypes', data_views.DriverRecordTypeViewSet)
+router.register('recordcosts', data_views.DriverRecordCostConfigViewSet)
 router.register('duplicates', data_views.DriverRecordDuplicateViewSet)
 router.register('userfilters', filt_views.SavedFilterViewSet, base_name='userfilters')
 
