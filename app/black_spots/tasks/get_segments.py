@@ -1,9 +1,13 @@
 import fiona
 from fiona.crs import from_epsg
+from functools import partial
+import csv
 import gc
+import glob
 import itertools
 import logging
 import os
+import pyproj
 import pytz
 import rtree
 import shutil
@@ -13,14 +17,14 @@ import subprocess
 import tempfile
 import billiard as multiprocessing
 from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
-from shapely.ops import unary_union
+from shapely.ops import transform, unary_union
 
 from django.core.files import File
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
 
-from black_spots.models import RoadSegmentsShapefile
+from black_spots.models import BlackSpotRecordsFile, RoadSegmentsShapefile
 
 from celery import shared_task
 from celery.utils.log import get_task_logger
@@ -78,16 +82,23 @@ def create_segments_tar(combined_segments_shp_dir):
 
 
 @shared_task
-def get_segments_shp(path_to_roads_shp, road_srid):
+def get_segments_shp(path_to_roads_shp, records_csv_uuid, road_srid):
     """Save segments to a shapefile and save in model
 
     Args:
     :param path_to_roads_shp: (str) path to shapefile
+    :param records_csv_uuid: (str) UUID for the BlackSpotRecordsFile
     :param road_srid: (int) EPSG ID of roads shapefile projection
     """
     try:
+        logger.info('Reading Records CSV with uuid: %s', records_csv_uuid)
+        record_buffers = get_record_buffers(road_srid, records_csv_uuid)
+        logger.info('Num record buffers: %s', len(record_buffers))
+
         logger.info('Reading Roads Shapefile: %s', path_to_roads_shp)
-        roads, road_bounds = read_roads(path_to_roads_shp)
+        roads, road_bounds = read_roads(path_to_roads_shp, record_buffers)
+        logger.info('Number of roads after filtering: %s', len(roads))
+
         logger.info('Obtaining intersection buffers')
         int_buffers = get_intersection_buffers(roads, road_bounds, INTERSECTION_BUFFER_UNITS,
                                                TILE_MAX_UNITS)
@@ -102,10 +113,41 @@ def get_segments_shp(path_to_roads_shp, road_srid):
 
         segments_shp_path = os.path.join(shp_output_dir, COMBINED_SEGMENTS_SHP_NAME)
         write_segments_shp(segments_shp_path, road_srid, combined_segments)
+
+        logger.info('Cleaning up old lines shapefile')
+        for f in glob.glob(path_to_roads_shp.replace('.shp', '.*')):
+            logger.info('Removing file: {}'.format(f))
+            os.remove(f)
     except:
         logger.exception('Error generating segments shapefile')
         raise
     return shp_output_dir
+
+
+def get_record_buffers(road_srid, records_csv_uuid):
+    """Returns a list of all records, buffered by the configured MATCH_TOLERANCE
+    :param road_srid: EPSG ID of roads shapefile projection
+    :param records_csv_uuid: UUID of the BlackSpotRecordsFile CSV
+    """
+    road_projection = {'init': 'epsg:{}'.format(road_srid)}
+    record_projection = {'init': RECORD_PROJECTION}
+    project = partial(
+        pyproj.transform,
+        pyproj.Proj(record_projection),
+        pyproj.Proj(road_projection)
+    )
+    record_buffers = []
+    with BlackSpotRecordsFile.objects.get(uuid=records_csv_uuid).csv as records_csv:
+        records_csv.open('rb')
+        try:
+            for row in csv.DictReader(records_csv):
+                record_point = transform(project, Point(float(row[RECORD_COL_X]),
+                                                        float(row[RECORD_COL_Y])))
+                record_buffers.append(record_point.buffer(MATCH_TOLERANCE))
+        finally:
+            records_csv.close()
+
+    return record_buffers
 
 
 def create_tarball(shp_dir, tar_dir):
@@ -157,8 +199,17 @@ def get_intersections(roads):
     return unioned
 
 
-def should_keep_road(road):
-    """Returns true if road should be considered for segmentation"""
+def should_keep_road(road, road_shp, record_buffers_index):
+    """Returns true if road should be considered for segmentation
+    :param road: Dictionary representation of the road (with properties)
+    :param roads_shp: Shapely representation of the road
+    :param record_buffers_index: RTree index of the record_buffers
+    """
+    # If the road has no nearby records, then we can discard it early on.
+    # This provides a major optimization since the majority of roads don't have recorded accidents.
+    if not len(list(record_buffers_index.intersection(road_shp.bounds))):
+        return False
+
     if ('highway' in road['properties']
             and road['properties']['highway'] is not None
             and road['properties']['highway'] != 'path'
@@ -173,17 +224,24 @@ def should_keep_road(road):
     return False
 
 
-def read_roads(roads_shp):
+def read_roads(roads_shp, record_buffers):
     """Reads shapefile and extracts roads and projection
     :param roads_shp: Path to the shapefile containing roads
+    :param record_buffers: List of shapely geometries representing buffered event points
     """
-    shp_file = fiona.open(roads_shp)
-    roads = [
-        shape(road['geometry'])
-        for road in shp_file
+    # Create a spatial index for record buffers to efficiently find intersecting roads
+    record_buffers_index = rtree.index.Index()
+    for idx, record_buffer in enumerate(record_buffers):
+        record_buffers_index.insert(idx, record_buffer.bounds)
 
-        if should_keep_road(road)
-    ]
+    shp_file = fiona.open(roads_shp)
+    roads = []
+    logger.info('Number of roads in shapefile: {}'.format(len(shp_file)))
+    for idx, road in enumerate(shp_file):
+        road_shp = shape(road['geometry'])
+        if should_keep_road(road, road_shp, record_buffers_index):
+            roads.append(road_shp)
+
     return (roads, shp_file.bounds)
 
 

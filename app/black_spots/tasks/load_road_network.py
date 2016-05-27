@@ -26,6 +26,15 @@ def load_road_network(output_root=None, output_srid='EPSG:3395'):
     """
     if not output_root:
         output_root = os.getcwd()
+
+    lines_shp_path = os.path.join(output_root, 'lines.shp')
+
+    # If the road network shapefile already exists, don't download it
+    logger.info('Checking if {} exists'.format(lines_shp_path))
+    if os.path.isfile(lines_shp_path):
+        logger.info('lines.shp already exists, not downloading OSM data')
+        return lines_shp_path
+
     osm_path = os.path.join(output_root, 'road_network.osm.pbf')
     # Download OSM data
     try:
@@ -58,4 +67,4 @@ def load_road_network(output_root=None, output_srid='EPSG:3395'):
             os.remove(osm_path)
         except OSError:
             pass
-    return os.path.join(output_root, 'lines.shp')
+    return lines_shp_path
