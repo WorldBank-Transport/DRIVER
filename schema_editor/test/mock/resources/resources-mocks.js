@@ -144,6 +144,20 @@
             ]
         };
 
+        var BlackSpotConfigResponse = {
+            'count': 1,
+            'next': null,
+            'previous': null,
+            'results': [
+                {
+                    'uuid':'aaa60346-65d7-4f4d-944d-27324e224691',
+                    'created':'2015-05-13T21:43:29.227598Z',
+                    'modified':'2015-05-13T21:43:29.227639Z',
+                    'severity_percentile_threshold': 0.95
+                }
+            ]
+        };
+
         var RecordType = RecordTypeResponse.results[0];
 
         var SecondaryRecordType = RecordTypeResponse.results[1];
@@ -212,6 +226,7 @@
         };
 
         var module = {
+            BlackSpotConfigResponse: BlackSpotConfigResponse,
             GeographyResponse: GeographyResponse,
             BoundaryNoGeomResponse: BoundaryNoGeomResponse,
             RecordSchema: RecordSchemaResponse.results[0],

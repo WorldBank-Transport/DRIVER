@@ -74,6 +74,7 @@
         'ase.views.geography',
         'ase.views.login',
         'ase.views.recordtype',
+        'ase.views.settings',
         'ase.views.usermgmt',
         'ase.resources',
         'ui.router',

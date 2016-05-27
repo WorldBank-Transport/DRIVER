@@ -16,6 +16,8 @@
                 class="btn btn-default navbar-btn navbar-right">Sign in</button>
             <button ng-if="ctl.authenticated" type="button" ng-click="ctl.onLogoutButtonClicked()"
                 class="btn btn-default navbar-btn navbar-right">Sign out</button>
+            <button ng-if="ctl.authenticated" type="button" ui-sref="settings.list"
+                class="btn btn-default navbar-btn navbar-right">System Settings</button>
             <button ng-if="ctl.authenticated" type="button" ui-sref="usermgmt.list"
                 class="btn btn-default navbar-btn navbar-right">Manage Users</button>
         </div><!-- /.container-fluid -->
