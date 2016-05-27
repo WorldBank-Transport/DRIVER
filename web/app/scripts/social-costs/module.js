@@ -5,8 +5,9 @@
     function DirectiveConfig() {
     }
 
-    angular.module('driver.recentProportions', [
+    angular.module('driver.socialCosts', [
         'driver.resources',
+        'driver.state',
         'ui.bootstrap'
     ]).config(DirectiveConfig);
 

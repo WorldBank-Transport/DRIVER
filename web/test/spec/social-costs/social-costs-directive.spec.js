@@ -1,9 +1,9 @@
 'use strict';
 
-describe('driver.recentProportions: RecentProportions', function () {
+describe('driver.socialCosts: SocialCosts', function () {
 
     beforeEach(module('ase.templates'));
-    beforeEach(module('driver.recentProportions'));
+    beforeEach(module('driver.socialCosts'));
     beforeEach(module('pascalprecht.translate'));
 
     var $compile;
@@ -16,9 +16,10 @@ describe('driver.recentProportions: RecentProportions', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-recent-proportions></driver-recent-proportions>')(scope);
+        var element = $compile('<driver-social-costs></driver-social-costs>')(scope);
         $rootScope.$apply();
 
-        expect(element.find('li').length).toEqual(3);
+        expect(element.find('h1').length).toEqual(1);
+        expect(element.find('h2').length).toEqual(1);
     });
 });

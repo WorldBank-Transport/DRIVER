@@ -8,6 +8,7 @@
     function RecordAggregates($q, RecordTypes, RecordState, Records, QueryBuilder) {
         var svc = {
             recentCounts: recentCounts,
+            socialCosts: socialCosts,
             toddow: toddow,
             stepwise: stepwise
         };
@@ -76,6 +77,32 @@
                     Records.recentCounts(params).$promise.then(function(counts) {
                         deferred.resolve(counts);
                     });
+                }
+            );
+            return deferred.promise;
+        }
+        /**
+         * Request the social costs (if configured) for the currently selected record type
+         */
+        function socialCosts(extraParams, filterConfig) {
+            var deferred = $q.defer();
+            extraParams = extraParams || {};
+            filterConfig = filterConfig || {};
+            QueryBuilder.assembleParams(0, filterConfig, true).then(
+                function (params) {
+                    params = _.extend(params, extraParams);
+                    if (params.limit) {
+                       delete params.limit;
+                    }
+
+                    Records.socialCosts(params).$promise.then(
+                        function(costs) {
+                            deferred.resolve(costs);
+                        },
+                        function(error) {
+                            deferred.reject(error);
+                        }
+                    );
                 }
             );
             return deferred.promise;

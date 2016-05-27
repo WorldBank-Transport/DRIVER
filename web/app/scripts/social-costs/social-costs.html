@@ -1,0 +1,13 @@
+<div>
+    <div>
+        <h1>
+          <b>{{ costData.prefix }}{{ costData.total | number }}{{ costData.suffix }}</b>
+        </h1>
+        <h2 ng-if="typeof(costData.total) !== 'undefined'">
+            {{ 'DASHBOARD.SOCIAL_COSTS_TEXT' | translate }}
+        </h2>
+        <div class="warning" ng-if="costData.outdated_cost_config || costData.error">
+          <p>{{ 'DASHBOARD.SOCIAL_COSTS_CONFIG_WARN' | translate }}</p>
+        </div>
+    </div>
+</div>

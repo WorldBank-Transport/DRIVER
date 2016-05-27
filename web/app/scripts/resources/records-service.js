@@ -38,8 +38,12 @@
             },
             report: {
                 url: baseUrl + 'crosstabs/',
-                method: 'GET',
+                method: 'GET'
             },
+            socialCosts: {
+                url: baseUrl + 'costs/',
+                method: 'GET'
+            }
         });
     }
 

@@ -100,6 +100,12 @@ class RecordCostConfig(AshlarModel):
     # This will need to be filtered on the front-end to enums.
     property_key = models.TextField()
 
+    #: User-configurable prefix to cost values
+    cost_prefix = models.CharField(max_length=6, blank=True, null=True)
+
+    #: User-configurable suffix to cost values
+    cost_suffix = models.CharField(max_length=6, blank=True, null=True)
+
     @property
     def path(self):
         """Gets the field path specified by this object within a schema"""

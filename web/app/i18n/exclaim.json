@@ -51,7 +51,8 @@
         "DAYS": "!Days",
         "LAST_WEEK": "!last week",
         "RECENT_EVENTS_PERIOD": "!Last Two Weeks",
-        "RECENT_PROPORTIONS_TEXT": "!of all traffic incidents involved",
+        "SOCIAL_COSTS_TEXT": "!Total economic loss and societal harm: past 90 days",
+        "SOCIAL_COSTS_CONFIG_WARN": "!Cost calculation may be misconfigured. Please notify your administrator.",
         "STEPWISE_TITLE": "!Weekly Counts: Last 90 Days",
         "TODDOW_TITLE": "!Time of Day, Day of Week: Last 90 Days",
         "VIEW_ALL": "!View all"
