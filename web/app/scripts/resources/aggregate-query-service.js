@@ -100,7 +100,7 @@
                             deferred.resolve(costs);
                         },
                         function(error) {
-                            deferred.reject(error);
+                            deferred.reject({'error': error});
                         }
                     );
                 }

@@ -106,6 +106,15 @@
             RecordAggregates.toddow(params).then(function(toddowData) {
                 ctl.toddow = toddowData;
             });
+
+            RecordAggregates.socialCosts(params).then(
+                function(costs) {
+                    ctl.socialCosts = costs;
+                },
+                function(error) {
+                    ctl.socialCosts = error;
+                }
+            );
         }
     }
 

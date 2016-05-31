@@ -122,6 +122,21 @@
         }
         &.costs {
             text-align: center;
+            cursor: pointer;
+
+            .subtotal {
+                font-size: 18px;
+                margin: 10px;
+                table {
+                    border-collapse: separate;
+                    border-spacing: 10px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    .cost-category {
+                        text-align: left;
+                    }
+                }
+            }
 
             h1 {
                 font-size: 60px;

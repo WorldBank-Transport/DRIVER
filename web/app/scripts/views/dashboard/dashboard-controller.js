@@ -75,8 +75,8 @@
                 function(costs) {
                     ctl.socialCosts = costs;
                 },
-                function() {
-                    ctl.socialCosts = {'error': true};
+                function(error) {
+                    ctl.socialCosts = error;
                 }
             );
 
