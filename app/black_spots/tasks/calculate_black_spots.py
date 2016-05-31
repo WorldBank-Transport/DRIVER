@@ -46,20 +46,27 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
         active=True
     ).first()
     segments_shp_obj = RoadSegmentsShapefile.objects.all().order_by('-created').first()
+    if segments_shp_obj:
+        # Get the UUID, since that is what is used when passing to tasks in the chain
+        segments_shp_uuid = str(segments_shp_obj.uuid)
+
+    # - Get events CSV. This is obtained before the road network segments are calculated
+    # as an optimization, so we can ignore roads that won't have any associated records.
+    records_csv_obj_id = export_records(oldest, now, record_type.pk)
+
     # Refresh road segments if the most recent one is more than 30 days out of date
     if not segments_shp_obj or (now - segments_shp_obj.created > datetime.timedelta(days=30)):
         # Celery callbacks prepend the result of the parent function to the callback's arg list
         segments_chain = chain(load_road_network.s(output_srid='EPSG:{}'.format(roads_srid)),
-                               get_segments_shp.s(roads_srid),
+                               get_segments_shp.s(records_csv_obj_id, roads_srid),
                                create_segments_tar.s())()
-        segments_shp_obj = segments_chain.get()
-    # - Get events CSV
-    records_csv_obj_id = export_records(oldest, now, record_type.pk)
+        segments_shp_uuid = segments_chain.get()
+
     # - Match events to segments shapefile
-    # TODO: This runs out of memory; we haven't been able to progress past this point.
-    blackspots_output = get_training_noprecip.delay(str(segments_shp_obj.uuid),
+    blackspots_output = get_training_noprecip.delay(segments_shp_uuid,
                                                     records_csv_obj_id,
                                                     roads_srid).get()
+
     # - Run Rscript to output CSV
     segments_csv = BlackSpotTrainingCsv.objects.get(pk=blackspots_output).csv.path
     forecasts_csv = forecast_segment_incidents(segments_csv, '/opt/app/forecasts.csv')
@@ -67,7 +74,7 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
     # The shapefile is stored as a gzipped tarfile so we need to extract it
     tar_output_dir = tempfile.mkdtemp()
     try:
-        shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_obj.pk).shp_tgz.path
+        shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_uuid).shp_tgz.path
         with tarfile.open(shp_tar, "r:gz") as tar:
             tar.extractall(tar_output_dir)
             load_blackspot_geoms(os.path.join(tar_output_dir, 'segments', 'combined_segments.shp'),
