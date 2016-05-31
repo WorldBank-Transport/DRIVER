@@ -71,6 +71,15 @@
                 ctl.toddow = toddowData;
             });
 
+            RecordAggregates.socialCosts(params, filterConfig).then(
+                function(costs) {
+                    ctl.socialCosts = costs;
+                },
+                function() {
+                    ctl.socialCosts = {'error': true};
+                }
+            );
+
             // The stepwise widget is only displayed when black spots are not visible
             if (!ctl.showBlackSpots) {
                 RecordAggregates.stepwise(params).then(function(stepwiseData) {

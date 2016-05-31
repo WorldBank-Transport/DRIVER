@@ -255,7 +255,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                        .order_by('-created').first())
         if not cost_config:
             return Response({'record_type': 'No cost configuration found for this record type.'},
-                            status_code=status.HTTP_404_NOT_FOUND)
+                            status=status.HTTP_404_NOT_FOUND)
         schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
         path = cost_config.path
         choices = self._get_schema_enum_choices(schema, path)
@@ -276,6 +276,11 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             annotate_params[idx] = choice_case
             counts_queryset = counts_queryset.annotate(**annotate_params)
 
+        output_data = {'prefix': cost_config.cost_prefix, 'suffix': cost_config.cost_suffix}
+        if counts_queryset.count() < 1:  # Short-circuit if no events at all
+            output_data.update({'total': 0, 'subtotals': {choice: 0 for choice in choices},
+                                'outdated_cost_config': False})
+            return Response(output_data)
         # Do the summation
         sum_ops = [Sum(key) for key in choice_indices.keys()]
         sum_qs = counts_queryset.values(*choice_indices.keys()).aggregate(*sum_ops)
@@ -304,8 +309,9 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 subtotals[key] = 0
         total = sum(subtotals.values())
         # Return breakdown costs and sum
-        return Response({'total': total, 'subtotals': subtotals,
-                         'outdated_cost_config': found_missing_choices})
+        output_data.update({'total': total, 'subtotals': subtotals,
+                            'outdated_cost_config': found_missing_choices})
+        return Response(output_data)
 
     @list_route(methods=['get'])
     def crosstabs(self, request):
@@ -877,9 +883,9 @@ class RecordCsvExportViewSet(viewsets.ViewSet):
             # TODO: We should add a cleanup task to prevent result files from accumulating
             # on the celery worker.
             uri = u'{scheme}://{host}{prefix}{file}'.format(scheme=request.scheme,
-                                                           host=request.get_host(),
-                                                           prefix=settings.CELERY_DOWNLOAD_PREFIX,
-                                                           file=job_result.get())
+                                                            host=request.get_host(),
+                                                            prefix=settings.CELERY_DOWNLOAD_PREFIX,
+                                                            file=job_result.get())
             return Response({'status': job_result.state, 'result': uri})
         return Response({'status': job_result.state, 'info': job_result.info})
 

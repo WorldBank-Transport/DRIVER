@@ -51,7 +51,8 @@
         "DAYS": "أيام",
         "LAST_WEEK": "الأسبوع الماضي",
         "RECENT_EVENTS_PERIOD": "خلال الأسبوعين الماضيين",
-        "RECENT_PROPORTIONS_TEXT": "من جميع الحوادث المرورية المعنية",
+        "SOCIAL_COSTS_TEXT": "!Total economic loss and societal harm: past 90 days",
+        "SOCIAL_COSTS_CONFIG_WARN": "!Cost calculation may be misconfigured. Please notify your administrator.",
         "STEPWISE_TITLE": "عدد الحوادث إسبوعياً: آخر 90 يوماً",
         "TODDOW_TITLE": "الوقت من اليوم، يوم من الأسبوع:خلال ال90 يوم الأخيرة",
         "VIEW_ALL": "عرض الجميع"
