@@ -41,6 +41,10 @@
             url: '/related/:uuid/schema/:schema',
             template: '<ase-rt-schema-edit></ase-rt-schema-edit>'
         });
+        $stateProvider.state('rt.related-aggregates', {
+            url: '/related/:uuid/aggregates',
+            template: '<ase-rt-related-aggregates></ase-rt-related-aggregates>'
+        });
     }
 
     angular.module('ase.views.recordtype', [
