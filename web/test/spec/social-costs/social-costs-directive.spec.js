@@ -16,7 +16,7 @@ describe('driver.socialCosts: SocialCosts', function () {
 
     it('should load directive', function () {
         var scope = $rootScope.$new();
-        var element = $compile('<driver-social-costs></driver-social-costs>')(scope);
+        var element = $compile('<driver-social-costs cost-data="{\'total\': 0}"></driver-social-costs>')(scope);
         $rootScope.$apply();
 
         expect(element.find('h1').length).toEqual(1);

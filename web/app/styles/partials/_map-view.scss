@@ -88,11 +88,6 @@
                     padding: 0px;
                 }
             }
-            &.interventions {
-                .tool-content {
-                    width: 300px;
-                }
-            }
             &.enforcers {
                 .tool-content {
                     width: 300px;
@@ -106,6 +101,16 @@
             &.interventions {
                 .tool-content {
                     width: 215px;
+                }
+            }
+            &.costs {
+                .tool-content {
+                    width: 400px;
+                    font-size: 16px;
+                    .subtotal {
+                        border-collapse: separate;
+                        border-spacing: 20px;
+                    }
                 }
             }
 
