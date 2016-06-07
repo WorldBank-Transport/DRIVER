@@ -12,8 +12,37 @@ body.rtl {
   .dashboard {
       .blackspots-disabled {
           .block {
+              &.block-2x1 {
+                  right: 2%;
+              }
+              &.block-1x2 {
+                  &:nth-child(1) {
+                      left: auto;
+                      right: 2%;
+                  }
+                  &:nth-child(2) {
+                      left: auto;
+                      right:2%;
+                  }
+                  &:nth-child(3) {
+                      left: 2%;
+                      right: auto;
+                  }
+                  &:nth-child(4) {
+                      left: 2%;
+                      right: auto;
+                  }
+              }
               &.block-1x1 {
-                  left: 2%;
+                  left: 35%;
+                  &:nth-child(5) {
+                      left: auto;
+                      right: 51%;
+                  }
+                  &:nth-child(6) {
+                      left: auto;
+                      right: 72%;
+                  }
               }
           }
       }
@@ -152,30 +181,6 @@ body.rtl {
       }
       .glyphicon-chevron-right:before {
         content: "\e079";
-      }
-    }
-  }
-
-  .blackspots-disabled {
-    .block {
-      &.block-2x1 {
-        right: 2%;
-      }
-
-      &.block-1x2 {
-        right: 50%;
-      }
-
-      &.block-1x1 {
-        left: 35%;
-
-        &:nth-child(4) {
-          right: 50%;
-        }
-
-        &:nth-child(5) {
-          right: 72%;
-        }
       }
     }
   }

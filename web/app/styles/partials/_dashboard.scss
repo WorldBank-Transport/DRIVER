@@ -230,6 +230,10 @@
                 font-size: 20px;
                 font-weight: 400;
             }
+            driver-stepwise {
+                display: block;
+                height: 100%;
+            }
         }
         &.filters {
             h3 {
@@ -280,16 +284,27 @@
             }
 
             &.block-1x2 {
-                width: 48%;
-                height: 33%;
-                right: 2%;
+                width: 47%;
+                height: 68%;
+                top: 3%;
 
-                &:nth-child(2) {
-                    top: 3%;
+                &:nth-child(1) {
+                    left: 2%
                 }
-
+                &:nth-child(2) {
+                    height: 24%;
+                    left: 2%;
+                    top: 73%;
+                }
                 &:nth-child(3) {
+                    right: 2%;
+                    top: 3%;
+                    height: 33%;
+                }
+                &:nth-child(4) {
+                    right: 2%;
                     top: 38%;
+                    height: 33%;
                 }
             }
 
@@ -298,12 +313,12 @@
                 height: 24%;
                 right: 35%;
 
-                &:nth-child(4) {
-                    left: 50%;
-                    width: 21%;
+                &:nth-child(5) {
+                    left: 51%;
+                    width: 20%;
                 }
 
-                &:nth-child(5) {
+                &:nth-child(6) {
                     left: 72%;
                     width: 26%;
                 }

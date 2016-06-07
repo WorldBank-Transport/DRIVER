@@ -21,7 +21,7 @@
                 </h3>
             </div>
         </div>
-        <div class="block block-1x1 costs">
+        <div class="block block-1x1 costs" ng-if="ctl.showBlackSpots">
             <driver-social-costs cost-data="ctl.socialCosts" as-tool="false"></driver-social-costs>
         </div>
         <div class="block block-1x1 counts">
@@ -38,8 +38,8 @@
         </div>
     </div>
 
-    <div ng-if="!ctl.showBlackSpots" class="blackspots-disabled">
-        <div class="block block-2x1 quick-map">
+    <div ng-if="!ctl.showBlackSpots" class="blackspots-disabled" ng-class="{'right-to-left': isRightToLeft}">
+        <div class="block block-1x2 quick-map">
             <div class="block-inner">
                 <div class="map" leaflet-map recent-events zoom-to-boundary></div>
                 <h3><span>{{ ctl.recordType.plural_label }}: {{ 'DASHBOARD.RECENT_EVENTS_PERIOD' | translate }}</span>
@@ -48,6 +48,9 @@
                     </a>
                 </h3>
             </div>
+        </div>
+        <div class="block block-1x2 filters">
+            <driver-saved-filters compact="true"></driver-saved-filters>
         </div>
         <div class="block block-1x2 toddow">
             <div class="block-inner">
@@ -60,16 +63,16 @@
                 <driver-stepwise
                    chart-data="ctl.stepwise"
                    min-date="ctl.minDate"
-                   max-date="ctl.maxDate">
+                   max-date="ctl.maxDate"
+                   in-dashboard="true">
                 </driver-stepwise>
-                <h3>{{ 'DASHBOARD.STEPWISE_TITLE' | translate }}</h3>
             </div>
         </div>
         <div class="block block-1x1 counts">
             <driver-recent-counts></driver-recent-counts>
         </div>
-        <div class="block block-1x1 filters">
-            <driver-saved-filters compact="true"></driver-saved-filters>
+        <div class="block block-1x1 costs">
+            <driver-social-costs cost-data="ctl.socialCosts" as-tool="false"></driver-social-costs>
         </div>
     </div>
 

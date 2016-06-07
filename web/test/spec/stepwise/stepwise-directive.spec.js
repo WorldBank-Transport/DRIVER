@@ -27,6 +27,6 @@ describe('driver.stepwise: Stepwise graph directive', function () {
         var element = $compile('<driver-stepwise chartData=""></driver-stepwise>')(scope);
         $rootScope.$apply();
 
-        expect(element.find('g.outer').length).toBe(1);
+        expect(element.find('svg').length).toBe(1);
     });
 });
