@@ -81,11 +81,18 @@
             &.graphs {
                 .tool-content {
                     width: 600px;
+                    height: 300px;
                 }
                 .tool-body {
                     margin: 25px 15px 20px 15px;
-                    height: 300px;
                     padding: 0px;
+                    height: 200px;
+                    driver-stepwise {
+                        height: 200px;
+                        width: 570px;
+                        display: block;
+                        overflow: visible;
+                    }
                 }
             }
             &.enforcers {
