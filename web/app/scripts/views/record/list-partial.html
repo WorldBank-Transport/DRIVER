@@ -20,7 +20,7 @@
                     </div>
                     <tr ng-if="!ctl.loadingRecords" ng-repeat="record in ctl.records.results">
                         <td class="date">
-                            {{ ::record.occurred_to | localDateTime }}
+                            {{ ::record.occurred_to | localizeRecordDate: 'numeric':'time' }}
                         </td>
                         <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
                             <driver-details-field
