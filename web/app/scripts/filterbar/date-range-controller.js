@@ -4,12 +4,11 @@
     /* ngInject */
     function DateRangeController() {
         var ctl = this;
-        // TODO: date format needs localization
-        ctl.dateTimeFormat = 'YYYY-MM-DDThh:mm:ss';
         ctl.error = {};
 
         /**
          * Determine validity of a min-max pairing
+         * Expected to be Javascript Date objects
          */
         ctl.isMinMaxValid = function(minMax) {
             var min, max;
@@ -17,7 +16,7 @@
             if (minMax.max) { max = minMax.max; }
 
             if (max && min) {
-                return new Date(max) >= new Date(min);
+                return max >= min;
             }
 
             if (max || min) {

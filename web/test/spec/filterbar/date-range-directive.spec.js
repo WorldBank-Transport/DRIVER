@@ -35,10 +35,12 @@ describe('driver.filterbar: Date Range', function () {
         expect(Element.find("input[type='text'][name='maximum']").val()).toEqual('');
 
         var date = new Date();
-        $rootScope.$broadcast('driver.filterbar:restore', [{'__dateRange': {max: date.toString()}}, null]);
+        $rootScope.$broadcast('driver.filterbar:restore', [{'__dateRange': {max: date.toJSON()}}, null]);
         $rootScope.$digest();
 
-        expect(Element.find("input[type='text'][name='maximum']").val()).toEqual(date.toString());
+        var cal = $.calendars.instance('gregorian', 'en');
+        expect(Element.find("input[type='text'][name='maximum']").val())
+            .toEqual(cal.formatDate('mm/dd/yyyy', cal.fromJSDate(date)));
     });
 
 });

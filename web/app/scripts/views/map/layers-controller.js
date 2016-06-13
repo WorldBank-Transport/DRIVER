@@ -328,7 +328,7 @@
 
             if (polygon) {
               return BlackspotSets.query({
-                'efffective_at': FilterState.getDateFilter().maxDate,
+                'effective_at': FilterState.getDateFilter().maxDate,
                 'record_type': ctl.recordType.uuid,
                 'polygon': polygon
               }).$promise;
