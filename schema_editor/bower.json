@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "^1.3.0",
-    "bootstrap-sass-official": "^3.2.0",
+    "bootstrap-sass-official": "twbs/bootstrap-sass#02c61388626f6942a8bcbb2129866a976b093acb",
     "angular-animate": "^1.3.0",
     "angular-aria": "^1.3.0",
     "angular-cookies": "^1.3.0",
