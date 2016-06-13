@@ -37,17 +37,17 @@
 - name: Create a directory for scheduled task logs
   file: path={{ driver_cron_log_dir }} state=directory
 
-# TODO: uncomment and modify this when the final script is ready
-# - name: Add black spot calculation cronjob
-#   cron: name="black spot calculation"
-#         job="/usr/local/bin/heimdall
-#         --database '{{ heimdall_db_connection }}'
-#         --namespace records
-#         --name find_duplicates
-#         --timeout 300
-#         docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots
-#         >> {{ driver_cron_log_dir }}/calculate_black_spots.log 2>&1"
-#         hour=19 minute=10  # 3:10am in UTC+8
+- name: Add black spot calculation cronjob
+  when: web_js_blackspots_visible
+  cron: name="black spot calculation"
+        job="/usr/local/bin/heimdall
+        --database '{{ heimdall_db_connection }}'
+        --namespace records
+        --name calculate_black_spots
+        --timeout 7200
+        docker exec $(docker ps -q -f name=driver-celery) ./manage.py calculate_black_spots
+        >> {{ driver_cron_log_dir }}/calculate_black_spots.log 2>&1"
+        hour=19 minute=10  # 3:10am in UTC+8
 
 - name: Add find duplicate records cronjob
   cron: name="find duplicate records"
