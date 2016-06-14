@@ -15,7 +15,7 @@ pre-start script
   /usr/bin/docker kill driver-celery || true
   /usr/bin/docker rm driver-celery || true
 
-  {% if 'staging' in group_names -%}
+  {% if 'development' not in group_names -%}
   /usr/bin/docker pull quay.io/azavea/driver-app:latest
   {% endif %}
 end script
