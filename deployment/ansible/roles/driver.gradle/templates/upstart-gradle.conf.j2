@@ -15,7 +15,7 @@ pre-start script
   /usr/bin/docker kill driver-gradle || true
   /usr/bin/docker rm driver-gradle || true
 
-  {% if 'staging' in group_names -%}
+  {% if 'development' not in group_names -%}
   /usr/bin/docker pull quay.io/azavea/driver-gradle:latest
   {% endif %}
 end script

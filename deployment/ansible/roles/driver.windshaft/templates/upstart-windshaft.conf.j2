@@ -15,7 +15,7 @@ pre-start script
   /usr/bin/docker kill windshaft || true
   /usr/bin/docker rm windshaft || true
 
-  {% if 'staging' in group_names -%}
+  {% if 'development' not in group_names -%}
   /usr/bin/docker pull quay.io/azavea/windshaft:0.1.0
   {% endif %}
 end script

@@ -15,7 +15,7 @@ pre-start script
   /usr/bin/docker kill driver-app || true
   /usr/bin/docker rm driver-app || true
 
-  {% if 'staging' in group_names -%}
+  {% if 'development' not in group_names -%}
   /usr/bin/docker pull quay.io/azavea/driver-app:latest
   {% endif %}
 end script
