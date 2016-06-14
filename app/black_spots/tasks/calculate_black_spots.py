@@ -69,7 +69,7 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
 
     # - Run Rscript to output CSV
     segments_csv = BlackSpotTrainingCsv.objects.get(pk=blackspots_output).csv.path
-    forecasts_csv = forecast_segment_incidents(segments_csv, '/opt/app/forecasts.csv')
+    forecasts_csv = forecast_segment_incidents(segments_csv, '/var/www/media/forecasts.csv')
     # - Load blackspot geoms from shapefile and CSV
     # The shapefile is stored as a gzipped tarfile so we need to extract it
     tar_output_dir = tempfile.mkdtemp()
