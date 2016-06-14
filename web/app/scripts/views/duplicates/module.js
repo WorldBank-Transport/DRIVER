@@ -15,6 +15,7 @@
         'ngSanitize',
         'ase.auth',
         'driver.config',
+        'driver.localization',
         'driver.resources',
         'driver.state',
         'ui.bootstrap',

@@ -7,6 +7,7 @@
 
     angular.module('driver.stepwise', [
         'driver.state',
+        'driver.localization',
         'ui.router',
         'ui.bootstrap'
     ]).config(DirectiveConfig);

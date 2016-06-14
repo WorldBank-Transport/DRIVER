@@ -8,7 +8,7 @@
     'use strict';
 
     /* ngInject */
-    function Stepwise($translate, $window, LanguageState) {
+    function Stepwise($translate, $window, LanguageState, DateUtils) {
         var module = {
             restrict: 'E',
             scope: {
@@ -132,7 +132,9 @@
                 function createXAxis(tScale) {
                     var xAxis = d3.svg.axis()
                         .scale(tScale)
-                        .tickFormat(d3.time.format('%b %y'))
+                        .tickFormat(function(d) {
+                            return DateUtils.getLocalizedDateString(d, 'short');
+                        })
                         .ticks(5)
                         .tickSize(1)
                         .orient('bottom');
@@ -215,7 +217,7 @@
                         return '<strong>' +
                             $translate.instant('RECORD.WEEK_OF') +
                             ': </strong>' +
-                            d.dt.toLocaleDateString() +
+                            DateUtils.getLocalizedDateString(d.dt, 'long') +
                             '</br><strong>' +
                             $translate.instant('RECORD.EVENT_COUNT') +
                             ':</strong> <span>' +

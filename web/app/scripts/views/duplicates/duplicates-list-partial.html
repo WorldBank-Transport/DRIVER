@@ -16,7 +16,7 @@
                 <tbody>
                     <tr ng-repeat="dup in ctl.duplicates.results">
                         <td ng-repeat-start="record in [dup.record, dup.duplicate_record]" class="date">
-                            {{ ::record.occurred_to | localDateTime }}
+                            {{ ::record.occurred_to | localizeRecordDate: 'numeric':'time' }}
                         </td>
                         <td ng-repeat-end class="detail">
                             {{ ::record.location_text }}
