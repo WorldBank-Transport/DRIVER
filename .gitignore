@@ -13,6 +13,9 @@
 # Ansible roles
 deployment/ansible/roles/azavea.*
 
+# Ansible retry files
+deployment/ansible/*.retry
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
