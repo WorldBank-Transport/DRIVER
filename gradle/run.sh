@@ -26,8 +26,11 @@ echo "Going to build new model jarfile ${MODEL_JAR}..."
 
 echo "$2" > $SCHEMA_SOURCE_DIR/${DRIVER_SCHEMA_FILE}
 
-gradle -Dorg.gradle.native=false clean assemble dexify --project-prop outfile=$MODEL_JAR \
-    --project-prop sourcedir=$SCHEMA_SOURCE_DIR --stacktrace --info
+# also signs jar: http://developer.android.com/tools/publishing/app-signing.html
+gradle -Dorg.gradle.native=false -Dfile.encoding='UTF-8' clean assemble dexify \
+    --project-prop outfile="$MODEL_JAR" --project-prop keystore="$ANDROID_KEYSTORE" \
+    --project-prop alias="$KEYSTORE_ALIAS" --project-prop keypass="$DRIVER_KEYSTORE_PASSWORD" \
+    --project-prop sourcedir="$SCHEMA_SOURCE_DIR" --stacktrace --info
 
 echo 'Model jarfile built.'
 
@@ -35,10 +38,6 @@ if [ ! -e "$ANDROID_KEYSTORE" ]; then
     echo 'No key store present for jar signing! Exiting.'
     exit -1
 fi
-
-# sign jar: http://developer.android.com/tools/publishing/app-signing.html
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore "$ANDROID_KEYSTORE" \
-    -storepass "$DRIVER_KEYSTORE_PASSWORD" -tsa "$TSA_URL" "$MODEL_JAR" "$KEYSTORE_ALIAS"
 
 # verfiy JAR is signed
 jarsigner -verify -certs -keystore "$ANDROID_KEYSTORE" "$MODEL_JAR"

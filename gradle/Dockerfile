@@ -13,10 +13,10 @@ RUN DEBIAN_FRONTEND=noninteractive && apt-get install -yq redis-tools python3-re
     ca-certificates ca-certificates-java haveged
 
 # install gradle
-ENV GRADLE_VERSION 2.11
-ENV GRADLE_HASH 8d7437082356c9fd6309a4479c8db307673965546daea445c6c72759cd6b1ed6
+ENV GRADLE_VERSION 2.14
+ENV GRADLE_HASH 993b4f33b652c689e9721917d8e021cab6bbd3eae81b39ab2fd46fdb19a928d5
 WORKDIR /usr/lib
-RUN wget https://downloads.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
+RUN wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip
 RUN echo "${GRADLE_HASH} gradle-${GRADLE_VERSION}-bin.zip" > gradle-${GRADLE_VERSION}-bin.zip.md5
 RUN sha256sum -c gradle-${GRADLE_VERSION}-bin.zip.md5
 RUN unzip "gradle-${GRADLE_VERSION}-bin.zip"
@@ -31,7 +31,8 @@ VOLUME /opt/app/data
 ENV GRADLE_HOME /usr/src/gradle
 ENV PATH $PATH:$GRADLE_HOME/bin
 ENV GRADLE_USER_HOME /opt/app/data
-ENV GRADLE_OPTS '-Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"'
+ENV GRADLE_OPTS '-Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError" -Dfile.encoding="UTF-8"'
+ENV JAVA_OPTS "-Dfile.encoding='UTF-8'"
 ENV TERM dumb
 
 # Download and untar Android SDK
