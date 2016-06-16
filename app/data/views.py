@@ -859,6 +859,7 @@ class DriverRecordDuplicateViewSet(viewsets.ModelViewSet):
 class DriverRecordCostConfigViewSet(viewsets.ModelViewSet):
     queryset = RecordCostConfig.objects.all()
     serializer_class = RecordCostConfigSerializer
+    filter_fields = ('record_type', )
 
 
 class RecordCsvExportViewSet(viewsets.ViewSet):
