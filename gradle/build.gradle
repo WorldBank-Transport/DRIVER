@@ -1,3 +1,5 @@
+System.setProperty("file.encoding", "UTF-8")
+
 buildscript {
     repositories {
         mavenCentral()
@@ -5,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.WorldBank-Transport.jsonschema2pojo:jsonschema2pojo-gradle-plugin:jsonschema2pojo-0.4.19-images'
+        classpath 'com.github.WorldBank-Transport.jsonschema2pojo:jsonschema2pojo-gradle-plugin:jsonschema2pojo-0.4.24-no-singular'
         classpath 'com.google.code.gson:gson:2.4'
         classpath 'org.joda:joda-convert:1.8.1'
         classpath 'javax.annotation:javax.annotation-api:1.2'
@@ -24,17 +26,50 @@ configurations {
     dexify
 }
 
-apply plugin: 'jsonschema2pojo'
 apply plugin: 'java'
+apply plugin: 'jsonschema2pojo'
 
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
-version = '1.0'
+version = '1.1'
 
+/**
+ * Create a signed archive of the models in Android bytecode (classes.dex).
+ * Expects project properties to be defined:
+ * outfile: the output jar
+ * keystore: relative path/file name for the signing keystore
+ * alias: the signing keystore alias
+ * keypass: keypass/storepass for the signing keystore
+*/
 jar {
+    dependsOn ':dexify'
+    metadataCharset = 'UTF-8'
+    manifestContentCharset = 'UTF-8'
     manifest {
         attributes 'Implementation-Title': 'DRIVER Android models',
         'Implementation-Version': version
+    }
+
+    // Omit all the class files and their directories; only need classes.dex in the jar.
+    // Including class files with unicode names run through the dexifier will confuse jarsigner.
+    exclude('**/org/**')
+
+    from ("${projectDir}") {
+        include('classes.dex')
+    }
+
+    doLast {
+        ant.signjar(signedjar: outfile,
+            jar: jar.archivePath,
+            alias: alias,
+            keystore: keystore,
+            storepass: keypass,
+            keypass: keypass,
+            verbose: "true",
+            tsaurl: "http://timestamp.digicert.com",
+            sigalg: "SHA1withRSA",
+            digestalg: "SHA1"
+        )
     }
 }
 
@@ -43,11 +78,13 @@ repositories {
     maven { url "https://jitpack.io" }
 }
 
-// expects project property `outfile` to be passed in with the name of the output JAR
-task dexify (dependsOn: assemble, type: JavaExec) {
+// convert compiled Java classes to Android bytecode; outputs classes.dex file
+task dexify (type: JavaExec) {
     classpath = configurations.dexify
     main = 'com.android.dx.command.Main'
-    args '--dex', '--debug', '--keep-classes', '--verbose', '--output=' + outfile, jar.archivePath
+    jvmArgs '-Dfile.encoding="UTF-8"'
+    setDefaultCharacterEncoding 'UTF-8'
+    args '--dex', '--debug', '--keep-classes', '--verbose', '--output=classes.dex', "${project.buildDir}/classes/main"
 }
 
 dependencies {
@@ -56,7 +93,7 @@ dependencies {
         all*.exclude group: 'commons-logging', module: 'commons-logging'
     }
     compile 'com.google.code.gson:gson:2.4'
-    compile('com.github.WorldBank-Transport:jsonschema2pojo:jsonschema2pojo-0.4.19-images') {
+    compile('com.github.WorldBank-Transport:jsonschema2pojo:jsonschema2pojo-0.4.24-no-singular') {
         // only want core
         exclude module: 'jsonschema2pojo-ant'
         exclude module: 'jsonschema2pojo-cli'
