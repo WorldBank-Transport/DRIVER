@@ -91,7 +91,11 @@ class RecordCostConfigSerializer(ModelSerializer):
                 obj = obj[key]
             except KeyError:
                 raise ValidationError("The property '{}' does not exist on the schema".format(key))
-        choices = obj.get('enum', None)
+        items = obj.get('items', None)
+        if items:
+            choices = items.get('enum', None)
+        else:
+            choices = obj.get('enum', None)
         if not choices:
             raise ValidationError("The specified property must have choices (be an enum).")
 
