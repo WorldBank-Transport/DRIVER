@@ -120,8 +120,9 @@
         }
 
         function populateEnumFields() {
+            var fields = ctl.selectedPropertyKey.property.enum || ctl.selectedPropertyKey.property.items.enum;
             ctl.enumFields = [];
-            _.forEach(ctl.selectedPropertyKey.property.enum, function(enumField) {
+            _.forEach(fields, function(enumField) {
                 ctl.enumFields.push({
                     field: enumField,
                     value: 0
