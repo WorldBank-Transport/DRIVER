@@ -45,7 +45,7 @@
             setDefinitions(ctl.definitions);
             /* jshint camelcase: false */
             return RecordCosts.query({
-                    record_type: $stateParams.uuid,
+                    record_type: recordSchema.record_type,
                     limit: 1,
                     ordering: '-modified'
                 }).$promise;
