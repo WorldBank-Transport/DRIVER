@@ -1,4 +1,4 @@
-<button id="record-type"
+<button id="date-range"
    role="button"
    ng-class="error.btnClasses"
    class="ng-binding btn btn-default dropdown-toggle"
@@ -19,17 +19,17 @@
             <div class="input-group input-daterange">
                 <input name="minimum"
                        id="dtMinField"
-                       ng-model="dtMin"
-                       ng-change="onDtRangeChange()"
+                       ng-model="min"
+                       ng-change="onDtRangeChange('min')"
                        type="text"
-                       class="form-control date-range-style">
+                       class="form-control date-range-style date-range-input">
                 <span class="input-group-addon">{{ 'COMMON.TO' | translate }}</span>
                 <input name="maximum"
                        id="dtMaxField"
-                       ng-model="dtMax"
-                       ng-change="onDtRangeChange()"
+                       ng-model="max"
+                       ng-change="onDtRangeChange('max')"
                        type="text"
-                       class="form-control date-range-style">
+                       class="form-control date-range-style date-range-input">
             </div>
         </div>
     </li>

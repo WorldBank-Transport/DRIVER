@@ -2,8 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DateUtils(LanguageState, WebConfig) {
-        /* jshint quotmark: false */
+    function DateLocalization(LanguageState, WebConfig) {
         var languageMap = {
             'ar-sa': {
                 language: 'ar',
@@ -20,6 +19,7 @@
                 calendar: 'gregorian',
                 formats: {
                     'short': 'M Y',
+                    'longNoTime': 'MM d, Y',
                     'long': 'MM d, Y',
                     'numeric': 'mm/dd/yyyy'
                 }
@@ -28,19 +28,40 @@
                 language: 'en',
                 calendar: 'gregorian',
                 formats: {
-                    'short': "'!'M Y",
-                    'longNoTime': "'!'MM d, Y",
-                    'long': "'!'MM d,Y",
-                    'numeric': "'!'mm/dd/yyyy"
+                    'short': 'M Y',
+                    'longNoTime': 'MM d, Y',
+                    'long': 'MM d,Y',
+                    'numeric': 'mm/dd/yyyy'
                 }
             }
         };
-        /* jshint quotmark: single */
 
         var module = {
-            getLocalizedDateString: getLocalizedDateString
+            getLocalizedDateString: getLocalizedDateString,
+            currentDateFormats: currentDateFormats,
+            convertToCalendar: convertToCalendar
         };
         return module;
+
+        /**
+         * Return the date formatting configuration for the currently selected interface language
+         */
+        function currentDateFormats() {
+            return languageMap[LanguageState.getSelected().id];
+        }
+
+        /**
+         * Convert a CDate to a different calendar, identified by 'calendarName' and 'calendarLang'
+         * @param cDate {CDate}: CDate object to convert
+         * @param calendarName {string}: String identifying the name of the calendar to convert to
+         * @param calendarLang {string}: Two-character language code for the calendar
+         * @returns {CDate}: The date in the new calendar
+         *
+         */
+        function convertToCalendar(cDate, calendarName, calendarLang) {
+            return $.calendars.instance(calendarName, calendarLang)
+                .fromJD(cDate._calendar.toJD(cDate));
+        }
 
         /*
          * Get a localized date string for a date, using the LanguageState to
@@ -92,15 +113,19 @@
     }
 
     /* ngInject */
-    function LocalizeDateFilter(DateUtils) {
+    function LocalizeDateFilter(DateLocalization) {
         function module(d, format, includeTime) {
-            return DateUtils.getLocalizedDateString(new Date(Date.parse(d)), format, includeTime === 'time');
+            return DateLocalization.getLocalizedDateString(
+                new Date(Date.parse(d)),
+                format,
+                includeTime === 'time'
+            );
         }
         return module;
     }
 
 
     angular.module('driver.localization')
-        .factory('DateUtils', DateUtils)
+        .factory('DateLocalization', DateLocalization)
         .filter('localizeRecordDate', LocalizeDateFilter);
 })();

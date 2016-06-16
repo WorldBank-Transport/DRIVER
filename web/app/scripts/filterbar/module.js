@@ -10,6 +10,7 @@
         'debounce',
         'driver.resources',
         'driver.state',
+        'driver.localization',
         'ui.bootstrap'
     ]).config(DirectiveConfig);
 
