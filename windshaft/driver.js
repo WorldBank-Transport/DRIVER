@@ -74,12 +74,7 @@ var blackspotRules = [
     'polygon-opacity: 0.5;',
     'line-opacity: 0.8;',
     'line-color: red;',
-    'polygon-fill: red;',
-    '[ severity_score > 0] { line-color: green; polygon-fill: green ; }',
-    '[ severity_score > 0.1] { line-color: blue; polygon-fill: blue ; }',
-    '[ severity_score > 0.3] { line-color: purple; polygon-fill: purple ; }',
-    '[ severity_score > 0.5] { line-color: orange; polygon-fill: orange ; }',
-    '[ severity_score > 0.7] { line-color: red; polygon-fill: red ; }',
+    'polygon-fill: red;'
 ];
 var blackspotStyle = constructCartoStyle('#black_spots_blackspot', blackspotRules);
 
