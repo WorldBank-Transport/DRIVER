@@ -59,16 +59,12 @@
                                         {{ 'RECORD.OCCURRED' | translate }}
                                     </label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control"
-                                            datepicker-popup="longDate"
-                                            is-open="ctl.occurredDatePicker.opened"
-                                            ng-change="ctl.onDateChanged()"
-                                            ng-model="ctl.occurredFrom"
+                                        <az-date-picker
+                                            id="occurred-from-datepicker"
+                                            datetime="ctl.occurredFromDate"
+                                            on-change="ctl.combineOccurredFromDateAndTime()"
                                             placeholder="{{ 'COMMON.FROM' | translate }}">
-                                        <span class="input-group-addon picker"
-                                              ng-click="ctl.occurredDatePicker.opened = true">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
+                                        </az-date-picker>
                                     </div>
                                     <p ng-if="ctl.constantFieldErrors.occurred"
                                         class="help-block errormsg">{{ctl.constantFieldErrors.occurred}}</p>
@@ -76,11 +72,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group time-picker">
-                                    <div class="input-group"
-                                         timepicker
-                                         ng-model="ctl.occurredFrom"
-                                         ng-change="ctl.onDateChanged()">
-                                    </div>
+                                    <timepicker
+                                        class="input-group"
+                                        ng-model="ctl.occurredFromTime"
+                                        show-meridian="false"
+                                        ng-change="ctl.combineOccurredFromDateAndTime()">
+                                    </timepicker>
                                 </div>
                             </div>
                         </div>
@@ -91,16 +88,12 @@
                                     ng-class="ctl.constantFieldErrors.occurredTo ? 'has-error' : ''">
                                     <label class="control-label">{{ 'RECORD.OCCURRED_TO' | translate }}</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control"
-                                            datepicker-popup="longDate"
-                                            is-open="ctl.occurredToDatePicker.opened"
-                                            ng-change="ctl.onDateChanged()"
-                                            ng-model="ctl.occurredTo"
+                                        <az-date-picker
+                                            id="occurred-to-datepicker"
+                                            datetime="ctl.occurredToDate"
+                                            on-change="ctl.combineOccurredToDateAndTime()"
                                             placeholder="{{ 'COMMON.TO' | translate }}">
-                                        <span class="input-group-addon picker"
-                                              ng-click="ctl.occurredToDatePicker.opened = true">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
+                                        </az-date-picker>
                                     </div>
                                     <p ng-if="ctl.constantFieldErrors.occurredTo"
                                         class="help-block errormsg">{{ctl.constantFieldErrors.occurredTo}}</p>
@@ -110,8 +103,8 @@
                                 <div class="form-group time-picker">
                                     <div class="input-group"
                                          timepicker
-                                         ng-model="ctl.occurredTo"
-                                         ng-change="ctl.onDateChanged()">
+                                         ng-model="ctl.occurredToTime"
+                                         ng-change="ctl.combineOccurredToDateAndTime()">
                                     </div>
                                 </div>
                             </div>
