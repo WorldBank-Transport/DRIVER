@@ -334,6 +334,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             As you might expect, these operate identically to the row_* parameters above, but the
             results are used as columns instead.
         - record_type: The UUID of the record type which should be aggregated
+        - calendar: the calendar to use for the report to (Ex: 'gregorian' or 'ummalqura')
 
         Allows the following query parameters:
         - aggregation_boundary: Id of a Boundary; separate tables will be generated for each
@@ -382,6 +383,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             ]
         }
         """
+        calendar = request.query_params.get('calendar')
         valid_row_params = set(['row_period_type', 'row_boundary_id', 'row_choices_path'])
         valid_col_params = set(['col_period_type', 'col_boundary_id', 'col_choices_path'])
         # Validate there's exactly one row_* and one col_* parameter

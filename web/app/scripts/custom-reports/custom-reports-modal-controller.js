@@ -4,29 +4,31 @@
     /* ngInject */
     function CustomReportsModalController($log, $modalInstance, $state, $translate, $window,
                                           FilterState, GeographyState, BoundaryState, QueryBuilder,
-                                          AggregationsConfig) {
+                                          AggregationsConfig, DateLocalization) {
         var ctl = this;
-        ctl.closeModal = closeModal;
-        ctl.createReport = createReport;
-        ctl.onParamChanged = onParamChanged;
-
-        // Only the date part is needed when displaying these dates
-        ctl.dateFormat = 'MMM D, YYYY';
-
-        // These are set as the selections are made
-        ctl.colAggSelected = null;
-        ctl.rowAggSelected = null;
-        ctl.geoAggSelected = null;
 
         // Translated types used for determining how to set parameters appropriately
         var timeType = $translate.instant('AGG.TIME');
         var geographyType = $translate.instant('AGG.GEOGRAPHY');
         var filterType = $translate.instant('AGG.FILTER');
 
-        init();
+        ctl.$onInit = initialize();
 
-        function init() {
+        function initialize() {
             ctl.ready = false;
+
+            ctl.calendar = DateLocalization.currentDateFormats().calendar;
+            ctl.closeModal = closeModal;
+            ctl.createReport = createReport;
+            ctl.onParamChanged = onParamChanged;
+
+            // Only the date part is needed when displaying these dates
+            ctl.dateFormat = 'MMM D, YYYY';
+
+            // These are set as the selections are made
+            ctl.colAggSelected = null;
+            ctl.rowAggSelected = null;
+            ctl.geoAggSelected = null;
 
             // Add the active filters for display
             ctl.nonDateFilters = _.omit(FilterState.filters, '__dateRange');
@@ -98,6 +100,7 @@
                         ctl.rowAggSelected.type !== 'Geography') {
                         crosstabsParams.aggregation_boundary = ctl.geoAggSelected.value;
                     }
+                    crosstabsParams.language = ctl.language;
                     /* jshint camelcase: true */
                     params = _.extend(params, crosstabsParams);
 

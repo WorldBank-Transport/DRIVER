@@ -7,7 +7,7 @@
             url: '/report/?' + ['row_period_type', 'row_boundary_id', 'row_choices_path',
                                 'col_period_type', 'col_boundary_id', 'col_choices_path',
                                 'aggregation_boundary', 'occurred_max', 'occurred_min',
-                                'jsonb', 'record_type'].join('&'),
+                                'jsonb', 'record_type', 'calendar'].join('&'),
             templateUrl: 'scripts/custom-reports/custom-report-partial.html',
             label: 'NAV.CUSTOM_REPORT',
             controller: 'CustomReportController',
@@ -22,6 +22,7 @@
         'driver.config',
         'driver.resources',
         'driver.state',
+        'driver.localization',
         'ui.bootstrap',
     ]).config(StateConfig);
 
