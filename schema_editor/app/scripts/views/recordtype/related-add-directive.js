@@ -19,6 +19,28 @@
             });
         }
 
+        /**
+         * Updates related definitions to include a property order attribute
+         * @param {object} definitions to check for propertyOrder attribute
+         */
+        function addPropertyOrdertoDefinitions(definitions) {
+            var currentPropertyOrder = 0;
+            _.mapValues(definitions, function(definition) {
+                var propertyOrder = definition.propertyOrder;
+                if (propertyOrder && propertyOrder > currentPropertyOrder) {
+                    currentPropertyOrder = propertyOrder;
+                }
+            });
+
+            _.forEach(definitions, function(definition) {
+                if (!definition.propertyOrder && definition.propertyOrder !== 0) {
+                    $log.debug('Adding property order for ' + definition.title);
+                    currentPropertyOrder = currentPropertyOrder + 1;
+                    definition.propertyOrder = currentPropertyOrder;
+                }
+            });
+        }
+
         function submitForm() {
             var key = Schemas.generateFieldName(ctl.definition.title);
             if (ctl.currentSchema.schema.definitions[key]) {
@@ -51,6 +73,8 @@
             ctl.currentSchema.schema.properties[key].options = {
                 collapsed: true
             };
+
+            addPropertyOrdertoDefinitions(ctl.currentSchema.schema.definitions);
 
             RecordSchemas.create({
                 /* jshint camelcase:false */

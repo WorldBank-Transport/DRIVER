@@ -12,6 +12,7 @@
                 "Picture"
             ],
             "plural_title": "Photos",
+            "propertyOrder": 3,
             "definitions": {},
             "type": "object",
             "properties": {
@@ -48,6 +49,7 @@
                 "_localId"
             ],
             "plural_title": "Vehicles",
+            "propertyOrder": 1,
             "definitions": {},
             "type": "object",
             "properties": {
@@ -362,6 +364,7 @@
                 "_localId"
             ],
             "plural_title": "People",
+            "propertyOrder": 2,
             "definitions": {},
             "type": "object",
             "properties": {
