@@ -41,7 +41,7 @@
             var key = Schemas.generateFieldName(definition.title);
             schema.definitions[key] = definition;
             schema.properties[key] = {
-                $ref: '#/definitions/' + key,
+                $ref: '#/definitions/' + encodeURIComponent(key),
 
                 // Set the collapsed option of the details option to true so it starts collapsed
                 options: {
