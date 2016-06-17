@@ -21,7 +21,7 @@
                     'short': 'M Y',
                     'longNoTime': 'MM d, Y',
                     'long': 'MM d, Y',
-                    'numeric': 'mm/dd/yyyy'
+                    'numeric': 'm/dd/yyyy'
                 }
             },
             'exclaim': {
@@ -31,7 +31,7 @@
                     'short': 'M Y',
                     'longNoTime': 'MM d, Y',
                     'long': 'MM d,Y',
-                    'numeric': 'mm/dd/yyyy'
+                    'numeric': 'm/dd/yyyy'
                 }
             }
         };
@@ -75,7 +75,8 @@
          *     includeTime (string): Include the time in the returned string
          */
         function getLocalizedDateString(date, format, includeTime) {
-            var localizedDate = moment(date).tz(WebConfig.localization.timeZone).toDate();
+            var localizedMoment = moment(date).tz(WebConfig.localization.timeZone);
+            var localizedDate = new Date(localizedMoment.format('MMM DD YYYY'));
             if (isNaN(localizedDate.getDate())) {
                 return '';
             }
@@ -90,22 +91,12 @@
                 .fromJSDate(localizedDate);
             var datestring = convertedDate.formatDate(conversion.formats[format], convertedDate);
             if (includeTime) {
-                var minutes = localizedDate.getMinutes() + '';
-                if (minutes.length < 2) {
-                    minutes = '0' + minutes;
-                }
-                var hours = localizedDate.getHours() + '';
-                if (hours.length < 2) {
-                    hours = '0' + hours;
-                }
-                var seconds = localizedDate.getSeconds() + '';
-                if (seconds.length < 2) {
-                    seconds = '0' + seconds;
-                }
+                var hms = localizedMoment.format('H:mm:ss');
+
                 if (isRtl) {
-                    datestring = hours + ':' + minutes + ':' + seconds + ' - ' + datestring;
+                    datestring = hms + ', ' + datestring;
                 } else {
-                    datestring = datestring + ' - ' + hours + ':' + minutes + ':' + seconds;
+                    datestring = datestring + ', ' + hms;
                 }
             }
             return datestring;
@@ -118,7 +109,7 @@
             return DateLocalization.getLocalizedDateString(
                 new Date(Date.parse(d)),
                 format,
-                includeTime === 'time'
+                includeTime
             );
         }
         return module;

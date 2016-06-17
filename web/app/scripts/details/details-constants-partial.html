@@ -3,9 +3,9 @@
         {{ 'RECORD.OCCURRED' | translate }}
     </label>
     <div class="value constant date occurred">
-        {{ ::ctl.record.occurred_from | localizeRecordDate: 'long':'time'}}
+        {{ ::ctl.record.occurred_from | localizeRecordDate: ctl.dateFormat : true }}
         <span ng-if="::ctl.record.isSecondary && ctl.record.occurred_to">
-         - {{ ::ctl.record.occurred_to | localizeRecordDate: 'long':'time'}}
+         - {{ ::ctl.record.occurred_to | localizeRecordDate: ctl.dateFormat : true }}
         </span>
     </div>
 </div>
