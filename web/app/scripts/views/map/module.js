@@ -20,6 +20,7 @@
         'driver.tools.export',
         'driver.tools.interventions',
         'driver.customReports',
+        'driver.enforcers',
         'driver.config',
         'driver.localization',
         'driver.map-layers',

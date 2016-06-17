@@ -155,7 +155,8 @@
         "MANAGE_DUPLICATE_RECORDS": "ادارة السجلات المكررة",
         "MY_ACCOUNT": "حسابي",
         "RECORD_DETAILS": "تفاصيل السجل",
-        "RECORD_LIST": "كل السجلات"
+        "RECORD_LIST": "كل السجلات",
+        "ENFORCER_ASSIGNMENTS": "!Enforcement"
     },
     "RECORD": {
         "BUTTON_ADD_ROW_TITLE": "!Add \\{\\{0\\}\\}",
@@ -199,6 +200,11 @@
         "ORGANIZE_ROWS": "تنظيم التقرير أفقي",
         "PAGES": "صفحات",
         "TITLE": "تقرير مخصص"
+    },
+    "ENFORCERS": {
+        "ASSIGNMENTS_TITLE": "!Traffic Enforcement Assignments",
+        "ASSIGNMENT": "!Assignment",
+        "FORECAST_SEVERITY": "!Forecast occurrences"
     },
     "SAVED_FILTERS": {
         "ADD_NEW": "أضف تصنيف محفوظ جديد",
