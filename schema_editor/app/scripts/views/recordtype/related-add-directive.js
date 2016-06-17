@@ -29,7 +29,7 @@
             ctl.currentSchema.schema.definitions[key] = ctl.definition;
 
             // Use an array or object depending on the 'multiple' setting
-            var ref = '#/definitions/' + key;
+            var ref = '#/definitions/' + encodeURIComponent(key);
             if (ctl.definition.multiple) {
                 ctl.currentSchema.schema.properties[key] = {
                     type: 'array',

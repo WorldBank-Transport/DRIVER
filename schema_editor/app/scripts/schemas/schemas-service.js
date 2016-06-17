@@ -131,21 +131,20 @@
         return module;
 
         /**
-         * Convert field titles into field names that are intially lower case,
-         * camel cased (no spaces), and escaped for use in URIs.
+         * Convert field titles into field names that are intially lower case and
+         * camel cased (no spaces)
          *
          * @param {string} "Example Field Name"
          * @return {string} "exampleFieldName"
          */
         function generateFieldName(str) {
-            // based on:
             // http://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
-            return encodeURIComponent(str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+            return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
                 if (+match === 0) {
                     return '';
                 }
                 return index === 0 ? match.toLowerCase() : match.toUpperCase();
-            }));
+            });
         }
 
         /**
