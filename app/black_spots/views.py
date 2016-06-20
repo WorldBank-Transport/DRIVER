@@ -5,12 +5,13 @@ from django_redis import get_redis_connection
 
 from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
 from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer,
-                                     BlackSpotConfigSerializer)
-from black_spots.filters import (BlackSpotFilter, BlackSpotSetFilter)
+                                     BlackSpotConfigSerializer, EnforcerAssignmentInputSerializer,
+                                     EnforcerAssignmentSerializer)
+from black_spots.filters import (BlackSpotFilter, BlackSpotSetFilter, EnforcerAssignmentFilter)
 
 from driver_auth.permissions import IsAdminOrReadOnly
 from driver import mixins
-import uuid
+import random, uuid
 
 
 class BlackSpotViewSet(viewsets.ModelViewSet, mixins.GenerateViewsetQuery):
@@ -74,3 +75,87 @@ class BlackSpotConfigViewSet(drf_mixins.ListModelMixin, drf_mixins.RetrieveModel
             BlackSpotConfig.objects.create()
             config = BlackSpotConfig.objects.all().order_by('pk').first()
         return BlackSpotConfig.objects.filter(pk__in=[config.pk])
+
+
+class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewSet):
+    """
+    ViewSet for enforcer assignments
+
+    Enforcer assignments do not currently have an associated model in the database, and are
+    instead based direcly on black spots, so this is a list-only ViewSet. This was created
+    as its own ViewSet to make it easier if we ever decide to create a db model for
+    enforcer assignments.
+    """
+    queryset = BlackSpot.objects.all()
+    serializer_class = EnforcerAssignmentSerializer
+    filter_class = EnforcerAssignmentFilter
+    permission_classes = (IsAdminOrReadOnly, )
+
+    def choose_assignments(self, assignments, num_personnel, shift_start, shift_end):
+        """
+        Select the assignments according to the supplied parameters
+        :param assignments: filtered queryset of assignments (black spots)
+        :param num_personnel: number of assignments to choose
+        :param shift_start: start dt of the shift
+        :param shift_end: end dt of the shift
+        """
+
+        # The multiplier used for determining the set of assignments to choose from. The size of
+        # the list of possible assignments is determined by multiplying this number by the number of
+        # personnel. A higher number will result in a greater variance of assignments among shifts.
+        fuzz_factor = 4
+
+        # Create a set of assignments with the highest forecasted severity score to sample from.
+        assignments = assignments.order_by('-severity_score')[:num_personnel * fuzz_factor]
+
+        # Specify a random seed based on the shift, so assignments are deterministic during the same
+        # shift, yet vary from shift to shift.
+        random.seed(hash('{}_{}'.format(shift_start, shift_end)))
+
+        # Return the sampled list of assignments
+        return random.sample(assignments, num_personnel)
+
+    def scale_by_toddow(self, assignments, shift_start, shift_end):
+        """
+        Scale the expected load forecast (severity score) by the time of day and day of week
+        :param assignments: filtered queryset of assignments (black spots)
+        :param shift_start: start dt of the shift
+        :param shift_end: end dt of the shift
+        """
+
+        # TODO: use time of day/day of week to generate the appropriate scaling factor
+        scaling_factor = 1 / (7 * 24.0)
+
+        # Scale the severity score by the scaling factor
+        for assignment in assignments:
+            assignment.severity_score *= scaling_factor;
+
+        return assignments
+
+    def list(self, request, *args, **kwargs):
+        """
+        List endpoint for enforcer assignments.
+        Required URL parameters:
+            - record_type - uuid of the record type
+            - num_enforcers - number of enforcer assignments to generate
+            - shift_start - start dt of the shift
+            - shift_end - end dt of the shift
+        Optional URL parameters:
+            - polygon - WKT for the polygon to generate enforcer assignments for
+            - polygon_id - uuid of the polygon to generate enforcer assignments for
+
+        :param request:  The request object
+        """
+
+        input_serializer = EnforcerAssignmentInputSerializer(request)
+        num_personnel = input_serializer.num_personnel
+        shift_start = input_serializer.shift_start
+        shift_end = input_serializer.shift_end
+
+        # Filter the assignments by supplied parameters, sample them, and scale by ToDDoW
+        assignments = self.filter_queryset(self.get_queryset())
+        assignments = self.choose_assignments(assignments, num_personnel, shift_start, shift_end)
+        assignments = self.scale_by_toddow(assignments, shift_start, shift_end)
+
+        output_serializer = self.get_serializer(assignments, many=True)
+        return Response(output_serializer.data)
