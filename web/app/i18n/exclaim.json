@@ -155,7 +155,8 @@
         "MANAGE_DUPLICATE_RECORDS": "!Manage Duplicate Records",
         "MY_ACCOUNT": "!My Account",
         "RECORD_DETAILS": "!Record Details",
-        "RECORD_LIST": "!Record List"
+        "RECORD_LIST": "!Record List",
+        "ENFORCER_ASSIGNMENTS": "!Enforcement"
     },
     "RECORD": {
         "BUTTON_ADD_ROW_TITLE": "!Add \\{\\{0\\}\\}",
@@ -199,6 +200,11 @@
         "ORGANIZE_ROWS": "!Organize Report By (rows)",
         "PAGES": "!pages",
         "TITLE": "!Custom Report"
+    },
+    "ENFORCERS": {
+        "ASSIGNMENTS_TITLE": "!Traffic Enforcement Assignments",
+        "ASSIGNMENT": "!Assignment",
+        "FORECAST_SEVERITY": "!Forecast occurrences"
     },
     "SAVED_FILTERS": {
         "ADD_NEW": "!Add New Saved Filter",

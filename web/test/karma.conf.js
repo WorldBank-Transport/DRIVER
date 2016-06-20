@@ -116,6 +116,8 @@ module.exports = function(config) {
       'app/scripts/saved-filters/**.js',
       'app/scripts/custom-reports/module.js',
       'app/scripts/custom-reports/**.js',
+      'app/scripts/enforcers/module.js',
+      'app/scripts/enforcers/**.js',
       'app/scripts/resources/module.js',
       'app/scripts/resources/**.js',
       'app/scripts/resources/**/*.js',

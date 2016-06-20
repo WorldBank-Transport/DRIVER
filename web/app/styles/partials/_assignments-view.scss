@@ -1,0 +1,33 @@
+.print-view {
+    background: $light-gray;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 0;
+
+    &.enforcer-assignments {
+        // Custom report uses table-view without table-view-container, because it scrolls
+        // the whole page so the absolute-positioned gray background breaks things.
+        background: white;
+        margin-top: 50px;
+        padding: 0px 20px;
+    }
+
+    .assignments-header {
+        margin-top: 50px;
+    }
+
+    .enforcer-assignment {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 50px;
+        width: 50%;
+        .assignment-map {
+            width: 500px;
+            height: 500px;
+        }
+        .assignment-details {
+        }
+    }
+
+}
