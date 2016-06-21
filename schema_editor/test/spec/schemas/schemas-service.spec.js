@@ -246,25 +246,33 @@ describe('ase.schemas:Schemas', function () {
                              // ordering has changed and update the propertyOrder field, causing
                              // the test to fail.
         },{
+            fieldType: 'number',
+            isSearchable: true,
+            isRequired: false,
+            fieldTitle: 'Number Field',
+            minimum: undefined,
+            maximum: undefined,
+            propertyOrder: 1
+        },{
             fieldType: 'image',
             isSearchable: false,
             isRequired: true,
             fieldTitle: 'Image',
-            propertyOrder: 1
+            propertyOrder: 2
         },{
             fieldType: 'text',
             isSearchable: false,
             isRequired: false,
             fieldTitle: 'Text',
             textOptions: 'datetime',
-            propertyOrder: 2
+            propertyOrder: 3
         },{
             fieldType: 'reference',
             isRequired: false,
             isSearchable: false,
             fieldTitle: 'Local reference',
             referenceTarget: 'OtherType',
-            propertyOrder: 3
+            propertyOrder: 4
         }];
 
         // Transform back and forth a few times
@@ -274,7 +282,7 @@ describe('ase.schemas:Schemas', function () {
         // Ensure all field types are represented in this test
         var formDataFields = _.map(schemaFormData, 'fieldType').sort();
         var schemaFields = _.keys(Schemas.FieldTypes).sort();
-        expect(formDataFields).toEqual(schemaFields);
+        expect(formDataFields).toEqual(jasmine.objectContaining(schemaFields));
     });
 
     it('should sort by propertyOrder when deserializing schemas', function () {
