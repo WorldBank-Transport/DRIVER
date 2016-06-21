@@ -1,6 +1,8 @@
-from rest_framework.exceptions import ParseError
+from django.contrib.gis.geos import GEOSGeometry
+from rest_framework.exceptions import ParseError, NotFound
 from rest_framework.serializers import ModelSerializer
 
+from ashlar.models import BoundaryPolygon
 from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
 from black_spots.filters import parse_and_validate_dt
 
@@ -44,6 +46,26 @@ class EnforcerAssignmentInputSerializer():
         self.shift_start = self.get_required_dt_param('shift_start', request)
         self.shift_end = self.get_required_dt_param('shift_end', request)
         self.record_type = self.get_required_param('record_type', request)
+
+        # The geometry is optional. Check if the WKT polygon is defined first, then check by id.
+        polygon = request.query_params.get('polygon', None)
+        polygon_id = request.query_params.get('polygon_id', None)
+        if polygon:
+            try:
+                self.geom = GEOSGeometry(polygon)
+            except ValueError as e:
+                raise ParseError(e)
+            if not self.geom.valid:
+                raise ParseError('Input polygon must be valid GeoJSON: ' + self.geom.valid_reason)
+        elif polygon_id:
+            try:
+                self.geom = BoundaryPolygon.objects.get(pk=polygon_id).geom
+            except ValueError as e:
+                raise ParseError(e)
+            except BoundaryPolygon.DoesNotExist as e:
+                raise NotFound(e)
+        else:
+            self.geom = None
 
     def get_required_param(self, key, request):
         """
