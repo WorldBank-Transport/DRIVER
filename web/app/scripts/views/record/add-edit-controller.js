@@ -12,20 +12,20 @@
         var suppressReverseNominatim = true;
         var timeZone = WebConfig.localization.timeZone;
 
-        initialize();
+        ctl.$onInit = initialize();
 
         // Initialize for either adding or editing, depending on recorduuid being supplied
         function initialize() {
+            ctl.combineOccurredFromDateAndTime = combineOccurredFromDateAndTime;
+            ctl.combineOccurredToDateAndTime = combineOccurredToDateAndTime;
             ctl.fixOccurredDTForPickers = fixOccurredDTForPickers;
             ctl.goBack = goBack;
             ctl.onDataChange = onDataChange;
             ctl.onDeleteClicked = onDeleteClicked;
             ctl.onSaveClicked = onSaveClicked;
-            ctl.onDateChanged = onDateChanged;
             ctl.onGeomChanged = onGeomChanged;
             ctl.nominatimLookup = nominatimLookup;
             ctl.nominatimSelect = nominatimSelect;
-            ctl.openOccurredDatePicker = openOccurredDatePicker;
 
             ctl.userCanWrite = AuthService.hasWriteAccess();
 
@@ -51,10 +51,10 @@
                 lng: null
             };
 
-            // Date picker state
-            ctl.occurredDatePicker = {
-                opened: false
-            };
+            ctl.occurredFromDate = new Date();
+            ctl.occurredToDate = new Date();
+            ctl.occurredFromTime = new Date();
+            ctl.occurredToTime = new Date();
 
             $scope.$on('driver.views.record:marker-moved', function(event, data) {
                 // update location when map marker set
@@ -114,11 +114,39 @@
                 }
                 $translate.onReady(onSchemaReady);
             });
+
+            $scope.$on('$destroy', function() {
+                // let map know to destroy its state
+                $scope.$emit('driver.views.record:close');
+            });
+
         }
 
-        // Called when calendar icon of occurred date picker is pressed
-        function openOccurredDatePicker() {
-            ctl.occurredDatePicker.opened = true;
+        function initDateTimePickers() {
+            ctl.occurredFromDate = new Date(ctl.occurredFrom);
+            ctl.occurredFromTime = new Date(ctl.occurredFrom);
+            ctl.occurredToDate = new Date(ctl.occurredTo);
+            ctl.occurredToTime = new Date(ctl.occurredTo);
+        }
+
+        function combineOccurredFromDateAndTime() {
+            var hours = ctl.occurredFromTime.getHours();
+            var minutes = ctl.occurredFromTime.getMinutes();
+            var newDatetime = new Date(ctl.occurredFromDate);
+            newDatetime.setHours(hours);
+            newDatetime.setMinutes(minutes);
+            ctl.occurredFrom = newDatetime;
+            constantFieldsValidationErrors();
+        }
+
+        function combineOccurredToDateAndTime() {
+            var hours = ctl.occurredToTime.getHours();
+            var minutes = ctl.occurredToTime.getMinutes();
+            var newDatetime = new Date(ctl.occurredToDate);
+            newDatetime.setHours(hours);
+            newDatetime.setMinutes(minutes);
+            ctl.occurredTo = newDatetime;
+            constantFieldsValidationErrors();
         }
 
         // tell embed-map-directive to update marker location
@@ -176,6 +204,7 @@
                     // Prep the occurred_from datetime for use with pickers
                     fixOccurredDTForPickers(false);
 
+                    initDateTimePickers();
                     // set lat/lng array into bind-able object
                     ctl.geom.lat = ctl.record.geom.coordinates[1];
                     ctl.geom.lng = ctl.record.geom.coordinates[0];
@@ -235,10 +264,6 @@
             });
         }
 
-        function onDateChanged() {
-            // update whether all constant fields are present
-            constantFieldsValidationErrors();
-        }
 
 
         /*
@@ -556,10 +581,6 @@
             });
         }
 
-        $scope.$on('$destroy', function() {
-            // let map know to destroy its state
-            $scope.$emit('driver.views.record:close');
-        });
     }
 
     angular.module('driver.views.record')
