@@ -6,7 +6,8 @@
     <div ng-switch on="ctl.property.format">
         <div ng-switch-when="color" class="value color">
             <svg>
-                <rect class="rectangle" rx="20" ry="20" style="fill:{{ ::ctl.data }};" />
+                <rect class="rectangle" rx="20" ry="20" style="fill:{{ ::ctl.data }};"
+                ng-attr-x="{{ ctl.xShift() }}"/>
             </svg>
         </div>
 
