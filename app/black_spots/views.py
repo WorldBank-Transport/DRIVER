@@ -2,17 +2,20 @@ from rest_framework import viewsets
 from rest_framework import mixins as drf_mixins
 from rest_framework.response import Response
 from django_redis import get_redis_connection
+from django.utils import timezone
 
+from ashlar.models import Record
 from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
 from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer,
                                      BlackSpotConfigSerializer, EnforcerAssignmentInputSerializer,
                                      EnforcerAssignmentSerializer)
 from black_spots.filters import (BlackSpotFilter, BlackSpotSetFilter, EnforcerAssignmentFilter)
+from data.views import build_toddow
 
 from driver_auth.permissions import IsAdminOrReadOnly
 from driver import mixins
-import random, uuid
-
+import datetime, random, uuid
+from dateutil import rrule
 
 class BlackSpotViewSet(viewsets.ModelViewSet, mixins.GenerateViewsetQuery):
     """ViewSet for black spots"""
@@ -78,14 +81,12 @@ class BlackSpotConfigViewSet(drf_mixins.ListModelMixin, drf_mixins.RetrieveModel
 
 
 class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewSet):
-    """
-    ViewSet for enforcer assignments
+    """ViewSet for enforcer assignments"""
+    # Enforcer assignments do not currently have an associated model in the database, and are
+    # instead based direcly on black spots, so this is a list-only ViewSet. This was created
+    # as its own ViewSet to make it easier if we ever decide to create a db model for
+    # enforcer assignments.
 
-    Enforcer assignments do not currently have an associated model in the database, and are
-    instead based direcly on black spots, so this is a list-only ViewSet. This was created
-    as its own ViewSet to make it easier if we ever decide to create a db model for
-    enforcer assignments.
-    """
     queryset = BlackSpot.objects.all()
     serializer_class = EnforcerAssignmentSerializer
     filter_class = EnforcerAssignmentFilter
@@ -113,22 +114,65 @@ class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewS
         random.seed(hash('{}_{}'.format(shift_start, shift_end)))
 
         # Return the sampled list of assignments
-        return random.sample(assignments, num_personnel)
+        if num_personnel < len(assignments):
+            return random.sample(assignments, num_personnel)
+        return assignments
 
-    def scale_by_toddow(self, assignments, shift_start, shift_end):
+    def scale_by_toddow(self, assignments, shift_start, shift_end, record_type, geom):
         """
         Scale the expected load forecast (severity score) by the time of day and day of week
         :param assignments: filtered queryset of assignments (black spots)
         :param shift_start: start dt of the shift
         :param shift_end: end dt of the shift
+        :record_type: the record type uuid
+        :geom: the geometry object used for filtering records in toddow creation
         """
 
-        # TODO: use time of day/day of week to generate the appropriate scaling factor
-        scaling_factor = 1 / (7 * 24.0)
+        # Generate the ToDDoW aggregation using the past year of data
+        num_days_events = 365
+        max_dt = timezone.now()
+        min_dt = max_dt - datetime.timedelta(days=num_days_events)
+        records = Record.objects.filter(
+            occurred_from__gte=min_dt,
+            occurred_to__lte=max_dt,
+            schema__record_type_id=record_type
+        )
+        if geom:
+            records = records.filter(geom__intersects=geom)
+        toddow = build_toddow(records)
+
+        # Construct an `rrule` for iterating over hours between shift start and shift end.
+        # Each of these items will be matched up to the items returned in the toddow aggregation to
+        # determine which toddow buckets the shift includes. So we need to ensure that the maximum
+        # hours in the range is 7x24 to make sure nothing is double counted.
+        max_shift_end = shift_start + datetime.timedelta(hours=7 * 24)
+        shift_end = min(shift_end, max_shift_end)
+        # If the shift_end falls exactly on on hour mark, don't include that bucket
+        if shift_end.second == 0 and shift_end.minute == 0:
+            shift_end = shift_end - datetime.timedelta(microseconds=1)
+        hour_generator = rrule.rrule(rrule.HOURLY, dtstart=shift_start, until=shift_end)
+
+        # Iterate over the ToDDoW items and determine which ones are relevant to this shift
+        total_count, in_shift_count = 0, 0
+        for item in toddow:
+            count = item['count']
+            total_count += count
+            for hourly_dt in hour_generator:
+                if hourly_dt.hour == item['tod'] and hourly_dt.isoweekday() == item['dow']:
+                    in_shift_count += count
+                    break
+
+        # Use ratio of in_shift_count to total_count as the scaling factor
+        if total_count > 0 and in_shift_count > 0:
+            scaling_factor = in_shift_count / float(total_count)
+        else:
+            # If there aren't enough counts to properly determine a scaling factor,
+            # base it on the linear number of toddow buckets.
+            scaling_factor = len(list(hour_generator)) / (7 * 24.0)
 
         # Scale the severity score by the scaling factor
         for assignment in assignments:
-            assignment.severity_score *= scaling_factor;
+            assignment.severity_score *= scaling_factor
 
         return assignments
 
@@ -151,11 +195,13 @@ class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewS
         num_personnel = input_serializer.num_personnel
         shift_start = input_serializer.shift_start
         shift_end = input_serializer.shift_end
+        record_type = input_serializer.record_type
+        geom = input_serializer.geom
 
         # Filter the assignments by supplied parameters, sample them, and scale by ToDDoW
         assignments = self.filter_queryset(self.get_queryset())
         assignments = self.choose_assignments(assignments, num_personnel, shift_start, shift_end)
-        assignments = self.scale_by_toddow(assignments, shift_start, shift_end)
+        assignments = self.scale_by_toddow(assignments, shift_start, shift_end, record_type, geom)
 
         output_serializer = self.get_serializer(assignments, many=True)
         return Response(output_serializer.data)

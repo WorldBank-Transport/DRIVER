@@ -63,6 +63,25 @@ DateTimeField.register_lookup(transformers.ISOYearTransform)
 DateTimeField.register_lookup(transformers.WeekTransform)
 
 
+def build_toddow(queryset):
+    """
+    Builds a toddow object
+
+    :param queryset: Queryset of records
+    """
+    # Build SQL `case` statement to annotate with the day of week
+    dow_case = Case(*[When(occurred_from__week_day=x, then=Value(x))
+                      for x in xrange(1, 8)], output_field=IntegerField())
+    # Build SQL `case` statement to annotate with the time of day
+    tod_case = Case(*[When(occurred_from__hour=x, then=Value(x))
+                      for x in xrange(24)], output_field=IntegerField())
+    annotated_recs = queryset.annotate(dow=dow_case).annotate(tod=tod_case)
+    # Voodoo to perform aggregations over `tod` and `dow` combinations
+    return (annotated_recs.values('tod', 'dow')
+            .order_by('tod', 'dow')
+            .annotate(count=Count('tod')))
+
+
 class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
     """
@@ -193,19 +212,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         e.g. [{"count":1,"dow":6,"tod":1},{"count":1,"dow":3,"tod":3}]
         """
         queryset = self.get_filtered_queryset(request)
-
-        # Build SQL `case` statement to annotate with the day of week
-        dow_case = Case(*[When(occurred_from__week_day=x, then=Value(x))
-                          for x in xrange(1, 8)], output_field=IntegerField())
-        # Build SQL `case` statement to annotate with the time of day
-        tod_case = Case(*[When(occurred_from__hour=x, then=Value(x))
-                          for x in xrange(24)], output_field=IntegerField())
-        annotated_recs = queryset.annotate(dow=dow_case).annotate(tod=tod_case)
-
-        # Voodoo to perform aggregations over `tod` and `dow` combinations
-        counted = (annotated_recs.values('tod', 'dow')
-                   .order_by('tod', 'dow')
-                   .annotate(count=Count('tod')))
+        counted = build_toddow(queryset)
         return Response(counted)
 
     @list_route(methods=['get'])
