@@ -20,7 +20,9 @@
         'driver.config',
         'driver.resources',
         'driver.state',
+        'driver.localization',
         'ui.bootstrap',
+        'datetimepicker',
         'Leaflet'
     ]).config(StateConfig);
 

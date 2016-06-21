@@ -19,6 +19,7 @@
         'driver.tools.charts',
         'driver.tools.export',
         'driver.tools.interventions',
+        'driver.tools.enforcers',
         'driver.customReports',
         'driver.enforcers',
         'driver.config',
