@@ -65,3 +65,5 @@
         job="docker exec $(docker ps -q -f name=driver-celery) ./manage.py remove_old_exports
         >> {{ driver_cron_log_dir }}/remove_old_exports.log 2>&1"
         minute=10
+
+- { include: firewall.yml }

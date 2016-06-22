@@ -45,3 +45,5 @@
   template: src=monit-postgresql.cfg.j2 dest=/etc/monit/conf.d/postgresql.cfg
   notify:
     - Restart monit
+
+- { include: firewall.yml }

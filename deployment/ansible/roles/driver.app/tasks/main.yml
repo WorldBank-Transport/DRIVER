@@ -56,3 +56,5 @@
   command: >
     /usr/bin/docker exec -i driver-app ./manage.py migrate
   when: developing_or_staging
+
+- { include: firewall.yml }

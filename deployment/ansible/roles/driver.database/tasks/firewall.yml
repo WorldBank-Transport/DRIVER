@@ -1,0 +1,25 @@
+---
+- name: Enable firewall
+  ufw: state=enabled policy=reject
+
+- name: Allow ssh access
+  ufw: rule=allow port=22
+
+- name: Allow monit access
+  ufw: rule=allow port=2812
+
+- name: Allow PostgreSQL connections from app machines
+  ufw: rule=allow port={{ postgresql_port }} from_ip={{ item }}
+  with_items: "{{ ip_addresses_app }}"
+
+- name: Allow PostgreSQL connections from celery machines
+  ufw: rule=allow port={{ postgresql_port }} from_ip={{ item }}
+  with_items: "{{ ip_addresses_celery }}"
+
+- name: Allow redis connections from app machines
+  ufw: rule=allow port={{ redis_port }} from_ip={{ item }}
+  with_items: "{{ ip_addresses_app }}"
+
+- name: Allow redis connections from celery machines
+  ufw: rule=allow port={{ redis_port }} from_ip={{ item }}
+  with_items: "{{ ip_addresses_celery }}"
