@@ -137,6 +137,8 @@ module.exports = function(config) {
       'app/scripts/tools/export/**.js',
       'app/scripts/tools/interventions/module.js',
       'app/scripts/tools/interventions/**.js',
+      'app/scripts/tools/enforcers/module.js',
+      'app/scripts/tools/enforcers/**.js',
       'app/scripts/weather/module.js',
       'app/scripts/weather/**.js',
       'app/scripts/views/account/module.js',

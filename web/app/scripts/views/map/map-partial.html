@@ -12,6 +12,7 @@
         </driver-interventions>
 
         <driver-export params="ctl.recordQueryParams"></driver-export>
+        <enforcers-tool params="ctl.recordQueryParams" ng-if="ctl.showBlackSpots"></enforcers-tool>
         <driver-social-costs cost-data="ctl.socialCosts" as-tool="true"></driver-social-costs>
     </div>
 </main>

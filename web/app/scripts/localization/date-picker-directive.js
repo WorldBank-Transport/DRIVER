@@ -8,7 +8,7 @@
          placeholder {string} - placeholder text for the text field
          on-change {function} - function to call when datetime is changed
      */
-    function DatePicker(DateLocalization) {
+    function DatePicker($timeout, DateLocalization) {
         var internalCalendar;
         var dateConfig;
         var module = {
@@ -41,15 +41,21 @@
             }, $.calendarsPicker.regionalOptions[dateConfig.language]);
 
             $(element)
-                .calendarsPicker(calendarOptions)
-                .calendarsPicker(
-                'option', 'onSelect', function(dates) {
-                    if (dates.length > 0) {
-                        updateDate(scope.datetime, dates[0]);
-                        scope.onChange();
+                .calendarsPicker(calendarOptions);
+            // Set up the selection callback on the next digest so that we don't
+            // do it on initialization.
+            $timeout(function() {
+                $(element).calendarsPicker(
+                    'option', 'onSelect', function(dates) {
+                        $timeout(function() {
+                            if (dates.length > 0) {
+                                updateDate(scope.datetime, dates[0]);
+                                scope.onChange();
+                            }
+                        });
                     }
-                }
-            );
+                );
+            });
 
             scope.$watch(function() {return scope.datetime;}, function(date) {
                 if (!date) {

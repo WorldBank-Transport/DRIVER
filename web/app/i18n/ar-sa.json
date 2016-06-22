@@ -204,7 +204,15 @@
     "ENFORCERS": {
         "ASSIGNMENTS_TITLE": "!Traffic Enforcement Assignments",
         "ASSIGNMENT": "!Assignment",
-        "FORECAST_SEVERITY": "!Forecast occurrences"
+        "ASSIGNMENTS": "!Assignments",
+        "FORECAST_SEVERITY": "!Forecast occurrences",
+        "SHIFT_LENGTH_ERROR": "!Shift cannot be more than 24 hours long",
+        "SELECTED_BOUNDARY": "!Selected boundary",
+        "BOUNDARY_NOTICE": "!To select a different boundary, cancel and make adjustments on the map page",
+        "SHIFT_START": "!Shift start",
+        "SHIFT_END": "!Shift end",
+        "NUM_PERSONNEL": "!Number of personnel",
+        "CUSTOM_BOUNDARY": "!Hand-drawn polygon filter will be applied"
     },
     "SAVED_FILTERS": {
         "ADD_NEW": "أضف تصنيف محفوظ جديد",

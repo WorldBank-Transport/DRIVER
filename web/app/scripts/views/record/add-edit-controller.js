@@ -5,12 +5,11 @@
     function RecordAddEditController($log, $scope, $state, $stateParams, $window, $q, $timeout,
                                      $translate, uuid4, AuthService, JsonEditorDefaults, Nominatim,
                                      Notifications, Records, RecordState, RecordSchemaState,
-                                     RecordTypes, WeatherService, WebConfig) {
+                                     RecordTypes, WeatherService, WebConfig, DateLocalization) {
         var ctl = this;
         var editorData = null;
         var bbox = null;
         var suppressReverseNominatim = true;
-        var timeZone = WebConfig.localization.timeZone;
 
         ctl.$onInit = initialize();
 
@@ -172,23 +171,9 @@
          * @param {bool} reverse True if the fix is being reversed out of for saving purposes
          */
         function fixOccurredDTForPickers(reverse) {
-            var occurredFromDT = new Date(ctl.occurredFrom);
-            var browserTZOffset = occurredFromDT.getTimezoneOffset();
-            var configuredTZOffset = moment(occurredFromDT).tz(timeZone)._offset;
-            // Note that the native js getTimezoneOffset returns the opposite of what
-            // you'd expect: i.e. EST which is UTC-5 gets returned as positive 5.
-            // The `moment` method of returning the offset would return this as a -5.
-            // Therefore if the browser tz is the same as the configured local tz,
-            // the following offset will cancel out and return zero.
-            var offset = (browserTZOffset + configuredTZOffset) * (reverse ? -1 : +1);
-
-            occurredFromDT.setMinutes(occurredFromDT.getMinutes() + offset);
-            ctl.occurredFrom = occurredFromDT;
-
+            ctl.occurredFrom = DateLocalization.convertNonTimezoneDate(ctl.occurredFrom, reverse);
             if (ctl.occurredTo) {
-                var occurredToDT = new Date(ctl.occurredTo);
-                occurredToDT.setMinutes(occurredToDT.getMinutes() + offset);
-                ctl.occurredTo = occurredToDT;
+                ctl.occurredTo = DateLocalization.convertNonTimezoneDate(ctl.occurredTo, reverse);
             }
         }
 

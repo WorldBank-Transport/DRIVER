@@ -8,6 +8,7 @@
         var ctl = this;
         ctl.userCanWrite = false;
         ctl.showInterventions = WebConfig.interventions.visible;
+        ctl.showBlackSpots = WebConfig.blackSpots.visible;
 
         /** This is one half of some fairly ugly code which serves to wire up a click
          *  handling event on top of some dynamically generated HTML. The other half is in
