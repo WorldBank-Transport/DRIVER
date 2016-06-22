@@ -170,6 +170,10 @@ class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewS
             # base it on the linear number of toddow buckets.
             scaling_factor = len(list(hour_generator)) / (7 * 24.0)
 
+        # Need to divide by 52, since the ToDDoW proportion only represents a weekly aggregation,
+        # yet the severity score is a yearly figure.
+        scaling_factor /= 52
+
         # Scale the severity score by the scaling factor
         for assignment in assignments:
             assignment.severity_score *= scaling_factor
