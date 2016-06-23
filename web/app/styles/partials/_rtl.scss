@@ -9,6 +9,32 @@ body.rtl {
     float: left !important;
   }
 
+  .calendars-month {
+    width: auto;
+  }
+
+  .enforcer-assignment-modal {
+    .time-picker {
+      left: auto;
+      right: 20px;
+    }
+
+    .date-picker {
+      float: right;
+    }
+
+    .calendars-trigger {
+      border-radius: 0;
+      border: 1px solid #ccc;
+      border-left: 0;
+    }
+
+    input {
+      border-radius: 0;
+      border: 1px solid #ccc;
+    }
+  }
+
   .dashboard {
       .blackspots-disabled {
           .block {
@@ -22,7 +48,7 @@ body.rtl {
                   }
                   &:nth-child(2) {
                       left: auto;
-                      right:2%;
+                      right: 2%;
                   }
                   &:nth-child(3) {
                       left: 2%;

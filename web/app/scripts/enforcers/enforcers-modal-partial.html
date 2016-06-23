@@ -18,26 +18,28 @@
                 <em>{{ 'ENFORCERS.BOUNDARY_NOTICE' | translate }}</em>
             </h6>
         </div>
+        <div class="row">
+            <div class="col-md-6 clearfix">
+              <label class="control-label">{{ 'ENFORCERS.SHIFT_START' | translate }}</label>
+              <az-date-time-picker datetime="modal.shiftStart" on-change="modal.onParamChanged()">
+              </az-date-time-picker>
+            </div>
 
-        <div class="col-md-6">
-          <label class="control-label">{{ 'ENFORCERS.SHIFT_START' | translate }}</label>
-          <az-date-time-picker datetime="modal.shiftStart" on-change="modal.onParamChanged()">
-          </az-date-time-picker>
-        </div>
-
-        <div class="col-md-6">
-          <label class="control-label">{{ 'ENFORCERS.SHIFT_END' | translate }}</label>
-          <az-date-time-picker datetime="modal.shiftEnd" on-change="modal.onParamChanged()">
-          </az-date-time-picker>
-        </div>
+            <div class="col-md-6 clearfix">
+              <label class="control-label">{{ 'ENFORCERS.SHIFT_END' | translate }}</label>
+              <az-date-time-picker datetime="modal.shiftEnd" on-change="modal.onParamChanged()">
+              </az-date-time-picker>
+            </div>
         </div>
 
         <div class="col-md-12 warning" ng-if="modal.error">{{ modal.error }}</div>
 
-        <div class="col-md-6">
-            <label class="control-label">{{ 'ENFORCERS.NUM_PERSONNEL' | translate }}</label>
-            <input ng-model="modal.numPersonnel" type="number" min="1" class="form-control"
-              ng-change="modal.onParamChanged()">
+        <div class="row">
+            <div class="col-md-6 col-xs-12 pull-left col-personnel">
+                <label class="control-label">{{ 'ENFORCERS.NUM_PERSONNEL' | translate }}</label>
+                <input ng-model="modal.numPersonnel" type="number" min="1" class="form-control"
+                  ng-change="modal.onParamChanged()">
+            </div>
         </div>
     </div>
     <div class="modal-footer">
