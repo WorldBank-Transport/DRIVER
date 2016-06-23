@@ -7,7 +7,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.github.WorldBank-Transport.jsonschema2pojo:jsonschema2pojo-gradle-plugin:jsonschema2pojo-0.4.24-annotate-format'
+        classpath 'com.github.WorldBank-Transport.jsonschema2pojo:jsonschema2pojo-gradle-plugin:jsonschema2pojo-0.4.24-annotate-type'
         classpath 'com.google.code.gson:gson:2.4'
         classpath 'org.joda:joda-convert:1.8.1'
         classpath 'javax.annotation:javax.annotation-api:1.2'
@@ -93,7 +93,7 @@ dependencies {
         all*.exclude group: 'commons-logging', module: 'commons-logging'
     }
     compile 'com.google.code.gson:gson:2.4'
-    compile('com.github.WorldBank-Transport:jsonschema2pojo:jsonschema2pojo-0.4.24-annotate-format') {
+    compile('com.github.WorldBank-Transport:jsonschema2pojo:jsonschema2pojo-0.4.24-annotate-type') {
         // only want core
         exclude module: 'jsonschema2pojo-ant'
         exclude module: 'jsonschema2pojo-cli'
