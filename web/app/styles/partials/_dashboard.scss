@@ -123,10 +123,14 @@
         &.costs {
             text-align: center;
             cursor: pointer;
+            padding-left: 20px;
+            padding-right: 20px;
 
             .subtotal {
                 font-size: 18px;
                 margin: 10px;
+                margin-left: -20px;
+                margin-right: -20px;
                 table {
                     border-collapse: separate;
                     border-spacing: 10px;
@@ -135,6 +139,9 @@
                     .cost-category {
                         text-align: left;
                     }
+                }
+                h2 {
+                    padding: 14px 20px;
                 }
             }
 
