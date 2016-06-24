@@ -1,5 +1,14 @@
 server {
-    listen 80 default_server;
+
+{% if staging or production %}
+    listen 443 default_server;
+
+    ssl on;
+    ssl_certificate {{ letsencrypt_certs_dir }}/driver-ssl-cert.cert;
+    ssl_certificate_key {{ letsencrypt_key_dir }}/driver-ssl-cert.key;
+{% else %}
+   listen 80 default_server;
+{% endif %}
 
     server_name _;
     root {{ web_build_dir }};
@@ -125,3 +134,20 @@ server {
         proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
     }
 }
+
+{% if staging or production %}
+server {
+    listen 80;
+    server_name _;
+
+    # Used for letsencrypt domain name ownership validation
+    location /.well-known/acme-challenge/ {
+        alias {{ acme_tiny_challenges_directory }}/;
+    }
+
+    # Redirect all other http traffic to https
+    location / {
+       return 301 https://$host$request_uri;
+    }
+}
+{% endif %}

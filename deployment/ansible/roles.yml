@@ -12,3 +12,5 @@
   version: 0.1.1
 - src: azavea.redis
   version: 0.1.0
+- src: andreaswolf.letsencrypt
+  version: v1.1
