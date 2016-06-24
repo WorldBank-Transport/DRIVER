@@ -118,6 +118,16 @@
                         .calendarsPicker('option', 'onSelect', function(dates) {
                             if (dates.length > 0) { updateDate(dates[0], 'min'); }
                         });
+
+                    scope.min = calendar.formatDate(
+                        scope.calendarOptions.dateFormat,
+                        calendar.fromJSDate(defaultMin)
+                    );
+                    scope.max = calendar.formatDate(
+                        scope.calendarOptions.dateFormat,
+                        calendar.fromJSDate(defaultMax)
+                    );
+
                     scope.error = {};
                     scope.updateFilter();
                 }
