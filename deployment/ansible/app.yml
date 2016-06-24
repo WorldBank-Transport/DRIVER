@@ -13,14 +13,26 @@
 
   become: True
 
+  vars:
+    letsencrypt_certs:
+      -
+        name: "driver-ssl-cert"
+        keypath: "{{ letsencrypt_key_dir }}/driver-ssl-cert.key"
+        certpath: "{{ letsencrypt_certs_dir }}/driver-ssl-cert.cert"
+        host: "{{ allowed_host }}"
+
   pre_tasks:
     - name: Update APT cache
       apt: update_cache=yes
+
+    - name: Install Git
+      apt: pkg=git state=present
 
   roles:
     - { role: "driver.windshaft" }
     - { role: "driver.app" }
     - { role: "driver.nginx" }
+    - { role: "andreaswolf.letsencrypt", when: staging or production }
 
 - hosts: database-servers
 
