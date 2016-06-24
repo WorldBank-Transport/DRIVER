@@ -16,7 +16,7 @@
 
         function streets() {
             var layer = new L.tileLayer(
-                'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+                'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png',
                 {
                     attribution: $translate.instant('MAP.CDB_ATTRIBUTION'),
                     detectRetina: false,

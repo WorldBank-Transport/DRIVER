@@ -119,7 +119,7 @@
     "MAP": {
         "BLACKSPOT": "!Blackspot",
         "BLACKSPOTS": "!Blackspots",
-        "CDB_ATTRIBUTION": "!&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, &copy; <a href='http://cartodb.com/attributions'>CartoDB</a>",
+        "CDB_ATTRIBUTION": "!&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, &copy; <a href='https://cartodb.com/attributions'>CartoDB</a>",
         "ESRI_ATTRIBUTION": "!Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
         "HEATMAP": "!Heatmap",
         "NUM_SEVERE": "!Num severe",
