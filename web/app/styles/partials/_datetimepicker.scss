@@ -1,0 +1,34 @@
+.calendars-month-header, .calendars-month-header select, .calendars-month-header input, .calendars-month td .calendars-selected {
+  background-color: #344055;
+}
+
+.calendars-month {
+  border: none;
+}
+
+.calendars {
+  border: 1px solid #ccc;
+}
+
+.calendars-month a {
+  padding: 4px 2px;
+  border-radius: 4px;
+  background-color: transparent;
+  &:hover {
+    background-color: #e4e4e4;
+    color: #333;
+  }
+}
+
+.calendars-month td {
+  border: none;
+}
+
+.calendars-ctrl {
+    background-color: #e4e4e4;
+}
+
+.calendars-cmd:hover {
+    background-color: #e4e4e4;
+    color: #222;
+}

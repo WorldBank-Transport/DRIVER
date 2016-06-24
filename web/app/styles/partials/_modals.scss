@@ -69,3 +69,33 @@
     margin: 0px 0px -2px 0px;
     display: inline-block;
 }
+
+.enforcer-assignment-modal {
+    .time-picker {
+        width: 40%;
+        float: left;
+        position: relative;
+        top: -34px;
+        left: 20px;
+    }
+    .date-picker {
+        width: 60%;
+        float: left;
+        & > input {
+            width: 100%;
+        }
+    }
+    .col-personnel {
+        margin-top: -20px;
+    }
+    .well {
+        margin-bottom: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 730px;
+        margin: 30px auto;
+    }
+}
