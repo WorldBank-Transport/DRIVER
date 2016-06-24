@@ -48,6 +48,12 @@ from driver_auth.permissions import (IsAdminOrReadOnly,
                                      IsAdminAndReadOnly,
                                      is_admin_or_writer)
 from data.tasks import export_csv
+from data.localization.date_utils import (
+    hijri_day_range,
+    hijri_week_range,
+    hijri_month_range,
+    hijri_year_range
+)
 
 import filters
 from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
@@ -390,7 +396,6 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             ]
         }
         """
-        calendar = request.query_params.get('calendar')
         valid_row_params = set(['row_period_type', 'row_boundary_id', 'row_choices_path'])
         valid_col_params = set(['col_period_type', 'col_boundary_id', 'col_choices_path'])
         # Validate there's exactly one row_* and one col_* parameter
@@ -408,7 +413,6 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         col_param = col_params.pop()
         row_case, row_labels = self._query_param_to_case_stmnt(row_param, request, queryset)
         col_case, col_labels = self._query_param_to_case_stmnt(col_param, request, queryset)
-
         # Apply case statements to filtered queryset
         annotated_qs = queryset.annotate(row=row_case).annotate(col=col_case)
 
@@ -455,14 +459,18 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         except KeyError:
             raise ParseError(detail="The 'record_type' parameter is required")
         if param.endswith('period_type'):
-            return self._make_period_case(request.query_params[param], request, queryset)
+            query_calendar = request.query_params.get('calendar')
+            if (query_calendar == 'gregorian'):
+                return self._make_gregorian_period_case(request.query_params[param], request, queryset)
+            elif (query_calendar == 'ummalqura'):
+                return self._make_ummalqura_period_case(request.query_params[param], request, queryset)
         elif param.endswith('boundary_id'):
             return self._make_boundary_case(request.query_params[param])
         else:  # 'choices_path'; ensured by parent function
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
             return self._make_choices_case(schema, request.query_params[param].split(','))
 
-    def _make_period_case(self, period_type, request, queryset):
+    def _make_gregorian_period_case(self, period_type, request, queryset):
         """Constructs a Django Case statement for a certain type of period.
 
         Args:
@@ -576,12 +584,12 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             },
             'day': {
                 'range': [],
-                'lookup': lambda (yr, wk, day): {'occurred_from__week': wk,
+                'lookup': lambda (yr, mo, day): {'occurred_from__month': mo,
                                                  'occurred_from__year': yr,
                                                  'occurred_from__day': day},
-                'label': lambda (yr, wk, day): [
+                'label': lambda (yr, mo, day): [
                     {
-                        'text': template_date(datetime.date(yr, wk, day)),
+                        'text': template_date(datetime.date(yr, mo, day)),
                         'translate': False
                     }
                 ]
@@ -625,13 +633,24 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 elif period_type == 'week':
                     # Using the existing lists for 'year' and 'week_of_year', builds a list of
                     # (year, week) tuples in order for the min_date to max_date range.
-                    # Rather than figure out what week the min_date and max_date fall in, this
-                    # includes all weeks for the starting and ending months.
+                    # Figure out what week the min_date and max_date fall in, then
+                    # use them as the starting and ending weeks
+                    def week_start_date(year, week):
+                        d = datetime.date(year, 1, 1)
+                        delta_days = d.isoweekday() - 1
+                        delta_weeks = week
+                        if year == d.isocalendar()[0]:
+                            delta_weeks -= 1
+                        delta = datetime.timedelta(days=-delta_days, weeks=delta_weeks)
+                        return d + delta
+
                     sequential_ranges['week']['range'] = [
                         (year, week) for year in sequential_ranges['year']['range']
                         for week in periodic_ranges['week_of_year']['range']
-                        if min_date <= datetime.date(year, month, calendar.monthrange(year, month)[1])
-                        and datetime.date(year, month, 1) <= max_date
+                        if week_start_date(
+                                min_date.year, min_date.isocalendar()[1]
+                        ) <= week_start_date(year, week)  # include first partial week
+                        and week_start_date(year, week) <= max_date  # include last partial week
                     ]
 
             period = sequential_ranges[period_type]
@@ -640,6 +659,129 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                                      .format(periodic_ranges.keys() + sequential_ranges.keys(),
                                              period_type)))
 
+        return self._build_case_from_period(period)
+
+    def _make_ummalqura_period_case(self, period_type, request, queryset):
+        periodic_ranges = {
+            'month_of_year': {
+                'type': 'generated',
+                'query': hijri_month_range,
+            },
+            'week_of_year': {
+                'type': 'generated',
+                'query': hijri_week_range
+            },
+            'day_of_week': {
+                'type': 'builtin',
+                'range': xrange(1, 8),
+                'lookup': lambda x: {'occurred_from__week_day': x},
+                'label': lambda x: [
+                    {
+                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
+                        'translate': True
+                    }
+                ]
+            },
+            'day_of_month': {
+                'type': 'generated',
+                'query': hijri_day_range,
+            },
+            'hour_of_day': {
+                'type': 'builtin',
+                'range': xrange(0, 24),
+                'lookup': lambda x: {'occurred_from__hour': x},
+                'label': lambda x: [
+                    {
+                        'text': '{}:00'.format(x),
+                        'translate': False
+                    }
+                ]
+            },
+        }
+
+        # Ranges are built below, partly based on the ranges in 'periodic_ranges' above.
+        sequential_ranges = {
+            'year': {
+                'type': 'generated',
+                'query': hijri_year_range
+            },
+            'month': {
+                'type': 'generated',
+                'query': hijri_month_range
+            },
+            'week': {
+                'type': 'generated',
+                'query': hijri_week_range
+            },
+            'day': {
+                'type': 'generated',
+                'query': hijri_day_range
+            },
+        }
+
+        # need to get start/end of every month in the requested range
+        # create Q expressions for each month
+        # create aggregation for each type of Case query which doesn't translate directly from
+        # the gregorian calendar:
+        # Periodic: Day of Month, Month of Year, Week of year
+        # Sequential: Day, Month, Year
+
+        # Min / max dates are required to limit the # of Q expressions
+        if request.query_params.get('occurred_min') is not None:
+            min_date = parse_date(request.query_params['occurred_min']).date()
+        else:
+            min_date = queryset.order_by('occurred_from').first().occurred_from.date()
+        if request.query_params.get('occurred_max') is not None:
+            max_date = parse_date(request.query_params['occurred_max']).date()
+        else:
+            max_date = queryset.order_by('-occurred_from').first().occurred_from.date()
+
+        if period_type in periodic_ranges.keys():
+            return self._build_ummalqura_periodic_case(
+                periodic_ranges, period_type, min_date, max_date
+            )
+        elif period_type in sequential_ranges.keys():
+            return self._build_ummalqura_sequential_case(
+                sequential_ranges, period_type, min_date, max_date
+            )
+        else:
+            raise ParseError(detail=('row_/col_period_type must be one of {}; received {}'
+                                     .format(periodic_ranges.keys() + sequential_ranges.keys(),
+                                             period_type)))
+
+    def _build_ummalqura_periodic_case(self, periodic_ranges, period_type, min_date, max_date):
+        period = periodic_ranges[period_type]
+
+        if period['type'] == 'generated':
+            query_dates = period['query'](min_date, max_date, True)
+            date_sets = query_dates['date_sets']
+
+            whens = []
+            labels = []
+
+            for date_set in date_sets:
+                range_expressions = []
+                for date_range in date_set.ranges:
+                    range_expressions.append(
+                        (Q(occurred_from__gte=date_range.start) &
+                         Q(occurred_from__lt=date_range.end))
+                    )
+                if len(range_expressions) > 1:
+                    in_range = reduce(lambda x, y: x | y, range_expressions)
+                elif len(range_expressions) == 1:
+                    in_range = range_expressions[0]
+                else:
+                    continue
+                set_when = When(in_range, then=Value(date_set.key))
+                whens.append(set_when)
+                labels.append({'key': date_set.key,
+                               'label': date_set.label})
+            return (Case(*whens, output_field=CharField()), labels)
+
+        elif period['type'] == 'builtin':
+            self._build_case_from_period(period)
+
+    def _build_case_from_period(self, period):
         whens = []  # Eventual list of When-clause objects
         for x in period['range']:
             when_args = period['lookup'](x)
@@ -648,6 +790,33 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
 
         labels = [{'key': str(x), 'label': period['label'](x)} for x in period['range']]
         return (Case(*whens, output_field=CharField()), labels)
+
+
+    def _build_ummalqura_sequential_case(self, sequential_ranges, period_type, min_date, max_date):
+        period = sequential_ranges[period_type]
+        if period and period['type'] == 'generated':
+            query_dates = period['query'](min_date, max_date)
+            date_sets = query_dates['date_sets']
+
+            whens = []
+            labels = []
+
+            for date_set in date_sets:
+                # only ever 1 range for each sequential when
+                date_range = date_set.ranges[0]
+                range_expression = (
+                    Q(occurred_from__gte=date_range.start) &
+                    Q(occurred_from__lt=date_range.end))
+                set_when = When(range_expression, then=Value(date_set.key))
+                whens.append(set_when)
+                labels.append({'key': date_set.key,
+                               'label': date_set.label})
+            return (Case(*whens, output_field=CharField()), labels)
+
+        else:
+            raise ParseError(
+                description='Invalid sequential aggregations type for ummalqura calendar'
+            )
 
     def _make_boundary_case(self, boundary_id):
         """Constructs a Django Case statement for points falling within a particular polygon
