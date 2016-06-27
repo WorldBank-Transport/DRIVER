@@ -75,7 +75,7 @@
             // If we were using $resource, Angular would automagically encode params that are
             // objects. But since we're using $state.href, we have to do it ourselves.
             var urlParams = _.mapValues(params, function (value) {
-                if (typeof(value) === 'object') {
+                if (typeof(value) === 'object' && value !== null) {
                     return angular.toJson(value);
                 } else {
                     return value;
