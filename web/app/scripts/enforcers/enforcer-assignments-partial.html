@@ -1,22 +1,31 @@
 <cube-grid-spinner ng-if="ctl.loading"></cube-grid-spinner>
 <div class="enforcer-assignments print-view" ng-if="!ctl.loading">
   <div class="assignments-header">
-    <h2>{{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }}</h2>
-    <h3 ng-if="!isRightToLeft">
-        <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' }}</span> &ndash;
-        <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' }}</span>
-    </h3>
-    <h3 ng-if="isRightToLeft">
-        <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' }}</span> &ndash;
-        <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' }}</span>
-    </h3>
+    <h2>
+      {{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }}
+      <button ng-click="ctl.printPage()">
+        {{ 'ENFORCERS.PRINT' | translate }}
+      </button>
+    </h2>
   </div>
   <div ng-repeat="assignment in ctl.assignments" class="enforcer-assignment">
-    <h3>{{ 'ENFORCERS.ASSIGNMENT' | translate }} {{$index + 1}}</h3>
+    <div ng-if="$index % 3 === 0">
+      <h3 ng-if="!isRightToLeft">
+          <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span> &ndash;
+          <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>
+      </h3>
+      <h3 ng-if="isRightToLeft">
+          <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span> &ndash;
+          <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>
+      </h3>
+    </div>
     <div class="assignment-details">
-      <span class="forecast-severity">
-        {{ 'ENFORCERS.FORECAST_SEVERITY' | translate }}: {{ assignment.severity_score | number }}
-      </span>
+      <div>
+        {{ 'ENFORCERS.ASSIGNMENT' | translate }} {{$index + 1}}
+      </div>
+      <div class="latlon">
+        {{ assignment.latitude | number }}, {{ assignment.longitude | number }}
+      </div>
     </div>
     <div class="map assignment-map" leaflet-map assignment-map geom="assignment.geom.coordinates"></div>
   </div>

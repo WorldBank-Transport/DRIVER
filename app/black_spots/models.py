@@ -24,6 +24,18 @@ class BlackSpot(AshlarModel):
     #: The set of black spots this belongs to
     black_spot_set = models.ForeignKey('BlackSpotSet')
 
+    #: The latitude of the black spot's centroid
+    @property
+    def latitude(self):
+        """Gets the latitude of the black spot's centroid"""
+        return self.geom.centroid.y
+
+    #: The longitude of the black spot's centroid
+    @property
+    def longitude(self):
+        """Gets the longitude of the black spot's centroid"""
+        return self.geom.centroid.x
+
 
 class BlackSpotSet(AshlarModel):
     """A grouping of black spots generated at one time"""
