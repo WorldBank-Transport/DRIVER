@@ -7,7 +7,7 @@
 
     /* ngInject */
     function EnforcerAssignmentsController($state, $stateParams, $q, $translate, $window,
-                                           Assignments, Boundaries, Polygons, RecordState) {
+                                           Assignments, Boundaries, Polygons) {
         var ctl = this;
 
         $translate.onReady(init);
