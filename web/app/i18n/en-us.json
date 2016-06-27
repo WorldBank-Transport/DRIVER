@@ -54,7 +54,6 @@
         "SOCIAL_COSTS_TEXT": "Total economic loss and societal harm",
         "SOCIAL_COSTS_90DAYS": "Last 90 days",
         "SOCIAL_COSTS_CONFIG_WARN": "Cost calculation may be misconfigured. Please notify your administrator.",
-        "RECENT_PROPORTIONS_TEXT": "of all traffic incidents involved",
         "STEPWISE_TITLE": "Weekly Counts: Last 90 Days",
         "TODDOW_TITLE": "Time of Day, Day of Week: Last 90 Days",
         "VIEW_ALL": "View all"
@@ -74,6 +73,20 @@
         "FRIDAY": "Friday",
         "SATURDAY": "Saturday",
         "SUNDAY": "Sunday"
+    },
+    "ENFORCERS": {
+        "ASSIGNMENT": "Assignment",
+        "ASSIGNMENTS": "Assignments",
+        "ASSIGNMENTS_TITLE": "Traffic Enforcement Assignments",
+        "BOUNDARY_NOTICE": "To select a different boundary, make adjustments on the map page",
+        "CUSTOM_BOUNDARY": "Hand-drawn polygon filter will be applied",
+        "FORECAST_SEVERITY": "Forecast occurrences",
+        "NUM_PERSONNEL": "Number of personnel",
+        "PRINT": "Print",
+        "SELECTED_BOUNDARY": "Selected boundary",
+        "SHIFT_END": "Shift end",
+        "SHIFT_LENGTH_ERROR": "Shift cannot be more than 24 hours long",
+        "SHIFT_START": "Shift start"
     },
     "ERRORS": {
         "CREATING_RECORD": "Error creating record",
@@ -201,19 +214,6 @@
         "ORGANIZE_ROWS": "Organize Report By (rows)",
         "PAGES": "pages",
         "TITLE": "Custom Report"
-    },
-    "ENFORCERS": {
-        "ASSIGNMENTS_TITLE": "Traffic Enforcement Assignments",
-        "ASSIGNMENT": "Assignment",
-        "ASSIGNMENTS": "Assignments",
-        "FORECAST_SEVERITY": "Forecast occurrences",
-        "SHIFT_LENGTH_ERROR": "Shift cannot be more than 24 hours long",
-        "SELECTED_BOUNDARY": "Selected boundary",
-        "BOUNDARY_NOTICE": "To select a different boundary, cancel and make adjustments on the map page",
-        "SHIFT_START": "Shift start",
-        "SHIFT_END": "Shift end",
-        "NUM_PERSONNEL": "Number of personnel",
-        "CUSTOM_BOUNDARY": "Hand-drawn polygon filter will be applied"
     },
     "SAVED_FILTERS": {
         "ADD_NEW": "Add New Saved Filter",

@@ -24,10 +24,15 @@
         ctl.$onInit = initialize();
 
         function initialize() {
+            // We don't want minutes or seconds in the default datetime
+            var defaultDateTime = new Date();
+            defaultDateTime.setMinutes(0);
+            defaultDateTime.setSeconds(0);
+
             ctl.updateDate = updateDate;
             ctl.updateTime = updateTime;
-            ctl.date = new Date();
-            ctl.time = new Date();
+            ctl.date = defaultDateTime;
+            ctl.time = defaultDateTime;
             updateDateTime();
         }
 

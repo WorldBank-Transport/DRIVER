@@ -74,8 +74,9 @@
          *     format (string): which string format to process the date into.
          *                      Formats are defined per language in the languageMap
          *     includeTime (string): Include the time in the returned string
+         *     excludeSeconds (string): Exclude seconds in the returned string
          */
-        function getLocalizedDateString(date, format, includeTime) {
+        function getLocalizedDateString(date, format, includeTime, excludeSeconds) {
             var localizedMoment = moment(date).tz(WebConfig.localization.timeZone);
             var localizedDate = new Date(localizedMoment.format('MMM DD YYYY'));
             if (isNaN(localizedDate.getDate())) {
@@ -92,7 +93,7 @@
                 .fromJSDate(localizedDate);
             var datestring = convertedDate.formatDate(conversion.formats[format], convertedDate);
             if (includeTime) {
-                var hms = localizedMoment.format('H:mm:ss');
+                var hms = localizedMoment.format(excludeSeconds ? 'H:mm' : 'H:mm:ss');
 
                 if (isRtl) {
                     datestring = hms + ', ' + datestring;
@@ -133,11 +134,12 @@
 
     /* ngInject */
     function LocalizeDateFilter(DateLocalization) {
-        function module(d, format, includeTime) {
+        function module(d, format, includeTime, excludeSeconds) {
             return DateLocalization.getLocalizedDateString(
                 new Date(Date.parse(d)),
                 format,
-                includeTime
+                includeTime,
+                excludeSeconds
             );
         }
         return module;
