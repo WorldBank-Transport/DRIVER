@@ -8,9 +8,8 @@
         RecordSchemaState, BoundaryState, QueryBuilder,
         MapState, TileUrlService, BaseLayersService, InitialState, BlackspotSets) {
         var ctl = this;
-        var localDateTimeFilter = $filter('localDateTime');
-        // TODO: date format needs localization
-        var dateFormat = 'M/D/YYYY, h:mm:ss A';
+        var localizeRecordDateFilter = $filter('localizeRecordDate');
+        var dateFormat = 'numeric';
 
         var blackSpotLabel = $translate.instant('MAP.BLACKSPOT');
         var severityScoreLabel = $translate.instant('MAP.SEVERITY_SCORE');
@@ -713,7 +712,7 @@
             // add header with record date constant field
             /* jshint camelcase: false */
             // DateTimes come back from Windshaft without tz information, but they're all UTC
-            var occurredStr = localDateTimeFilter(moment.utc(record.occurred_from), dateFormat);
+            var occurredStr = localizeRecordDateFilter(moment.utc(record.occurred_from), dateFormat, true);
             var str = '<div id="record-popup" class="record-popup">';
             str += '<div><h5>' + popupParams.label + ' ' + detailsLabel +
                 '</h5><h3>' + occurredStr + '</h3>';

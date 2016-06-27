@@ -3,12 +3,12 @@
     <table class="table" ng-repeat="table in ctl.report.tables">
         <caption class="text-right-on-rtl">
             <h2 ng-if="!isRightToLeft">
-                <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span> -
-                <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span>
+                <span>{{ ::ctl.params.occurred_min | localizeRecordDate : "long" }}</span> -
+                <span>{{ ::ctl.params.occurred_max | localizeRecordDate : "long" }}</span>
             </h2>
             <h2 ng-if="isRightToLeft">
-                <span>{{ ::ctl.params.occurred_max | localDateTime : ctl.dateFormat }}</span> -
-                <span>{{ ::ctl.params.occurred_min | localDateTime : ctl.dateFormat }}</span>
+                <span>{{ ::ctl.params.occurred_max | localizeRecordDate : "long" }}</span> -
+                <span>{{ ::ctl.params.occurred_min | localizeRecordDate : "long" }}</span>
             </h2>
             <h3>
                 {{ ctl.recordType.plural_label }}

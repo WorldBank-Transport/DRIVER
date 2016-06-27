@@ -12,9 +12,6 @@
     function CustomReportController($state, $stateParams, $q, $translate,
                                     Records, RecordState, AggregationsConfig) {
         var ctl = this;
-        // TODO: date format needs localization
-        ctl.dateFormat = 'MMM D, YYYY';
-
         var totalString;
 
         $translate.onReady(init);

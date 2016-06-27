@@ -10,8 +10,8 @@
             <h4>{{ 'REPORT.ACTIVE_FILTERS' | translate }}</h4>
             <div>
                 <strong>{{ 'COMMON.DATE_RANGE' | translate }}:</strong>
-                <span>{{ ::modal.dateFilter.minDate | localDateTime : modal.dateFormat }}</span> -
-                <span>{{ ::modal.dateFilter.maxDate | localDateTime : modal.dateFormat }}</span>
+                <span>{{ ::modal.dateFilter.minDate | localizeRecordDate : modal.dateFormat }}</span> -
+                <span>{{ ::modal.dateFilter.maxDate | localizeRecordDate : modal.dateFormat }}</span>
             </div>
             <div ng-if="modal.boundaryFilter">
                 <strong>{{ 'REPORT.BOUNDARY' | translate }}:</strong>

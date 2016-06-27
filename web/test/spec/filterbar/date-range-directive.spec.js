@@ -37,7 +37,7 @@ describe('driver.filterbar: Date Range', function () {
 
         var cal = $.calendars.instance('gregorian', 'en');
         expect(Element.find("input[type='text'][name='maximum']").val())
-            .toEqual(cal.formatDate('mm/dd/yyyy', cal.fromJSDate(date)));
+            .toEqual(cal.formatDate('m/dd/yyyy', cal.fromJSDate(date)));
     });
 
 });

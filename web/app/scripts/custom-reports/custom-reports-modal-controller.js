@@ -23,7 +23,7 @@
             ctl.onParamChanged = onParamChanged;
 
             // Only the date part is needed when displaying these dates
-            ctl.dateFormat = 'MMM D, YYYY';
+            ctl.dateFormat = 'long';
 
             // These are set as the selections are made
             ctl.colAggSelected = null;
