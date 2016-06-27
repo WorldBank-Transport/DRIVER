@@ -19,6 +19,7 @@
         name: "driver-ssl-cert"
         keypath: "{{ letsencrypt_key_dir }}/driver-ssl-cert.key"
         certpath: "{{ letsencrypt_certs_dir }}/driver-ssl-cert.cert"
+        fullchainedcertpath: "{{ letsencrypt_certs_dir }}/driver-ssl-cert-full.cert"
         host: "{{ allowed_host }}"
 
   pre_tasks:
@@ -32,7 +33,7 @@
     - { role: "driver.windshaft" }
     - { role: "driver.app" }
     - { role: "driver.nginx" }
-    - { role: "andreaswolf.letsencrypt", when: staging or production }
+    - { role: "azavea.letsencrypt", when: staging or production }
 
 - hosts: database-servers
 
