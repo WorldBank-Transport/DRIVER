@@ -48,15 +48,15 @@ describe('ase.views.recordtype: AddController', function () {
                 plural_title: '',
                 description: '',
                 properties: {
-                    'incidentDetails': {
-                        $ref: '#/definitions/incidentDetails',
+                    'driverIncidentDetails': {
+                        $ref: '#/definitions/driverIncidentDetails',
                         options: {
                             collapsed: true
                         }
                     }
                 },
                 definitions: {
-                    'incidentDetails': {
+                    'driverIncidentDetails': {
                         type: 'object',
                         title: 'Incident Details',
                         plural_title: 'Incident Details',
