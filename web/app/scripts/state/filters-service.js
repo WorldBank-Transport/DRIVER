@@ -98,8 +98,8 @@
             }
 
             if (svc.filters && svc.filters.hasOwnProperty('__dateRange')) {
-                minDateString = convertDT(svc.filters.__dateRange.min);
-                maxDateString = convertDT(svc.filters.__dateRange.max);
+                minDateString = convertDT(svc.filters.__dateRange.min || minDateString);
+                maxDateString = convertDT(svc.filters.__dateRange.max || maxDateString);
             }
 
             // Perform some sanity checks on the dates
