@@ -7,7 +7,7 @@
 
     /* ngInject */
     function EnforcerAssignmentsController($state, $stateParams, $q, $translate, $window,
-                                           RecordState, Assignments) {
+                                           Assignments, Boundaries, Polygons, RecordState) {
         var ctl = this;
 
         $translate.onReady(init);
@@ -17,6 +17,7 @@
             ctl.params = $stateParams;
             ctl.dateFormat = 'long';
             ctl.printPage = printPage;
+            ctl.areaName = '';
 
             Assignments.query(ctl.params).$promise.then(function(assignments) {
                 ctl.assignments = assignments;
@@ -26,6 +27,22 @@
             }).finally(function () {
                 ctl.loading = false;
             });
+
+            /* jshint camelcase: false */
+            var polygonId = $stateParams.polygon_id;
+            /* jshint camelcase: false */
+
+            if (polygonId) {
+              Polygons.get({ id: polygonId }).$promise.then(function(poly) {
+                  Boundaries.get({ id: poly.boundary }).$promise.then(function(boundary) {
+                      /* jshint camelcase: false */
+                      ctl.areaName = poly.data[boundary.display_field];
+                      /* jshint camelcase: false */
+                  });
+              });
+            } else {
+                ctl.areaName = 'Custom Polygon';
+            }
         }
 
         function printPage() {
