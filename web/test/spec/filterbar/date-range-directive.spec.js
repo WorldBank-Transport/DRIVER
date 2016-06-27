@@ -31,9 +31,6 @@ describe('driver.filterbar: Date Range', function () {
         var Element = $compile('<driver-filterbar></driver-filterbar>')($filterbarScope);
         $rootScope.$apply();
 
-        // should have no maximum set yet
-        expect(Element.find("input[type='text'][name='maximum']").val()).toEqual('');
-
         var date = new Date();
         $rootScope.$broadcast('driver.filterbar:restore', [{'__dateRange': {max: date.toJSON()}}, null]);
         $rootScope.$digest();
