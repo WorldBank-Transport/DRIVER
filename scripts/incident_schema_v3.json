@@ -3,7 +3,7 @@
     "title": "",
     "plural_title": "",
     "definitions": {
-        "photo": {
+        "driverPhoto": {
             "multiple": true,
             "description": "Pictures of the incident",
             "title": "Photo",
@@ -41,7 +41,7 @@
                 }
             }
         },
-        "vehicle": {
+        "driverVehicle": {
             "multiple": true,
             "description": "A vehicle involved in the incident",
             "title": "Vehicle",
@@ -202,7 +202,7 @@
                 }
             }
         },
-        "incidentDetails": {
+        "driverIncidentDetails": {
             "multiple": false,
             "description": "Details for Incident",
             "title": "Incident Details",
@@ -356,7 +356,7 @@
                 }
             }
         },
-        "person": {
+        "driverPerson": {
             "multiple": true,
             "description": "A person involved in the incident",
             "title": "Person",
@@ -508,9 +508,9 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "type": "object",
     "properties": {
-        "photo": {
+        "driverPhoto": {
             "items": {
-                "$ref": "#/definitions/photo"
+                "$ref": "#/definitions/driverPhoto"
             },
             "type": "array",
             "options": {
@@ -518,9 +518,9 @@
             },
             "propertyOrder": 3
         },
-        "vehicle": {
+        "driverVehicle": {
             "items": {
-                "$ref": "#/definitions/vehicle"
+                "$ref": "#/definitions/driverVehicle"
             },
             "type": "array",
             "options": {
@@ -528,16 +528,16 @@
             },
             "propertyOrder": 1
         },
-        "incidentDetails": {
+        "driverIncidentDetails": {
             "propertyOrder": 0,
             "options": {
                 "collapsed": true
             },
-            "$ref": "#/definitions/incidentDetails"
+            "$ref": "#/definitions/driverIncidentDetails"
         },
-        "person": {
+        "driverPerson": {
             "items": {
-                "$ref": "#/definitions/person"
+                "$ref": "#/definitions/driverPerson"
             },
             "type": "array",
             "options": {

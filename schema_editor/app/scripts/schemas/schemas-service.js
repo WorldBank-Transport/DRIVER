@@ -131,15 +131,21 @@
         return module;
 
         /**
-         * Convert field titles into field names that are intially lower case and
-         * camel cased (no spaces)
+         * Convert field titles into field names that are valid java identifiers
+         * by doing the following:
+         *
+         *  - strip out control characters
+         *  - prepend name with driver to ensure whitelisted words are excluded
+         *  - convert to camel case
          *
          * @param {string} "Example Field Name"
-         * @return {string} "exampleFieldName"
+         * @return {string} "driverExampleFieldName_udb234"
          */
         function generateFieldName(str) {
+            // Remove control characters with regular expression
+            var strippedStr = 'driver ' + str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
             // http://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
-            return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+            return strippedStr.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
                 if (+match === 0) {
                     return '';
                 }

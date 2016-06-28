@@ -34,7 +34,6 @@
 
             _.forEach(definitions, function(definition) {
                 if (!definition.propertyOrder && definition.propertyOrder !== 0) {
-                    $log.debug('Adding property order for ' + definition.title);
                     currentPropertyOrder = currentPropertyOrder + 1;
                     definition.propertyOrder = currentPropertyOrder;
                 }
