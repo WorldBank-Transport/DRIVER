@@ -36,6 +36,32 @@
                         return textProperty;
                     }
                 },
+                'number': { // Number field
+                    toProperty: function(fieldData) {
+                        var numberProperty = {
+                            type: 'number',
+                            minimum: undefined,
+                            maximum: undefined
+                        };
+
+                        assignMinMax(fieldData, numberProperty);
+
+                        return numberProperty;
+                    }
+                },
+//                'integer': { // Number --> integer
+//                    toProperty: function(fieldData) {
+//                        var integerProperty = {
+//                            type: 'integer',
+//                            minimum: undefined,
+//                            maximum: undefined
+//                        };
+//
+//                        assignMinMax(fieldData, integerProperty);
+//
+//                        return integerProperty;
+//                    }
+//                },
                 'selectlist': { // Select list
                     toProperty: function(fieldData) {
                         if (fieldData.displayType === 'checkbox') {
@@ -130,6 +156,22 @@
         };
         return module;
 
+        function assignMinMax(fieldData, property) {
+            /** If neither minimum nor maximum is specified,
+             * they're left null, which helps json-editor's
+             * validation out by not setting limits.
+             */
+
+            if (fieldData.minimum < fieldData.maximum) {
+                property.minimum = fieldData.minimum;
+                property.maximum = fieldData.maximum;
+            } else if (fieldData.minimum && fieldData.maximum === 0) {
+                property.minimum = fieldData.minimum;
+            } else if (fieldData.maximum && fieldData.minimum === 0) {
+                property.maximum = fieldData.maximum;
+            }
+        }
+
         /**
          * Convert field titles into field names that are valid java identifiers
          * by doing the following:
@@ -167,12 +209,23 @@
         // (likewise in the deserializing function below)
         function _propertyFromSchemaFieldData(fieldData, index, allData, currentSchema,
                 definitionName) {
-            var propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
-                    index,
-                    allData,
-                    currentSchema,
-                    definitionName
+            var propertyDefinition;
+            if (fieldData.fieldType !== 'integer') {
+                propertyDefinition = module.FieldTypes[fieldData.fieldType].toProperty(fieldData,
+                        index,
+                        allData,
+                        currentSchema,
+                        definitionName
+                    );
+            } else {
+                propertyDefinition = module.FieldTypes.number.toProperty(fieldData,
+                        index,
+                        allData,
+                        currentSchema,
+                        definitionName
                 );
+                propertyDefinition.type = 'integer';
+            }
 
             // Set the common properties
             propertyDefinition.isSearchable = fieldData.isSearchable;

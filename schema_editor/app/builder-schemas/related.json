@@ -9,7 +9,8 @@
             { "$ref": "#/definitions/textField" },
             { "$ref": "#/definitions/selectList" },
             { "$ref": "#/definitions/imageUploader" },
-            { "$ref": "#/definitions/localReference" }
+            { "$ref": "#/definitions/localReference" },
+            { "$ref": "#/definitions/numberField" }
         ]
     },
     "definitions": {
@@ -86,6 +87,36 @@
                     },
                     "type": "string",
                     "enum": ["text"]
+                }
+            }
+        },
+        "numberField": {
+            "allOf": [
+                { "$ref": "#/definitions/abstractBaseField" },
+                { "$ref": "#/definitions/abstractSearchableField" },
+                { "$ref": "#/definitions/abstractRequirableField" }
+            ],
+            "title": "Number Field",
+            "properties": {
+                "fieldTitle": {
+                    "title": "Number Field Title",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "minimum": {
+                    "title": "Minimum Value",
+                    "type": "number"
+                },
+                "maximum": {
+                    "title": "Maximum Value",
+                    "type": "number"
+                },
+                "fieldType": {
+                    "options": {
+                        "hidden": false
+                    },
+                    "type": "string",
+                    "enum": ["number", "integer"]
                 }
             }
         },

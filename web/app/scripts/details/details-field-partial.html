@@ -15,6 +15,10 @@
         property="ctl.property" data="ctl.data" compact="ctl.compact">
     </driver-details-text>
 
+    <driver-details-number ng-switch-when="number"
+        property="ctl.property" data="ctl.data" compact="ctl.compact">
+    </driver-details-number>
+
     <div ng-switch-default>
         {{ 'ERRORS.NO_RENDERER' | translate }}: {{ ::property.fieldType }}
     </div>
