@@ -82,6 +82,8 @@
         "BOUNDARY_NOTICE": "!To select a different boundary, make adjustments on the map page",
         "CUSTOM_BOUNDARY": "!Hand-drawn polygon filter will be applied",
         "FORECAST_SEVERITY": "!Forecast occurrences",
+        "LOCATION": "!Location",
+        "NOTES": "!Notes",
         "NUM_PERSONNEL": "!Number of personnel",
         "PRINT": "!Print",
         "SELECTED_BOUNDARY": "!Selected boundary",
