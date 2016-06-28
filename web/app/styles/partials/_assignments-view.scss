@@ -1,32 +1,127 @@
+@page {
+    margin: 0.75in 0.5in 0.5in;
+    size: 8.5in 11in;
+}
+
 .print-view {
-    background: $light-gray;
-    position: absolute;
-    bottom: 0;
     width: 100%;
-    top: 0;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10rem;
 
-    &.enforcer-assignments {
-        // Custom report uses table-view without table-view-container, because it scrolls
-        // the whole page so the absolute-positioned gray background breaks things.
-        background: white;
-        margin-top: 50px;
-        padding: 0px 20px;
+    .assignment-map {
+        width: 100%;
+        height: 2.2in;
     }
 
-    .assignments-header {
-        margin-top: 50px;
+    .assignment {
+        width: 100%;
+        overflow: auto;
+        zoom: 1;
+        padding-bottom: 0.3in;
+        margin-bottom: 0.3in;
+        border-bottom: 1px solid #000;
     }
 
-    .enforcer-assignment {
+    hr {
+        margin-bottom: .28in;
+        border-top-color: #ccc;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    table {
+        width: 100%;
+    }
+
+    td {
+        vertical-align: top;
+        padding-bottom: 4px;
+        &:first-child {
+            padding: 0 50px 0 30px;
+            width: 140px;
+        }
+    }
+
+    tr:last-child > td:last-child {
+        padding-bottom: 0;
+    }
+
+    .assignment-left {
+        float: left;
+        width: 50%;
+    }
+
+    .assignment-right {
+        float: right;
+        width: 50%;
+    }
+
+    .assignment-pages {
+        &:not(:first-child) {
+            .assignment-header {
+                display: none;
+            }
+        }
+        &:last-child {
+            .assignment {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    h3 {
+        margin-bottom: 0.15in;
+        font-size: 28px;
+        font-weight: 300;
+    }
+
+    h4 {
+        text-transform: uppercase;
+        color: #aaa !important;
+        font-weight: bold;
+        margin-bottom: 0.2in;
+        font-size: 16px;
+        -webkit-print-color-adjust: exact;
+        border-bottom: 5px solid #000;
+        padding-bottom: .3in;
+        margin-bottom: .3in;
+    }
+}
+
+@media print {
+    .assignment-header {
+        display: block !important;
+    }
+    .third {
+        border-bottom: none !important;
+        margin-bottom: 0;
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    .print-view {
+        width: auto;
+        max-width: auto;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 50px;
-        .assignment-map {
-            width: 500px;
-            height: 500px;
-        }
-        .assignment-details {
-        }
+        margin-top: 0;
     }
-
+    .assignment {
+        width: 8.5in;
+    }
+    .assignments-header {
+        display: none;
+    }
+    .print-view.enforcer-assignments {
+        padding: 0;
+        margin: 0;
+    }
+    h1, h2, h3 {
+    margin-top: 0;
+    }
+    .leaflet-control-attribution, .leaflet-control {
+        display: none;
+    }
 }
