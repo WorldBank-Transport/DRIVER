@@ -18,7 +18,7 @@
             <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>&ndash;<span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>
         </h3>
         <h4>
-          8 {{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }} for Metro Manila (City)
+          {{ ::ctl.params.num_personnel }} {{ 'ENFORCERS.ASSIGNMENTS_FOR' | translate }} {{ ctl.areaName }}
         </h4>
         <h3 ng-if="isRightToLeft">
             <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span> &ndash;
@@ -33,15 +33,15 @@
           <div class="assignment-details">
             <table>
               <tr>
-                <td>Assignment:</td>
+                <td>{{ 'ENFORCERS.ASSIGNMENT' | translate }}:</td>
                 <td><b>{{ 'ENFORCERS.ASSIGNMENT' | translate }} {{$index + 1}}</b></td>
               </tr>
               <tr>
-                <td>Location:</td>
+                <td>{{ 'ENFORCERS.LOCATION' | translate }}:</td>
                 <td><b>{{ assignment.latitude | number }}, {{ assignment.longitude | number }}</b></td>
               </tr>
               <tr>
-                <td>Notes:</td>
+                <td>{{ 'ENFORCERS.NOTES' | translate }}:</td>
                 <td>
                   <hr><hr><hr><hr><hr><hr>
                 </td>
