@@ -7,9 +7,6 @@
     <h2>
       {{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }}
     </h2>
-    <div>
-      {{ ::ctl.params.num_personnel }} {{ 'ENFORCERS.ASSIGNMENTS_FOR' | translate }} {{ ctl.areaName }}
-    </div>
   </div>
   <div class="assignment-pages-container">
     <div ng-repeat="assignment in ctl.assignments" class="assignment-pages">
