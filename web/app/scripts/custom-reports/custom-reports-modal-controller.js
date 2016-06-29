@@ -100,7 +100,7 @@
                         ctl.rowAggSelected.type !== 'Geography') {
                         crosstabsParams.aggregation_boundary = ctl.geoAggSelected.value;
                     }
-                    crosstabsParams.language = ctl.language;
+                    crosstabsParams.calendar = ctl.calendar;
                     /* jshint camelcase: true */
                     params = _.extend(params, crosstabsParams);
 

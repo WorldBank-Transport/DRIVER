@@ -235,9 +235,9 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
                               schema=self.schema, data=data)
 
     def test_month_by_day_of_week(self):
-        """Test two date aggregations. Checks that the label arrays are the right length and that
-        there's no entry for """
-        url_template = (self.url + '&row_period_type=month&col_period_type=day_of_week')
+        """Test two gregorian date aggregations. Checks that the label arrays are
+        the right length and that there's no entry for """
+        url_template = (self.url + '&row_period_type=month&col_period_type=day_of_week&calendar=gregorian')
         url = url_template.format(record_type=str(self.record_type.uuid),
                                   min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
                                   max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
@@ -253,7 +253,7 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_year_by_property(self):
         url_template = (self.url + '&row_period_type=year' +
-                        '&col_choices_path=objectDetails,properties,Itness')
+                        '&col_choices_path=objectDetails,properties,Itness&calendar=gregorian')
         url = url_template.format(record_type=str(self.record_type.uuid),
                                   min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
                                   max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
@@ -262,7 +262,7 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_year_by_property_with_items(self):
         url_template = (self.url + '&row_period_type=year' +
-                        '&col_choices_path=objectDetails,properties,ItnessMultiple,items')
+                        '&col_choices_path=objectDetails,properties,ItnessMultiple,items&calendar=gregorian')
         url = url_template.format(record_type=str(self.record_type.uuid),
                                   min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
                                   max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
