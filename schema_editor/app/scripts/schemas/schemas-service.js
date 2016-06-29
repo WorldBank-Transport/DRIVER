@@ -185,7 +185,7 @@
          */
         function generateFieldName(str) {
             // Remove control characters with regular expression
-            var strippedStr = 'driver ' + str.replace(/[\x00-\x1F\x7F-\x9F]/g, '');
+            var strippedStr = 'driver ' + str.replace(/[\x00-\x1F\x7F-\x9F.,\/#!$%\^&\*;:{}=\-_`~()]/g, '');
             // http://stackoverflow.com/questions/2970525/converting-any-string-into-camel-case
             return strippedStr.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
                 if (+match === 0) {
