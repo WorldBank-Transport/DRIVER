@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function DetailsNumber() {
+    function DetailsInteger() {
         var module = {
             restrict: 'AE',
             scope: {
@@ -10,15 +10,15 @@
               data: '=',
               compact: '='
             },
-            templateUrl: 'scripts/details/details-number-partial.html',
+            templateUrl: 'scripts/details/details-integer-partial.html',
             bindToController: true,
-            controller: 'DetailsNumberController',
+            controller: 'DetailsIntegerController',
             controllerAs: 'ctl'
         };
         return module;
     }
 
     angular.module('driver.details')
-    .directive('driverDetailsNumber', DetailsNumber);
+    .directive('driverDetailsInteger', DetailsInteger);
 
 })();
