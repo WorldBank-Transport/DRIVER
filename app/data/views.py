@@ -886,6 +886,10 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         except KeyError as e:
             raise ParseError(detail="Part of choices_path was not found: '{}'".format(e.message))
 
+        # Checkbox types have an additional 'items' part at the end of the path
+        if 'items' in obj:
+            obj = obj['items']
+
         # Build a JSONB filter that will catch Records that match each choice in the enum.
         choices = obj.get('enum', None)
         if not choices:
