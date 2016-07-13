@@ -21,21 +21,21 @@
 
         /**
          * Updates related definitions to include a property order attribute
-         * @param {object} definitions to check for propertyOrder attribute
+         * @param {object} properties to update propertyOrder attribute
          */
-        function addPropertyOrdertoDefinitions(definitions) {
+        function addPropertyOrder(properties) {
             var currentPropertyOrder = 0;
-            _.mapValues(definitions, function(definition) {
-                var propertyOrder = definition.propertyOrder;
+            _.mapValues(properties, function(property) {
+                var propertyOrder = property.propertyOrder;
                 if (propertyOrder && propertyOrder > currentPropertyOrder) {
                     currentPropertyOrder = propertyOrder;
                 }
             });
 
-            _.forEach(definitions, function(definition) {
-                if (!definition.propertyOrder && definition.propertyOrder !== 0) {
+            _.forEach(properties, function(property) {
+                if (!property.propertyOrder && property.propertyOrder !== 0) {
                     currentPropertyOrder = currentPropertyOrder + 1;
-                    definition.propertyOrder = currentPropertyOrder;
+                    property.propertyOrder = currentPropertyOrder;
                 }
             });
         }
@@ -73,7 +73,7 @@
                 collapsed: true
             };
 
-            addPropertyOrdertoDefinitions(ctl.currentSchema.schema.definitions);
+            addPropertyOrder(ctl.currentSchema.schema.properties);
 
             RecordSchemas.create({
                 /* jshint camelcase:false */
