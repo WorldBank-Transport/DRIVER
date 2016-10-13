@@ -68,7 +68,22 @@
             var searchText = filterSpecs.__searchText;
             var filters = _.cloneDeep(_.omit(filterSpecs, '__searchText'));
             _.each(filters, function(filter, path) {
-                if (filter.contains && !filter.contains.length) { delete filters[path]; }
+                if (filter.contains) {
+                    if (!filter.contains.length) {
+                        delete filters[path];
+                    } else {
+                        // All jsonb containment keys we want to filter on must also have
+                        // a corresponding value of the key wrapped in an array. The key
+                        // wrapped in an array allows successful querying of data that was
+                        // input as a checkbox, while the bare key finds data that was input
+                        // as a dropdown.
+                        var wrappedKeys = _.map(filter.contains, function(key) {
+                            return [key];
+                        });
+
+                        filter.contains = filter.contains.concat(wrappedKeys);
+                    }
+                }
             });
 
             RecordSchemaState.getFilterables().then(function(filterables) {
