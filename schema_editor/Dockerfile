@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   python-dev \
   && rm -rf /var/lib/apt/lists/*
 
+RUN gem install sass -v 3.4.22
 RUN gem install compass
 
 RUN mkdir -p /opt/schema_editor /npm /bower

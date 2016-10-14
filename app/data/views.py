@@ -910,7 +910,12 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         # 'properties' and 'items'.
         filter_path = [component for component in reversed(path)
                        if component not in ['properties', 'items']]
-        filter_rule = dict(_rule_type='containment', contains=[value])
+
+        # Check if a row contains either the value as a string, or the value in an array.
+        # The string value handles dropdown types, while the array handles checkbox types.
+        # Since an admin may switch between dropdowns and checkboxes at any time, performing
+        # both checks guarantees the filter will be correctly applied for data in both formats.
+        filter_rule = dict(_rule_type='containment', contains=[value, [value]])
         for component in filter_path:
             # Nest filter inside itself so we eventually get something like:
             # {"incidentDetails": {"severity": {"_rule_type": "containment"}}}
