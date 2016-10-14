@@ -1,0 +1,44 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <div class="form-area-heading">
+            <h2>All Record Types</h2>
+            <div class="button-container">
+                <button type="button" ui-sref="rt.add" class="btn btn-default">Add new type</button>
+            </div>
+            <div class="content-border"></div>
+        </div>
+        <div class="form-area-body">
+            <div ng-repeat="recordType in rtList.recordTypes | orderBy:'label'" class="row">
+                <div class="type">
+                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 10 22" enable-background="new 0 0 10 22" xml:space="preserve">
+                        <path opacity="0.5" fill-rule="evenodd" clip-rule="evenodd" fill="#4A4A4A" d="M4.6,20.6L8,17.3H1.3L4.6,20.6z M1.3,4H8L4.6,0.7 L1.3,4z M8,10.7c0-1.8-1.5-3.3-3.3-3.3c-1.8,0-3.3,1.5-3.3,3.3c0,1.8,1.5,3.3,3.3,3.3C6.5,14,8,12.5,8,10.7z"/>
+                    </svg>
+                    <h4>
+                      <a ui-sref="rt.edit({ uuid: recordType.uuid })">{{ recordType.label }}</a>
+                    </h4>
+                    <a ui-sref="rt.preview({ uuid: recordType.uuid })" role="button" class="edit">
+                        <p>Preview</p>
+                        <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 95 100" enable-background="new 0 0 80 100" xml:space="preserve">
+                            <polygon points="92.901,35.938 90.089,12.031 67.427,21.513 76.354,26.566 56.799,61.33 43.643,46.857 7.099,87.969 20.268,87.969 43.724,61.58 58.693,78.045 84.92,31.418"/>
+                        </svg>
+                    </a>
+                    <a ase-confirm-click="rtList.deactivateRecordType(recordType)"
+                       role="button" class="delete">
+                        <p>Trash</p>
+                        <svg version="1.1" id="Layer_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 80 100" enable-background="new 0 0 80 100" xml:space="preserve">
+                            <path d="M6.1,39l5.5,48.5c0.3,2.3,11.4,9.9,27.5,9.9c16.1,0,27.3-7.6,27.6-9.9L72.2,39c-8.4,4.7-21,6.9-33.1,6.9 C27.1,46,14.5,43.7,6.1,39z M55,9l-4.3-4.8c-1.7-2.4-3.5-2.8-7-2.8h-9.2c-3.5,0-5.3,0.4-7,2.8L23.4,9C10.5,11.3,1.2,17.2,1.2,21.6 v0.9c0,7.7,17,14,38,14c21,0,38-6.3,38-14v-0.9C77.2,17.2,67.9,11.3,55,9z M49.5,20.2l-6.3-6.7h-8.2l-6.3,6.7h-8.5 c0,0,9.3-11.1,10.6-12.6c1-1.2,1.9-1.6,3.2-1.6h10.2c1.3,0,2.2,0.4,3.2,1.6C48.7,9.1,58,20.2,58,20.2H49.5z"/>
+                        </svg>
+                    </a>
+                    <a ui-sref="rt.edit({ uuid: recordType.uuid })" role="button" class="edit">
+                        <p>Edit</p>
+                        <svg version="1.1" id="Layer_3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 80 80" enable-background="new 0 0 80 80" xml:space="preserve">
+                            <g><path d="M71.8,8.2C64.6,1,59.2,2.1,59.2,2.1L33.9,27.3L5,56.2L0,80l23.8-5.1l28.9-28.9l25.3-25.3C77.9,20.8,79,15.4,71.8,8.2z M22.4,72.1l-8.1,1.7c-0.8-1.5-1.7-2.9-3.5-4.7c-1.7-1.7-3.2-2.7-4.7-3.5l1.8-8.1l2.3-2.3c0,0,4.4,0.1,9.4,5.1c5,5,5.1,9.4,5.1,9.4 L22.4,72.1z"/></g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="dark-border"></div>
+        </div>
+    </div>
+</div>

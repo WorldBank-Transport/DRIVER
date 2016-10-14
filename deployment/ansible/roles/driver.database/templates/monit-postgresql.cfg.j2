@@ -1,0 +1,3 @@
+check process postgresql with pidfile "/var/run/postgresql/{{ postgresql_version }}-main.pid"
+  start program = "/etc/init.d/postgresql start"
+  stop program = "/etc/init.d/postgresql stop"

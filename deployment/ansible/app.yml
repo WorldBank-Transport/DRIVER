@@ -1,0 +1,43 @@
+---
+
+# Installs packages/dependencies for web servers
+
+- hosts: all
+
+  pre_tasks:
+    - name: Gather EC2 facts
+      action: ec2_facts
+      when: staging
+
+- hosts: app-servers
+
+  become: True
+
+  vars:
+    letsencrypt_certs:
+      -
+        name: "driver-ssl-cert"
+        keypath: "{{ letsencrypt_key_dir }}/driver-ssl-cert.key"
+        certpath: "{{ letsencrypt_certs_dir }}/driver-ssl-cert.cert"
+        fullchainedcertpath: "{{ letsencrypt_certs_dir }}/driver-ssl-cert-full.cert"
+        host: "{{ allowed_host }}"
+
+  pre_tasks:
+    - name: Update APT cache
+      apt: update_cache=yes
+
+    - name: Install Git
+      apt: pkg=git state=present
+
+  roles:
+    - { role: "driver.windshaft" }
+    - { role: "driver.app" }
+    - { role: "driver.nginx" }
+    - { role: "azavea.letsencrypt", when: staging or production }
+
+- hosts: database-servers
+
+  become: True
+
+  roles:
+    - { role: "driver.access" }

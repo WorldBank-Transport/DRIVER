@@ -1,0 +1,48 @@
+description "driver-app"
+
+start on (filesystem and started docker)
+stop on stopping docker
+
+kill timeout 20
+kill signal CONT
+respawn
+
+pre-start script
+  {% if 'development' in group_names -%}
+  until mountpoint -q {{ root_app_dir }}; do sleep 1; done
+  {% endif %}
+
+  /usr/bin/docker kill driver-app || true
+  /usr/bin/docker rm driver-app || true
+
+  {% if 'development' not in group_names -%}
+  /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  {% endif %}
+end script
+
+exec /usr/bin/docker run \
+  --name driver-app \
+  --publish 4000:4000 \
+  {% if 'development' in group_names -%}
+  --publish 8000:8000 \
+  {% endif %}
+  --volume {{ root_static_dir }}:{{ root_static_dir }} \
+  --volume {{ root_media_dir }}:{{ root_media_dir }} \
+  {% if 'development' in group_names -%}
+  --volume {{ root_app_dir }}:{{ root_app_dir }} \
+  --volume /opt/ashlar:/opt/ashlar \
+  --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
+  {% endif -%}
+  {% for k,v in driver_conf.items() -%}
+  --env {{ k }}="{{ v }}" \
+  {% endfor -%}
+  --log-driver syslog \
+{% if celery %} --entrypoint '/bin/bash -c' \
+{% endif %}  quay.io/azavea/driver-app:latest {% if celery %} \
+  celery -A driver worker --queue=path --loglevel=info --concurrency=4
+{% endif %}
+
+post-stop script
+  /usr/bin/docker kill driver-app
+  /usr/bin/docker rm driver-app
+end script

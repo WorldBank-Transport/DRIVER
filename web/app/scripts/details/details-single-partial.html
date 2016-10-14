@@ -1,0 +1,11 @@
+<cube-grid-spinner ng-if="ctl.definition.pending"></cube-grid-spinner>
+
+<driver-details-constants
+     ng-if="ctl.definition.details" record="ctl.record">
+</driver-details-constants>
+
+<div ng-repeat="property in ctl.properties" ng-if="!ctl.definition.pending">
+    <driver-details-field
+       property="property" data="ctl.data[property.propertyName]" record="ctl.record">
+    </driver-details-field>
+</div>

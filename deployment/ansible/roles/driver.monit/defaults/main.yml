@@ -1,0 +1,5 @@
+---
+monit_version: 5.17.1
+monit_httpd_port: 2812
+monit_allow_hosts: []
+monit_enable_web_access: no

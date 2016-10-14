@@ -1,0 +1,56 @@
+<div class="enforcer-assignment-modal">
+    <div class="close" ng-click="modal.closeModal()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3>{{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="well">
+            <h4>{{ 'ENFORCERS.SELECTED_BOUNDARY' | translate }}</h4>
+            <div ng-if="modal.polygonName">
+                <span>{{ ::modal.polygonName }}</span>
+            </div>
+            <h6 ng-if="modal.polygon">
+              {{ 'ENFORCERS.CUSTOM_BOUNDARY' | translate }}
+            </h6>
+            <h6>
+                <em>{{ 'ENFORCERS.BOUNDARY_NOTICE' | translate }}</em>
+            </h6>
+        </div>
+        <div class="row">
+            <div class="col-md-6 clearfix">
+              <label class="control-label">{{ 'ENFORCERS.SHIFT_START' | translate }}</label>
+              <az-date-time-picker datetime="modal.shiftStart" on-change="modal.onParamChanged()">
+              </az-date-time-picker>
+            </div>
+
+            <div class="col-md-6 clearfix">
+              <label class="control-label">{{ 'ENFORCERS.SHIFT_END' | translate }}</label>
+              <az-date-time-picker datetime="modal.shiftEnd" on-change="modal.onParamChanged()">
+              </az-date-time-picker>
+            </div>
+        </div>
+
+        <div class="col-md-12 warning" ng-if="modal.error">{{ modal.error }}</div>
+
+        <div class="row">
+            <div class="col-md-6 col-xs-12 pull-left col-personnel">
+                <label class="control-label">{{ 'ENFORCERS.NUM_PERSONNEL' | translate }}</label>
+                <input ng-model="modal.numPersonnel" type="number" min="1" class="form-control"
+                  ng-change="modal.onParamChanged()">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default"
+                ng-click="modal.closeModal()">
+            {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button class="btn btn-default"
+                ng-click="modal.createAssignments()"
+                ng-disabled="!modal.ready">
+                {{ 'ENFORCERS.ASSIGNMENTS' | translate }}
+        </button>
+    </div>
+</div>

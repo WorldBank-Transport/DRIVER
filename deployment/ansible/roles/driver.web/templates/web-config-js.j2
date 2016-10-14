@@ -1,0 +1,58 @@
+
+(function () {
+    'use strict';
+
+    // WARNING: This file is templated by ansible, any changes will be overridden on next provision
+    // Modify this file in: `deployment/ansible/roles/driver.web/templates/web-config-js.conf.j2`
+    //
+    // Note: This module is also mocked for Travis. If any changes are made to it, they should also
+    // be made in: `web/test/mock/config.js`
+    //
+    // The schema editor project resources loaded by this project also include
+    // a config constant, which is why these are namespaced.
+
+    var config = {
+        debug: {% if 'development' in group_names %}true{% else %}false{% endif %},
+        html5Mode: {
+            enabled: {{ web_js_html5mode }},
+            prefix: '{{ web_js_html5mode_prefix }}'
+        },
+        api: {
+            hostname: '{{ web_js_api_hostname }}'
+        },
+        windshaft: {
+            hostname: '{{ web_js_windshaft_hostname }}'
+        },
+        nominatim: {
+            key: '{{ web_js_nominatim_key }}'
+        },
+        record: {
+            limit: 50
+        },
+        blackSpots: {
+            visible: {{ web_js_blackspots_visible }}
+        },
+        heatmap: {
+            visible: {{ web_js_heatmap_visible }}
+        },
+        interventions: {
+            visible: {{ web_js_interventions_visible }}
+        },
+        recordType: {
+            visible: {{ web_js_record_type_visible }},
+            primaryLabel: '{{ web_js_record_type_primary_label }}',
+            secondaryLabel: '{{ web_js_record_type_secondary_label }}'
+        },
+        localization: {
+            timeZone: '{{ local_time_zone_id }}',
+            countryCode: '{{ local_country_code }}',
+            centerLatLon: {{ local_center_lat_lon }},
+            /*jshint quotmark: double */
+            languages: {{ languages | to_json }}
+            /*jshint quotmark: single */
+        }
+    };
+
+    angular.module('driver.config', [])
+    .constant('WebConfig', config);
+})();

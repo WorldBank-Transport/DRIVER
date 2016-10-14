@@ -1,0 +1,70 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>Edit Geography</h2>
+            <div class="content-border"></div>
+        </div>
+        <div ng-switch="geoEdit.updateState">
+            <div class="alert alert-info" role="alert" ng-switch-default>
+                <span class="sr-only">Info:</span>
+                Click 'save' to commit changes to this geography
+            </div>
+            <div class="alert alert-info" ng-switch-when="requesting">
+                <span class="sr-only">Loading...:</span>
+                Loading...
+            </div>
+            <div class="alert alert-success" role="alert" ng-switch-when="update-success">
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                <span class="sr-only">Success:</span>
+                Geography update successful!
+            </div>
+            <div class="alert alert-danger" role="alert" ng-switch-when="update-error">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{ geoEdit.errorMessage }}
+            </div>
+        </div>
+        <form name="geoEditForm" ng-submit="" novalidate>
+            <div class="form-group col-sm-12">
+                <label for="geo-label">Geography Label</label>
+                <input type="text"
+                       name="label"
+                       ng-model="geoEdit.workingGeo.label"
+                       class="form-control"
+                       id="geo-label"
+                       placeholder="Pilot Areas"
+                       required
+                       ng-minlength="3"
+                       ng-maxlength="64">
+                <span ng-show="geoEditForm.label.$invalid && !geoEditForm.label.$span" class="help-block">Label is required</span>
+                <span ng-show="geoEditForm.label.$error.minlength" class="help-block">Label too short</span>
+                <span ng-show="geoEditForm.label.$error.maxlength" class="help-block">Label too long</span>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="display-field">Display Field (select after upload)</label>
+                <select class="form-control"
+                        id="display-field"
+                        ng-options="field for field in geoEdit.workingGeo.data_fields"
+                        ng-model="geoEdit.workingGeo.display_field">
+                </select>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="geo-color">Geography Color</label>
+                <select class="form-control"
+                        id="geo-color"
+                        ng-model="geoEdit.workingGeo.color"
+                        ng-options="color for color in geoEdit.colors">
+                </select>
+            </div>
+        </form>
+        <div class="save-area">
+            <button type="button"
+                    class="btn btn-default"
+                    ui-sref="geo.list">Cancel</button>
+            <button type="button"
+                    class="btn btn-default"
+                    ng-click="geoEdit.geoUpdate()">Save</button>
+        </div>
+    </div>
+</div>

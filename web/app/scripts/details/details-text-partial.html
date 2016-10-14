@@ -1,0 +1,32 @@
+<div ng-class="{ 'compact': ctl.compact, 'col-sm-6': !ctl.compact }">
+    <label ng-if="!ctl.compact">
+        {{ ::ctl.property.propertyName }}
+    </label>
+
+    <div ng-switch on="ctl.property.format">
+        <div ng-switch-when="color" class="value color">
+            <svg>
+                <rect class="rectangle" rx="20" ry="20" style="fill:{{ ::ctl.data }};"
+                ng-attr-x="{{ ctl.xShift() }}"/>
+            </svg>
+        </div>
+
+        <div ng-switch-when="textarea" class="value textarea">
+            <pre ng-if="!ctl.compact">{{ ::ctl.data }}</pre>
+            <span ng-if="ctl.compact">
+                {{ ::ctl.data | limitTo: ctl.maxLength }}
+                <span ng-if="ctl.data.length > ctl.maxLength">
+                    {{ 'COMMON.ELLIPSIS' | translate }}
+                </span>
+            </span>
+        </div>
+
+        <div ng-switch-when="url" class="value url">
+            <a href="{{ ctl.data }}">{{ ::ctl.data }}</a>
+        </div>
+
+        <div ng-switch-default class="value text">
+            {{ ::ctl.data }}
+        </div>
+    </div>
+</div>

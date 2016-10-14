@@ -1,0 +1,81 @@
+<div class="custom-reports">
+    <div class="close" ng-click="modal.closeModal()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3>{{ 'REPORT.TITLE' | translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <div class="well">
+            <h4>{{ 'REPORT.ACTIVE_FILTERS' | translate }}</h4>
+            <div>
+                <strong>{{ 'COMMON.DATE_RANGE' | translate }}:</strong>
+                <span>{{ ::modal.dateFilter.minDate | localizeRecordDate : modal.dateFormat }}</span> -
+                <span>{{ ::modal.dateFilter.maxDate | localizeRecordDate : modal.dateFormat }}</span>
+            </div>
+            <div ng-if="modal.boundaryFilter">
+                <strong>{{ 'REPORT.BOUNDARY' | translate }}:</strong>
+                <span>{{ ::modal.boundaryFilter }}</span>
+            </div>
+            <div ng-if="modal.nonDateFilters | savedFilterAsHTML">
+                <span ng-bind-html="modal.nonDateFilters | savedFilterAsHTML: '<br />'"></span>
+            </div>
+            <h6>
+                <em>{{ 'REPORT.FILTER_NOTICE' | translate }}</em>
+            </h6>
+        </div>
+
+        <div class="col-md-6">
+            <label class="control-label">{{ 'REPORT.ORGANIZE_ROWS' | translate }}</label>
+            <select ng-options="agg as agg.label
+                                group by agg.type
+                                for agg in modal.rowColAggs
+                                | orderBy: 'label'"
+                    ng-model="modal.rowAggSelected"
+                    ng-change="modal.onParamChanged()"
+                    class="form-control">
+            </select>
+        </div>
+
+        <div class="col-md-6">
+            <label class="control-label">{{ 'REPORT.ORGANIZE_COLUMNS' | translate }}</label>
+            <select ng-options="agg as agg.label
+                                group by agg.type
+                                for agg in modal.rowColAggs
+                                | orderBy: 'label'"
+                    ng-model="modal.colAggSelected"
+                    ng-change="modal.onParamChanged()"
+                    class="form-control">
+            </select>
+        </div>
+
+        <div class="col-md-12"
+             ng-if="modal.colAggSelected && modal.rowAggSelected
+                    && modal.colAggSelected.type !== 'Geography'
+                    && modal.rowAggSelected.type !== 'Geography'">
+            <label class="control-label">
+                {{ 'REPORT.GEO_AGG' | translate }} ({{ 'REPORT.PAGES' | translate }} &mdash;
+                <em>{{ 'REPORT.OPTIONAL' | translate }}</em>)
+            </label>
+            <select ng-options="agg as agg.label for agg in modal.rowColAggs
+                                | filter: { type: 'Geography' }
+                                | orderBy: 'label'"
+                    ng-model="modal.geoAggSelected"
+                    ng-change="modal.onParamChanged()"
+                    class="form-control">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default"
+                ng-click="modal.closeModal()">
+            {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button class="btn btn-default"
+                ng-click="modal.createReport()"
+                ng-disabled="!modal.ready">
+                {{ 'REPORT.TITLE' | translate }}
+        </button>
+    </div>
+</div>

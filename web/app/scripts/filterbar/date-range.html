@@ -1,0 +1,36 @@
+<button id="date-range"
+   role="button"
+   ng-class="error.btnClasses"
+   class="ng-binding btn btn-default dropdown-toggle"
+   data-toggle="dropdown"
+   aria-haspopup="true"
+   aria-expanded="true">
+  {{ 'COMMON.DATE_RANGE' | translate }} <span class="caret"></span>
+</button>
+<ul class="dropdown-menu alert date-range"
+    ng-class="error.classes"
+    role="menu"
+    aria-labelledby="record-type"
+    ng-click="$event.stopPropagation()">
+    <li class="nav-rt-item ng-scope" role="menuitem">
+        <span ng-show="isMinMaxValid()">{{ 'RECORD.DATE_FILTER' | translate }}</span>
+        <span ng-hide="isMinMaxValid()">{{ 'ERRORS.INVALID_RANGE' | translate }}</span>
+        <div class="ng-binding pull-right form-inline">
+            <div class="input-group input-daterange">
+                <input name="minimum"
+                       id="dtMinField"
+                       ng-model="min"
+                       ng-change="onDtRangeChange('min')"
+                       type="text"
+                       class="form-control date-range-style date-range-input">
+                <span class="input-group-addon">{{ 'COMMON.TO' | translate }}</span>
+                <input name="maximum"
+                       id="dtMaxField"
+                       ng-model="max"
+                       ng-change="onDtRangeChange('max')"
+                       type="text"
+                       class="form-control date-range-style date-range-input">
+            </div>
+        </div>
+    </li>
+</ul>

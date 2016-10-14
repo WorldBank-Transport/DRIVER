@@ -1,0 +1,12 @@
+server {
+    listen 80 default_server;
+
+    server_name _;
+    root {{ root_media_dir }};
+    index index.html;
+
+    access_log /var/log/nginx/driver-celery.access.log logstash_json;
+
+    client_max_body_size 10m;
+
+}

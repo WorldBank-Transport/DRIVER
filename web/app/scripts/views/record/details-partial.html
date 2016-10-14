@@ -1,0 +1,14 @@
+<div class="form-area no-filterbar">
+    <div class="col-sm-8 col-sm-offset-2">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>{{ ::ctl.recordType.label }} {{ 'RECORD.DETAILS' | translate }}</h2>
+            <div class="content-border"></div>
+            <driver-details-tabs
+                 record-schema="ctl.recordSchema"
+                 record="ctl.record"
+                 ng-if="ctl.record && ctl.recordSchema">
+            </driver-details-tabs>
+        </div>
+    </div>
+</div>

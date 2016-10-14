@@ -1,0 +1,33 @@
+$icon-font-path: '../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
+// bower:scss
+@import 'bootstrap-sass-official/assets/stylesheets/_bootstrap.scss';
+// endbower
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700');
+
+@import 'helpers';
+@import 'variables';
+@import 'mixins';
+@import 'typography';
+@import 'layout';
+
+@import 'partials/add-new';
+@import 'partials/duplicates';
+@import 'partials/modals';
+@import 'partials/dashboard';
+@import 'partials/record-list';
+@import 'partials/field';
+@import 'partials/filterbar';
+@import 'partials/incident-report';
+@import 'partials/json-editor';
+@import 'partials/login';
+@import 'partials/map';
+@import 'partials/map-view';
+@import 'partials/nav';
+@import 'partials/notifications';
+@import 'partials/table-view';
+@import 'partials/assignments-view';
+@import 'partials/types';
+@import 'partials/filters';
+@import 'partials/weather-icons';
+@import 'partials/rtl';
+@import 'partials/datetimepicker';

@@ -1,0 +1,26 @@
+<div class="audit-download">
+    <div class="close" ng-click="modal.close()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3 class="modal-title">{{ 'MANAGEMENT.AUDIT_LOGS' | translate }}</h3>
+    </div>
+    <div class="modal-body">
+      <input type="number" ng-model="modal.selectedYear" min="1900" max="{{modal.currentYear}}"
+             ng-change="modal.onDateChange()">
+      <select class="month-select"
+              ng-model="modal.selectedMonth"
+              ng-options="+index as month | translate for (index, month) in modal.months"
+              ng-change="modal.onDateChange()">
+      </select>
+      <div ng-if="modal.error" class="error">{{ modal.error }}</div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn" ng-class="{'btn-primary': !modal.pending}"
+                ng-click="modal.onDownloadClicked()">
+                 <span ng-if="!modal.pending">{{ 'COMMON.DOWNLOAD_CSV' | translate }}</span>
+                <span ng-if="modal.pending">{{ 'COMMON.DOWNLOADING' | translate }} <fading-circle-spinner></fading-circle-spinner></span>
+        </button>
+        <button class="btn btn-primary" ng-click="modal.close()">{{ 'COMMON.CLOSE' | translate }} </button>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="notifications alert" ng-hide="!ntf.active" ng-class="ntf.alert.displayClass">
+  <table ng-if="ntf.alert.text">
+    <tr>
+      <td><span class="glyphicon"
+          ng-class="ntf.alert.imageClass"
+          ng-if="ntf.alert.imageClass"></span></td>
+      <td>{{ ntf.alert.text }}</td>
+      <td><span class="glyphicon glyphicon-remove pull-right"
+          ng-if="ntf.alert.closeButton"
+          ng-click="ntf.hideAlert()"></span></td>
+    </tr>
+  </table>
+  <div ng-if="ntf.alert.html">
+    <span class="glyphicon pull-left"
+      ng-class="ntf.alert.imageClass"
+      ng-if="ntf.alert.imageClass">
+    </span>
+    <span class="glyphicon glyphicon-remove pull-right"
+      ng-if="ntf.alert.closeButton"
+      ng-click="ntf.hideAlert()">
+    </span>
+    <div class="container-fluid">
+      <div class="row">
+        <h4 class="text-center">{{ ntf.alert.header }}</h4>
+      </div>
+      <div class="row">
+        <div ng-bind-html="ntf.alert.html"></div>
+      </div>
+    </div>
+  </div>
+</div>

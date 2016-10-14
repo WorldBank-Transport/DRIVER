@@ -1,0 +1,121 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>Ashlar Editor</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(.) styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/angular-spinkit/build/angular-spinkit.min.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="ase">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <ase-navbar></ase-navbar>
+    <div ui-view></div>
+
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+    <script src="bower_components/angular-spinkit/build/angular-spinkit.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/json-editor/dist/jsoneditor.js"></script>
+    <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/lodash/lodash.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+        <!-- build:js({.tmp,app}) scripts/scripts.js -->
+        <script src="scripts/config.js"></script>
+        <script src="scripts/utils/module.js"></script>
+        <script src="scripts/utils/utils-service.js"></script>
+        <script src="scripts/directives/module.js"></script>
+        <script src="scripts/directives/confirm-click-directive.js"></script>
+        <script src="scripts/userdata/module.js"></script>
+        <script src="scripts/userdata/user-service.js"></script>
+        <script src="scripts/auth/module.js"></script>
+        <script src="scripts/auth/auth-service.js"></script>
+        <script src="scripts/auth/auth-interceptor.js"></script>
+        <script src="scripts/auth/logout-interceptor.js"></script>
+        <script src="scripts/schemas/module.js"></script>
+        <script src="scripts/schemas/schemas-service.js"></script>
+        <script src="scripts/resources/module.js"></script>
+        <script src="scripts/resources/blackspotconfig-service.js"></script>
+        <script src="scripts/resources/builderschemas-service.js"></script>
+        <script src="scripts/resources/geography-service.js"></script>
+        <script src="scripts/resources/recordschemas-service.js"></script>
+        <script src="scripts/resources/recordtypes-service.js"></script>
+        <script src="scripts/resources/recordcosts-service.js"></script>
+        <script src="scripts/json-editor/module.js"></script>
+        <script src="scripts/json-editor/json-editor-defaults-service.js"></script>
+        <script src="scripts/json-editor/json-editor-directive.js"></script>
+        <script src="scripts/notifications/module.js"></script>
+        <script src="scripts/notifications/notifications-service.js"></script>
+        <script src="scripts/notifications/notifications-directive.js"></script>
+        <script src="scripts/notifications/notifications-controller.js"></script>
+        <script src="scripts/navbar/module.js"></script>
+        <script src="scripts/navbar/navbar-controller.js"></script>
+        <script src="scripts/navbar/navbar-directive.js"></script>
+        <script src="scripts/views/sidebar/module.js"></script>
+        <script src="scripts/views/sidebar/cancel-bubble-directive.js"></script>
+        <script src="scripts/views/sidebar/sidebar-controller.js"></script>
+        <script src="scripts/views/sidebar/sidebar-directive.js"></script>
+        <script src="scripts/views/geography/module.js"></script>
+        <script src="scripts/views/geography/list-controller.js"></script>
+        <script src="scripts/views/geography/list-directive.js"></script>
+        <script src="scripts/views/geography/edit-controller.js"></script>
+        <script src="scripts/views/geography/edit-directive.js"></script>
+        <script src="scripts/views/geography/add-controller.js"></script>
+        <script src="scripts/views/geography/add-directive.js"></script>
+        <script src="scripts/views/login/module.js"></script>
+        <script src="scripts/views/login/auth-controller.js"></script>
+        <script src="scripts/views/recordtype/module.js"></script>
+        <script src="scripts/views/recordtype/list-controller.js"></script>
+        <script src="scripts/views/recordtype/list-directive.js"></script>
+        <script src="scripts/views/recordtype/add-controller.js"></script>
+        <script src="scripts/views/recordtype/add-directive.js"></script>
+        <script src="scripts/views/recordtype/edit-controller.js"></script>
+        <script src="scripts/views/recordtype/edit-directive.js"></script>
+        <script src="scripts/views/recordtype/preview-controller.js"></script>
+        <script src="scripts/views/recordtype/preview-directive.js"></script>
+        <script src="scripts/views/recordtype/related-controller.js"></script>
+        <script src="scripts/views/recordtype/related-directive.js"></script>
+        <script src="scripts/views/recordtype/related-add-directive.js"></script>
+        <script src="scripts/views/recordtype/related-edit-directive.js"></script>
+        <script src="scripts/views/recordtype/related-aggregates-directive.js"></script>
+        <script src="scripts/views/recordtype/schema/edit-controller.js"></script>
+        <script src="scripts/views/recordtype/schema/edit-directive.js"></script>
+        <script src="scripts/views/settings/module.js"></script>
+        <script src="scripts/views/settings/list-controller.js"></script>
+        <script src="scripts/views/settings/list-directive.js"></script>
+        <script src="scripts/views/usermgmt/module.js"></script>
+        <script src="scripts/views/usermgmt/list-controller.js"></script>
+        <script src="scripts/views/usermgmt/list-directive.js"></script>
+        <script src="scripts/views/usermgmt/details-controller.js"></script>
+        <script src="scripts/views/usermgmt/details-directive.js"></script>
+        <script src="scripts/views/usermgmt/edit-controller.js"></script>
+        <script src="scripts/views/usermgmt/edit-directive.js"></script>
+        <script src="scripts/views/usermgmt/add-controller.js"></script>
+        <script src="scripts/views/usermgmt/add-directive.js"></script>
+        <script src="scripts/app.js"></script>
+        <!-- endbuild -->
+</body>
+</html>

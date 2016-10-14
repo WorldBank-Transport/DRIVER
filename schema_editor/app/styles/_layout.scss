@@ -1,0 +1,101 @@
+body {
+	font-weight: 300;
+}
+
+
+h5 {
+	text-transform: uppercase;
+	color: #555;
+
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+	&:hover {
+		text-decoration: none;
+		color: #999;
+	}
+}
+
+
+svg {
+	width: 15px;
+}
+
+.btn {
+	border-radius: 20px;
+}
+
+label {
+	text-transform: uppercase;
+	font-size: 12px;
+	color: #555;
+    :not(.acct-info) {
+        margin-top: 10px;
+    }
+}
+
+.checkbox label {
+	text-transform: initial;
+	margin-top: 5px;
+}
+
+.row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.acct-info {
+    .row {
+        margin-top: 10px;
+    }
+}
+
+/* MAIN BODY */
+
+.form-area {
+	position: relative;
+	padding-top: 80px;
+}
+
+/* MAIN BODY HEADING */
+
+.content-border {
+	border-bottom: 3px solid #dedede;
+	margin-bottom: 20px;
+}
+
+.form-area-heading {
+	.button-container {
+		float: right;
+		margin-top: -40px;
+
+        .btn, .dropdown {
+            float: left;
+            margin-left: 5px;
+        }
+	}
+}
+
+.edit, .delete {
+	color: #000;
+	fill: #000;
+
+	&:hover {
+		color: #999;
+		fill: #999;
+
+	}
+}
+
+/* SAVE BUTTON AREA */
+
+.save-area {
+	margin: 25px 39%;
+	display: inline-block;
+	.btn {
+		margin-right: 15px;
+	}
+}
+

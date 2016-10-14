@@ -1,0 +1,25 @@
+djangorestframework==3.1.3
+djangorestframework-gis==0.9.1
+django-filter==0.11.0
+django-extensions==1.6.1
+django-cors-headers==1.0.0
+django-storages==1.4.1
+oauth2client==2.0.1
+git+https://github.com/rohe/pyoidc.git@c9880cac2e5435f4197bda4364ace82206795f92#egg=oic
+# TODO: revert to marcanpilami django-oidc when https://github.com/rohe/pyoidc/issues/161 fixed
+git+https://github.com/flibbertigibbet/django-oidc.git
+#git+https://github.com/marcanpilami/django-oidc.git
+celery[redis]==3.1.19
+django-redis==4.2.0
+python-dateutil==2.4.2
+pytz==2015.7
+mock==1.3.0
+djangorestframework-csv==1.4.1
+git+https://github.com/azavea/ashlar.git@develop#egg=ashlar
+# Dependencies for generate_training_input script
+argparse==1.2.1
+Fiona==1.6.3
+pyproj==1.9.5.1
+Rtree==0.8.2
+Shapely==1.5.13
+umalqurra==0.2

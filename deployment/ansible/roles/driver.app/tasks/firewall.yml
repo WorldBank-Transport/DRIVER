@@ -1,0 +1,39 @@
+---
+- name: Enable firewall
+  ufw: state=enabled policy=reject
+
+- name: Allow ssh access
+  ufw: rule=allow port=22
+
+- name: Allow monit access
+  ufw: rule=allow port=2812
+
+- name: Allow http access
+  ufw: rule=allow port=80
+
+- name: Allow https access
+  ufw: rule=allow port=443
+
+- name: Allow Runserver access
+  ufw: rule=allow port=4000
+  when: developing
+
+- name: Allow Runserver interactive access
+  ufw: rule=allow port=8000
+  when: developing
+
+- name: Allow Grunt serve - schema editor access
+  ufw: rule=allow port=9000
+  when: developing
+
+- name: Allow Grunt serve - web app access
+  ufw: rule=allow port=9001
+  when: developing
+
+- name: Allow Livereload - editor access
+  ufw: rule=allow port=35731
+  when: developing
+
+- name: Allow Livereload - web access
+  ufw: rule=allow port=35732
+  when: developing

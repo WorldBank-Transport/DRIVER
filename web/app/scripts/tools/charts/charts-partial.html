@@ -1,0 +1,33 @@
+<div class="tool graphs" ng-class="{ 'open': ctl.isOpen }">
+    <div class="tool-tab" ng-click="ctl.toggle()" >
+        <span class="glyphicon glyphicon-list-alt"></span> {{ 'COMMON.GRAPHS' | translate }}
+    </div>
+    <div class="tool-content" ng-init="activeChart = 'toddow'">
+        <div class="tool-header">
+            <span class="pull-right">
+                <span class="graph-selector glyphicon glyphicon-th"
+                      ng-click="activeChart = 'toddow'"
+                      ng-class="{ 'active': activeChart === 'toddow' }">
+                </span>
+
+                <span class="graph-selector glyphicon glyphicon-stats"
+                      ng-click="activeChart = 'stepwise'"
+                      ng-class="{ 'active': activeChart === 'stepwise' }">
+                </span>
+            </span>
+            <h4>{{ 'COMMON.GRAPHS' | translate }}</h4>
+        </div>
+        <hr />
+        <div class="tool-body">
+            <driver-toddow chart-data="ctl.toddow"
+                           ng-show="activeChart === 'toddow'">
+            </driver-toddow>
+            <driver-stepwise chart-data="ctl.stepwise"
+                             min-date="ctl.minDate"
+                             max-date="ctl.maxDate"
+                             in-dashboard="false"
+                             ng-show="activeChart === 'stepwise'">
+            </driver-stepwise>
+        </div>
+    </div>
+</div>

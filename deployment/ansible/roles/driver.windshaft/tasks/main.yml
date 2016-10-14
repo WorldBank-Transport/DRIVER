@@ -1,0 +1,34 @@
+---
+- name: Ensure windshaft directory exists
+  file: path="/opt/windshaft"
+        owner={{ansible_ssh_user}}
+        group={{ansible_ssh_user}}
+        state=directory
+  when: staging or production
+
+- name: Synchronize Windshaft configuration
+  synchronize: archive=no
+               checksum=yes
+               compress=no
+               links=yes
+               recursive=yes
+               copy_links=no
+               src="../../windshaft/"
+               dest="/opt/windshaft"
+  become: False
+  when: staging or production
+  notify:
+    - Restart Windshaft
+
+- name: Configure Windshaft service definition
+  template: src=upstart-windshaft.conf.j2 dest=/etc/init/windshaft.conf
+  notify:
+    - Restart Windshaft
+
+- name: Ensure Windshaft application is running
+  service: name=windshaft state=started
+
+- name: Set up monit monitoring
+  template: src=monit-windshaft.cfg.j2 dest=/etc/monit/conf.d/windshaft.cfg
+  notify:
+    - Restart monit

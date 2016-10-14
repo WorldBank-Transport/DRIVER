@@ -1,0 +1,4 @@
+check program driver-gradle with path "/bin/sh -c 'docker top driver-gradle'"
+  if status != 0 then alert
+  start program = "/usr/sbin/service driver-gradle start"
+  stop program = "/usr/sbin/service driver-gradle stop"

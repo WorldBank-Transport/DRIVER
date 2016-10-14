@@ -1,0 +1,133 @@
+@page {
+    margin: 0.65in 0.5in 0.5in;
+    size: 8.5in 11in;
+}
+
+.print-view {
+    width: 100%;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10rem;
+
+    .assignment-map {
+        width: 100%;
+        height: 2.1in;
+    }
+
+    .assignment {
+        width: 100%;
+        overflow: auto;
+        zoom: 1;
+        padding-bottom: 0.3in;
+        margin-bottom: 0.3in;
+        border-bottom: 1px solid #000;
+    }
+
+    hr {
+        margin-bottom: .26in;
+        border-top-color: #ccc;
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    table {
+        width: 100%;
+    }
+
+    td {
+        vertical-align: top;
+        padding-bottom: 0.04in;
+        &:first-child {
+            padding: 0 50px 0 30px;
+            width: 140px;
+        }
+    }
+
+    tr:last-child > td:last-child {
+        padding-bottom: 0;
+    }
+
+    .assignment-left {
+        float: left;
+        width: 50%;
+    }
+
+    .assignment-right {
+        float: right;
+        width: 50%;
+    }
+
+    .assignment-pages {
+        &:not(:first-child) {
+            .assignment-header {
+                display: none;
+            }
+        }
+        &:last-child {
+            .assignment {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    h3 {
+        margin-bottom: 0.15in;
+        font-size: .29in;
+        font-weight: 300;
+        margin-top: 0;
+    }
+
+    h4 {
+        text-transform: uppercase;
+        color: #aaa !important;
+        font-weight: bold;
+        margin-bottom: 0.2in;
+        font-size: .16in;
+        -webkit-print-color-adjust: exact;
+        border-bottom: 0.05in solid #000;
+        padding-bottom: .3in;
+        margin-bottom: .3in;
+    }
+}
+
+@media print {
+    body {
+        width: 100%;
+        margin: 0;
+    }
+    .assignment-header {
+        display: block !important;
+    }
+    .third {
+        border-bottom: none !important;
+        margin-bottom: 0;
+        page-break-after: always;
+        page-break-inside: avoid;
+    }
+    .print-view {
+        width: auto;
+        max-width: auto;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+        font-size: 0.14in;
+    }
+    .assignment {
+        width: 8.5in;
+    }
+    .assignments-header {
+        display: none;
+    }
+    .print-view.enforcer-assignments {
+        padding: 0;
+        margin: 0;
+    }
+    h1, h2, h3 {
+    margin-top: 0;
+    }
+    .leaflet-control-attribution, .leaflet-control {
+        display: none;
+    }
+}

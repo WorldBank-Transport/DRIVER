@@ -1,0 +1,21 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>{{ ::rtSchemaEdit.schemaTitle }}</h2>
+            <div class="content-border"></div>
+        </div>
+        <json-editor editor-id="{{ rtSchemaEdit.editor.id }}"
+                     options="rtSchemaEdit.editor.options"
+                     on-data-change="rtSchemaEdit.onDataChange"
+                     class="form-area-body">
+        </json-editor>
+        <div class="save-area">
+            <button type="button" class="btn btn-default" ng-disabled="rtSchemaEdit.editor.errors.length > 0"
+                    ng-click="rtSchemaEdit.onSaveClicked()">Save</button>
+            <button type="button" class="btn btn-default"
+                    ui-sref="rt.related({uuid: rtSchemaEdit.recordType.uuid })">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

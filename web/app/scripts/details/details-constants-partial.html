@@ -1,0 +1,71 @@
+<div class="col-sm-6">
+    <label>
+        {{ 'RECORD.OCCURRED' | translate }}
+    </label>
+    <div class="value constant date occurred">
+        {{ ::ctl.record.occurred_from | localizeRecordDate: ctl.dateFormat : true }}
+        <span ng-if="::ctl.record.isSecondary && ctl.record.occurred_to">
+         - {{ ::ctl.record.occurred_to | localizeRecordDate: ctl.dateFormat : true }}
+        </span>
+    </div>
+</div>
+<div class="col-sm-6">
+    <label>
+        {{ 'RECORD.CREATED' | translate }}
+    </label>
+    <div class="value constant date created">
+        {{ ::ctl.record.created | localizeRecordDate: 'long':'time'}}
+    </div>
+</div>
+<div class="col-sm-12">
+    <label>
+        {{ 'RECORD.LOCATION' | translate }}
+    </label>
+    <div class="value constant">
+        {{ ::ctl.record.location_text }}
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="map" leaflet-map driver-embed-map
+        lat="{{ ::ctl.record.geom.coordinates[1] }}"
+        lng="{{ ::ctl.record.geom.coordinates[0] }}">
+    </div>
+</div>
+<div class="col-sm-6">
+    <label>
+        {{ 'RECORD.LATITUDE' | translate }}
+    </label>
+    <div class="value constant float latitude">
+        {{ ::ctl.record.geom.coordinates[1] | number:5 }}
+    </div>
+</div>
+<div class="col-sm-6">
+    <label>
+        {{ 'RECORD.LONGITUDE' | translate }}
+    </label>
+    <div class="value constant float longitude">
+        {{ ::ctl.record.geom.coordinates[0] | number:5 }}
+    </div>
+</div>
+<div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
+    <label>
+        {{ 'RECORD.WEATHER' | translate }}
+    </label>
+    <div>
+        <i ng-if="ctl.record.weather" class="wi wi-forecast-io-{{ ::ctl.record.weather }}"></i>
+        <span class="value constant string weather">
+            {{ ::ctl.record.weather | weatherLabel | translate }}
+        </span>
+    </div>
+    <a href="https://forecast.io" ng-if="ctl.record.weather" target="_blank">
+        {{ 'RECORD.POWERED_BY_FORECAST' | translate }}
+    </a>
+</div>
+<div ng-if="::!ctl.record.isSecondary" class="col-sm-6">
+    <label>
+        {{ 'RECORD.LIGHT' | translate }}
+    </label>
+    <div class="value constant string light">
+        {{ ::ctl.record.light | weatherLabel | translate }}
+    </div>
+</div>

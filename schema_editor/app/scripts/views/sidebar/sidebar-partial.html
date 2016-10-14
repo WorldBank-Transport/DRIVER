@@ -1,0 +1,31 @@
+<main class="all-record-types">
+    <div class="content-types">
+        <ul>
+            <li class="active-parent in">
+                <a>All Record Types</a>
+                <ul>
+                    <li><a ui-sref="rt.list">View all record types</a></li>
+                    <li><a ui-sref="rt.add">Add a new record type</a>
+                </ul>
+            </li>
+            <li class="active-parent row" ng-repeat="recordType in sb.recordTypes | orderBy:'label'"
+                ng-class="{ 'in': expand }" ng-click="expand = !expand">
+                <a>&#8212; {{ recordType.label }}</a>
+                <ul cancel-bubble>
+                    <li><a ui-sref="rt.related({uuid: '{{recordType.uuid}}'})">View related content</a></li>
+                    <li><a ui-sref="rt.related-add({uuid: '{{recordType.uuid}}'})">Add related content</a></li>
+                    <li><a ui-sref="rt.related-aggregates({uuid: '{{recordType.uuid}}'})">Cost aggregation settings</a></li>
+                </ul>
+            </li>
+            <li class="active-parent in">
+                <a>All Geographies</a>
+                <ul>
+                    <li class="active-page"><a ui-sref="geo.list">View all geographies</a></li>
+                    <li><a ui-sref="geo.add">Add new geographies</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <ui-view></ui-view>
+</main>

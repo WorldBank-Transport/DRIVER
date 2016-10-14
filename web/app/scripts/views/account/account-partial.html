@@ -1,0 +1,36 @@
+<div class="form-area no-filterbar acct-info">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="form-area-heading">
+            <h2>{{ 'MANAGEMENT.ACCOUNT_INFORMATION' | translate }}</h2>
+        </div>
+        <div class="well">
+            <div>
+                <div class="row">
+                    <div class="col-sm-2"><label>{{ 'MANAGEMENT.USER_ID' | translate }}:</label></div>
+                    <div class="col-sm-4">{{ ::userInfo.id }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>{{ 'MANAGEMENT.EMAIL' | translate }}:</label></div>
+                    <div class="col-sm-4">{{ ::userInfo.email }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>{{ 'MANAGEMENT.ADMINISTRATOR?' | translate }}</label></div>
+                    <div class="col-sm-4">
+                        <span ng-show="userInfo.isAdmin">{{ 'COMMON.YES' | translate }}</span>
+                        <span ng-show="::!userInfo.isAdmin">{{ 'COMMON.NO' | translate }}</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="::userInfo.groups.length > 0">
+                    <div class="col-sm-2"><label>{{ 'MANAGEMENT.GROUPS' | translate }}:</label></div>
+                    <div class="col-sm-4">
+                        <span>{{ ::userInfo.groups.join(', ') }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>{{ 'MANAGEMENT.TOKEN' | translate }}:</label></div>
+                    <div class="col-sm-4">{{ ::userInfo.token }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

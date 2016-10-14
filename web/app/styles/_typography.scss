@@ -1,0 +1,29 @@
+body {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #AAA;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.value:not(.form-control) {
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.textarea pre {
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+.btn {
+    border-radius: 999px;
+}
+.form-control {
+    border-radius: 6px;
+}

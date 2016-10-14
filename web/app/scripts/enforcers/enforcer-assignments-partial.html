@@ -1,0 +1,53 @@
+<cube-grid-spinner ng-if="ctl.loading"></cube-grid-spinner>
+<div class="enforcer-assignments print-view" ng-if="!ctl.loading">
+  <div class="assignments-header">
+    <button ng-click="ctl.printPage()" class="pull-right">
+      {{ 'ENFORCERS.PRINT' | translate }}
+    </button>
+    <h2>
+      {{ 'ENFORCERS.ASSIGNMENTS_TITLE' | translate }}
+    </h2>
+  </div>
+  <div class="assignment-pages-container">
+    <div ng-repeat="assignment in ctl.assignments" class="assignment-pages">
+      <div class="assignment-header" ng-if="$index % 3 === 0">
+        <h3 ng-if="!isRightToLeft">
+            <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>&ndash;<span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>
+        </h3>
+        <h4>
+          {{ ::ctl.params.num_personnel }} {{ 'ENFORCERS.ASSIGNMENTS_FOR' | translate }} {{ ctl.areaName }}
+        </h4>
+        <h3 ng-if="isRightToLeft">
+            <span>{{ ::ctl.params.shift_end | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span> &ndash;
+            <span>{{ ::ctl.params.shift_start | localizeRecordDate :ctl.dateFormat :'time' :'noseconds' }}</span>
+        </h3>
+      </div>
+      <div class="assignment" ng-class="{'third': $index % 3 === 2}">
+        <div class="assignment-left">
+          <div class="map assignment-map" leaflet-map assignment-map geom="assignment.geom.coordinates"></div>
+        </div>
+        <div class="assignment-right">
+          <div class="assignment-details">
+            <table>
+              <tr>
+                <td>{{ 'ENFORCERS.ASSIGNMENT' | translate }}:</td>
+                <td><b>{{ 'ENFORCERS.ASSIGNMENT' | translate }} {{$index + 1}}</b></td>
+              </tr>
+              <tr>
+                <td>{{ 'ENFORCERS.LOCATION' | translate }}:</td>
+                <td><b>{{ assignment.latitude | number }}, {{ assignment.longitude | number }}</b></td>
+              </tr>
+              <tr>
+                <td>{{ 'ENFORCERS.NOTES' | translate }}:</td>
+                <td>
+                  <hr><hr><hr><hr><hr><hr>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div ng-if="ctl.error" class="error">{{ 'ERRORS.ERROR' | translate }}: {{ ctl.error }}</div>
+</div>

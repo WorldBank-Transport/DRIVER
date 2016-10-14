@@ -1,0 +1,28 @@
+driver-record-list {
+    position: fixed;
+    top: 105px;
+    width: 100%;
+    bottom: 0;
+    overflow: scroll;
+
+    .modal-footer {
+        margin-top: 50px;
+        margin-bottom: 0;
+        padding-top: 10px;
+        padding-bottom: 0;
+    }
+    .links a {
+        cursor: pointer;
+    }
+
+    .loadingrecords {
+        height: 0px;
+    }
+    
+    .fading-circle-spinner {
+        height: 35px;
+        width: 35px;
+        top: 80px;
+        left: 50%;
+    }
+}

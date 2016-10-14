@@ -1,0 +1,17 @@
+<div class="locale-datetime-picker">
+  <div class="date-picker input-group">
+    <az-date-picker
+       class="date-picker"
+       datetime="ctl.date"
+       on-change="ctl.updateDate()"
+       placeholder="{{ 'COMMON.FROM' | translate }}">
+  </div>
+  <div class="time-picker">
+    <timepicker
+        class="input-group"
+        ng-model="ctl.time"
+        show-meridian="false"
+        ng-change="ctl.updateTime()">
+    </timepicker>
+  </div>
+</div>

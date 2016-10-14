@@ -1,0 +1,64 @@
+
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <div class="form-area-heading">
+            <h2 ng-show="!rtRelated.schemaKey">Add New Related Content</h2>
+            <h2 ng-show="rtRelated.schemaKey">Edit Related Content</h2>
+            <div class="content-border"></div>
+        </div>
+
+        <form name="rtForm" novalidate ng-submit="rtRelated.submitForm()">
+            <div class="form-group col-sm-6">
+                <label for="single-title">Single Title</label>
+                <input required type="text" name="label" ng-model="rtRelated.definition.title"
+                       ng-readonly="!!rtRelated.schemaKey"
+                       class="form-control" id="single-title" placeholder="Incident"
+                       ng-minlength="3" ng-maxlength="64" />
+                <p ng-show="rtForm.title.$invalid && !rtForm.title.$pristine" class="help-block">
+                    Single Title is required
+                </p>
+                <p ng-show="rtForm.title.$error.minlength" class="help-block">Single Title too short</p>
+                <p ng-show="rtForm.title.$error.maxlength" class="help-block">Single Title too long</p>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="plural-title">Plural Title</label>
+                <input required type="text" name="plural_label" ng-model="rtRelated.definition.plural_title"
+                       class="form-control" id="plural-title" placeholder="Incidents"
+                       ng-minlength="3" ng-maxlength="64" />
+                <p ng-show="rtForm.plural_title.$invalid && !rtForm.plural_title.$pristine" class="help-block">
+                    Plural Title is required
+                </p>
+                <p ng-show="rtForm.plural_title.$error.minlength" class="help-block">Plural Title too short</p>
+                <p ng-show="rtForm.plural_title.$error.maxlength" class="help-block">Plural Title too long</p>
+            </div>
+            <div class="form-group col-sm-12">
+                <label for="description">Description</label>
+                <textarea required name="description" class="form-control" ng-model="rtRelated.definition.description"
+                          id="description" rows="5" placeholder="Lorem ipsum"
+                          ng-minlength="3" ng-maxlength="255">
+                </textarea>
+                <p ng-show="rtForm.description.$invalid && !rtForm.description.$pristine" class="help-block">
+                    Description is required
+                </p>
+                <p ng-show="rtForm.description.$error.minlength" class="help-block">Description too short</p>
+                <p ng-show="rtForm.description.$error.maxlength" class="help-block">Description too long</p>
+            </div>
+
+            <div class="form-group col-sm-12">
+                <label for="multiple">Allow multiple?</label>
+                <input type="checkbox" name="multiple"
+                       ng-disabled="!!rtRelated.schemaKey"
+                       ng-model="rtRelated.definition.multiple" id="multiple">
+                </input>
+            </div>
+
+            <div class="save-area">
+                <button type="submit" class="btn btn-default" ng-disabled="rtForm.$invalid">
+                    Save
+                </button>
+                <button type="button" ui-sref="rt.related({uuid: rtRelated.recordType.uuid})"
+                        class="btn btn-default">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

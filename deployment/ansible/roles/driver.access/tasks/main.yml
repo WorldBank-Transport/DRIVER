@@ -1,0 +1,13 @@
+---
+
+- name: Set table-level access privileges for Windshaft DB role
+  become_user: postgres
+  postgresql_privs: >
+    state=present
+    type=table
+    priv=SELECT
+    objs="{{ windshaft_tables | join(",") }}"
+    schema=public
+    db="{{ postgresql_database }}"
+    role="{{ windshaft_db_username }}"
+    grant_option=no

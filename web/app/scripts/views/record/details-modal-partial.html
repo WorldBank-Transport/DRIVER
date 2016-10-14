@@ -1,0 +1,33 @@
+<div class="incident-report modal-content">
+    <div class="modal-content">
+        <div class="close" ng-click="modal.close()">
+            &times;
+        </div>
+        <div class="report-header">
+            <h3 class="modal-title">
+                <small ng-if="modal.userCanWrite" class="pull-right">
+                    <a ui-sref="record.edit({ recorduuid: modal.record.uuid })" target="_blank">
+                        <span class="glyphicon glyphicon-share"></span> {{ 'COMMON.EDIT' | translate }}
+                    </a>
+                </small>
+                <small class="pull-right">
+                    <a ui-sref="record.details({ recorduuid: modal.record.uuid })" target="_blank">
+                        <span class="glyphicon glyphicon-share"></span> {{ 'COMMON.VIEW' | translate }}
+                    </a>
+                </small>
+                {{ modal.recordType.label }} {{ 'RECORD.DETAILS' | translate }}
+            </h3>
+        </div>
+        <driver-details-tabs
+            class="modal-body"
+            record-schema="modal.recordSchema"
+            record="modal.record"
+            user-can-write="modal.userCanWrite">
+        </driver-details-tabs>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="modal.close()">
+                {{ 'COMMON.CLOSE' | translate }}
+            </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,335 @@
+.dashboard {
+    background: $light-gray;
+    padding: 2.5%;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    top: 106px;
+
+    .block {
+        background: white;
+        box-shadow: none;
+        transition: 0.5s all;
+        position: absolute;
+
+        &:hover {
+            box-shadow: 0 0 12px rgba(0,0,0,0.2);
+        }
+
+        &.block-1x2 {
+            width: 40%;
+            height: 44%;
+
+            &:nth-child(2n) {
+                top: 52%;
+
+                @media screen and (max-width: 1024px) {
+                    top: 51%;
+                }
+            }
+
+            @media screen and (max-width: 1024px) {
+                height: 45%;
+            }
+        }
+        &.block-1x1 {
+            width: 26%;
+            height: 28%;
+            left: 44%;
+
+            @media screen and (max-width: 1024px) {
+                height: 30%;
+            }
+            @media screen and (max-height: 768px) {
+                height: 32%;
+            }
+
+            &:nth-child(2n) {
+                left: 72%;
+            }
+        }
+        &.block-2x1 {
+            width: 54%;
+            height: 39%;
+            left: 44%;
+            top: 36%;
+
+            &:nth-child(2n) {
+                top: 78%;
+                height: 18%;
+
+                @media screen and (max-height: 768px) {
+                    top: 72%;
+                    height: 24%;
+                }
+            }
+
+            @media screen and (max-height: 768px) {
+                height: 32%;
+                top: 38%;
+            }
+        }
+
+        > .block-inner {
+            padding: 10px;
+            height: 100%;
+
+            > .placeholder {
+                position: absolute;
+                left: 10px;
+                right: 10px;
+                width: auto;
+            }
+
+            > .black-spots {
+                position: absolute;
+                top: 10px;
+                bottom: 50px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                background: #ddd;
+            }
+        }
+        &.quick-map {
+            h3 {
+                position: absolute;
+                bottom: 0;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                margin: 14px 0;
+                font-size: 20px;
+
+                span {
+                    max-width: 65%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    display: inline-block;
+                }
+                .small { margin-top: 5px; }
+            }
+
+            .map {
+                top: 10px;
+                bottom: 50px;
+                position: absolute!important;
+                left: 10px;
+                right: 10px;
+                height: auto;
+            }
+        }
+        &.costs {
+            text-align: center;
+            cursor: pointer;
+            padding-left: 20px;
+            padding-right: 20px;
+
+            .subtotal {
+                font-size: 18px;
+                margin: 10px;
+                margin-left: -20px;
+                margin-right: -20px;
+                table {
+                    border-collapse: separate;
+                    border-spacing: 10px;
+                    margin-left: auto;
+                    margin-right: auto;
+                    .cost-category {
+                        text-align: left;
+                    }
+                }
+                h2 {
+                    padding: 14px 20px;
+                }
+            }
+
+            h1 {
+                font-size: 60px;
+                font-weight: 700;
+                margin: 30px 0 10px;
+                color: #266DD3;
+
+                @media screen and (max-width: 768px) {
+                    font-size: 48px;
+                }
+                @media screen and (max-width: 960px) {
+                    font-size: 54px;
+                }
+                @media screen and (max-height: 768px) {
+                    font-size: 54px;
+                }
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 400;
+                margin: 0;
+            }
+
+            .active > a {
+                background: #266DD3;
+            }
+
+            @media screen and (max-width: 960px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+            @media screen and (max-height: 768px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+
+        }
+        &.counts {
+            text-align: center;
+
+            h1 {
+                font-size: 60px;
+                font-weight: 700;
+                margin: 30px 0 10px;
+                color: #266DD3;
+
+                @media screen and (max-width: 768px) {
+                    font-size: 48px;
+                }
+                @media screen and (max-width: 960px) {
+                    font-size: 54px;
+                }
+                @media screen and (max-height: 768px) {
+                    font-size: 54px;
+                }
+            }
+            h2 {
+                font-size: 21px;
+                font-weight: 400;
+                margin: 0;
+            }
+
+            .active > a {
+                background: #266DD3;
+            }
+
+            @media screen and (max-width: 960px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+            @media screen and (max-height: 768px) {
+                .nav>li>a {
+                    padding: 4px 8px;
+                    font-size: 12px;
+                    font-weight: bold;
+                }
+            }
+        }
+        &.toddow, &.stepwise {
+            h3 {
+                margin: 0;
+                font-size: 20px;
+                font-weight: 400;
+            }
+            driver-stepwise {
+                display: block;
+                height: 100%;
+            }
+        }
+        &.filters {
+            h3 {
+                margin: 6px 0 8px;
+                font-size: 18px;
+            }
+            table {
+                margin: 0;
+            }
+            .filters-table {
+                position: absolute;
+                top: 50px;
+                bottom: 10px;
+                left: 10px;
+                right: 10px;
+                width: auto;
+                overflow: auto;
+            }
+        }
+
+        .nav-pills {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            width: 100%;
+
+            > li {
+                float: none;
+                display: inline-block;
+
+                > a {
+                    border-radius: 999px;
+                }
+            }
+        }
+        a {
+            cursor: pointer;
+        }
+    }
+
+    .blackspots-disabled {
+        .block {
+            &.block-2x1 {
+                width: 47%;
+                height: 94%;
+                left: 2%;
+                top: 3%;
+            }
+
+            &.block-1x2 {
+                width: 47%;
+                height: 68%;
+                top: 3%;
+
+                &:nth-child(1) {
+                    left: 2%
+                }
+                &:nth-child(2) {
+                    height: 24%;
+                    left: 2%;
+                    top: 73%;
+                }
+                &:nth-child(3) {
+                    right: 2%;
+                    top: 3%;
+                    height: 33%;
+                }
+                &:nth-child(4) {
+                    right: 2%;
+                    top: 38%;
+                    height: 33%;
+                }
+            }
+
+            &.block-1x1 {
+                top: 73%;
+                height: 24%;
+                right: 35%;
+
+                &:nth-child(5) {
+                    left: 51%;
+                    width: 20%;
+                }
+
+                &:nth-child(6) {
+                    left: 72%;
+                    width: 26%;
+                }
+            }
+        }
+    }
+}

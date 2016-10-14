@@ -1,0 +1,25 @@
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Ashlar Space &amp; Time Database Builder v1.0</a>
+            </div>
+            <button ng-if="!ctl.authenticated" type="button" ng-click="ctl.onLoginButtonClicked()"
+                class="btn btn-default navbar-btn navbar-right">Sign in</button>
+            <button ng-if="ctl.authenticated" type="button" ng-click="ctl.onLogoutButtonClicked()"
+                class="btn btn-default navbar-btn navbar-right">Sign out</button>
+            <button ng-if="ctl.authenticated" type="button" ui-sref="settings.list"
+                class="btn btn-default navbar-btn navbar-right">System Settings</button>
+            <button ng-if="ctl.authenticated" type="button" ui-sref="usermgmt.list"
+                class="btn btn-default navbar-btn navbar-right">Manage Users</button>
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>

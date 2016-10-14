@@ -1,0 +1,49 @@
+<div class="filterbar drop-shadow">
+    <div class="pull-left">
+        <ul class="nav navbar-nav">
+            <li text-search-field></li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li date-range-field class="dropdown"></li>
+        </ul>
+        <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
+            <li ng-if="value.format === 'number'"
+                numeric-range-field
+                label="key"
+                data="value"
+                class="dropdown"></li>
+            <li ng-if="value.fieldType === 'selectlist'"
+                options-field
+                label="key"
+                data="value"
+                class="dropdown">
+            </li>
+        </ul>
+    </div>
+    <div class="pull-right">
+        <a ng-click="filterbar.showSavedFiltersModal()"
+            class="btn btn-default btn-icon"
+            tooltip-trigger
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
+            tooltip-append-to-body
+            tooltip-animation="false"
+            tooltip="{{ 'SAVED_FILTERS.TITLE' | translate }}"><span class="glyphicon glyphicon-filter"></span></a>
+        <a
+            class="btn btn-default btn-icon"
+            tooltip-trigger
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
+            tooltip="{{ 'SAVED_FILTERS.CLEAR' | translate }}"
+            tooltip-append-to-body
+            tooltip-animation="false"
+            ng-click="filterbar.reset()"><span class="glyphicon glyphicon-remove"></span></a>
+        <a
+            ng-if="::filterbar.userCanAdd"
+            class="btn btn-default btn-icon"
+            tooltip-trigger
+            tooltip-placement="{{ isRightToLeft ? 'right' : 'left' }}"
+            tooltip="{{ 'NAV.ADD_A_RECORD' | translate }}"
+            tooltip-append-to-body
+            tooltip-animation="false"
+            ui-sref="record.add()"><span class="glyphicon glyphicon-plus-sign"></span></a>
+    </div>
+</div>

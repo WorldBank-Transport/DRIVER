@@ -1,0 +1,4 @@
+---
+dependencies:
+  - { role: "azavea.redis" }
+  - { role: "driver.monit" }

@@ -1,0 +1,4 @@
+check program windshaft with path "/bin/sh -c 'docker top windshaft'"
+  if status != 0 then alert
+  start program = "/usr/sbin/service windshaft start"
+  stop program = "/usr/sbin/service windshaft stop"

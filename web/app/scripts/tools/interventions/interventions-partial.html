@@ -1,0 +1,36 @@
+<div class="tool interventions" ng-if="ctl.recordType" ng-class="{ 'open': ctl.isOpen }">
+    <div class="tool-tab" ng-click="ctl.toggle()" >
+        <span class="glyphicon glyphicon-map-marker"
+              ng-if="ctl.isOpen || (!ctl.pending && !ctl.downloadURL)"></span>
+        <cube-grid-spinner ng-if="!ctl.isOpen && ctl.pending"></cube-grid-spinner>
+        <span class="glyphicon glyphicon-download-alt"
+              ng-if="!ctl.isOpen && ctl.downloadURL && !ctl.pending"></span>
+        {{ ctl.recordType.plural_label }}
+    </div>
+    <div class="tool-content">
+        <div class="tool-body">
+            <div class="tool-item">
+                <a ui-sref="record.addSecondary()">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+                {{ 'COMMON.ADD' | translate }} {{ ctl.recordType.label }}</a>
+            </div>
+            <div class="tool-item" ng-class="{ 'clickable': !ctl.pending }">
+                <div ng-if="!ctl.pending" ng-click="ctl.exportCSV()">
+                    <span class="glyphicon glyphicon-export"></span>
+                    <span>{{ 'COMMON.EXPORT' | translate }} {{ ctl.recordType.plural_label }}</span>
+                </div>
+                <div ng-if="ctl.pending">
+                    <cube-grid-spinner></cube-grid-spinner>
+                    {{ 'COMMON.EXPORTING' | translate }} {{ ctl.recordType.plural_label }}
+                </div>
+                <div class="error" ng-if="ctl.error">{{ ctl.error }}</div>
+            </div>
+            <div class="tool-item" ng-if="ctl.downloadURL && !ctl.pending">
+                <span class="glyphicon glyphicon-download-alt"></span>
+                <a href="{{ ctl.downloadURL }}" download>
+                    {{ 'COMMON.DOWNLOAD_CSV' | translate }}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

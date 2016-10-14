@@ -1,0 +1,144 @@
+.navbar {
+    margin-bottom: 0;
+}
+
+.navbar-default {
+    position: fixed;
+    z-index: 1001; /* Ensure above Leaflet controls */
+    width: 100%;
+    top: 0px;
+
+    background-color: #344055;
+    border: none;
+    border-radius: 0;
+}
+
+.navbar .nav-dropdown {
+    padding-top: 8px;
+    padding-right: 4px;
+}
+
+.navbar a {
+    cursor: pointer;
+}
+
+.navbar .account {
+    margin-top: 8px;
+    margin-right: 4px;
+}
+
+nav {
+    margin-bottom: 0 !important;
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+
+    .navbar-brand {
+        font-weight: 700;
+        font-size: 14px;
+
+        border-right: 1px solid #68748A;
+        color: white !important;
+        margin-right: 10px;
+        transition: 0.5s all;
+
+        &:hover {
+            opacity: 0.65;
+            color: white !important;
+        }
+    }
+    .dropdown.open .dropdown-toggle {
+        background-color: #344055 !important;
+        color: white;
+    }
+    .dropdown-toggle {
+        color: white !important;
+        transition: 0.5s all;
+
+        &:hover {
+            opacity: 0.65;
+            color: white !important;
+        }
+    }
+    .dropdown-menu {
+        border: none;
+        margin-top: -5px !important;
+        padding: 0;
+        border-radius: 0;
+
+        > li {
+            border-bottom: 1px solid $light-gray;
+            z-index: 10;
+
+            &:last-of-type {
+                border-bottom: none;
+            }
+
+            > a {
+                padding: 10px 20px;
+            }
+        }
+    }
+}
+.content-types {
+	position: fixed;
+	width: 220px;
+	height: 100%;
+	background-color: #555;
+	margin-top: 50px;
+	z-index: 9;
+
+	> ul {
+		padding-left: 0;
+
+		> li {
+			color: #fff;
+			list-style-type: none;
+
+			border-bottom: 1px solid #777;
+
+			a {
+				font-size: 14px;
+				color: #AAA;
+				padding: 12px 16px;
+				display: block;
+                cursor: pointer;
+
+				&:hover {
+					text-decoration: none;
+					color: #FFF;
+					background-color: #666;
+				}
+			}
+
+			> ul {
+				overflow: hidden;
+				max-height: 0;
+                transition: 0.5s max-height;
+                list-style-type: none;
+                padding-left: 0;
+
+                a {
+                    padding-left: 40px;
+
+                    &:hover {
+                        background-color: #666;
+                    }
+                }
+			}
+
+			&.in > ul {
+				max-height: 400px;
+			}
+		}
+	}
+
+	.active-parent > a {
+		color: #fff !important;
+        background: #333;
+	}
+	.active-page > a {
+		color: #fff;
+        background: #444;
+	}
+}

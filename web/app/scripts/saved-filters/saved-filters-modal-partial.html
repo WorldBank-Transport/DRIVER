@@ -1,0 +1,33 @@
+<div class="saved-filters">
+    <div class="close" ng-click="modal.closeModal()">
+        &times;
+    </div>
+    <div class="modal-header">
+        <h3>{{ 'SAVED_FILTERS.TITLE' | translate }}</h3>
+    </div>
+    <div class="modal-body">
+        <ase-notifications></ase-notifications>
+        <driver-saved-filters></driver-saved-filters>
+        <div class="well">
+            <h4>{{ 'SAVED_FILTERS.ADD_NEW' | translate }}</h4>
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>{{ 'SAVED_FILTERS.FILTER_NAME' | translate }}</label>
+                </div>
+                <div class="form-group">
+                    <input ng-model="modal.label" type="text" class="form-control" />
+                </div>
+                <a ng-click="modal.save()"
+                   ng-disabled="!modal.label.length"
+                   class="btn btn-default">
+                    {{ 'SAVED_FILTERS.SAVE_FILTER' | translate }}
+                </a>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" ng-click="modal.closeModal()">
+            {{ 'COMMON.CLOSE' | translate }}
+        </button>
+    </div>
+</div>

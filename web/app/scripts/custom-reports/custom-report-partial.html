@@ -1,0 +1,30 @@
+<cube-grid-spinner ng-if="ctl.loading"></cube-grid-spinner>
+<div class="table-view custom-report" ng-if="!ctl.loading">
+    <table class="table" ng-repeat="table in ctl.report.tables">
+        <caption class="text-right-on-rtl">
+            <h2 ng-if="!isRightToLeft">
+                <span>{{ ::ctl.params.occurred_min | localizeRecordDate : "long" }}</span> -
+                <span>{{ ::ctl.params.occurred_max | localizeRecordDate : "long" }}</span>
+            </h2>
+            <h2 ng-if="isRightToLeft">
+                <span>{{ ::ctl.params.occurred_max | localizeRecordDate : "long" }}</span> -
+                <span>{{ ::ctl.params.occurred_min | localizeRecordDate : "long" }}</span>
+            </h2>
+            <h3>
+                {{ ctl.recordType.plural_label }}
+                <span ng-if="ctl.params.aggregation_boundary">
+                  {{ 'REPORT.AREA_FOR' | translate }}
+                  {{ ::ctl.report.table_labels[table.tablekey] }}
+                </span>
+                {{ 'REPORT.CATEGORY_BY' | translate }}
+                {{ ::ctl.rowCategoryLabel }}
+                {{ 'REPORT.CATEGORY_AND' | translate }}
+                {{ ::ctl.colCategoryLabel }}
+            </h3>
+        </caption>
+        <thead table-data-string="ctl.headerHTML"></thead>
+        <tbody table-data-string="table.bodyHTML"></tbody>
+    </table>
+
+    <div ng-if="ctl.error" class="error">{{ 'ERRORS.ERROR' | translate }}: {{ ctl.error }}</div>
+</div>

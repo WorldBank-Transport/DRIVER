@@ -1,0 +1,27 @@
+---
+
+# Installs packages/dependencies for web servers
+
+- hosts: all
+
+  pre_tasks:
+    - name: Gather EC2 facts
+      action: ec2_facts
+      when: staging
+
+- hosts: celery-servers
+
+  become: True
+
+  vars:
+    celery: True
+
+  pre_tasks:
+    - name: Update APT cache
+      apt: update_cache=yes
+
+  roles:
+    - { role: "driver.celery" }
+    - { role: "driver-celery.nginx" }
+    - { role: "driver.r-docker" }
+    - { role: "driver.gradle" }

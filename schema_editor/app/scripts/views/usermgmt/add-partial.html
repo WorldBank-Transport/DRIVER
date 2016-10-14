@@ -1,0 +1,39 @@
+<div class="form-area edit-user">
+    <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>Create User Account</h2>
+            <div class="content-border"></div>
+        </div>
+        <div class="well">
+            <form name="userForm" ng-submit="UserAdd.submitForm()">
+                <div class="row form-group">
+                    <div class="col-sm-2"><label for="username">Username:</label></div>
+                    <div class="col-sm-4"><input type="text" class="form-control" id="username"
+                        placeholder="Username" required ng-model="UserAdd.user.username"></div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-2"><label for="userEmail">E-mail:</label></div>
+                    <div class="col-sm-4"><input type="email" class="form-control" id="userEmail"
+                        placeholder="Email" ng-model="UserAdd.user.email"></div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-2"><label for="userGroup">DRIVER Group:</label></div>
+                    <div class="col-sm-4">
+                        <select required ng-model="UserAdd.userGroup" class="form-control"
+                            id="userGroup" ng-options="group for (groupKey, group) in UserAdd.groups">
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-sm-2"><label for="password">Password:</label></div>
+                    <div class="col-sm-4"><input type="password" class="form-control" id="password"
+                        placeholder="Password" ng-model="UserAdd.user.password"></div>
+                </div>
+                <button type="submit" class="btn btn-default"
+                    ng-disabled="userForm.$invalid">CreateUser</button>
+                <button ui-sref="usermgmt.list" class="btn btn-default">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>

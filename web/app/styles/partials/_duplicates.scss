@@ -1,0 +1,86 @@
+.duplicates-title {
+    width: 100%;
+    position: fixed;
+    z-index: 8;
+    top: 52px;
+    height: 50px !important;
+    padding: 0px 14px !important;
+    background: $light-gray;
+}
+
+driver-duplicates-list {
+    position: fixed;
+    top: 105px;
+    width: 100%;
+    bottom: 0;
+    overflow: scroll;
+
+    .links a {
+        cursor: pointer;
+    }
+    .links {
+        min-width: 105px;
+    }
+    .date {
+        min-width: 70px;
+    }
+}
+
+.duplicate-modal {
+    &.modal {
+        background: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+        border-radius: 0;
+        border: none;
+        padding: 15px;
+    }
+    .close {
+        @include close-modal();
+    }
+    .modal-body {
+        width: 100%;
+        padding: 0px;
+    }
+
+    .duplicate-details {
+        width: 50%;
+        display: inline-block;
+        border-right: 1px solid #e5e5e5;
+        border-left: 1px solid #e5e5e5;
+        padding: 20px 15px 30px;
+        vertical-align: top;
+    }
+
+    .modal-footer {
+        margin-top: -5px;
+        margin-bottom: 0;
+        padding: 0px;
+        padding-bottom: 0;
+        text-align: center;
+    }
+    .select-record {
+        width: 50%;
+        float: left;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        background: #ddd;
+        color: #999;
+        font-weight: 700;
+        &:hover {
+            background: #888;
+            color: #fff;
+        }
+    }
+
+    .keep-both {
+        clear: both;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        &:hover {
+            background: #efefef;
+        }
+    }
+}

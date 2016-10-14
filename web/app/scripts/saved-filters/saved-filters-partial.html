@@ -1,0 +1,37 @@
+<div class="block-inner">
+    <h3 ng-if="filters.compact">{{ 'SAVED_FILTERS.TITLE' | translate }}</h3>
+    <div class="report-content tab-content filters-table">
+        <div ng-show="!filters.savedFilters.length">
+            <i>{{ 'SAVED_FILTERS.NO_FILTERS_SAVED' | translate }}</i>
+        </div>
+        <table ng-show="filters.savedFilters.length" class="table table-hover">
+            <thead ng-if="!filters.compact">
+                <tr>
+                    <td>{{ 'SAVED_FILTERS.NAME' | translate }}</td>
+                    <td>{{ 'SAVED_FILTERS.FILTERS' | translate }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="sf in filters.savedFilters">
+                    <td width="20%">
+                        {{ ::sf.label }}
+                    </td>
+                    <td width="60%" ng-bind-html="sf.filter_json | savedFilterAsHTML">
+                    </td>
+                    <td width="10%">
+                        <a ng-click="filters.viewFilter(sf)">
+                            {{ 'COMMON.VIEW' | translate }}&nbsp;&raquo;
+                        </a>
+                    </td>
+                    <td width="10%" ng-if="!filters.compact">
+                        <a ng-click="filters.deleteFilter(sf)">
+                            {{ 'COMMON.DELETE' | translate }}
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

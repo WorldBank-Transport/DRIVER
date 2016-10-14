@@ -1,0 +1,46 @@
+.drop-shadow {
+    box-shadow: 0 5px 0 rgba(0,0,0,0.1);
+}
+.placeholder {
+    width: 100%;
+    background: #ddd;
+}
+.divider {
+    margin: 0 5px;
+    color: #CCC;
+}
+.n {
+    padding: 5px 10px;
+    font-size: 14px;
+    font-weight: 700;
+    background-color: black;
+    background-color: rgba(0,0,0,0.9);
+    color: white;
+    margin-left: 0px;
+    margin-top: 10px;
+    pointer-events: none;
+
+    &:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        margin-left: -5px;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-top: 10px solid rgba(0,0,0,0.9);
+        bottom: -10px;
+    }
+}
+
+.dropdown-menu {
+    height: auto;
+    max-height: 500px;
+    overflow-x: auto;
+
+    /* Needed so the datepicker widgets don't get confined to a small window */
+    &.date-range {
+        overflow-x: initial;
+    }
+}

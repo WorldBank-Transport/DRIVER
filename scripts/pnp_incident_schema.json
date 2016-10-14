@@ -1,0 +1,407 @@
+{
+  "type": "object",
+  "description": "",
+  "title": "",
+  "plural_title": "",
+  "definitions": {
+    "Black spot": {
+      "multiple": true,
+      "description": "A pre-defined black spot with which an incident is associated.",
+      "title": "Black spot",
+      "required": [
+        "_localId"
+      ],
+      "plural_title": "Black spots",
+      "definitions": {},
+      "type": "object",
+      "properties": {
+        "ID": {
+          "isSearchable": true,
+          "propertyOrder": 0,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "_localId": {
+          "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+          "type": "string",
+          "options": {
+            "hidden": true
+          }
+        }
+      }
+    },
+    "Site": {
+      "description": "Details about the site where the incident took place.",
+      "title": "Site",
+      "required": [
+        "_localId"
+      ],
+      "plural_title": "Sites",
+      "definitions": {},
+      "type": "object",
+      "properties": {
+        "Road sub-category": {
+          "enum": [
+            "East-West Lateral",
+            "Secondary National Road",
+            "North-South Backbone",
+            "Other Road of Strategic Importance"
+          ],
+          "displayType": "select",
+          "propertyOrder": 15,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "DPWH province name": {
+          "isSearchable": false,
+          "propertyOrder": 12,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "DPWH region ID": {
+          "isSearchable": false,
+          "propertyOrder": 11,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Description": {
+          "isSearchable": false,
+          "propertyOrder": 6,
+          "type": "string",
+          "fieldType": "text",
+          "format": "textarea"
+        },
+        "X coordinate (as entered)": {
+          "isSearchable": true,
+          "propertyOrder": 2,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Road section ID": {
+          "isSearchable": false,
+          "propertyOrder": 4,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "DPWH province ID": {
+          "isSearchable": false,
+          "propertyOrder": 13,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Engineering district name": {
+          "isSearchable": false,
+          "propertyOrder": 8,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Chainage": {
+          "isSearchable": false,
+          "propertyOrder": 5,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Road name": {
+          "isSearchable": false,
+          "propertyOrder": 7,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Engineering district ID": {
+          "isSearchable": false,
+          "propertyOrder": 9,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Y coordinate (as entered)": {
+          "isSearchable": true,
+          "propertyOrder": 3,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "_localId": {
+          "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+          "type": "string",
+          "options": {
+            "hidden": true
+          }
+        },
+        "DPWH region name": {
+          "isSearchable": false,
+          "propertyOrder": 10,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Section length": {
+          "isSearchable": false,
+          "propertyOrder": 14,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Type": {
+          "enum": [
+            "I",
+            "M",
+            "U"
+          ],
+          "displayType": "select",
+          "propertyOrder": 1,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "ID": {
+          "isSearchable": false,
+          "propertyOrder": 0,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        }
+      }
+    },
+    "Incident Details": {
+      "multiple": false,
+      "description": "Details for Incident",
+      "title": "Incident Details",
+      "required": [
+        "_localId"
+      ],
+      "plural_title": "Incident Details",
+      "definitions": {},
+      "type": "object",
+      "details": true,
+      "properties": {
+        "Junction type": {
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "99"
+          ],
+          "displayType": "select",
+          "propertyOrder": 8,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Surface conditions": {
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "9"
+          ],
+          "displayType": "select",
+          "propertyOrder": 11,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Hit and run": {
+          "enum": [
+            "1",
+            "2",
+            "99"
+          ],
+          "displayType": "select",
+          "propertyOrder": 13,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Severity": {
+          "enum": [
+            "M",
+            "F",
+            "D",
+            "S"
+          ],
+          "displayType": "select",
+          "propertyOrder": 7,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Number not injured": {
+          "isSearchable": false,
+          "propertyOrder": 17,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Police station number": {
+          "isSearchable": true,
+          "propertyOrder": 2,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Incident number": {
+          "isSearchable": false,
+          "propertyOrder": 0,
+          "type": "string",
+          "fieldType": "text",
+          "format": "text"
+        },
+        "Number seriously injured": {
+          "isSearchable": true,
+          "propertyOrder": 15,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Number killed": {
+          "isSearchable": false,
+          "propertyOrder": 14,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Number of pedestrians": {
+          "isSearchable": false,
+          "propertyOrder": 6,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Number of drivers": {
+          "isSearchable": false,
+          "propertyOrder": 4,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Number of vehicles": {
+          "isSearchable": false,
+          "propertyOrder": 3,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Main cause": {
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "99"
+          ],
+          "displayType": "select",
+          "propertyOrder": 12,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Weather type": {
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "99"
+          ],
+          "displayType": "select",
+          "propertyOrder": 9,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Record date": {
+          "isSearchable": false,
+          "propertyOrder": 18,
+          "type": "string",
+          "fieldType": "text",
+          "format": "datetime"
+        },
+        "Number of passengers": {
+          "isSearchable": false,
+          "propertyOrder": 5,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "_localId": {
+          "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+          "type": "string",
+          "options": {
+            "hidden": true
+          }
+        },
+        "Date": {
+          "isSearchable": false,
+          "propertyOrder": 1,
+          "type": "string",
+          "fieldType": "text",
+          "format": "datetime"
+        },
+        "Lighting conditions": {
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "99"
+          ],
+          "displayType": "select",
+          "propertyOrder": 10,
+          "fieldType": "selectlist",
+          "isSearchable": false,
+          "type": "string"
+        },
+        "Number with minor injuries": {
+          "isSearchable": false,
+          "propertyOrder": 16,
+          "type": "string",
+          "fieldType": "text",
+          "format": "number"
+        },
+        "Police description": {
+          "isSearchable": false,
+          "propertyOrder": 19,
+          "type": "string",
+          "fieldType": "text",
+          "format": "textarea"
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "properties": {
+    "Black spot": {
+      "items": {
+        "$ref": "#/definitions/Black spot"
+      },
+      "type": "array"
+    },
+    "Site": {
+      "$ref": "#/definitions/Site"
+    },
+    "Incident Details": {
+      "$ref": "#/definitions/Incident Details"
+    }
+  }
+}

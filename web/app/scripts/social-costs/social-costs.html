@@ -1,0 +1,31 @@
+<div class="costs total" ng-click="ctl.toggle()" ng-if="ctl.state === 'total'">
+    <h1>
+      {{ ctl.costData.prefix }}{{ ctl.costData.total | number }}{{ ctl.costData.suffix }}
+    </h1>
+    <h2 ng-if="ctl.costData.total || ctl.costData.total === 0">
+        {{ 'DASHBOARD.SOCIAL_COSTS_TEXT' | translate }}:
+        {{ 'DASHBOARD.SOCIAL_COSTS_90DAYS' | translate }}
+    </h2>
+    <div class="warn" ng-if="ctl.costData.outdated_cost_config || ctl.costData.error">
+      <span class="glyphicon glyphicon-warning-sign"></span>
+      {{ 'DASHBOARD.SOCIAL_COSTS_CONFIG_WARN' | translate }}
+    </div>
+</div>
+<div class="costs subtotal" ng-click="ctl.toggle()" ng-if="ctl.state === 'subtotal'">
+    <h2 ng-if="ctl.costData.total || ctl.costData.total === 0">
+        {{ 'DASHBOARD.SOCIAL_COSTS_TEXT' | translate }}:
+        {{ 'DASHBOARD.SOCIAL_COSTS_90DAYS' | translate }}
+    </h2>
+    <hr></hr>
+    <table>
+        <tbody>
+            <tr ng-repeat="(subkey, subtotal) in ctl.costData.subtotals">
+              <td class="cost-category">{{ subkey }}:</td><td class="subtotal">{{ ctl.costData.prefix }}{{ subtotal | number }}{{ ctl.costData.suffix }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="warn" ng-if="ctl.costData.outdated_cost_config || ctl.costData.error">
+      <span class="glyphicon glyphicon-warning-sign"></span>
+      {{ 'DASHBOARD.SOCIAL_COSTS_CONFIG_WARN' | translate }}
+    </div>
+</div>

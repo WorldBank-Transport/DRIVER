@@ -1,0 +1,27 @@
+<div class="tool costs" ng-class="{'open': ctl.state === 'subtotal'}">
+    <div class="tool-tab total costs" ng-click="ctl.toggle()" >
+      <span ng-if="ctl.costData.outdated_cost_config || ctl.costData.error"
+            class="glyphicon glyphicon-warning-sign"></span>
+      {{ ctl.costData.prefix }}{{ ctl.costData.total | number }}{{ ctl.costData.suffix }}
+    </div>
+    <div class="tool-content">
+        <div class="tool-header">
+            <h4>{{ 'DASHBOARD.SOCIAL_COSTS_TEXT' | translate }}</h4>
+        </div>
+        <hr />
+        <div class="tool-body">
+            <table class="costs subtotal">
+                <tbody>
+                    <tr ng-repeat="(subkey, subtotal) in ctl.costData.subtotals">
+                      <td>{{ subkey }}:</td><td>{{ ctl.costData.prefix }}{{ subtotal | number }}{{ ctl.costData.suffix }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="warn" ng-if="ctl.costData.outdated_cost_config || ctl.costData.error">
+              <span class="glyphicon glyphicon-warning-sign"></span>
+              {{ 'DASHBOARD.SOCIAL_COSTS_CONFIG_WARN' | translate }}
+            </div>
+        </div>
+    </div>
+</div>
+

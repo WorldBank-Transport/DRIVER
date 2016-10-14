@@ -1,0 +1,79 @@
+.table-view {
+    background: $light-gray;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    top: 0;
+
+    &.custom-report {
+        // Custom report uses table-view without table-view-container, because it scrolls
+        // the whole page so the absolute-positioned gray background breaks things.
+        background: white;
+        margin-top: 50px;
+        padding: 0px 20px;
+
+        td:nth-child(even) {
+            background: $light-gray;
+        }
+    }
+
+    .table-view-container {
+        margin: 25px;
+        background: white;
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+
+
+        .links {
+            text-align: right;
+
+            a {
+                font-weight: 700;
+                font-size: 12px;
+                border: 1px solid #ccc;
+                padding: 4px 10px;
+                border-radius: 99px;
+                margin-left: 8px;
+
+                span { margin-right: 3px; }
+
+                &:hover {
+                    color: #333;
+                    background-color: #e6e6e6;
+                    border-color: #adadad;
+                }
+            }
+        }
+    }
+    .overflow {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        bottom: 0;
+        overflow: auto;
+
+        nav {
+            position: relative;
+            padding: 0 20px;
+        }
+    }
+    .table {
+        margin: 0;
+
+        th {
+            background: #ddd;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        caption {
+            text-align: left;
+            margin: 10px;
+            font-size: 18px;
+        }
+    }
+}

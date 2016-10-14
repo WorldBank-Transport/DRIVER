@@ -1,0 +1,156 @@
+html {
+	height: 100%;
+}
+
+body {
+	font-weight: 400;
+	height: 100%;
+}
+
+
+h5 {
+	text-transform: uppercase;
+	color: #555;
+
+}
+
+a {
+	text-decoration: none;
+	color: #000;
+	&:hover {
+		text-decoration: none;
+		color: #999;
+	}
+}
+
+.btn {
+	border-radius: 20px;
+}
+
+label {
+	text-transform: uppercase;
+	font-size: 12px;
+	color: #555;
+    :not(.acct-info) {
+        margin-top: 10px;
+    }
+}
+
+.jse-MultiCheckboxControl {
+    label {
+        text-transform: initial;
+    }
+    input {
+        // margin-bottom: 3px;
+        margin-top: 3px;
+        margin-right: 2px
+    }
+}
+
+.checkbox label {
+	text-transform: initial;
+	margin-top: 5px;
+}
+
+.row {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.acct-info {
+    .row {
+        margin-top: 10px;
+    }
+}
+
+.error {
+    background-color: #EF6055;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+/* MAIN BODY */
+
+main {
+}
+
+.form-area {
+	position: relative;
+	padding-top: 40px;
+
+    .row {
+    	margin-left: -15px;
+    	margin-right: -15px;
+    }
+    .btn-group > .btn {
+        margin-left: 10px;
+        border-radius: 6px !important;
+    }
+    .well-sm {
+        padding: 19px;
+        border-radius: 4px;
+
+        .well-sm {
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+    }
+}
+
+/* MAIN BODY HEADING */
+
+.content-border {
+	border-bottom: 3px solid #dedede;
+	margin-bottom: 20px;
+}
+
+.form-area-heading {
+	.btn {
+		float: right;
+		margin-top: -40px;
+	}
+}
+
+.edit, .delete {
+	color: #000;
+	fill: #000;
+
+	&:hover {
+		color: #999;
+		fill: #999;
+
+	}
+}
+
+/* DETAILS */
+
+.value.image img {
+    max-width: 100%;
+    max-height: 150px;
+}
+
+.compact .value.image img {
+    max-width: 100%;
+    max-height: 70px;
+}
+
+.compact .value {
+    font-size: 14px !important;
+    padding: 0;
+    margin: 0;
+}
+
+.value.color .rectangle {
+    width: 200px;
+    height: 100px;
+}
+
+.compact .value.color .rectangle {
+    width: 125px;
+    height: 25px;
+}
+
+.bootstrap-select {
+    box-shadow: none;
+}

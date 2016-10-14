@@ -1,0 +1,18 @@
+---
+- name: Copy web index.html to web -- for google analytics ID
+  template: src=index.html.j2
+            dest="{{ web_dir}}/app/index.html"
+  become: False
+
+- name: Copy web JS config to scripts dir
+  template: src=web-config-js.j2
+            dest="{{ web_scripts_dir}}/config.js"
+  become: False
+
+- name: Copy editor JS config to scripts dir
+  template: src=editor-config-js.j2
+            dest="{{ editor_scripts_dir}}/config.js"
+  become: False
+
+- { include: development.yml, when: developing }
+- { include: staging_or_production.yml, when: staging or production }

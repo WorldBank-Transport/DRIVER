@@ -1,0 +1,53 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <div class="form-area-heading">
+            <h2 ng-show="!rt.recordType.uuid">Add New Record Type</h2>
+            <h2 ng-show="rt.recordType.uuid">Edit Record Type</h2>
+            <div class="content-border"></div>
+        </div>
+
+        <form name="rtForm" novalidate ng-submit="rt.submitForm()">
+            <div class="form-group col-sm-6">
+                <label for="single-title">Single Title</label>
+                <input required type="text" name="label" ng-model="rt.recordType.label"
+                       class="form-control" id="single-title" placeholder="Incident"
+                       ng-minlength="3" ng-maxlength="64" />
+                <p ng-show="rtForm.label.$invalid && !rtForm.label.$pristine" class="help-block">
+                    Single Title is required
+                </p>
+                <p ng-show="rtForm.label.$error.minlength" class="help-block">Single Title too short</p>
+                <p ng-show="rtForm.label.$error.maxlength" class="help-block">Single Title too long</p>
+            </div>
+            <div class="form-group col-sm-6">
+                <label for="plural-title">Plural Title</label>
+                <input required type="text" name="plural_label" ng-model="rt.recordType.plural_label"
+                       class="form-control" id="plural-title" placeholder="Incidents"
+                       ng-minlength="3" ng-maxlength="64" />
+                <p ng-show="rtForm.plural_label.$invalid && !rtForm.plural_label.$pristine" class="help-block">
+                    Plural Title is required
+                </p>
+                <p ng-show="rtForm.plural_label.$error.minlength" class="help-block">Plural Title too short</p>
+                <p ng-show="rtForm.plural_label.$error.maxlength" class="help-block">Plural Title too long</p>
+            </div>
+            <div class="form-group col-sm-12">
+                <label for="description">Description</label>
+                <textarea required name="description" class="form-control" ng-model="rt.recordType.description"
+                          id="description" rows="5" placeholder="Lorem ipsum"
+                          ng-minlength="3" ng-maxlength="255">
+                </textarea>
+                <p ng-show="rtForm.label.$invalid && !rtForm.label.$pristine" class="help-block">
+                    Description is required
+                </p>
+                <p ng-show="rtForm.description.$error.minlength" class="help-block">Description too short</p>
+                <p ng-show="rtForm.description.$error.maxlength" class="help-block">Description too long</p>
+            </div>
+
+            <div class="save-area">
+                <button type="submit" class="btn btn-default" ng-disabled="rtForm.$invalid">
+                    Save
+                </button>
+                <button type="button" ui-sref="rt.list" class="btn btn-default">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>

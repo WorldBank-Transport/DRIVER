@@ -1,0 +1,6 @@
+---
+dependencies:
+  - { role: "driver.docker" }
+  - { role: "driver.web"}
+  - { role: "driver.windshaft" }
+  - { role: "driver.monit" }

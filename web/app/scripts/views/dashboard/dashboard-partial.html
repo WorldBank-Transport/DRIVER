@@ -1,0 +1,79 @@
+<main class="dashboard no-filterbar" ng-if="isRightToLeft !== undefined">
+
+    <div ng-if="ctl.showBlackSpots">
+        <div class="block block-1x2 quick-map">
+            <div class="block-inner">
+                <div class="map" driver-black-spots leaflet-map zoom-to-boundary></div>
+                <h3><span>{{ 'DASHBOARD.BLACK_SPOTS_BY_SEVERITY' | translate }}</span>
+                    <a ui-sref="map" class="small pull-right">
+                        {{ 'DASHBOARD.ANALYZE_AND_FILTER' | translate }} »
+                    </a>
+                </h3>
+            </div>
+        </div>
+        <div class="block block-1x2 quick-map">
+            <div class="block-inner">
+                <div class="map" leaflet-map recent-events zoom-to-boundary></div>
+                <h3><span>{{ ctl.recordType.plural_label }}: {{ 'DASHBOARD.RECENT_EVENTS_PERIOD' | translate }}</span>
+                    <a ui-sref="map" class="small pull-right">
+                        {{ 'DASHBOARD.VIEW_ALL' | translate }} {{ ctl.recordType.plural_label | lowercase }} »
+                    </a>
+                </h3>
+            </div>
+        </div>
+        <div class="block block-1x1 costs" ng-if="ctl.showBlackSpots">
+            <driver-social-costs cost-data="ctl.socialCosts" as-tool="false"></driver-social-costs>
+        </div>
+        <div class="block block-1x1 counts">
+            <driver-recent-counts></driver-recent-counts>
+        </div>
+        <div class="block block-2x1 toddow">
+            <div class="block-inner">
+                <driver-toddow chart-data="ctl.toddow"></driver-toddow>
+                <h3>{{ 'DASHBOARD.TODDOW_TITLE' | translate }}</h3>
+            </div>
+        </div>
+        <div class="block block-2x1 filters">
+            <driver-saved-filters compact="true"></driver-saved-filters>
+        </div>
+    </div>
+
+    <div ng-if="!ctl.showBlackSpots" class="blackspots-disabled" ng-class="{'right-to-left': isRightToLeft}">
+        <div class="block block-1x2 quick-map">
+            <div class="block-inner">
+                <div class="map" leaflet-map recent-events zoom-to-boundary></div>
+                <h3><span>{{ ctl.recordType.plural_label }}: {{ 'DASHBOARD.RECENT_EVENTS_PERIOD' | translate }}</span>
+                    <a ui-sref="map" class="small pull-right">
+                        {{ 'DASHBOARD.VIEW_ALL' | translate }} {{ ctl.recordType.plural_label | lowercase }} »
+                    </a>
+                </h3>
+            </div>
+        </div>
+        <div class="block block-1x2 filters">
+            <driver-saved-filters compact="true"></driver-saved-filters>
+        </div>
+        <div class="block block-1x2 toddow">
+            <div class="block-inner">
+                <driver-toddow chart-data="ctl.toddow"></driver-toddow>
+                <h3>{{ 'DASHBOARD.TODDOW_TITLE' | translate }}</h3>
+            </div>
+        </div>
+        <div class="block block-1x2 stepwise">
+            <div class="block-inner">
+                <driver-stepwise
+                   chart-data="ctl.stepwise"
+                   min-date="ctl.minDate"
+                   max-date="ctl.maxDate"
+                   in-dashboard="true">
+                </driver-stepwise>
+            </div>
+        </div>
+        <div class="block block-1x1 counts">
+            <driver-recent-counts></driver-recent-counts>
+        </div>
+        <div class="block block-1x1 costs">
+            <driver-social-costs cost-data="ctl.socialCosts" as-tool="false"></driver-social-costs>
+        </div>
+    </div>
+
+</main>

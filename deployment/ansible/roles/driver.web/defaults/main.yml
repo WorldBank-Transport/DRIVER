@@ -1,0 +1,8 @@
+---
+web_dir: "/opt/web"
+web_scripts_dir: "{{ web_dir }}/app/scripts"
+web_build_dir: "{{ web_dir }}/dist"
+
+editor_dir: "/opt/schema_editor"
+editor_scripts_dir: "{{ editor_dir }}/app/scripts"
+editor_build_dir: "{{ editor_dir }}/dist"

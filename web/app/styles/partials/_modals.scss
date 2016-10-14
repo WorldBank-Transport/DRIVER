@@ -1,0 +1,101 @@
+.modal-content {
+    border-radius: 0;
+    border: none;
+
+    .close {
+        @include close-modal();
+    }
+}
+
+.modal-footer {
+    clear: both;
+}
+
+.confirmation-modal {
+    top: 175px;
+
+    .modal-content {
+        border-radius: 0;
+        border: none;
+    }
+
+    .modal-body {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .modal-footer {
+        margin-top: -5px;
+        margin-bottom: 0;
+        padding: 0px;
+        padding-bottom: 0;
+        text-align: center;
+    }
+
+    .select {
+        width: 50%;
+        float: left;
+        padding: 10px;
+        text-transform: uppercase;
+        cursor: pointer;
+        border-right: 1px solid #e5e5e5;
+        color: #999;
+        font-weight: 700;
+        &:hover {
+            color: #000;
+        }
+    }
+}
+
+.custom-reports {
+    .form-control {
+        margin-bottom: 15px;
+    }
+}
+
+.audit-download {
+    .month-select {
+        width: 45%;
+    }
+
+    input[type="number"] {
+        width: 40%;
+    }
+}
+
+.fading-circle-spinner {
+    width: 15px;
+    height: 15px;
+    margin: 0px 0px -2px 0px;
+    display: inline-block;
+}
+
+.enforcer-assignment-modal {
+    .time-picker {
+        width: 40%;
+        float: left;
+        position: relative;
+        top: -34px;
+        left: 20px;
+    }
+    .date-picker {
+        width: 60%;
+        float: left;
+        & > input {
+            width: 100%;
+        }
+    }
+    .col-personnel {
+        margin-top: -20px;
+    }
+    .well {
+        margin-bottom: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: 730px;
+        margin: 30px auto;
+    }
+}

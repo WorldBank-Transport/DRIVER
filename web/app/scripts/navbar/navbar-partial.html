@@ -1,0 +1,111 @@
+<nav class="navbar navbar-default {{ctl.isFilterPage ? '' : 'drop-shadow' }}">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" ui-sref="dashboard">{{ 'COMMON.APP_NAME' | translate }}</a>
+        </div>
+
+        <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav" ng-if="ctl.authenticated">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.stateSelected.label | translate }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-page-item" ng-repeat="navState in ctl.availableStates">
+                            <a ng-click="ctl.onStateSelected(navState)">
+                                {{ navState.label | translate }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown" ng-if="ctl.recordTypesVisible">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.recordTypeSelected.plural_label }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-rt-item" ng-repeat="recordType in ctl.recordTypeResults | orderBy:'plural_label'">
+                            <a ng-click="ctl.onRecordTypeSelected(recordType)">
+                                {{ recordType.plural_label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.geographySelected.label }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-rt-item" ng-repeat="geography in ctl.geographyResults | orderBy:'label'">
+                            <a ng-click="ctl.onGeographySelected(geography)">
+                                {{ geography.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.getBoundaryLabel(ctl.boundarySelected) }}
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-rt-item">
+                            <a ng-click="ctl.onBoundarySelected({ uuid: '' })">{{ 'NAV.ALL' | translate }}</a>
+                        </li>
+                        <li class="nav-rt-item"
+                            ng-repeat="boundary in ctl.boundaryResults | orderBy:ctl.getBoundaryLabel"
+                            ng-if="ctl.getBoundaryLabel(boundary)">
+                            <a ng-click="ctl.onBoundarySelected(boundary)">
+                                {{ ctl.getBoundaryLabel(boundary) }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <ul ng-if="ctl.authenticated" class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">{{ ctl.userEmail }} <span class="glyphicon glyphicon-option-vertical"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a ng-click="ctl.navigateToStateName('account')">
+                                {{ 'NAV.MY_ACCOUNT' | translate }}
+                            </a>
+                        </li>
+                        <li ng-if="ctl.isAdmin">
+                            <a ng-click="ctl.showAuditDownloadModal()">
+                                {{ 'NAV.DOWNLOAD_AUDIT_LOGS' | translate }}
+                            </a>
+                        </li>
+                        <li ng-if="ctl.hasWriteAccess">
+                            <a ng-click="ctl.navigateToStateName('duplicates')">
+                                {{ 'NAV.MANAGE_DUPLICATE_RECORDS' | translate }}
+                            </a>
+                        </li>
+                        <li>
+                            <a ng-click="ctl.onLogoutButtonClicked()">
+                                {{ 'NAV.LOG_OUT' | translate }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right" ng-if="ctl.languages.length > 1">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" role="button">
+                        {{ ctl.selectedLanguage.label }} <span class="glyphicon glyphicon-globe"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li ng-repeat="language in ctl.languages">
+                            <a ng-click="ctl.onLanguageSelected(language)">
+                                {{ language.label }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<driver-filterbar ng-if="ctl.isFilterPage"></driver-filterbar>

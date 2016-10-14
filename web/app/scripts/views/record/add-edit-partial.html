@@ -1,0 +1,174 @@
+<div class="json-editor-form form-area no-filterbar" ng-if="ctl.userCanWrite && !ctl.error">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="form-area-heading">
+            <h2>{{ ::ctl.recordType.label }} {{ 'RECORD.INPUT_FORM' | translate }}</h2>
+            <div class="content-border"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm-9" ng-class="{ 'col-sm-push-3': isRightToLeft }">
+                <ase-notifications></ase-notifications>
+                <div class="constant-fields">
+                    <div class="well">
+                        <h3>{{ ::ctl.recordType.label }} {{ 'RECORD.LOCATION_AND_TIME' | translate }}</h3>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">{{ 'RECORD.LOCATION' | translate }}</label>
+                                    <input type="text" class="form-control"
+                                        typeahead="result.display_name for result in ctl.nominatimLookup($viewValue)"
+                                        typeahead-on-select="ctl.nominatimSelect($item)"
+                                        typeahead-wait-ms="250"
+                                        ng-model="ctl.nominatimLocationText">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="map" leaflet-map driver-embed-map editable="true"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                    ng-class="ctl.constantFieldErrors.latitude ? 'has-error' : ''">
+                                    <label class="control-label required">{{ 'RECORD.LATITUDE' | translate }}</label>
+                                    <input type="number" class="form-control"
+                                        ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lat">
+                                    <p ng-if="ctl.constantFieldErrors.latitude"
+                                        class="help-block errormsg">{{ 'ERRORS.VALUE_REQUIRED' | translate }}.</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group"
+                                    ng-class="ctl.constantFieldErrors.longitude ? 'has-error' : ''">
+                                    <label class="control-label required">{{ 'RECORD.LONGITUDE' | translate }}</label>
+                                    <input type="number" class="form-control"
+                                        ng-change="ctl.onGeomChanged(false)" ng-model="ctl.geom.lng">
+                                    <p ng-if="ctl.constantFieldErrors.longitude"
+                                        class="help-block errormsg">{{ 'ERRORS.VALUE_REQUIRED' | translate }}.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group date-picker"
+                                    ng-class="ctl.constantFieldErrors.occurred ? 'has-error' : ''">
+                                    <label class="control-label required" ng-if="ctl.isSecondary">
+                                        {{ 'RECORD.OCCURRED_FROM' | translate }}
+                                    </label>
+                                    <label class="control-label required" ng-if="!ctl.isSecondary">
+                                        {{ 'RECORD.OCCURRED' | translate }}
+                                    </label>
+                                    <div class="input-group">
+                                        <az-date-picker
+                                            id="occurred-from-datepicker"
+                                            datetime="ctl.occurredFromDate"
+                                            on-change="ctl.combineOccurredFromDateAndTime()"
+                                            placeholder="{{ 'COMMON.FROM' | translate }}">
+                                        </az-date-picker>
+                                    </div>
+                                    <p ng-if="ctl.constantFieldErrors.occurred"
+                                        class="help-block errormsg">{{ctl.constantFieldErrors.occurred}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group time-picker">
+                                    <timepicker
+                                        class="input-group"
+                                        ng-model="ctl.occurredFromTime"
+                                        show-meridian="false"
+                                        ng-change="ctl.combineOccurredFromDateAndTime()">
+                                    </timepicker>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="ctl.isSecondary">
+                            <div class="col-md-6">
+                                <div class="form-group date-picker"
+                                    ng-class="ctl.constantFieldErrors.occurredTo ? 'has-error' : ''">
+                                    <label class="control-label">{{ 'RECORD.OCCURRED_TO' | translate }}</label>
+                                    <div class="input-group">
+                                        <az-date-picker
+                                            id="occurred-to-datepicker"
+                                            datetime="ctl.occurredToDate"
+                                            on-change="ctl.combineOccurredToDateAndTime()"
+                                            placeholder="{{ 'COMMON.TO' | translate }}">
+                                        </az-date-picker>
+                                    </div>
+                                    <p ng-if="ctl.constantFieldErrors.occurredTo"
+                                        class="help-block errormsg">{{ctl.constantFieldErrors.occurredTo}}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group time-picker">
+                                    <div class="input-group"
+                                         timepicker
+                                         ng-model="ctl.occurredToTime"
+                                         ng-change="ctl.combineOccurredToDateAndTime()">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" ng-if="!ctl.isSecondary">
+                            <div class="col-md-6">
+                                <label class="control-label">{{ 'RECORD.WEATHER' | translate }}</label>
+                                <div class="input-group">
+                                    <select class="form-control" ng-model="ctl.weather">
+                                        <option ng-repeat="weatherVal in ctl.weatherValues" value="{{ weatherVal }}">
+                                            {{ weatherVal | weatherLabel | translate }}
+                                        </option>
+                                    </select>
+                                    <span class="input-group-addon">
+                                        <i class="wi wi-forecast-io-{{ ctl.weather }}"></i>
+                                    </span>
+                                </div>
+                                <a href="https://forecast.io" ng-if="ctl.record.weather" target="_blank">
+                                    {{ 'RECORD.POWERED_BY_FORECAST' | translate }}
+                                </a>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label">{{ 'RECORD.LIGHT' | translate }}</label>
+                                <select class="form-control" ng-model="ctl.light">
+                                    <option ng-repeat="lightVal in ctl.lightValues" value="{{ lightVal }}">
+                                        {{ lightVal | weatherLabel | translate }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <json-editor editor-id="{{ ctl.editor.id }}"
+                             options="ctl.editor.options"
+                             on-data-change="ctl.onDataChange"
+                             class="form-area-body">
+                </json-editor>
+            </div>
+            <div class="col-sm-3" ng-class="{ 'col-sm-pull-9': isRightToLeft }">
+                <div class="save-area">
+                    <button type="button" class="btn btn-primary btn-block"
+                        ng-disabled="ctl.editor.errors.length > 0 || ctl.constantFieldErrors"
+                        ng-click="ctl.onSaveClicked()">
+                        {{ 'COMMON.SAVE' | translate }} {{ ::ctl.recordType.label }}
+                    </button>
+                    <button type="button" class="btn btn-warning btn-block" ng-if="ctl.record"
+                        ng-click="ctl.onDeleteClicked()">
+                        {{ 'COMMON.DELETE' | translate }} {{ ::ctl.recordType.label }}
+                    </button>
+                    <button type="button" class="btn btn-default btn-block" ng-click="ctl.goBack()">
+                        {{ 'COMMON.CANCEL' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+<div class="form-area no-filterbar" ng-if="::!ctl.userCanWrite">
+    <!-- Shouldn't get here, but have a message to display, just in case -->
+    <h2>{{ 'ERRORS.NO_ACCESS' | translate }}</h2>
+</div>
+<div class="form-area no-filterbar" ng-if="::ctl.error">
+    <!-- Shouldn't get here, but have a message to display, just in case -->
+    <h2>{{ctl.error}}</h2>
+</div>

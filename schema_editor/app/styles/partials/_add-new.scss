@@ -1,0 +1,33 @@
+.add-new {
+	form {
+		background-color: transparent;
+	}
+
+	input[type="file"] {
+		text-align: right;
+	}
+
+/* background-image in select doesn't work in Chrome */
+
+	select#boundary-color option[value="red"] {
+		background-image: url(red.png);
+		background-repeat: no-repeat;
+		background-position: bottom left; 
+		padding-left: 30px;
+	}
+
+	select#boundary-color option[value="blue"] {
+		background-image: url(blue.png);
+		background-repeat: no-repeat;
+		background-position: bottom left; 
+		padding-left: 30px;
+	}
+
+	select#boundary-color option[value="green"] {
+		background-image: url(green.png);
+		background-repeat: no-repeat;
+		background-position: bottom left; 
+		padding-left: 30px;
+	}
+
+}

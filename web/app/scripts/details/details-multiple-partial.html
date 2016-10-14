@@ -1,0 +1,37 @@
+<div class="incident-report">
+    <cube-grid-spinner ng-if="ctl.definition.pending"></cube-grid-spinner>
+    <div class="table" ng-if="!ctl.definition.pending">
+        <div class="table-head">
+            <div class="row">
+                <div class="col-sm-3" ng-repeat="property in ctl.properties | limitTo : ctl.maxDataColumns">
+                    {{ ::property.propertyName }}
+                </div>
+            </div>
+        </div>
+        <div class="table-body">
+            <div class="table-body-row" ng-repeat="item in ctl.data">
+                <div class="table-body-row-header" ng-click="item.open = !item.open" ng-class="{'open': item.open}">
+                    <div class="row">
+                        <div class="col-sm-3" ng-repeat="property in ctl.properties | limitTo : ctl.maxDataColumns">
+                             <driver-details-field
+                                  compact="true"
+                                  data="::item[property.propertyName]"
+                                  record="::ctl.record"
+                                  property="::property">
+                              </driver-details-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-body-row-content">
+                    <div class="row">
+                        <driver-details-single
+                            data="item"
+                            properties="ctl.properties"
+                            record="ctl.record">
+                        </driver-details-single>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

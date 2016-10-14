@@ -1,0 +1,14 @@
+<div class="btn-group dropdown options open" ng-class="{ 'active': filter.contains.length }">
+    <div class="form-group">
+        <select data-ng-options="val for val in data.enum || data.items.enum"
+                data-selected-text-format="static"
+                data-title="{{ label | labelFormatter }}"
+                class="selectpicker form-control"
+                id="{{ domID }}"
+                multiple
+                name="options[]"
+                ng-model="filter.contains"
+                ng-change="updateFilter(label)">
+        </select>
+    </div>
+</div>

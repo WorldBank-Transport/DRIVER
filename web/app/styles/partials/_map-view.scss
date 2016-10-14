@@ -1,0 +1,139 @@
+.map-view {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+
+    #map {
+        background: $light-gray;
+        position: absolute;
+        top: 52px;
+        bottom: 0;
+        width: 100%;
+    }
+
+    .tools {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        .tool {
+            position: relative;
+            margin-left: 10px;
+            display: inline-block;
+
+            &:first-of-type {
+                margin-left: 20px;
+            }
+
+            &.open {
+                .tool-tab {
+                    bottom: -2px;
+                    padding-top: 20px;
+                }
+                .tool-content {
+                    max-height: 300px;
+                }
+            }
+            .tool-tab {
+                background: white;
+                padding: 16px 20px 16px;
+                position: relative;
+                bottom: -2px;
+                transition: 0.5s all;
+                cursor: pointer;
+            }
+            .tool-content {
+                width: 600px;
+                background: white;
+                max-height: 0;
+                bottom: 50px;
+                overflow: hidden;
+                position: absolute;
+                transition: 0.5s all;
+            }
+            .tool-header {
+                margin: 20px 15px 0 15px;
+            }
+            .tool-body {
+            }
+            .tool-item {
+                padding: 15px;
+                border-bottom: 1px solid #eeeeee;
+                &.clickable {
+                    cursor: pointer;
+                }
+                a {
+                    color: inherit;
+                }
+            }
+            .cube-grid-spinner {
+                width: 15px;
+                height: 15px;
+                margin: 0px 0px -2px 0px;
+                display: inline-block;
+            }
+            .error {
+                cursor: default;
+            }
+
+            &.graphs {
+                .tool-content {
+                    width: 600px;
+                    height: 300px;
+                }
+                .tool-body {
+                    margin: 25px 15px 20px 15px;
+                    padding: 0px;
+                    height: 200px;
+                    driver-stepwise {
+                        height: 200px;
+                        width: 570px;
+                        display: block;
+                        overflow: visible;
+                    }
+                }
+            }
+            &.enforcers {
+                .tool-content {
+                    width: 300px;
+                }
+            }
+            &.export {
+                .tool-content {
+                    width: 200px;
+                }
+            }
+            &.interventions {
+                .tool-content {
+                    width: 215px;
+                }
+            }
+            &.costs {
+                .tool-content {
+                    width: 400px;
+                    font-size: 16px;
+                    .subtotal {
+                        border-collapse: separate;
+                        border-spacing: 20px;
+                    }
+                }
+            }
+
+            .graph-selector {
+                cursor: pointer;
+                color: lightgrey;
+                border: 2px solid #d3d3d3;
+                border-radius: 99px;
+                padding: 8px;
+                top: -8px;
+
+                &.active {
+                    color: black;
+                    border-color: #000;
+                }
+            }
+        }
+    }
+}

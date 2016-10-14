@@ -1,0 +1,190 @@
+System.setProperty("file.encoding", "UTF-8")
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencies {
+        classpath 'com.github.WorldBank-Transport.jsonschema2pojo:jsonschema2pojo-gradle-plugin:jsonschema2pojo-0.4.24-annotate-type'
+        classpath 'com.google.code.gson:gson:2.4'
+        classpath 'org.joda:joda-convert:1.8.1'
+        classpath 'javax.annotation:javax.annotation-api:1.2'
+        classpath 'com.google.code.findbugs:jsr305:3.0.1'
+        classpath 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+        classpath 'joda-time:joda-time:2.9.1'
+    }
+}
+
+configurations {
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
+    all*.exclude group: 'ant', module: 'ant'
+    all*.exclude group: 'awtui', module: 'awtui'
+    all*.exclude group: 'swingui', module: 'swingui'
+
+    dexify
+}
+
+apply plugin: 'java'
+apply plugin: 'jsonschema2pojo'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+version = '1.1'
+
+/**
+ * Create a signed archive of the models in Android bytecode (classes.dex).
+ * Expects project properties to be defined:
+ * outfile: the output jar
+ * keystore: relative path/file name for the signing keystore
+ * alias: the signing keystore alias
+ * keypass: keypass/storepass for the signing keystore
+*/
+jar {
+    dependsOn ':dexify'
+    metadataCharset = 'UTF-8'
+    manifestContentCharset = 'UTF-8'
+    manifest {
+        attributes 'Implementation-Title': 'DRIVER Android models',
+        'Implementation-Version': version
+    }
+
+    // Omit all the class files and their directories; only need classes.dex in the jar.
+    // Including class files with unicode names run through the dexifier will confuse jarsigner.
+    exclude('**/org/**')
+
+    from ("${projectDir}") {
+        include('classes.dex')
+    }
+
+    doLast {
+        ant.signjar(signedjar: outfile,
+            jar: jar.archivePath,
+            alias: alias,
+            keystore: keystore,
+            storepass: keypass,
+            keypass: keypass,
+            verbose: "true",
+            tsaurl: "http://timestamp.digicert.com",
+            sigalg: "SHA1withRSA",
+            digestalg: "SHA1"
+        )
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://jitpack.io" }
+}
+
+// convert compiled Java classes to Android bytecode; outputs classes.dex file
+task dexify (type: JavaExec) {
+    classpath = configurations.dexify
+    main = 'com.android.dx.command.Main'
+    jvmArgs '-Dfile.encoding="UTF-8"'
+    setDefaultCharacterEncoding 'UTF-8'
+    args '--dex', '--debug', '--keep-classes', '--verbose', '--output=classes.dex', "${project.buildDir}/classes/main"
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    configurations {
+        all*.exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile 'com.google.code.gson:gson:2.4'
+    compile('com.github.WorldBank-Transport:jsonschema2pojo:jsonschema2pojo-0.4.24-annotate-type') {
+        // only want core
+        exclude module: 'jsonschema2pojo-ant'
+        exclude module: 'jsonschema2pojo-cli'
+        exclude module: 'jsonschema2pojo-maven-plugin'
+        exclude module: 'jsonschema2pojo-gradle-plugin'
+        exclude module: 'jsonschema2pojo-integration-tests'
+
+        exclude group: 'javax.validation', module: 'validation-api'
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'android', module: 'net'
+    }
+
+    // used by jsonschema2pojo
+    compile 'javax.validation:validation-api:1.1.0.Final'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'joda-time:joda-time:2.9.1'
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.6.3'
+    compile 'javax.annotation:javax.annotation-api:1.2'
+    compile 'org.joda:joda-convert:1.8.1'
+    compile 'com.google.code.findbugs:jsr305:3.0.1'
+
+    // to make Dalvik VM DEX code from the JAR
+    // expects env variable DX_JAR_PATH to be set to location of dx.jar
+    dexify files(System.getenv('DX_JAR_PATH'))
+}
+
+// If this configuration is changed, the config used in UpdateSchemaTask should be updated as well.
+jsonSchema2Pojo {
+    // Whether to generate builder-style methods of the form withXxx(value) (that return this),
+    // alongside the standard, void-return setters.
+    generateBuilders = false
+
+    usePrimitives = false
+
+    // Location of the JSON Schema file(s). This may refer to a single file or a directory of files.
+    //source = files("${sourceSets.main.output.resourcesDir}/json")
+
+    // expects project property `sourcedir` to be passed in with the name of the output JAR
+    source = files(sourcedir)
+
+    // Target directory for generated Java source files. The plugin will add this directory to the
+    // java source set so the compiler will find and compile the newly generated source files.
+    targetDirectory = file("${project.buildDir}/generated/source/js2p")
+
+    // Package name used for generated Java classes (for types where a fully qualified name has not
+    // been supplied in the schema using the 'javaType' property).
+    targetPackage = 'org.worldbank.transport.driver.models'
+
+    // The characters that should be considered as word delimiters when creating Java Bean property
+    // names from JSON property names. If blank or not set, JSON properties will be considered to
+    // contain a single word when creating Java Bean property names.
+    propertyWordDelimiters = [' ','_'] as char[]
+
+    // Whether to use the java type long (or Long) instead of int (or Integer) when representing the
+    // JSON Schema type 'integer'.
+    useLongIntegers = false
+
+    // Whether to use the java type double (or Double) instead of float (or Float) when representing
+    // the JSON Schema type 'number'.
+    useDoubleNumbers = true
+
+    // Whether to include hashCode and equals methods in generated Java types.
+    includeHashcodeAndEquals = true
+
+    // Whether to include a toString method in generated Java types.
+    includeToString = true
+
+    includeAccessors = false
+
+    includeAdditionalProperties = false
+
+    annotationStyle = 'gson'
+
+    //customAnnotator = 'org.jsonschema2pojo.NoopAnnotator'
+    customAnnotator = 'org.jsonschema2pojo.JsonEditorAnnotator'
+
+    includeJsr303Annotations = true
+
+    sourceType = 'jsonschema'
+
+    removeOldOutput = true
+
+    outputEncoding = 'UTF-8'
+
+    useJodaDates = false
+
+    useCommonsLang3 = false
+
+    // Whether to initialize Set and List fields as empty collections, or leave them as null.
+    initializeCollections = true
+
+    // **EXPERIMENTAL** Whether to make the generated types Parcelable for Android
+    parcelable = false
+}

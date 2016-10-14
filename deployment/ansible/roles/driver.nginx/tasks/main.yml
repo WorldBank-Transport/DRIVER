@@ -1,0 +1,24 @@
+---
+- name: Configure Nginx site
+  template: src=nginx-app.conf.j2
+            dest=/etc/nginx/sites-available/driver-app.conf
+  notify:
+    - Restart Nginx
+
+- name: Enable Nginx site
+  file: src=/etc/nginx/sites-available/driver-app.conf
+        dest=/etc/nginx/sites-enabled/driver-app
+        state=link
+  notify:
+    - Restart Nginx
+
+- name: Configure Nginx log format
+  template: src=log-format.conf.j2
+            dest=/etc/nginx/conf.d/log-format.conf
+  notify:
+    - Restart Nginx
+
+- name: Set up monit monitoring of nginx for app
+  template: src=monit-nginx-app.cfg.j2 dest=/etc/monit/conf.d/driver-app-nginx.cfg
+  notify:
+    - Restart monit

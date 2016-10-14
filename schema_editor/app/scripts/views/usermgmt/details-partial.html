@@ -1,0 +1,43 @@
+<div class="form-area">
+    <div class="col-sm-8 col-sm-offset-3">
+        <ase-notifications></ase-notifications>
+        <div class="form-area-heading">
+            <h2>Details for User Account</h2>
+            <div class="content-border"></div>
+        </div>
+        <div class="well">
+            <div>
+                <div class="row">
+                    <div class="col-sm-2"><label>User ID:</label></div>
+                    <div class="col-sm-4">{{ ::UserDetails.user.id }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>E-mail:</label></div>
+                    <div class="col-sm-4">{{ ::UserDetails.user.email }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Administrator?</label></div>
+                    <div class="col-sm-4">
+                        <span ng-show="UserDetails.user.isAdmin">Yes</span>
+                        <span ng-show="!UserDetails.user.isAdmin">No</span>
+                    </div>
+                </div>
+                <div class="row" ng-if="UserDetails.user.groups.length > 0">
+                    <div class="col-sm-2"><label>Groups:</label></div>
+                    <div class="col-sm-4">
+                        <span>{{ ::UserDetails.user.groups.join(', ') }}</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Account Created:</label></div>
+                    <div class="col-sm-4">{{ ::UserDetails.user.date_joined | date:'MM/dd/yyyy h:mm a' }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2"><label>Token:</label></div>
+                    <div class="col-sm-4">{{ ::UserDetails.user.token }}</div>
+                </div>
+            </div>
+        </div>
+        <button ui-sref="usermgmt.list" class="btn btn-default">Go Back</button>
+    </div>
+</div>

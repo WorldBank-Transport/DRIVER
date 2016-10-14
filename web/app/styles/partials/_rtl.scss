@@ -1,0 +1,219 @@
+body.rtl {
+  direction: RTL !important;
+
+  .quick-map {
+    left: 2%;
+  }
+
+  .dashboard .block.quick-map h3 .small {
+    float: left !important;
+  }
+
+  .calendars-month {
+    width: auto;
+  }
+
+  .enforcer-assignment-modal {
+    .time-picker {
+      left: auto;
+      right: 20px;
+    }
+
+    .date-picker {
+      float: right;
+    }
+
+    .calendars-trigger {
+      border-radius: 0;
+      border: 1px solid #ccc;
+      border-left: 0;
+    }
+
+    input {
+      border-radius: 0;
+      border: 1px solid #ccc;
+    }
+  }
+
+  .dashboard {
+      .blackspots-disabled {
+          .block {
+              &.block-2x1 {
+                  right: 2%;
+              }
+              &.block-1x2 {
+                  &:nth-child(1) {
+                      left: auto;
+                      right: 2%;
+                  }
+                  &:nth-child(2) {
+                      left: auto;
+                      right: 2%;
+                  }
+                  &:nth-child(3) {
+                      left: 2%;
+                      right: auto;
+                  }
+                  &:nth-child(4) {
+                      left: 2%;
+                      right: auto;
+                  }
+              }
+              &.block-1x1 {
+                  left: 35%;
+                  &:nth-child(5) {
+                      left: auto;
+                      right: 51%;
+                  }
+                  &:nth-child(6) {
+                      left: auto;
+                      right: 72%;
+                  }
+              }
+          }
+      }
+  }
+
+  .navbar-header {
+    float: right;
+  }
+
+  .navbar-nav {
+    float: right !important;
+
+    > li {
+      float: right !important;
+    }
+  }
+
+  .filterbar .navbar-nav {
+    padding-right: 0;
+    &:first-child {
+      padding-right: 0;
+      margin-right: 0;
+    }
+    &:last-child {
+      padding-right: 10px;
+      margin-right: 0;
+    }
+  }
+
+  .filterbar > .pull-right {
+    right: auto;
+    left: 10px;
+  }
+
+  .navbar-right {
+    float: left !important;
+  }
+
+  .navbar-brand {
+    border-left: 1px solid #68748A;
+    border-right: 0;
+  }
+
+  .pull-right {
+    float: left !important;
+  }
+
+  .pull-left {
+    float: right !important;
+  }
+
+  .dropdown-menu {
+    text-align: right;
+  }
+
+  .navbar-right .dropdown-menu:not(.datepicker) {
+    left: 0;
+    right: auto;
+  }
+
+  .dropdown-menu:not(.datepicker) {
+    left: auto;
+    right: 0;
+  }
+
+  table th {
+    text-align: right;
+  }
+
+  .bootstrap-select>.dropdown-toggle {
+    padding-right: 12px;
+    padding-left: 25px;
+  }
+
+  .bootstrap-select.btn-group .dropdown-toggle .caret {
+    right: auto;
+    left: 12px;
+  }
+
+  .table-view .table-view-container .links a {
+    float: right;
+  }
+
+  .modal .close {
+    left: -15px;
+    right: auto;
+  }
+
+  .leaflet-draw-tooltip {
+    margin-right: 20px;
+    margin-left: auto;
+    &:before {
+      border-left: 6px solid #000;
+      border-left-color: rgba(0,0,0,.5);
+      right: -13px;
+      border-right-color: transparent;
+      border-left: 6px solid #000;
+      border-left-color: rgba(0,0,0,.5);
+      left: auto;
+    }
+  }
+
+  .leaflet-draw-actions li:last-child a {
+    border-right: 1px solid rgba(255,255,255,0.5);
+    border-radius: 0;
+  }
+
+  .form-inline .input-group > .form-control.num-range-style {
+    border-radius: 0;
+  }
+
+  .input-group-addon:last-child {
+    border-left: 1px solid #ccc;
+  }
+
+  .json-editor-form {
+    json-editor {
+      > div > .well > div > div > .row {
+        > div {
+          > h3 {
+            .btn-group {
+              float: left;
+            }
+          }
+
+          &[data-schematype="array"] > .well.well-sm > div > [data-schematype="object"] {
+            h3 .btn-group {
+              float: left;
+            }
+          }
+        }
+      }
+      .jse-Checkbox {
+        float: right !important;
+        margin-left: 2px;
+      }
+      .glyphicon-chevron-right:before {
+        content: "\e079";
+      }
+    }
+  }
+}
+
+.text-right-on-rtl {
+  .rtl & {
+    text-align: right !important;
+  }
+}

@@ -1,0 +1,24 @@
+---
+- name: Configure Nginx site
+  template: src=nginx-app.conf.j2
+            dest=/etc/nginx/sites-available/driver-celery.conf
+  notify:
+    - Restart Nginx
+
+- name: Enable Nginx site
+  file: src=/etc/nginx/sites-available/driver-celery.conf
+        dest=/etc/nginx/sites-enabled/driver-celery
+        state=link
+  notify:
+    - Restart Nginx
+
+- name: Configure Nginx log format
+  template: src=log-format.conf.j2
+            dest=/etc/nginx/conf.d/log-format.conf
+  notify:
+    - Restart Nginx
+
+- name: Set up monit monitoring of celery nginx server
+  template: src=monit-driver-nginx-celery.cfg.j2 dest=/etc/monit/conf.d/driver-celery-nginx.cfg
+  notify:
+    - Restart monit

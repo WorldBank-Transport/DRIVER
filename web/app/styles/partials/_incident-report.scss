@@ -1,0 +1,187 @@
+.incident-report {
+
+    &.single {
+        margin: 40px 0 20px;
+
+        @media print {
+            margin: 0;
+
+            label {
+                font-size: 10px;
+            }
+
+            .col-sm-2 {
+                width: 15%;
+                display: inline-block;
+            }
+            .col-sm-3 {
+                width: 24%;
+                display: inline-block;
+            }
+            .col-sm-5 {
+                width: 41%;
+                display: inline-block;
+            }
+            .col-sm-6 {
+                width: 48%;
+                display: inline-block;
+            }
+            .alert,
+            .btn {
+                display: none;
+            }
+        }
+
+        .report-header {
+            margin: 0;
+            padding: 0 0 15px;
+            border-bottom: 5px solid #ddd;
+        }
+        .report-content {
+            padding-top: 0;
+
+            h2 {
+                background: $light-gray;
+                padding: 12px 16px;
+
+                @media print {
+                    padding: 10px 0;
+                }
+            }
+        }
+    }
+    &.modal {
+        background: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        border-radius: 0;
+        border: none;
+        padding: 15px;
+    }
+    .modal-footer {
+        margin: 15px -15px -15px;
+    }
+    .edit {
+        font-size: 14px;
+        font-weight: 700;
+        
+        .glyphicon { font-size: 12px; margin-right: 3px; }
+    }
+    .close {
+        @include close-modal();
+    }
+    .alert {
+        margin: 15px 0 0;
+    }
+
+    .report-header {
+        border-bottom: 1px solid #ddd;
+        margin: 0 -15px 0 -15px;
+        padding: 0 15px 15px;
+
+        h1 {
+            font-size: 30px;
+            font-weight: 400;
+            margin: 0;
+
+            small {
+                margin-left: 5px;
+                font-size: 18px;
+                font-weight: 700;
+                color: #AAA;
+            }
+        }
+        h3 small {
+            margin-left: 10px;
+            
+            a {
+                font-weight: 700;
+                text-decoration: underline;
+            }
+        }
+    }
+    .report-sections {
+        margin: 0 -15px;
+        background-color: $light-gray;
+        padding: 5px 8px 0;
+
+        a { font-weight: 700; }
+    }
+    .report-content {
+        padding-top: 25px;
+
+        h2 {
+            margin: 0 0 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+            font-size: 24px;
+            font-weight: 400;
+
+            .edit {
+                margin-top: 12px;
+            }
+        }
+        hr {
+            margin: 30px 0;
+
+            @media print {
+                margin: 20px 0;
+            }
+        }
+    }
+    .map {
+        height: 300px;
+        margin-bottom: 10px;
+    }
+
+    .table {
+        .table-head {
+            padding: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            color: #AAA;
+            border-bottom: 4px solid #ddd;
+
+            @media print {
+                font-size: 10px;
+                padding: 10px 0;
+            }
+        }
+        .table-body {
+            .table-body-row {
+                .table-body-row-header {
+                    padding: 10px;
+                    border-bottom: 1px solid #ddd;
+                    cursor: pointer;
+
+                    @media print {
+                        padding: 10px 0;
+                    }
+
+                    &.open {
+                        background-color: $light-gray;
+
+                        & + .table-body-row-content {
+                            max-height: 1000px;
+                            padding: 20px 15px;
+                            border-bottom: 1px solid #ddd;
+
+                            @media print {
+                                padding: 10px 0;
+                            }
+                        }
+                    }
+                }
+                .table-body-row-content {
+                    height: auto;
+                    max-height: 0;
+                    overflow: hidden;
+                    padding: 0;
+                    transition: 0.5 all;
+                }
+            }
+        }
+    }
+}

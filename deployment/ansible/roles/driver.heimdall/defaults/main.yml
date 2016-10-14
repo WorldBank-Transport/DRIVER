@@ -1,0 +1,5 @@
+---
+heimdall_version: "0.2.3"
+heimdall_install_path: "/usr/local/bin/heimdall"
+heimdall_db_user: "heimdall"
+heimdall_lock_db: "lockspace"

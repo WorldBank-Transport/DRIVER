@@ -1,0 +1,20 @@
+---
+
+# Installs packages/dependencies for database servers
+
+- hosts: all
+
+  pre_tasks:
+    - name: Gather EC2 facts
+      action: ec2_facts
+
+- hosts: database-servers
+
+  become: True
+
+  pre_tasks:
+    - name: Update APT cache
+      apt: update_cache=yes
+
+  roles:
+    - { role: "driver.database" }

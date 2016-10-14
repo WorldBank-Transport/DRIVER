@@ -1,0 +1,68 @@
+<div class="table-view">
+    <div class="table-view-container">
+        <div class="overflow">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{{ 'RECORD.DATE_AND_TIME' | translate }}</th>
+
+                        <th ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
+                            {{ ::headerKey }}
+                        </th>
+
+                        <!-- View/Edit links -->
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div class="loadingrecords" ng-if="ctl.loadingRecords">
+                        <fading-circle-spinner></fading-circle-spinner>
+                    </div>
+                    <tr ng-if="!ctl.loadingRecords" ng-repeat="record in ctl.records.results">
+                        <td class="date">
+                            {{ ::record.occurred_to | localizeRecordDate: 'numeric':'time' }}
+                        </td>
+                        <td class="detail" ng-repeat="headerKey in ctl.headerKeys | limitTo : ctl.maxDataColumns">
+                            <driver-details-field
+                                compact="true"
+                                data="::record.data[ctl.detailsPropertyKey][headerKey]"
+                                record="::record"
+                                property="::ctl.recordSchema.schema.definitions[ctl.detailsPropertyKey].properties[headerKey]">
+                            </driver-details-field>
+                        </td>
+
+                        <td class="links">
+                            <a ng-click="ctl.showDetailsModal(record)">
+                                <span class="glyphicon glyphicon-log-in"></span> {{ 'COMMON.VIEW' | translate }}
+                            </a>
+                            <a ng-if="::ctl.userCanWrite"
+                                ui-sref="record.edit({ rtuuid: ctl.recordType.uuid, recorduuid: record.uuid })">
+                                <span class="glyphicon glyphicon-pencil"></span> {{ 'COMMON.EDIT' | translate }}
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pager" ng-if="!ctl.loadingRecords">
+                    <li class="previous" ng-if="ctl.records.previous">
+                        <a type="button" class="btn btn-default" ng-click="ctl.getPreviousRecords()">
+                            <span aria-hidden="true">&larr;</span> {{ 'COMMON.PREVIOUS' | translate }}</a>
+                    </li>
+                    <li ng-if="ctl.records.count" class="text-center">
+                        <i>
+                            {{ 'RECORD.SHOWING_RESULTS' | translate }}
+                            {{ ctl.currentOffset + 1}} -
+                            {{ ctl.currentOffset + ctl.records.results.length }} {{ 'COMMON.OF' | translate }}
+                            {{ ctl.records.count }}
+                        </i>
+                    </li>
+                    <li class="next" ng-if="ctl.records.next">
+                        <a type="button" class="btn btn-default" ng-click="ctl.getNextRecords()">
+                            {{ 'COMMON.NEXT' | translate }} <span aria-hidden="true">&rarr;</span></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

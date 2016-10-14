@@ -1,0 +1,4 @@
+check program driver-celery with path "/bin/sh -c 'docker top driver-celery'"
+  if status != 0 then alert
+  start program = "/usr/sbin/service driver-celery start"
+  stop program = "/usr/sbin/service driver-celery stop"

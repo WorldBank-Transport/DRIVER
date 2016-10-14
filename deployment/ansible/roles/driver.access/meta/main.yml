@@ -1,0 +1,4 @@
+---
+# Dependencies for driver.access role
+dependencies:
+  - { role: "driver.database" }

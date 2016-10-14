@@ -1,0 +1,10 @@
+<div class="confirmation-modal">
+    <div class="modal-body">
+        {{ 'MANAGEMENT.REALLY_ARCHIVE' | translate }}
+        {{ 'MANAGEMENT.ARCHIVE_NOTE' | translate }}
+    </div>
+    <div class="modal-footer">
+        <div class="select confirm" ng-click="$close()">{{ 'COMMON.YES' | translate }}</div>
+        <div class="select dismiss" ng-click="$dismiss('cancel')">{{ 'COMMON.NO' | translate }}</div>
+    </div>
+</div>
