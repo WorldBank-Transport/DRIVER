@@ -471,6 +471,22 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
             return self._make_choices_case(schema, request.query_params[param].split(','))
 
+    def _get_day_label(self, week_day_index):
+        """Constructs a day translation label string given a week day index
+
+        Args:
+            week_day_index (int): Django `week_day` property (1-indexed, starting with Sunday)
+
+        Returns:
+            A string representing the day translation label
+        """
+        # week_day is 1-indexed and starts with Sunday, whereas day_name
+        # is 0-indexed and starts with Monday, so we need to map indices as follows:
+        # 1,2,3,4,5,6,7 -> 6,0,1,2,3,4,5 for Sunday through Saturday
+        return 'DAY.{}'.format(
+            calendar.day_name[6 if week_day_index == 1 else week_day_index - 2].upper()
+        )
+
     def _make_gregorian_period_case(self, period_type, request, queryset):
         """Constructs a Django Case statement for a certain type of period.
 
@@ -516,7 +532,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 'lookup': lambda x: {'occurred_from__week_day': x},
                 'label': lambda x: [
                     {
-                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
+                        'text': self._get_day_label(x),
                         'translate': True
                     }
                 ]
@@ -678,7 +694,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 'lookup': lambda x: {'occurred_from__week_day': x},
                 'label': lambda x: [
                     {
-                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
+                        'text': self._get_day_label(x),
                         'translate': True
                     }
                 ]
