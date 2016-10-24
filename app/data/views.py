@@ -796,7 +796,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             return (Case(*whens, output_field=CharField()), labels)
 
         elif period['type'] == 'builtin':
-            self._build_case_from_period(period)
+            return self._build_case_from_period(period)
 
     def _build_case_from_period(self, period):
         whens = []  # Eventual list of When-clause objects
