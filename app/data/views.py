@@ -271,6 +271,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                             status=status.HTTP_404_NOT_FOUND)
         schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
         path = cost_config.path
+        multiple = self._is_multiple(schema, path)
         choices = self._get_schema_enum_choices(schema, path)
         # `choices` may include user-entered data; to prevent users from entering column names
         # that conflict with existing Record fields, we're going to use each choice's index as an
@@ -278,7 +279,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         choice_indices = {str(idx): choice for idx, choice in enumerate(choices)}
         counts_queryset = self.get_filtered_queryset(request)
         for idx, choice in choice_indices.items():
-            filter_rule = self._make_djsonb_containment_filter(path, choice)
+            filter_rule = self._make_djsonb_containment_filter(path, choice, multiple)
             # We want a column for each enum choice with a binary 1/0 indication of whether the row
             # in question has that enum choice. This is to support checkbox fields which can have
             # more than one selection from the enum per field. Then we're going to sum those to get
@@ -470,6 +471,22 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
             return self._make_choices_case(schema, request.query_params[param].split(','))
 
+    def _get_day_label(self, week_day_index):
+        """Constructs a day translation label string given a week day index
+
+        Args:
+            week_day_index (int): Django `week_day` property (1-indexed, starting with Sunday)
+
+        Returns:
+            A string representing the day translation label
+        """
+        # week_day is 1-indexed and starts with Sunday, whereas day_name
+        # is 0-indexed and starts with Monday, so we need to map indices as follows:
+        # 1,2,3,4,5,6,7 -> 6,0,1,2,3,4,5 for Sunday through Saturday
+        return 'DAY.{}'.format(
+            calendar.day_name[6 if week_day_index == 1 else week_day_index - 2].upper()
+        )
+
     def _make_gregorian_period_case(self, period_type, request, queryset):
         """Constructs a Django Case statement for a certain type of period.
 
@@ -515,7 +532,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 'lookup': lambda x: {'occurred_from__week_day': x},
                 'label': lambda x: [
                     {
-                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
+                        'text': self._get_day_label(x),
                         'translate': True
                     }
                 ]
@@ -677,7 +694,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                 'lookup': lambda x: {'occurred_from__week_day': x},
                 'label': lambda x: [
                     {
-                        'text': 'DAY.{}'.format(calendar.day_name[x - 1].upper()),
+                        'text': self._get_day_label(x),
                         'translate': True
                     }
                 ]
@@ -779,7 +796,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             return (Case(*whens, output_field=CharField()), labels)
 
         elif period['type'] == 'builtin':
-            self._build_case_from_period(period)
+            return self._build_case_from_period(period)
 
     def _build_case_from_period(self, period):
         whens = []  # Eventual list of When-clause objects
@@ -846,6 +863,24 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         return (Case(*[When(geom__within=poly.geom, then=Value(poly.pk)) for poly in polygons],
                      output_field=UUIDField()), labels)
 
+    def _is_multiple(self, schema, path):
+        """Determines whether this related object type has a multiple item configuration
+
+        Args:
+            schema (RecordSchema): A RecordSchema to get properties from
+            path (list): A list of path fragments to navigate to the desired property
+        Returns:
+            True if this related object type has a multiple item configuration
+        """
+        # The related key is always the first item appearing in the path
+        try:
+            return schema.schema['definitions'][path[0]]['multiple']
+        except:
+            # This shouldn't ever fail, but in case a bug causes the schema to change, treat
+            # the related type as non-multiple, since that's the main use-case
+            logger.exception('Exception obtaining multiple with path: %s', path)
+            return False
+
     def _make_choices_case(self, schema, path):
         """Constructs a Django Case statement for the choices of a schema property
 
@@ -856,10 +891,12 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             (Case, labels), where Case is a Django Case object with the choice of each record,
             and labels is a dict matching choices to their labels (currently the same).
         """
+
+        multiple = self._is_multiple(schema, path)
         choices = self._get_schema_enum_choices(schema, path)
         whens = []
         for choice in choices:
-            filter_rule = self._make_djsonb_containment_filter(path, choice)
+            filter_rule = self._make_djsonb_containment_filter(path, choice, multiple)
             whens.append(When(data__jsonb=filter_rule, then=Value(choice)))
         labels = [
             {'key': choice, 'label': [{'text': choice, 'translate': False}]}
@@ -896,12 +933,13 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ParseError(detail="The property at choices_path is missing required 'enum' field")
         return choices
 
-    def _make_djsonb_containment_filter(self, path, value):
+    def _make_djsonb_containment_filter(self, path, value, multiple):
         """Returns a djsonb containment filter for a path to contain a value
 
         Args:
             path (list): A list of strings denoting the path
             value (String): The value to match on
+            multiple (Boolean): True if this related object type has a multiple item configuration
         Returns:
             A dict representing a valid djsonb containment filter specification that matches if the
             field at path contains value
@@ -915,7 +953,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         # The string value handles dropdown types, while the array handles checkbox types.
         # Since an admin may switch between dropdowns and checkboxes at any time, performing
         # both checks guarantees the filter will be correctly applied for data in both formats.
-        filter_rule = dict(_rule_type='containment', contains=[value, [value]])
+        rule_type = 'containment_multiple' if multiple else 'containment'
+        filter_rule = dict(_rule_type=rule_type, contains=[value, [value]])
         for component in filter_path:
             # Nest filter inside itself so we eventually get something like:
             # {"incidentDetails": {"severity": {"_rule_type": "containment"}}}
