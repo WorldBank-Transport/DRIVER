@@ -72,6 +72,15 @@ class ViewTestSetUpMixin(object):
                         }
                     }
                 },
+                "multiDetails": {
+                    "multiple": True,
+                    "properties": {
+                        "MultiProperty": {
+                            "displayType": "select",
+                            "enum": ["Multi1", "Multi2"]
+                        }
+                    }
+                }
             },
         }
 
@@ -222,7 +231,23 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
 
         self.date1 = datetime(2015, 12, 12, 2, 0, 0, 0, pytz.timezone('Asia/Manila'))
         self.date2 = datetime(2016, 2, 29, 13, 0, 0, 0, pytz.timezone('Asia/Manila'))
-        data = {'objectDetails': {'Itness': 'It', 'ItnessMultiple': 'It multi'}}
+        data = {
+            'objectDetails': {
+                'Itness': 'It',
+                'ItnessMultiple': 'It multi'
+            },
+            'multiDetails': [
+                {
+                    'MultiProperty': 'Multi1'
+                },
+                {
+                    'MultiProperty': 'Multi2'
+                },
+                {
+                    'MultiProperty': 'Multi2'
+                }
+            ]
+        }
 
         Record.objects.create(occurred_from=self.date1, occurred_to=self.date1,
                               geom='POINT (120.97 14.62)', location_text='Manila',
@@ -268,6 +293,64 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
                                   max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
         response = json.loads(self.admin_client.get(url).content)
         self.assertEqual(response['tables'][0]['data']['2016']['It multi'], 1)
+
+    def test_year_by_property_multi(self):
+        """Test that 'multiple' related types within a record each get counted in aggregation"""
+        url_template = (self.url + '&row_period_type=year' +
+                        '&col_choices_path=multiDetails,properties,MultiProperty&calendar=gregorian')
+        url = url_template.format(record_type=str(self.record_type.uuid),
+                                  min=(self.date1 - timedelta(days=1)).isoformat() + 'Z',
+                                  max=(self.date2 + timedelta(days=1)).isoformat() + 'Z')
+        response = json.loads(self.admin_client.get(url).content)
+        response_data = response['tables'][0]['data']
+
+        # The test data includes one record that contains both a 'Multi1' and a 'Multi2'
+        self.assertTrue('Multi1' in response_data['2016'], 'No key for Multi1')
+        self.assertEqual(response_data['2016']['Multi1'], 1)
+        self.assertTrue('Multi2' in response_data['2016'], 'No key for Multi2')
+        self.assertEqual(response_data['2016']['Multi2'], 1)
+
+        # Add another Multi1 and verify counts
+        Record.objects.create(
+            occurred_from=self.date2, occurred_to=self.date2,
+            geom='POINT (120.97 14.62)', location_text='Manila',
+            schema=self.schema, data={
+                'multiDetails': [
+                    {
+                        'MultiProperty': 'Multi1'
+                    }
+                ]
+            })
+
+        response = json.loads(self.admin_client.get(url).content)
+        response_data = response['tables'][0]['data']
+        self.assertTrue('Multi1' in response_data['2016'], 'No key for Multi1')
+        self.assertEqual(response_data['2016']['Multi1'], 2)
+        self.assertTrue('Multi2' in response_data['2016'], 'No key for Multi2')
+        self.assertEqual(response_data['2016']['Multi2'], 1)
+
+        # Add another Multi1/Multi2 and verify counts
+        Record.objects.create(
+            occurred_from=self.date2, occurred_to=self.date2,
+            geom='POINT (120.97 14.62)', location_text='Manila',
+            schema=self.schema, data={
+                'multiDetails': [
+                    {
+                        'MultiProperty': 'Multi1'
+                    },
+                    {
+                        'MultiProperty': 'Multi2'
+                    }
+                ]
+            })
+
+        response = json.loads(self.admin_client.get(url).content)
+        response_data = response['tables'][0]['data']
+        self.assertTrue('Multi1' in response_data['2016'], 'No key for Multi1')
+        self.assertEqual(response_data['2016']['Multi1'], 3)
+        self.assertTrue('Multi2' in response_data['2016'], 'No key for Multi2')
+        self.assertEqual(response_data['2016']['Multi2'], 2)
+
 
 
 class DriverRecordSchemaViewTestCase(APITestCase):

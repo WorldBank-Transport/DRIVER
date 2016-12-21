@@ -1,3 +1,4 @@
+from collections import defaultdict
 import json
 import logging
 import uuid
@@ -412,10 +413,10 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         # Pass parameters to case-statement generators
         row_param = row_params.pop()  # Guaranteed to be just one at this point
         col_param = col_params.pop()
-        row_case, row_labels = self._query_param_to_case_stmnt(row_param, request, queryset)
-        col_case, col_labels = self._query_param_to_case_stmnt(col_param, request, queryset)
-        # Apply case statements to filtered queryset
-        annotated_qs = queryset.annotate(row=row_case).annotate(col=col_case)
+        row_multi, row_labels, annotated_qs = self._query_param_to_annotated_tuple(
+            row_param, request, queryset, 'row')
+        col_multi, col_labels, annotated_qs = self._query_param_to_annotated_tuple(
+            col_param, request, annotated_qs, 'col')
 
         # If aggregation_boundary_id exists, grab the associated BoundaryPolygons.
         tables_boundary = request.query_params.get('aggregation_boundary', None)
@@ -434,42 +435,148 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                                         for poly in boundaries}
             # Filter by polygon for counting
             for poly in boundaries:
-                table = self._fill_table(annotated_qs.filter(geom__within=poly.geom))
+                table = self._fill_table(
+                    annotated_qs.filter(geom__within=poly.geom),
+                    row_multi, row_labels, col_multi, col_labels)
                 table['tablekey'] = poly.pk
                 response['tables'].append(table)
         else:
-            response['tables'].append(self._fill_table(annotated_qs))
+            response['tables'].append(self._fill_table(
+                annotated_qs, row_multi, row_labels, col_multi, col_labels))
         return Response(response)
 
-    def _fill_table(self, annotated_qs):
+    def _fill_table(self, annotated_qs, row_multi, row_labels, col_multi, col_labels):
         """ Fill a nested dictionary with the counts and compute row totals. """
-        data = {}
-        for value in (annotated_qs.values('row', 'col')
-                      .order_by('row', 'col')
-                      .annotate(count=Count('row'))):
-            data.setdefault(unicode(value['row']), {})[unicode(value['col'])] = value['count']
+
+        # The data being returned is a nested dictionary: row label -> col labels = integer count
+        data = defaultdict(lambda: defaultdict(int))
+
+        if not row_multi and not col_multi:
+            # Not in multi-mode: sum rows/columns by a simple count annotation.
+            # This is the normal case.
+            # Note: order_by is necessary here -- it's what triggers django to do a group by.
+            for value in (annotated_qs.values('row', 'col')
+                          .order_by('row', 'col')
+                          .annotate(count=Count('row'))):
+                if value['row'] is not None and value['col'] is not None:
+                    data[unicode(value['row'])][unicode(value['col'])] = value['count']
+        elif row_multi and col_multi:
+            # The row and column are in multi-mode, iterate to build up counts.
+            # This is a very rare case, since creating a report between two 'multiple' items
+            # doesn't seem very useful, at least with the current set of data. We may even end
+            # up restricting this via the front-end. But until then, it's been implemented
+            # here, and it works, but is on the slow side, since it needs to manually aggregate.
+            for record in annotated_qs:
+                rd = record.__dict__
+                row_ids = [
+                    unicode(label['key'])
+                    for label in row_labels
+                    if rd['row_{}'.format(label['key'])] > 0
+                ]
+                col_ids = [
+                    unicode(label['key'])
+                    for label in col_labels
+                    if rd['col_{}'.format(label['key'])] > 0
+                ]
+                # Each object has row_* and col_* fields, where a value > 0 indicates presence.
+                # Increment the counter for each combination.
+                for row_id in row_ids:
+                    for col_id in col_ids:
+                        data[row_id][col_id] += 1
+        else:
+            # Either the row or column is a 'multiple' item, but not both.
+            # This is a relatively common case and is still very fast since the heavy-lifting
+            # is all done within the db.
+            if row_multi:
+                multi_labels = row_labels
+                single_label = 'col'
+                multi_prefix = 'row'
+            else:
+                multi_labels = col_labels
+                single_label = 'row'
+                multi_prefix = 'col'
+
+            multi_labels = [
+                '{}_{}'.format(multi_prefix, unicode(label['key']))
+                for label in multi_labels
+            ]
+
+            # Perform a sum on each of the 'multi' columns, storing the data in a sum_* field
+            annotated_qs = (
+                annotated_qs.values(single_label, *multi_labels)
+                .order_by()
+                .annotate(**{'sum_{}'.format(label): Sum(label) for label in multi_labels}))
+
+            # Iterate over each object and accumulate each sum in the proper dictionary position.
+            # Each object either has a 'row' and several 'col_*'s or a 'col' and several 'row_*'s.
+            # Get the combinations accordingly and accumulate the appropriate stored value.
+            for rd in annotated_qs:
+                for multi_label in multi_labels:
+                    sum_val = rd['sum_{}'.format(multi_label)]
+                    if row_multi and rd['col'] is not None:
+                        data[multi_label[4:]][rd['col']] += sum_val
+                    elif rd['row'] is not None:
+                        data[rd['row']][multi_label[4:]] += sum_val
 
         row_totals = {row: sum(cols.values()) for (row, cols) in data.items()}
-
         return {'data': data, 'row_totals': row_totals}
 
-    def _query_param_to_case_stmnt(self, param, request, queryset):
-        """Wrapper to handle getting the params for each case generator because we do it twice"""
+    def _get_annotated_tuple(self, queryset, annotation_id, case, labels):
+        """Helper wrapper for annotating a queryset with a case statement
+
+        Args:
+          queryset (QuerySet): The input queryset
+          annotation_id (String): 'row' or 'col'
+          case (Case): The generated Case statement
+          labels (dict<Case, String>): dict mapping Case values to labels
+
+        Returns:
+            A 3-tuple of:
+              - boolean which specifies whether or not this is a 'multiple' query (always False)
+              - dict mapping Case values to labels
+              - the newly-annotated queryset
+        """
+        kwargs = {}
+        kwargs[annotation_id] = case
+        annotated_qs = queryset.annotate(**kwargs)
+        return (False, labels, annotated_qs)
+
+    def _query_param_to_annotated_tuple(self, param, request, queryset, annotation_id):
+        """Wrapper to handle getting the params for each case generator because we do it twice. TODO....."""
         try:
             record_type_id = request.query_params['record_type']
         except KeyError:
             raise ParseError(detail="The 'record_type' parameter is required")
+
         if param.endswith('period_type'):
             query_calendar = request.query_params.get('calendar')
             if (query_calendar == 'gregorian'):
-                return self._make_gregorian_period_case(request.query_params[param], request, queryset)
+                return self._get_annotated_tuple(
+                    queryset, annotation_id,
+                    *self._make_gregorian_period_case(
+                        request.query_params[param], request, queryset))
             elif (query_calendar == 'ummalqura'):
-                return self._make_ummalqura_period_case(request.query_params[param], request, queryset)
+                return self._get_annotated_tuple(
+                    queryset, annotation_id,
+                    *self._make_ummalqura_period_case(
+                        request.query_params[param], request, queryset))
         elif param.endswith('boundary_id'):
-            return self._make_boundary_case(request.query_params[param])
+            return self._get_annotated_tuple(
+                queryset, annotation_id, *self._make_boundary_case(request.query_params[param]))
         else:  # 'choices_path'; ensured by parent function
             schema = RecordType.objects.get(pk=record_type_id).get_current_schema()
-            return self._make_choices_case(schema, request.query_params[param].split(','))
+            path = request.query_params[param].split(',')
+            multiple = self._is_multiple(schema, path)
+
+            if (not multiple):
+                return self._get_annotated_tuple(
+                    queryset, annotation_id,
+                    *self._make_choices_case(schema, path))
+            else:
+                # A 'multiple' related object must be annotated differently,
+                # since it may fall into multiple different categories.
+                return self._get_multiple_choices_annotated_tuple(
+                    queryset, annotation_id, schema, path)
 
     def _get_day_label(self, week_day_index):
         """Constructs a day translation label string given a week day index
@@ -874,6 +981,8 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         """
         # The related key is always the first item appearing in the path
         try:
+            if 'multiple' not in schema.schema['definitions'][path[0]]:
+                return False;
             return schema.schema['definitions'][path[0]]['multiple']
         except:
             # This shouldn't ever fail, but in case a bug causes the schema to change, treat
@@ -903,6 +1012,38 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             for choice in choices
         ]
         return (Case(*whens, output_field=CharField()), labels)
+
+    def _get_multiple_choices_annotated_tuple(self, queryset, annotation_id, schema, path):
+        """Helper wrapper for annotating a queryset with a case statement
+
+        Args:
+          queryset (QuerySet): The input queryset
+          annotation_id (String): 'row' or 'col'
+          schema (RecordSchema): A RecordSchema to get properties from
+          path (list): A list of path fragments to navigate to the desired property
+
+        Returns:
+            A 3-tuple of:
+              - boolean which specifies whether or not this is a 'multiple' query (always False)
+              - dict mapping Case values to labels
+              - the newly-annotated queryset
+        """
+
+        choices = self._get_schema_enum_choices(schema, path)
+        labels = [
+            {'key': choice, 'label': [{'text': choice, 'translate': False}]}
+            for choice in choices
+        ]
+
+        annotations = {}
+        for choice in choices:
+            filter_rule = self._make_djsonb_containment_filter(path, choice, True)
+            annotations['{}_{}'.format(annotation_id, choice)] = Case(
+                When(data__jsonb=filter_rule, then=Value(1)),
+                output_field=IntegerField(), default=Value(0))
+
+        return (True, labels, queryset.annotate(**annotations))
+
 
     # TODO: This snippet also appears in data/serializers.py and should be refactored into the Ashlar
     # RecordSchema model
