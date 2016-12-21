@@ -513,10 +513,13 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             for rd in annotated_qs:
                 for multi_label in multi_labels:
                     sum_val = rd['sum_{}'.format(multi_label)]
-                    if row_multi and rd['col'] is not None:
-                        data[multi_label[4:]][rd['col']] += sum_val
-                    elif rd['row'] is not None:
-                        data[rd['row']][multi_label[4:]] += sum_val
+                    rd_row = rd['row'] if 'row' in rd else 'None'
+                    rd_col = rd['col'] if 'col' in rd else 'None'
+
+                    if row_multi:
+                        data[unicode(multi_label[4:])][unicode(rd_col)] += sum_val
+                    else:
+                        data[unicode(rd_row)][unicode(multi_label[4:])] += sum_val
 
         row_totals = {row: sum(cols.values()) for (row, cols) in data.items()}
         return {'data': data, 'row_totals': row_totals}
