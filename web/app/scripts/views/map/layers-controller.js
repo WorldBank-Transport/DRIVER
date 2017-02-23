@@ -692,7 +692,20 @@
          */
         ctl.buildBlackspotPopup = function(blackspot) {
             /* jshint camelcase: false */
+            var url = "https://a.mapillary.com/v3/images?lookat=" + e.latlng.lng + "," + e.latlng.lat + "&closeto=" + e.latlng.lng + "," + e.latlng.lat + "&client_id=UTZhSnNFdGpxSEFFREUwb01GYzlXZzo5ZWIxZWYxNzM1YWY2MjNm&radius=400"
+            var imgkey
+            var mly
+            $.ajax({
+                      dataType: 'json',
+                      url: url,
+                      success: function (data) {
+                  imgkey = data.images[0]["key"]
+                  mly = '<iframe width=\"320\" height=\"200\" src=\"https://embed-v1.mapillary.com/embed?show_segmentation=true&version=1&filter=%5B%22all%22%5D&map_filter=%5B%22all%22%5D&image_key=" + imgkey + "&client_id=UTZhSnNFdGpxSEFFREUwb01GYzlXZzo5ZWIxZWYxNzM1YWY2MjNm&style=photo\" frameborder=\"0\"></iframe>'
+                  }
+
+            });
             var str = '<div id="blackspot-popup" class="blackspot-popup">';
+            str += mly;
             str += '<div><h4>' + blackSpotLabel + '</h4></div>';
             str += '<div><h6>' + severityScoreLabel + ': ' + blackspot.severity_score + '</h6></div>';
             str += '<div><h6>' + ctl.recordType.plural_label + ': ' +
