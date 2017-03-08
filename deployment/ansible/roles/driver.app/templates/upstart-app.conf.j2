@@ -36,6 +36,9 @@ exec /usr/bin/docker run \
   {% for k,v in driver_conf.items() -%}
   --env {{ k }}="{{ v }}" \
   {% endfor -%}
+  --env DRIVER_READ_ONLY_GROUP="{{ driver_read_only_group }}" \
+  --env DRIVER_READ_WRITE_GROUP="{{ driver_read_write_group }}" \
+  --env DRIVER_ADMIN_GROUP="{{ driver_admin_group }}" \
   --log-driver syslog \
 {% if celery %} --entrypoint '/bin/bash -c' \
 {% endif %}  quay.io/azavea/driver-app:latest {% if celery %} \

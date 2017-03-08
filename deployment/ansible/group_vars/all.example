@@ -96,3 +96,8 @@ ip_addresses_app:
     - 192.168.12.102
 ip_addresses_celery:
     - 192.168.12.103
+
+## Permission overrides
+driver_read_only_group: "public"
+driver_read_write_group: "analyst"
+driver_admin_group: "admin"
