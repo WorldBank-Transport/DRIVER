@@ -218,7 +218,11 @@ DEFAULT_ADMIN_EMAIL = os.environ.get("DRIVER_ADMIN_EMAIL", 'systems+driver@azave
 DEFAULT_ADMIN_USERNAME = os.environ.get("DRIVER_ADMIN_USERNAME", 'admin')
 DEFAULT_ADMIN_PASSWORD = os.environ.get("DRIVER_ADMIN_PASSWORD", 'admin')
 # the client keeps these group names in the editor's config.js
-DRIVER_GROUPS = {'READ_ONLY': 'public', 'READ_WRITE': 'analyst', 'ADMIN': 'admin'}
+DRIVER_GROUPS = {
+    'READ_ONLY': os.environ.get('DRIVER_READ_ONLY_GROUP', 'public'),
+    'READ_WRITE': os.environ.get('DRIVER_READ_WRITE_GROUP', 'analyst'),
+    'ADMIN': os.environ.get('DRIVER_ADMIN_GROUP', 'admin')
+}
 
 # Django Rest Framework
 # http://www.django-rest-framework.org/
