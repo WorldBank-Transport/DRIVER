@@ -1,6 +1,6 @@
 description "windshaft"
 
-start on (filesystem and started docker)
+start on started docker
 stop on stopping docker
 
 kill timeout 20
