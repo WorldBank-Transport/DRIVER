@@ -13,4 +13,4 @@
 - src: azavea.redis
   version: 0.1.0
 - src: azavea.letsencrypt
-  version: v11.2
+  version: v11.3
