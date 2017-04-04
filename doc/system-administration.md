@@ -82,11 +82,10 @@ The web server is configured with an SSL certificate which has been automaticall
 
 In the case of a problem, the cron task should be checked. This can be examined by running the commands:
 ```
-sudo su letsencrypt
-crontab -l
+sudo crontab -l
 ```
 
-There should be an entry for `cd /var/lib/letsencrypt && ./renew-certs.py`. That command may be run manually in order to help diagnose an error with SSL certification renewal.
+There should be an entry for `cd /var/lib/letsencrypt && ./renew-certs.py`. That command may be run manually as the root user in order to help diagnose an error with SSL certification renewal.
 
 
 ## Cleaning up after Docker
