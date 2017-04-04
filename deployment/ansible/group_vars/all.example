@@ -101,3 +101,6 @@ ip_addresses_celery:
 driver_read_only_group: "public"
 driver_read_write_group: "analyst"
 driver_admin_group: "admin"
+
+## Reload the nginx config after an SSL certificate is renewed
+letsencrypt_post_renew_cmd: "service nginx reload"
