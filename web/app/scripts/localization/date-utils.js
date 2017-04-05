@@ -24,6 +24,16 @@
                     'numeric': 'm/dd/yyyy'
                 }
             },
+            'pt-br': {
+                language: 'pt',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
             'exclaim': {
                 language: 'en',
                 calendar: 'gregorian',
