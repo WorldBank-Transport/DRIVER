@@ -25,7 +25,17 @@
                 }
             },
             'pt-br': {
-                language: 'pt',
+                language: 'pt-BR',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'vi': {
+                language: 'vi',
                 calendar: 'gregorian',
                 formats: {
                     'short': 'M Y',
