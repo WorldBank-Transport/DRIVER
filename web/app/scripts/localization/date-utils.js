@@ -44,6 +44,26 @@
                     'numeric': 'dd/mm/yyyy'
                 }
             },
+            'zh': {
+                language: 'zh-CN',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'es': {
+                language: 'es',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
             'exclaim': {
                 language: 'en',
                 calendar: 'gregorian',
