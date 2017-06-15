@@ -1,4 +1,4 @@
-FROM quay.io/azavea/django:0.1.1
+FROM quay.io/azavea/django:1.8-python2.7-slim
 
 # N.B. This will not work for docker versions above 1.10.x; Docker 1.11 and above contain
 # multiple binaries in a tarball; if we upgrade Docker to the 1.11 branch or beyond then
@@ -8,7 +8,10 @@ ENV DOCKER_VERSION 1.10.3
 # install dependencies for django-oidc
 RUN apt-get update && apt-get install -y \
     libffi-dev \
-    python-dev
+    python-dev \
+    git \
+    libssl-dev \
+    build-essential
 
 # install dependencies for generate_training_input script
 RUN apt-get update && apt-get install -y \
