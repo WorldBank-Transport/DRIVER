@@ -64,6 +64,16 @@
                     'numeric': 'dd/mm/yyyy'
                 }
             },
+            'bn': {
+                language: 'bn',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
             'exclaim': {
                 language: 'en',
                 calendar: 'gregorian',
