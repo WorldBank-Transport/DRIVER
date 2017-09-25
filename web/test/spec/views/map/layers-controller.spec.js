@@ -86,11 +86,11 @@ describe('driver.views.map: Layers Controller', function () {
         $httpBackend.verifyNoOutstandingRequest();
     }));
 
-    xit('should have a controller', function () {
+    it('should have a controller', function () {
         expect(Controller).toBeDefined();
     });
 
-    xit('should build a record popup', function () {
+    it('should build a record popup', function () {
         expect(Controller.buildRecordPopup).toBeDefined();
 
         var record = DriverResourcesMock.RecordResponse.results[0];
@@ -103,7 +103,7 @@ describe('driver.views.map: Layers Controller', function () {
         expect(popup).toEqual(expected);
     });
 
-    xit('should build a blackspot popup', function () {
+    it('should build a blackspot popup', function () {
         expect(Controller.buildBlackspotPopup).toBeDefined();
 
         var blackspot = DriverResourcesMock.BlackspotResponse.results[0];
@@ -116,13 +116,13 @@ describe('driver.views.map: Layers Controller', function () {
         expect(popup).toEqual(expected);
     });
 
-    xit('should listen for record type change', function() {
+    it('should listen for record type change', function() {
         spyOn(Controller, 'setRecordLayers');
         RecordState.setSelected(ResourcesMock.RecordTypeResponse.results[2]);
         expect(Controller.setRecordLayers).toHaveBeenCalled();
     });
 
-    xit('should restore state when certain props are set on MapState', function() {
+    it('should restore state when certain props are set on MapState', function() {
         expect(Controller.map.getCenter()).toEqual({lat: 123, lng: 234});
         expect(Controller.map.getZoom()).toEqual(7);
     });
