@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "Delete \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "Expand",
         "CREATED": "Created",
+        "MODIFIED": "Modified",
+        "MODIFIED_BY": "Modified by",
         "DATE_AND_TIME": "Date & Time",
         "DATE_FILTER": "Filter events by date of occurence",
         "DETAILS": "Details",

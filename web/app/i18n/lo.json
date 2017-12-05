@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "ລົບອອກ \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "ການຂະຫຍາຍ",
         "CREATED": "ສ້າງຂຶ້ນແລ້ວ",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "ວັນທີ ແລະ ເວລາ",
         "DATE_FILTER": "ການຈັດ​ລຽງເຫດການໂດຍວັນທີີ່ເກີດຂຶ້ນ",
         "DETAILS": "ລາຍລະອຽດ",

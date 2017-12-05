@@ -6,10 +6,10 @@
         var module = {
             restrict: 'AE',
             scope: {
-                data: '=',
-                properties: '=',
-                record: '=',
-                definition: '='
+                data: '<',
+                properties: '<',
+                record: '<',
+                definition: '<'
             },
             templateUrl: 'scripts/details/details-single-partial.html',
             bindToController: true,

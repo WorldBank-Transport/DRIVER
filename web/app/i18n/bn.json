@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "মুছে ফেলুন \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "বিস্তৃত করা",
         "CREATED": "তৈরী করা",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "তারিখ ও সময়",
         "DATE_FILTER": "ঘটনার তারিখ অনুসারে ঘটনা ফিল্টার করুন",
         "DETAILS": "বিস্তারিত",

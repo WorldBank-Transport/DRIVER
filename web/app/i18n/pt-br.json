@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "Apagar \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "Expandir",
         "CREATED": "Criado",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "Data & Hora",
         "DATE_FILTER": "Filtrar eventos por dia do acontecimento",
         "DETAILS": "Detalhes",
