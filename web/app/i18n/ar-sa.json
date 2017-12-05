@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "!Delete \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "!Expand",
         "CREATED": "أضاف",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "اليوم والوقت",
         "DATE_FILTER": "تصنيف الأحداث حسب تاريخ القوع",
         "DETAILS": "تفاصيل",

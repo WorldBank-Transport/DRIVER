@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "X\u00f3a [\u0110i\u1ec1n t\u00ean d\u00f2ng]",
         "BUTTON_EXPAND": "M\u1edf r\u1ed9ng",
         "CREATED": "\u0110\u00e3 \u0111\u01b0\u1ee3c t\u1ea1o",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "Ng\u00e0y & Gi\u1edd",
         "DATE_FILTER": "L\u1ecdc c\u00e1c s\u1ef1 ki\u1ec7n theo ng\u00e0y x\u1ea3y ra",
         "DETAILS": "Chi ti\u1ebft",

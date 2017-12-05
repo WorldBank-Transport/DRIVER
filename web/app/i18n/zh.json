@@ -181,6 +181,8 @@
         "BUTTON_DELETE_ROW_TITLE": "删除 \\{\\{0\\}\\}",
         "BUTTON_EXPAND": "展开",
         "CREATED": "创建的",
+        "MODIFIED": "!Modified",
+        "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "日期和时间",
         "DATE_FILTER": "通过日期过滤事件",
         "DETAILS": "细节",

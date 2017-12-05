@@ -8,6 +8,12 @@
          - {{ ::ctl.record.occurred_to | localizeRecordDate: ctl.dateFormat : true }}
         </span>
     </div>
+    <label>
+        {{ 'RECORD.MODIFIED' | translate }}
+    </label>
+    <div class="value constant date">
+        {{ ::ctl.record.modified | localizeRecordDate: ctl.dateFormat : true }}
+    </div>
 </div>
 <div class="col-sm-6">
     <label>
@@ -15,6 +21,14 @@
     </label>
     <div class="value constant date created">
         {{ ::ctl.record.created | localizeRecordDate: 'long':'time'}}
+    </div>
+    <div ng-if="ctl.record.modified_by">
+        <label>
+            {{ 'RECORD.MODIFIED_BY' | translate }}
+        </label>
+        <div class="value constant">
+            {{ ctl.record.modified_by }}
+        </div>
     </div>
 </div>
 <div class="col-sm-12">
