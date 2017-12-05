@@ -1,4 +1,4 @@
-FROM quay.io/azavea/static-core:0.1.0
+FROM node:4-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   ruby-dev \
   python \
   python-dev \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* && \
+  npm install -g --save grunt-cli bower
 
 RUN gem install sass -v 3.4.22
 RUN gem install compass
