@@ -78,7 +78,17 @@ telling it to communicate with the Docker daemon on the `app` virtual machine.
 
 ## Testing Data
 
-A CSV of historical data can be downloaded from the project /data folder (incidents_and_sites.csv).
+### Boundaries
+
+To load boundaries, upload the `regions.zip` and `states.zip` files to Ashlar.
+Ashlar is runs on localhost:7001. For each file, first upload the file, then select
+`name` as the display field, then hit save. Either refresh the page or
+navigate somewhere else in between any two uploads.
+
+### Records
+
+A CSV of historical data can be downloaded from the project /data folder.
+Good files are `<city or agency>_traffic.csv`.
 
 Once the app has been built, this data can be loaded.
 
@@ -87,7 +97,7 @@ Then open the network tab in web developer tools and reload the page. Inspect th
 from an API request and pull out the value of the `Authorization` header, for example
 `Token f1acac96cc79c4822e9010d23ab425231d580875`.
 
-Run `python scripts/load_incidents_v3.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/incident_csvs`.
+Run `python scripts/load_incidents_v3.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/directory_containing_incident_csvs`.
 Note that the import process will take roughly two hours for the full data set; you can cut down the
 number of records with `head` on the individual CSVs.
 
@@ -96,6 +106,17 @@ To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token
 To load mock interventions, run `python scripts/load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/interventions_sample_pts.geojson`.
 
 To generate black spot and load forecast training inputs, run `python scripts/generate_training_input.py /path/to/roads.shp /path/to/records.csv`.
+
+### Costs
+
+You can't request records with associated costs successfully until you configure some costs.
+To do this, navigate to your editor (by default on `localhost:7001`), select "Incident" from
+record types in the menu on the left. Select "Cost aggregation settings", then:
+
+- choose a currency prefix in "Cost Prefix" (e.g., `$`, but anything is fine)
+- Select "Incident Details" in "Related Content Type"
+- Choose "Severity" in "Field"
+- then decide how much money you think human lives, human physical security, and property are worth
 
 ## Production
 
