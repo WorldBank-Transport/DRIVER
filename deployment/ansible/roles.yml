@@ -1,3 +1,5 @@
+- src: azavea.python-security
+  version: 0.1.0
 - src: azavea.postgresql
   version: 0.3.4
 - src: azavea.postgresql-support
