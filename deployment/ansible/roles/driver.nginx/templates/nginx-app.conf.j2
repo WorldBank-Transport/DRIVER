@@ -10,7 +10,7 @@ server {
    listen 80 default_server;
 {% endif %}
 
-    server_name _;
+    server_name {{ allowed_host }};
     root {{ web_build_dir }};
     index index.html;
 

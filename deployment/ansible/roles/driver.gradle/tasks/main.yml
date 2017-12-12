@@ -28,7 +28,7 @@
 - name: Configure gradle service definition
   template: src=upstart-gradle.conf.j2 dest=/etc/init/driver-gradle.conf
   notify:
-    - Restart driver-gradle
+    - Restart Gradle
 
 - name: Ensure gradle service is running
   service: name=driver-gradle state=started
