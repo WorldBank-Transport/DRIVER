@@ -1,7 +1,4 @@
 ---
-- name: Enable firewall
-  ufw: state=enabled policy=reject
-
 - name: Allow ssh access
   ufw: rule=allow port=22
 
@@ -15,3 +12,6 @@
 - name: Allow https connections from app machines (e.g. for CSV downloads)
   ufw: rule=allow port=443 from_ip={{ item }}
   with_items: "{{ ip_addresses_app }}"
+
+- name: Enable firewall
+  ufw: state=enabled policy=reject

@@ -1,7 +1,4 @@
 ---
-- name: Enable firewall
-  ufw: state=enabled policy=reject
-
 - name: Allow ssh access
   ufw: rule=allow port=22
 
@@ -37,3 +34,6 @@
 - name: Allow Livereload - web access
   ufw: rule=allow port=35732
   when: developing
+
+- name: Enable firewall
+  ufw: state=enabled policy=reject
