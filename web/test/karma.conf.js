@@ -82,6 +82,8 @@ module.exports = function(config) {
       'bower_components/world-calendars/jquery.calendars.picker-bn.js',
       'bower_components/world-calendars/jquery.calendars-lo.js',
       'bower_components/world-calendars/jquery.calendars.picker-lo.js',
+      'bower_components/world-calendars/jquery.calendars-th.js',
+      'bower_components/world-calendars/jquery.calendars.picker-th.js',
       'bower_components/moment-timezone/builds/moment-timezone-with-data-2010-2020.js',
       'bower_components/angular-mocks/angular-mocks.js',
       'bower_components/jjv/lib/jjv.js',
