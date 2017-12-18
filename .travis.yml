@@ -26,7 +26,7 @@ install:
   ./analysis_tasks
 script: ".travis/script.sh"
 before_deploy:
-- docker login -e . -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
+- docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
 - sudo pip install ansible==2.0.0.2
 - openssl aes-256-cbc -K "${encrypted_71b51a189c16_key}" -iv "${encrypted_71b51a189c16_iv}"
   -in deployment/driver.pem.enc -out deployment/driver.pem -d
