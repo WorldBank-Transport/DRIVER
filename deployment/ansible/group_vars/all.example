@@ -1,4 +1,7 @@
 ---
+# This is used ONLY when deploying to production to determine which docker image is used.
+# To use a specific version locally, you'll need to `git checkout tags/<version>`
+app_version: "1.0.0"
 developing: "{{ 'development' in group_names }}"
 developing_or_staging: "{{ 'development' in group_names or 'staging' in group_names }}"
 not_developing: "{{ 'development' not in group_names }}"
@@ -9,6 +12,9 @@ production: "{{ 'production' in group_names }}"
 docker_version: "1.10.*"
 docker_py_version: "1.2.3"
 docker_options: "--storage-driver=aufs"
+# In local development, always use the 'latest' tag regardless of what app_version says;
+# users need to checkout a tag in order to get a specific version.
+docker_image_tag: "{% if developing %}latest{% else %}{{app_version}}{% endif %}"
 
 python_version: "2.7.*"
 pip_version: "1.*"

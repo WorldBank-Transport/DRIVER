@@ -3,20 +3,20 @@
   command: >
     docker build
       -f {{ root_app_dir }}/Dockerfile.base
-      -t quay.io/azavea/driver-app:latest
+      -t quay.io/azavea/driver-app:{{ docker_image_tag }}
       {{ root_app_dir }}
   when: developing
 
-- name: Build application Docker image
+- name: Build application Docker image (dev tools)
   command: >
     docker build
       -f {{ root_app_dir }}/Dockerfile.development
-      -t quay.io/azavea/driver-app:latest
+      -t quay.io/azavea/driver-app:{{ docker_image_tag }}
       {{ root_app_dir }}
   when: developing
 
 - name: Pull application Docker image
-  command: /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  command: /usr/bin/docker pull quay.io/azavea/driver-app:{{ docker_image_tag}}
   when: staging or production
   notify:
     - Restart driver-celery

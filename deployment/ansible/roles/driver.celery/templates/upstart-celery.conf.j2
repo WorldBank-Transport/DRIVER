@@ -16,7 +16,7 @@ pre-start script
   /usr/bin/docker rm driver-celery || true
 
   {% if 'development' not in group_names -%}
-  /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  /usr/bin/docker pull quay.io/azavea/driver-app:{{ docker_image_tag }}
   {% endif %}
 end script
 
@@ -36,7 +36,7 @@ exec /usr/bin/docker run \
   {% endfor -%}
   --log-driver syslog \
   --entrypoint 'celery' \
-  quay.io/azavea/driver-app:latest \
+  quay.io/azavea/driver-app:{{ docker_image_tag }} \
   -A driver worker --queue=taskworker \
   --loglevel={% if 'development' in group_names %}debug{% else %}info{% endif %} \
   --concurrency=4 \
