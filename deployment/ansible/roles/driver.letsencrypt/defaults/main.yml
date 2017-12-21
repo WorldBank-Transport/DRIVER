@@ -1,0 +1,10 @@
+---
+certbot_version: "v0.20.0"
+letsencrypt_root: "/etc/letsencrypt"
+letsencrypt_cert_root: "{{ letsencrypt_root }}/live/{{ allowed_host }}"
+
+letsencrypt_options_ssl_nginx_url: "https://raw.githubusercontent.com/certbot/certbot/{{certbot_version}}/certbot-nginx/certbot_nginx/options-ssl-nginx.conf"
+letsencrypt_options_ssl_nginx_path: "{{ letsencrypt_root }}/options-ssl-nginx.conf"
+
+letsencrypt_dhparams_url: "https://raw.githubusercontent.com/certbot/certbot/{{ certbot_version }}/certbot/ssl-dhparams.pem"
+letsencrypt_dhparams_path: "{{ letsencrypt_root }}/ssl-dhparams.pem"
