@@ -33,12 +33,20 @@ before_deploy:
 - export PATH="$PATH:$HOME/.rvm/bin"
 - export PHANTOMJS_CDNURL=http://cnpmjs.org/downloads
 deploy:
-  provider: script
-  script: ".travis/deploy.sh"
-  skip_cleanup: true
-  on:
-    repo: WorldBank-Transport/DRIVER
-    branch: develop
+  - provider: script
+    script: ".travis/deploy_staging.sh"
+    skip_cleanup: true
+    on:
+      repo: WorldBank-Transport/DRIVER
+      branch: develop
+  - provider: script
+    script: ".travis/deploy.sh"
+    skip_cleanup: true
+    on:
+      repo: WorldBank-Transport/DRIVER
+      branch: master
+      tags: true
+
 after_deploy:
 - rm deployment/driver.pem
 - rm gradle/data/driver.keystore
