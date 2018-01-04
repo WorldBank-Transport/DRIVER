@@ -31,7 +31,7 @@
     "Leaflet.utfgrid": "danzel/Leaflet.utfgrid#18b7043c4a8ac19d4a06658b26e165fb02b8cf1b",
     "d3": "3.5.5",
     "d3-tip": "^0.6.7",
-    "world-calendars": "azavea/calendars#app/wb-demo-multi-lang",
+    "world-calendars": "azavea/calendars#master",
     "moment": "2.13.0",
     "moment-timezone": "0.5.6"
   },
