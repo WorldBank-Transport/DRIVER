@@ -1,6 +1,6 @@
 description "driver-app"
 
-start on (filesystem and started docker)
+start on started docker
 stop on stopping docker
 
 kill timeout 20
@@ -16,7 +16,7 @@ pre-start script
   /usr/bin/docker rm driver-app || true
 
   {% if 'development' not in group_names -%}
-  /usr/bin/docker pull quay.io/azavea/driver-app:latest
+  /usr/bin/docker pull quay.io/azavea/driver-app:{{ docker_image_tag }}
   {% endif %}
 end script
 
@@ -34,11 +34,14 @@ exec /usr/bin/docker run \
   --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
   {% endif -%}
   {% for k,v in driver_conf.items() -%}
-  --env {{ k }}="{{ v }}" \
+  --env {{ k }}='{{ v }}' \
   {% endfor -%}
+  --env DRIVER_READ_ONLY_GROUP='{{ driver_read_only_group }}' \
+  --env DRIVER_READ_WRITE_GROUP='{{ driver_read_write_group }}' \
+  --env DRIVER_ADMIN_GROUP='{{ driver_admin_group }}' \
   --log-driver syslog \
 {% if celery %} --entrypoint '/bin/bash -c' \
-{% endif %}  quay.io/azavea/driver-app:latest {% if celery %} \
+{% endif %}  quay.io/azavea/driver-app:{{ docker_image_tag }} {% if celery %} \
   celery -A driver worker --queue=path --loglevel=info --concurrency=4
 {% endif %}
 

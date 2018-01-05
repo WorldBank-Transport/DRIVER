@@ -1,7 +1,4 @@
 ---
-- name: Enable firewall
-  ufw: state=enabled policy=reject
-
 - name: Allow ssh access
   ufw: rule=allow port=22
 
@@ -23,3 +20,6 @@
 - name: Allow redis connections from celery machines
   ufw: rule=allow port={{ redis_port }} from_ip={{ item }}
   with_items: "{{ ip_addresses_celery }}"
+
+- name: Enable firewall
+  ufw: state=enabled policy=reject

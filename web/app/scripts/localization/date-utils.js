@@ -24,6 +24,76 @@
                     'numeric': 'm/dd/yyyy'
                 }
             },
+            'pt-br': {
+                language: 'pt-BR',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'vi': {
+                language: 'vi',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'zh': {
+                language: 'zh-CN',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'es': {
+                language: 'es',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'bn': {
+                language: 'bn',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'lo': {
+                language: 'lo',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
+            'th': {
+                language: 'th',
+                calendar: 'gregorian',
+                formats: {
+                    'short': 'M Y',
+                    'longNoTime': 'd MM, Y',
+                    'long': 'd MM, Y',
+                    'numeric': 'dd/mm/yyyy'
+                }
+            },
             'exclaim': {
                 language: 'en',
                 calendar: 'gregorian',

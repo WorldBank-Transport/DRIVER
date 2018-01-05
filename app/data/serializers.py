@@ -12,7 +12,7 @@ from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 from django.conf import settings
 
 
-class DriverRecordSerializer(serializers.RecordSerializer):
+class BaseDriverRecordSerializer(serializers.RecordSerializer):
     def validate_occurred_from(self, value):
         """ Require that record occurred_from be in the past. """
         if value > datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)):
@@ -20,7 +20,23 @@ class DriverRecordSerializer(serializers.RecordSerializer):
         return value
 
 
-class DetailsReadOnlyRecordSerializer(DriverRecordSerializer):
+class DriverRecordSerializer(BaseDriverRecordSerializer):
+    modified_by = SerializerMethodField(method_name='get_latest_change_email')
+
+    def get_latest_change_email(self, record):
+        """Returns the email of the user who has most recently modified this Record"""
+        latest_audit_entry = (RecordAuditLogEntry.objects
+                              .filter(record=record)
+                              .order_by('-date')
+                              .first())
+        if latest_audit_entry:
+            if latest_audit_entry.user is not None:
+                return latest_audit_entry.user.email
+            return latest_audit_entry.username
+        return None
+
+
+class DetailsReadOnlyRecordSerializer(BaseDriverRecordSerializer):
     """Serialize records with only read-only fields included"""
     data = serializer_fields.MethodTransformJsonField('filter_details_only')
 

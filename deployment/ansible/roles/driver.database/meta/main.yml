@@ -1,6 +1,7 @@
 ---
 # Dependencies for driver.database role
 dependencies:
+  - { role: "azavea.python-security" }
   - { role: "azavea.postgresql" }
   - { role: "azavea.postgresql-support"}
   - { role: "azavea.postgis" }

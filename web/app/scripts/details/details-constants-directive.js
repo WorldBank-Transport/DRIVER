@@ -6,7 +6,7 @@
         var module = {
             restrict: 'AE',
             scope: {
-                record: '='
+                record: '<'
             },
             templateUrl: 'scripts/details/details-constants-partial.html',
             bindToController: true,

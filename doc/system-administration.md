@@ -28,9 +28,11 @@ Each of these servers also includes:
 
 ## Deploying updates
 
-Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the latest source code, so make sure to pull down the latest version via `git pull`. In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy.  These files are as follows
+Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the source code for the version you want to deploy, so make sure to pull down the latest version via `git pull` and then `git checkout tags/<version>`. In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy.  These files are as follows
 
 1. `production` group_vars - Defines the configured settings for the system. Must be placed in: `deployment/ansible/group_vars/`.
+  - Make sure to edit the `app_version` flag at the top of the `production` group_vars file to specify the version of the app you want to deploy
+  - Check out that tag with `git checkout tags/<version>`
 2. `production` inventory - Defines the remote servers where code will be deployed. Must be placed in: `deployment/ansible/inventory/`.
 3. `driver.keystore` - The signing keystore required for building Android APKs. Must be placed in: `gradle/data/`.
 4. ssh identity file - The private key used for logging into the servers. This does not need to be placed in a particular location, but must be added via `ssh-add` before starting the deploy, so commands may be run on remote machines.
@@ -82,11 +84,10 @@ The web server is configured with an SSL certificate which has been automaticall
 
 In the case of a problem, the cron task should be checked. This can be examined by running the commands:
 ```
-sudo su letsencrypt
-crontab -l
+sudo crontab -l
 ```
 
-There should be an entry for `cd /var/lib/letsencrypt && ./renew-certs.py`. That command may be run manually in order to help diagnose an error with SSL certification renewal.
+There should be an entry for `cd /var/lib/letsencrypt && ./renew-certs.py`. That command may be run manually as the root user in order to help diagnose an error with SSL certification renewal.
 
 
 ## Cleaning up after Docker

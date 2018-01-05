@@ -28,10 +28,10 @@
     "lodash": "^3.8.0",
     "leaflet": "~0.7.3",
     "leaflet-draw": "^0.2.4",
-    "Leaflet.utfgrid": "danzel/Leaflet.utfgrid",
+    "Leaflet.utfgrid": "danzel/Leaflet.utfgrid#18b7043c4a8ac19d4a06658b26e165fb02b8cf1b",
     "d3": "3.5.5",
     "d3-tip": "^0.6.7",
-    "world-calendars": "azavea/calendars#app/wb-saudi-road-safety",
+    "world-calendars": "azavea/calendars#master",
     "moment": "2.13.0",
     "moment-timezone": "0.5.6"
   },
@@ -43,6 +43,7 @@
   "appPath": "app",
   "moduleName": "driverApp",
   "resolutions": {
-    "angular": "~1.5.8"
+  "angular": "~1.5.8",
+  "bootstrap-select": "1.7.3"
   }
 }

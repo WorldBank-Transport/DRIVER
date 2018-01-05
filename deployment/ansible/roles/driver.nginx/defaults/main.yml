@@ -31,3 +31,5 @@ root_www_dir: "/var/www"
 root_windshaft_dir: "/opt/windshaft"
 root_static_dir: "{{ root_www_dir }}/static"
 root_media_dir: "{{ root_www_dir }}/media"
+
+nginx_server_name: "{% if allowed_host %}{{ allowed_host }}{% else %}_{% endif %}"

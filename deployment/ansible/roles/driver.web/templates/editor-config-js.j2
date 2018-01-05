@@ -20,9 +20,9 @@
             hostname: '{{ editor_js_api_hostname }}',
             // These group names are defined server-side in settings.py
             groups: {
-                admin: 'admin',
-                readOnly: 'public',
-                readWrite: 'analyst'
+                admin: '{{ driver_admin_group }}',
+                readOnly: '{{ driver_read_only_group }}',
+                readWrite: '{{ driver_read_write_group }}'
             }
         }
     };

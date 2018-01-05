@@ -1,16 +1,17 @@
 server {
 
 {% if staging or production %}
-    listen 443 default_server;
-
     ssl on;
-    ssl_certificate {{ letsencrypt_certs_dir }}/driver-ssl-cert-full.cert;
-    ssl_certificate_key {{ letsencrypt_key_dir }}/driver-ssl-cert.key;
+    listen 443 default_server ssl;
+    ssl_certificate {{ letsencrypt_cert_root }}/fullchain.pem;
+    ssl_certificate_key {{ letsencrypt_cert_root }}/privkey.pem;
+    include {{ letsencrypt_options_ssl_nginx_path }};
+    ssl_dhparam {{ letsencrypt_dhparams_path }};
 {% else %}
    listen 80 default_server;
 {% endif %}
 
-    server_name _;
+    server_name {{ nginx_server_name }};
     root {{ web_build_dir }};
     index index.html;
 
@@ -139,11 +140,6 @@ server {
 server {
     listen 80;
     server_name _;
-
-    # Used for letsencrypt domain name ownership validation
-    location /.well-known/acme-challenge/ {
-        alias {{ acme_tiny_challenges_directory }}/;
-    }
 
     # Redirect all other http traffic to https
     location / {
