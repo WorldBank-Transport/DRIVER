@@ -43,7 +43,7 @@
   "appPath": "app",
   "moduleName": "driverApp",
   "resolutions": {
-    "angular": "~1.5.8",
-    "bootstrap-select": "1.7.3"
+  "angular": "~1.5.8",
+  "bootstrap-select": "1.7.3"
   }
 }
