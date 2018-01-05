@@ -201,3 +201,32 @@ Now, this token will have read-only access to the API.
 First, ssh into the app vm: `vagrant ssh app`
 
 Then, cd to the web dir and run the grunt tests: `cd /opt/web && grunt test`
+
+## Releases
+
+Releases use a `github_changelog_generator` tool written in `ruby`.
+
+- make sure your `develop` is up-to-date
+- `git flow release start <your release version>`
+- `docker run -ti --rm -v ${PWD}:/changelog -w /changelog ruby:2.3 /bin/bash`
+- From the container, `gem install github_changelog_generator`
+- Then, to generate the changelog since the last release:
+
+```bash
+$ export RELEASE_VERSION=<your release version>
+$ export LAST_RELEASE=<the most recent tag>
+$ export GITHUB_TOKEN=<your github personal access token>
+$ github_changelog_generator "WorldBank-Transport/DRIVER" \
+      --token ${GITHUB_TOKEN} \
+      --since-tag ${LAST_RELEASE} \
+      --future-release ${RELEASE_VERSION} \
+      --no-issues \
+      --no-issues-wo-labels \
+      --no-author
+```
+
+It's important to include the `since-tag` argument, since without it, the changelog generator
+will include everything that went into 1.0.0, which is a lot of stuff and not super meaningful,
+since `1.0.0` is "what was there when we decided to start using semantic versioning."
+
+Include changes to the CHANGELOG in your release branch.
