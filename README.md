@@ -147,7 +147,7 @@ To generate black spot and load forecast training inputs, run `python scripts/ge
 
 You can't request records with associated costs successfully until you configure some costs.
 To do this, navigate to your editor (by default on `localhost:7001`), select "Incident" from
-record types in the menu on the left. Select "Cost aggregation settings", then:
+record types in the menu on the left. (If there are multiple record types named "Incident", delete all but one.) Select "Cost aggregation settings", then:
 
 - choose a currency prefix in "Cost Prefix" (e.g., `$`, but anything is fine)
 - Select "Incident Details" in "Related Content Type"
