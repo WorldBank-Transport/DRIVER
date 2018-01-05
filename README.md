@@ -229,4 +229,18 @@ It's important to include the `since-tag` argument, since without it, the change
 will include everything that went into 1.0.0, which is a lot of stuff and not super meaningful,
 since `1.0.0` is "what was there when we decided to start using semantic versioning."
 
-Include changes to the CHANGELOG in your release branch.
+- include the CHANGELOG in your release branch
+- `git flow release publish <your release version>`
+- open a PR for your release
+- Wait for a successful build and approval (from whom?), then:
+
+```bash
+$ git flow release finish <your release version>
+$ git checkout master
+$ git push origin master
+$ git checkout develop
+$ git push origin develop
+$ git push [-s] --tags
+```
+
+:tada:
