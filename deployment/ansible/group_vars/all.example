@@ -19,6 +19,9 @@ docker_image_tag: "{% if developing %}latest{% else %}{{app_version}}{% endif %}
 python_version: "2.7.*"
 pip_version: "1.*"
 
+python_security_ndghttpsclient_version: 0.4.3
+python_security_pyasn1_version: 0.4.2
+
 postgresql_host: "database.service.driver.internal"
 postgresql_port: 5432
 
