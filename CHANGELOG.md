@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.1.1](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.1) (2018-01-08)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.1.0...1.1.1)
+
+**Merged pull requests:**
+
+- Update python\_security configs in all.example [\#661](https://github.com/WorldBank-Transport/DRIVER/pull/661)
+- Fix building tagged images on deployment [\#660](https://github.com/WorldBank-Transport/DRIVER/pull/660)
+
 ## [1.1.0](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.0) (2018-01-05)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/v1.0.0...1.1.0)
 
