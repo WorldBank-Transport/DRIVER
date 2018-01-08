@@ -220,6 +220,7 @@ $ github_changelog_generator "WorldBank-Transport/DRIVER" \
       --token ${GITHUB_TOKEN} \
       --since-tag ${LAST_RELEASE} \
       --future-release ${RELEASE_VERSION} \
+      --base CHANGELOG.md \
       --no-issues \
       --no-issues-wo-labels \
       --no-author
@@ -228,6 +229,8 @@ $ github_changelog_generator "WorldBank-Transport/DRIVER" \
 It's important to include the `since-tag` argument, since without it, the changelog generator
 will include everything that went into 1.0.0, which is a lot of stuff and not super meaningful,
 since `1.0.0` is "what was there when we decided to start using semantic versioning."
+Note: We've had some problems with the `since-tag` argument not being respected; if this happens,
+manually delete the duplicate entries and update the GitHub diff link.
 
 - include the CHANGELOG in your release branch
 - `git flow release publish <your release version>`
