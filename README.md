@@ -147,7 +147,7 @@ To generate black spot and load forecast training inputs, run `python scripts/ge
 
 You can't request records with associated costs successfully until you configure some costs.
 To do this, navigate to your editor (by default on `localhost:7001`), select "Incident" from
-record types in the menu on the left. Select "Cost aggregation settings", then:
+record types in the menu on the left. (If there are multiple record types named "Incident", delete all but one.) Select "Cost aggregation settings", then:
 
 - choose a currency prefix in "Cost Prefix" (e.g., `$`, but anything is fine)
 - Select "Incident Details" in "Related Content Type"
@@ -220,6 +220,7 @@ $ github_changelog_generator "WorldBank-Transport/DRIVER" \
       --token ${GITHUB_TOKEN} \
       --since-tag ${LAST_RELEASE} \
       --future-release ${RELEASE_VERSION} \
+      --base CHANGELOG.md \
       --no-issues \
       --no-issues-wo-labels \
       --no-author
@@ -228,6 +229,8 @@ $ github_changelog_generator "WorldBank-Transport/DRIVER" \
 It's important to include the `since-tag` argument, since without it, the changelog generator
 will include everything that went into 1.0.0, which is a lot of stuff and not super meaningful,
 since `1.0.0` is "what was there when we decided to start using semantic versioning."
+Note: We've had some problems with the `since-tag` argument not being respected; if this happens,
+manually delete the duplicate entries and update the GitHub diff link.
 
 - include the CHANGELOG in your release branch
 - `git flow release publish <your release version>`
