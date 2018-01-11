@@ -1,0 +1,241 @@
+---
+## GLOBAL APP SETTINGS
+# Which version of the app to install. Specifically, this designates a tag on quay.io that should be
+# used when pulling docker images. A list of valid tags can be found here:
+# https://quay.io/repository/azavea/driver-app?tag=latest&tab=tags
+# Generally, when setting up a new instance, you should use the highest-number tag available. The
+# 'latest' tag should be avoided when setting up new instances for production usage, because it may
+# contain bugs.
+app_version: "0.0.0"
+# The URL at which users will access the application. Do NOT include 'http' or 'https'; all DRIVER
+# instances are configured to use https.
+app_domain_name: "your.driver-domain.here"
+
+# The *internal* IP address of the hosts for the different components of the web application. DRIVER
+# is currently divided up to run on three servers: A database, a web app server, and a Celery
+# (asynchronous tasks) server. If your servers have only a single IP address, then use that. If they
+# have multiple IP addresses, use the internal, non-public-facing IP address of the database server.
+database_server_ip: "11.11.11.11"
+app_server_ip: "22.22.22.22"
+celery_server_ip: "33.33.33.33"
+
+## POSTGRESQL SETTINGS
+# The username, password, and database name that the main web app will use when connecting to the
+# database server. These do not need to already exist on the database server; they will be added
+# automatically as part of the setup process. You should put in a long (at least 25 characters)
+# random string for the password.
+postgresql_username: driver
+#postgresql_password: "uncomment and change me!"
+postgresql_database: driver
+
+# The username and password that the tile server will use when connecting to the database. This
+# will be added automatically as part of the setup process. This should be different from the
+# previous user/password because the two users have different access privileges, although they both
+# use the same database.
+windshaft_db_username: windshaft
+#windshaft_db_password: "uncomment and change me!"
+
+# Heimdall is a utility used for managing distributed asynchronous processes by using database
+# locks. It needs a username, password, and its own (very small) database in order to run.  This
+# section specifies the account information and database that Heimdall should use when connection to
+# the database. This will be added automatically as part of the setup process. This should be
+# different from the previous user/passwords because the Heimdall user has different access
+# privileges.
+heimdall_db_username: heimdall
+#heimdall_db_password: "uncomment and change me!"
+heimdall_lock_db: lockspace
+
+# UNCOMMENT one of the two examples below.
+# The whitelist of hosts which are allowed to connect to the database, which will be used to modify
+# PostgreSQL's pg_hba.conf file. Generally, this should contain two entries, containing the internal
+# IP addresses of the Celery machine and the Web server machine. For example (using variable
+# substitution), if deploying on bare metal:
+# postgresql_hba_mapping:
+#   - { type: "host", database: "all", user: "all", address: "{{ app_server_ip }}", method: "md5" }
+#   - { type: "host", database: "all", user: "all", address: "{{ celery_server_ip }}", method: "md5" }
+#
+# Alternatively, you can use a subnet range to specify the hosts that will be allowed to connect in a
+# single entry. This should only be used if your hosts have private IP addresses that they use to
+# connect to one another; if you use a range of public addresses it could open your database server
+# to attacks.
+# For example (if deploying into an AWS VPC):
+# postgresql_hba_mapping:
+#   - { type: "host", database: "all", user: "all", address: "172.31.0.0/16", method: "md5" }
+# More information about pg_hba.conf is available here:
+# https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
+
+## APP SETTINGS
+# These keys are used for security purposes; the should be set to different, long (50+ characters),
+# random strings.
+#csrf_session_key: "uncomment and change me!"
+#cookie_secret_key: "uncomment and change me!"
+
+## DEFAULT ADMIN USER SETTINGS
+# These are the username, password, and email for the default admin user that should be used to
+# administer the web application. This user will be set up during the setup process and will be the
+# only user with administrative privileges when the app is first started. You can use this user to
+# add other users and adjust their access privileges, as well as edit the types of records that
+# DRIVER will support.
+driver_admin_username: "admin"
+#driver_admin_password: "uncomment and change me!"
+driver_admin_email: "you@yourdomain.com"
+
+## WEB SETTINGS
+# DRIVER uses the PickPoint API (which runs Nominatim) for geocoding; this is the API key that
+# should be used when accessing that API. You can sign up for an API key here:
+# https://pickpoint.io
+#web_js_nominatim_key: "uncomment and change me!"
+
+# Set this to "true" for slightly cleaner URLs, if you are sure that all your users have updated
+# browsers. Otherwise, it is safe to leave as "false"
+js_html5mode: "false"
+
+# Whether to display a dropdown in the web app to allow users to switch between different record
+# types. To avoid user confusion, it is best to leave this false if you are only planning to track
+# traffic crashes, but if you plan to track other record types you may want to set it to true.
+web_js_record_type_visible: "false"
+
+# If the previous setting is set to "false", DRIVER needs to know the name of the record type that
+# you want to track. Set this to whatever you plan on calling your records, e.g. "Accident",
+# "Incident", or "Crash".
+web_js_record_type_primary_label: "Crash"
+
+# DRIVER also has the ability to track "interventions", or actions taken in an effort to reduce
+# crash rates at a particular location (for example, a dangerous intersection). This flag determines
+# whether this feature should be enabled in the application.
+web_js_interventions_visible: "false"
+# If the previous flag is set to "true", DRIVER needs to know the name of the record type that will
+# be used for representing the secondary records (which represent interventions).
+web_js_record_type_secondary_label: "Intervention"
+
+# DRIVER has the ability to calculate "black spots", which are stretches of road or intersections
+# that experience relatively higher crash rates. Set this to "true" to display these spots in the
+# web user interface.
+web_js_blackspots_visible: "true"
+# DRIVER can display crashes as individual points, as a heatmap, or both. Set this to "true" to
+# enable the heatmap visualization.
+web_js_heatmap_visible: "true"
+# The Google Analytics ID that should be used for the application. For more information, see here:
+# https://support.google.com/analytics/answer/1008080?hl=en
+google_analytics_id: ""
+
+# The languages that should be enabled for the application. See web/app/i18n for a list of supported
+# languages. The id: field should generally be the ISO 639-1 language code for the language in
+# question, with an optional lowercase ISO 3166-1 alpha-2 country code to specify the regional
+# variant. However, in all cases, the id: field needs to exactly match the filename of the
+# corresponding file in web/app/i18n, if the file extension (.json) is removed.
+# Set the rtl: key to true for right-to-left languages.
+languages:
+    - { id: "en-us", label: "English", rtl: false }
+
+# DRIVER uses the DarkSky (formerly forecast.io) API to obtain weather data, which requires an API
+# key. To obtain an API key, see here: https://darksky.net/dev
+forecast_io_api_key: ""
+
+## OIDC SETTINGS
+# DRIVER has the capability to enable Single-Sign-On via OAuth (usually via Google).
+# To enable this feature, you will need a client ID and secret, which can be obtained from the
+# Google API Console: https://developers.google.com/identity/sign-in/web/devconsole-project
+# The URLs that you will need to authorize for your application are:
+# https://<your domain name>
+# https://<your domain name>/
+# https://<your domain name>/openid/
+# https://<your domain name>/openid/callback/
+# https://<your domain name>/openid/callback/login
+# https://<your domain name>/openid/callback/login/
+# https://<your domain name>/openid/callback/logout
+# https://<your domain name>/openid/callback/logout/
+oauth_client_id: ""
+oauth_client_secret: ""
+
+## Localization settings
+# The name of the time zone in which you want your DRIVER instance to operate; this should usually
+# be the time zone for your country. If your country has multiple time zones, pick one. A list of
+# valid time zone names can be found here:
+# https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+local_time_zone_id: "Asia/Manila"
+
+# The ISO 3166-1 alpha 2 country code for the country where this DRIVER instance will be operated.
+# https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+# Note that this may be different from the language code used above.
+local_country_code: "ph"
+# The latitude and longitude of where the maps in your installation of DRIVER should center by
+# default. This is given as [lat, lon]
+local_center_lat_lon: [14.5995, 120.984]
+# DRIVER has the ability to calculate "black spots", which are stretches of road or intersections
+# that experience relatively higher crash rates. The calculation process uses extracts of Open
+# Street Map data. This parameter specifies where to download that extract from. GeoFabrik maintains
+# extracts for most countries and regions in the world; for most countries, you should be able to
+# simply search https://download.geofabrik.de until you find your country and then use the link for
+# your country's extract. If you are trying to run DRIVER on a sub-national area, you may want to
+# generate your own extract for efficiency (the black spot calculation will run more quickly on
+# smaller areas), but the national-level extract can still be used.
+osm_extract_url: "https://download.geofabrik.de/asia/philippines-latest.osm.pbf"
+
+# DRIVER provits a Monit interface for monitoring and inspecting the status of the various
+# application components.
+# If you do not plan to use Monit, security can be increased by disabling it completely, so this is
+# the default. Set this to "true" to enable it.
+monit_enable_web_access: "false"
+# Because Monit enables low-level administration of the DRIVER application, access should be
+# restricted only to systems administrators. This can be accomplished by limiting the IP addresses
+# from which the Monit interface will accept connections, as well as via password. For more
+# information about Monit, see https://mmonit.com/monit/
+# You can connect to Monit at port 2812.
+# The hosts from which to allow connections; this should be tightly limited to just the IP address
+# of system administrators.
+monit_allow_hosts: [96.93.19.137, 66.212.12.106]
+# The user account and password which should be used to connect to Monit
+monit_allow_user: "admin"
+#monit_allow_password: "uncomment and change me!"
+
+## Android jar signing password
+# If you want to run the accompanying Android application with your web app, you will need to place
+# the keystore file that was used to sign the Android application in gradle/data/driver.keystore. In
+# that case, this parameter should be updated with the keystore's password. Otherwise, it can be
+# left alone. Don't worry if you're not sure about the Android app right now; you can always add it
+# later by placing a keystore file in the proper location and updating this field. Then, re-run the
+# original setup command to update your installation of DRIVER.
+keystore_password: ""
+
+## Permission overrides
+# These can be used to override DRIVER's default permission scheme. Making changes to these settings
+# is NOT recommended, because it could allow members of the public access to alter data on your
+# DRIVER installation.
+driver_read_only_group: "public"
+driver_read_write_group: "analyst"
+driver_admin_group: "admin"
+
+####################################
+# ADVANCED                         #
+####################################
+allowed_host: "{{ app_domain_name }}"
+driver_app_hostname: "https://{{ allowed_host }}"
+web_js_api_hostname: "{{ driver_app_hostname}}"
+editor_js_api_hostname: "{{ driver_app_hostname}}"
+web_js_windshaft_hostname: "{{ driver_app_hostname}}"
+
+# This should be the same as the database host IP
+postgresql_host: "{{ database_server_ip }}"
+# The address(es) on which the database server will listen for incoming connections. In most cases,
+# this will be the same as the previous setting.
+postgresql_listen_addresses: "{{ database_server_ip }}"
+# Besides the built-in PostgreSQL security above, the app also deploys a firewall which limits
+# access to servers running the application.
+# The internal IP address of servers running the web application. If this is incorrect, the
+# application will not be able to connect to the database or Redis.
+ip_addresses_app:
+    - "{{ app_server_ip }}"
+
+# The internal IP address of the server running the Celery asynchronous task workers; if this is
+# incorrect, asynchronous tasks such as CSV export will not be able to connect to the database
+ip_addresses_celery:
+    - "{{ celery_server_ip }}"
+
+# The IP address on which the Redis server will listen for incoming connections. Redis is installed
+# onto the database server, so this will usually be the same as the PostgreSQL listen address.
+redis_bind_address: "{{ database_server_ip }}"
+
+## CELERY SETTINGS
+# The internal IP address of the server on which Celery tasks will run.
+celery_host_address: "{{ celery_server_ip }}"
