@@ -24,6 +24,9 @@ python_security_pyasn1_version: 0.4.2
 
 postgresql_host: "database.service.driver.internal"
 postgresql_port: 5432
+# The maximum number of connections that PostgreSQL should allow. You shouldn't need to change this
+# except under conditions of very high load.
+postgresql_max_connections: 400
 
 postgresql_version: "9.4"
 postgresql_package_version: "9.4.*.pgdg14.04+1"
@@ -46,17 +49,20 @@ redis_bind_address: "redis.service.driver.internal"
 redis_port: 6379
 
 ## WEB SETTINGS
+js_html5mode: "true"
+js_html5mode_prefix: "!"
+
 web_js_nominatim_key: ""
-web_js_html5mode: "true"
-web_js_html5mode_prefix: "!"
+web_js_html5mode: "{{ js_html5mode }}"
+web_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
 web_js_record_type_visible: "false"
 web_js_record_type_primary_label: "Incident"
 web_js_record_type_secondary_label: "Intervention"
 web_js_blackspots_visible: "true"
 web_js_heatmap_visible: "true"
 web_js_interventions_visible: "true"
-editor_js_html5mode: "true"
-editor_js_html5mode_prefix: "!"
+editor_js_html5mode: "{{ js_html5mode }}"
+editor_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
 
 ## OIDC SETTINGS
 oauth_client_id: ''

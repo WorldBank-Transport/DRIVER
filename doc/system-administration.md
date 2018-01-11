@@ -31,6 +31,7 @@ Each of these servers also includes:
 Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the source code for the version you want to deploy, so make sure to pull down the latest version via `git pull` and then `git checkout tags/<version>`. In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy.  These files are as follows
 
 1. `production` group_vars - Defines the configured settings for the system. Must be placed in: `deployment/ansible/group_vars/`.
+   Copy from deployment/ansible/group_vars/production.example and fill in the blanks.
   - Make sure to edit the `app_version` flag at the top of the `production` group_vars file to specify the version of the app you want to deploy
   - Check out that tag with `git checkout tags/<version>`
 2. `production` inventory - Defines the remote servers where code will be deployed. Must be placed in: `deployment/ansible/inventory/`.
