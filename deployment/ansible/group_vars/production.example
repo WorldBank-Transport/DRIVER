@@ -6,15 +6,25 @@
 # Generally, when setting up a new instance, you should use the highest-number tag available. The
 # 'latest' tag should be avoided when setting up new instances for production usage, because it may
 # contain bugs.
+# If you want to upgrade to a new version, you can change the version number and re-deploy. However,
+# this may cause outages or lost data depending on which versions you upgrade between. Before
+# performing any upgrades to a production instance of DRIVER, it's recommended that you consult the
+# [change log](https://github.com/WorldBank-Transport/DRIVER/blob/master/CHANGELOG.md) and read the
+# entries for the versions between your current version and the version to which you want to upgrade
+# to see if there are any upgrade warnings or instructions. It is also a good idea to make a copy of
+# your instance (the easiest way to do this will depend on where your servers are hosted) and test
+# the upgrade against the copy first. If you are setting up a production instance of DRIVER for the
+# first time, this is a good opportunity to set up that second testing instance now. For more
+# information about the versioning scheme that DRIVER uses, see https://semver.org/spec/v2.0.0.html
 app_version: "0.0.0"
 # The URL at which users will access the application. Do NOT include 'http' or 'https'; all DRIVER
 # instances are configured to use https.
 app_domain_name: "your.driver-domain.here"
 
 # The *internal* IP address of the hosts for the different components of the web application. DRIVER
-# is currently divided up to run on three servers: A database, a web app server, and a Celery
-# (asynchronous tasks) server. If your servers have only a single IP address, then use that. If they
-# have multiple IP addresses, use the internal, non-public-facing IP address of the database server.
+# runs on three servers: A database, a web app server, and a Celery (asynchronous tasks) server. If
+# your servers have only a single IP address, then use that. If they have multiple IP addresses, use
+# the internal, non-public-facing IP address of the database server.
 database_server_ip: "11.11.11.11"
 app_server_ip: "22.22.22.22"
 celery_server_ip: "33.33.33.33"
@@ -22,8 +32,8 @@ celery_server_ip: "33.33.33.33"
 ## POSTGRESQL SETTINGS
 # The username, password, and database name that the main web app will use when connecting to the
 # database server. These do not need to already exist on the database server; they will be added
-# automatically as part of the setup process. You should put in a long (at least 25 characters)
-# random string for the password.
+# automatically as part of the setup process (but it is fine if they already exist).
+# You should put in a long (at least 25 characters) random string for the password.
 postgresql_username: driver
 #postgresql_password: "uncomment and change me!"
 postgresql_database: driver
@@ -37,7 +47,7 @@ windshaft_db_username: windshaft
 
 # Heimdall is a utility used for managing distributed asynchronous processes by using database
 # locks. It needs a username, password, and its own (very small) database in order to run.  This
-# section specifies the account information and database that Heimdall should use when connection to
+# section specifies the account information and database that Heimdall should use when connecting to
 # the database. This will be added automatically as part of the setup process. This should be
 # different from the previous user/passwords because the Heimdall user has different access
 # privileges.
@@ -65,7 +75,7 @@ heimdall_lock_db: lockspace
 # https://www.postgresql.org/docs/current/static/auth-pg-hba-conf.html
 
 ## APP SETTINGS
-# These keys are used for security purposes; the should be set to different, long (50+ characters),
+# These keys are used for security purposes; they should be set to different, long (50+ characters),
 # random strings.
 #csrf_session_key: "uncomment and change me!"
 #cookie_secret_key: "uncomment and change me!"
@@ -167,12 +177,13 @@ local_center_lat_lon: [14.5995, 120.984]
 # Street Map data. This parameter specifies where to download that extract from. GeoFabrik maintains
 # extracts for most countries and regions in the world; for most countries, you should be able to
 # simply search https://download.geofabrik.de until you find your country and then use the link for
-# your country's extract. If you are trying to run DRIVER on a sub-national area, you may want to
-# generate your own extract for efficiency (the black spot calculation will run more quickly on
-# smaller areas), but the national-level extract can still be used.
+# your country's extract. If you are trying to run DRIVER on a sub-national area, you may be able to
+# find an extract for your area using the resources here:
+# https://wiki.openstreetmap.org/wiki/Planet.osm#Country_and_area_extracts . Make sure to only use
+# extracts in .pbf format.
 osm_extract_url: "https://download.geofabrik.de/asia/philippines-latest.osm.pbf"
 
-# DRIVER provits a Monit interface for monitoring and inspecting the status of the various
+# DRIVER provides a Monit interface for monitoring and inspecting the status of the various
 # application components.
 # If you do not plan to use Monit, security can be increased by disabling it completely, so this is
 # the default. Set this to "true" to enable it.
@@ -182,8 +193,8 @@ monit_enable_web_access: "false"
 # from which the Monit interface will accept connections, as well as via password. For more
 # information about Monit, see https://mmonit.com/monit/
 # You can connect to Monit at port 2812.
-# The hosts from which to allow connections; this should be tightly limited to just the IP address
-# of system administrators.
+# The hosts from which to allow connections; this should be limited to just the IP address of system
+# administrators.
 monit_allow_hosts: [96.93.19.137, 66.212.12.106]
 # The user account and password which should be used to connect to Monit
 monit_allow_user: "admin"
