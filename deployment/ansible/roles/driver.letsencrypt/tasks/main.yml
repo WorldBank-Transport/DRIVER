@@ -15,6 +15,11 @@
     pkg: certbot
     state: present
 
+- name: Stop nginx
+  service:
+    name: nginx
+    state: stopped
+
 # The nginx role will assume that this cert exists when configuring.
 - name: Use CertBot to obtain certificate
   command: certbot certonly --standalone -n --agree-tos --email {{ driver_admin_email }} --domains {{ allowed_host }}
