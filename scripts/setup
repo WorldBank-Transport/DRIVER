@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#########################################
+# Set up Driver for deployment.
+# Requires python3.6 with pip installed.
+#########################################
+
+# Remove virtual environment if it already exists
+rm -rf env
+
+# Make sure virtualenv is installed
+pip install virtualenv
+
+# Create new python3.6 virtual environment
+virtualenv -p python3.6 env
+
+# Install dependencies within virtual environment
+env/bin/pip install jinja2 click
+
+# Run Python setup script
+env/bin/python scripts/setup.py
