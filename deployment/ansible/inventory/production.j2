@@ -1,0 +1,17 @@
+app ansible_ssh_host={{ app_server_ip }} ansible_ssh_user=ubuntu
+database ansible_ssh_host={{ database_server_ip }} ansible_ssh_user=ubuntu
+celery ansible_ssh_host={{ celery_server_ip }} ansible_ssh_user=ubuntu
+
+[app-servers]
+app
+
+[database-servers]
+database
+
+[celery-servers]
+celery
+
+[staging:children]
+app-servers
+database-servers
+celery-servers
