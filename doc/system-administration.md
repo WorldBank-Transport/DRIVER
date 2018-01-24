@@ -50,7 +50,7 @@ In addition to a fully manual deployment, you can run the setup wizard at `scrip
 
 ### Deploy
 
-Once the files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command (NOTE: Make sure to change the `user` argument as appropriate):
+Once the files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command (NOTE: Make sure to change the `user` argument to a user that has sudo privileges on those servers):
 ```
 ansible-playbook -i deployment/ansible/inventory/production --user=ubuntu \
     deployment/ansible/database.yml \
