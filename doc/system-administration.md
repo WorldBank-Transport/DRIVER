@@ -38,9 +38,9 @@ Deploying updates to production is done using [Ansible](https://www.ansible.com/
 3. `driver.keystore` - The signing keystore required for building Android APKs. Must be placed in: `gradle/data/`.
 4. ssh identity file - The private key used for logging into the servers. This does not need to be placed in a particular location, but must be added via `ssh-add` before starting the deploy, so commands may be run on remote machines.
 
-These files are created while configuring the application, and contain sensitive information. They should only be supplied to administrators that will need to deploy updates to the application. Once these files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command:
+These files are created while configuring the application, and contain sensitive information. They should only be supplied to administrators that will need to deploy updates to the application. Once these files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command (NOTE: Make sure to change the `user` argument as appropriate):
 ```
-ansible-playbook -i deployment/ansible/inventory/production \
+ansible-playbook -i deployment/ansible/inventory/production --user=ubuntu \
     deployment/ansible/database.yml \
     deployment/ansible/app.yml \
     deployment/ansible/celery.yml

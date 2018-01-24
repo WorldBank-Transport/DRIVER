@@ -1,6 +1,6 @@
-app ansible_ssh_host={{ app_server_ip }} ansible_ssh_user=ubuntu
-database ansible_ssh_host={{ database_server_ip }} ansible_ssh_user=ubuntu
-celery ansible_ssh_host={{ celery_server_ip }} ansible_ssh_user=ubuntu
+app ansible_ssh_host={{ app_server_ip }}
+database ansible_ssh_host={{ database_server_ip }}
+celery ansible_ssh_host={{ celery_server_ip }}
 
 [app-servers]
 app
