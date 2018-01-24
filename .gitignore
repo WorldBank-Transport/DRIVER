@@ -16,6 +16,10 @@ deployment/ansible/roles/azavea.*
 # Ansible retry files
 deployment/ansible/*.retry
 
+# Wizard output
+deployment/ansible/group_vars/production
+deployment/ansible/inventory/production
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
