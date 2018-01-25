@@ -28,7 +28,7 @@ def generate_password():
 
 
 def wrap_in_quotes(s):
-    return '"{}"'.format(s)
+    return '"{}"'.format(s.strip())
 
 
 @click.command()
