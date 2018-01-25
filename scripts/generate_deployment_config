@@ -21,7 +21,7 @@ echo 'Installing Python dependencies in virtual environment...'
 # Install dependencies within virtual environment
 env/bin/pip install jinja2 click
 
-echo 'Running setup script...'
+echo 'Running script...'
 
-# Run Python setup script
-env/bin/python scripts/setup.py
+# Run Python script
+env/bin/python scripts/generate_deployment_config.py

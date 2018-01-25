@@ -46,7 +46,7 @@ These files are created while configuring the application, and contain sensitive
 
 ### Configuration wizard
 
-In addition to a fully manual deployment, you can run the setup wizard at `scripts/setup` (requires Python 3.6 and pip). The wizard will generate barebones versions of the necessary files for you (`deployment/ansible/group_vars/production` and `deployment/ansible/inventory/production`). You will still need to edit these files as per the environment and locale but the wizard can be helpful in getting started.
+In addition to a fully manual deployment, you can run the setup wizard at `scripts/generate_deployment_config` (requires Python 3.6 and pip). The wizard will generate barebones versions of the necessary files for you (`deployment/ansible/group_vars/production` and `deployment/ansible/inventory/production`). You will still need to edit these files as per the environment and locale but the wizard can be helpful in getting started.
 
 ### Deploy
 
