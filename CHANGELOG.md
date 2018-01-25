@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.1.2](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.2) (2018-01-25)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...1.1.2)
+
+**Merged pull requests:**
+
+- Config Wizard \#154147803 [\#667](https://github.com/WorldBank-Transport/DRIVER/pull/667)
+- Always migrate during deployments [\#666](https://github.com/WorldBank-Transport/DRIVER/pull/666)
+- Bring back staging environment [\#665](https://github.com/WorldBank-Transport/DRIVER/pull/665)
+- Simplify and document production group\_vars [\#664](https://github.com/WorldBank-Transport/DRIVER/pull/664)
+- Include all language options in date-utils [\#663](https://github.com/WorldBank-Transport/DRIVER/pull/663)
+
 ## [1.1.1](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.1) (2018-01-08)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.1.0...1.1.1)
 
