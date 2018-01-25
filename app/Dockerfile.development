@@ -1,4 +1,5 @@
-FROM quay.io/azavea/driver-app:latest
+ARG DOCKER_REPOSITORY=quay.io/azavea
+FROM ${DOCKER_REPOSITORY}/driver-app:latest
 
 RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r dev-requirements.txt --src /opt
 EXPOSE 8000

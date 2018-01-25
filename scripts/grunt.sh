@@ -24,7 +24,11 @@ case "$1" in
     PUBLISHED_PORT=9000
     LIVERELOAD_PORT=35731
     VOLUME_ROOT="/opt/schema_editor"
-    IMAGE_NAME="quay.io/azavea/driver-editor:latest"
+    if [[ -z "${DOCKER_REPOSITORY}" ]]; then
+      IMAGE_NAME="quay.io/azavea/driver-editor:latest"
+    else
+      IMAGE_NAME="${DOCKER_REPOSITORY}/driver-editor:latest"
+    fi
     ;;
 
   web)
@@ -32,7 +36,11 @@ case "$1" in
     PUBLISHED_PORT=9001
     LIVERELOAD_PORT=35732
     VOLUME_ROOT="/opt/web"
-    IMAGE_NAME="quay.io/azavea/driver-web:latest"
+    if [[ -z "${DOCKER_REPOSITORY}" ]]; then
+      IMAGE_NAME="quay.io/azavea/driver-web:latest"
+    else
+      IMAGE_NAME="${DOCKER_REPOSITORY}/driver-web:latest"
+    fi
     ;;
 
   *)

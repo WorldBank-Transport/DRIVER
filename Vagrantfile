@@ -89,7 +89,8 @@ Vagrant.configure("2") do |config|
     app.vm.synced_folder "./app", "/opt/app", type: "nfs", mount_options: MOUNT_OPTIONS
     app.vm.synced_folder "./web", "/opt/web", type: "nfs", mount_options: MOUNT_OPTIONS
     app.vm.synced_folder "./windshaft", "/opt/windshaft", type: "nfs", mount_options: MOUNT_OPTIONS
-    app.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs", mount_options: MOUNT_OPTIONS
+    # app.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "nfs", mount_options: MOUNT_OPTIONS
+    app.vm.synced_folder "./schema_editor", "/opt/schema_editor", type: "virtualbox"
     app.vm.synced_folder "../ashlar", "/opt/ashlar", type: "nfs", mount_options: MOUNT_OPTIONS
 
     # nginx
