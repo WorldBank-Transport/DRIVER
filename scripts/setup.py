@@ -37,28 +37,53 @@ def wrap_in_quotes(s):
     prompt='App domain name (without http:// or https://)',
 )
 @click.option(
+    '--database_server_public_ip',
+    prompt='Database server IP (public)',
+)
+@click.option(
+    '--app_server_public_ip',
+    prompt='App server IP (public)',
+)
+@click.option(
+    '--celery_server_public_ip',
+    prompt='Celery server IP (public)',
+)
+@click.option(
     '--database_server_ip',
-    prompt='Database server IP',
+    default='',
+    prompt='Database server IP (internal, leave blank if n/a)',
 )
 @click.option(
     '--app_server_ip',
-    prompt='App server IP',
+    default='',
+    prompt='App server IP (internal, leave blank if n/a)',
 )
 @click.option(
     '--celery_server_ip',
-    prompt='Celery server IP',
+    default='',
+    prompt='Celery server IP (internal, leave blank if n/a)',
 )
 def create_files_for_deployment(
-        app_domain_name, database_server_ip, app_server_ip, celery_server_ip):
+        app_domain_name,
+        database_server_public_ip,
+        app_server_public_ip,
+        celery_server_public_ip,
+        database_server_ip,
+        app_server_ip,
+        celery_server_ip,
+    ):
 
     with open(os.path.join(GROUP_VARS_PATH, GROUP_VARS_FILENAME), 'w') as f:
         group_vars = render_template(
             os.path.join(PROJECT_PATH, GROUP_VARS_PATH),
             GROUP_VARS_TEMPLATE_FILENAME,
             {
-                'database_server_ip': wrap_in_quotes(database_server_ip),
-                'app_server_ip': wrap_in_quotes(app_server_ip),
-                'celery_server_ip': wrap_in_quotes(celery_server_ip),
+                'database_server_ip': wrap_in_quotes(
+                    database_server_ip or database_server_public_ip),
+                'app_server_ip': wrap_in_quotes(
+                    app_server_ip or app_server_public_ip),
+                'celery_server_ip': wrap_in_quotes(
+                    celery_server_ip or celery_server_public_ip),
                 'app_domain_name': wrap_in_quotes(app_domain_name),
                 'postgresql_password': wrap_in_quotes(generate_password()),
                 'windshaft_db_password': wrap_in_quotes(generate_password()),
@@ -74,9 +99,9 @@ def create_files_for_deployment(
             os.path.join(PROJECT_PATH, INVENTORY_PATH),
             INVENTORY_TEMPLATE_FILENAME,
             {
-                'database_server_ip': database_server_ip,
-                'app_server_ip': app_server_ip,
-                'celery_server_ip': celery_server_ip,
+                'database_server_public_ip': database_server_public_ip,
+                'app_server_public_ip': app_server_public_ip,
+                'celery_server_public_ip': celery_server_public_ip,
             }
         )
         f.write(inventory)
