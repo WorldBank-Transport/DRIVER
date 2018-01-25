@@ -90,6 +90,7 @@ def create_files_for_deployment(
                 'heimdall_db_password': wrap_in_quotes(generate_password()),
                 'csrf_session_key': wrap_in_quotes(generate_password()),
                 'cookie_secret_key': wrap_in_quotes(generate_password()),
+                'driver_admin_password': wrap_in_quotes(generate_password()),
             }
         )
         f.write(group_vars)
