@@ -5,6 +5,8 @@
 # Requires python3.6 with pip installed.
 #########################################
 
+echo 'Setting up virtual environment...'
+
 # Remove virtual environment if it already exists
 rm -rf env
 
@@ -14,8 +16,12 @@ pip install virtualenv
 # Create new python3.6 virtual environment
 virtualenv -p python3.6 env
 
+echo 'Installing Python dependencies in virtual environment...'
+
 # Install dependencies within virtual environment
 env/bin/pip install jinja2 click
+
+echo 'Running setup script...'
 
 # Run Python setup script
 env/bin/python scripts/setup.py

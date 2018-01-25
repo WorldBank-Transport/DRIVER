@@ -93,6 +93,8 @@ def create_files_for_deployment(
             }
         )
         f.write(group_vars)
+        print('New group_vars file written to: {}'.format(
+            os.path.join(PROJECT_PATH, GROUP_VARS_PATH, GROUP_VARS_FILENAME)))
 
     with open(os.path.join(INVENTORY_PATH, INVENTORY_FILENAME), 'w') as f:
         inventory = render_template(
@@ -105,6 +107,8 @@ def create_files_for_deployment(
             }
         )
         f.write(inventory)
+        print('New inventory file written to: {}'.format(
+            os.path.join(PROJECT_PATH, INVENTORY_PATH, INVENTORY_FILENAME)))
 
 
 if __name__ == '__main__':
