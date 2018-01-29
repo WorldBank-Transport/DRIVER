@@ -1,0 +1,189 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DRIVER demo stack -- EC2 instances with Security Groups'
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  AppInstanceType:
+    Description: Web app EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues: [t2.nano, t2.micro, t2.small, t2.medium, t2.large, t2.xlarge, t2.2xlarge]
+    ConstraintDescription: must be a valid EC2 instance type in the T2 family.
+  DatabaseInstanceType:
+    Description: Database EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues: [t2.nano, t2.micro, t2.small, t2.medium, t2.large, t2.xlarge, t2.2xlarge]
+    ConstraintDescription: must be a valid EC2 instance type in the T2 family.
+  CeleryInstanceType:
+    Description: Celery worker EC2 instance type
+    Type: String
+    Default: t2.medium
+    AllowedValues: [t2.nano, t2.micro, t2.small, t2.medium, t2.large, t2.xlarge, t2.2xlarge]
+    ConstraintDescription: must be a valid EC2 instance type in the T2 family.
+  SSHCidr:
+    Description: The IP address range that can be used to SSH to the EC2 instances
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  WebCidr:
+    Description: The IP address range that can be used to view the web app
+    Type: String
+    MinLength: '9'
+    MaxLength: '18'
+    Default: 0.0.0.0/0
+    AllowedPattern: (\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})/(\d{1,2})
+    ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
+  NameSuffix:
+    AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
+    Description: Suffix for EC2 instanced made by this template (2-15 chars), e.g. 'Philippines'
+    MaxLength: 15
+    MinLength: 2
+    Type: String
+Mappings:
+  AWSInstanceType2Arch:
+    t2.nano:
+      Arch: HVM64
+    t2.micro:
+      Arch: HVM64
+    t2.small:
+      Arch: HVM64
+    t2.medium:
+      Arch: HVM64
+    t2.large:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    us-east-1:
+      HVM64: ami-4bc8fe31
+    us-west-2:
+      HVM64: ami-3a5fe342
+    us-west-1:
+      HVM64: ami-94cec3f4
+    eu-west-1:
+      HVM64: ami-a6b7d3df
+    eu-west-2:
+      HVM64: ami-a54359c1
+    eu-west-3:
+      HVM64: ami-6cc77111
+    eu-central-1:
+      HVM64: ami-f7b32a98
+    ap-northeast-1:
+      HVM64: ami-7bf0921d
+    us-gov-west-1:
+      HVM64: ami-8160e9e0
+    ap-southeast-1:
+      HVM64: ami-8d037bf1
+    ap-southeast-2:
+      HVM64: ami-51d92733
+    ap-south-1:
+      HVM64: ami-5480d13b
+    us-east-2:
+      HVM64: ami-bb96bcde
+    sa-east-1:
+      HVM64: ami-aa236fc6
+    cn-north-1:
+      HVM64: ami-0b508d66
+    cn-northwest-1:
+      HVM64: ami-41130723
+    ca-central-1:
+      HVM64: ami-7727a213
+Resources:
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow inbound traffic for SSH, Monit, and HTTP/S
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref 'SSHCidr'
+      - IpProtocol: tcp
+        FromPort: 2812
+        ToPort: 2812
+        CidrIp: !Ref 'SSHCidr'
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: !Ref 'WebCidr'
+      - IpProtocol: tcp
+        FromPort: 443
+        ToPort: 443
+        CidrIp: !Ref 'WebCidr'
+  AppEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'AppInstanceType'
+      SecurityGroups: [!Ref 'AppSecurityGroup']
+      KeyName: !Ref 'KeyName'
+      ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'AppInstanceType', Arch]]
+      Tags:
+      - Key: Name
+        Value:
+          !Join ["", [ "DriverDemoApp-", Ref: NameSuffix ] ]
+  CelerySecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow inbound traffic for SSH and Monit
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref 'SSHCidr'
+      - IpProtocol: tcp
+        FromPort: 2812
+        ToPort: 2812
+        CidrIp: !Ref 'SSHCidr'
+  CeleryEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'CeleryInstanceType'
+      SecurityGroups: [!Ref 'CelerySecurityGroup']
+      KeyName: !Ref 'KeyName'
+      ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'CeleryInstanceType', Arch]]
+      Tags:
+      - Key: Name
+        Value:
+          !Join ["", [ "DriverDemoCelery-", Ref: NameSuffix ] ]
+  DatabaseSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow inbound traffic for SSH, Monit, App, and Celery
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: !Ref 'SSHCidr'
+      - IpProtocol: tcp
+        FromPort: 2812
+        ToPort: 2812
+        CidrIp: !Ref 'SSHCidr'
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        SourceSecurityGroupName:
+          Ref: "AppSecurityGroup"
+      - IpProtocol: tcp
+        FromPort: 0
+        ToPort: 65535
+        SourceSecurityGroupName:
+           Ref: "CelerySecurityGroup"
+  DatabaseEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !Ref 'DatabaseInstanceType'
+      SecurityGroups: [!Ref 'DatabaseSecurityGroup']
+      KeyName: !Ref 'KeyName'
+      ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'DatabaseInstanceType', Arch]]
+      Tags:
+      - Key: Name
+        Value:
+          !Join ["", [ "DriverDemoDatabase-", Ref: NameSuffix ] ]
+Outputs:
+  AppInstanceId:
+    Description: InstanceId of the App EC2 instance
+    Value: !Ref 'AppEC2Instance'
