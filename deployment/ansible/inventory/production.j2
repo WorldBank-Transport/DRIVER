@@ -1,0 +1,17 @@
+app ansible_ssh_host={{ app_server_public_ip }}
+database ansible_ssh_host={{ database_server_public_ip }}
+celery ansible_ssh_host={{ celery_server_public_ip }}
+
+[app-servers]
+app
+
+[database-servers]
+database
+
+[celery-servers]
+celery
+
+[staging:children]
+app-servers
+database-servers
+celery-servers

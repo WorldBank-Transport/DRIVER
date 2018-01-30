@@ -3,6 +3,11 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
 
 [![Build Status](https://travis-ci.org/WorldBank-Transport/DRIVER.svg?branch=develop)](https://travis-ci.org/WorldBank-Transport/DRIVER)
 
+## Deploying
+
+1. Follow the Installation instructions below
+2. Follow the instructions in doc/system-administration.md
+
 ## Developing
 
 ### Installation
@@ -240,6 +245,7 @@ manually delete the duplicate entries and update the GitHub diff link.
 ```bash
 $ git flow release finish <your release version>
 $ git checkout master
+$ git tag -f <your version>  # git-flow puts the tag on `develop`
 $ git push origin master
 $ git checkout develop
 $ git push origin develop

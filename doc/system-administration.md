@@ -28,18 +28,31 @@ Each of these servers also includes:
 
 ## Deploying updates
 
-Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the source code for the version you want to deploy, so make sure to pull down the latest version via `git pull` and then `git checkout tags/<version>`. In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy.  These files are as follows
+Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the source code for the version you want to deploy, so make sure to pull down the latest version via `git pull` and then `git checkout tags/<version>`.
+
+### Manual configuration
+
+In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy. These files are as follows:
 
 1. `production` group_vars - Defines the configured settings for the system. Must be placed in: `deployment/ansible/group_vars/`.
+   Copy from deployment/ansible/group_vars/production.example and fill in the blanks.
   - Make sure to edit the `app_version` flag at the top of the `production` group_vars file to specify the version of the app you want to deploy
   - Check out that tag with `git checkout tags/<version>`
 2. `production` inventory - Defines the remote servers where code will be deployed. Must be placed in: `deployment/ansible/inventory/`.
 3. `driver.keystore` - The signing keystore required for building Android APKs. Must be placed in: `gradle/data/`.
 4. ssh identity file - The private key used for logging into the servers. This does not need to be placed in a particular location, but must be added via `ssh-add` before starting the deploy, so commands may be run on remote machines.
 
-These files are created while configuring the application, and contain sensitive information. They should only be supplied to administrators that will need to deploy updates to the application. Once these files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command:
+These files are created while configuring the application, and contain sensitive information. They should only be supplied to administrators that will need to deploy updates to the application.
+
+### Configuration wizard
+
+In addition to a fully manual deployment, you can run the setup wizard at `scripts/generate_deployment_config` (requires Python 3.6 and pip). The wizard will generate barebones versions of the necessary files for you (`deployment/ansible/group_vars/production` and `deployment/ansible/inventory/production`). You will still need to edit these files as per the environment and locale but the wizard can be helpful in getting started.
+
+### Deploy
+
+Once the files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command (NOTE: Make sure to change the `user` argument to a user that has sudo privileges on those servers):
 ```
-ansible-playbook -i deployment/ansible/inventory/production \
+ansible-playbook -i deployment/ansible/inventory/production --user=ubuntu \
     deployment/ansible/database.yml \
     deployment/ansible/app.yml \
     deployment/ansible/celery.yml
