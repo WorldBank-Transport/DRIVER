@@ -3,10 +3,10 @@
   command: >
     docker build
       -f {{ root_analysis_dir }}/Dockerfile
-      -t quay.io/azavea/driver-analysis:{{ docker_image_tag }}
+      -t {{ docker_repository }}driver-analysis:{{ docker_image_tag }}
       {{ root_analysis_dir }}
   when: developing
 
 - name: Pull application Docker image
-  command: /usr/bin/docker pull quay.io/azavea/driver-analysis:{{ docker_image_tag }}
+  command: /usr/bin/docker pull {{ docker_repository }}driver-analysis:{{ docker_image_tag }}
   when: staging or production

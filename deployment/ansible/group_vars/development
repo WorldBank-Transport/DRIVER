@@ -1,6 +1,7 @@
 ---
 ## DOCKER SETTINGS
 docker_options: "-H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock --storage-driver=aufs"
+docker_repository: ""
 
 ## POSTGRESQL SETTINGS
 postgresql_host: "{{ lookup('env', 'DRIVER_DATABASE_IP') | default('192.168.12.101', true) }}"

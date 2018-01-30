@@ -21,6 +21,11 @@ app_version: "0.0.0"
 # instances are configured to use https.
 app_domain_name: "your.driver-domain.here"
 
+## DOCKER SETTINGS
+# The docker repository you want your app to pull images from. The default is "quay.io/azavea/".
+# The trailing / is required.
+docker_repository: "quay.io/azavea/"
+
 # The *internal* IP address of the hosts for the different components of the web application. DRIVER
 # runs on three servers: A database, a web app server, and a Celery (asynchronous tasks) server. If
 # your servers have only a single IP address, then use that. If they have multiple IP addresses, use
