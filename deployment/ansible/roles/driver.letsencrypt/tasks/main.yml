@@ -40,6 +40,11 @@
     url: "{{ letsencrypt_dhparams_url }}"
     dest: "{{ letsencrypt_dhparams_path }}"
 
+- name: Start nginx
+  service:
+    name: nginx
+    state: started
+
 # Copied from old azavea.letsencrypt role
 - name: Install cronjob for cert renewal
   cron:
