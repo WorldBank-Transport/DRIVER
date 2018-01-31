@@ -1,6 +1,8 @@
 # System administration and troubleshooting
 
-The goal of this document is to provide enough information to allow a system administrator to maintain a production DRIVER system, and to aid in troubleshooting if something goes wrong. This assumes a production system has already been deployed using the default configuration.
+The goal of this document is to provide enough information to allow a system administrator to set up and maintain a production DRIVER system, and to aid in troubleshooting if something goes wrong.
+
+These instructions are designed to be run on a Linux- or Unix-like system.
 
 
 ## General system architecture
@@ -25,32 +27,65 @@ Each of these servers also includes:
    * Firewall configuration via [ufw](https://help.ubuntu.com/community/UFW)
    * Logs for each locally running service, see [logging.md](logging.md) for details
 
+## Deployment
+### 1. Initial setup
 
-## Deploying updates
+Using whatever computing resources are available to you, set up three blank servers running Ubuntu 14.04. Amazon Web Services (AWS) is the preferred way to set up these servers, but other cloud providers such as Microsoft Azure should work as well. If you have physical servers provided by your IT department, they will also work.
 
-Deploying updates to production is done using [Ansible](https://www.ansible.com/) (version must be at minimum 1.8). An `ansible-playbook` command is run, which uses the local configuration of the application files in the `deployment` directory to deploy updates to the remote servers. It is not necessary to have the application running locally, but it is necessary to have the source code for the version you want to deploy, so make sure to pull down the latest version via `git pull` and then `git checkout tags/<version>`.
+If you are using AWS, you can take advantage of the CloudFormation template file located at `deployment/demo-cfn-template.yaml`. See **CloudFormation** below.
 
-### Manual configuration
+Make sure you have SSH access to the servers via an identity file before proceeding.
+For example, if your servers are in AWS, you will need the `.pem` identity file that grants access. See [here](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) for instructions on creating this file for AWS.
 
-In addition to the latest source code, there are four files not checked in to the repository that are needed in order to successfully deploy. These files are as follows:
+For each server, note down:
+1. The public IP address used to access the server via SSH.
+2. (If applicable) The server's private IP address. This is likely to apply if the server is running in a cloud provider such as AWS.
 
-1. `production` group_vars - Defines the configured settings for the system. Must be placed in: `deployment/ansible/group_vars/`.
-   Copy from deployment/ansible/group_vars/production.example and fill in the blanks.
-  - Make sure to edit the `app_version` flag at the top of the `production` group_vars file to specify the version of the app you want to deploy
-  - Check out that tag with `git checkout tags/<version>`
-2. `production` inventory - Defines the remote servers where code will be deployed. Must be placed in: `deployment/ansible/inventory/`.
-3. `driver.keystore` - The signing keystore required for building Android APKs. Must be placed in: `gradle/data/`.
-4. ssh identity file - The private key used for logging into the servers. This does not need to be placed in a particular location, but must be added via `ssh-add` before starting the deploy, so commands may be run on remote machines.
+#### CloudFormation
+To launch the DRIVER instances in an AWS account, follow these steps:
+1. Log into the AWS console and navigate to the CloudFormation service console.
+2. Click `Create Stack`
+3. Under `Choose a template`, select `Upload a template to Amazon S3` and choose `deployment/demo-cfn-template.yaml` under the project directory. Click `Next`.
+4. On the `Specify Details` screen, fill in the requested parameters. In a production scenario with many users, we recommend using at least `t2.large` instances, but `t2.medium` instances will work fine if you are not anticipating a lot of user activity. For `KeyName`, enter the name of the key pair you created previously. For `NameSuffix`, enter a short name that will help you remember the purpose of the servers that will be launched. Click `Next`.
+5. On the `Options` screen you should not need to make any changes. Click `Next`.
+6. On the `Review` screen, review the parameters you have entered. If everything looks good, click `Create`.
+7. Once your DRIVER instances have been launched, note down their public and private IP addresses and continue with the deployment process. You can find this information by clicking the `Resources` tab after the stack is up. You can then select an instance by its `Physical ID`. The public and private IPs will be shown under the "Description" tab at the bottom of the page.
 
-These files are created while configuring the application, and contain sensitive information. They should only be supplied to administrators that will need to deploy updates to the application.
 
-### Configuration wizard
+### 2. DNS Setup
 
-In addition to a fully manual deployment, you can run the setup wizard at `scripts/generate_deployment_config` (requires Python 3.6 and pip). The wizard will generate barebones versions of the necessary files for you (`deployment/ansible/group_vars/production` and `deployment/ansible/inventory/production`). You will still need to edit these files as per the environment and locale but the wizard can be helpful in getting started.
+Determine the domain name at which you plan to make your DRIVER instance accessible (e.g. roadsafety.io). Use your DNS management system to create an A record which directs the DRIVER domain name to the IP address of server you plan to use as the **App** host (see above).
 
-### Deploy
+A domain name is necessary for DRIVER to function correctly. If you do not have a domain name available, you should follow the instructions in `README.md` to set up a local development instance of DRIVER, and use that until you can obtain a domain name.
 
-Once the files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the command (NOTE: Make sure to change the `user` argument to a user that has sudo privileges on those servers):
+### 3. Configuration files
+
+In addition to the source code, there are three files not checked in to the repository that are needed in order to successfully deploy. These files are as follows:
+
+1. Ansible group-vars (`deployment/ansible/group_vars/production`)
+2. Ansible inventory (`deployment/ansible/inventory/production`)
+3. Gradle Keystore (`gradle/data/driver.keystore`)
+
+The Ansible **group-vars** and **inventory** should be generated by using the *configuration wizard* (see below). 
+
+The Gradle **keystore** always needs to exist, but if you don't want to use DRIVER's companion data entry app, you can use a blank file by running `touch gradle/data/driver.keystore`. If you *do* want to use the data-entry app, however, you will need to generate the file properly. More detailed instructions on how to generate this file are available in the [DRIVER-Android](https://github.com/WorldBank-Transport/DRIVER-Android) repository. You can always add this functionality later.
+
+#### Configuration wizard
+
+Run the setup wizard by executing `./scripts/generate_deployment_config`. This will prompt you for the domain name and IP addresses that you noted down previously. The script will then generate a barebones versions of the Ansible group-vars and inventory files for you, including auto-generated passwords. **You will still need to edit the group-vars**, but the wizard is a convenient way to get started.
+
+Once you've run the wizard, open up `deployment/ansible/group_vars/production` using a text editor. The file contains numerous parameters that must be set correctly in order for your installation of DRIVER to function. It also contains explanations of the meaning of each parameter. The **configuration wizard** will have already set most of these values to reasonable defaults, so you shouldn't need to change many. However, there are some that you will almost certainly want to change:
+- `driver_admin_email`: Set this to your email
+- `languages`: Change this to the language(s) you want to use
+- `local_time_zone_id`: Set this to the time zone of the area where you will use DRIVER
+- `local_country_code`: Set this to your country's two-letter code
+- `local_center_lat_lon`: Set this to the location where you want DRIVER's maps to be centered by default.
+
+Don't worry about making a mistake here -- you can always change the parameters and re-run the deployment process (next section) if you realize you need to make changes later.
+
+### 4. Deploy
+
+Once the **group-vars** and **inventory** files are in place, deployment may be performed by opening a terminal, switching to the directory of the DRIVER source code and running the following command (NOTE: Make sure to change the `--user` argument to a user that has sudo privileges on those servers):
 ```
 ansible-playbook -i deployment/ansible/inventory/production --user=ubuntu \
     deployment/ansible/database.yml \
@@ -58,10 +93,44 @@ ansible-playbook -i deployment/ansible/inventory/production --user=ubuntu \
     deployment/ansible/celery.yml
 ```
 
-At some point it may be desirable to modify some of the configuration values found in the `production` group_vars file, or similarly, to update the server configuration in the `production` inventory file. The following are links to the `Ansible` documentation for an in-depth description of how to use inventories and variables:
+When running this command, you may see messages of the form `The authenticity of host '...' can't be established`. If so, type `yes` and hit Enter. You may have to do this several times before provisioning will begin. If you nonetheless receive an error like `fatal: [app]: UNREACHABLE! =>{"changed": false, "msg": "Failed to connect to the host via ssh: Host key verification failed.`, just re-run the command.
+
+The following are links to the `Ansible` documentation for an in-depth description of how to use inventories and variables:
  * [Ansible inventory documentation](http://docs.ansible.com/ansible/intro_inventory.html)
  * [Ansible variables documentation](http://docs.ansible.com/ansible/playbooks_variables.html)
 
+## Deploying updates
+
+To deploy updates or make changes to the application, follow these steps:
+1. Edit `deployment/ansible/group_vars/production` with your desired changes.
+2. If you changed the `app_version` parameter, run `git fetch --all && git checkout tags/<version>` where `<version>` should be the same as the version number you set in `app_version`.
+3. Re-run the `ansible-playbook` command from the previous section.
+
+## Making custom changes
+The code for DRIVER is open-source, which makes it possible for any software developer to alter the software's functionality, fix bugs, and add features.
+
+If you have software development resources available to make these types of changes, you are encouraged to [submit pull requests](https://github.com/WorldBank-Transport/DRIVER/pulls) to the DRIVER repository so that all DRIVER users can benefit.
+
+However, if you want to deploy your changes to your production version of DRIVER before they are incorporated into the main repository, you will need to maintain your own Docker registry that your copy of DRIVER can use to install your custom code. 
+
+Setting up a Docker registry is beyond the scope of this document; there are various services, such as [AWS Elastic Container Registry](https://aws.amazon.com/ecr/) and [Quay](https://quay.io/), which can be used to operate a registry, and you can use their documentation to get a registry set up.
+
+Once you have a Docker registry set up, follow these steps to use it when deploying your copy of DRIVER:
+1. Execute `vagrant up && vagrant ssh celery`
+2. Build images for the following 5 containers:
+   - App: `sudo docker build -f opt/app/Dockerfile.base -t "<your-repository>/driver-app" /opt/app`
+   - Schema Editor: `sudo docker build -f /opt/schema_editor/Dockerfile -t "<your-repository>/driver-editor" /opt/schema_editor`
+   - User interface: `sudo docker build -f /opt/web/Dockerfile -t "<your-repository>/driver-web" /opt/web`
+   - Gradle: `sudo docker build -f /opt/gradle/Dockerfile -t "<your-repository>/driver-gradle" /opt/gradle`
+   - Analysis tools: `sudo docker build -f /opt/analysis_tasks/Dockerfile -t "<your-repository>/driver-analysis" /opt/analysis_tasks`
+3. Push images for all containers:
+   - `docker push "<your-repository>/driver-app:latest"`
+   - `docker push "<your-repository>/driver-editor:latest"`
+   - `docker push "<your-repository>/driver-web:latest"`
+   - `docker push "<your-repository>/driver-gradle:latest"`
+   - `docker push "<your-repository>/driver-analysis:latest"`
+4. Then, edit your `deployment/ansible/group_vars/production` file and change the `docker_repository` parameter to point to your repository.
+5. Redeploy your stack as usual, following the deployment instructions above.
 
 ## Using Monit to restart services
 
@@ -100,7 +169,7 @@ In the case of a problem, the cron task should be checked. This can be examined 
 sudo crontab -l
 ```
 
-There should be an entry for `cd /var/lib/letsencrypt && ./renew-certs.py`. That command may be run manually as the root user in order to help diagnose an error with SSL certification renewal.
+There should be an entry for `certbot renew`. That command may be run manually as the root user in order to help diagnose an error with SSL certification renewal.
 
 
 ## Cleaning up after Docker
