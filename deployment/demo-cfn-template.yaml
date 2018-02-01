@@ -41,7 +41,7 @@ Parameters:
     ConstraintDescription: must be a valid IP CIDR range of the form x.x.x.x/x.
   NameSuffix:
     AllowedPattern: '[a-zA-Z][a-zA-Z0-9]*'
-    Description: Suffix for EC2 instanced made by this template (2-15 chars), e.g. 'Philippines'
+    Description: Suffix for EC2 instance made by this template (2-15 chars), e.g. 'Philippines'
     MaxLength: 15
     MinLength: 2
     Type: String
