@@ -17,18 +17,14 @@ INVENTORY_FILENAME = 'production'
 
 def render_template(template_path, template_filename, context):
     template_environment = Environment(
-        autoescape=False,
         loader=FileSystemLoader(template_path),
-        trim_blocks=False)
+        trim_blocks=True
+    )
     return template_environment.get_template(template_filename).render(context)
 
 
 def generate_password():
     return secrets.token_urlsafe(32)
-
-
-def wrap_in_quotes(s):
-    return '"{}"'.format(s.strip())
 
 
 @click.command()
@@ -51,17 +47,17 @@ def wrap_in_quotes(s):
 @click.option(
     '--database_server_ip',
     default='',
-    prompt='Database server IP (internal, leave blank if n/a)',
+    prompt='Database server IP (private, leave blank if n/a)',
 )
 @click.option(
     '--app_server_ip',
     default='',
-    prompt='App server IP (internal, leave blank if n/a)',
+    prompt='App server IP (private, leave blank if n/a)',
 )
 @click.option(
     '--celery_server_ip',
     default='',
-    prompt='Celery server IP (internal, leave blank if n/a)',
+    prompt='Celery server IP (private, leave blank if n/a)',
 )
 def create_files_for_deployment(
         app_domain_name,
@@ -78,19 +74,16 @@ def create_files_for_deployment(
             os.path.join(PROJECT_PATH, GROUP_VARS_PATH),
             GROUP_VARS_TEMPLATE_FILENAME,
             {
-                'database_server_ip': wrap_in_quotes(
-                    database_server_ip or database_server_public_ip),
-                'app_server_ip': wrap_in_quotes(
-                    app_server_ip or app_server_public_ip),
-                'celery_server_ip': wrap_in_quotes(
-                    celery_server_ip or celery_server_public_ip),
-                'app_domain_name': wrap_in_quotes(app_domain_name),
-                'postgresql_password': wrap_in_quotes(generate_password()),
-                'windshaft_db_password': wrap_in_quotes(generate_password()),
-                'heimdall_db_password': wrap_in_quotes(generate_password()),
-                'csrf_session_key': wrap_in_quotes(generate_password()),
-                'cookie_secret_key': wrap_in_quotes(generate_password()),
-                'driver_admin_password': wrap_in_quotes(generate_password()),
+                'database_server_ip': database_server_ip or database_server_public_ip,
+                'app_server_ip': app_server_ip or app_server_public_ip,
+                'celery_server_ip': celery_server_ip or celery_server_public_ip,
+                'app_domain_name': app_domain_name,
+                'postgresql_password': generate_password(),
+                'windshaft_db_password': generate_password(),
+                'heimdall_db_password': generate_password(),
+                'csrf_session_key': generate_password(),
+                'cookie_secret_key': generate_password(),
+                'driver_admin_password': generate_password(),
             }
         )
         f.write(group_vars)
