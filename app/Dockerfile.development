@@ -1,4 +1,4 @@
-FROM quay.io/azavea/driver-app:latest
+FROM driver-app:latest
 
 RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r dev-requirements.txt --src /opt
 EXPOSE 8000

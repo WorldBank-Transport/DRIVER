@@ -17,12 +17,12 @@
   command: >
     docker build
       -f {{ gradle_dir }}/Dockerfile
-      -t quay.io/azavea/driver-gradle:{{ docker_image_tag }}
+      -t {{ docker_repository }}driver-gradle:{{ docker_image_tag }}
       {{ gradle_dir }}
   when: developing
 
 - name: Pull gradle Docker image
-  command: /usr/bin/docker pull quay.io/azavea/driver-gradle:{{ docker_image_tag }}
+  command: /usr/bin/docker pull {{ docker_repository }}driver-gradle:{{ docker_image_tag }}
   when: staging or production
 
 - name: Configure gradle service definition
