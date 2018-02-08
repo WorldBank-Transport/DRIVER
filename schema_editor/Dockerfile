@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   && rm -rf /var/lib/apt/lists/* && \
   npm install -g --save grunt-cli bower
 
+RUN gem install ffi -v 1.9.18
 RUN gem install sass -v 3.4.22
 RUN gem install compass
 
