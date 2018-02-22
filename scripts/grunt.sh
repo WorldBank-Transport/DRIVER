@@ -24,7 +24,7 @@ case "$1" in
     PUBLISHED_PORT=9000
     LIVERELOAD_PORT=35731
     VOLUME_ROOT="/opt/schema_editor"
-    IMAGE_NAME="quay.io/azavea/driver-editor:latest"
+    IMAGE_NAME="driver-editor:latest"
     ;;
 
   web)
@@ -32,7 +32,7 @@ case "$1" in
     PUBLISHED_PORT=9001
     LIVERELOAD_PORT=35732
     VOLUME_ROOT="/opt/web"
-    IMAGE_NAME="quay.io/azavea/driver-web:latest"
+    IMAGE_NAME="driver-web:latest"
     ;;
 
   *)

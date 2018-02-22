@@ -51,3 +51,6 @@ ip_addresses_app:
     - "{{ hostvars['app']['ansible_ec2_local_ipv4'] }}"
 ip_addresses_celery:
     - "{{ hostvars['celery']['ansible_ec2_local_ipv4'] }}"
+
+## DOCKER SETTINGS
+docker_repository: "quay.io/azavea/"

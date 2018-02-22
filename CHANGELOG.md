@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.1.3](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.3) (2018-02-22)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...1.1.3)
+
+**Merged pull requests:**
+
+- Add data best practices doc [\#675](https://github.com/WorldBank-Transport/DRIVER/pull/675)
+- Fix gem install error on editor and web image builds [\#674](https://github.com/WorldBank-Transport/DRIVER/pull/674)
+- Update documentation [\#672](https://github.com/WorldBank-Transport/DRIVER/pull/672)
+- Restart nginx after certbot task [\#671](https://github.com/WorldBank-Transport/DRIVER/pull/671)
+- Template out docker repository [\#670](https://github.com/WorldBank-Transport/DRIVER/pull/670)
+- Add CloudFormation template for demo resources [\#669](https://github.com/WorldBank-Transport/DRIVER/pull/669)
+
+# Change Log
+
 ## [1.1.2](https://github.com/WorldBank-Transport/DRIVER/tree/1.1.2) (2018-01-25)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...1.1.2)
 
