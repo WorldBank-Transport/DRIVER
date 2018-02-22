@@ -27,6 +27,8 @@ Each of these servers also includes:
    * Firewall configuration via [ufw](https://help.ubuntu.com/community/UFW)
    * Logs for each locally running service, see [logging.md](logging.md) for details
 
+![(DRIVER System Architecture Diagram)](arch-diagram.svg)
+
 ## Deployment
 ### 1. Initial setup
 
