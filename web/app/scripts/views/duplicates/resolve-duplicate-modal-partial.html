@@ -8,11 +8,11 @@
     <div class="modal-body">
         <div class="duplicate-details"
              ng-repeat="record in [modal.params.duplicate.record, modal.params.duplicate.duplicate_record]">
-            <driver-details-single
-                data="record.data[modal.params.propertyKey]"
-                properties="modal.params.properties"
-                record="record">
-            </driver-details-single>
+            <driver-details-tabs
+                record-schema="modal.params.recordSchema"
+                record="record"
+                user-can-write="false">
+            </driver-details-tabs>
         </div>
     </div>
     <div class="modal-footer">
