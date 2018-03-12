@@ -31,6 +31,7 @@
     "grunt-translate-sync": "0.3.0",
     "grunt-usemin": "~3.0.0",
     "grunt-wiredep": "^2.0.0",
+    "jasmine-core": "2.99.1",
     "jshint-stylish": "^1.0.0",
     "karma-jasmine": "*",
     "karma-ng-html2js-preprocessor": "^0.1.2",
