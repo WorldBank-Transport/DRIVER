@@ -1,8 +1,6 @@
 import subprocess
 import os
 
-from django.conf import settings
-
 from celery import shared_task
 from celery.utils.log import get_task_logger
 
@@ -22,7 +20,7 @@ def forecast_segment_incidents(segments_csv, output_path):
     analysis_container = 'quay.io/azavea/driver-analysis'
     docker_repository = os.environ.get('DOCKER_REPOSITORY')
     if docker_repository is not None:
-        analysis_container = docker_repository + '/driver-analysis'
+        analysis_container = docker_repository + 'driver-analysis'
     cmd = ['docker',
            'run',
            '--rm',
