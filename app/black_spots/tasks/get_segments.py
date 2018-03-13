@@ -141,9 +141,12 @@ def get_record_buffers(road_srid, records_csv_uuid):
         records_csv.open('rb')
         try:
             for row in csv.DictReader(records_csv):
-                record_point = transform(project, Point(float(row[RECORD_COL_X]),
-                                                        float(row[RECORD_COL_Y])))
-                record_buffers.append(record_point.buffer(MATCH_TOLERANCE))
+                try:
+                    record_point = transform(project, Point(float(row[RECORD_COL_X]),
+                                                            float(row[RECORD_COL_Y])))
+                    record_buffers.append(record_point.buffer(MATCH_TOLERANCE))
+                except RuntimeError:
+                    continue
         finally:
             records_csv.close()
 
