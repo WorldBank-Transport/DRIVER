@@ -67,11 +67,11 @@ def export_records(occurred_min, occurred_max, record_type_id):
     }
     details_key = details.keys()[0]
     record_detail_fields = [
-        key for key, val in details[details_key]['properties'].viewitems()
+        to_utf8(key) for key, val in details[details_key]['properties'].viewitems()
         if (
-                'options' not in val or
-                'hidden' not in val['options'] or
-                val['options']['hidden'] is False
+            'options' not in val or
+            'hidden' not in val['options'] or
+            val['options']['hidden'] is False
         ) and (
             key not in DROPPED_KEYS
         )
