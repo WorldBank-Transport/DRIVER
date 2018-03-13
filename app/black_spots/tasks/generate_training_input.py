@@ -340,6 +340,12 @@ def get_segments_with_data(combined_segments, segments_with_records, min_occurre
     # Figure out the number of full years of data we have so we can create offset aggregations.
     # A year is defined here as 52 weeks, in case we eventually want to do week/month aggregations.
     num_years = (max_occurred - min_occurred).days / (52 * 7)
+    desired_years = 4
+    if num_years < desired_years:  # The R script expects at least 4 years of data
+        logger.info('Fewer than 4 years of data found; outputting zeroes for extra years')
+        diff = desired_years - num_years
+        num_years = desired_years
+        min_occurred = min_occurred - relativedelta(years=diff)
 
     # Create the set of year ranges
     year_ranges = [
