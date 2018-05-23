@@ -151,6 +151,9 @@ forecast_io_api_key: ""
 # DRIVER has the capability to enable Single-Sign-On via OAuth (usually via Google).
 # To enable this feature, you will need a client ID and secret, which can be obtained from the
 # Google API Console: https://developers.google.com/identity/sign-in/web/devconsole-project
+# CAUTION: We have had problems copy-pasting the client ID and client secret from this site; there
+# have sometimes been whitespace and invisible characters in the copied strings. We recommend
+# typing the client id and secret by hand.
 # The URLs that you will need to authorize for your application are:
 # https://<your domain name>
 # https://<your domain name>/
