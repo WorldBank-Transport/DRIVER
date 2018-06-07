@@ -36,7 +36,6 @@
                                         displayClass: 'alert-danger'});
                 }
             }
-            console.log('uploading data!');
             ctl.uploadState = 'requesting';
             Notifications.show({text: 'Loading...'});
             Geography.create(ctl.files,
