@@ -122,7 +122,7 @@ telling it to communicate with the Docker daemon on the `app` virtual machine.
 ### Boundaries
 
 To load boundaries, upload the `regions.zip` and `states.zip` files to Ashlar.
-Ashlar is runs on localhost:7001. For each file, first upload the file, then select
+Ashlar runs on localhost:7001. For each file, first upload the file, then select
 `name` as the display field, then hit save. Either refresh the page or
 navigate somewhere else in between any two uploads.
 
@@ -147,6 +147,9 @@ To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token
 To load mock interventions, run `python scripts/load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/interventions_sample_pts.geojson`.
 
 To generate black spot and load forecast training inputs, run `python scripts/generate_training_input.py /path/to/roads.shp /path/to/records.csv`.
+
+More documentation for loading data can be found in the [`scripts`
+directory](./scripts/README/md).
 
 ### Costs
 
