@@ -2,18 +2,21 @@
 
 ## Requirements
 
+## OS-level requirements
+
 - Python 2.x.
-- python-gdal
+- Python bindings for GDAL (available on the [apt package index](https://packages.ubuntu.com/artful/python-gdal))
+  as well as on [PyPi](https://pypi.org/project/GDAL/))
 
 These OS-level requirements can be bootstrapped off of Azavea's GDAL docker
 image ([code](https://github.com/azavea/docker-gdal),
 [Quay repo](https://quay.io/repository/azavea/gdal?tag=latest&tab=tags)).
 
-Install Python requirements with pip:
+## Python requirements
 
-```
-pip install -U -r requirements.txt
-```
+- [python-dateutil](https://pypi.org/project/python-dateutil/)
+- [pytz](https://pypi.org/project/pytz/)
+- [requests](https://pypi.org/project/requests/)
 
 ## Script and schema dependencies
 
