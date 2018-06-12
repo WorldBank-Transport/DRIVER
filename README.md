@@ -143,12 +143,14 @@ Note that the import process will take roughly two hours for the full data set; 
 number of records with `head` on the individual CSVs.
 
 To load mock black spots, run `python scripts/load_black_spots.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/black_spots.json`.
+Mock black spot data is available in `scripts/sample_data/black_spots.json`.
 
 To load mock interventions, run `python scripts/load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' /path/to/interventions_sample_pts.geojson`.
+Mock intervention data is available in `scripts/sample_data/interventions_sample_pts.json`.
 
 To generate black spot and load forecast training inputs, run `python scripts/generate_training_input.py /path/to/roads.shp /path/to/records.csv`.
 
-More documentation for loading data can be found in the [`scripts`
+More information on the requirements for loading data can be found in the [`scripts`
 directory](./scripts/README/md).
 
 ### Costs
