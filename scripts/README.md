@@ -4,7 +4,7 @@
 
 ## OS-level requirements
 
-- Python 2.x.
+- Python 2.7
 - Python bindings for GDAL (available on the [apt package index](https://packages.ubuntu.com/artful/python-gdal))
   as well as on [PyPi](https://pypi.org/project/GDAL/))
 
@@ -18,19 +18,20 @@ image ([code](https://github.com/azavea/docker-gdal),
 - [pytz](https://pypi.org/project/pytz/)
 - [requests](https://pypi.org/project/requests/)
 
-## Script and schema dependencies
+## Loading sample data
 
-Certain ETL scripts and schemas in this repo depend on specific data
-sources to run properly. Retrieve these dependencies from the fileshare and
-make sure they exist in this repo before you load the data.
+The `sample_data` directory provides two sample data files for testing purposes:
 
-These dependencies include:
+- `black_spots.json`: sample black spots
+- `interventions_sample_pts.json`: sample interventions
 
-| script/schema | depends on |
-| ------------- | --------------- |
-| `pnp_incident_schema.json` | `incidents_and_sites.csv` |
-| `pnp_incident_schema_v2.json` | 'public.csv' |
-| `incident_schema_v3.json` | `data_for_v3` directory |
-| `load_black_spots.py` | `black_spots.json` |
-| `load_interventions.py | `interventions_sample_pts.geojson` |
-| `generate_training_input.py` | `blackspot_training/roads_utm.*` and `blackspot_training/all_crashes_2008-2012.csv` |
+Retrieve your auth token by inspecting network traffic, and then load these
+files using the scripts in this directory:
+
+```
+python load_black_spots.py --authz 'Token YOUR_AUTH_TOKEN' sample_data/black_spots.json
+```
+
+```
+python load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' sample_data/interventions_sample_pts.geojson
+```
