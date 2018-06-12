@@ -2,6 +2,8 @@
 
 This document describes how one can manage a domain name with more specific information on how to use [Amazon Route 53](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/Welcome.html).
 
+Instructions are provided for using Route 53, but DRIVER DNS can be configured using many different DNS providers. The necessary steps will be similar to what is required for Route 53.
+
 ## DNS
 
 Domain registration involves a _registrant_, the person or organization registering the domain name. The _registrant_ must work with a _registrar_, an organization accredited by [ICANN](https://www.icann.org/) to sell domain names. After the domain is purchased, the _registry_ then stores the information in their database and in a public [WHOIS](https://whois.icann.org/en/dns-and-whois-how-it-works) database.
