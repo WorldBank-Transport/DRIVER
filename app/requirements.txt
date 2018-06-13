@@ -15,7 +15,7 @@ python-dateutil==2.4.2
 pytz==2015.7
 mock==1.3.0
 djangorestframework-csv==1.4.1
-git+https://github.com/azavea/ashlar.git@develop#egg=ashlar
+git+https://github.com/azavea/ashlar.git@legacy#egg=ashlar
 # Dependencies for generate_training_input script
 argparse==1.2.1
 Fiona==1.6.3
