@@ -1,13 +1,37 @@
-#Loading data for development
+# Loading data for development
 
-pnp_incident_schema.json requires 'incidents_and_sites.csv'
+## Requirements
 
-pnp_incident_schema_v2.json requires 'public.csv'
+## OS-level requirements
 
-incident_schema_v3.json requires the directory `data_for_v3`
+- Python 2.7
+- Python bindings for GDAL (available on the [apt package index](https://packages.ubuntu.com/artful/python-gdal))
+  as well as on [PyPi](https://pypi.org/project/GDAL/))
 
-load_black_spots.py requires `black_spots.json`
+These OS-level requirements can be bootstrapped off of Azavea's GDAL docker
+image ([code](https://github.com/azavea/docker-gdal),
+[Quay repo](https://quay.io/repository/azavea/gdal?tag=latest&tab=tags)).
 
-load_interventions.py requires `interventions_sample_pts.geojson`
+## Python requirements
 
-generate_training_input.py requires `blackspot_training/roads_utm.*` and `blackspot_training/all_crashes_2008-2012.csv`
+- [python-dateutil](https://pypi.org/project/python-dateutil/)
+- [pytz](https://pypi.org/project/pytz/)
+- [requests](https://pypi.org/project/requests/)
+
+## Loading sample data
+
+The `sample_data` directory provides two sample data files for testing purposes:
+
+- `black_spots.json`: sample black spots
+- `interventions_sample_pts.json`: sample interventions
+
+Retrieve your auth token by inspecting network traffic, and then load these
+files using the scripts in this directory:
+
+```
+python load_black_spots.py --authz 'Token YOUR_AUTH_TOKEN' sample_data/black_spots.json
+```
+
+```
+python load_interventions.py --authz 'Token YOUR_AUTH_TOKEN' sample_data/interventions_sample_pts.geojson
+```
