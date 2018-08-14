@@ -50,6 +50,7 @@ INSTALLED_APPS = (
 
     'django_extensions',
     'djangooidc',
+    'django_filters',
 
     'ashlar',
 
