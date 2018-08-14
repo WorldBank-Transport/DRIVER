@@ -53,6 +53,7 @@ INSTALLED_APPS = (
 
     'ashlar',
 
+    'driver',
     'driver_auth',
     'data',
     'user_filters',
