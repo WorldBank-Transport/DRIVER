@@ -15,7 +15,7 @@ class RecordAuditLogFilter(django_filters.FilterSet):
 
 
 class RecordDuplicateFilter(django_filters.FilterSet):
-    record_type = django_filters.MethodFilter(name='record_type', action='filter_record_type')
+    record_type = django_filters.Filter(field_name='record_type', method='filter_record_type')
 
     def filter_record_type(self, queryset, value):
         """ Filter duplicates by the record type of their first record

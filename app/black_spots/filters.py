@@ -10,10 +10,17 @@ from ashlar.models import BoundaryPolygon
 from black_spots.models import (BlackSpot, BlackSpotSet)
 
 from django.contrib.gis.geos import GEOSGeometry
+from django.contrib.gis.db import models as gis_models
 
 from rest_framework.exceptions import ParseError, NotFound
 from rest_framework_gis.filterset import GeoFilterSet
 
+
+FILTER_OVERRIDES = {
+    gis_models.PolygonField: {
+        'filter_class': django_filters.CharFilter
+    }
+}
 
 def parse_and_validate_dt(dt_str, param_name):
     """
@@ -35,9 +42,9 @@ def parse_and_validate_dt(dt_str, param_name):
 class BlackSpotFilter(django_filters.FilterSet):
     """Filter for black spots"""
 
-    polygon = django_filters.MethodFilter(name='polygon', action='filter_polygon')
+    polygon = django_filters.Filter(field_name='polygon', method='filter_polygon')
 
-    def filter_polygon(self, queryset, geojson):
+    def filter_polygon(self, queryset, field_name, geojson):
         """ Method filter for arbitrary polygon, sent in as geojson """
         poly = GEOSGeometry(geojson)
         if poly.valid:
@@ -53,9 +60,9 @@ class BlackSpotFilter(django_filters.FilterSet):
 class BlackSpotSetFilter(django_filters.FilterSet):
     """Filter for black spots sets"""
 
-    effective_at = django_filters.MethodFilter(name='effective_at', action='filter_effective_at')
+    effective_at = django_filters.Filter(field_name='effective_at', method='filter_effective_at')
 
-    def filter_effective_at(self, queryset, effective_at_str):
+    def filter_effective_at(self, queryset, field_name, effective_at_str):
         """Method filter for effective datetime specified by effective_at"""
         if not effective_at_str:
             return queryset
@@ -75,12 +82,12 @@ class BlackSpotSetFilter(django_filters.FilterSet):
 class EnforcerAssignmentFilter(GeoFilterSet):
     """Filter for enforcer assignments"""
 
-    record_type = django_filters.MethodFilter(name='record_type', action='filter_record_type')
-    polygon = django_filters.MethodFilter(name='polygon', action='filter_polygon')
-    polygon_id = django_filters.MethodFilter(name='polygon_id', action='filter_polygon_id')
-    shift_end = django_filters.MethodFilter(name='shift_end', action='filter_shift_end')
+    record_type = django_filters.Filter(field_name='record_type', method='filter_record_type')
+    polygon = django_filters.Filter(field_name='polygon', method='filter_polygon')
+    polygon_id = django_filters.Filter(field_name='polygon_id', method='filter_polygon_id')
+    shift_end = django_filters.Filter(field_name='shift_end', method='filter_shift_end')
 
-    def filter_polygon(self, queryset, geojson):
+    def filter_polygon(self, queryset, field_name, geojson):
         """Method filter for arbitrary polygon, sent in as geojson"""
         try:
             poly = GEOSGeometry(geojson)
@@ -91,7 +98,7 @@ class EnforcerAssignmentFilter(GeoFilterSet):
         else:
             raise ParseError('Input polygon must be valid GeoJSON: ' + poly.valid_reason)
 
-    def filter_polygon_id(self, queryset, poly_uuid):
+    def filter_polygon_id(self, queryset, field_name, poly_uuid):
         """Method filter for containment within the polygon using id"""
         try:
             return queryset.filter(geom__intersects=BoundaryPolygon.objects.get(pk=poly_uuid).geom)
@@ -100,11 +107,11 @@ class EnforcerAssignmentFilter(GeoFilterSet):
         except BoundaryPolygon.DoesNotExist as e:
             raise NotFound(e)
 
-    def filter_record_type(self, queryset, rt_id):
+    def filter_record_type(self, queryset, field_name, rt_id):
         """Method filter for record type"""
         return queryset.filter(black_spot_set__record_type=rt_id)
 
-    def filter_shift_end(self, queryset, shift_end_str):
+    def filter_shift_end(self, queryset, field_name, shift_end_str):
         """Method filter for shift end datetime"""
         shift_end_dt = parse_and_validate_dt(shift_end_str, 'shift_end')
 
@@ -116,3 +123,5 @@ class EnforcerAssignmentFilter(GeoFilterSet):
 
     class Meta:
         model = BlackSpot
+        exclude = []
+        filter_overrides = FILTER_OVERRIDES
