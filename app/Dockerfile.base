@@ -1,9 +1,17 @@
-FROM quay.io/azavea/django:1.8-python2.7-slim
+FROM quay.io/azavea/django:1.11-python2.7-slim
 
 # N.B. This will not work for docker versions above 1.10.x; Docker 1.11 and above contain
 # multiple binaries in a tarball; if we upgrade Docker to the 1.11 branch or beyond then
 # the RUN command below will need to be updated.
 ENV DOCKER_VERSION 1.10.3
+
+# install libgdal1-dev
+RUN echo "deb http://deb.debian.org/debian jessie main contrib non-free " > /etc/apt/sources.list.d/jessie.list
+RUN set -ex && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends libgdal1-dev && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /etc/apt/sources.list.d/jessie.list
 
 # install dependencies for django-oidc
 RUN apt-get update && apt-get install -y \
@@ -16,8 +24,7 @@ RUN apt-get update && apt-get install -y \
 # install dependencies for generate_training_input script
 RUN apt-get update && apt-get install -y \
     libgeos-dev \
-    libspatialindex-dev \
-    libgdal1-dev
+    libspatialindex-dev
 
 # Dependencies for installing docker locally
 RUN apt-get update && apt-get install -y \
@@ -29,7 +36,7 @@ WORKDIR /opt/app
 
 COPY . /opt/app
 
-RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r requirements.txt
+RUN pip install --no-cache-dir --process-dependency-links djsonb -r requirements.txt
 
 EXPOSE 4000
 
