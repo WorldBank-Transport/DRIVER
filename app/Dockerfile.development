@@ -1,6 +1,6 @@
 FROM driver-app:latest
 
-RUN pip install --no-cache-dir --process-dependency-links --allow-external djsonb -r dev-requirements.txt --src /opt
+RUN pip install --no-cache-dir --process-dependency-links djsonb -r dev-requirements.txt --src /opt
 EXPOSE 8000
 
 CMD ["driver.wsgi", "-w1", "-b:4000", "--reload", "-kgevent"]
