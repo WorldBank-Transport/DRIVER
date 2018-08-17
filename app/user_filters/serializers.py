@@ -14,3 +14,4 @@ class SavedFilterSerializer(ModelSerializer):
     class Meta:
         model = SavedFilter
         read_only_fields = ('uuid', 'owner')
+        fields = '__all__'
