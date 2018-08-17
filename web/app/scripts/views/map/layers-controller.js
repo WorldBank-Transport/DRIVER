@@ -574,7 +574,7 @@
 
                 new L.popup(popupOptions)
                     .setLatLng(e.latlng)
-                    .setContent(ctl.buildRecordPopup(e.data, popupParams))
+                    .setContent(ctl.buildRecordPopup(e.data, popupParams, e.latlng))
                     .openOn(ctl.map);
 
                 $compile($('#record-popup'))($scope);
@@ -733,7 +733,7 @@
          * @param {Object} UTFGrid interactivity data from interaction event object
          * @returns {String} HTML snippet for a Leaflet popup.
          */
-        ctl.buildRecordPopup = function(record, popupParams) {
+        ctl.buildRecordPopup = function(record, popupParams, latlng) {
             // add header with record date constant field
             /* jshint camelcase: false */
             // DateTimes come back from Windshaft without tz information, but they're all UTC
@@ -742,6 +742,12 @@
             str += '<div><h5>' + popupParams.label + ' ' + detailsLabel +
                 '</h5><h3>' + occurredStr + '</h3>';
             /* jshint camelcase: true */
+
+            // Mapillary Image in popup
+            if (WebConfig.mapillary.enabled) {
+                str += '<img id="mapillaryimg" style="width:320px; display:block; margin-bottom:12px;"/>';
+                getMapillaryImg(latlng);
+            }
 
             // The ng-click here refers to a function which sits on the map-controller's scope
             str += '<a ng-click="showDetailsModal(\'' + record.uuid + '\')">';
