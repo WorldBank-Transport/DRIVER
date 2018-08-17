@@ -685,6 +685,13 @@
             });
         }
 
+        function getMapillaryHtmlString() {
+            return '<img id="mapillaryimg" />' +
+                '<p id="mapillaryattributionp" align="right">' +
+                    'Image powered by <a target="_blank" href="https://www.mapillary.com/">Mapillary</a>.' +
+                '</p>';
+        }
+
         function getMapillaryImg(latlng) {
             var clientId = WebConfig.mapillary.clientId;
             var mapillaryRadius = WebConfig.mapillary.range;
@@ -692,7 +699,9 @@
                 .success(function(data) {
                     if (data.features.length !== 0) {
                         var mapillaryImg = document.querySelector('#mapillaryimg');
+                        var mapillaryAttributionP = document.querySelector('#mapillaryattributionp');
                         mapillaryImg.setAttribute('src', 'https://d1cuyjsrcm0gby.cloudfront.net/' + data.features[0].properties.key + '/thumb-320.jpg');
+                        mapillaryAttributionP.style.display = 'block';
                     }
                 })
                 .error(function(data, status) {
@@ -720,7 +729,7 @@
 
             // Mapillary Image in popup
             if (WebConfig.mapillary.enabled) {
-                str += '<img id="mapillaryimg" style="width:320px; display:block; margin-bottom:12px;"/>';
+                str += getMapillaryHtmlString();
                 getMapillaryImg(latlng);
             }
 
@@ -745,7 +754,7 @@
 
             // Mapillary Image in popup
             if (WebConfig.mapillary.enabled) {
-                str += '<img id="mapillaryimg" style="width:320px; display:block; margin-bottom:12px;"/>';
+                str += getMapillaryHtmlString();
                 getMapillaryImg(latlng);
             }
 
