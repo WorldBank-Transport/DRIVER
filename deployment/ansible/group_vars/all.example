@@ -61,6 +61,9 @@ web_js_record_type_secondary_label: "Intervention"
 web_js_blackspots_visible: "true"
 web_js_heatmap_visible: "true"
 web_js_interventions_visible: "true"
+web_js_mapillary: "false"
+web_js_mapillary_client_id: ""
+web_js_mapillary_range: 10
 editor_js_html5mode: "{{ js_html5mode }}"
 editor_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
 
