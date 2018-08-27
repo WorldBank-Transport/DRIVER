@@ -12,6 +12,7 @@ class BlackSpotSerializer(ModelSerializer):
     class Meta:
         model = BlackSpot
         read_only_fields = ('uuid',)
+        fields = '__all__'
 
 
 class BlackSpotSetSerializer(ModelSerializer):
@@ -19,12 +20,14 @@ class BlackSpotSetSerializer(ModelSerializer):
     class Meta:
         model = BlackSpotSet
         read_only_fields = ('uuid',)
+        fields = '__all__'
 
 
 class BlackSpotConfigSerializer(ModelSerializer):
     """Serializer for singleton BlackSpotConfig object"""
     class Meta:
         model = BlackSpotConfig
+        fields = '__all__'
 
 
 class EnforcerAssignmentSerializer(ModelSerializer):

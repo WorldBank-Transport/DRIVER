@@ -145,12 +145,13 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 class DriverObtainAuthToken(ObtainAuthToken):
     def post(self, request):
-        serializer = self.serializer_class(data=request.DATA)
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.validated_data['user']
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key, 'user': token.user_id})
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        # Override method to include `user` in response
+        return Response({'token': token.key, 'user': token.user_id})
 
 
 obtain_auth_token = DriverObtainAuthToken.as_view()

@@ -42,6 +42,9 @@
                 { "id": "ar-sa", "label": "Arabic (Saudi Arabia)", "rtl": true },
                 { "id": "exclaim", "label": "Exclaim (DEV)", "rtl": false }
             ]
+        },
+        mapillary: {
+            enabled: false
         }
     };
 

@@ -5,8 +5,8 @@ from models import RecordAuditLogEntry, RecordDuplicate
 
 class RecordAuditLogFilter(django_filters.FilterSet):
     """Allow filtering audit log entries by user, record, min_date, max_date"""
-    min_date = django_filters.IsoDateTimeFilter(name="date", lookup_type='gte')
-    max_date = django_filters.IsoDateTimeFilter(name="date", lookup_type='lte')
+    min_date = django_filters.IsoDateTimeFilter(name="date", lookup_expr='gte')
+    max_date = django_filters.IsoDateTimeFilter(name="date", lookup_expr='lte')
     action = django_filters.ChoiceFilter(choices=RecordAuditLogEntry.ActionTypes.choices)
 
     class Meta:
@@ -15,7 +15,7 @@ class RecordAuditLogFilter(django_filters.FilterSet):
 
 
 class RecordDuplicateFilter(django_filters.FilterSet):
-    record_type = django_filters.MethodFilter(name='record_type', action='filter_record_type')
+    record_type = django_filters.Filter(field_name='record_type', method='filter_record_type')
 
     def filter_record_type(self, queryset, value):
         """ Filter duplicates by the record type of their first record
