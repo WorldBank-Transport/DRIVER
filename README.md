@@ -66,9 +66,21 @@ A default django superuser will be created, but only on a development provision:
   - username: `admin`
   - password: `admin`
 
-A default OAuth2 application will be created, but only on a development provision.
-Navigate to http://localhost:7000/o/applications/ to retrieve the client id/secret after
-logging in via http://localhost:7000/admin/
+### Google OAuth
+
+To configure Google OAuth for development, follow [these steps](https://support.google.com/googleapi/answer/6158849?hl=en&ref_topic=7013279) to create a web application and credentials for your local DRIVER instance.
+
+When creating a client ID for your web application, use these URLs:
+
+**Authorized JavaScript origins**:
+
+http://localhost:7000
+
+**Authorized redirect URIs**:
+
+http://localhost:7000/openid/callback/login/
+
+Once you have the client ID and client secret, add those values to `deployment/ansible/group_vars/all` and reprovision the `app` VM (`vagrant provision app`) as needed.
 
 ### Frontend
 
