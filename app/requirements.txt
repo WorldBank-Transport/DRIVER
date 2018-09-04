@@ -4,7 +4,7 @@ djangorestframework==3.8.0
 coreapi==2.3.3
 djangorestframework-gis==0.13.0
 django-filter==1.1.0
-django-extensions==1.6.1
+django-extensions==2.1.2
 django-cors-headers==2.4.0
 django-storages==1.4.1
 oauth2client==2.0.1
