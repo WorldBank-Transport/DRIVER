@@ -2,7 +2,12 @@ import re
 import datetime
 import pytz
 
-from rest_framework.serializers import (ModelSerializer, SerializerMethodField, ValidationError)
+from rest_framework.serializers import (
+    CharField,
+    ModelSerializer,
+    SerializerMethodField,
+    ValidationError,
+)
 
 from ashlar import serializers
 from ashlar import serializer_fields
@@ -39,6 +44,7 @@ class DriverRecordSerializer(BaseDriverRecordSerializer):
 class DetailsReadOnlyRecordSerializer(BaseDriverRecordSerializer):
     """Serialize records with only read-only fields included"""
     data = serializer_fields.MethodTransformJsonField('filter_details_only')
+    created_by = CharField()
 
     def filter_details_only(self, key, value):
         """Return only the details object and no other related info"""

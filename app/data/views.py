@@ -13,16 +13,20 @@ from celery import states
 
 from django.conf import settings
 from django.db import transaction
-from django.db.models import (Case,
-                              When,
-                              IntegerField,
-                              DateTimeField,
-                              CharField,
-                              UUIDField,
-                              Value,
-                              Count,
-                              Sum,
-                              Q)
+from django.db.models import (
+    Case,
+    CharField,
+    Count,
+    DateTimeField,
+    IntegerField,
+    OuterRef,
+    Q,
+    Subquery,
+    Sum,
+    UUIDField,
+    Value,
+    When,
+)
 from django_redis import get_redis_connection
 
 from rest_framework import viewsets
@@ -108,8 +112,18 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         return DetailsReadOnlyRecordSerializer
 
     def get_queryset(self):
-        """Override default model ordering"""
         qs = super(DriverRecordViewSet, self).get_queryset()
+        # Add in `created_by` field for user who created the record
+        created_by_query = (
+            RecordAuditLogEntry.objects.filter(
+                record=OuterRef('pk'),
+                action=RecordAuditLogEntry.ActionTypes.CREATE
+            )
+            .values('username')
+            [:1]
+        )
+        qs = qs.annotate(created_by=Subquery(created_by_query))
+        # Override default model ordering
         return qs.order_by('-occurred_from')
 
     def get_filtered_queryset(self, request):
