@@ -74,6 +74,20 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
 )
 
+if DEBUG:
+    import debug_toolbar
+    # Perform set up for Django Debug Toolbar
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
+    # Prepend the Debug Toolbar middleware class to the begining of the list
+    MIDDLEWARE_CLASSES = (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ) + MIDDLEWARE_CLASSES
+    # Show toolbar in local dev
+    INTERNAL_IPS = ["127.0.0.1"]
+
+
 ROOT_URLCONF = 'driver.urls'
 
 TEMPLATES = [
