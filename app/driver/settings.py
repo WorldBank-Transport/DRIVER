@@ -85,7 +85,12 @@ if DEBUG:
         'debug_toolbar.middleware.DebugToolbarMiddleware',
     ) + MIDDLEWARE_CLASSES
     # Show toolbar in local dev
-    INTERNAL_IPS = ["127.0.0.1"]
+    DEBUG_TOOLBAR_CONFIG = {
+        # Since REMOTE_HOST gets overloaded by routing through Docker and Nginx, we can't rely on
+        # it like DDT normally does internally.
+        # Until an alternative is available, we have to trust DEBUG=True is safety enough
+        'SHOW_TOOLBAR_CALLBACK': lambda(request): True
+    }
 
 
 ROOT_URLCONF = 'driver.urls'
