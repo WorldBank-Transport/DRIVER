@@ -31,7 +31,7 @@
             ctl.geoAggSelected = null;
 
             // Add the active filters for display
-            ctl.nonDateFilters = _.omit(FilterState.filters, '__dateRange');
+            ctl.nonDateFilters = _.omit(FilterState.filters, ['__dateRange', '__createdRange']);
             ctl.dateFilter = FilterState.getDateFilter();
 
             GeographyState.getSelected().then(function (geography) {

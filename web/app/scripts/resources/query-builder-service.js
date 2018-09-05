@@ -140,9 +140,12 @@
             /* jshint camelcase: false */
             if (filterConfig.doAttrFilters) {
                 var dateFilter = FilterState.getDateFilter();
+                var createdFilter = FilterState.getCreatedFilter();
                 paramObj = _.extend(paramObj, {
                     occurred_max: dateFilter.maxDate,
-                    occurred_min: dateFilter.minDate
+                    occurred_min: dateFilter.minDate,
+                    created_max: createdFilter.maxDate,
+                    created_min: createdFilter.minDate
                 });
             }
 
@@ -157,7 +160,7 @@
             }
 
             if (filterConfig.doJsonFilters) {
-                jsonPromise = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(
+                jsonPromise = svc.assembleJsonFilterParams(_.omit(FilterState.filters, ['__dateRange', '__createdRange'])).then(
                     function(jsonFilters) {
                         // Handle cases where no json filters are set
                         if (!_.isEmpty(jsonFilters)) {

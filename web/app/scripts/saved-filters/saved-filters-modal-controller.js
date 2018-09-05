@@ -37,6 +37,9 @@
             if (filters.hasOwnProperty('__dateRange')) {
                 delete filters.__dateRange;
             }
+            if (filters.hasOwnProperty('__createdRange')) {
+                delete filters.__createdRange;
+            }
 
             /* jshint camelcase: false */
             var dataToSave = {
