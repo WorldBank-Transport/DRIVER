@@ -75,7 +75,6 @@ MIDDLEWARE_CLASSES = (
 )
 
 if DEBUG:
-    import debug_toolbar
     # Perform set up for Django Debug Toolbar
     INSTALLED_APPS += (
         'debug_toolbar',
