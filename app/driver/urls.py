@@ -51,5 +51,5 @@ urlpatterns.append(url(r'^api-auth/', include('rest_framework.urls', namespace='
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
-        url(r'^__debug__/', include(debug_toolbar.urls)),
+        url(r'^api/__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
