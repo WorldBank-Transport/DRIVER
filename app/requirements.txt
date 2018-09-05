@@ -8,7 +8,7 @@ django-extensions==2.1.2
 django-cors-headers==2.4.0
 django-storages==1.4.1
 oauth2client==2.0.1
-oic==0.14.0
+oic==0.10.0
 git+https://github.com/alexsdutton/django-oidc/@py3-dj1.10#egg=django-oidc
 celery[redis]==3.1.19
 django-redis==4.2.0
