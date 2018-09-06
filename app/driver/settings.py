@@ -74,6 +74,24 @@ MIDDLEWARE_CLASSES = (
     'corsheaders.middleware.CorsMiddleware',
 )
 
+if DEBUG:
+    # Perform set up for Django Debug Toolbar
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
+    # Prepend the Debug Toolbar middleware class to the begining of the list
+    MIDDLEWARE_CLASSES = (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
+    ) + MIDDLEWARE_CLASSES
+    # Show toolbar in local dev
+    DEBUG_TOOLBAR_CONFIG = {
+        # Since REMOTE_HOST gets overloaded by routing through Docker and Nginx, we can't rely on
+        # it like DDT normally does internally.
+        # Until an alternative is available, we have to trust DEBUG=True is safety enough
+        'SHOW_TOOLBAR_CALLBACK': lambda(request): True
+    }
+
+
 ROOT_URLCONF = 'driver.urls'
 
 TEMPLATES = [
