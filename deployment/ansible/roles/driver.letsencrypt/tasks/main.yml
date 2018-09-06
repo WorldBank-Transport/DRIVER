@@ -48,7 +48,7 @@
 # Copied from old azavea.letsencrypt role
 - name: Install cronjob for cert renewal
   cron:
-    job: "certbot renew"
+    job: "certbot renew --pre-hook 'service nginx stop' --post-hook 'service nginx start'"
     day: "1,11,21"
     hour: 4
     minute: 30
