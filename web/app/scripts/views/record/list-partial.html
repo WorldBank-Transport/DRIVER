@@ -10,6 +10,8 @@
                             {{ ::headerKey }}
                         </th>
 
+                        <th>{{ 'RECORD.CREATED_BY' | translate }}</th>
+
                         <!-- View/Edit links -->
                         <th></th>
                     </tr>
@@ -29,6 +31,10 @@
                                 record="::record"
                                 property="::ctl.recordSchema.schema.definitions[ctl.detailsPropertyKey].properties[headerKey]">
                             </driver-details-field>
+                        </td>
+
+                        <td class="created_by">
+                            {{ ::record.created_by }}
                         </td>
 
                         <td class="links">

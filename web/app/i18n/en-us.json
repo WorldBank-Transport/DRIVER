@@ -185,6 +185,7 @@
         "MODIFIED": "Modified",
         "MODIFIED_BY": "Modified by",
         "DATE_AND_TIME": "Date & Time",
+        "CREATED_BY": "Created by",
         "DATE_FILTER": "Filter events by date of occurrence",
         "CREATED_FILTER": "Filter events by date of record creation",
         "DETAILS": "Details",
