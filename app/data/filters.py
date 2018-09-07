@@ -2,6 +2,7 @@ import django_filters
 
 from models import RecordAuditLogEntry, RecordDuplicate
 from ashlar.models import Record
+from ashlar.filters import RecordFilter
 
 
 class RecordAuditLogFilter(django_filters.FilterSet):
@@ -30,7 +31,8 @@ class RecordDuplicateFilter(django_filters.FilterSet):
         fields = ['resolved', 'job', 'record_type']
 
 
-class CreatedRangeFilter(django_filters.FilterSet):
+class DriverRecordFilter(RecordFilter):
+    """Extend RecordFilter to allow filtering on created date."""
     created_min = django_filters.IsoDateTimeFilter(name="created", lookup_expr='gte')
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
 

@@ -93,7 +93,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
     """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
     """
     permission_classes = (ReadersReadWritersWrite,)
-    filter_class = filters.CreatedRangeFilter
+    filter_class = filters.DriverRecordFilter
 
     # Filter out everything except details for read-only users
     def get_serializer_class(self):
