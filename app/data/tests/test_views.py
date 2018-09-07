@@ -105,6 +105,15 @@ class ViewTestSetUpMixin(object):
                                              location_text='Equator',
                                              schema=self.schema)
 
+    def set_up_audit_log(self):
+        # CREATE audit log entry where user has been deleted
+        self.audit_log_entry = RecordAuditLogEntry.objects.create(
+            user=None,
+            username='banana',
+            action=RecordAuditLogEntry.ActionTypes.CREATE,
+            record=self.record3,
+            record_uuid=self.record3.uuid,
+        )
 
 class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
     def setUp(self):
@@ -112,6 +121,7 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
         self.set_up_admin_client()
         self.set_up_records()
+        self.set_up_audit_log()
         self.factory = APIRequestFactory()
 
     def test_toddow(self):
@@ -156,6 +166,19 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
 
+    def test_created_by(self):
+        url = '/api/records/?details_only=True'
+
+        response_data = json.loads(self.admin_client.get(url).content)
+        record3_result = next(
+            r for r in response_data['results']
+            if r['uuid'] == str(self.record3.uuid)
+        )
+
+        self.assertTrue(all('created_by' in result for result in response_data['results']))
+        self.assertEqual(record3_result['created_by'], self.audit_log_entry.username)
+
+
     def test_tilekey_param(self):
         """Ensure that the tilekey param stores a SQL query in Redis and returns an access token"""
         # Since the call to store in redis won't have access to a real Redis instance under test,
@@ -188,6 +211,9 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_audit_log_creation(self):
         """Test that audit logs are generated on create operations"""
+        # Start from clean slate
+        RecordAuditLogEntry.objects.all().delete()
+
         url = '/api/records/'
         post_data = {
             'data': {
