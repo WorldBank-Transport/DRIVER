@@ -147,6 +147,11 @@
                     created_max: createdFilter.maxDate,
                     created_min: createdFilter.minDate
                 });
+
+                var created_by_string = FilterState.getCreatedByFilter();
+                if (created_by_string) {
+                    paramObj.created_by = created_by_string;
+                }
             }
 
             if (filterConfig.doBoundaryFilter) {

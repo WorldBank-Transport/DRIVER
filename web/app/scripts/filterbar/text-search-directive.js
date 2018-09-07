@@ -8,8 +8,9 @@
             require: ['^driver-filterbar', 'text-search-field'],
             templateUrl: 'scripts/filterbar/text-search.html',
             controller: 'textSearchController',
+            scope: true,
             link: function(scope, elem, attrs, ctlArray) {
-                var filterLabel = '__searchText';
+                var filterLabel = attrs.textSearchField;
                 var filterBarCtl = ctlArray[0];
 
                 scope.$on('driver.filterbar:reset', function() {

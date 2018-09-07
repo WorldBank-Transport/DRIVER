@@ -13,6 +13,9 @@ describe('driver.resources: QueryBuilder', function () {
         },
         'getCreatedFilter': function(){
             return {};
+        },
+        'getCreatedByFilter': function(){
+            return '';
         }
     };
     beforeEach(module('ase.mock.resources'));
