@@ -1,4 +1,5 @@
 import django_filters
+from django.db.models import Q
 
 from models import RecordAuditLogEntry, RecordDuplicate
 from ashlar.models import Record
@@ -35,6 +36,15 @@ class DriverRecordFilter(RecordFilter):
     """Extend RecordFilter to allow filtering on created date."""
     created_min = django_filters.IsoDateTimeFilter(name="created", lookup_expr='gte')
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
+    created_by = django_filters.Filter(field_name='created_by', method='filter_created_by')
+
+    def filter_created_by(self, queryset, name, value):
+        """ Filter records by the email or username of the creating user."""
+        return queryset.filter(
+            Q(recordauditlogentry__action=RecordAuditLogEntry.ActionTypes.CREATE) &
+            (Q(recordauditlogentry__username=value) |
+             Q(recordauditlogentry__user__email=value))
+        )
 
     class Meta:
         model = Record
