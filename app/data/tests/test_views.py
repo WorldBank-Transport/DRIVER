@@ -35,9 +35,15 @@ class ViewTestSetUpMixin(object):
         self.admin_client.force_authenticate(user=self.admin)
 
     def set_up_public_client(self):
-        self.public = User.objects.create_user('public', 'public@ashlar', 'public')
-        self.public.groups.add(Group.objects.get(name='public'))
-        self.public.save()
+        try:
+            self.public = User.objects.get(username='public')
+        except User.DoesNotExist:
+            self.public = User.objects.create_user('public', 'public@ashlar', 'public')
+            self.public.save()
+
+        if not self.public.groups.exists():
+            self.public.groups.add(Group.objects.get(name='public'))
+
         self.public_client = APIClient()
         self.public_client.force_authenticate(user=self.public)
 
@@ -120,6 +126,7 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         super(DriverRecordViewTestCase, self).setUp()
 
         self.set_up_admin_client()
+        self.set_up_public_client()
         self.set_up_records()
         self.set_up_audit_log()
         self.factory = APIRequestFactory()
@@ -169,15 +176,16 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
     def test_created_by(self):
         url = '/api/records/?details_only=True'
 
-        response_data = json.loads(self.admin_client.get(url).content)
+        admin_response_data = json.loads(self.admin_client.get(url).content)
         record3_result = next(
-            r for r in response_data['results']
+            r for r in admin_response_data['results']
             if r['uuid'] == str(self.record3.uuid)
         )
 
-        self.assertTrue(all('created_by' in result for result in response_data['results']))
+        self.assertTrue(all('created_by' in result for result in admin_response_data['results']))
         self.assertEqual(record3_result['created_by'], self.audit_log_entry.username)
-
+        public_response_data = json.loads(self.public_client.get(url).content)
+        self.assertTrue(all('created_by' not in result for result in public_response_data['results']))
 
     def test_tilekey_param(self):
         """Ensure that the tilekey param stores a SQL query in Redis and returns an access token"""
@@ -201,10 +209,9 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_get_serializer_class(self):
         """Test that get_serializer_class returns read-only serializer correctly"""
-        read_only = User.objects.create_user('public', 'public@public.com', 'public')
         view = DriverRecordViewSet()
         mock_req = mock.Mock(spec=Request)
-        mock_req.user = read_only
+        mock_req.user = self.public
         view.request = mock_req
         serializer_class = view.get_serializer_class()
         self.assertEqual(serializer_class, DetailsReadOnlyRecordSerializer)
