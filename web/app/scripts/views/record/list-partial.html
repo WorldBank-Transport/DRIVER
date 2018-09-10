@@ -10,7 +10,7 @@
                             {{ ::headerKey }}
                         </th>
 
-                        <th>{{ 'RECORD.CREATED_BY' | translate }}</th>
+                        <th ng-if="ctl.userCanWrite">{{ 'RECORD.CREATED_BY' | translate }}</th>
 
                         <!-- View/Edit links -->
                         <th></th>
@@ -33,7 +33,7 @@
                             </driver-details-field>
                         </td>
 
-                        <td class="created_by">
+                        <td ng-if="ctl.userCanWrite" class="created_by">
                             {{ ::record.created_by }}
                         </td>
 

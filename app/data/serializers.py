@@ -44,7 +44,6 @@ class DriverRecordSerializer(BaseDriverRecordSerializer):
 class DetailsReadOnlyRecordSerializer(BaseDriverRecordSerializer):
     """Serialize records with only read-only fields included"""
     data = serializer_fields.MethodTransformJsonField('filter_details_only')
-    created_by = CharField()
 
     def filter_details_only(self, key, value):
         """Return only the details object and no other related info"""
@@ -52,6 +51,14 @@ class DetailsReadOnlyRecordSerializer(BaseDriverRecordSerializer):
             return key, value
         else:
             raise serializer_fields.DropJsonKeyException
+
+
+class DetailsReadOnlyRecordNonPublicSerializer(DetailsReadOnlyRecordSerializer):
+    """
+    Serialize records with only read-only fields included plus non-public fields
+    (only available to admins and analysts)
+    """
+    created_by = CharField()
 
 
 class DetailsReadOnlyRecordSchemaSerializer(serializers.RecordSchemaSerializer):

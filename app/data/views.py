@@ -64,7 +64,8 @@ import filters
 from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 from serializers import (DriverRecordSerializer, DetailsReadOnlyRecordSerializer,
                          DetailsReadOnlyRecordSchemaSerializer, RecordAuditLogEntrySerializer,
-                         RecordDuplicateSerializer, RecordCostConfigSerializer)
+                         RecordDuplicateSerializer, RecordCostConfigSerializer,
+                         DetailsReadOnlyRecordNonPublicSerializer)
 import transformers
 from driver import mixins
 
@@ -107,22 +108,26 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         if details_only_param == 'True' or details_only_param == 'true':
             requested_details_only = True
 
-        if is_admin_or_writer(self.request.user) and not requested_details_only:
-            return DriverRecordSerializer
+        if is_admin_or_writer(self.request.user):
+            if requested_details_only:
+                return DetailsReadOnlyRecordNonPublicSerializer
+            else:
+                return DriverRecordSerializer
         return DetailsReadOnlyRecordSerializer
 
     def get_queryset(self):
         qs = super(DriverRecordViewSet, self).get_queryset()
-        # Add in `created_by` field for user who created the record
-        created_by_query = (
-            RecordAuditLogEntry.objects.filter(
-                record=OuterRef('pk'),
-                action=RecordAuditLogEntry.ActionTypes.CREATE
+        if self.get_serializer_class() is DetailsReadOnlyRecordNonPublicSerializer:
+            # Add in `created_by` field for user who created the record
+            created_by_query = (
+                RecordAuditLogEntry.objects.filter(
+                    record=OuterRef('pk'),
+                    action=RecordAuditLogEntry.ActionTypes.CREATE
+                )
+                .values('username')
+                [:1]
             )
-            .values('username')
-            [:1]
-        )
-        qs = qs.annotate(created_by=Subquery(created_by_query))
+            qs = qs.annotate(created_by=Subquery(created_by_query))
         # Override default model ordering
         return qs.order_by('-occurred_from')
 
