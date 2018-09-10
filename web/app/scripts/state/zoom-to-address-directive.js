@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function zoomToAddress() {
+    function zoomToAddress($log, Nominatim) {
         var module = {
             restrict: 'A',
             scope: false,
@@ -16,36 +16,68 @@
 
         function link(scope, element, attrs, controller) {
             controller.getMap().then(function(map) {
-                L.Control.LatLngInput = L.Control.extend({
-                    onAdd: function() {
-                        var latlngDiv = L.DomUtil.create('div');
-                        var latlngInput = L.DomUtil.create('input', 'latlng-input', latlngDiv);
-                        var latlngButton = L.DomUtil.create('button', 'latlng-button', latlngDiv);
-                        L.DomUtil.create('span', 'glyphicon glyphicon-search', latlngButton);
 
-                        latlngInput.id = 'latlng-input';
-                        latlngInput.placeholder = 'Zoom to';
-                        latlngInput.type = 'text';
+                var latlngFromText = function(latlngText) {
+                    var latlng = latlngText.split(',');
+                    if (latlng.length !== 2 || isNaN(latlng[0]) || isNaN(latlng[1])) {
+                        return null;
+                    } else {
+                        return [parseFloat(latlng[0]), parseFloat(latlng[1])];
+                    }
+                };
 
-                        L.DomEvent.addListener(latlngButton, 'click', function() {
-                            var latlngInput = document.getElementById('latlng-input').value;
-                            var latlng = latlngInput.split(',');
-                            if (latlng.length !== 2 || isNaN(latlng[0]) || isNaN(latlng[1])) {
-                                return;
+                var setLatlng = function(latlng) {
+                    if (latlng === null) {
+                        return;
+                    }
+                    map.setZoom(16);
+                    map.panTo(new L.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1])));
+                };
+
+                var geocodeAddress = function(query) {
+                    Nominatim.forward(query)
+                        .then(function(data) {
+                            if (data.length !== 0) {
+                                setLatlng([data[0].lat, data[0].lon]);
                             }
-                            map.setZoom(16);
-                            map.panTo(new L.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1])));
+                        })
+                        .catch(function(err) {
+                            $log.error('Failed to get Pickpoint data:');
+                            $log.error(err.status);
+                            $log.error(err.data);
+                        });
+                };
+
+                L.Control.AddressSearch = L.Control.extend({
+                    onAdd: function() {
+                        var addressSearchDiv = L.DomUtil.create('div');
+                        var addressSearchInput = L.DomUtil.create('input', 'address-search-input', addressSearchDiv);
+                        var addressSearchButton = L.DomUtil.create('button', 'address-search-button', addressSearchDiv);
+                        L.DomUtil.create('span', 'glyphicon glyphicon-search', addressSearchButton);
+
+                        addressSearchInput.id = 'address-search-input';
+                        addressSearchInput.placeholder = 'Zoom to';
+                        addressSearchInput.type = 'text';
+
+                        L.DomEvent.addListener(addressSearchButton, 'click', function() {
+                            var addressSearchInput = document.getElementById('address-search-input').value;
+                            var latlng = latlngFromText(addressSearchInput);
+                            if (latlng === null) {
+                                geocodeAddress(addressSearchInput);
+                            } else {
+                                setLatlng(latlng);
+                            }
                         });
 
-                        return latlngDiv;
+                        return addressSearchDiv;
                     }
                 });
 
-                L.control.latlngInput = function(opts) {
-                    return new L.Control.LatLngInput(opts);
+                L.control.addressSearch = function(opts) {
+                    return new L.Control.AddressSearch(opts);
                 };
             
-                L.control.latlngInput({ position: 'topleft' }).addTo(map);
+                L.control.addressSearch({ position: 'topleft' }).addTo(map);
             });
         }
     }
