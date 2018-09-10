@@ -13,6 +13,12 @@
                 var filterLabel = attrs.textSearchField;
                 var filterBarCtl = ctlArray[0];
 
+                if (filterLabel === '__createdBy') {
+                    scope.placeholderLabel = 'RECORD.FILTER_CREATED_BY';
+                } else {
+                    scope.placeholderLabel = 'RECORD.FILTER_BY';
+                }
+
                 scope.$on('driver.filterbar:reset', function() {
                     init();
                 });

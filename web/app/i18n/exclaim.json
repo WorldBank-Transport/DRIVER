@@ -190,6 +190,7 @@
         "DETAILS": "!Details",
         "EVENT_COUNT": "!Event count",
         "FILTER_BY": "!Filter by name, keyword",
+        "FILTER_CREATED_BY": "!Created by user",
         "INPUT_FORM": "!Input Form",
         "LATITUDE": "!Latitude",
         "LIGHT": "!Light",
