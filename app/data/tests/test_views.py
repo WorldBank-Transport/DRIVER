@@ -112,8 +112,15 @@ class ViewTestSetUpMixin(object):
                                              schema=self.schema)
 
     def set_up_audit_log(self):
+        self.audit_log_entry1 = RecordAuditLogEntry.objects.create(
+            user=self.admin,
+            username=self.admin.username,
+            action=RecordAuditLogEntry.ActionTypes.CREATE,
+            record=self.record2,
+            record_uuid=self.record2.uuid,
+        )
         # CREATE audit log entry where user has been deleted
-        self.audit_log_entry = RecordAuditLogEntry.objects.create(
+        self.audit_log_entry2 = RecordAuditLogEntry.objects.create(
             user=None,
             username='banana',
             action=RecordAuditLogEntry.ActionTypes.CREATE,
@@ -177,13 +184,19 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         url = '/api/records/?details_only=True'
 
         admin_response_data = json.loads(self.admin_client.get(url).content)
+        record2_result = next(
+            r for r in admin_response_data['results']
+            if r['uuid'] == str(self.record2.uuid)
+        )
         record3_result = next(
             r for r in admin_response_data['results']
             if r['uuid'] == str(self.record3.uuid)
         )
 
         self.assertTrue(all('created_by' in result for result in admin_response_data['results']))
-        self.assertEqual(record3_result['created_by'], self.audit_log_entry.username)
+        self.assertEqual(record2_result['created_by'], self.audit_log_entry1.user.email)
+        self.assertEqual(record3_result['created_by'], self.audit_log_entry2.username)
+
         public_response_data = json.loads(self.public_client.get(url).content)
         self.assertTrue(all('created_by' not in result for result in public_response_data['results']))
 

@@ -27,6 +27,7 @@ from django.db.models import (
     Value,
     When,
 )
+from django.db.models.functions import Coalesce
 from django_redis import get_redis_connection
 
 from rest_framework import viewsets
@@ -124,10 +125,14 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                     record=OuterRef('pk'),
                     action=RecordAuditLogEntry.ActionTypes.CREATE
                 )
-                .values('username')
+                .annotate(
+                    # Fall back to username if the user has been deleted
+                    email_or_username=Coalesce('user__email', 'username')
+                )
+                .values('email_or_username')
                 [:1]
             )
-            qs = qs.annotate(created_by=Subquery(created_by_query))
+            qs = qs.annotate(created_by=Subquery(created_by_query, output_field=CharField()))
         # Override default model ordering
         return qs.order_by('-occurred_from')
 
