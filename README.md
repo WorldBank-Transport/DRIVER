@@ -146,20 +146,16 @@ To run the Javascript automated tests, use:
 ## Testing Data
 
 ### Boundaries
+Geographic boundaries are used to filter records to a defined area, such as a region or state. These boundaries are created by uploading shape files to the editor, http://localhost:7000/editor under "Add new geographies".
 
-To load boundaries, upload the `regions.zip` and `states.zip` files to the schema editor in http://localhost:7000/editor/. For each file, first upload the file, then select
-`name` as the display field, then hit save. Either refresh the page or
-navigate somewhere else in between any two uploads.
+For developers at Azavea, use the `regions.zip` and `states.zip` files available in the DRIVER project folder on the fileshare. For non-Azavea users, upload a zipped shapefile containing the boundaries of the jurisdictions where you plan to operate DRIVER. If you don't have such a shapefile, [Natural Earth](https://www.naturalearthdata.com/features/) is a good place to start."
+
+After uploading each the file, select `name` as the display field, then hit save. Either refresh the page or navigate somewhere else in between uploads.
 
 ### Records
+Record data can be populated from a CSV file that contains named columns for `"lat"`, `"lon"`, and `"record_date"`. For developers at Azavea, CSV files containing historical data can be downloaded from the `/data` folder of the project's directory in the fileshare, with names of the format `<city or agency>_traffic.csv`.
 
-A CSV of historical data can be downloaded from the project /data folder.
-Good files are `<city or agency>_traffic.csv`.
-
-Once the app has been built, this data can be loaded.
-
-You will first have to obtain an authorization header. Log in to the web application.
-Then open the network tab in web developer tools and reload the page. Inspect the request headers
+In order to import record data you will have to obtain an Authorization header and its API token. To do this, log in to the web application, then open the network tab in web developer tools and reload the page. Inspect the request headers
 from an API request and pull out the value of the `Authorization` header, for example
 `Token f1acac96cc79c4822e9010d23ab425231d580875`.
 
@@ -180,7 +176,7 @@ To load mock interventions, run:
 ```bash
 python scripts/load_interventions.py --authz 'Token <YOUR_AUTH_TOKEN>' /path/to/interventions_sample_pts.geojson
 ```
-Mock intervention data is available in `scripts/sample_data/interventions_sample_pts.json`.
+Mock intervention data is available in `scripts/sample_data/interventions_sample_pts.geojson`.
 
 To generate black spot and load forecast training inputs, run:
 ```bash
