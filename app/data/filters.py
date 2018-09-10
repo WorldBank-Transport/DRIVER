@@ -4,6 +4,7 @@ from django.db.models import Q
 from models import RecordAuditLogEntry, RecordDuplicate
 from ashlar.models import Record
 from ashlar.filters import RecordFilter
+from driver_auth.permissions import is_admin_or_writer
 
 
 class RecordAuditLogFilter(django_filters.FilterSet):
@@ -40,6 +41,10 @@ class DriverRecordFilter(RecordFilter):
 
     def filter_created_by(self, queryset, name, value):
         """ Filter records by the email or username of the creating user."""
+        if not is_admin_or_writer(self.request.user):
+            # Public users cannot filter by creating user
+            return queryset
+
         return queryset.filter(
             Q(recordauditlogentry__action=RecordAuditLogEntry.ActionTypes.CREATE) &
             (Q(recordauditlogentry__username=value) |

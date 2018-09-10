@@ -11,6 +11,7 @@
         ctl.reset = reset;
         ctl.showSavedFiltersModal = showSavedFiltersModal;
         ctl.userCanAdd = false;
+        ctl.hasWriteAccess = AuthService.hasWriteAccess();
         init();
 
         function init() {
