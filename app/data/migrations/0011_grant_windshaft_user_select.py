@@ -5,6 +5,20 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
+GRANT_IF_WINDSHAFT_EXISTS = """
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM   pg_catalog.pg_roles
+    WHERE  rolname = 'windshaft'
+  ) THEN
+    GRANT SELECT ON %s TO windshaft;
+  END IF;
+END$$;
+"""
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -13,7 +27,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL([
-            'GRANT SELECT ON auth_user TO windshaft',
-            'GRANT SELECT ON data_recordauditlogentry TO windshaft'
+            GRANT_IF_WINDSHAFT_EXISTS % 'auth_user',
+            GRANT_IF_WINDSHAFT_EXISTS % 'data_recordauditlogentry',
         ])
     ]
