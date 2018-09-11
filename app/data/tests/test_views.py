@@ -180,23 +180,18 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
 
-    def test_created_by(self):
+    def test_created_by_admin_client_email(self):
+        url = '/api/records/{uuid}/?details_only=True'.format(uuid=self.record2.uuid)
+        response_data = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response_data['created_by'], self.audit_log_entry1.user.email)
+
+    def test_created_by_admin_client_username(self):
+        url = '/api/records/{uuid}/?details_only=True'.format(uuid=self.record3.uuid)
+        response_data = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response_data['created_by'], self.audit_log_entry2.username)
+
+    def test_created_by_public_client(self):
         url = '/api/records/?details_only=True'
-
-        admin_response_data = json.loads(self.admin_client.get(url).content)
-        record2_result = next(
-            r for r in admin_response_data['results']
-            if r['uuid'] == str(self.record2.uuid)
-        )
-        record3_result = next(
-            r for r in admin_response_data['results']
-            if r['uuid'] == str(self.record3.uuid)
-        )
-
-        self.assertTrue(all('created_by' in result for result in admin_response_data['results']))
-        self.assertEqual(record2_result['created_by'], self.audit_log_entry1.user.email)
-        self.assertEqual(record3_result['created_by'], self.audit_log_entry2.username)
-
         public_response_data = json.loads(self.public_client.get(url).content)
         self.assertTrue(all('created_by' not in result for result in public_response_data['results']))
 
