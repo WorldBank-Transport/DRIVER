@@ -18,6 +18,7 @@
         svc.restoreFilters = restoreFilters;
         svc.getDateFilter = getDateFilter;
         svc.getCreatedFilter = getCreatedFilter;
+        svc.getCreatedByFilter = getCreatedByFilter;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -125,6 +126,10 @@
 
         function getCreatedFilter(defaults) {
             return getGenericDateFilter('__createdRange', defaults);
+        }
+
+        function getCreatedByFilter() {
+            return svc.filters.__createdBy;
         }
 
         // Helper for converting a datetime string to the proper format to work with moment.tz.
