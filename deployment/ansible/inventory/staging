@@ -1,6 +1,6 @@
 app ansible_ssh_host=52.201.236.109 ansible_ssh_user=ubuntu
 database ansible_ssh_host=34.203.36.37 ansible_ssh_user=ubuntu
-celery ansible_ssh_host=34.229.58.2 ansible_ssh_user=ubuntu
+celery ansible_ssh_host=18.215.181.196 ansible_ssh_user=ubuntu
 
 [app-servers]
 app
