@@ -35,9 +35,15 @@ class ViewTestSetUpMixin(object):
         self.admin_client.force_authenticate(user=self.admin)
 
     def set_up_public_client(self):
-        self.public = User.objects.create_user('public', 'public@ashlar', 'public')
-        self.public.groups.add(Group.objects.get(name='public'))
-        self.public.save()
+        try:
+            self.public = User.objects.get(username='public')
+        except User.DoesNotExist:
+            self.public = User.objects.create_user('public', 'public@ashlar', 'public')
+            self.public.save()
+
+        if not self.public.groups.exists():
+            self.public.groups.add(Group.objects.get(name='public'))
+
         self.public_client = APIClient()
         self.public_client.force_authenticate(user=self.public)
 
@@ -105,13 +111,31 @@ class ViewTestSetUpMixin(object):
                                              location_text='Equator',
                                              schema=self.schema)
 
+    def set_up_audit_log(self):
+        self.audit_log_entry1 = RecordAuditLogEntry.objects.create(
+            user=self.admin,
+            username=self.admin.username,
+            action=RecordAuditLogEntry.ActionTypes.CREATE,
+            record=self.record2,
+            record_uuid=self.record2.uuid,
+        )
+        # CREATE audit log entry where user has been deleted
+        self.audit_log_entry2 = RecordAuditLogEntry.objects.create(
+            user=None,
+            username='banana',
+            action=RecordAuditLogEntry.ActionTypes.CREATE,
+            record=self.record3,
+            record_uuid=self.record3.uuid,
+        )
 
 class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
     def setUp(self):
         super(DriverRecordViewTestCase, self).setUp()
 
         self.set_up_admin_client()
+        self.set_up_public_client()
         self.set_up_records()
+        self.set_up_audit_log()
         self.factory = APIRequestFactory()
 
     def test_toddow(self):
@@ -156,6 +180,21 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
 
+    def test_created_by_admin_client_email(self):
+        url = '/api/records/{uuid}/?details_only=True'.format(uuid=self.record2.uuid)
+        response_data = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response_data['created_by'], self.audit_log_entry1.user.email)
+
+    def test_created_by_admin_client_username(self):
+        url = '/api/records/{uuid}/?details_only=True'.format(uuid=self.record3.uuid)
+        response_data = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response_data['created_by'], self.audit_log_entry2.username)
+
+    def test_created_by_public_client(self):
+        url = '/api/records/?details_only=True'
+        public_response_data = json.loads(self.public_client.get(url).content)
+        self.assertTrue(all('created_by' not in result for result in public_response_data['results']))
+
     def test_tilekey_param(self):
         """Ensure that the tilekey param stores a SQL query in Redis and returns an access token"""
         # Since the call to store in redis won't have access to a real Redis instance under test,
@@ -178,16 +217,18 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_get_serializer_class(self):
         """Test that get_serializer_class returns read-only serializer correctly"""
-        read_only = User.objects.create_user('public', 'public@public.com', 'public')
         view = DriverRecordViewSet()
         mock_req = mock.Mock(spec=Request)
-        mock_req.user = read_only
+        mock_req.user = self.public
         view.request = mock_req
         serializer_class = view.get_serializer_class()
         self.assertEqual(serializer_class, DetailsReadOnlyRecordSerializer)
 
     def test_audit_log_creation(self):
         """Test that audit logs are generated on create operations"""
+        # Start from clean slate
+        RecordAuditLogEntry.objects.all().delete()
+
         url = '/api/records/'
         post_data = {
             'data': {

@@ -2,7 +2,12 @@ import re
 import datetime
 import pytz
 
-from rest_framework.serializers import (ModelSerializer, SerializerMethodField, ValidationError)
+from rest_framework.serializers import (
+    CharField,
+    ModelSerializer,
+    SerializerMethodField,
+    ValidationError,
+)
 
 from ashlar import serializers
 from ashlar import serializer_fields
@@ -46,6 +51,14 @@ class DetailsReadOnlyRecordSerializer(BaseDriverRecordSerializer):
             return key, value
         else:
             raise serializer_fields.DropJsonKeyException
+
+
+class DetailsReadOnlyRecordNonPublicSerializer(DetailsReadOnlyRecordSerializer):
+    """
+    Serialize records with only read-only fields included plus non-public fields
+    (only available to admins and analysts)
+    """
+    created_by = CharField()
 
 
 class DetailsReadOnlyRecordSchemaSerializer(serializers.RecordSchemaSerializer):
