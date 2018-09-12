@@ -94,6 +94,10 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
     """Override base RecordViewSet from grout to provide aggregation and tiler integration
     """
     permission_classes = (ReadersReadWritersWrite,)
+<<<<<<< HEAD
+=======
+    filter_class = filters.DriverRecordFilter
+>>>>>>> a036cf1... Migrate to Grout
     queryset = DriverRecord.objects.all()
 
     # Filter out everything except details for read-only users

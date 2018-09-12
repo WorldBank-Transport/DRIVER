@@ -109,7 +109,6 @@ class ViewTestSetUpMixin(object):
                                                    data=dict())
 
 
-
 class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
     def setUp(self):
         super(DriverRecordViewTestCase, self).setUp()
