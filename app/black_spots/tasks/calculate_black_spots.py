@@ -10,7 +10,7 @@ from django.utils import timezone
 from celery import shared_task, chain
 from celery.utils.log import get_task_logger
 
-from ashlar.models import RecordType
+from grout.models import RecordType
 
 from black_spots.tasks import (forecast_segment_incidents, load_blackspot_geoms,
                                load_road_network, get_training_noprecip)

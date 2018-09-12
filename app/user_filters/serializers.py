@@ -1,4 +1,4 @@
-from ashlar.serializer_fields import JsonBField
+from grout.serializer_fields import JsonBField
 
 from rest_framework.serializers import ModelSerializer
 

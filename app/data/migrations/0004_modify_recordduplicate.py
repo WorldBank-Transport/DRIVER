@@ -9,7 +9,7 @@ from django.utils.timezone import utc
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ashlar', '0021_add_weather_fields'),
+        ('grout', '0021_add_weather_fields'),
         ('data', '0003_dedupejob_recordduplicate'),
     ]
 
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recordduplicate',
             name='duplicate_record',
-            field=models.ForeignKey(related_name='duplicate_record', to='ashlar.Record', null=True),
+            field=models.ForeignKey(related_name='duplicate_record', to='grout.Record', null=True),
         ),
         migrations.AddField(
             model_name='recordduplicate',
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='recordduplicate',
             name='record',
-            field=models.ForeignKey(related_name='record', to='ashlar.Record', null=True),
+            field=models.ForeignKey(related_name='record', to='grout.Record', null=True),
         ),
         migrations.AddField(
             model_name='recordduplicate',

@@ -4,8 +4,8 @@ from dateutil.parser import parse
 
 from django.db.models import Q
 
-from ashlar.exceptions import QueryParameterException
-from ashlar.models import BoundaryPolygon
+from grout.exceptions import QueryParameterException
+from grout.models import BoundaryPolygon
 
 from black_spots.models import (BlackSpot, BlackSpotSet)
 

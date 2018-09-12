@@ -9,7 +9,7 @@ import django.contrib.gis.db.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ashlar', '0021_add_weather_fields'),
+        ('grout', '0021_add_weather_fields'),
     ]
 
     operations = [
@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('effective_start', models.DateTimeField()),
                 ('effective_end', models.DateTimeField(null=True, blank=True)),
-                ('record_type', models.ForeignKey(to='ashlar.RecordType')),
+                ('record_type', models.ForeignKey(to='grout.RecordType')),
             ],
             options={
                 'abstract': False,
