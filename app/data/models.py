@@ -4,7 +4,20 @@ from django.db import models
 from django.contrib.postgres.fields import HStoreField
 from django.contrib.auth.models import User
 
-from ashlar.models import AshlarModel, Record, RecordType
+from grout.models import GroutModel, Record, RecordType
+
+
+class DriverRecord(Record):
+    """Extend Grout Record model with custom fields"""
+    weather = models.CharField(max_length=50, null=True, blank=True)
+    light = models.CharField(max_length=50, null=True, blank=True)
+
+    city = models.CharField(max_length=50, null=True, blank=True)
+    city_district = models.CharField(max_length=50, null=True, blank=True)
+    county = models.CharField(max_length=50, null=True, blank=True)
+    neighborhood = models.CharField(max_length=50, null=True, blank=True)
+    road = models.CharField(max_length=200, null=True, blank=True)
+    state = models.CharField(max_length=50, null=True, blank=True)
 
 
 class RecordAuditLogEntry(models.Model):
@@ -21,7 +34,8 @@ class RecordAuditLogEntry(models.Model):
     username = models.CharField(max_length=30, db_index=True)
     # Same for the record; if the record this refers to is deleted we still want to be able to
     # determine which audit log entries pertained to that record.
-    record = models.ForeignKey(Record, null=True, on_delete=models.SET_NULL)
+    record = models.ForeignKey(Record, null=True, on_delete=models.SET_NULL,
+                               related_name='audit_entries')
     record_uuid = models.CharField(max_length=36, db_index=True)
 
     date = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -70,18 +84,20 @@ class DedupeJob(models.Model):
         get_latest_by = 'datetime'
 
 
-class RecordDuplicate(AshlarModel):
+class RecordDuplicate(GroutModel):
     """ Store information about a possible duplicate record pair
     Duplicates are found using a time-distance heuristic
     """
     record = models.ForeignKey(Record, null=True, related_name="record")
-    duplicate_record = models.ForeignKey(Record, null=True, related_name="duplicate_record")
+
+    duplicate_record = models.ForeignKey(Record, null=True,
+                                         related_name="duplicate_record")
     score = models.FloatField(default=0)
     resolved = models.BooleanField(default=False)
     job = models.ForeignKey(DedupeJob)
 
 
-class RecordCostConfig(AshlarModel):
+class RecordCostConfig(GroutModel):
     """Store a configuration for calculating costs of incidents.
 
     This takes the form of a reference to an enum field on a RecordType, along with user-

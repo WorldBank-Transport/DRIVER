@@ -46,16 +46,6 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
     sudo apt-get install nfs-common nfs-kernel-server
     ```
 
-1. Clone the [Ashlar](https://github.com/azavea/ashlar) project such that it is a sibling of DRIVER (Ashlar is needed for generating dynamic schemas used by DRIVER).
-
-    An example setup might be as follows:
-    ```bash
-    /home/username/
-      git
-        DRIVER
-        ashlar
-    ```
-
 1. Start the Vagrant VM
     ```bash
     vagrant up

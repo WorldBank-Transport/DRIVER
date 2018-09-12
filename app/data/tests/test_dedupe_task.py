@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 import pytz
 
-from ashlar.models import RecordSchema, RecordType, Record
-from data.models import DedupeJob, RecordDuplicate
+from grout.models import RecordSchema, RecordType
+from data.models import DedupeJob, RecordDuplicate, DriverRecord
 from data.tasks import find_duplicates as task
 
 from django.test import TestCase
@@ -36,34 +36,38 @@ class DedupeTaskTestCase(TestCase):
             record_type=self.record_type
         )
         # 3 identical records to test dedupe
-        self.record1 = Record.objects.create(
+        self.record1 = DriverRecord.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
             geom='POINT (0 0)',
             location_text='Equator1',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
-        self.record2 = Record.objects.create(
+        self.record2 = DriverRecord.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
             geom='POINT (0 0)',
             location_text='Equator2',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
-        self.record3 = Record.objects.create(
+        self.record3 = DriverRecord.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
             geom='POINT (0 0.0001)',
             location_text='Equator3',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
         # and one that shouldn't be considered a duplicate
-        self.record4 = Record.objects.create(
+        self.record4 = DriverRecord.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
             geom='POINT (0 5)',
             location_text='somewhere else1',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
         self.stop = datetime.now(pytz.timezone('Asia/Manila'))
 
@@ -91,12 +95,13 @@ class DedupeTaskTestCase(TestCase):
 
         # test incremental dedupe task
         now = datetime.now().replace(tzinfo=pytz.timezone('Asia/Manila'))
-        newrecord = Record.objects.create(
+        newrecord = DriverRecord.objects.create(
             occurred_from=now,
             occurred_to=now,
             geom='POINT (0 5)',
             location_text='somewhere else2',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
         result = task.find_duplicate_records.delay().get()
         self.assertEqual(DedupeJob.objects.count(), 2)
@@ -121,12 +126,13 @@ class DedupeTaskTestCase(TestCase):
         job1 = DedupeJob.objects.latest()
 
         now = datetime.now().replace(tzinfo=pytz.timezone('Asia/Manila'))
-        newrecord = Record.objects.create(
+        newrecord = DriverRecord.objects.create(
             occurred_from=now,
             occurred_to=now,
             geom='POINT (0 5)',
             location_text='somewhere else2',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
         result = task.find_duplicate_records.delay().get()
 
@@ -147,12 +153,13 @@ class DedupeTaskTestCase(TestCase):
         self.assertEqual(DedupeJob.objects.count(), 0)
         self.assertEqual(RecordDuplicate.objects.count(), 0)
         start2 = datetime.utcnow().replace(tzinfo=pytz.timezone('UTC'))
-        newrecord = Record.objects.create(
+        newrecord = DriverRecord.objects.create(
             occurred_from=self.start,
             occurred_to=self.start,
             geom='POINT (0 5)',
             location_text='somewhere else2',
-            schema=self.schema
+            schema=self.schema,
+            data=dict()
         )
         stop2 = datetime.utcnow().replace(tzinfo=pytz.timezone('UTC'))
         set, queryset = task.get_dedupe_set({'start_time': self.start, 'end_time': self.stop})
@@ -161,7 +168,7 @@ class DedupeTaskTestCase(TestCase):
         self.assertEqual(len(set), 1)
 
     def test_get_time_extent(self):
-        time = Record.objects.earliest('created').created
+        time = DriverRecord.objects.earliest('created').created
         job = DedupeJob(status=DedupeJob.Status.SUCCESS)
         job.save()
         result = task.get_time_extent(job)

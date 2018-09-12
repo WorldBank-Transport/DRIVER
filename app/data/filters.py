@@ -2,9 +2,9 @@ import django_filters
 from django.db.models import Q
 
 from models import RecordAuditLogEntry, RecordDuplicate
-from ashlar.models import Record
-from ashlar.filters import RecordFilter
 from driver_auth.permissions import is_admin_or_writer
+from data.models import DriverRecord
+from grout.filters import RecordFilter
 
 
 class RecordAuditLogFilter(django_filters.FilterSet):
@@ -52,5 +52,5 @@ class DriverRecordFilter(RecordFilter):
         )
 
     class Meta:
-        model = Record
+        model = DriverRecord
         fields = ['created_min', 'created_max']

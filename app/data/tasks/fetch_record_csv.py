@@ -6,7 +6,7 @@ import re
 
 from celery import shared_task
 
-from ashlar.models import Record
+from data.models import DriverRecord
 from black_spots.models import BlackSpotRecordsFile
 
 
@@ -48,7 +48,7 @@ def export_records(occurred_min, occurred_max, record_type_id):
         else:
             return re.sub(r'[\r\n\t]', '', unicode(s)).encode('utf-8')
 
-    records = Record.objects.filter(
+    records = DriverRecord.objects.filter(
         occurred_from__gte=occurred_min,
         occurred_to__lte=occurred_max,
         schema__record_type_id=record_type_id
