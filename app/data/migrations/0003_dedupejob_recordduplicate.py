@@ -8,7 +8,7 @@ import uuid
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ashlar', '0021_add_weather_fields'),
+        ('grout', '0021_add_weather_fields'),
         ('data', '0002_auto_20160126_0404'),
     ]
 
@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
                 ('uuid', models.UUIDField(default=uuid.uuid4, serialize=False, editable=False, primary_key=True)),
                 ('resolved', models.BooleanField(default=False)),
                 ('job', models.ForeignKey(to='data.DedupeJob')),
-                ('records', models.ManyToManyField(to='ashlar.Record')),
+                ('records', models.ManyToManyField(to='grout.Record')),
             ],
         ),
     ]

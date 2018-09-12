@@ -13,7 +13,7 @@ from celery.utils.log import get_task_logger
 
 from django_redis import get_redis_connection
 
-from ashlar.models import Record
+from data.models import DriverRecord
 
 from driver_auth.permissions import is_admin_or_writer
 
@@ -34,6 +34,7 @@ def _utf8(value):
     else:
         return unicode(value).encode('utf-8')
 
+
 def _sanitize(value):
     """
     Helper for sanitizing the record type label to ensure it doesn't contain characters that are
@@ -43,6 +44,7 @@ def _sanitize(value):
     :param value: The string to sanitize
     """
     return ''.join(char for char in value if char.isalnum() or char in [' ', '.', '_']).rstrip()
+
 
 @shared_task(track_started=True)
 def export_csv(query_key, user_id):
@@ -66,7 +68,7 @@ def export_csv(query_key, user_id):
     user = User.objects.get(pk=user_id)
     # Create files and CSV Writers from Schema
     if is_admin_or_writer(user):
-        record_writer = AshlarRecordExporter(schema)
+        record_writer = DriverRecordExporter(schema)
     else:
         record_writer = ReadOnlyRecordExporter(schema)
 
@@ -120,10 +122,10 @@ def get_queryset_by_key(key):
     :param key: A UUID specifying the SQL string to use
     """
     sql_str = get_sql_string_by_key(key)
-    return Record.objects.raw(sql_str)
+    return DriverRecord.objects.raw(sql_str)
 
 
-class AshlarRecordExporter(object):
+class DriverRecordExporter(object):
     """Exports Records matching a schema to CSVs"""
     def __init__(self, schema_obj):
         # Detect related info types and set up CSV Writers as necessary
@@ -238,7 +240,7 @@ class AshlarRecordExporter(object):
         return ModelAndDetailsWriter(model_writer, details_writer, details_key)
 
 
-class ReadOnlyRecordExporter(AshlarRecordExporter):
+class ReadOnlyRecordExporter(DriverRecordExporter):
     """Export only fields which read-only users are allow to access"""
     def __init__(self, schema_obj):
         # Don't write any related info fields, just details only.

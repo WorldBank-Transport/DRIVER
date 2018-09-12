@@ -13,10 +13,10 @@ from rest_framework import status
 from django.contrib.auth.models import User, Group
 from django.conf import settings
 
-from ashlar.models import RecordSchema, RecordType, Record
+from grout.models import RecordSchema, RecordType
 
 from data.filters import RecordAuditLogFilter
-from data.models import RecordAuditLogEntry, DedupeJob, RecordDuplicate
+from data.models import RecordAuditLogEntry, DedupeJob, RecordDuplicate, DriverRecord
 from data.views import DriverRecordViewSet, DriverRecordSchemaViewSet, DriverRecordAuditLogViewSet
 from data.serializers import DetailsReadOnlyRecordSerializer, DetailsReadOnlyRecordSchemaSerializer
 
@@ -26,7 +26,7 @@ class ViewTestSetUpMixin(object):
         try:
             self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
         except User.DoesNotExist:
-            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+            self.admin = User.objects.create_user('admin', 'admin@grout', 'admin')
             self.admin.is_superuser = True
             self.admin.is_staff = True
             self.admin.save()
@@ -35,7 +35,7 @@ class ViewTestSetUpMixin(object):
         self.admin_client.force_authenticate(user=self.admin)
 
     def set_up_public_client(self):
-        self.public = User.objects.create_user('public', 'public@ashlar', 'public')
+        self.public = User.objects.create_user('public', 'public@grout', 'public')
         self.public.groups.add(Group.objects.get(name='public'))
         self.public.save()
         self.public_client = APIClient()
@@ -88,22 +88,26 @@ class ViewTestSetUpMixin(object):
         self.schema = RecordSchema.objects.create(schema=schema,
                                                   version=1,
                                                   record_type=self.record_type)
-        self.record1 = Record.objects.create(occurred_from=self.now,
-                                             occurred_to=self.now,
-                                             geom='POINT (0 0)',
-                                             location_text='Equator',
-                                             schema=self.schema)
+        self.record1 = DriverRecord.objects.create(occurred_from=self.now,
+                                                   occurred_to=self.now,
+                                                   geom='POINT (0 0)',
+                                                   location_text='Equator',
+                                                   schema=self.schema,
+                                                   data=dict())
         # Create different numbers of objects at the different times so we can distinguish
-        self.record2 = Record.objects.create(occurred_from=self.then,
-                                             occurred_to=self.then,
-                                             geom='POINT (0 0)',
-                                             location_text='Equator',
-                                             schema=self.schema)
-        self.record3 = Record.objects.create(occurred_from=self.then,
-                                             occurred_to=self.then,
-                                             geom='POINT (0 0)',
-                                             location_text='Equator',
-                                             schema=self.schema)
+        self.record2 = DriverRecord.objects.create(occurred_from=self.then,
+                                                   occurred_to=self.then,
+                                                   geom='POINT (0 0)',
+                                                   location_text='Equator',
+                                                   schema=self.schema,
+                                                   data=dict())
+        self.record3 = DriverRecord.objects.create(occurred_from=self.then,
+                                                   occurred_to=self.then,
+                                                   geom='POINT (0 0)',
+                                                   location_text='Equator',
+                                                   schema=self.schema,
+                                                   data=dict())
+
 
 
 class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
@@ -191,16 +195,21 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         url = '/api/records/'
         post_data = {
             'data': {
-                'Person': [],
-                'Incident Details': {
-                    'Num passenger casualties': '',
-                    'Num driver casualties': '',
-                    'Num pedestrian casualties': '',
-                    '_localId': '9635a7f7-a897-4a3f-904e-93f5b273f990',
-                    'Num vehicles': '',
-                    'Description': ''
+                'objectDetails': {
+                    'Itness': 'It',
+                    'ItnessMultiple': 'It multi'
                 },
-                'Vehicle': []
+                'multiDetails': [
+                    {
+                        'MultiProperty': 'Multi1'
+                    },
+                    {
+                        'MultiProperty': 'Multi2'
+                    },
+                    {
+                        'MultiProperty': 'Multi2'
+                    }
+                ]
             },
             'schema': self.schema.pk,
             'geom': 'POINT(120.81298917531966 15.180301034030107)',
@@ -214,8 +223,10 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
             'occurred_to': '2015-12-31T16:00:00.000Z'
         }
         self.assertEqual(RecordAuditLogEntry.objects.count(), 0)
+        self.assertEqual(DriverRecord.objects.count(), 3)
         response = self.admin_client.post(url, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(DriverRecord.objects.all().count(), 4)
         self.assertEqual(RecordAuditLogEntry.objects.count(), 1)
 
 
@@ -249,15 +260,15 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
             ]
         }
 
-        Record.objects.create(occurred_from=self.date1, occurred_to=self.date1,
-                              geom='POINT (120.97 14.62)', location_text='Manila',
-                              schema=self.schema)
-        Record.objects.create(occurred_from=self.date2, occurred_to=self.date2,
-                              geom='POINT (120.97 14.62)', location_text='Manila',
-                              schema=self.schema)
-        Record.objects.create(occurred_from=self.date2, occurred_to=self.date2,
-                              geom='POINT (120.97 14.62)', location_text='Manila',
-                              schema=self.schema, data=data)
+        DriverRecord.objects.create(occurred_from=self.date1, occurred_to=self.date1,
+                                    geom='POINT (120.97 14.62)', location_text='Manila',
+                                    schema=self.schema, data=dict())
+        DriverRecord.objects.create(occurred_from=self.date2, occurred_to=self.date2,
+                                    geom='POINT (120.97 14.62)', location_text='Manila',
+                                    schema=self.schema, data=dict())
+        DriverRecord.objects.create(occurred_from=self.date2, occurred_to=self.date2,
+                                    geom='POINT (120.97 14.62)', location_text='Manila',
+                                    schema=self.schema, data=data)
 
     def test_month_by_day_of_week(self):
         """Test two gregorian date aggregations. Checks that the label arrays are
@@ -311,7 +322,7 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
         self.assertEqual(response_data['2016']['Multi2'], 1)
 
         # Add another Multi1 and verify counts
-        Record.objects.create(
+        DriverRecord.objects.create(
             occurred_from=self.date2, occurred_to=self.date2,
             geom='POINT (120.97 14.62)', location_text='Manila',
             schema=self.schema, data={
@@ -330,7 +341,7 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
         self.assertEqual(response_data['2016']['Multi2'], 1)
 
         # Add another Multi1/Multi2 and verify counts
-        Record.objects.create(
+        DriverRecord.objects.create(
             occurred_from=self.date2, occurred_to=self.date2,
             geom='POINT (120.97 14.62)', location_text='Manila',
             schema=self.schema, data={
@@ -350,7 +361,6 @@ class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
         self.assertEqual(response_data['2016']['Multi1'], 3)
         self.assertTrue('Multi2' in response_data['2016'], 'No key for Multi2')
         self.assertEqual(response_data['2016']['Multi2'], 2)
-
 
 
 class DriverRecordSchemaViewTestCase(APITestCase):
@@ -480,8 +490,8 @@ class DriverDuplicatesViewSetTestCase(APITestCase, ViewTestSetUpMixin):
         url = self.url + '{}/resolve/'.format(self.dup1.uuid)
         response = self.admin_client.patch(url, {'recordUUID': self.dup1.record.uuid})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertFalse(Record.objects.get(pk=self.dup1.record.pk).archived)
-        self.assertTrue(Record.objects.get(pk=self.dup1.duplicate_record.pk).archived)
+        self.assertFalse(DriverRecord.objects.get(pk=self.dup1.record.pk).archived)
+        self.assertTrue(DriverRecord.objects.get(pk=self.dup1.duplicate_record.pk).archived)
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
         self.assertFalse(RecordDuplicate.objects.get(pk=self.dup2.pk).resolved)
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup3.pk).resolved)
@@ -492,8 +502,8 @@ class DriverDuplicatesViewSetTestCase(APITestCase, ViewTestSetUpMixin):
         url = self.url + '{}/resolve/'.format(self.dup2.uuid)
         response = self.admin_client.patch(url, {'recordUUID': self.dup2.duplicate_record.uuid})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertTrue(Record.objects.get(pk=self.dup2.record.pk).archived)
-        self.assertFalse(Record.objects.get(pk=self.dup2.duplicate_record.pk).archived)
+        self.assertTrue(DriverRecord.objects.get(pk=self.dup2.record.pk).archived)
+        self.assertFalse(DriverRecord.objects.get(pk=self.dup2.duplicate_record.pk).archived)
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup1.pk).resolved)
         self.assertTrue(RecordDuplicate.objects.get(pk=self.dup2.pk).resolved)
         self.assertFalse(RecordDuplicate.objects.get(pk=self.dup3.pk).resolved)
@@ -504,7 +514,7 @@ class RecordCsvExportViewSetTestCase(APITestCase):
         try:
             self.admin = User.objects.get(username=settings.DEFAULT_ADMIN_USERNAME)
         except User.DoesNotExist:
-            self.admin = User.objects.create_user('admin', 'admin@ashlar', 'admin')
+            self.admin = User.objects.create_user('admin', 'admin@grout', 'admin')
             self.admin.is_superuser = True
             self.admin.is_staff = True
             self.admin.save()

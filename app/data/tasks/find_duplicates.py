@@ -6,8 +6,7 @@ from celery import shared_task
 from celery.app.task import Task
 from celery.utils.log import get_task_logger
 
-from data.models import (DedupeJob, RecordDuplicate)
-from ashlar.models import Record
+from data.models import DedupeJob, RecordDuplicate, DriverRecord
 
 import datetime
 
@@ -51,8 +50,8 @@ def calculate_similarity_score(record1, record2, time_allowance, distance_allowa
 def find_duplicates_for_record(uuid, time_allowance, distance_allowance):
     """ Given a record, find all possible duplicates for it
     """
-    record = Record.objects.get(uuid=uuid)
-    return Record.objects.filter(
+    record = DriverRecord.objects.get(uuid=uuid)
+    return DriverRecord.objects.filter(
         schema__record_type=record.schema.record_type,
         geom__dwithin=(record.geom, distance_allowance),
         occurred_from__range=(
@@ -87,7 +86,7 @@ def get_time_extent(job):
     if last_job:
         start_time = last_job.datetime
     else:
-        start_time = Record.objects.earliest('created').created
+        start_time = DriverRecord.objects.earliest('created').created
     end_time = job.datetime
     return {'start_time': start_time, 'end_time': end_time}
 
@@ -97,7 +96,7 @@ def get_dedupe_set(extent):
     return a set of uuids to check for duplicates, and the queryset used to
     generate it
     """
-    queryset = Record.objects.filter(
+    queryset = DriverRecord.objects.filter(
         created__range=(
             extent['start_time'], extent['end_time']
         )

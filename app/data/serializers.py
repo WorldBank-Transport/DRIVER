@@ -4,15 +4,20 @@ import pytz
 
 from rest_framework.serializers import (ModelSerializer, SerializerMethodField, ValidationError)
 
-from ashlar import serializers
-from ashlar import serializer_fields
+from grout import serializers
+from grout import serializer_fields
 
-from models import RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
+from models import DriverRecord, RecordAuditLogEntry, RecordDuplicate, RecordCostConfig
 
 from django.conf import settings
 
 
 class BaseDriverRecordSerializer(serializers.RecordSerializer):
+    class Meta:
+        model = DriverRecord
+        fields = '__all__'
+        read_only_fields = ('uuid',)
+
     def validate_occurred_from(self, value):
         """ Require that record occurred_from be in the past. """
         if value > datetime.datetime.now(pytz.timezone(settings.TIME_ZONE)):
@@ -99,7 +104,7 @@ class RecordCostConfigSerializer(ModelSerializer):
 
         cost_keys = set(get_from_data('enum_costs').keys())
         schema = get_from_data('record_type').get_current_schema()
-        # TODO: This snippet also appears in data/views.py and should be refactored into the Ashlar
+        # TODO: This snippet also appears in data/views.py and should be refactored into the Grout
         # RecordSchema model
         path = [get_from_data('content_type_key'), 'properties', get_from_data('property_key')]
         obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths

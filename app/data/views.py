@@ -35,20 +35,21 @@ from rest_framework import renderers, status
 
 from rest_framework_csv import renderers as csv_renderer
 
-from ashlar.models import RecordSchema, RecordType, BoundaryPolygon, Boundary
-from ashlar.views import (BoundaryPolygonViewSet,
-                          RecordViewSet,
-                          RecordTypeViewSet,
-                          RecordSchemaViewSet,
-                          BoundaryViewSet)
+from grout.models import RecordSchema, RecordType, BoundaryPolygon, Boundary
+from grout.views import (BoundaryPolygonViewSet,
+                         RecordViewSet,
+                         RecordTypeViewSet,
+                         RecordSchemaViewSet,
+                         BoundaryViewSet)
 
-from ashlar.serializers import RecordSchemaSerializer
+from grout.serializers import RecordSchemaSerializer
 
 from driver_auth.permissions import (IsAdminOrReadOnly,
                                      ReadersReadWritersWrite,
                                      IsAdminAndReadOnly,
                                      is_admin_or_writer)
 from data.tasks import export_csv
+from data.models import DriverRecord
 from data.localization.date_utils import (
     hijri_day_range,
     hijri_week_range,
@@ -90,9 +91,10 @@ def build_toddow(queryset):
 
 
 class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
-    """Override base RecordViewSet from ashlar to provide aggregation and tiler integration
+    """Override base RecordViewSet from grout to provide aggregation and tiler integration
     """
     permission_classes = (ReadersReadWritersWrite,)
+    queryset = DriverRecord.objects.all()
 
     # Filter out everything except details for read-only users
     def get_serializer_class(self):
@@ -1047,8 +1049,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
 
         return (True, labels, queryset.annotate(**annotations))
 
-
-    # TODO: This snippet also appears in data/serializers.py and should be refactored into the Ashlar
+    # TODO: This snippet also appears in data/serializers.py and should be refactored into the Grout
     # RecordSchema model
     def _get_schema_enum_choices(self, schema, path):
         """Returns the choices in a schema enum field at path
@@ -1156,7 +1157,7 @@ def start_jar_build(schema_uuid):
     return True
 
 
-# override ashlar views to set permissions and trigger model jar builds
+# override grout views to set permissions and trigger model jar builds
 class DriverBoundaryPolygonViewSet(BoundaryPolygonViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 

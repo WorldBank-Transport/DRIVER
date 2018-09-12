@@ -38,11 +38,12 @@ postgis_package_version: "2.3.*.pgdg14.04+1"
 
 ## TABLES USED BY WINDSHAFT
 windshaft_tables:
-    - ashlar_record
-    - ashlar_boundary
-    - ashlar_boundarypolygon
-    - ashlar_recordschema
-    - ashlar_recordtype
+    - data_driverrecord
+    - grout_record
+    - grout_boundary
+    - grout_boundarypolygon
+    - grout_recordschema
+    - grout_recordtype
     - black_spots_blackspot
 
 redis_bind_address: "redis.service.driver.internal"

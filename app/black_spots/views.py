@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django_redis import get_redis_connection
 from django.utils import timezone
 
-from ashlar.models import Record
+from data.models import DriverRecord
 from black_spots.models import (BlackSpot, BlackSpotSet, BlackSpotConfig)
 from black_spots.serializers import (BlackSpotSerializer, BlackSpotSetSerializer,
                                      BlackSpotConfigSerializer, EnforcerAssignmentInputSerializer,
@@ -14,8 +14,11 @@ from data.views import build_toddow
 
 from driver_auth.permissions import IsAdminOrReadOnly
 from driver import mixins
-import datetime, random, uuid
+import datetime
+import random
+import uuid
 from dateutil import rrule
+
 
 class BlackSpotViewSet(viewsets.ModelViewSet, mixins.GenerateViewsetQuery):
     """ViewSet for black spots"""
@@ -132,7 +135,7 @@ class EnforcerAssignmentViewSet(drf_mixins.ListModelMixin, viewsets.GenericViewS
         num_days_events = 365
         max_dt = timezone.now()
         min_dt = max_dt - datetime.timedelta(days=num_days_events)
-        records = Record.objects.filter(
+        records = DriverRecord.objects.filter(
             occurred_from__gte=min_dt,
             occurred_to__lte=max_dt,
             schema__record_type_id=record_type

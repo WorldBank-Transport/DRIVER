@@ -20,7 +20,7 @@ from rest_framework.response import Response
 from djangooidc.oidc import OIDCError
 from djangooidc.views import CLIENTS
 
-from ashlar.pagination import OptionalLimitOffsetPagination
+from grout.pagination import OptionalLimitOffsetPagination
 
 from django.conf import settings
 from driver_auth.serializers import UserSerializer, GroupSerializer

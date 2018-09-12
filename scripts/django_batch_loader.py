@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 """Loads incidents from CSV data"""
-import argparse
 import csv
 from dateutil import parser
 import glob
@@ -10,7 +9,8 @@ import os
 import pytz
 import uuid
 
-from ashlar.models import RecordSchema, RecordType, Record
+from grout.models import RecordSchema
+from data.models import DriverRecord
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -116,7 +116,7 @@ def load(obj, schema, headers=None):
     if headers is None:
         headers = {}
 
-    Record.objects.create(
+    DriverRecord.objects.create(
         occurred_from=obj['occurred_from'],
         occurred_to=obj['occurred_to'],
         geom=obj['geom'],

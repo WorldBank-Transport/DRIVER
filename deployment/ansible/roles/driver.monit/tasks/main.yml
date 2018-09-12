@@ -44,6 +44,6 @@
 
 - name: Configure monit web interface
   template: src=monit-enable-httpd.cfg.j2 dest=/etc/monit/conf.d/monit-enable-httpd.cfg
-  when: "{{ monit_enable_web_access }}"
+  when: monit_enable_web_access
   notify:
     - Restart monit

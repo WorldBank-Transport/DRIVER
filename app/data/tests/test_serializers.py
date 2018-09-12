@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from django.conf import settings
 from rest_framework.serializers import ModelSerializer
-from ashlar import serializer_fields
+from grout import serializer_fields
 
 from data import serializers
 from data.models import RecordAuditLogEntry
