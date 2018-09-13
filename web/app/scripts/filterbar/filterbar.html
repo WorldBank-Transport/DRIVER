@@ -13,7 +13,7 @@
             <li text-search-field="__createdBy"></li>
         </ul>
         <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
-            <li ng-if="value.format === 'number'"
+            <li ng-if="(value.format === 'number') || (value.fieldType === 'integer') || (value.fieldType === 'number')"
                 numeric-range-field
                 label="key"
                 data="value"

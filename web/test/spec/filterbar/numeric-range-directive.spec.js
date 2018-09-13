@@ -32,8 +32,7 @@ describe('driver.filterbar: Numeric Range', function () {
 
         // set the list of filterable things on the parent controller with an option filter
         var testFilterables = {'my#amplifier': {
-            format: 'number',
-            fieldType: 'text',
+            fieldType: 'number',
             isSearchable: true,
             propertyOrder: 0,
             type: 'string'
