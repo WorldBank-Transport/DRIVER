@@ -38,6 +38,8 @@ postgis_package_version: "2.3.*.pgdg14.04+1"
 
 ## TABLES USED BY WINDSHAFT
 windshaft_tables:
+    - auth_user
+    - data_recordauditlogentry
     - data_driverrecord
     - grout_record
     - grout_boundary
