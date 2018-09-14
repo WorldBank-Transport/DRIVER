@@ -34,8 +34,7 @@ class RecordAuditLogEntry(models.Model):
     username = models.CharField(max_length=30, db_index=True)
     # Same for the record; if the record this refers to is deleted we still want to be able to
     # determine which audit log entries pertained to that record.
-    record = models.ForeignKey(Record, null=True, on_delete=models.SET_NULL,
-                               related_name='audit_entries')
+    record = models.ForeignKey(DriverRecord, null=True, on_delete=models.SET_NULL)
     record_uuid = models.CharField(max_length=36, db_index=True)
 
     date = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -88,9 +87,9 @@ class RecordDuplicate(GroutModel):
     """ Store information about a possible duplicate record pair
     Duplicates are found using a time-distance heuristic
     """
-    record = models.ForeignKey(Record, null=True, related_name="record")
+    record = models.ForeignKey(DriverRecord, null=True, related_name="record")
 
-    duplicate_record = models.ForeignKey(Record, null=True,
+    duplicate_record = models.ForeignKey(DriverRecord, null=True,
                                          related_name="duplicate_record")
     score = models.FloatField(default=0)
     resolved = models.BooleanField(default=False)
