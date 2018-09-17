@@ -161,7 +161,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             response = Response(dict())
             query_sql = self.generate_query_sql(request)
             tile_token = uuid.uuid4()
-            self._cache_tile_sql(tile_token, query_sql.encode('utf-8'))
+            self._cache_tile_sql(tile_token, query_sql)
             response.data['tilekey'] = tile_token
         else:
             response = super(DriverRecordViewSet, self).list(self, request, *args, **kwargs)
