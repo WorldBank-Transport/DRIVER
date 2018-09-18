@@ -59,6 +59,12 @@ class ViewTestSetUpMixin(object):
             "definitions": {
                 "objectDetails": {
                     "properties": {
+                        u"Numb\xe9r": {
+                            "fieldType": "number",
+                            "maximum": 10,
+                            "minimum": 0,
+                            "type": "integer"
+                        },
                         "Itness": {
                             "displayType": "select",
                             "enum": ["It", "Not it"]
@@ -116,6 +122,11 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         self.set_up_admin_client()
         self.set_up_records()
         self.factory = APIRequestFactory()
+
+    def tearDown(self):
+        super(DriverRecordViewTestCase, self).tearDown()
+        DriverRecord.objects.all().delete()
+        RecordAuditLogEntry.objects.all().delete()
 
     def test_toddow(self):
         url = '/api/records/toddow/?record_type={}'.format(str(self.record_type.uuid))
@@ -191,6 +202,9 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_audit_log_creation(self):
         """Test that audit logs are generated on create operations"""
+        initial_num_records = DriverRecord.objects.count()
+        initial_num_audit_log_entries = RecordAuditLogEntry.objects.count()
+
         url = '/api/records/'
         post_data = {
             'data': {
@@ -221,12 +235,10 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
             'occurred_from': '2015-12-31T16:00:00.000Z',
             'occurred_to': '2015-12-31T16:00:00.000Z'
         }
-        self.assertEqual(RecordAuditLogEntry.objects.count(), 0)
-        self.assertEqual(DriverRecord.objects.count(), 3)
         response = self.admin_client.post(url, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(DriverRecord.objects.all().count(), 4)
-        self.assertEqual(RecordAuditLogEntry.objects.count(), 1)
+        self.assertEqual(DriverRecord.objects.all().count(), initial_num_records + 1)
+        self.assertEqual(RecordAuditLogEntry.objects.count(), initial_num_audit_log_entries + 1)
 
 
 class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
