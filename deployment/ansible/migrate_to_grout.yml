@@ -13,10 +13,10 @@
   become: true
   tasks:
     - name: Move Ashlar tables to Grout
-      command: docker run --rm {{ docker_repository }}driver-app:{{ docker_image_tag }} ./manage.py migrate data 0011
+      command: docker exec driver-app ./manage.py migrate data 0011
 
     - name: Finish migrating Grout
-      command: docker run --rm {{ docker_repository }}driver-app:{{ docker_image_tag }} ./manage.py migrate grout
+      command: docker exec driver-app ./manage.py migrate grout
 
     - name: Finish migrating DRIVER
-      command: docker run --rm {{ docker_repository }}driver-app:{{ docker_image_tag }} ./manage.py migrate data
+      command: docker exec driver-app ./manage.py migrate data
