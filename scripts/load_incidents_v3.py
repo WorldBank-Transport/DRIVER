@@ -121,6 +121,7 @@ def create_schema(schema_path, api, headers=None):
                              data={'label': 'Incident',
                                    'plural_label': 'Incidents',
                                    'description': 'Historical incident data',
+                                   'temporal': True,
                                    'active': True},
                              headers=headers)
     response.raise_for_status()
