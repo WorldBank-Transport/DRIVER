@@ -1,7 +1,4 @@
 ---
-# This is used ONLY when deploying to production to determine which docker image is used.
-# To use a specific version locally, you'll need to `git checkout tags/<version>`
-app_version: "1.1.2"
 developing: "{{ 'development' in group_names }}"
 developing_or_staging: "{{ 'development' in group_names or 'staging' in group_names }}"
 not_developing: "{{ 'development' not in group_names }}"
@@ -12,9 +9,6 @@ production: "{{ 'production' in group_names }}"
 docker_version: "1.10.*"
 docker_py_version: "1.2.3"
 docker_options: "--storage-driver=aufs"
-# In local development, always use the 'latest' tag regardless of what app_version says;
-# users need to checkout a tag in order to get a specific version.
-docker_image_tag: "{% if developing %}latest{% else %}{{app_version}}{% endif %}"
 
 python_version: "2.7.*"
 pip_version: "1.*"
@@ -22,7 +16,6 @@ pip_version: "1.*"
 python_security_ndghttpsclient_version: 0.4.3
 python_security_pyasn1_version: 0.4.2
 
-postgresql_host: "database.service.driver.internal"
 postgresql_port: 5432
 # The maximum number of connections that PostgreSQL should allow. You shouldn't need to change this
 # except under conditions of very high load.
@@ -48,80 +41,7 @@ windshaft_tables:
     - grout_recordtype
     - black_spots_blackspot
 
-redis_bind_address: "redis.service.driver.internal"
 redis_port: 6379
-
-## WEB SETTINGS
-js_html5mode: "false"
-js_html5mode_prefix: "!"
-
-web_js_nominatim_key: ""
-web_js_html5mode: "{{ js_html5mode }}"
-web_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
-web_js_record_type_visible: "false"
-web_js_record_type_primary_label: "Incident"
-web_js_record_type_secondary_label: "Intervention"
-web_js_blackspots_visible: "true"
-web_js_heatmap_visible: "true"
-web_js_interventions_visible: "true"
-web_js_mapillary: "false"
-web_js_mapillary_client_id: ""
-web_js_mapillary_range: 10
-editor_js_html5mode: "{{ js_html5mode }}"
-editor_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
-
-## OIDC SETTINGS
-oauth_client_id: ''
-oauth_client_secret: ''
-
-## Localization settings
-local_time_zone_id: 'Asia/Manila'
-local_country_code: 'ph'
-local_center_lat_lon: [12.375, 121.5]
-osm_extract_url: 'https://download.geofabrik.de/asia/philippines-latest.osm.pbf'
-
-# List of languages to allow in the application. There must be at least one defined,
-# and the first one in the list is used as the application's default language.
-# If there is only one language defined, the drop-down will not be displayed.
-languages:
-    - { id: 'en-us', label: 'English (US)', rtl: false  }
-
-## The following options may also be added to languages for display in the language picker
-## - { id: 'ar-sa', label: 'Arabic (Saudi Arabia)', rtl: true }
-## - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
-
-## Forecast.io settings
-forecast_io_api_key: ''
-
-celery_host_address: "celery.service.driver.internal"
-
-## Android jar signing settings
-keystore_password: 'driverkeystore'
-
-## Django allowed hosts setting. Override when not in DEBUG mode.
-allowed_host: ''
-
-## Access settings for Monit admin interface. Note that this is
-## insecure; ideally, SSL should be used (which Monit supports).
-## An intermediate step would be to restrict the IPs from which
-## monit can be accessed via monit_allow_hosts
-## Username and Password MUST be defined in order for monit to work
-## but monit is restricted to requests coming from localhost by default
-monit_allow_hosts: []
-monit_allow_user: 'test'
-monit_allow_password: 'test'
-monit_enable_web_access: yes
-
-## IP addresses used to configure the firewall
-ip_addresses_app:
-    - 192.168.12.102
-ip_addresses_celery:
-    - 192.168.12.103
-
-## Permission overrides
-driver_read_only_group: "public"
-driver_read_write_group: "analyst"
-driver_admin_group: "admin"
 
 ## Reload the nginx config after an SSL certificate is renewed
 letsencrypt_post_renew_cmd: "service nginx reload"
