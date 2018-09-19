@@ -143,7 +143,7 @@ For developers at Azavea, use the `regions.zip` and `states.zip` files available
 After uploading each the file, select `name` as the display field, then hit save. Either refresh the page or navigate somewhere else in between uploads.
 
 ### Records
-Record data can be populated from a CSV file that contains named columns for `"lat"`, `"lon"`, and `"record_date"`. For developers at Azavea, CSV files containing historical data can be downloaded from the `/data` folder of the project's directory in the fileshare, with names of the format `<city or agency>_traffic.csv`.
+Record data can be populated from a CSV file that contains named columns for `"lat"`, `"lon"`, and `"record_date"`. A file with semi-realistic data can be found in `scripts/sample_data/sample_traffic.csv` for use. For developers at Azavea, CSV files containing historical data can be downloaded from the `/data` folder of the project's directory in the fileshare, with names of the format `<city or agency>_traffic.csv`.
 
 In order to import record data you will have to obtain an Authorization header and its API token. To do this, log in to the web application, then open the network tab in web developer tools and reload the page. Inspect the request headers
 from an API request and pull out the value of the `Authorization` header, for example
@@ -151,7 +151,7 @@ from an API request and pull out the value of the `Authorization` header, for ex
 
 Using the API token, run:
 ```bash
-python scripts/load_incidents_v3.py --authz 'Token <YOUR_AUTH_TOKEN>' /path/to/directory_containing_incident_csvs
+python scripts/load_incidents_v3.py --authz 'Token <YOUR_AUTH_TOKEN>' scripts/sample_data/
 ```
 Note that the import process will take roughly two hours for the full data set; you can cut down the
 number of records with `head` on the individual CSVs.
