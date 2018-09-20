@@ -30,8 +30,7 @@
                     if (latlng === null) {
                         return;
                     }
-                    map.setZoom(16);
-                    map.panTo(new L.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1])));
+                    map.setView([parseFloat(latlng[0]), parseFloat(latlng[1])], 16);
                 };
 
                 var geocodeAddress = function(query) {
