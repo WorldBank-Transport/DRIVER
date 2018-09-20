@@ -59,6 +59,12 @@ class ViewTestSetUpMixin(object):
             "definitions": {
                 "objectDetails": {
                     "properties": {
+                        u"Numb\xe9r": {
+                            "fieldType": "number",
+                            "maximum": 10,
+                            "minimum": 0,
+                            "type": "integer"
+                        },
                         "Itness": {
                             "displayType": "select",
                             "enum": ["It", "Not it"]
@@ -114,6 +120,11 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         self.set_up_records()
         self.factory = APIRequestFactory()
 
+    def tearDown(self):
+        super(DriverRecordViewTestCase, self).tearDown()
+        Record.objects.all().delete()
+        RecordAuditLogEntry.objects.all().delete()
+
     def test_toddow(self):
         url = '/api/records/toddow/?record_type={}'.format(str(self.record_type.uuid))
         response = json.loads(self.admin_client.get(url).content)
@@ -156,6 +167,39 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
         response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
 
+    def test_unicode_in_filters_number_field(self):
+        data = {
+            'objectDetails': {
+                u"Numb\xe9r": 1,
+            },
+        }
+        date = datetime(2016, 1, 29, 13, 0, 0, 0, pytz.timezone('Asia/Manila'))
+        test_record = Record.objects.create(
+            occurred_from=date,
+            occurred_to=date,
+            geom='POINT (120.97 14.62)',
+            location_text='Manila',
+            schema=self.schema,
+            data=data)
+
+        url = '/api/records/?details_only=True&tilekey=True&jsonb={jsonb}'.format(
+            jsonb=json.dumps({
+                "objectDetails": {
+                    u"Numb\xe9r": {
+                        "_rule_type":"intrange",
+                        "min": 0,
+                        "max": 2
+                    }
+                }
+            }))
+        with mock.patch('data.views.get_redis_connection') as mocked_get_redis_connection:
+            mocked_redis_connection = mock.Mock()
+            mocked_get_redis_connection.return_value = mocked_redis_connection
+            response = json.loads(self.admin_client.get(url).content)
+            self.assertEqual(mocked_redis_connection.set.call_count, 1)
+            self.assertEqual(type(mocked_redis_connection.set.call_args[0][1]), str)
+        self.assertTrue('tilekey' in response)
+
     def test_tilekey_param(self):
         """Ensure that the tilekey param stores a SQL query in Redis and returns an access token"""
         # Since the call to store in redis won't have access to a real Redis instance under test,
@@ -188,6 +232,9 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
 
     def test_audit_log_creation(self):
         """Test that audit logs are generated on create operations"""
+        initial_num_records = Record.objects.count()
+        initial_num_audit_log_entries = RecordAuditLogEntry.objects.count()
+
         url = '/api/records/'
         post_data = {
             'data': {
@@ -213,10 +260,10 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
             'occurred_from': '2015-12-31T16:00:00.000Z',
             'occurred_to': '2015-12-31T16:00:00.000Z'
         }
-        self.assertEqual(RecordAuditLogEntry.objects.count(), 0)
         response = self.admin_client.post(url, post_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(RecordAuditLogEntry.objects.count(), 1)
+        self.assertEqual(Record.objects.all().count(), initial_num_records + 1)
+        self.assertEqual(RecordAuditLogEntry.objects.count(), initial_num_audit_log_entries + 1)
 
 
 class DriverCustomReportViewTestCase(APITestCase, ViewTestSetUpMixin):
