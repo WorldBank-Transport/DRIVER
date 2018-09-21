@@ -22,6 +22,11 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
     vagrant plugin install vagrant-hostmanager
     ```
 
+1. Prevent changes in `group_vars/development` from being tracked by git.
+
+    - You will likely make changes to `group_vars/development` to configure your local environment. To make sure you don't commit those changes unless you need to change the default development settings, you can make git not track changes to that file. To do this, run `git update-index --assume-unchanged deployment/ansible/group_vars/development`.
+    - To revert back to tracking changes, run `git update-index --no-assume-unchanged deployment/ansible/group_vars/development`.
+
 1. Create `gradle/data/driver.keystore`
 
     - To run in development without support for JAR file building:
@@ -31,14 +36,9 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
       (If you just want to install the DRIVER web interface, do this. You can add Android integration later.)
 
     - To build schema model JAR files for the Android app, copy the signing keystore to `gradle/data/driver.keystore`
-    and set the password for the keystore under `keystore_password` in `deployment/ansible/group_vars/all`.
+    and set the password for the keystore under `keystore_password` in `deployment/ansible/group_vars/development`.
 
-1. Copy the example `group_vars` file:
-    ```bash
-    cp deployment/ansible/group_vars/all.example deployment/ansible/group_vars/all
-    ```
-
-1. (Optional) To enable geocoding, [set up Pickpoint in `group_vars/all`](#pickpoint)
+1. (Optional) To enable geocoding, [set up Pickpoint in `group_vars/development`](#pickpoint)
 
 1. Install [NFS](https://en.wikipedia.org/wiki/Network_File_System). On Debian/Ubuntu, run:
 
@@ -58,7 +58,7 @@ DRIVER - Data for Road Incident Visualization, Evaluation, and Reporting
 
 ### Pickpoint
 
-Pickpoint is a geocoding service used by DRIVER to obtain lat/lon coordinates from input addresses. DRIVER can work without Pickpoint configured, but to enable geocoding, obtain a pickpoint API key from https://pickpoint.io and enter the key in `deployment/ansible/group_vars/all` under `web_js_nominatim_key`.
+Pickpoint is a geocoding service used by DRIVER to obtain lat/lon coordinates from input addresses. DRIVER can work without Pickpoint configured, but to enable geocoding, obtain a pickpoint API key from https://pickpoint.io and enter the key in `deployment/ansible/group_vars/development` under `web_js_nominatim_key`.
 
 ### Running & Configuration
 
@@ -82,7 +82,7 @@ http://localhost:7000
 
 http://localhost:7000/openid/callback/login/
 
-Once you have the client ID and client secret, add those values to `deployment/ansible/group_vars/all` and reprovision the `app` VM  as needed:
+Once you have the client ID and client secret, add those values to `deployment/ansible/group_vars/development` and reprovision the `app` VM  as needed:
 ```bash
 vagrant provision app
 ```
@@ -116,7 +116,7 @@ propagated to other translations via a grunt task:
 #### Adding a new translation file
 Place the new JSON file in the i18n folder. Add the file to the i18nForeignLanguages var in Gruntfile.js.
 To enable the language to be selected via the language picker, add an item to the `languages` list in
-`deployment/ansible/group_vars/all`. Setting `rtl` to true will enable right-to-left CSS changes.
+`deployment/ansible/group_vars/development`. Setting `rtl` to true will enable right-to-left CSS changes.
 
 
 ### Docker
