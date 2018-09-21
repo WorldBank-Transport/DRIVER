@@ -1,0 +1,15 @@
+<div class="btn-group dropdown options open" ng-class="{ 'active': value }">
+    <div class="form-group">
+        <select data-selected-text-format="static"
+                data-title="{{ 'RECORD.WEATHER' | translate }}"
+                class="selectpicker form-control"
+                id="{{ domID }}"
+                name="options[]"
+                ng-model="value"
+                ng-change="updateFilter()">
+            <option ng-repeat="weatherVal in weatherValues" value="{{ weatherVal }}">
+                {{ weatherVal | weatherLabel | translate }}
+            </option>
+        </select>
+    </div>
+</div>

@@ -152,6 +152,11 @@
                 if (created_by_string) {
                     paramObj.created_by = created_by_string;
                 }
+
+                var weatherFilter = FilterState.getWeatherFilter();
+                if (weatherFilter) {
+                    paramObj.weather = weatherFilter;
+                }
             }
 
             if (filterConfig.doBoundaryFilter) {

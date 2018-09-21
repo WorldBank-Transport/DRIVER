@@ -19,6 +19,7 @@
         svc.getDateFilter = getDateFilter;
         svc.getCreatedFilter = getCreatedFilter;
         svc.getCreatedByFilter = getCreatedByFilter;
+        svc.getWeatherFilter = getWeatherFilter;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -130,6 +131,10 @@
 
         function getCreatedByFilter() {
             return svc.filters.__createdBy;
+        }
+
+        function getWeatherFilter() {
+            return svc.filters.__weather;
         }
 
         // Helper for converting a datetime string to the proper format to work with moment.tz.
