@@ -30,8 +30,7 @@
                     if (latlng === null) {
                         return;
                     }
-                    map.setZoom(16);
-                    map.panTo(new L.LatLng(parseFloat(latlng[0]), parseFloat(latlng[1])));
+                    map.setView([parseFloat(latlng[0]), parseFloat(latlng[1])], 16);
                 };
 
                 var geocodeAddress = function(query) {
@@ -55,6 +54,7 @@
                         var addressSearchButton = L.DomUtil.create('button', 'address-search-button', addressSearchDiv);
                         L.DomUtil.create('span', 'glyphicon glyphicon-search', addressSearchButton);
 
+                        addressSearchButton.id = 'address-search-button';
                         addressSearchInput.id = 'address-search-input';
                         addressSearchInput.placeholder = 'Zoom to';
                         addressSearchInput.type = 'text';
@@ -66,6 +66,13 @@
                                 geocodeAddress(addressSearchInput);
                             } else {
                                 setLatlng(latlng);
+                            }
+                        });
+
+                        L.DomEvent.addListener(addressSearchInput, 'keyup', function(event) {
+                            event.preventDefault();
+                            if (event.keyCode === 13) {
+                                document.getElementById('address-search-button').click();
                             }
                         });
 
