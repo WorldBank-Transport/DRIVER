@@ -95,15 +95,20 @@ def load(obj, api, headers=None):
     """Load a transformed object into the data store via the API"""
     if headers is None:
         headers = {}
-    response = requests.post(api + '/records/',
-                             data=json.dumps(obj),
-                             headers=dict({'content-type': 'application/json'}.items() +
-                                          headers.items()))
-    sleep(0.2)
-    if response.status_code != 201:
-        logger.error(response.text)
-        logger.error('retrying...')
-        load(obj, api, headers)
+
+    url = api + '/records/'
+    data = json.dumps(obj)
+    headers = dict(headers)
+    headers.setdefault('content-type', 'application/json')
+
+    while True:
+        response = requests.post(url, data=data, headers=headers)
+        sleep(0.2)
+        if response.status_code == 201:
+            return
+        else:
+            logger.error(response.text)
+            logger.error('retrying...')
 
 
 def create_schema(schema_path, api, headers=None):
