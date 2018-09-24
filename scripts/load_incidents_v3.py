@@ -32,20 +32,20 @@ def transform(record, schema_id):
 
     Doesn't do anything fancy -- if the schema changes, this needs to change too.
     """
-    details_mapping = {
-        'severity': 'Severity',
-        'description': 'Description',
-        'num_vehicles': 'Num vehicles',
-        'num_driver_casualties': 'Num driver casualties',
-        'num_passenger_casualties': 'Num passenger casualties',
-        'num_pedestrian_casualties': 'Num pedestrian casualties',
-        'traffic_control': 'Traffic control',
-        'collision_type': 'Collision type',
-        'street_lights': 'Street lights',
-        'surface_condition': 'Surface condition',
-        'surface_type': 'Surface type',
-        'main_cause': 'Main cause'
-    }
+    details_mapping = [
+        ('severity', 'Severity', str),
+        ('description', 'Description', str),
+        ('num_vehicles', 'Num vehicles', int),
+        ('num_driver_casualties', 'Num driver casualties', int),
+        ('num_passenger_casualties', 'Num passenger casualties', int),
+        ('num_pedestrian_casualties', 'Num pedestrian casualties', int),
+        ('traffic_control', 'Traffic control', str),
+        ('collision_type', 'Collision type', str),
+        ('street_lights', 'Street lights', str),
+        ('surface_condition', 'Surface condition', str),
+        ('surface_type', 'Surface type', str),
+        ('main_cause', 'Main cause', str)
+    ]
 
     # Calculate value for the occurred_from/to fields in local time
     occurred_date = parser.parse(record['record_date'])
@@ -74,7 +74,8 @@ def transform(record, schema_id):
     obj = {
         'data': {
             'driverIncidentDetails': {
-                driver_key: record[csv_key] for csv_key, driver_key in details_mapping.iteritems()
+                driver_key: cast_func(record[csv_key])
+                for csv_key, driver_key, cast_func in details_mapping
                 if csv_key in record
             },
             'driverPerson': [],
