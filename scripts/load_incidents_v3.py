@@ -46,39 +46,15 @@ def transform(record, schema_id):
         'surface_type': 'Surface type',
         'main_cause': 'Main cause'
     }
-    obj = {
-        'data': {
-            'driverIncidentDetails': dict(),
-            'driverPerson': [],
-            'driverVehicle': []
-        },
-        'schema': str(schema_id),
-        'occurred_from': 'None',
-        'occurred_to': 'None',
-        'geom': 'POINT (0 0)'
-    }
-    data = obj['data']
-    for key, value in details_mapping.iteritems():
-        if key in record:
-            data['driverIncidentDetails'][value] = record[key]
 
-    # Add in the _localId field; they're not used here but the schema requires them
-    def _add_local_id(dictionary):
-        dictionary['_localId'] = str(uuid.uuid4())
-
-    _add_local_id(data['driverIncidentDetails'])
-
-    # Set the occurred_from/to fields
+    # Calculate value for the occurred_from/to fields in local time
     occurred_date = parser.parse(record['record_date'])
     occurred_date = pytz.timezone('Asia/Manila').localize(occurred_date)
-    obj['occurred_from'] = occurred_date.isoformat()
-    obj['occurred_to'] = occurred_date.isoformat()
 
     # Set the geom field
-    point = ogr.Geometry(ogr.wkbPoint)
-
     # Some of the files use lat/lon, others use 3123.
     # Reproject the ones that don't look like lat/lon.
+    point = ogr.Geometry(ogr.wkbPoint)
     if -180 < float(record['lon']) < 180:
         point.AddPoint(float(record['lon']), float(record['lat']))
         point.FlattenTo2D()
@@ -95,7 +71,23 @@ def transform(record, schema_id):
         transform = osr.CoordinateTransformation(source, target)
         point.Transform(transform)
 
-    obj['geom'] = point.ExportToWkt()
+    obj = {
+        'data': {
+            'driverIncidentDetails': {
+                value: record[key] for key, value in details_mapping.iteritems() if key in record
+            },
+            'driverPerson': [],
+            'driverVehicle': []
+        },
+        'schema': str(schema_id),
+        'occurred_from': occurred_date.isoformat(),
+        'occurred_to': occurred_date.isoformat(),
+        'geom': point.ExportToWkt()
+    }
+
+    # Add in the _localId field; they're not used here but the schema requires them
+    obj['data']['driverIncidentDetails']['_localId'] = str(uuid.uuid4())
+
     return obj
 
 
