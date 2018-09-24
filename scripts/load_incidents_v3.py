@@ -74,7 +74,8 @@ def transform(record, schema_id):
     obj = {
         'data': {
             'driverIncidentDetails': {
-                value: record[key] for key, value in details_mapping.iteritems() if key in record
+                driver_key: record[csv_key] for csv_key, driver_key in details_mapping.iteritems()
+                if csv_key in record
             },
             'driverPerson': [],
             'driverVehicle': []
