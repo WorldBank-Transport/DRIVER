@@ -7,6 +7,8 @@
     function SavedFilterAsHTML($translate, $filter) {
         var searchTextLabel = $translate.instant('SAVED_FILTERS.SEARCH_TEXT');
         var textSearchLabel = $translate.instant('SAVED_FILTERS.TEXT_SEARCH');
+        var checkOutsideBoundaryLabel = $translate.instant('RECORD.OUT_OF_BOUNDS');
+        var createdByLabel = $translate.instant('RECORD.CREATED_BY');
         var unknownRuleType = $translate.instant('ERRORS.UNKNOWN_RULE_TYPE');
         var weatherLabel = $translate.instant('RECORD.WEATHER');
 
@@ -57,6 +59,7 @@
                         break;
 
                     default:
+                        // TODO: Refactor now that we have more of these.
                         if (key === '__searchText') {
                             htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
                         } else if (key === '__weather') {
@@ -64,6 +67,10 @@
                                 return $translate.instant($filter('weatherLabel')(weatherKey));
                             }).join(', ');
                             htmlBlocks.push('<strong>' + weatherLabel + ':</strong> ' + valTranslation);
+                        } else if (key === '__quality') {
+                            htmlBlocks.push('<strong>' + checkOutsideBoundaryLabel + '</strong>');
+                        } else if (key === '__createdBy') {
+                            htmlBlocks.push('<strong>' + createdByLabel + ':</strong> ' + val);
                         } else {
                             htmlBlocks.push(unknownRuleType + ': ' + val._rule_type);
                         }

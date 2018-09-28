@@ -20,6 +20,8 @@
         svc.getCreatedFilter = getCreatedFilter;
         svc.getCreatedByFilter = getCreatedByFilter;
         svc.getWeatherFilter = getWeatherFilter;
+        svc.getQualityChecksFilter = getQualityChecksFilter;
+        svc.getNonJsonFilterNames = getNonJsonFilterNames;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -135,6 +137,24 @@
 
         function getWeatherFilter() {
             return svc.filters.__weather;
+        }
+        function getQualityChecksFilter() {
+            var qualityChecks = {};
+            _.forEach(svc.filters.__quality, function(checkKey) {
+                qualityChecks[checkKey] = true;
+            });
+            return qualityChecks;
+        }
+
+        function getNonJsonFilterNames() {
+            return [
+                '__dateRange',
+                '__createdRange',
+                '__searchText',
+                '__createdBy',
+                '__quality',
+                '__weather'
+            ];
         }
 
         // Helper for converting a datetime string to the proper format to work with moment.tz.
