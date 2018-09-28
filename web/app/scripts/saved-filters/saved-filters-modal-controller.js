@@ -31,6 +31,7 @@
             }
 
             var filters = _.cloneDeep(FilterState.filters);
+            console.log('saving filters as', filters);
             // Don't include the date range on the saved filter. Doing so would
             // lock the start/end time of the filter, whereas users would most likely
             // want to see filters applied to their current date range.

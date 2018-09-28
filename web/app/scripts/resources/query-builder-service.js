@@ -148,9 +148,14 @@
                     created_min: createdFilter.minDate
                 });
 
-                var created_by_string = FilterState.getCreatedByFilter();
-                if (created_by_string) {
-                    paramObj.created_by = created_by_string;
+                var createdByString = FilterState.getCreatedByFilter();
+                if (createdByString) {
+                    paramObj.created_by = createdByString;
+                }
+
+                var qualityChecks = FilterState.getQualityChecksFilter();
+                if (qualityChecks.checkOutsideBoundary) {
+                    paramObj.check_outside_bounds = qualityChecks.checkOutsideBoundary;
                 }
 
                 var weatherFilter = FilterState.getWeatherFilter();
@@ -170,12 +175,9 @@
             }
 
             if (filterConfig.doJsonFilters) {
-                var jsonFilterParams = _.omit(FilterState.filters, [
-                    '__dateRange',
-                    '__createdRange',
-                    '__weather'
-                ]);
-                jsonPromise = svc.assembleJsonFilterParams(jsonFilterParams).then(
+                jsonPromise = svc.assembleJsonFilterParams(
+                    _.omit(FilterState.filters, FilterState.getNonJsonFilterNames())
+                ).then(
                     function(jsonFilters) {
                         // Handle cases where no json filters are set
                         if (!_.isEmpty(jsonFilters)) {

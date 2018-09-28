@@ -34,7 +34,6 @@
                 //unset
                 delete ctl.filters[filterLabel];
             }
-
             FilterState.saveFilters(ctl.filters);
             ctl.sendFilter();
         };
@@ -112,18 +111,14 @@
             var value;
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
-
             if (!ctl.filters.__dateRange && dateRange) {
                 ctl.filters.__dateRange = dateRange;
             }
-
-            if (ctl.filters.__dateRange) {
-                filterOn.push('__dateRange');
-            }
-
-            if (ctl.filters.__searchText) {
-                filterOn.push('__searchText');
-            }
+            _.each(FilterState.getNonJsonFilterNames(), function(filterName) {
+                if (ctl.filters[filterName]) {
+                    filterOn.push(filterName);
+                }
+            });
 
             if (ctl.filters.__weather) {
                 filterOn.push('__weather');
