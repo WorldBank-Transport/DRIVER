@@ -11,7 +11,11 @@ module.exports = function (grunt) {
 
   // Add new languages here
   // Do not put en-us or exclaim in this list
-  var i18nForeignLanguages = ['app/i18n/ar-sa.json'];
+  var i18nForeignLanguages = grunt.file.expand([
+      'app/i18n/*.json'
+  ]);
+  i18nForeignLanguages.splice(i18nForeignLanguages.indexOf('app/i18n/exclaim.json'), 1);
+  i18nForeignLanguages.splice(i18nForeignLanguages.indexOf('app/i18n/en-us.json'), 1);
 
   // Load grunt tasks automatically
   require('load-grunt-tasks')(grunt);

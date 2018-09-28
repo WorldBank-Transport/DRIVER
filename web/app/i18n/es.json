@@ -21,6 +21,7 @@
         "CANCEL": "Cancelar",
         "CLOSE": "Cerca",
         "DATE_RANGE": "Rango de fechas",
+        "CREATED_RANGE": "!Created Date",
         "DELETE": "Borrar",
         "DOWNLOAD_CSV": "Descargar archivo CSV",
         "DOWNLOADING": "Descarganando",
@@ -74,7 +75,6 @@
         "SATURDAY": "Sabado",
         "SUNDAY": "Domingo"
     },
-
     "ENFORCERS": {
         "ASSIGNMENT": "Asignación",
         "ASSIGNMENTS": "Asignaciones",
@@ -186,9 +186,14 @@
         "MODIFIED_BY": "!Modified by",
         "DATE_AND_TIME": "Fecha y hora",
         "DATE_FILTER": "Filtrar eventos por fecha de ocurrencia",
+        "CREATED_FILTER": "!Filter events by date of record creation",
         "DETAILS": "Detalles",
         "EVENT_COUNT": "Recuento de eventos",
         "FILTER_BY": "Filtrar por nombre, palabra clave",
+        "FILTER_CREATED_BY": "!Created by user",
+        "CREATED_BY": "!Creator",
+        "QUALITY_CHECKS": "!Quality checks",
+        "OUT_OF_BOUNDS": "!Location outside boundary",
         "INPUT_FORM": "Formulario de entrada",
         "LATITUDE": "Latitud",
         "LIGHT": "Ligero",
