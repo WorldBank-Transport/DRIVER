@@ -7,6 +7,7 @@ describe('driver.filterbar: Options', function () {
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
     beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('driver.weather'));
 
     var $compile;
     var $rootScope;
@@ -45,11 +46,14 @@ describe('driver.filterbar: Options', function () {
         $rootScope.$apply();
 
         // should have no selection yet
-        expect(Element.find('select').val()).toEqual(null);
+        var getSelectValue = function() {
+            return Element.find('select[data-title=bar]').val();
+        };
+        expect(getSelectValue()).toEqual(null);
         $rootScope.$broadcast('driver.filterbar:restore', [{'foo#bar': {'_rule_type': 'containment', 'contains': ['baz']}}, null]);
         $rootScope.$digest();
         // should have baz selected now
-        expect(Element.find('select').val()).toEqual(['string:baz']);
+        expect(getSelectValue()).toEqual(['string:baz']);
     });
 
 });
