@@ -14,10 +14,10 @@
             link: function(scope, elem, attrs, ctlArray) {
                 var filterbarController = ctlArray[0];
                 var weatherController = ctlArray[1];
+                var selectElem = angular.element(elem[0]).find('select');
 
                 scope.ctl.updateFilter = updateFilter;
                 scope.ctl.weatherValues = weatherController.weatherValues;
-                scope.ctl.domID = 'weather-filter-select';
                 scope.ctl.label = '__weather';
 
                 init();
@@ -25,7 +25,7 @@
                 function init() {
                     // use `%timeout` to ensure that the template is rendered before selectpicker logic
                     $timeout(function() {
-                        $('#' + scope.ctl.domID).selectpicker();
+                        selectElem.selectpicker();
                     });
                 }
 
@@ -45,8 +45,8 @@
                     scope.ctl.value = value;
                     $timeout(function() {
                         // Update UI
-                        $('#' + scope.ctl.domID).selectpicker('refresh');
-                        $('#' + scope.ctl.domID).val(value);
+                        selectElem.selectpicker('refresh');
+                        selectElem.val(value);
                         // Update filters
                         updateFilter();
                     });
