@@ -8,28 +8,30 @@
             require: ['^driver-filterbar', 'weather-field'],
             templateUrl: 'scripts/filterbar/weather.html',
             controller: 'weatherController',
-            scope: true,
+            bindToController: true,
+            controllerAs: 'ctl',
+            scope: {},
             link: function(scope, elem, attrs, ctlArray) {
                 var filterbarController = ctlArray[0];
                 var weatherController = ctlArray[1];
 
-                scope.updateFilter = updateFilter;
-                scope.weatherValues = weatherController.weatherValues;
-                scope.domID = 'weather-filter-select';
-                scope.label = '__weather';
+                scope.ctl.updateFilter = updateFilter;
+                scope.ctl.weatherValues = weatherController.weatherValues;
+                scope.ctl.domID = 'weather-filter-select';
+                scope.ctl.label = '__weather';
 
                 init();
 
                 function init() {
                     // use `%timeout` to ensure that the template is rendered before selectpicker logic
                     $timeout(function() {
-                        $('#' + scope.domID).selectpicker();
+                        $('#' + scope.ctl.domID).selectpicker();
                     });
                 }
 
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
-                    if (filter.label === scope.label) {
+                    if (filter.label === scope.ctl.label) {
                         setValue(filter.value);
                     }
                 });
@@ -40,11 +42,11 @@
 
                 function setValue(value) {
                     // Update model
-                    scope.value = value;
+                    scope.ctl.value = value;
                     $timeout(function() {
                         // Update UI
-                        $('#' + scope.domID).selectpicker('refresh');
-                        $('#' + scope.domID).val(value);
+                        $('#' + scope.ctl.domID).selectpicker('refresh');
+                        $('#' + scope.ctl.domID).val(value);
                         // Update filters
                         updateFilter();
                     });
@@ -55,7 +57,7 @@
                 *  filters should only be updated when data validates
                 */
                 function updateFilter() {
-                    filterbarController.updateFilter(scope.label, scope.value);
+                    filterbarController.updateFilter(scope.ctl.label, scope.ctl.value);
                 }
             }
         };
