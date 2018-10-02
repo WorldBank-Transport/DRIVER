@@ -1,9 +1,17 @@
 import django_filters
+
+from django.contrib.gis.db.models import Union
+from django.contrib.gis.geos import GEOSGeometry
+from django.core.exceptions import ValidationError
 from django.db.models import Q
+
+from django_redis import get_redis_connection
+from rest_framework.exceptions import ParseError, NotFound
 
 from models import RecordAuditLogEntry, RecordDuplicate
 from driver_auth.permissions import is_admin_or_writer
 from data.models import DriverRecord
+from grout.models import Boundary
 from grout.filters import RecordFilter
 
 
@@ -48,12 +56,35 @@ WEATHER_CHOICES = [(c, c) for c in [
     'wind',
 ]]
 
+
 class DriverRecordFilter(RecordFilter):
     """Extend RecordFilter to allow filtering on created date."""
     created_min = django_filters.IsoDateTimeFilter(name="created", lookup_expr='gte')
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
     created_by = django_filters.Filter(field_name='created_by', method='filter_created_by')
     weather = django_filters.MultipleChoiceFilter(choices=WEATHER_CHOICES)
+    outside_boundary = django_filters.Filter(field_name='geom', method='filter_outside_boundary')
+
+    def filter_outside_boundary(self, queryset, field_name, boundary_uuid):
+        """Filter records that fall outside the specified boundary."""
+        redis_conn = get_redis_connection('boundaries')
+        bounds_hexewkb = redis_conn.get(boundary_uuid)
+        one_month_seconds = 30 * 24 * 60 * 60
+        if bounds_hexewkb is None:
+            try:
+                boundary = Boundary.objects.get(pk=boundary_uuid)
+            except ValidationError:
+                raise ParseError('outside_boundary was passed an invalid UUID')
+            except Boundary.DoesNotExist:
+                raise NotFound('Boundary not found')
+            unioned_bounds = boundary.polygons.aggregate(all_polys=Union('geom'))['all_polys']
+            # Full resolution is very slow, so simplify down to roughly 100m (DRIVER is in lat/lon).
+            unioned_bounds = unioned_bounds.simplify(tolerance=0.001, preserve_topology=True)
+            redis_conn.set(boundary_uuid, str(unioned_bounds.hexewkb), one_month_seconds)
+        else:
+            redis_conn.expire(boundary_uuid, one_month_seconds)
+            unioned_bounds = GEOSGeometry(bounds_hexewkb)
+        return queryset.exclude(geom__intersects=unioned_bounds)
 
     def filter_created_by(self, queryset, name, value):
         """ Filter records by the email or username of the creating user."""
