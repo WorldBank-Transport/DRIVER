@@ -282,15 +282,15 @@ CACHES = {
     "default": {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/2',
-        'TIMEOUT': None, # never expire
+        'TIMEOUT': None,  # never expire
         'KEY_PREFIX': 'DJANGO',
         'VERSION': 1,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'SOCKET_CONNECT_TIMEOUT': 5, # seconds
-            'SOCKET_TIMEOUT': 5, # seconds
-            'MAX_ENTRIES': 900, # defaults to 300
-            'CULL_FREQUENCY': 4, # fraction culled when max reached (1 / CULL_FREQ); default: 3
+            'SOCKET_CONNECT_TIMEOUT': 5,  # seconds
+            'SOCKET_TIMEOUT': 5,  # seconds
+            'MAX_ENTRIES': 900,  # defaults to 300
+            'CULL_FREQUENCY': 4,  # fraction culled when max reached (1 / CULL_FREQ); default: 3
             # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
         }
     },
@@ -302,12 +302,20 @@ CACHES = {
         'VERSION': 1,
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'SOCKET_CONNECT_TIMEOUT': 5, # seconds
-            'SOCKET_TIMEOUT': 5, # seconds
-            'MAX_ENTRIES': 300, # defaults to 300
-            'CULL_FREQUENCY': 4, # fraction culled when max reached (1 / CULL_FREQ); default: 3
+            'SOCKET_CONNECT_TIMEOUT': 5,  # seconds
+            'SOCKET_TIMEOUT': 5,  # seconds
+            'MAX_ENTRIES': 300,  # defaults to 300
+            'CULL_FREQUENCY': 4,  # fraction culled when max reached (1 / CULL_FREQ); default: 3
             # 'COMPRESS_MIN_LEN': 0, # set to value > 0 to enable compression
         }
+    },
+    "boundaries": {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://{host}:{port}/4'.format(host=REDIS_HOST, port=REDIS_PORT),
+        # Timeout is set and renewed at the individual key level in data/filters.py
+        'TIMEOUT': None,
+        'KEY_PREFIX': 'boundary',
+        'VERSION': 1,
     }
 }
 

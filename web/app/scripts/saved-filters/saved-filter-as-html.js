@@ -59,7 +59,7 @@
                         break;
 
                     default:
-                        // TODO: Refactor now that we have more of these.
+                        // TODO: Refactor now that we have more of these. See #160822988
                         if (key === '__searchText') {
                             htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
                         } else if (key === '__weather') {
