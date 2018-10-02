@@ -8,6 +8,7 @@
         var searchTextLabel = $translate.instant('SAVED_FILTERS.SEARCH_TEXT');
         var textSearchLabel = $translate.instant('SAVED_FILTERS.TEXT_SEARCH');
         var unknownRuleType = $translate.instant('ERRORS.UNKNOWN_RULE_TYPE');
+        var weatherLabel = $translate.instant('RECORD.WEATHER');
 
         // Helper for determining if a value is a number
         function isNumeric(n) {
@@ -58,6 +59,8 @@
                     default:
                         if (key === '__searchText') {
                             htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
+                        } else if (key === '__weather') {
+                            htmlBlocks.push('<strong>' + weatherLabel + ':</strong> ' + val);
                         } else {
                             htmlBlocks.push(unknownRuleType + ': ' + val._rule_type);
                         }
