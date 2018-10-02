@@ -32,23 +32,22 @@
                 // restore previously set filter selection on page reload
                 scope.$on('driver.filterbar:restored', function(event, filter) {
                     if (filter.label === scope.ctl.label) {
-                        setValue(filter.value);
+                        update(filter.value);
                     }
                 });
 
                 scope.$on('driver.filterbar:reset', function() {
-                    setValue([]);
+                    update([]);
+                    updateFilter();
                 });
 
-                function setValue(value) {
+                function update(value) {
                     // Update model
                     scope.ctl.value = value;
                     $timeout(function() {
                         // Update UI
                         selectElem.selectpicker('refresh');
                         selectElem.val(value);
-                        // Update filters
-                        updateFilter();
                     });
                 }
 
