@@ -5,7 +5,9 @@
     function WeatherController(WeatherService) {
         var ctl = this;
 
-        ctl.weatherValues = WeatherService.weatherValues;
+        // Ignore first value, which is blank
+        ctl.weatherValues = WeatherService.weatherValues.slice(1);
+
         return ctl;
     }
 

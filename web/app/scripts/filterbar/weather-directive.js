@@ -37,7 +37,7 @@
                 });
 
                 scope.$on('driver.filterbar:reset', function() {
-                    setValue('');
+                    setValue([]);
                 });
 
                 function setValue(value) {
