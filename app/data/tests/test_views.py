@@ -105,6 +105,7 @@ class ViewTestSetUpMixin(object):
                                                    geom='POINT (0 0)',
                                                    location_text='Equator',
                                                    schema=self.schema,
+                                                   weather='fog',
                                                    data=dict())
         # Create different numbers of objects at the different times so we can distinguish
         self.record2 = DriverRecord.objects.create(occurred_from=self.then,
@@ -112,12 +113,14 @@ class ViewTestSetUpMixin(object):
                                                    geom='POINT (0 0)',
                                                    location_text='Equator',
                                                    schema=self.schema,
+                                                   weather='clear-day',
                                                    data=dict())
         self.record3 = DriverRecord.objects.create(occurred_from=self.then,
                                                    occurred_to=self.then,
                                                    geom='POINT (0 0)',
                                                    location_text='Equator',
                                                    schema=self.schema,
+                                                   weather='cloudy',
                                                    data=dict())
 
     def set_up_audit_log(self):
@@ -194,6 +197,12 @@ class DriverRecordViewTestCase(APITestCase, ViewTestSetUpMixin):
                            dtmax=self.afterNow.isoformat())
         response_data2 = json.loads(self.admin_client.get(url2).content)
         self.assertEqual(len(response_data2), 2)
+
+    def test_weather_filters(self):
+        # Multiple filter values are OR'd together
+        url = '/api/records/?detail_only=True&weather=fog&weather=cloudy'
+        response = json.loads(self.admin_client.get(url).content)
+        self.assertEqual(response['count'], 2)
 
     def test_created_by_admin_client_email(self):
         url = '/api/records/{uuid}/?details_only=True'.format(uuid=self.record2.uuid)
