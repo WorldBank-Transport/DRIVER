@@ -4,10 +4,11 @@
     // Angular filter for  transforming a saved filter object to an HTML representation.
     // Note: if a new filter rule type is implemented, a new case must be added here for display.
     /* ngInject */
-    function SavedFilterAsHTML($translate) {
+    function SavedFilterAsHTML($translate, $filter) {
         var searchTextLabel = $translate.instant('SAVED_FILTERS.SEARCH_TEXT');
         var textSearchLabel = $translate.instant('SAVED_FILTERS.TEXT_SEARCH');
         var unknownRuleType = $translate.instant('ERRORS.UNKNOWN_RULE_TYPE');
+        var weatherLabel = $translate.instant('RECORD.WEATHER');
 
         // Helper for determining if a value is a number
         function isNumeric(n) {
@@ -58,6 +59,11 @@
                     default:
                         if (key === '__searchText') {
                             htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
+                        } else if (key === '__weather') {
+                            var valTranslation = _.map(val, function(weatherKey) {
+                                return $translate.instant($filter('weatherLabel')(weatherKey));
+                            }).join(', ');
+                            htmlBlocks.push('<strong>' + weatherLabel + ':</strong> ' + valTranslation);
                         } else {
                             htmlBlocks.push(unknownRuleType + ': ' + val._rule_type);
                         }

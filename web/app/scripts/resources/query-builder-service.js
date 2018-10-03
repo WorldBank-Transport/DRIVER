@@ -152,6 +152,11 @@
                 if (created_by_string) {
                     paramObj.created_by = created_by_string;
                 }
+
+                var weatherFilter = FilterState.getWeatherFilter();
+                if (weatherFilter) {
+                    paramObj.weather = weatherFilter;
+                }
             }
 
             if (filterConfig.doBoundaryFilter) {
@@ -165,7 +170,12 @@
             }
 
             if (filterConfig.doJsonFilters) {
-                jsonPromise = svc.assembleJsonFilterParams(_.omit(FilterState.filters, ['__dateRange', '__createdRange'])).then(
+                var jsonFilterParams = _.omit(FilterState.filters, [
+                    '__dateRange',
+                    '__createdRange',
+                    '__weather'
+                ]);
+                jsonPromise = svc.assembleJsonFilterParams(jsonFilterParams).then(
                     function(jsonFilters) {
                         // Handle cases where no json filters are set
                         if (!_.isEmpty(jsonFilters)) {

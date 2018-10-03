@@ -38,6 +38,7 @@ class DriverRecordFilter(RecordFilter):
     created_min = django_filters.IsoDateTimeFilter(name="created", lookup_expr='gte')
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
     created_by = django_filters.Filter(field_name='created_by', method='filter_created_by')
+    weather = django_filters.Filter(field_name='weather')
 
     def filter_created_by(self, queryset, name, value):
         """ Filter records by the email or username of the creating user."""

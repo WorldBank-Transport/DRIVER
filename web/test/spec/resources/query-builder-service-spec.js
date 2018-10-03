@@ -16,6 +16,9 @@ describe('driver.resources: QueryBuilder', function () {
         },
         'getCreatedByFilter': function(){
             return '';
+        },
+        'getWeatherFilter': function(){
+            return '';
         }
     };
     beforeEach(module('ase.mock.resources'));

@@ -125,6 +125,10 @@
                 filterOn.push('__searchText');
             }
 
+            if (ctl.filters.__weather) {
+                filterOn.push('__weather');
+            }
+
             _.each(filterOn, function(label) {
                 if (ctl.filters[label]) {
                     value = ctl.filters[label];
