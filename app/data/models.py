@@ -1,4 +1,5 @@
 import uuid
+import hashlib
 
 from django.db import models
 from django.contrib.postgres.fields import HStoreField
@@ -55,6 +56,16 @@ class RecordAuditLogEntry(models.Model):
             return [cls.CREATE, cls.UPDATE, cls.DELETE]
 
     action = models.CharField(max_length=6, choices=ActionTypes.choices)
+
+    # The log JSON will contain `old` and `new` state of the model
+    log = models.TextField(null=True)
+    # Singature will contain an MD5 hash of the log field
+    signature = models.CharField(max_length=36, null=True)
+
+    def verify_log(self):
+        if self.log is None:
+            return True
+        return hashlib.md5(self.log).hexdigest() == str(self.signature)
 
 
 class DedupeJob(models.Model):

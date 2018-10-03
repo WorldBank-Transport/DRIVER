@@ -5,6 +5,7 @@ import uuid
 import calendar
 import datetime
 import pytz
+import hashlib
 
 from dateutil.parser import parse as parse_date
 from django.template.defaultfilters import date as template_date
@@ -28,6 +29,7 @@ from django.db.models import (
     When,
 )
 from django.db.models.functions import Coalesce
+from django.core import serializers
 from django_redis import get_redis_connection
 
 from rest_framework import viewsets
@@ -40,7 +42,7 @@ from rest_framework import renderers, status
 
 from rest_framework_csv import renderers as csv_renderer
 
-from grout.models import RecordSchema, RecordType, BoundaryPolygon, Boundary
+from grout.models import RecordSchema, RecordType, BoundaryPolygon, Boundary, Record
 from grout.views import (BoundaryPolygonViewSet,
                          RecordViewSet,
                          RecordTypeViewSet,
@@ -152,11 +154,26 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ValueError('Cannot create audit log entries for unsaved model objects')
         if action not in RecordAuditLogEntry.ActionTypes.as_list():
             raise ValueError("{} not one of 'create', 'update', or 'delete'".format(action))
-        RecordAuditLogEntry.objects.create(user=request.user,
-                                           username=request.user.username,
-                                           record=instance,
-                                           record_uuid=str(instance.pk),
-                                           action=action)
+        log = None
+        signature = None
+        if action == RecordAuditLogEntry.ActionTypes.CREATE:
+            log = serializers.serialize(
+                'json',
+                [
+                    DriverRecord.objects.get(pk=instance.pk),
+                    Record.objects.get(pk=instance.record_ptr_id)
+                ]
+            )
+            signature = hashlib.md5(log).hexdigest()
+        RecordAuditLogEntry.objects.create(
+            user=request.user,
+            username=request.user.username,
+            record=instance,
+            record_uuid=str(instance.pk),
+            action=action,
+            log=log,
+            signature=signature
+        )
 
     @transaction.atomic
     def perform_create(self, serializer):
