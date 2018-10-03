@@ -63,6 +63,8 @@ class RecordAuditLogEntry(models.Model):
     signature = models.BinaryField(null=True)
 
     def verify_log(self):
+        if self.log is None:
+            return True
         return hashlib.md5(self.log).digest() == str(self.signature)
 
 

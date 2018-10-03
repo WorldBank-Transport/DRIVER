@@ -154,30 +154,26 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
             raise ValueError('Cannot create audit log entries for unsaved model objects')
         if action not in RecordAuditLogEntry.ActionTypes.as_list():
             raise ValueError("{} not one of 'create', 'update', or 'delete'".format(action))
+        log = None
+        signature = None
         if action == RecordAuditLogEntry.ActionTypes.CREATE:
             log = serializers.serialize(
                 'json',
-                list(DriverRecord.objects.filter(pk=instance.pk)) +
-                list(Record.objects.filter(pk=instance.record_ptr_id))
+                [
+                    DriverRecord.objects.get(pk=instance.pk),
+                    Record.objects.get(pk=instance.record_ptr_id)
+                ]
             )
             signature = hashlib.md5(log).digest()
-            RecordAuditLogEntry.objects.create(
-                user=request.user,
-                username=request.user.username,
-                record=instance,
-                record_uuid=str(instance.pk),
-                action=action,
-                log=log,
-                signature=signature
-            )
-        else:
-            RecordAuditLogEntry.objects.create(
-                user=request.user,
-                username=request.user.username,
-                record=instance,
-                record_uuid=str(instance.pk),
-                action=action
-            )
+        RecordAuditLogEntry.objects.create(
+            user=request.user,
+            username=request.user.username,
+            record=instance,
+            record_uuid=str(instance.pk),
+            action=action,
+            log=log,
+            signature=signature
+        )
 
     @transaction.atomic
     def perform_create(self, serializer):
