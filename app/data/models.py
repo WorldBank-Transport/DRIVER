@@ -60,12 +60,12 @@ class RecordAuditLogEntry(models.Model):
     # The log JSON will contain `old` and `new` state of the model
     log = models.TextField(null=True)
     # Singature will contain an MD5 hash of the log field
-    signature = models.BinaryField(null=True)
+    signature = models.CharField(max_length=36, null=True)
 
     def verify_log(self):
         if self.log is None:
             return True
-        return hashlib.md5(self.log).digest() == str(self.signature)
+        return hashlib.md5(self.log).hexdigest() == str(self.signature)
 
 
 class DedupeJob(models.Model):

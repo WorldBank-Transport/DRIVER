@@ -164,7 +164,7 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
                     Record.objects.get(pk=instance.record_ptr_id)
                 ]
             )
-            signature = hashlib.md5(log).digest()
+            signature = hashlib.md5(log).hexdigest()
         RecordAuditLogEntry.objects.create(
             user=request.user,
             username=request.user.username,
