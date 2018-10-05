@@ -32,13 +32,28 @@ class RecordDuplicateFilter(django_filters.FilterSet):
         model = RecordDuplicate
         fields = ['resolved', 'job', 'record_type']
 
+WEATHER_CHOICES = [(c, c) for c in [
+    'clear-day',
+    'clear-night',
+    'cloudy',
+    'fog',
+    'hail',
+    'partly-cloudy-day',
+    'partly-cloudy-night',
+    'rain',
+    'sleet',
+    'snow',
+    'thunderstorm',
+    'tornado',
+    'wind',
+]]
 
 class DriverRecordFilter(RecordFilter):
     """Extend RecordFilter to allow filtering on created date."""
     created_min = django_filters.IsoDateTimeFilter(name="created", lookup_expr='gte')
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
     created_by = django_filters.Filter(field_name='created_by', method='filter_created_by')
-    weather = django_filters.Filter(field_name='weather')
+    weather = django_filters.MultipleChoiceFilter(choices=WEATHER_CHOICES)
 
     def filter_created_by(self, queryset, name, value):
         """ Filter records by the email or username of the creating user."""
