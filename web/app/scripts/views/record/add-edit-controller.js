@@ -497,6 +497,7 @@
             /* jshint camelcase: false */
             if (ctl.record && ctl.record.geom) {
                 // set back coordinates and nominatim values
+                ctl.record.schema = ctl.recordSchema.uuid;
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 ctl.record.location_text = ctl.nominatimLocationText;
                 ctl.record.city = ctl.nominatimCity;
