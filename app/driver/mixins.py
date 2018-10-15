@@ -14,4 +14,4 @@ class GenerateViewsetQuery(object):
         # get properly escaped string representation of the query
         query_str = cursor.mogrify(sql, params)
         cursor.close()
-        return query_str
+        return query_str.decode('utf-8')

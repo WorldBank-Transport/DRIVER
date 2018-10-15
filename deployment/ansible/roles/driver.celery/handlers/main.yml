@@ -1,3 +1,0 @@
----
-- name: Restart driver-celery
-  service: name=driver-celery state=restarted
