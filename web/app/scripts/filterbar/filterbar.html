@@ -12,7 +12,7 @@
         <ul class="nav navbar-nav" ng-if="ctl.hasWriteAccess">
             <li text-search-field="__createdBy"></li>
         </ul>
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav" ng-if="::filterbar.showWeatherFilter">
             <li weather-field class="dropdown"></li>
         </ul>
         <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">

@@ -53,6 +53,8 @@ web_js_record_type_secondary_label: "Intervention"
 web_js_blackspots_visible: "true"
 web_js_heatmap_visible: "true"
 
+web_js_weather_filter_visible: "true"
+
 web_js_api_hostname: "https://prs.azavea.com"
 web_js_windshaft_hostname: "https://prs.azavea.com"
 driver_app_hostname: "https://prs.azavea.com"

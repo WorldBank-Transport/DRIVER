@@ -57,6 +57,8 @@ web_js_record_type_secondary_label: "Intervention"
 web_js_blackspots_visible: "true"
 web_js_heatmap_visible: "true"
 
+web_js_weather_filter_visible: "true"
+
 web_js_api_hostname: "http://localhost:7000"
 web_js_windshaft_hostname: "http://localhost:7000"
 driver_app_hostname: "{{ web_js_api_hostname }}"
