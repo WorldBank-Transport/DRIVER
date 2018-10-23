@@ -45,6 +45,9 @@
         },
         mapillary: {
             enabled: false
+        },
+        weatherFilter: {
+            visible: true
         }
     };
 
