@@ -3,7 +3,7 @@
 
     /* ngInject */
     function FilterbarController($modal, $scope, $timeout, debounce, RecordSchemaState,
-                                 AuthService, FilterState, RecordState) {
+                                 AuthService, FilterState, RecordState, WebConfig) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
@@ -12,6 +12,7 @@
         ctl.showSavedFiltersModal = showSavedFiltersModal;
         ctl.userCanAdd = false;
         ctl.hasWriteAccess = AuthService.hasWriteAccess();
+        ctl.showWeatherFilter = WebConfig.weatherFilter.visible;
         init();
 
         function init() {
