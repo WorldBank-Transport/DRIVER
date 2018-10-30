@@ -3,7 +3,7 @@
 # and partially based on android docker:
 # https://github.com/gfx/docker-android-project/blob/master/Dockerfile
 
-FROM java:7-jdk
+FROM openjdk:8-jdk
 MAINTAINER Kathryn Killebrew <kkillebrew@azavea.com>
 
 RUN apt-get update && apt-get install -yq apt-utils
