@@ -35,7 +35,7 @@ ANSIBLE_GROUPS = {
   "celery-servers" => [ "celery" ]
 }
 MOUNT_OPTIONS = if Vagrant::Util::Platform.linux? then
-                  ['rw', 'vers=4', 'tcp', 'nolock']
+                  ['rw', 'tcp', 'nolock']
                 else
                   ['vers=3', 'udp']
                 end
