@@ -76,6 +76,8 @@
                             }
                         });
 
+                        L.DomEvent.disableClickPropagation(addressSearchDiv);
+
                         return addressSearchDiv;
                     }
                 });
