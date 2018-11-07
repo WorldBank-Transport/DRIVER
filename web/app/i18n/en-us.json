@@ -112,7 +112,7 @@
         "VALUE_REQUIRED": "Value required"
     },
     "LOGIN": {
-        "LOG_IN_TO": "Log in to",
+        "LOG_IN_TO_DRIVER": "Log in to DRIVER",
         "LOG_IN_WITH": "Log in with",
         "PASSWORD": "Password",
         "SIGN_IN": "Sign-in",

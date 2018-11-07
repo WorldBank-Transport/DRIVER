@@ -112,7 +112,7 @@
         "VALUE_REQUIRED": "需要值"
     },
     "LOGIN": {
-        "LOG_IN_TO": "登录至",
+        "LOG_IN_TO_DRIVER": "登录至 用于公路事故可视化，评估和报告的数据",
         "LOG_IN_WITH": "用…登录",
         "PASSWORD": "密码",
         "SIGN_IN": "登录",
