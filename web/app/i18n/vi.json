@@ -111,11 +111,11 @@
     },
     "LANG": "Tiếng Việt",
     "LOGIN": {
-        "LOG_IN_TO": "Nh\u1eadp v\u00e0o",
-        "LOG_IN_WITH": "Nh\u1eadp v\u1edbi",
-        "PASSWORD": "M\u1eadt kh\u1ea9u",
-        "SIGN_IN": "\u0110\u0103ng nh\u1eadp",
-        "USERNAME": "T\u00ean ng\u01b0\u1eddi s\u1eed d\u1ee5ng"
+        "LOG_IN_TO_DRIVER": "Nhập vào Người lái xe",
+        "LOG_IN_WITH": "Nhập với",
+        "PASSWORD": "Mật khẩu",
+        "SIGN_IN": "Đăng nhập",
+        "USERNAME": "Tên người sử dụng"
     },
     "MANAGEMENT": {
         "ACCOUNT_INFORMATION": "Th\u00f4ng tin t\u00e0i kho\u1ea3n",

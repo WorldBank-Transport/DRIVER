@@ -111,7 +111,7 @@
         "VALUE_REQUIRED": "তথ্য প্রয়োজন"
     },
     "LOGIN": {
-        "LOG_IN_TO": "লগ ইন করুন",
+        "LOG_IN_TO_DRIVER": "লগ ইন করুন ড্রাইভার",
         "LOG_IN_WITH": "দিয়ে লগ ইন করুন",
         "PASSWORD": " পাসওয়ার্ড",
         "SIGN_IN": "সাইন ইন করুন",
