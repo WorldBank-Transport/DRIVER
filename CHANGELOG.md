@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.2.2](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.2) (2018-10-15)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.1...1.2.2)
+
+**Merged pull requests:**
+
+- Fix certbot to stop and restart nginx before and after renew [\#704](https://github.com/WorldBank-Transport/DRIVER/pull/704)
+- Show numeric filter for number and integer filters [\#711](https://github.com/WorldBank-Transport/DRIVER/pull/711)
+- Fix provisioning of app VM [\#694](https://github.com/WorldBank-Transport/DRIVER/pull/694)
+- Fix Travis build [\#697](https://github.com/WorldBank-Transport/DRIVER/pull/697)
+- Restart driver-app service only after we have the new image [\#705](https://github.com/WorldBank-Transport/DRIVER/pull/705)
+- Fix bug with non-ASCII characters in filter name [\#718](https://github.com/WorldBank-Transport/DRIVER/pull/718)
+
 ## [1.2.1](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.1) (2018-07-12)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.0...1.2.1)
 
