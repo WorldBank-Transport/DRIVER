@@ -111,7 +111,7 @@
         "VALUE_REQUIRED": "Valor Necessário"
     },
     "LOGIN": {
-        "LOG_IN_TO": "Entrar para",
+        "LOG_IN_TO_DRIVER": "Entrar para MOTORISTA",
         "LOG_IN_WITH": "Entrar com",
         "PASSWORD": "Senha",
         "SIGN_IN": "Inscreva-se",
