@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.2.4](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.4) (2018-11-08)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.3...1.2.4)
+
+**Merged pull requests:**
+
+- Translate "Log in to DRIVER" as a complete phrase [\#731](https://github.com/WorldBank-Transport/DRIVER/pull/731)
+
+## [1.2.3](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.3) (2018-10-17)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.2...1.2.3)
+
+**Merged pull requests:**
+
+- Bump version of azavea.pip to 1.0.1 [\#725](https://github.com/WorldBank-Transport/DRIVER/pull/725)
+
 ## [1.2.2](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.2) (2018-10-15)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.1...1.2.2)
 
