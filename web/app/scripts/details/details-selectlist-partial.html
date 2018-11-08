@@ -3,7 +3,71 @@
         {{ ::ctl.property.propertyName }}
     </label>
 
-    <div class="value selectlist">
+    <div class="value selectlist" ng-if="!ctl.record.isSecondary">
         {{ ::ctl.data }}
+    </div>
+
+    <div class="value selectlist" ng-if="ctl.record.isSecondary" ng-switch on="ctl.data">
+        <span ng-switch-when="I01">{{ 'INTERVENTION_TYPE.I01' | translate }}</span>
+        <span ng-switch-when="I02">{{ 'INTERVENTION_TYPE.I02' | translate }}</span>
+        <span ng-switch-when="I03">{{ 'INTERVENTION_TYPE.I03' | translate }}</span>
+        <span ng-switch-when="I04">{{ 'INTERVENTION_TYPE.I04' | translate }}</span>
+        <span ng-switch-when="I05">{{ 'INTERVENTION_TYPE.I05' | translate }}</span>
+        <span ng-switch-when="I06">{{ 'INTERVENTION_TYPE.I06' | translate }}</span>
+        <span ng-switch-when="I07">{{ 'INTERVENTION_TYPE.I07' | translate }}</span>
+        <span ng-switch-when="I08">{{ 'INTERVENTION_TYPE.I08' | translate }}</span>
+        <span ng-switch-when="I09">{{ 'INTERVENTION_TYPE.I09' | translate }}</span>
+        <span ng-switch-when="I10">{{ 'INTERVENTION_TYPE.I10' | translate }}</span>
+        <span ng-switch-when="I11">{{ 'INTERVENTION_TYPE.I11' | translate }}</span>
+        <span ng-switch-when="I12">{{ 'INTERVENTION_TYPE.I12' | translate }}</span>
+        <span ng-switch-when="I13">{{ 'INTERVENTION_TYPE.I13' | translate }}</span>
+        <span ng-switch-when="I14">{{ 'INTERVENTION_TYPE.I14' | translate }}</span>
+        <span ng-switch-when="I15">{{ 'INTERVENTION_TYPE.I15' | translate }}</span>
+        <span ng-switch-when="I16">{{ 'INTERVENTION_TYPE.I16' | translate }}</span>
+        <span ng-switch-when="I17">{{ 'INTERVENTION_TYPE.I17' | translate }}</span>
+        <span ng-switch-when="I18">{{ 'INTERVENTION_TYPE.I18' | translate }}</span>
+        <span ng-switch-when="I19">{{ 'INTERVENTION_TYPE.I19' | translate }}</span>
+        <span ng-switch-when="I20">{{ 'INTERVENTION_TYPE.I20' | translate }}</span>
+        <span ng-switch-when="I21">{{ 'INTERVENTION_TYPE.I21' | translate }}</span>
+        <span ng-switch-when="I22">{{ 'INTERVENTION_TYPE.I22' | translate }}</span>
+        <span ng-switch-when="I23">{{ 'INTERVENTION_TYPE.I23' | translate }}</span>
+        <span ng-switch-when="I24">{{ 'INTERVENTION_TYPE.I24' | translate }}</span>
+        <span ng-switch-when="I25">{{ 'INTERVENTION_TYPE.I25' | translate }}</span>
+        <span ng-switch-when="I26">{{ 'INTERVENTION_TYPE.I26' | translate }}</span>
+        <span ng-switch-when="I27">{{ 'INTERVENTION_TYPE.I27' | translate }}</span>
+        <span ng-switch-when="I28">{{ 'INTERVENTION_TYPE.I28' | translate }}</span>
+        <span ng-switch-when="I29">{{ 'INTERVENTION_TYPE.I29' | translate }}</span>
+        <span ng-switch-when="I30">{{ 'INTERVENTION_TYPE.I30' | translate }}</span>
+        <span ng-switch-when="I31">{{ 'INTERVENTION_TYPE.I31' | translate }}</span>
+        <span ng-switch-when="I32">{{ 'INTERVENTION_TYPE.I32' | translate }}</span>
+        <span ng-switch-when="I33">{{ 'INTERVENTION_TYPE.I33' | translate }}</span>
+        <span ng-switch-when="I34">{{ 'INTERVENTION_TYPE.I34' | translate }}</span>
+        <span ng-switch-when="I35">{{ 'INTERVENTION_TYPE.I35' | translate }}</span>
+        <span ng-switch-when="I36">{{ 'INTERVENTION_TYPE.I36' | translate }}</span>
+        <span ng-switch-when="I37">{{ 'INTERVENTION_TYPE.I37' | translate }}</span>
+        <span ng-switch-when="I38">{{ 'INTERVENTION_TYPE.I38' | translate }}</span>
+        <span ng-switch-when="I39">{{ 'INTERVENTION_TYPE.I39' | translate }}</span>
+        <span ng-switch-when="I40">{{ 'INTERVENTION_TYPE.I40' | translate }}</span>
+        <span ng-switch-when="I41">{{ 'INTERVENTION_TYPE.I41' | translate }}</span>
+        <span ng-switch-when="I42">{{ 'INTERVENTION_TYPE.I42' | translate }}</span>
+        <span ng-switch-when="I43">{{ 'INTERVENTION_TYPE.I43' | translate }}</span>
+        <span ng-switch-when="I44">{{ 'INTERVENTION_TYPE.I44' | translate }}</span>
+        <span ng-switch-when="I45">{{ 'INTERVENTION_TYPE.I45' | translate }}</span>
+        <span ng-switch-when="I48">{{ 'INTERVENTION_TYPE.I48' | translate }}</span>
+        <span ng-switch-when="I50">{{ 'INTERVENTION_TYPE.I50' | translate }}</span>
+        <span ng-switch-when="I51">{{ 'INTERVENTION_TYPE.I51' | translate }}</span>
+        <span ng-switch-when="I52">{{ 'INTERVENTION_TYPE.I52' | translate }}</span>
+        <span ng-switch-when="I53">{{ 'INTERVENTION_TYPE.I53' | translate }}</span>
+        <span ng-switch-when="I54">{{ 'INTERVENTION_TYPE.I54' | translate }}</span>
+        <span ng-switch-when="I55">{{ 'INTERVENTION_TYPE.I55' | translate }}</span>
+        <span ng-switch-when="I56">{{ 'INTERVENTION_TYPE.I56' | translate }}</span>
+        <span ng-switch-when="I57">{{ 'INTERVENTION_TYPE.I57' | translate }}</span>
+        <span ng-switch-when="I58">{{ 'INTERVENTION_TYPE.I58' | translate }}</span>
+        <span ng-switch-when="I59">{{ 'INTERVENTION_TYPE.I59' | translate }}</span>
+        <span ng-switch-when="I60">{{ 'INTERVENTION_TYPE.I60' | translate }}</span>
+        <span ng-switch-when="I61">{{ 'INTERVENTION_TYPE.I61' | translate }}</span>
+        <span ng-switch-default>{{ ::ctl.data }}</span>
+    </div>
+
     </div>
 </div>
