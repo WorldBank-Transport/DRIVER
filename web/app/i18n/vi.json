@@ -112,7 +112,7 @@
         "VALUE_REQUIRED": "Giá trị được yêu cầu"
     },
     "LOGIN": {
-        "LOG_IN_TO": "Nhập vào",
+        "LOG_IN_TO_DRIVER": "Nhập vào Người lái xe",
         "LOG_IN_WITH": "Nhập với",
         "PASSWORD": "Mật khẩu",
         "SIGN_IN": "Đăng nhập",
