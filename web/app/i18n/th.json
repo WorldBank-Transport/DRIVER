@@ -111,7 +111,7 @@
         "VALUE_REQUIRED": "ต้องมีค่าบันทึก"
     },
     "LOGIN": {
-        "LOG_IN_TO": "เข้าสู่ระบบ",
+        "LOG_IN_TO_DRIVER": "เข้าสู่ระบบ DRIVER",
         "LOG_IN_WITH": "เข้าสู่ระบบด้วย",
         "PASSWORD": "รหัสผ่าน",
         "SIGN_IN": "ลงชื่อเข้าใช้",

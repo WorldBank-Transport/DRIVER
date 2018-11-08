@@ -112,7 +112,7 @@
         "VALUE_REQUIRED": "Valor requerido"
     },
     "LOGIN": {
-        "LOG_IN_TO": "Iniciar sesión a",
+        "LOG_IN_TO_DRIVER": "Iniciar sesión a DRIVER",
         "LOG_IN_WITH": "Iniciar sesión con",
         "PASSWORD": "Contraseña",
         "SIGN_IN": "Registrarse",
