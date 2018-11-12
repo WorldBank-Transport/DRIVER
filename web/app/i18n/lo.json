@@ -17,7 +17,7 @@
     "COMMON": {
         "ADD": "ຕື່ມເຂົ້າ",
         "APP_BRAND": "ລະບົບຂໍ້ມູນອຸບັດເຫດທາງຖະໜົນ",
-        "APP_NAME": "ຜູ້ຂັບຂີ່",
+        "APP_NAME": "DRIVER",
         "CANCEL": "ຍົກເລີກ",
         "CLOSE": "ປິດ",
         "DATE_RANGE": "ລະວ່າງວັນທີ",
@@ -111,7 +111,7 @@
         "VALUE_REQUIRED": "ຕ້ອງຕື່ມມູນຄ່າ"
     },
     "LOGIN": {
-        "LOG_IN_TO_DRIVER": "ການເຂົ້າສູ່ ລະບົບ",
+        "LOG_IN_TO_DRIVER": "ການເຂົ້າສູ່ ລະບົບ DRIVER",
         "LOG_IN_WITH": "ການເຂົ້າໂດຍ",
         "PASSWORD": "ລະຫັດຜ່ານ",
         "SIGN_IN": "ການເຂົ້າສູ່ລະບົບ",
