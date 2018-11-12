@@ -281,6 +281,23 @@
             });
         }
 
+        function translateInterventionTypes() {
+            if (!ctl.record || !ctl.isSecondary) {
+                return;
+            }
+
+            _.forEach(ctl.recordSchema.schema.definitions, function(definition) {
+                _.forEach(definition.properties, function(property) {
+                    if (property.fieldType === 'selectlist') {
+                        for (var i = 0; i < property.enum.length; i++) {
+                            var interventionType = property.enum[i];
+                            property.enum[i] = $translate.instant('INTERVENTION_TYPE.' + interventionType);
+                        }
+                    }
+                });
+            });
+        }
+
         function nominatimLookup(text) {
             return Nominatim.forward(text, bbox);
         }
@@ -301,6 +318,7 @@
 
         function onSchemaReady() {
             fixEmptyFields();
+            translateInterventionTypes();
 
             // Add json-editor translations for button titles (shown on hover)
             JsonEditorDefaults.addTranslation('button_add_row_title',
