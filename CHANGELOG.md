@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.2.5](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.5) (2018-11-12)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.4...1.2.5)
+
+**Merged pull requests:**
+
+- Update Lao translations [\#733](https://github.com/WorldBank-Transport/DRIVER/pull/733)
+
 ## [1.2.4](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.4) (2018-11-08)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.3...1.2.4)
 
