@@ -282,17 +282,21 @@
         }
 
         function translateInterventionTypes() {
-            if (!ctl.record || !ctl.isSecondary) {
+            if (!ctl.isSecondary) {
                 return;
             }
 
             _.forEach(ctl.recordSchema.schema.definitions, function(definition) {
                 _.forEach(definition.properties, function(property) {
                     if (property.fieldType === 'selectlist') {
-                        for (var i = 0; i < property.enum.length; i++) {
-                            var interventionType = property.enum[i];
-                            property.enum[i] = $translate.instant('INTERVENTION_TYPE.' + interventionType);
-                        }
+                        console.log(property);
+                        var enumTitles = _.map(property.enum, function(interventionType) {
+                            var translation = $translate.instant('INTERVENTION_TYPE.' + interventionType);
+                            return translation.includes('INTERVENTION_TYPE.') ? interventionType : translation;
+                        });
+                        property.options = {
+                            'enum_titles': enumTitles
+                        };
                     }
                 });
             });
