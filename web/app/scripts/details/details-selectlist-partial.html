@@ -3,11 +3,11 @@
         {{ ::ctl.property.propertyName }}
     </label>
 
-    <div class="value selectlist" ng-if="!ctl.record.isSecondary">
+    <div class="value selectlist" ng-if="!(ctl.record.isSecondary || ctl.isSecondary)">
         {{ ::ctl.data }}
     </div>
 
-    <div class="value selectlist" ng-if="ctl.record.isSecondary" ng-switch on="ctl.data">
+    <div class="value selectlist" ng-if="ctl.record.isSecondary || ctl.isSecondary" ng-switch on="ctl.data">
         <span ng-switch-when="I01">{{ 'INTERVENTION_TYPE.I01' | translate }}</span>
         <span ng-switch-when="I02">{{ 'INTERVENTION_TYPE.I02' | translate }}</span>
         <span ng-switch-when="I03">{{ 'INTERVENTION_TYPE.I03' | translate }}</span>

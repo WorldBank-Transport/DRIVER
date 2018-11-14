@@ -8,7 +8,8 @@
             scope: {
                 recordSchema: '=',
                 record: '=',
-                userCanWrite: '='
+                userCanWrite: '=',
+                isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-tabs-partial.html',
             bindToController: true,

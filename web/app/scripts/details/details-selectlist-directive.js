@@ -9,7 +9,8 @@
                 property: '=',
                 data: '=',
                 compact: '=',
-                record: '<'
+                record: '<',
+                isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-selectlist-partial.html',
             bindToController: true,

@@ -6,6 +6,6 @@
 
 <div ng-repeat="property in ctl.properties" ng-if="!ctl.definition.pending">
     <driver-details-field
-       property="property" data="ctl.data[property.propertyName]" record="ctl.record">
+       property="property" data="ctl.data[property.propertyName]" record="ctl.record" is-secondary="ctl.isSecondary">
     </driver-details-field>
 </div>
