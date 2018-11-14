@@ -289,7 +289,6 @@
             _.forEach(ctl.recordSchema.schema.definitions, function(definition) {
                 _.forEach(definition.properties, function(property) {
                     if (property.fieldType === 'selectlist') {
-                        console.log(property);
                         var enumTitles = _.map(property.enum, function(interventionType) {
                             var translation = $translate.instant('INTERVENTION_TYPE.' + interventionType);
                             return translation.includes('INTERVENTION_TYPE.') ? interventionType : translation;
