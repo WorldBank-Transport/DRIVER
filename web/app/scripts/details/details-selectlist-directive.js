@@ -8,7 +8,9 @@
             scope: {
                 property: '=',
                 data: '=',
-                compact: '='
+                compact: '=',
+                record: '<',
+                isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-selectlist-partial.html',
             bindToController: true,

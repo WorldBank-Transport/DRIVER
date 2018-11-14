@@ -9,7 +9,8 @@
               compact: '=',
               data: '=',
               property: '=',
-              record: '='
+              record: '=',
+              isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-field-partial.html',
             bindToController: true,
