@@ -54,6 +54,7 @@ after_deploy:
 notifications:
   slack:
     secure: RVtR2f3Q+hyW+JeXXsf6TyS1f5OQi7HW35jW+Auu/ET1VxOtQ/Swheiil26a8h6XtEC51YL+SiUhhiAxeKCMz31O33LZ3AsWjOC3ercIjDXDBPVYiYCsSpKoMGPm1/+FXjHnMzEPvIrOo2vA9hLk0QGr8fEiDZ/pHcUxmtVOmWc=
+    on_success: change
 before_install:
 - '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && openssl aes-256-cbc -K "${encrypted_1319bc8a028f_key}"
   -iv "${encrypted_1319bc8a028f_iv}" -in deployment/driver.keystore.enc -out gradle/data/driver.keystore
