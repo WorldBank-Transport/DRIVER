@@ -22,8 +22,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         source_type = 'incidentDetails'
         source_field = 'Description'
-        target_type = 'driverSensitiveInformation'
-        target_field = 'Description'
+        target_type = 'driverNotes'
+        target_field = 'Notes'
 
         qs = Record.objects.filter(
             schema__record_type__label='Incident'
