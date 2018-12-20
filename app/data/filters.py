@@ -29,7 +29,7 @@ class RecordAuditLogFilter(django_filters.FilterSet):
 class RecordDuplicateFilter(django_filters.FilterSet):
     record_type = django_filters.Filter(field_name='record_type', method='filter_record_type')
 
-    def filter_record_type(self, queryset, value):
+    def filter_record_type(self, queryset, name, value):
         """ Filter duplicates by the record type of their first record
 
         e.g. /api/duplicates/?record_type=44a51b83-470f-4e3d-b71b-e3770ec79772
