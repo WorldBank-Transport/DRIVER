@@ -56,8 +56,27 @@
             clientId: '{{ web_js_mapillary_client_id }}',
             range: {{ web_js_mapillary_range }}
         },
-        weatherFilter: {
-            visible: {{ web_js_weather_filter_visible }}
+        filters: {
+            weather: {
+                visible: {{ web_js_weather_filter_visible }}
+            },
+            createdBy: {
+                visible: {{ web_js_created_by_filter_visible }}
+            },
+            createdDate: {
+                visible: {{ web_js_created_date_filter_visible }}
+            },
+        },
+        qualityChecks: {
+            outsideBoundary: {
+                visible: {{ web_js_outside_boundary_filter_visible }}
+            },
+        },
+        addressSearch: {
+            visible: {{ web_js_map_address_search_visible }}
+        },
+        duplicateRecordsLink: {
+            visible: {{ web_js_duplicate_records_link_visible }}
         }
     };
 

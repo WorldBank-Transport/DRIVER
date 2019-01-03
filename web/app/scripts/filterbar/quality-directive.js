@@ -3,7 +3,7 @@
     'use strict';
 
     /* ngInject */
-    function QualityField($timeout) {
+    function QualityField($timeout, WebConfig) {
         var module = {
             restrict: 'A',
             require: ['^driver-filterbar', 'quality-field'],
@@ -16,12 +16,13 @@
                 var filterbarController = controllers[0];
                 var selectElem = angular.element(elem[0]).find('select');
                 scope.ctl.label = attrs.qualityField;
-                scope.ctl.qualityChecks = [
-                    {
+                scope.ctl.qualityChecks = [];
+                if (WebConfig.qualityChecks.outsideBoundary.visible) {
+                    scope.ctl.qualityChecks.push({
                         key: 'checkOutsideBoundary',
                         label: 'RECORD.OUT_OF_BOUNDS'
-                    }
-                ];
+                    });
+                }
                 scope.ctl.value = [];
                 scope.ctl.updateFilter = updateFilter;
 

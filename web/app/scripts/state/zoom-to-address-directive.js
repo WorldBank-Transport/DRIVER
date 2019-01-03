@@ -2,7 +2,7 @@
     'use strict';
 
     /* ngInject */
-    function zoomToAddress($log, Nominatim) {
+    function zoomToAddress($log, Nominatim, WebConfig) {
         var module = {
             restrict: 'A',
             scope: false,
@@ -85,8 +85,10 @@
                 L.control.addressSearch = function(opts) {
                     return new L.Control.AddressSearch(opts);
                 };
-            
-                L.control.addressSearch({ position: 'topleft' }).addTo(map);
+
+                if (WebConfig.addressSearch.visible) {
+                    L.control.addressSearch({ position: 'topleft' }).addTo(map);
+                }
             });
         }
     }
