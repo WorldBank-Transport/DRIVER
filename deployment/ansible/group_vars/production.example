@@ -138,7 +138,7 @@ web_js_created_by_filter_visible: "false"
 # Whether or not to show the Created Date filter in the filter bar.
 web_js_created_date_filter_visible: "false"
 # Whether or not to show the "Location outside boundary" Quality Check filter in the filter bar.
-web_js_outside_boundary_filter_visible: "false"
+web_js_outside_boundary_quality_check_visible: "false"
 # Whether or not to show the "Zoom to" address search bar in the map view
 web_js_map_address_search_visible: "false"
 # Whether or not to show a link to the Manage Duplicate Records page in the account dropdown
