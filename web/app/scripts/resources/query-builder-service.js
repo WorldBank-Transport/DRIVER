@@ -140,13 +140,14 @@
             /* jshint camelcase: false */
             if (filterConfig.doAttrFilters) {
                 var dateFilter = FilterState.getDateFilter();
-                var createdFilter = FilterState.getCreatedFilter();
-                paramObj = _.extend(paramObj, {
-                    occurred_max: dateFilter.maxDate,
-                    occurred_min: dateFilter.minDate,
-                    created_max: createdFilter.maxDate,
-                    created_min: createdFilter.minDate
-                });
+                paramObj.occurred_max = dateFilter.maxDate;
+                paramObj.occurred_min = dateFilter.minDate;
+
+                if (WebConfig.filters.createdDate.visible) {
+                    var createdFilter = FilterState.getCreatedFilter();
+                    paramObj.created_max = createdFilter.maxDate;
+                    paramObj.created_min = createdFilter.minDate;
+                }
 
                 var createdByString = FilterState.getCreatedByFilter();
                 if (createdByString) {
