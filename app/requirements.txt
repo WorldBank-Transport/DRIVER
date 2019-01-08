@@ -13,6 +13,7 @@ oic==0.10.0
 git+https://github.com/alexsdutton/django-oidc/@py3-dj1.10#egg=django-oidc
 celery[redis]==3.1.19
 django-redis==4.2.0
+redis==2.10.6
 python-dateutil==2.4.2
 pytz==2015.7
 mock==1.3.0
