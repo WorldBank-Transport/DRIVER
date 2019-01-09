@@ -150,7 +150,6 @@
             return [
                 '__dateRange',
                 '__createdRange',
-                '__searchText',
                 '__createdBy',
                 '__quality',
                 '__weather'
