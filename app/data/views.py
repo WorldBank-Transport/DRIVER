@@ -1104,11 +1104,13 @@ class DriverRecordViewSet(RecordViewSet, mixins.GenerateViewsetQuery):
         """
         # Walk down the schema using the path components
         obj = schema.schema['definitions']  # 'definitions' is the root of all schema paths
-        try:
-            for key in path:
+        for key in path:
+            try:
                 obj = obj[key]
-        except KeyError as e:
-            raise ParseError(detail="Part of choices_path was not found: '{}'".format(e.message))
+            except KeyError as e:
+                raise ParseError(
+                    detail=u'Could not look up path "{}", "{}" was not found in schema'.format(
+                        u':'.join(path), key))
 
         # Checkbox types have an additional 'items' part at the end of the path
         if 'items' in obj:
