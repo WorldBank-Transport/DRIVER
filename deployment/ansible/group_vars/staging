@@ -52,8 +52,13 @@ web_js_interventions_visible: "true"
 web_js_record_type_secondary_label: "Intervention"
 web_js_blackspots_visible: "true"
 web_js_heatmap_visible: "true"
+web_js_outside_boundary_quality_check_visible: "true"
+web_js_map_address_search_visible: "true"
+web_js_duplicate_records_link_visible: "true"
 
 web_js_weather_filter_visible: "true"
+web_js_created_by_filter_visible: "true"
+web_js_created_date_filter_visible: "true"
 
 web_js_api_hostname: "https://prs.azavea.com"
 web_js_windshaft_hostname: "https://prs.azavea.com"

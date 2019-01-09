@@ -77,7 +77,7 @@
                                 {{ 'NAV.DOWNLOAD_AUDIT_LOGS' | translate }}
                             </a>
                         </li>
-                        <li ng-if="ctl.hasWriteAccess">
+                        <li ng-if="ctl.hasWriteAccess && ctl.showDuplicateRecordsLink">
                             <a ng-click="ctl.navigateToStateName('duplicates')">
                                 {{ 'NAV.MANAGE_DUPLICATE_RECORDS' | translate }}
                             </a>

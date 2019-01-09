@@ -12,7 +12,9 @@
         ctl.showSavedFiltersModal = showSavedFiltersModal;
         ctl.userCanAdd = false;
         ctl.hasWriteAccess = AuthService.hasWriteAccess();
-        ctl.showWeatherFilter = WebConfig.weatherFilter.visible;
+        ctl.showWeatherFilter = WebConfig.filters.weather.visible;
+        ctl.showCreatedByFilter = WebConfig.filters.createdBy.visible;
+        ctl.showCreatedDateFilter = ctl.hasWriteAccess && WebConfig.filters.createdDate.visible;
         init();
 
         function init() {

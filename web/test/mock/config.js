@@ -46,7 +46,26 @@
         mapillary: {
             enabled: false
         },
-        weatherFilter: {
+        filters: {
+            weather: {
+                visible: true
+            },
+            createdBy: {
+                visible: true
+            },
+            createdDate: {
+                visible: true
+            },
+        },
+        qualityChecks: {
+            outsideBoundary: {
+                visible: true
+            },
+        },
+        addressSearch: {
+            visible: true
+        },
+        duplicateRecordsLink: {
             visible: true
         }
     };

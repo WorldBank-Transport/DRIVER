@@ -6,10 +6,10 @@
         <ul class="nav navbar-nav">
             <li date-range-field="__dateRange" class="dropdown"></li>
         </ul>
-        <ul class="nav navbar-nav">
+        <ul class="nav navbar-nav" ng-if="::filterbar.showCreatedDateFilter">
             <li date-range-field="__createdRange" class="dropdown"></li>
         </ul>
-        <ul class="nav navbar-nav" ng-if="ctl.hasWriteAccess">
+        <ul class="nav navbar-nav" ng-if="::filterbar.showCreatedByFilter">
             <li text-search-field="__createdBy"></li>
         </ul>
         <ul class="nav navbar-nav" ng-if="::filterbar.showWeatherFilter">

@@ -1,4 +1,6 @@
-<div class="btn-group dropdown options open" ng-class="{ 'active': ctl.value.length }">
+<div class="btn-group dropdown options open"
+    ng-class="{ 'active': ctl.value.length }"
+    ng-if="ctl.qualityChecks.length > 0">
     <div class="form-group">
         <select class="selectpicker form-control"
                 data-title="{{ 'RECORD.QUALITY_CHECKS' | translate }}"
