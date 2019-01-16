@@ -175,17 +175,21 @@ def load(obj, api, headers=None):
 
     url = api + '/records/'
     data = json.dumps(obj)
+    print data
     headers = dict(headers)
     headers.setdefault('content-type', 'application/json')
 
     while True:
-        response = requests.post(url, data=data, headers=headers)
         sleep(0.2)
-        if response.status_code == 201:
-            return
-        else:
+        response = requests.post(url, data=data, headers=headers)
+        try:
+            response.raise_for_status()
+        except Exception:
             logger.error(response.text)
+            raise
             logger.error('retrying...')
+        else:
+            return
 
 
 def create_schema(schema_path, api, headers=None):
@@ -231,6 +235,8 @@ def main():
 
     if args.authz:
         headers = {'Authorization': args.authz}
+    else:
+        logger.info("No authorization token provided")
 
     # Do the work
     schema_id = args.schema_id
