@@ -100,31 +100,40 @@ def format_record_object(data, mapping):
 def construct_record_data(record, persons, vehicles):
     return {
         'driverIncidentDetails': format_record_object(record, [
-            ('', 'Log1', int),
-            ('', 'Numero', int),
-            ('', 'CodReferencia', int),
-            ('', 'Log2', int),
-            ('', 'Log3', int),
-            ('', 'CodIntersecao', int),
-            ('', 'Jurisdicao', str),
-            ('', 'CodNatureza', int),
-            ('', 'TipoCruzamento', int),
-            ('', 'INTERSEÇÃO?', str),
-            ('', 'Natureza', str)
+            ('CdAcidente', 'CdAcidente', int),
+            ('Data', 'Data', str),  # Needed?
+            ('Hora', 'Hora', str),  # Needed?
+            ('Latitude', 'Latitude', float),  # Needed?
+            ('Longitude', 'Longitude', float),  # Needed?
+            ('CdLogradouro', '', int),  # What does this correspond to?
+            ('NumLog', '', int),  # What does this correspond to?
+            ('', 'Numero', int),  # What field is this?
+            ('CdReferencia', 'CodReferencia', int),
+            ('CdLogTransversal1', 'Log1', int),
+            ('CdLogTransversal2', 'Log2', int),
+            ('', 'Log3', int),  # What field is this?
+            ('CdIntersecao', 'CodIntersecao', int),
+            ('Jurisdicao', 'Jurisdicao', str),
+            ('CdNatureza', 'CodNatureza', int),
+            ('CdTipoCruzamento', 'TipoCruzamento', int),
+            ('INTERSECAO', 'INTERSEÇÃO?', str),
+            ('Natureza', 'Natureza', str)
         ]),
-        'driverPerson': [format_record_object(person,  [
-            ('', 'CdPessoa', int),
-            ('', 'CdGravidadeLesao', int),
-            ('', 'Sexo', str),
-            ('', 'TipoPessoa', int),
-            ('', 'CdVeiculo', int),
-            ('', 'Idade', int)
+        'driverVíTima': [format_record_object(person,  [
+            ('CdAcidente', 'CdAcidente', int),
+            ('CdPessoa', 'CdPessoa', int),
+            ('CdGravidadeLesao', 'CdGravidadeLesao', int),
+            ('Sexo', 'Sexo', str),
+            ('TipoPessoa', 'TipoPessoa', int),
+            ('CdVeículo', 'CdVeiculo', int),
+            ('Idade', 'Idade', int)
         ]) for person in persons],
         'driverVehicle': [format_record_object(vehicle,  [
-            ('', 'CdVeiculo', int),
-            ('', 'Ano', int),
-            ('', 'TipoVeiculo', str),
-            ('', 'Linha', int)
+            ('CdAcidente', 'CdAcidente', int),
+            ('CdVeiculo', 'CdVeiculo', int),
+            ('Ano', 'Ano', int),
+            ('TipoVeiculo', 'TipoVeiculo', str),
+            ('Linha', 'Linha', int)
         ]) for vehicle in vehicles]
     }
 
@@ -226,8 +235,11 @@ def main():
     # Do the work
     schema_id = args.schema_id
     if not schema_id:
-        logger.info("Creating schema remotely")
+        logger.info("No schema ID, creating new schema in 2s")
+        sleep(2)
+        logger.info("Creating new schema...")
         schema_id = create_schema(args.schema_path, args.api_url, headers)
+        logger.info("Schema created, ID is {}".format(schema_id))
     logger.info("Loading data")
 
     # Load all files in the directory, ordered by file size
@@ -258,8 +270,6 @@ def main():
         people = record_set.get(files['people'], [])
 
         record_data = transform(record, vehicles, people, schema_id)
-        print(json.dumps(record_data))
-        continue
 
         load(record_data, args.api_url, headers)
         count += 1
