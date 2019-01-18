@@ -156,6 +156,7 @@
             }
         },
         "driverVíTima": {
+            "multiple": true,
             "description": "Details for Vítima",
             "title": "Vítima",
             "required": [
@@ -245,6 +246,7 @@
             }
         },
         "driverVeíCulo": {
+            "multiple": true,
             "description": "Details for Vítima",
             "title": "Veículo",
             "required": [
@@ -326,18 +328,28 @@
             "$ref": "#/definitions/driverAcidenteDetails"
         },
         "driverVíTima": {
+            "title": "Vítima",
+            "items": {
+                "$ref": "#/definitions/driverVíTima"
+            },
+            "plural_title": "Vítimas",
             "propertyOrder": 3,
+            "type": "array",
             "options": {
                 "collapsed": true
-            },
-            "$ref": "#/definitions/driverVíTima"
+            }
         },
         "driverVeíCulo": {
+            "title": "Veículo",
+            "items": {
+                "$ref": "#/definitions/driverVeíCulo"
+            },
+            "plural_title": "Veículos",
             "propertyOrder": 2,
+            "type": "array",
             "options": {
                 "collapsed": true
-            },
-            "$ref": "#/definitions/driverVeíCulo"
+            }
         }
     }
 }

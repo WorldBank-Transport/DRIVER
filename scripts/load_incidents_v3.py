@@ -7,6 +7,7 @@ from itertools import groupby
 from collections import defaultdict
 from datetime import datetime, timedelta
 import argparse
+import re
 import csv
 from dateutil import parser
 import logging
@@ -20,6 +21,7 @@ import requests
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
+time_regex = re.compile(r'[\d]+:[\d]+(:[\d]+)?')
 
 
 @contextmanager
@@ -89,7 +91,12 @@ def format_record_object(data, mapping):
             value = data[csv_key]
         except KeyError:
             continue
-        output[driver_key] = cast_func(value)
+        try:
+            output[driver_key] = cast_func(value)
+        except Exception:
+            logger.info('Failed to convert {} value "{}" with {}'.format(
+                driver_key, value, cast_func))
+            pass
 
     # Add in the _localId field; they're not used here but the schema requires them
     output['_localId'] = str(uuid.uuid4())
@@ -120,7 +127,7 @@ def construct_record_data(record, persons, vehicles):
             ('Natureza', 'Natureza', str)
         ]),
         'driverVíTima': [format_record_object(person,  [
-            ('CdAcidente', 'CdAcidente', int),
+            ('CdAcidente', 'CdAcidente', str),
             ('CdPessoa', 'CdPessoa', int),
             ('CdGravidadeLesao', 'CdGravidadeLesao', int),
             ('Sexo', 'Sexo', str),
@@ -129,7 +136,7 @@ def construct_record_data(record, persons, vehicles):
             ('Idade', 'Idade', int)
         ]) for person in persons],
         'driverVehicle': [format_record_object(vehicle,  [
-            ('CdAcidente', 'CdAcidente', int),
+            ('CdAcidente', 'CdAcidente', str),
             ('CdVeiculo', 'CdVeiculo', int),
             ('Ano', 'Ano', int),
             ('TipoVeiculo', 'TipoVeiculo', str),
@@ -147,7 +154,7 @@ def transform(record, vehicles, people, schema_id):
     # Calculate value for the occurred_from/to fields in local time
     occurred_date = parser.parse('{date} {time}'.format(
         date=record['Data'],
-        time=record['Hora'] if record['Hora'] != 'N' else ''
+        time=record['Hora'] if time_regex.match(record['Hora']) else ''
     ))
     occurred_date = pytz.timezone('America/Sao_Paulo').localize(occurred_date)
 
@@ -175,7 +182,6 @@ def load(obj, api, headers=None):
 
     url = api + '/records/'
     data = json.dumps(obj)
-    print data
     headers = dict(headers)
     headers.setdefault('content-type', 'application/json')
 
@@ -185,15 +191,14 @@ def load(obj, api, headers=None):
         try:
             response.raise_for_status()
         except Exception:
+            logger.warn("Error loading record")
             logger.error(response.text)
-            raise
             logger.error('retrying...')
         else:
             return
 
 
-def create_schema(schema_path, api, headers=None):
-    """Create a recordtype/schema into which to load all new objects"""
+def create_record_type(api, headers=None):
     # Create record type
     response = requests.post(api + '/recordtypes/',
                              data={'label': 'Incident',
@@ -203,19 +208,21 @@ def create_schema(schema_path, api, headers=None):
                                    'active': True},
                              headers=headers)
     response.raise_for_status()
-    rectype_id = response.json()['uuid']
-    logger.info('Created RecordType')
+    return response.json()['uuid']
+
+
+def create_schema(schema_path, api, record_type_id, headers=None):
+    """Create a recordtype/schema into which to load all new objects"""
     # Create associated schema
     with open(schema_path, 'r') as schema_file:
         schema_json = json.load(schema_file)
         response = requests.post(api + '/recordschemas/',
-                                 data=json.dumps({u'record_type': rectype_id,
+                                 data=json.dumps({u'record_type': record_type_id,
                                                   u'schema': schema_json}),
                                  headers=dict({'content-type': 'application/json'}.items() +
                                               headers.items()))
     logger.debug(response.json())
     response.raise_for_status()
-    logger.info('Created RecordSchema')
     return response.json()['uuid']
 
 
@@ -228,7 +235,8 @@ def main():
     parser.add_argument('--api-url', help='API host / path to target for loading data',
                         default='http://localhost:7000/api')
     parser.add_argument('--authz', help='Authorization header')
-    parser.add_argument('--schema-id', help='UUID for the Record Type to use')
+    parser.add_argument('--schema-id', help='UUID for the Record Type schema to use')
+    parser.add_argument('--record-type-id', help='UUID for the Record Type to use')
     args = parser.parse_args()
 
     headers = None
@@ -241,10 +249,18 @@ def main():
     # Do the work
     schema_id = args.schema_id
     if not schema_id:
+        record_type_id = args.record_type_id
+        if not record_type_id:
+            logger.info("No Record Type ID, creating new Record Type in 2s")
+            sleep(2)
+            logger.info("Creating new Record Type...")
+            record_type_id = create_record_type(args.api_url, headers)
+            logger.info("Record Type created, ID is {}".format(record_type_id))
+
         logger.info("No schema ID, creating new schema in 2s")
         sleep(2)
         logger.info("Creating new schema...")
-        schema_id = create_schema(args.schema_path, args.api_url, headers)
+        schema_id = create_schema(args.schema_path, args.api_url, record_type_id, headers)
         logger.info("Schema created, ID is {}".format(schema_id))
     logger.info("Loading data")
 
@@ -255,29 +271,36 @@ def main():
         'people': 'vitimas.csv'
     }
 
-    logger.info("{} - Importing records".format(datetime.now()))
+    logger.info("Importing records")
     last_print = datetime.now()
 
+    join_col = 'CdAcidente'
+
     count = 0
-    for record_set in collate_multiple_files(files.values(), 'CdAcidente'):
+    for record_set in collate_multiple_files(files.values(), join_col):
         if datetime.now() - last_print > timedelta(minutes=1):
-            logger.info("{} - Imported {} records".format(datetime.now(), count))
+            logger.info("Imported {} records".format(count))
             last_print = datetime.now()
 
         try:
             record = record_set[files['record']][0]
-        except KeyError:
+        except (KeyError, IndexError):
             # Somehow there was a record in one of the addendum files that wasn't in the main file
             # We don't have enough info to go on, so log the error and skip it
-            logger.warn("Found record join with no associated incident, skipping")
+            if files['vehicles'] in record_set:
+                missing_id = record_set[files['vehicles']][0][join_col]
+            else:
+                missing_id = record_set[files['people']][0][join_col]
+            logger.warn("Found record join for ID {} but no associated incident, skipping".format(
+                            missing_id))
             continue
 
         vehicles = record_set.get(files['vehicles'], [])
         people = record_set.get(files['people'], [])
 
         record_data = transform(record, vehicles, people, schema_id)
-
         load(record_data, args.api_url, headers)
+
         count += 1
     logger.info('Loading complete')
 
