@@ -104,6 +104,10 @@ def format_record_object(data, mapping):
     return output
 
 
+def get_value_map(mapping):
+    return lambda val: mapping[val]
+
+
 def construct_record_data(record, persons, vehicles):
     return {
         'driverIncidentDetails': format_record_object(record, [
@@ -112,18 +116,24 @@ def construct_record_data(record, persons, vehicles):
             ('Hora', 'Hora', str),  # Needed?
             ('Latitude', 'Latitude', float),  # Needed?
             ('Longitude', 'Longitude', float),  # Needed?
-            ('CdLogradouro', '', int),  # What does this correspond to?
-            ('NumLog', '', int),  # What does this correspond to?
-            ('', 'Numero', int),  # What field is this?
+            ('CdLogradouro', 'CdLogradouro', int),
+            #('NumLog', '', int),  # What does this correspond to?
+            #('', 'Numero', int),  # What field is this?
             ('CdReferencia', 'CodReferencia', int),
             ('CdLogTransversal1', 'Log1', int),
             ('CdLogTransversal2', 'Log2', int),
-            ('', 'Log3', int),  # What field is this?
             ('CdIntersecao', 'CodIntersecao', int),
-            ('Jurisdicao', 'Jurisdicao', str),
+            ('Jurisdicao', 'Jurisdicao', get_value_map({
+                'F': 'Federal',
+                'E': 'Estadual',
+                'M': 'Municipal'
+            })),
             ('CdNatureza', 'CodNatureza', int),
             ('CdTipoCruzamento', 'TipoCruzamento', int),
-            ('INTERSECAO', 'INTERSEÇÃO?', str),
+            ('INTERSECAO', 'INTERSEÇÃO?', get_value_map({
+                'NAO': 'Não',
+                'SIM': 'Sim'
+            })),
             ('Natureza', 'Natureza', str)
         ]),
         'driverVíTima': [format_record_object(person,  [
