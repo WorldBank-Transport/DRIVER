@@ -13,7 +13,7 @@
 - name: Install CertBot
   apt:
     pkg: certbot
-    state: present
+    state: latest
 
 - name: Stop nginx
   service:
