@@ -18,7 +18,7 @@ python-dateutil==2.4.2
 pytz==2015.7
 mock==1.3.0
 djangorestframework-csv==1.4.1
-grout==2.0.0
+grout==2.0.1
 # Dependencies for generate_training_input script
 argparse==1.2.1
 Fiona==1.6.3
