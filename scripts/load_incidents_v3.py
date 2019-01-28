@@ -91,6 +91,9 @@ def format_record_object(data, mapping):
             value = data[csv_key]
         except KeyError:
             continue
+        if value == 'NULL' or (value == 'N' and cast_func == int):
+            # Ignore all NULL values
+            continue
         try:
             output[driver_key] = cast_func(value)
         except Exception:
@@ -108,9 +111,13 @@ def get_value_map(mapping):
     return lambda val: mapping[val]
 
 
+def trim_str(val):
+    return str(val).strip()
+
+
 def construct_record_data(record, persons, vehicles):
     return {
-        'driverIncidentDetails': format_record_object(record, [
+        'driverAcidenteDetails': format_record_object(record, [
             ('CdAcidente', 'CdAcidente', int),
             ('Data', 'Data', str),  # Needed?
             ('Hora', 'Hora', str),  # Needed?
@@ -134,22 +141,22 @@ def construct_record_data(record, persons, vehicles):
                 'NAO': 'Não',
                 'SIM': 'Sim'
             })),
-            ('Natureza', 'Natureza', str)
+            ('Natureza', 'Natureza', trim_str)
         ]),
         'driverVíTima': [format_record_object(person,  [
-            ('CdAcidente', 'CdAcidente', str),
+            ('CdAcidente', 'CdAcidente', trim_str),
             ('CdPessoa', 'CdPessoa', int),
-            ('CdGravidadeLesao', 'CdGravidadeLesao', int),
-            ('Sexo', 'Sexo', str),
+            ('CdGravidadeLesao', 'CdGravidadeLesao', str),
+            ('Sexo', 'Sexo', trim_str),
             ('TipoPessoa', 'TipoPessoa', int),
-            ('CdVeículo', 'CdVeiculo', int),
+            ('CdVeículo', 'CdVeiculo', trim_str),
             ('Idade', 'Idade', int)
         ]) for person in persons],
-        'driverVehicle': [format_record_object(vehicle,  [
-            ('CdAcidente', 'CdAcidente', str),
+        'driverVeíCulo': [format_record_object(vehicle,  [
+            ('CdAcidente', 'CdAcidente', trim_str),
             ('CdVeiculo', 'CdVeiculo', int),
             ('Ano', 'Ano', int),
-            ('TipoVeiculo', 'TipoVeiculo', str),
+            ('TipoVeiculo', 'TipoVeiculo', trim_str),
             ('Linha', 'Linha', int)
         ]) for vehicle in vehicles]
     }
@@ -175,7 +182,7 @@ def transform(record, vehicles, people, schema_id):
     )
 
     obj = {
-        'data': construct_record_data(record, vehicles, people),
+        'data': construct_record_data(record, people, vehicles),
         'schema': str(schema_id),
         'occurred_from': occurred_date.isoformat(),
         'occurred_to': occurred_date.isoformat(),
@@ -203,7 +210,10 @@ def load(obj, api, headers=None):
         except Exception:
             logger.warn("Error loading record")
             logger.error(response.text)
-            logger.error('retrying...')
+            if response.status_code >= 500:
+                logger.error('retrying...')
+            else:
+                raise
         else:
             return
 
