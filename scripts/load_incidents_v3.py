@@ -109,12 +109,6 @@ def format_record_object(data, mapping):
 
 
 def get_uuid_lookup_func(data, id_col):
-    def lookup(val):
-        for row in data:
-            if row[id_col] == val:
-                return row['_localId']
-        raise Exception(val)
-    return lookup
     return lambda val: next(row['_localId'] for row in data if row[id_col] == val)
 
 
