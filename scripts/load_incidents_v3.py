@@ -72,6 +72,10 @@ def collate_multiple_files(paths, join_col):
     for id, matches in groupby(merged_stream, lambda row: row[0]):
         result = defaultdict(list)
         for id, key, line in matches:
+
+            # Add in the _localId field
+            line['_localId'] = str(uuid.uuid4())
+
             result[key].append(line)
         yield result
 
@@ -86,7 +90,7 @@ def extract(csv_path):
 
 def format_record_object(data, mapping):
     output = {}
-    for csv_key, driver_key, cast_func in mapping:
+    for driver_key, csv_key, cast_func in mapping:
         try:
             value = data[csv_key]
         except KeyError:
@@ -101,13 +105,20 @@ def format_record_object(data, mapping):
                 driver_key, value, cast_func))
             pass
 
-    # Add in the _localId field; they're not used here but the schema requires them
-    output['_localId'] = str(uuid.uuid4())
-
     return output
 
 
-def get_value_map(mapping):
+def get_uuid_lookup_func(data, id_col):
+    def lookup(val):
+        for row in data:
+            if row[id_col] == val:
+                return row['_localId']
+        raise Exception(val)
+    return lookup
+    return lambda val: next(row['_localId'] for row in data if row[id_col] == val)
+
+
+def get_value_map_func(mapping):
     return lambda val: mapping[val]
 
 
@@ -118,6 +129,7 @@ def trim_str(val):
 def construct_record_data(record, persons, vehicles):
     return {
         'driverAcidenteDetails': format_record_object(record, [
+            ('_localId', '_localId', str),
             ('CdAcidente', 'CdAcidente', int),
             ('Data', 'Data', str),  # Needed?
             ('Hora', 'Hora', str),  # Needed?
@@ -126,34 +138,36 @@ def construct_record_data(record, persons, vehicles):
             ('CdLogradouro', 'CdLogradouro', int),
             #('NumLog', '', int),  # What does this correspond to?
             #('', 'Numero', int),  # What field is this?
-            ('CdReferencia', 'CodReferencia', int),
+            ('CdReferencia', 'CodReferencia', str),
             ('CdLogTransversal1', 'Log1', int),
             ('CdLogTransversal2', 'Log2', int),
             ('CdIntersecao', 'CodIntersecao', int),
-            ('Jurisdicao', 'Jurisdicao', get_value_map({
+            ('Jurisdicao', 'Jurisdicao', get_value_map_func({
                 'F': 'Federal',
                 'E': 'Estadual',
                 'M': 'Municipal'
             })),
-            ('CdNatureza', 'CodNatureza', int),
-            ('CdTipoCruzamento', 'TipoCruzamento', int),
-            ('INTERSECAO', 'INTERSEÇÃO?', get_value_map({
+            ('CdNatureza', 'CodNatureza', str),
+            ('CdTipoCruzamento', 'TipoCruzamento', str),
+            ('INTERSECAO', 'INTERSEÇÃO?', get_value_map_func({
                 'NAO': 'Não',
                 'SIM': 'Sim'
             })),
             ('Natureza', 'Natureza', trim_str)
         ]),
         'driverVíTima': [format_record_object(person,  [
-            ('CdAcidente', 'CdAcidente', trim_str),
+            ('_localId', '_localId', str),
+            ('CdAcidente', 'CdAcidente', lambda _: record['_localId']),
             ('CdPessoa', 'CdPessoa', int),
             ('CdGravidadeLesao', 'CdGravidadeLesao', str),
             ('Sexo', 'Sexo', trim_str),
             ('TipoPessoa', 'TipoPessoa', int),
-            ('CdVeículo', 'CdVeiculo', trim_str),
+            ('CdVeículo', 'CdVeiculo', get_uuid_lookup_func(vehicles, 'CdVeiculo')),
             ('Idade', 'Idade', int)
         ]) for person in persons],
         'driverVeíCulo': [format_record_object(vehicle,  [
-            ('CdAcidente', 'CdAcidente', trim_str),
+            ('_localId', '_localId', str),
+            ('CdAcidente', 'CdAcidente', lambda _: record['_localId']),
             ('CdVeiculo', 'CdVeiculo', int),
             ('Ano', 'Ano', int),
             ('TipoVeiculo', 'TipoVeiculo', trim_str),
@@ -213,6 +227,7 @@ def load(obj, api, headers=None):
             if response.status_code >= 500:
                 logger.error('retrying...')
             else:
+                logger.info("Object: {}".format(json.dumps(obj)))
                 raise
         else:
             return
