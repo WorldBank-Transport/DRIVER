@@ -212,13 +212,14 @@ def load(obj, api, headers=None):
 
     while True:
         sleep(0.2)
-        response = requests.post(url, data=data, headers=headers)
+        response = None
         try:
+            response = requests.post(url, data=data, headers=headers)
             response.raise_for_status()
         except Exception:
             logger.warn("Error loading record")
             logger.error(response.text)
-            if response.status_code >= 500:
+            if response is None or response.status_code >= 500:
                 logger.error('retrying...')
             else:
                 logger.info("Object: {}".format(json.dumps(obj)))
