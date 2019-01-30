@@ -344,9 +344,9 @@ CELERY_DOWNLOAD_PREFIX = '/download/'
 CELERY_EXPORTS_FILE_PATH = '/var/www/media'
 
 # Deduplication settings
-DEDUPE_TIME_RANGE_HOURS = 12
+DEDUPE_TIME_RANGE_HOURS = float(os.environ.get('DRIVER_DEDUPE_TIME_RANGE_HOURS', '12'))
 # .001 ~= 110m
-DEDUPE_DISTANCE_DEGREES = 0.0008
+DEDUPE_DISTANCE_DEGREES = float(os.environ.get('DRIVER_DEDUPE_DISTANCE_DEGREES', '0.0008'))
 
 GROUT = {
     # It is suggested to change this if you know that your data will be limited to
