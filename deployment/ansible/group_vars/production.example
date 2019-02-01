@@ -95,6 +95,10 @@ driver_admin_username: "admin"
 #driver_admin_password: "uncomment and change me!"
 driver_admin_email: "you@yourdomain.com"
 
+## DEDUPLICATION SETTINGS
+dedupe_time_range_hours: "12"
+dedupe_distance_degrees: "0.0008"
+
 ## WEB SETTINGS
 # DRIVER uses the PickPoint API (which runs Nominatim) for geocoding; this is the API key that
 # should be used when accessing that API. You can sign up for an API key here:

@@ -37,6 +37,10 @@ driver_admin_username: "admin"
 driver_admin_password: "admin"
 driver_admin_email: "systems+driver@azavea.com"
 
+## DEDUPLICATION SETTINGS
+dedupe_time_range_hours: "12"
+dedupe_distance_degrees: "0.0008"
+
 ## WEB SETTINGS
 js_html5mode: "false"
 js_html5mode_prefix: "!"
