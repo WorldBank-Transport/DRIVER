@@ -277,7 +277,7 @@
             'exclaim': {
                 calendar: 'gregorian',
                 formats: {
-                    'long': 'MM d,Y',
+                    'long': 'MM d, Y',
                     'longNoTime': 'MM d, Y',
                     'numeric': 'm/dd/yyyy',
                     'short': 'M Y'
