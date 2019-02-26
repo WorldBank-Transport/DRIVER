@@ -5,24 +5,20 @@
     function DateLocalization(LanguageState, WebConfig) {
         var languageMap = {
             '': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'mm/dd/yyyy',
                     'short': 'M Y'
-                },
-                language: ''
+                }
             },
             'af': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'af'
+                }
             },
             'am': {
                 calendar: 'ethiopian',
@@ -31,8 +27,7 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'am'
+                }
             },
             'ar': {
                 calendar: 'islamic',
@@ -41,28 +36,23 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ar'
+                }
             },
             'ar-DZ': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ar-DZ'
+                }
             },
             'ar-EG': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ar-EG'
+                }
             },
             'ar-sa': {
                 calendar: 'ummalqura',
@@ -75,137 +65,110 @@
                 language: 'ar'
             },
             'az': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'az'
+                }
             },
             'bg': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'bg'
+                }
             },
             'bn': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'bn'
+                }
             },
             'bs': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yy',
                     'short': 'M Y'
-                },
-                language: 'bs'
+                }
             },
             'ca': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ca'
+                }
             },
             'cs': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'cs'
+                }
             },
             'da': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'da'
+                }
             },
             'de': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'de'
+                }
             },
             'de-CH': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'de-CH'
+                }
             },
             'el': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'el'
+                }
             },
             'en-AU': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'en-AU'
+                }
             },
             'en-GB': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'en-GB'
+                }
             },
             'en-NZ': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'en-NZ'
+                }
             },
             'en-us': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'MM d, Y',
                     'longNoTime': 'MM d, Y',
@@ -215,67 +178,54 @@
                 language: 'en'
             },
             'eo': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'eo'
+                }
             },
             'es': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'es'
+                }
             },
             'es-AR': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'es-AR'
+                }
             },
             'es-PE': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'es-PE'
+                }
             },
             'et': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'et'
+                }
             },
             'eu': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
-                },
-                language: 'eu'
+                }
             },
             'exclaim': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'MM d, Y',
                     'longNoTime': 'MM d, Y',
@@ -291,68 +241,55 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
-                },
-                language: 'fa'
+                }
             },
             'fi': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'fi'
+                }
             },
             'fo': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'fo'
+                }
             },
             'fr': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'fr'
+                }
             },
             'fr-CH': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'fr-CH'
+                }
             },
             'gl': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'gl'
+                }
             },
             'gu': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-M-yyyy',
                     'short': 'M Y'
-                },
-                language: 'gu'
+                }
             },
             'he': {
                 calendar: 'hebrew',
@@ -361,208 +298,167 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'he'
+                }
             },
             'hi-IN': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'hi-IN'
+                }
             },
             'hr': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy.',
                     'short': 'M Y'
-                },
-                language: 'hr'
+                }
             },
             'hu': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'hu'
+                }
             },
             'hy': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'hy'
+                }
             },
             'id': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'id'
+                }
             },
             'is': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'is'
+                }
             },
             'it': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'it'
+                }
             },
             'ja': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
-                },
-                language: 'ja'
+                }
             },
             'ka': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ka'
+                }
             },
             'km': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'km'
+                }
             },
             'ko': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'ko'
+                }
             },
             'lo': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'lo'
+                }
             },
             'lt': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'lt'
+                }
             },
             'lv': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'lv'
+                }
             },
             'me': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'me'
+                }
             },
             'me-ME': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'me-ME'
+                }
             },
             'mk': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'mk'
+                }
             },
             'ml': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ml'
+                }
             },
             'ms': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ms'
+                }
             },
             'mt': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'mt'
+                }
             },
             'ne': {
                 calendar: 'nepali',
@@ -571,38 +467,31 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'lt'
+                }
             },
             'nl': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'nl'
+                }
             },
             'nl-BE': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'nl-BE'
+                }
             },
             'no': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'no'
+                }
             },
             'pa': {
                 calendar: 'nanakshahi',
@@ -611,218 +500,175 @@
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'pa'
+                }
             },
             'pl': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'pl'
+                }
             },
             'pt-BR': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'pt-BR'
+                }
             },
             'rm': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'rm'
+                }
             },
             'ro': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'ro'
+                }
             },
             'ru': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'ru'
+                }
             },
             'sk': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'sk'
+                }
             },
             'sl': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'sl'
+                }
             },
             'sq': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'sq'
+                }
             },
             'sr': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'sr'
+                }
             },
             'sr-SR': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'sr-SR'
+                }
             },
             'sv': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'sv'
+                }
             },
             'ta': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ta'
+                }
             },
             'th': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'th'
+                }
             },
             'tr': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'tr'
+                }
             },
             'tt': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                },
-                language: 'tt'
+                }
             },
             'uk': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'uk'
+                }
             },
             'ur': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'ur'
+                }
             },
             'vi': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                },
-                language: 'vi'
+                }
             },
             'zh-CN': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                },
-                language: 'zh-CN'
+                }
             },
             'zh-HK': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                },
-                language: 'zh-HK'
+                }
             },
             'zh-TW': {
-                calendar: 'gregorian',
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
-                },
-                language: 'zh-TW'
+                }
             }
         };
 
@@ -834,11 +680,33 @@
         };
         return module;
 
+        function getLanguageConfigObject(languageId) {
+            var result = languageMap[languageId];
+            if(result === undefined) {
+                // Empty string covers all default languages
+                result = languageMap[''];
+            }
+
+            if(result.language === undefined) {
+                // Some calendars have an override language code, but default to languageId
+                result.language = languageId;
+            }
+
+            if(result.calendar === undefined) {
+                // For calendars that don't specify, assume they're gregorian
+                result.calendar = 'gregorian';
+            }
+
+            return result;
+        }
+
         /**
          * Return the date formatting configuration for the currently selected interface language
          */
         function currentDateFormats() {
-            return languageMap[LanguageState.getSelected().id];
+            return getLanguageConfigObject(
+                LanguageState.getSelected().id
+            );
         }
 
         /**
@@ -879,12 +747,7 @@
                 language = 'exclaim';
             }
             var isRtl = selected.rtl;
-            if (language in languageMap) {
-                conversion = languageMap[language];
-            } else {
-                // Empty string covers all default languages
-                conversion = languageMap[''];
-            }
+            conversion = getLanguageConfigObject(language);
             var convertedDate = $.calendars.instance(conversion.calendar, conversion.language)
                 .fromJSDate(localizedDate);
             var datestring = convertedDate.formatDate(conversion.formats[format], convertedDate);
