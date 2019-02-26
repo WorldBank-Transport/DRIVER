@@ -7,7 +7,6 @@
             '': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'mm/dd/yyyy',
                     'short': 'M Y'
                 }
@@ -15,7 +14,6 @@
             'af': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -24,7 +22,6 @@
                 calendar: 'ethiopian',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -33,7 +30,6 @@
                 calendar: 'islamic',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -41,7 +37,6 @@
             'ar-DZ': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -49,7 +44,6 @@
             'ar-EG': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -58,7 +52,6 @@
                 calendar: 'ummalqura',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 },
@@ -67,7 +60,6 @@
             'az': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -75,7 +67,6 @@
             'bg': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -83,7 +74,6 @@
             'bn': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -91,7 +81,6 @@
             'bs': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yy',
                     'short': 'M Y'
                 }
@@ -99,7 +88,6 @@
             'ca': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -107,7 +95,6 @@
             'cs': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -115,7 +102,6 @@
             'da': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -123,7 +109,6 @@
             'de': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -131,7 +116,6 @@
             'de-CH': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -139,7 +123,6 @@
             'el': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -147,7 +130,6 @@
             'en-AU': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -155,7 +137,6 @@
             'en-GB': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -163,7 +144,6 @@
             'en-NZ': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -171,7 +151,6 @@
             'en-us': {
                 formats: {
                     'long': 'MM d, Y',
-                    'longNoTime': 'MM d, Y',
                     'numeric': 'm/dd/yyyy',
                     'short': 'M Y'
                 },
@@ -180,7 +159,6 @@
             'eo': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -188,7 +166,6 @@
             'es': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -196,7 +173,6 @@
             'es-AR': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -204,7 +180,6 @@
             'es-PE': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -212,7 +187,6 @@
             'et': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -220,7 +194,6 @@
             'eu': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
                 }
@@ -228,7 +201,6 @@
             'exclaim': {
                 formats: {
                     'long': 'MM d, Y',
-                    'longNoTime': 'MM d, Y',
                     'numeric': 'm/dd/yyyy',
                     'short': 'M Y'
                 },
@@ -238,7 +210,6 @@
                 calendar: 'persian',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
                 }
@@ -246,7 +217,6 @@
             'fi': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -254,7 +224,6 @@
             'fo': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -262,7 +231,6 @@
             'fr': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -270,7 +238,6 @@
             'fr-CH': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -278,7 +245,6 @@
             'gl': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -286,7 +252,6 @@
             'gu': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-M-yyyy',
                     'short': 'M Y'
                 }
@@ -295,7 +260,6 @@
                 calendar: 'hebrew',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -303,7 +267,6 @@
             'hi-IN': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -311,7 +274,6 @@
             'hr': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy.',
                     'short': 'M Y'
                 }
@@ -319,7 +281,6 @@
             'hu': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -327,7 +288,6 @@
             'hy': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -335,7 +295,6 @@
             'id': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -343,7 +302,6 @@
             'is': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -351,7 +309,6 @@
             'it': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -359,7 +316,6 @@
             'ja': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
                 }
@@ -367,7 +323,6 @@
             'ka': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -375,7 +330,6 @@
             'km': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -383,7 +337,6 @@
             'ko': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -391,7 +344,6 @@
             'lo': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -399,7 +351,6 @@
             'lt': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -407,7 +358,6 @@
             'lv': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -415,7 +365,6 @@
             'me': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -423,7 +372,6 @@
             'me-ME': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -431,7 +379,6 @@
             'mk': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -439,7 +386,6 @@
             'ml': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -447,7 +393,6 @@
             'ms': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -455,7 +400,6 @@
             'mt': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -464,7 +408,6 @@
                 calendar: 'nepali',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -472,7 +415,6 @@
             'nl': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -480,7 +422,6 @@
             'nl-BE': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -488,7 +429,6 @@
             'no': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -497,7 +437,6 @@
                 calendar: 'nanakshahi',
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -505,7 +444,6 @@
             'pl': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -513,7 +451,6 @@
             'pt-BR': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -521,7 +458,6 @@
             'rm': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -529,7 +465,6 @@
             'ro': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -537,7 +472,6 @@
             'ru': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -545,7 +479,6 @@
             'sk': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -553,7 +486,6 @@
             'sl': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -561,7 +493,6 @@
             'sq': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -569,7 +500,6 @@
             'sr': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -577,7 +507,6 @@
             'sr-SR': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -585,7 +514,6 @@
             'sv': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -593,7 +521,6 @@
             'ta': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -601,7 +528,6 @@
             'th': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -609,7 +535,6 @@
             'tr': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -617,7 +542,6 @@
             'tt': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
                 }
@@ -625,7 +549,6 @@
             'uk': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -633,7 +556,6 @@
             'ur': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -641,7 +563,6 @@
             'vi': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
                 }
@@ -649,7 +570,6 @@
             'zh-CN': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
                 }
@@ -657,7 +577,6 @@
             'zh-HK': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
                 }
@@ -665,7 +584,6 @@
             'zh-TW': {
                 formats: {
                     'long': 'd MM, Y',
-                    'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
                 }
