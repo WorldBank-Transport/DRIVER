@@ -8,14 +8,21 @@
             require: ['^driver-filterbar', 'date-range-field'],
             templateUrl: 'scripts/filterbar/date-range.html',
             controller: 'dateRangeController',
+            scope: true,
             link: function(scope, elem, attrs, ctlArray) {
                 var calendar = null;
-                var filterLabel = '__dateRange';
                 var filterBarCtl = ctlArray[0];
                 var dateRangeCtl = ctlArray[1];
                 var dtRange = {};  // internal min/max date strings, used for API
                 // scope.min and scope.max are localized strings for display
 
+                if (attrs.dateRangeField === '__createdRange') {
+                    scope.helpLabel = 'RECORD.CREATED_FILTER';
+                    scope.buttonLabel = 'COMMON.CREATED_RANGE';
+                } else {
+                    scope.helpLabel = 'RECORD.DATE_FILTER';
+                    scope.buttonLabel = 'COMMON.DATE_RANGE';
+                }
 
                 scope.$on('driver.filterbar:reset', function() {
                     init();
@@ -27,7 +34,7 @@
                  * we can display it to the user.
                  */
                 scope.$on('driver.filterbar:restored', function(event, filter) {
-                    if (filter.label === filterLabel) {
+                    if (filter.label === attrs.dateRangeField) {
                         // The restored date will be an ISO-8601 string, so we need to convert
                         // that to a Javascript Date, and then convert that to a localized CDate,
                         // and then store the formatted string.
@@ -39,7 +46,7 @@
                                 scope.calendarOptions.dateFormat,
                                 calendar.fromJSDate(jsMin)
                             );
-                            $('#dtMinField').calendarsPicker('setDate', calendar.fromJSDate(jsMin));
+                            $(elem).find('.dt-min-field').calendarsPicker('setDate', calendar.fromJSDate(jsMin));
                         }
                         if (dtRange.max) {
                             var jsMax = moment(dtRange.max, moment.ISO_8601).toDate();
@@ -47,7 +54,7 @@
                                 scope.calendarOptions.dateFormat,
                                 calendar.fromJSDate(jsMax)
                             );
-                            $('#dtMaxField').calendarsPicker('setDate', calendar.fromJSDate(jsMax));
+                            $(elem).find('.dt-max-field').calendarsPicker('setDate', calendar.fromJSDate(jsMax));
                         }
                         scope.isMinMaxValid();
                     }
@@ -106,13 +113,13 @@
                     var defaultMax = new Date();
                     // 90 days ago
                     var defaultMin = new Date(moment(defaultMax) - moment.duration({days:90}));
-                    $('#dtMaxField')
+                    $(elem).find('.dt-max-field')
                         .calendarsPicker(scope.calendarOptions)
                         .calendarsPicker('setDate', calendar.fromJSDate(defaultMax))
                         .calendarsPicker('option', 'onSelect', function(dates) {
                             if (dates.length > 0) { updateDate(dates[0], 'max'); }
                         });
-                    $('#dtMinField')
+                    $(elem).find('.dt-min-field')
                         .calendarsPicker(scope.calendarOptions)
                         .calendarsPicker('setDate', calendar.fromJSDate(defaultMin))
                         .calendarsPicker('option', 'onSelect', function(dates) {
@@ -141,7 +148,7 @@
                  */
                 scope.updateFilter = function() {
                     if (scope.isMinMaxValid()) {
-                        filterBarCtl.updateFilter(filterLabel, dtRange);
+                        filterBarCtl.updateFilter(attrs.dateRangeField, dtRange);
                     }
                 };
 
@@ -166,9 +173,9 @@
                  */
                 scope.onDtRangeChange = function(minOrMax) {
                     if (minOrMax === 'min') {
-                        $('#dtMinField').calendarsPicker('setDate', scope.min);
+                        $(elem).find('.dt-min-field').calendarsPicker('setDate', scope.min);
                     } else if (minOrMax === 'max') {
-                        $('#dtMaxField').calendarsPicker('setDate', scope.max);
+                        $(elem).find('.dt-max-field').calendarsPicker('setDate', scope.max);
                     }
                 };
 

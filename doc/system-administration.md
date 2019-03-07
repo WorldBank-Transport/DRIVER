@@ -62,6 +62,8 @@ A domain name is necessary for DRIVER to function correctly. If you do not have 
 
 ### 3. Configuration files
 
+When checking out the source code, make sure to checkout the tag that you want to deploy. The list of valid tags can be found [here](https://github.com/WorldBank-Transport/DRIVER/tags). To do this, run `git fetch --all && git checkout tags/<version>`.
+
 In addition to the source code, there are three files not checked in to the repository that are needed in order to successfully deploy. These files are as follows:
 
 1. Ansible group-vars (`deployment/ansible/group_vars/production`)
@@ -77,6 +79,7 @@ The Gradle **keystore** always needs to exist, but if you don't want to use DRIV
 Run the setup wizard by executing `./scripts/generate_deployment_config`. This will prompt you for the domain name and IP addresses that you noted down previously. The script will then generate a barebones versions of the Ansible group-vars and inventory files for you, including auto-generated passwords. **You will still need to edit the group-vars**, but the wizard is a convenient way to get started.
 
 Once you've run the wizard, open up `deployment/ansible/group_vars/production` using a text editor. The file contains numerous parameters that must be set correctly in order for your installation of DRIVER to function. It also contains explanations of the meaning of each parameter. The **configuration wizard** will have already set most of these values to reasonable defaults, so you shouldn't need to change many. However, there are some that you will almost certainly want to change:
+- `app_version`: Set this to the `<version>` that corresponds to the tag you checked out in Step 3
 - `driver_admin_email`: Set this to your email
 - `languages`: Change this to the language(s) you want to use
 - `local_time_zone_id`: Set this to the time zone of the area where you will use DRIVER

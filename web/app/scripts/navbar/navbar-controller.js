@@ -22,6 +22,7 @@
         ctl.showAuditDownloadModal = showAuditDownloadModal;
         ctl.getBoundaryLabel = getBoundaryLabel;
         ctl.recordTypesVisible = WebConfig.recordType.visible;
+        ctl.showDuplicateRecordsLink = WebConfig.duplicateRecordsLink.visible;
         ctl.userEmail = userDropdownDefault;
 
         function init() {

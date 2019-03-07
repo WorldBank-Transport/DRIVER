@@ -8,7 +8,7 @@ import django.contrib.postgres.fields.hstore
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ashlar', '0022_record_archived'),
+        ('grout', '0022_record_archived'),
         ('data', '0007_auto_20160525_0156'),
     ]
 
@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('content_type_key', models.TextField()),
                 ('property_key', models.TextField()),
                 ('enum_costs', django.contrib.postgres.fields.hstore.HStoreField()),
-                ('record_type', models.ForeignKey(to='ashlar.RecordType')),
+                ('record_type', models.ForeignKey(to='grout.RecordType')),
             ],
         ),
     ]

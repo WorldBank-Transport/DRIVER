@@ -10,7 +10,8 @@ env:
   - secure: wc2LNYrPX8OfaytX9iQi4Wp9CBdMzBEt2PGiJIzcxALl8CS/PnP4/efnSuuAW49zaKvtSZ2kwqXObH0E0PamcCufkR3QCbnG+pxuq+Zxu11152inz3FO8UiaYksmzBcO3tidGuehWFPr+ULinlbT3RYaItXmPoPTAfO5l/0r1F4=
   - secure: hZNrcEi/XfMpdjegA9AAFm/XDM6+aP+NV7NfQAo4/P5IN2rBz20TEHcLmtDs0YODPnT0mneoqWaEM1V55VFZIp4FhDJetOA3nk+MhKpo6jAy+E5au+jJ8R5yWkwGAosedBBEYhU5T6iF073SpYcjfyun4fgC58o7yuYNoBISWVg=
   - secure: fcgtvICGfCMqxgbF2A0i+FCImh/vNC5lTyBvwztPLShhIg0z/SxE1aDcHRGEFu5hkqw04B4kQN17XPpcRS2CKgne/Fv7n+k/7mPiVImTVk oWL/TZHPplmYFm9szQKR5RWnAVKcejjC4PK6E1w9jgwK+7U6usnPHF9BcvPpKOYN8=
-language: bash
+language: python
+python: "2.7.15"
 services:
 - docker
 install:
@@ -27,7 +28,7 @@ install:
 script: ".travis/script.sh"
 before_deploy:
 - docker login -p "${QUAY_PASSWORD}" -u "${QUAY_USER}" quay.io
-- sudo pip install ansible==2.0.0.2
+- pip install ansible==2.6.3.0
 - openssl aes-256-cbc -K "${encrypted_71b51a189c16_key}" -iv "${encrypted_71b51a189c16_iv}"
   -in deployment/driver.pem.enc -out deployment/driver.pem -d
 - export PATH="$PATH:$HOME/.rvm/bin"
@@ -53,6 +54,7 @@ after_deploy:
 notifications:
   slack:
     secure: RVtR2f3Q+hyW+JeXXsf6TyS1f5OQi7HW35jW+Auu/ET1VxOtQ/Swheiil26a8h6XtEC51YL+SiUhhiAxeKCMz31O33LZ3AsWjOC3ercIjDXDBPVYiYCsSpKoMGPm1/+FXjHnMzEPvIrOo2vA9hLk0QGr8fEiDZ/pHcUxmtVOmWc=
+    on_success: change
 before_install:
 - '[ "${TRAVIS_PULL_REQUEST}" == "false" ] && openssl aes-256-cbc -K "${encrypted_1319bc8a028f_key}"
   -iv "${encrypted_1319bc8a028f_iv}" -in deployment/driver.keystore.enc -out gradle/data/driver.keystore

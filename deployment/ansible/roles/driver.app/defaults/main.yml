@@ -26,6 +26,8 @@ driver_conf:
   DJANGO_ENV: "{% if developing %}development{% elif staging %}staging{% else %}production{% endif %}"
   DRIVER_OSM_EXTRACT_URL: "{{ osm_extract_url }}"
   ALLOWED_HOST: "{{ allowed_host }}"
+  DRIVER_DEDUPE_TIME_RANGE_HOURS: "{{ dedupe_time_range_hours }}"
+  DRIVER_DEDUPE_DISTANCE_DEGREES: "{{ dedupe_distance_degrees }}"
 
 driver_postgis_version: 2.1.3
 

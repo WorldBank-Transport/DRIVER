@@ -1,4 +1,4 @@
-from ashlar.serializer_fields import JsonBField
+from grout.serializer_fields import JsonBField
 
 from rest_framework.serializers import ModelSerializer
 
@@ -14,3 +14,4 @@ class SavedFilterSerializer(ModelSerializer):
     class Meta:
         model = SavedFilter
         read_only_fields = ('uuid', 'owner')
+        fields = '__all__'

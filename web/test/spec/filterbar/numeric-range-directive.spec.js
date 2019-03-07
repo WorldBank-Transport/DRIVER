@@ -7,6 +7,7 @@ describe('driver.filterbar: Numeric Range', function () {
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
     beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('driver.weather'));
 
     var $compile;
     var $rootScope;

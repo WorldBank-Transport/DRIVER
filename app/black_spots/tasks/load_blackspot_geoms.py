@@ -17,7 +17,7 @@ from django.conf import settings
 from django.contrib.gis.geos import GEOSGeometry
 from django.utils import timezone
 
-from ashlar.models import RecordType
+from grout.models import RecordType
 from black_spots.models import BlackSpot, BlackSpotSet
 
 logger = get_task_logger(__name__)
@@ -200,7 +200,7 @@ def blackspot_from_feature(feature, black_spot_set, src_srid, score_prop=None, r
     """
     blackspot = BlackSpot()
     geometry = GEOSGeometry(buffer(shape(feature['geometry']).wkb), srid=src_srid)
-    geometry.transform(settings.ASHLAR['SRID'])
+    geometry.transform(settings.GROUT['SRID'])
     blackspot.geom = geometry
     blackspot.black_spot_set = black_spot_set
     blackspot.severity_score = feature['properties'][score_prop] if score_prop else 0.0

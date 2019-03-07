@@ -6,12 +6,12 @@
 
     function TileUrlService(WebConfig) {
         var allRecordsUrl = (WebConfig.windshaft.hostname +
-            '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.png');
+            '/tiles/table/grout_record/id/ALL/{z}/{x}/{y}.png');
         var secondaryRecordsUrl = allRecordsUrl + '?secondary=true';
         var allRecordsUtfGridUrl = (WebConfig.windshaft.hostname +
-            '/tiles/table/ashlar_record/id/ALL/{z}/{x}/{y}.grid.json');
+            '/tiles/table/grout_record/id/ALL/{z}/{x}/{y}.grid.json');
         var allBoundariesUrl = (WebConfig.windshaft.hostname +
-            '/tiles/table/ashlar_boundary/id/ALL/{z}/{x}/{y}.png');
+            '/tiles/table/grout_boundary/id/ALL/{z}/{x}/{y}.png');
         var heatmapUrl = allRecordsUrl + '?heatmap=true';
         var blackspotsUrl = (WebConfig.windshaft.hostname +
                              '/tiles/table/black_spots_blackspot/id/ALL/{z}/{x}/{y}.png');

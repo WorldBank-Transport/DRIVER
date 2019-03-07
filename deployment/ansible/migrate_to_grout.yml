@@ -1,0 +1,22 @@
+---
+- hosts: database-servers
+  become_user: postgres
+  become: true
+  tasks:
+    - name: Adjust Django migration history
+      command: psql driver -c "UPDATE django_migrations SET app = 'grout' WHERE app = 'ashlar';"
+
+    - name: Adjust Django contenttypes
+      command: psql driver -c "UPDATE django_content_type SET app_label='grout' WHERE app_label='ashlar';"
+
+- hosts: app-servers
+  become: true
+  tasks:
+    - name: Move Ashlar tables to Grout
+      command: docker exec driver-app ./manage.py migrate data 0011
+
+    - name: Finish migrating Grout
+      command: docker exec driver-app ./manage.py migrate grout
+
+    - name: Finish migrating DRIVER
+      command: docker exec driver-app ./manage.py migrate data

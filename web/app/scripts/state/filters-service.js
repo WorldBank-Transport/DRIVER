@@ -17,6 +17,11 @@
         svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
         svc.getDateFilter = getDateFilter;
+        svc.getCreatedFilter = getCreatedFilter;
+        svc.getCreatedByFilter = getCreatedByFilter;
+        svc.getWeatherFilter = getWeatherFilter;
+        svc.getQualityChecksFilter = getQualityChecksFilter;
+        svc.getNonJsonFilterNames = getNonJsonFilterNames;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -84,7 +89,7 @@
          * returns an object containing the min and max dates
          * If none are set, uses passed in defaults or its own
          */
-        function getDateFilter(defaults) {
+        function getGenericDateFilter(label, defaults) {
             // An exceptional case for date ranges (not part of the JsonB we filter over).
             // If no dates are specified, the last 90 days are used.
             var now = new Date();
@@ -97,9 +102,9 @@
                 minDateString = defaults.minDate ? defaults.minDate : minDateString;
             }
 
-            if (svc.filters && svc.filters.hasOwnProperty('__dateRange')) {
-                minDateString = convertDT(svc.filters.__dateRange.min || minDateString);
-                maxDateString = convertDT(svc.filters.__dateRange.max || maxDateString);
+            if (svc.filters && svc.filters.hasOwnProperty(label)) {
+                minDateString = convertDT(svc.filters[label].min || minDateString);
+                maxDateString = convertDT(svc.filters[label].max || maxDateString);
             }
 
             // Perform some sanity checks on the dates
@@ -116,6 +121,39 @@
                 }
             }
             return dateFilters;
+        }
+
+        function getDateFilter(defaults) {
+            return getGenericDateFilter('__dateRange', defaults);
+        }
+
+        function getCreatedFilter(defaults) {
+            return getGenericDateFilter('__createdRange', defaults);
+        }
+
+        function getCreatedByFilter() {
+            return svc.filters.__createdBy;
+        }
+
+        function getWeatherFilter() {
+            return svc.filters.__weather;
+        }
+        function getQualityChecksFilter() {
+            var qualityChecks = {};
+            _.forEach(svc.filters.__quality, function(checkKey) {
+                qualityChecks[checkKey] = true;
+            });
+            return qualityChecks;
+        }
+
+        function getNonJsonFilterNames() {
+            return [
+                '__dateRange',
+                '__createdRange',
+                '__createdBy',
+                '__quality',
+                '__weather'
+            ];
         }
 
         // Helper for converting a datetime string to the proper format to work with moment.tz.

@@ -281,6 +281,26 @@
             });
         }
 
+        function translateInterventionTypes() {
+            if (!ctl.isSecondary) {
+                return;
+            }
+
+            _.forEach(ctl.recordSchema.schema.definitions, function(definition) {
+                _.forEach(definition.properties, function(property) {
+                    if (property.fieldType === 'selectlist') {
+                        var enumTitles = _.map(property.enum, function(interventionType) {
+                            var translation = $translate.instant('INTERVENTION_TYPE.' + interventionType);
+                            return translation.includes('INTERVENTION_TYPE.') ? interventionType : translation;
+                        });
+                        property.options = {
+                            'enum_titles': enumTitles
+                        };
+                    }
+                });
+            });
+        }
+
         function nominatimLookup(text) {
             return Nominatim.forward(text, bbox);
         }
@@ -301,6 +321,7 @@
 
         function onSchemaReady() {
             fixEmptyFields();
+            translateInterventionTypes();
 
             // Add json-editor translations for button titles (shown on hover)
             JsonEditorDefaults.addTranslation('button_add_row_title',
@@ -497,6 +518,7 @@
             /* jshint camelcase: false */
             if (ctl.record && ctl.record.geom) {
                 // set back coordinates and nominatim values
+                ctl.record.schema = ctl.recordSchema.uuid;
                 ctl.record.geom.coordinates = [ctl.geom.lng, ctl.geom.lat];
                 ctl.record.location_text = ctl.nominatimLocationText;
                 ctl.record.city = ctl.nominatimCity;

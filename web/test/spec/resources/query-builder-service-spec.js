@@ -10,6 +10,21 @@ describe('driver.resources: QueryBuilder', function () {
         },
         'getDateFilter': function(){
             return {minDate:'2015-10-04T16:00:00.000Z'};
+        },
+        'getQualityChecksFilter': function () {
+            return [];
+        },
+        'getNonJsonFilterNames': function () {
+            return ['__dateRange'];
+        },
+        'getCreatedFilter': function(){
+            return {};
+        },
+        'getCreatedByFilter': function(){
+            return '';
+        },
+        'getWeatherFilter': function(){
+            return '';
         }
     };
     beforeEach(module('ase.mock.resources'));

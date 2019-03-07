@@ -9,7 +9,7 @@
 
     /* ngInject */
     function QueryBuilder($q, FilterState, RecordState, RecordSchemaState, BoundaryState,
-                          Records, WebConfig) {
+                          GeographyState, Records, WebConfig) {
         var FILTER_DEFAULTS = {
             doAttrFilters: true,
             doBoundaryFilter: true,
@@ -136,14 +136,41 @@
             filterConfig = _.extend({}, FILTER_DEFAULTS, filterConfig);
             var deferred = $q.defer();
             var paramObj = { limit: WebConfig.record.limit };
-            var boundaryPromise, jsonPromise;
+            var boundaryPromise, geographyPromise, jsonPromise;
             /* jshint camelcase: false */
             if (filterConfig.doAttrFilters) {
                 var dateFilter = FilterState.getDateFilter();
-                paramObj = _.extend(paramObj, {
-                    occurred_max: dateFilter.maxDate,
-                    occurred_min: dateFilter.minDate
-                });
+                paramObj.occurred_max = dateFilter.maxDate;
+                paramObj.occurred_min = dateFilter.minDate;
+
+                if (WebConfig.filters.createdDate.visible) {
+                    var createdFilter = FilterState.getCreatedFilter();
+                    paramObj.created_max = createdFilter.maxDate;
+                    paramObj.created_min = createdFilter.minDate;
+                }
+
+                var createdByString = FilterState.getCreatedByFilter();
+                if (createdByString) {
+                    paramObj.created_by = createdByString;
+                }
+
+                var qualityChecks = FilterState.getQualityChecksFilter();
+                // There is a naming mismatch between the Django API and the frontend when it comes to boundaries.
+                // The API's "Boundary" is the frontend's "Geography"
+                // The API's "BoundaryPolygon" is the frontend's "Boundary"
+                if (qualityChecks.checkOutsideBoundary) {
+                    geographyPromise = GeographyState.getSelected().then(function(selected) {
+                        if (selected && selected.uuid) {
+                            return { outside_boundary: selected.uuid };
+                        }
+                        return {};
+                    });
+                }
+
+                var weatherFilter = FilterState.getWeatherFilter();
+                if (weatherFilter) {
+                    paramObj.weather = weatherFilter;
+                }
             }
 
             if (filterConfig.doBoundaryFilter) {
@@ -157,7 +184,9 @@
             }
 
             if (filterConfig.doJsonFilters) {
-                jsonPromise = svc.assembleJsonFilterParams(_.omit(FilterState.filters, '__dateRange')).then(
+                jsonPromise = svc.assembleJsonFilterParams(
+                    _.omit(FilterState.filters, FilterState.getNonJsonFilterNames())
+                ).then(
                     function(jsonFilters) {
                         // Handle cases where no json filters are set
                         if (!_.isEmpty(jsonFilters)) {
@@ -175,7 +204,7 @@
                 });
             }
 
-            $q.all([boundaryPromise, jsonPromise]).then(function(filters) {
+            $q.all([boundaryPromise, geographyPromise, jsonPromise]).then(function(filters) {
                 // Pagination offset
                 if (offset) {
                     paramObj.offset = offset;
