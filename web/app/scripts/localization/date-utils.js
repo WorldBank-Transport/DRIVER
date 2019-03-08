@@ -38,21 +38,23 @@
                     'short': 'M Y'
                 }
             },
-            'ar-DZ': {
+            'ar-dz': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'ar-DZ'
             },
-            'ar-EG': {
+            'ar-eg': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'ar-EG'
             },
             'ar-sa': {
                 calendar: 'ummalqura',
@@ -128,13 +130,14 @@
                     'short': 'M Y'
                 }
             },
-            'de-CH': {
+            'de-ch': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'de-CH'
             },
             'el': {
                 formats: {
@@ -144,29 +147,32 @@
                     'short': 'M Y'
                 }
             },
-            'en-AU': {
+            'en-au': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'en-AU'
             },
-            'en-GB': {
+            'en-gb': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'en-GB'
             },
-            'en-NZ': {
+            'en-nz': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'en-NZ'
             },
             'en-us': {
                 formats: {
@@ -193,21 +199,23 @@
                     'short': 'M Y'
                 }
             },
-            'es-AR': {
+            'es-ar': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'es-AR'
             },
-            'es-PE': {
+            'es-pe': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'es-PE'
             },
             'et': {
                 formats: {
@@ -267,13 +275,14 @@
                     'short': 'M Y'
                 }
             },
-            'fr-CH': {
+            'fr-ch': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd.mm.yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'fr-CH'
             },
             'gl': {
                 formats: {
@@ -300,13 +309,14 @@
                     'short': 'M Y'
                 }
             },
-            'hi-IN': {
+            'hi-in': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'hi-IN'
             },
             'hr': {
                 formats: {
@@ -420,13 +430,14 @@
                     'short': 'M Y'
                 }
             },
-            'me-ME': {
+            'me-me': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'me-ME'
             },
             'mk': {
                 formats: {
@@ -477,13 +488,14 @@
                     'short': 'M Y'
                 }
             },
-            'nl-BE': {
+            'nl-be': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'nl-BE'
             },
             'no': {
                 formats: {
@@ -510,13 +522,14 @@
                     'short': 'M Y'
                 }
             },
-            'pt-BR': {
+            'pt-br': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'pt-BR'
             },
             'rm': {
                 formats: {
@@ -574,13 +587,14 @@
                     'short': 'M Y'
                 }
             },
-            'sr-SR': {
+            'sr-sr': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd/mm/yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'sr-SR'
             },
             'sv': {
                 formats: {
@@ -646,29 +660,32 @@
                     'short': 'M Y'
                 }
             },
-            'zh-CN': {
+            'zh-cn': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy-mm-dd',
                     'short': 'M Y'
-                }
+                },
+                language: 'zh-CN'
             },
-            'zh-HK': {
+            'zh-hk': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'dd-mm-yyyy',
                     'short': 'M Y'
-                }
+                },
+                language: 'zh-HK'
             },
-            'zh-TW': {
+            'zh-tw': {
                 formats: {
                     'long': 'd MM, Y',
                     'longNoTime': 'd MM, Y',
                     'numeric': 'yyyy/mm/dd',
                     'short': 'M Y'
-                }
+                },
+                language: 'zh-TW'
             }
         };
 
