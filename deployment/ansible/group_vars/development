@@ -97,10 +97,7 @@ languages:
     - { id: 'zh', label: '漢語', rtl: false }
     - { id: 'lo', label: 'ລາວ', rtl: false }
     - { id: 'ar-sa', label: 'العَرَبِيَّة', rtl: true }
-
-## The following options may also be added to languages for display in the language picker
-## - { id: 'ar-sa', label: 'Arabic (Saudi Arabia)', rtl: true }
-## - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
+    - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
 
 ## Forecast.io settings
 forecast_io_api_key: ''
