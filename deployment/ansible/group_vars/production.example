@@ -22,6 +22,7 @@ app_version: "0.0.0"
 app_domain_name: "your.driver-domain.here"
 
 ## DOCKER SETTINGS
+docker_image_tag: "{{app_version}}"
 # The docker repository you want your app to pull images from. The default is "quay.io/azavea/".
 # The trailing / is required.
 docker_repository: "quay.io/azavea/"
@@ -108,6 +109,19 @@ dedupe_distance_degrees: "0.0008"
 # Set this to "true" for slightly cleaner URLs, if you are sure that all your users have updated
 # browsers. Otherwise, it is safe to leave as "false"
 js_html5mode: "false"
+js_html5mode_prefix: "!"
+web_js_html5mode: "{{ js_html5mode }}"
+web_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
+editor_js_html5mode: "{{ js_html5mode }}"
+editor_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
+
+# DRIVER uses the Mapillary API for street view; this is the client ID that
+# should be used when accessing that API. You can sign up for an API key here:
+# https://www.mapillary.com/
+web_js_mapillary: "false"
+web_js_mapillary_client_id: ""
+# This is the radius (in meters) within which images are searchf for around the point clicked
+web_js_mapillary_range: 10
 
 # Whether to display a dropdown in the web app to allow users to switch between different record
 # types. To avoid user confusion, it is best to leave this false if you are only planning to track
