@@ -42,6 +42,7 @@ windshaft_tables:
     - black_spots_blackspot
 
 redis_port: 6379
+redis_version: 2:2.8.4-2ubuntu0.2
 
 ## Reload the nginx config after an SSL certificate is renewed
 letsencrypt_post_renew_cmd: "service nginx reload"
