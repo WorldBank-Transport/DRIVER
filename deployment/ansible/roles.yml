@@ -9,7 +9,7 @@
 - src: azavea.nginx
   version: 0.2.1
 - src: azavea.docker
-  version: 1.0.2
+  version: 4.0.0
 - src: azavea.pip
   version: 1.0.1
 - src: azavea.redis
