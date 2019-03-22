@@ -43,6 +43,6 @@ exec /usr/bin/docker run \
   --maxtasksperchild=1
 
 post-stop script
-  /usr/bin/docker kill driver-celery
-  /usr/bin/docker rm driver-celery
+  /usr/bin/docker kill driver-celery || true
+  /usr/bin/docker rm driver-celery || true
 end script
