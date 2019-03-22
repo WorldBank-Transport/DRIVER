@@ -1,8 +1,5 @@
 FROM quay.io/azavea/django:1.11-python2.7-slim
 
-# N.B. This will not work for docker versions above 1.10.x; Docker 1.11 and above contain
-# multiple binaries in a tarball; if we upgrade Docker to the 1.11 branch or beyond then
-# the RUN command below will need to be updated.
 ENV DOCKER_VERSION 17.06.2
 
 # install libgdal1-dev
