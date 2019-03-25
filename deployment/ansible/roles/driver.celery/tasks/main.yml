@@ -22,8 +22,11 @@
 - name: Configure Driver celery service definition
   template: src=upstart-celery.conf.j2 dest=/etc/init/driver-celery.conf
 
-- name: Restart Driver celery service
+- name: Restart DRIVER Celery service
   service: name=driver-celery state=restarted
+
+- name: Restart DRIVER Gradle service
+  service: name=driver-gradle state=restarted
 
 - name: Set up monit monitoring of driver-celery container
   template: src=monit-driver-celery.cfg.j2 dest=/etc/monit/conf.d/driver-celery.cfg
