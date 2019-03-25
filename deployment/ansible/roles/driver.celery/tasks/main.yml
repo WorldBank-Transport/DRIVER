@@ -19,7 +19,7 @@
   command: /usr/bin/docker pull {{ docker_repository }}driver-app:{{ docker_image_tag}}
   when: staging or production
 
-- name: Configure Driver celery service definition
+- name: Configure DRIVER Celery service definition
   template: src=upstart-celery.conf.j2 dest=/etc/init/driver-celery.conf
 
 - name: Restart DRIVER Celery service
