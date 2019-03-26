@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #########################################
-# Set up Driver for deployment.
+# Set up DRIVER for deployment.
 # Requires python3.6 with pip installed.
 #########################################
 
