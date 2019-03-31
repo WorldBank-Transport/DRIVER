@@ -63,7 +63,19 @@ class DriverRecordFilter(RecordFilter):
     created_max = django_filters.IsoDateTimeFilter(name="created", lookup_expr='lte')
     created_by = django_filters.Filter(field_name='created_by', method='filter_created_by')
     weather = django_filters.MultipleChoiceFilter(choices=WEATHER_CHOICES)
+    archived = django_filters.BooleanFilter(name='archived')
     outside_boundary = django_filters.Filter(field_name='geom', method='filter_outside_boundary')
+
+    def __init__(self, data=None, *args, **kwargs):
+        # if filterset is bound, use initial values as defaults
+        if data is not None:
+            # get a mutable copy of the QueryDict
+            data = data.copy()
+
+            if not data.get('archived'):
+                data['archived'] = "False"
+
+        super(DriverRecordFilter, self).__init__(data, *args, **kwargs)
 
     def filter_outside_boundary(self, queryset, field_name, boundary_uuid):
         """Filter records that fall outside the specified boundary."""
