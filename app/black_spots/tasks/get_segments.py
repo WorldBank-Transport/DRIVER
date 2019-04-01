@@ -12,8 +12,7 @@ import pytz
 import rtree
 import shutil
 from math import ceil
-import tarfile as t
-import subprocess
+import tarfile
 import tempfile
 import billiard as multiprocessing
 from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
@@ -159,16 +158,12 @@ def create_tarball(shp_dir, tar_dir):
     :params shp_dir: output directory of shapefile
     :params tar_dir: output directory for gzipped tarball
     """
-    filename = 'road_segments.tar'
+    filename = 'road_segments.tar.gz'
     tar_path = os.path.join(tar_dir, filename)
-    tarball = t.TarFile(tar_path, 'w')
-    tarball.add(shp_dir, arcname='segments')
-    tarball.close()
+    with tarfile.open(tar_path, 'w:gz') as tarball:
+        tarball.add(shp_dir, arcname='segments')
 
-    command = ['gzip', tar_path]
-    subprocess.check_call(command)
-    gzip_filepath = '{}.gz'.format(tar_path)
-    return gzip_filepath
+    return tar_path
 
 
 def get_intersections(roads):
