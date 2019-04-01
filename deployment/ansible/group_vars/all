@@ -6,7 +6,7 @@ staging: "{{ 'staging' in group_names }}"
 not_staging: "{{ 'staging' not in group_names }}"
 production: "{{ 'production' in group_names }}"
 
-docker_version: "1.10.*"
+docker_version: "17.06.*"
 docker_py_version: "1.2.3"
 docker_options: "--storage-driver=aufs"
 
@@ -42,6 +42,7 @@ windshaft_tables:
     - black_spots_blackspot
 
 redis_port: 6379
+redis_version: 2:2.8.4-2ubuntu0.2
 
 ## Reload the nginx config after an SSL certificate is renewed
 letsencrypt_post_renew_cmd: "service nginx reload"

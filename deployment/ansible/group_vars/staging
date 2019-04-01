@@ -82,10 +82,14 @@ osm_extract_url: 'https://download.geofabrik.de/asia/philippines-latest.osm.pbf'
 # If there is only one language defined, the drop-down will not be displayed.
 languages:
     - { id: 'en-us', label: 'English (US)', rtl: false  }
-
-## The following options may also be added to languages for display in the language picker
-## - { id: 'ar-sa', label: 'Arabic (Saudi Arabia)', rtl: true }
-## - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
+    - { id: 'vi', label: 'Tiếng Việt', rtl: false }
+    - { id: 'bn', label: 'বাংলা', rtl: false }
+    - { id: 'es', label: 'Español', rtl: false }
+    - { id: 'pt-br', label: 'português do Brasil', rtl: false }
+    - { id: 'zh', label: '漢語', rtl: false }
+    - { id: 'lo', label: 'ລາວ', rtl: false }
+    - { id: 'ar-sa', label: 'العَرَبِيَّة', rtl: true }
+    - { id: 'exclaim', label: 'Exclaim (Developer)', rtl: false }
 
 ## Django allowed hosts setting. Overridden since staging runs in non-DEBUG mode.
 allowed_host: 'prs.azavea.com'

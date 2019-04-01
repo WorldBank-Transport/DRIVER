@@ -14,6 +14,9 @@
   become: True
 
   pre_tasks:
+    - name: Add Docker APT key via curl
+      shell: "curl -sSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+
     - name: Update APT cache
       apt: update_cache=yes
 

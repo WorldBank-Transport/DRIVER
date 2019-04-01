@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 
 from django.core.management.base import BaseCommand
 
-from ashlar.models import Record
+from grout.models import Record
 
 
 class Command(BaseCommand):

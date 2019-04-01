@@ -33,10 +33,10 @@
   command: /usr/bin/docker pull {{ docker_repository }}driver-app:{{ docker_image_tag }}
   when: staging or production
 
-- name: Configure Driver application service definition
+- name: Configure DRIVER application service definition
   template: src=upstart-app.conf.j2 dest=/etc/init/driver-app.conf
 
-- name: Restart Driver application
+- name: Restart DRIVER application
   service: name=driver-app state=restarted
 
 - name: Set up monit monitoring of driver-app container
