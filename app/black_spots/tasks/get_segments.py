@@ -19,6 +19,7 @@ from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
 from shapely.ops import transform, unary_union
 
 from django.core.files import File
+from django.db import transaction
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -63,6 +64,7 @@ def cleanup(shp_dir, tar_dir):
 
 
 @shared_task
+@transaction.atomic
 def create_segments_tar(combined_segments_shp_dir):
     """Create a RoadSegmentsShapefile out of a shpfile"""
     logger.info('Creating tar file from shapefile segments')
