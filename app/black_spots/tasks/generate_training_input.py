@@ -143,12 +143,16 @@ def get_data(records_csv_uuid, segments_shp_uuid, road_srid):
         )
 
     # segments shapefile
+    shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_uuid).shp_tgz.path
+
     tar_output_dir = tempfile.mkdtemp()
     try:
-        shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_uuid).shp_tgz.path
+        # TODO: Extract only the combined segments file, not the entire tarball
         with tarfile.open(shp_tar, 'r:gz') as tar:
             tar.extractall(tar_output_dir)
-        with fiona.open(os.path.join(tar_output_dir, 'segments', COMBINED_SEGMENTS_SHP_NAME)) as segments:
+
+        segments_path = os.path.join(tar_output_dir, 'segments', COMBINED_SEGMENTS_SHP_NAME)
+        with fiona.open(segments_path) as segments:
             segments_index = rtree.index.Index()
             # Create a spatial index for segments to efficiently find nearby records
             seg_shapes = [shape(segment['geometry']) for segment in segments]
@@ -158,7 +162,7 @@ def get_data(records_csv_uuid, segments_shp_uuid, road_srid):
     finally:
         shutil.rmtree(tar_output_dir)
     Data = namedtuple('Data', ['records', 'segments', 'index', 'min_occurred', 'max_occurred'])
-    return Data(records,  seg_shapes, segments_index, min_occurred, max_occurred)
+    return Data(records, seg_shapes, segments_index, min_occurred, max_occurred)
 
 
 def write_black_spot_training_csv(segments_with_data, schema):

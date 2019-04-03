@@ -20,6 +20,7 @@ from data.tasks.fetch_record_csv import export_records
 
 logger = get_task_logger(__name__)
 
+COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_segments.shp')
 
 @shared_task
 def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), roads_srid=3395):
@@ -76,9 +77,14 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
     try:
         shp_tar = RoadSegmentsShapefile.objects.get(uuid=segments_shp_uuid).shp_tgz.path
         with tarfile.open(shp_tar, "r:gz") as tar:
+            # TODO: Extract only the combined segments file, not the entire tarball
             tar.extractall(tar_output_dir)
-            load_blackspot_geoms(os.path.join(tar_output_dir, 'segments', 'combined_segments.shp'),
-                                 forecasts_csv, record_type.pk, roads_srid,
-                                 output_percentile=config.severity_percentile_threshold)
+
+            segments_path = os.path.join(tar_output_dir, 'segments', COMBINED_SEGMENTS_SHP_NAME)
+            load_blackspot_geoms(
+                segments_path,
+                forecasts_csv, record_type.pk, roads_srid,
+                output_percentile=config.severity_percentile_threshold
+            )
     finally:
         shutil.rmtree(tar_output_dir)
