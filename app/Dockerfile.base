@@ -23,10 +23,23 @@ RUN apt-get update && apt-get install -y \
     libgeos-dev \
     libspatialindex-dev
 
-# Dependencies for installing docker locally
+# Install dependencies to install Docker
 RUN apt-get update && apt-get install -y \
-    curl
-RUN curl -L https://get.docker.com/builds/Linux/x86_64/docker-$DOCKER_VERSION > /usr/bin/docker && chmod +x /usr/bin/docker
+    curl \
+    lsb-release \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates
+
+RUN curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
+
+RUN add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/debian \
+   $(lsb_release -cs) \
+   stable"
+
+RUN apt-get update && apt-get install -y \
+    docker-ce
 
 RUN mkdir -p /opt/app
 WORKDIR /opt/app
