@@ -7,20 +7,26 @@ import tempfile
 from django.conf import settings
 from django.utils import timezone
 
-from celery import shared_task, chain
+from celery import shared_task
 from celery.utils.log import get_task_logger
 
 from grout.models import RecordType
 
-from black_spots.tasks import (forecast_segment_incidents, load_blackspot_geoms,
-                               load_road_network, get_training_noprecip)
+from black_spots.tasks import (
+    forecast_segment_incidents,
+    load_blackspot_geoms,
+    load_road_network,
+    get_training_noprecip
+)
 from black_spots.tasks.get_segments import get_segments_shp, create_segments_tar
 from black_spots.models import BlackSpotTrainingCsv, RoadSegmentsShapefile, BlackSpotConfig
 from data.tasks.fetch_record_csv import export_records
 
+
 logger = get_task_logger(__name__)
 
 COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_segments.shp')
+
 
 @shared_task
 def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), roads_srid=3395):
@@ -57,16 +63,16 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
 
     # Refresh road segments if the most recent one is more than 30 days out of date
     if not segments_shp_obj or (now - segments_shp_obj.created > datetime.timedelta(days=30)):
-        # Celery callbacks prepend the result of the parent function to the callback's arg list
-        segments_chain = chain(load_road_network.s(output_srid='EPSG:{}'.format(roads_srid)),
-                               get_segments_shp.s(records_csv_obj_id, roads_srid),
-                               create_segments_tar.s())()
-        segments_shp_uuid = segments_chain.get()
+        lines_shp_path = load_road_network(output_srid='EPSG:{}'.format(roads_srid))
+        shp_output_dir = get_segments_shp(lines_shp_path, records_csv_obj_id, roads_srid)
+        segments_shp_uuid = create_segments_tar(shp_output_dir)
 
     # - Match events to segments shapefile
-    blackspots_output = get_training_noprecip.delay(segments_shp_uuid,
-                                                    records_csv_obj_id,
-                                                    roads_srid).get()
+    blackspots_output = get_training_noprecip(
+        segments_shp_uuid,
+        records_csv_obj_id,
+        roads_srid
+    )
 
     # - Run Rscript to output CSV
     segments_csv = BlackSpotTrainingCsv.objects.get(pk=blackspots_output).csv.path
