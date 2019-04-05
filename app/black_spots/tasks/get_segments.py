@@ -210,16 +210,15 @@ def should_keep_road(road, road_shp, record_buffers_index):
     if not len(list(record_buffers_index.intersection(road_shp.bounds))):
         return False
 
-    if ('highway' in road['properties']
-            and road['properties']['highway'] is not None
-            and road['properties']['highway'] != 'path'
-            and road['properties']['highway'] != 'footway'):
+    props = road['properties']
+    if props.get('highway', None) not in ['path', 'footway', None]:
         return True
+
     # We're only interested in non-bridge, non-tunnel highways
     # 'class' is optional, so only consider it when it's available.
-    if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
-            and road['properties']['bridge'] == 0
-            and road['properties']['tunnel'] == 0):
+    if ('class' not in props or props['class'] == 'highway'
+            and props['bridge'] == 0
+            and props['tunnel'] == 0):
         return True
     return False
 
