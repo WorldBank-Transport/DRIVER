@@ -28,6 +28,19 @@ logger = get_task_logger(__name__)
 COMBINED_SEGMENTS_SHP_NAME = os.getenv('COMBINED_SEGMENTS_SHP_NAME', 'combined_segments.shp')
 
 
+def get_latest_segments_tar_uuid(roads_srid, records_csv_obj_id):
+    cutoff = timezone.now() - datetime.timedelta(days=30)
+    segments_shp_obj = RoadSegmentsShapefile.objects.all().order_by('-created').first()
+
+    # Refresh road segments if the most recent one is more than 30 days out of date
+    if segments_shp_obj and segments_shp_obj.created > cutoff:
+        return str(segments_shp_obj.uuid)
+
+    lines_shp_path = load_road_network(output_srid='EPSG:{}'.format(roads_srid))
+    shp_output_dir = get_segments_shp(lines_shp_path, records_csv_obj_id, roads_srid)
+    return create_segments_tar(shp_output_dir)
+
+
 @shared_task
 def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), roads_srid=3395):
     """Integrates all black spot tasks into a pipeline
@@ -52,20 +65,13 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
         label=settings.BLACKSPOT_RECORD_TYPE_LABEL,
         active=True
     ).first()
-    segments_shp_obj = RoadSegmentsShapefile.objects.all().order_by('-created').first()
-    if segments_shp_obj:
-        # Get the UUID, since that is what is used when passing to tasks in the chain
-        segments_shp_uuid = str(segments_shp_obj.uuid)
 
     # - Get events CSV. This is obtained before the road network segments are calculated
     # as an optimization, so we can ignore roads that won't have any associated records.
     records_csv_obj_id = export_records(oldest, now, record_type.pk)
 
-    # Refresh road segments if the most recent one is more than 30 days out of date
-    if not segments_shp_obj or (now - segments_shp_obj.created > datetime.timedelta(days=30)):
-        lines_shp_path = load_road_network(output_srid='EPSG:{}'.format(roads_srid))
-        shp_output_dir = get_segments_shp(lines_shp_path, records_csv_obj_id, roads_srid)
-        segments_shp_uuid = create_segments_tar(shp_output_dir)
+    # Get the UUID, since that is what is used when passing to tasks in the chain
+    segments_shp_uuid = get_latest_segments_tar_uuid(roads_srid, records_csv_obj_id)
 
     # - Match events to segments shapefile
     blackspots_output = get_training_noprecip(
