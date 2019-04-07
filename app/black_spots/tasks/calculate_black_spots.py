@@ -34,10 +34,18 @@ def get_latest_segments_tar_uuid(roads_srid, records_csv_obj_id):
 
     # Refresh road segments if the most recent one is more than 30 days out of date
     if segments_shp_obj and segments_shp_obj.created > cutoff:
+        logger.info("Using existing RoadSegmentsShapefile")
         return str(segments_shp_obj.uuid)
 
+    logger.info("Creating new RoadSegmentsShapefile")
+
+    logger.info("Loading road network")
     lines_shp_path = load_road_network(output_srid='EPSG:{}'.format(roads_srid))
+
+    logger.info("Creating segments shape files")
     shp_output_dir = get_segments_shp(lines_shp_path, records_csv_obj_id, roads_srid)
+
+    logger.info("Compressing shape files into tarball")
     return create_segments_tar(shp_output_dir)
 
 
@@ -92,6 +100,7 @@ def calculate_black_spots(history_length=datetime.timedelta(days=5 * 365 + 1), r
             # TODO: Extract only the combined segments file, not the entire tarball
             tar.extractall(tar_output_dir)
 
+            logger.info("Performing blackspot calculations")
             segments_path = os.path.join(tar_output_dir, 'segments', COMBINED_SEGMENTS_SHP_NAME)
             load_blackspot_geoms(
                 segments_path,
