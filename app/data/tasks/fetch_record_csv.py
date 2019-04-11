@@ -7,6 +7,7 @@ import re
 from celery import shared_task
 
 from data.models import DriverRecord
+from grout.models import RecordType
 from black_spots.models import BlackSpotRecordsFile
 
 
@@ -35,51 +36,22 @@ def FIELD_TRANSFORMS():
     }
 
 
-@shared_task
-def export_records(occurred_min, occurred_max, record_type_id):
-    def to_utf8(s):
-        """Convert to utf8 encoding and strip special whitespace/commas for csv writing"""
-        if isinstance(s, str):
-            return re.sub(r'[\r\n\t]', '', s)
-        elif isinstance(s, unicode):
-            return re.sub(r'[\r\n\t]', '', s).encode('utf-8')
-        elif s is None:
-            return unicode('').encode('utf-8')
-        else:
-            return re.sub(r'[\r\n\t]', '', unicode(s)).encode('utf-8')
+def to_utf8(s):
+    """Convert to utf8 encoding and strip special whitespace/commas for csv writing"""
+    if isinstance(s, str):
+        return re.sub(r'[\r\n\t]', '', s)
+    elif isinstance(s, unicode):
+        return re.sub(r'[\r\n\t]', '', s).encode('utf-8')
+    elif s is None:
+        return unicode('').encode('utf-8')
+    else:
+        return re.sub(r'[\r\n\t]', '', unicode(s)).encode('utf-8')
 
-    records = DriverRecord.objects.filter(
-        occurred_from__gte=occurred_min,
-        occurred_to__lte=occurred_max,
-        schema__record_type_id=record_type_id
-    )
 
-    try:
-        record_type = records[0].schema.record_type
-        schema = record_type.get_current_schema()
-    except IndexError:
-        raise Exception('No records in result set')
-
-    jsonschema = schema.schema
-    details = {
-        key: subschema for key, subschema in jsonschema['definitions'].viewitems()
-        if 'details' in subschema and subschema['details'] is True
-    }
-    details_key = details.keys()[0]
-    record_detail_fields = [
-        to_utf8(key) for key, val in details[details_key]['properties'].viewitems()
-        if (
-            'options' not in val or
-            'hidden' not in val['options'] or
-            val['options']['hidden'] is False
-        ) and (
-            key not in DROPPED_KEYS
-        )
-    ]
-    csv_columns = RECORD_FIELDS + record_detail_fields
+def generate_row_dicts(records_qs, record_detail_fields, details_key):
     transforms = FIELD_TRANSFORMS()
-    row_dicts = []
-    for record in records:
+
+    for record in records_qs.iterator():
         row = dict()
         for field in RECORD_FIELDS:
             if field in transforms:
@@ -99,12 +71,46 @@ def export_records(occurred_min, occurred_max, record_type_id):
                     row[field] = to_utf8(record.data[details_key][field])
                 else:
                     row[field] = ''
-        row_dicts.append(row)
+        yield row
+
+
+@shared_task
+def export_records(occurred_min, occurred_max, record_type_id):
+    def is_hidden(field):
+        try:
+            return field['options']['hidden']
+        except KeyError:
+            return False
+
+    record_type = RecordType.objects.get(uuid=record_type_id)
+    schema = record_type.get_current_schema()
+
+    jsonschema = schema.schema
+    details_key, details_subschema = next(
+        (key, subschema) for key, subschema in jsonschema['definitions'].items()
+        if subschema.get('details', False)
+    )
+    record_detail_fields = [
+        to_utf8(key) for key, val in details_subschema['properties'].items()
+        if not is_hidden(val) and key not in DROPPED_KEYS
+    ]
+
+    records = DriverRecord.objects.filter(
+        occurred_from__gte=occurred_min,
+        occurred_to__lte=occurred_max,
+        schema__record_type=record_type,
+        archived=False
+    )
+
+    row_dicts = generate_row_dicts(records, record_detail_fields, details_key)
 
     with tempfile.SpooledTemporaryFile(max_size=128000000) as csvfile:  # 128 mb
+        csv_columns = RECORD_FIELDS + record_detail_fields
         writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
+
         writer.writeheader()
         writer.writerows(row_dicts)
+
         store = BlackSpotRecordsFile()
         #  seek to the beginning of file so it can be read into the store
         csvfile.seek(0, 0)

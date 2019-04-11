@@ -12,14 +12,14 @@ import pytz
 import rtree
 import shutil
 from math import ceil
-import tarfile as t
-import subprocess
+import tarfile
 import tempfile
 import billiard as multiprocessing
 from shapely.geometry import mapping, shape, LineString, MultiPoint, Point
 from shapely.ops import transform, unary_union
 
 from django.core.files import File
+from django.db import transaction
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
@@ -64,6 +64,7 @@ def cleanup(shp_dir, tar_dir):
 
 
 @shared_task
+@transaction.atomic
 def create_segments_tar(combined_segments_shp_dir):
     """Create a RoadSegmentsShapefile out of a shpfile"""
     logger.info('Creating tar file from shapefile segments')
@@ -159,16 +160,12 @@ def create_tarball(shp_dir, tar_dir):
     :params shp_dir: output directory of shapefile
     :params tar_dir: output directory for gzipped tarball
     """
-    filename = 'road_segments.tar'
+    filename = 'road_segments.tar.gz'
     tar_path = os.path.join(tar_dir, filename)
-    tarball = t.TarFile(tar_path, 'w')
-    tarball.add(shp_dir, arcname='segments')
-    tarball.close()
+    with tarfile.open(tar_path, 'w:gz') as tarball:
+        tarball.add(shp_dir, arcname='segments')
 
-    command = ['gzip', tar_path]
-    subprocess.check_call(command)
-    gzip_filepath = '{}.gz'.format(tar_path)
-    return gzip_filepath
+    return tar_path
 
 
 def get_intersections(roads):
@@ -213,16 +210,15 @@ def should_keep_road(road, road_shp, record_buffers_index):
     if not len(list(record_buffers_index.intersection(road_shp.bounds))):
         return False
 
-    if ('highway' in road['properties']
-            and road['properties']['highway'] is not None
-            and road['properties']['highway'] != 'path'
-            and road['properties']['highway'] != 'footway'):
+    props = road['properties']
+    if props.get('highway', None) not in ['path', 'footway', None]:
         return True
+
     # We're only interested in non-bridge, non-tunnel highways
     # 'class' is optional, so only consider it when it's available.
-    if ('class' not in road['properties'] or road['properties']['class'] == 'highway'
-            and road['properties']['bridge'] == 0
-            and road['properties']['tunnel'] == 0):
+    if ('class' not in props or props['class'] == 'highway'
+            and props['bridge'] == 0
+            and props['tunnel'] == 0):
         return True
     return False
 

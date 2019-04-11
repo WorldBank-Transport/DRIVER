@@ -1,4 +1,4 @@
-FROM r-base:3.2.5
+FROM r-base:3.5.0
 
 RUN R --slave --silent --vanilla \
     -e 'install.packages(c("optparse", "caret", "plyr", "gbm", "doParallel"), repos="http://cran.rstudio.com")'
