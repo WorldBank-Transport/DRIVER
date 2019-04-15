@@ -32,53 +32,29 @@ def transform(record, schema_id):
 
     Doesn't do anything fancy -- if the schema changes, this needs to change too.
     """
-    details_mapping = {
-        'severity': 'Severity',
-        'description': 'Description',
-        'num_vehicles': 'Num vehicles',
-        'num_driver_casualties': 'Num driver casualties',
-        'num_passenger_casualties': 'Num passenger casualties',
-        'num_pedestrian_casualties': 'Num pedestrian casualties',
-        'traffic_control': 'Traffic control',
-        'collision_type': 'Collision type',
-        'street_lights': 'Street lights',
-        'surface_condition': 'Surface condition',
-        'surface_type': 'Surface type',
-        'main_cause': 'Main cause'
-    }
-    obj = {
-        'data': {
-            'incidentDetails': dict(),
-            'person': [],
-            'vehicle': []
-        },
-        'schema': str(schema_id),
-        'occurred_from': 'None',
-        'occurred_to': 'None',
-        'geom': 'POINT (0 0)'
-    }
-    data = obj['data']
-    for key, value in details_mapping.iteritems():
-        if key in record:
-            data['incidentDetails'][value] = record[key]
+    details_mapping = [
+        ('severity', 'Severity', str),
+        ('description', 'Description', str),
+        ('num_vehicles', 'Num vehicles', int),
+        ('num_driver_casualties', 'Num driver casualties', int),
+        ('num_passenger_casualties', 'Num passenger casualties', int),
+        ('num_pedestrian_casualties', 'Num pedestrian casualties', int),
+        ('traffic_control', 'Traffic control', str),
+        ('collision_type', 'Collision type', str),
+        ('street_lights', 'Street lights', str),
+        ('surface_condition', 'Surface condition', str),
+        ('surface_type', 'Surface type', str),
+        ('main_cause', 'Main cause', str)
+    ]
 
-    # Add in the _localId field; they're not used here but the schema requires them
-    def _add_local_id(dictionary):
-        dictionary['_localId'] = str(uuid.uuid4())
-
-    _add_local_id(data['incidentDetails'])
-
-    # Set the occurred_from/to fields
+    # Calculate value for the occurred_from/to fields in local time
     occurred_date = parser.parse(record['record_date'])
     occurred_date = pytz.timezone('Asia/Manila').localize(occurred_date)
-    obj['occurred_from'] = occurred_date.isoformat()
-    obj['occurred_to'] = occurred_date.isoformat()
 
     # Set the geom field
-    point = ogr.Geometry(ogr.wkbPoint)
-
     # Some of the files use lat/lon, others use 3123.
     # Reproject the ones that don't look like lat/lon.
+    point = ogr.Geometry(ogr.wkbPoint)
     if -180 < float(record['lon']) < 180:
         point.AddPoint(float(record['lon']), float(record['lat']))
         point.FlattenTo2D()
@@ -95,7 +71,25 @@ def transform(record, schema_id):
         transform = osr.CoordinateTransformation(source, target)
         point.Transform(transform)
 
-    obj['geom'] = point.ExportToWkt()
+    obj = {
+        'data': {
+            'driverIncidentDetails': {
+                driver_key: cast_func(record[csv_key])
+                for csv_key, driver_key, cast_func in details_mapping
+                if csv_key in record
+            },
+            'driverPerson': [],
+            'driverVehicle': []
+        },
+        'schema': str(schema_id),
+        'occurred_from': occurred_date.isoformat(),
+        'occurred_to': occurred_date.isoformat(),
+        'geom': point.ExportToWkt()
+    }
+
+    # Add in the _localId field; they're not used here but the schema requires them
+    obj['data']['driverIncidentDetails']['_localId'] = str(uuid.uuid4())
+
     return obj
 
 
@@ -103,15 +97,20 @@ def load(obj, api, headers=None):
     """Load a transformed object into the data store via the API"""
     if headers is None:
         headers = {}
-    response = requests.post(api + '/records/',
-                             data=json.dumps(obj),
-                             headers=dict({'content-type': 'application/json'}.items() +
-                                          headers.items()))
-    sleep(0.2)
-    if response.status_code != 201:
-        logger.error(response.text)
-        logger.error('retrying...')
-        load(obj, api, headers)
+
+    url = api + '/records/'
+    data = json.dumps(obj)
+    headers = dict(headers)
+    headers.setdefault('content-type', 'application/json')
+
+    while True:
+        response = requests.post(url, data=data, headers=headers)
+        sleep(0.2)
+        if response.status_code == 201:
+            return
+        else:
+            logger.error(response.text)
+            logger.error('retrying...')
 
 
 def create_schema(schema_path, api, headers=None):
@@ -121,6 +120,7 @@ def create_schema(schema_path, api, headers=None):
                              data={'label': 'Incident',
                                    'plural_label': 'Incidents',
                                    'description': 'Historical incident data',
+                                   'temporal': True,
                                    'active': True},
                              headers=headers)
     response.raise_for_status()

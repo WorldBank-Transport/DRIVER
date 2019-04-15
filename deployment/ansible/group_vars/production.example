@@ -22,6 +22,7 @@ app_version: "0.0.0"
 app_domain_name: "your.driver-domain.here"
 
 ## DOCKER SETTINGS
+docker_image_tag: "{{app_version}}"
 # The docker repository you want your app to pull images from. The default is "quay.io/azavea/".
 # The trailing / is required.
 docker_repository: "quay.io/azavea/"
@@ -95,6 +96,10 @@ driver_admin_username: "admin"
 #driver_admin_password: "uncomment and change me!"
 driver_admin_email: "you@yourdomain.com"
 
+## DEDUPLICATION SETTINGS
+dedupe_time_range_hours: "12"
+dedupe_distance_degrees: "0.0008"
+
 ## WEB SETTINGS
 # DRIVER uses the PickPoint API (which runs Nominatim) for geocoding; this is the API key that
 # should be used when accessing that API. You can sign up for an API key here:
@@ -104,6 +109,19 @@ driver_admin_email: "you@yourdomain.com"
 # Set this to "true" for slightly cleaner URLs, if you are sure that all your users have updated
 # browsers. Otherwise, it is safe to leave as "false"
 js_html5mode: "false"
+js_html5mode_prefix: "!"
+web_js_html5mode: "{{ js_html5mode }}"
+web_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
+editor_js_html5mode: "{{ js_html5mode }}"
+editor_js_html5mode_prefix: "{{ js_html5mode_prefix }}"
+
+# DRIVER uses the Mapillary API for street view; this is the client ID that
+# should be used when accessing that API. You can sign up for an API key here:
+# https://www.mapillary.com/
+web_js_mapillary: "false"
+web_js_mapillary_client_id: ""
+# This is the radius (in meters) within which images are searchf for around the point clicked
+web_js_mapillary_range: 10
 
 # Whether to display a dropdown in the web app to allow users to switch between different record
 # types. To avoid user confusion, it is best to leave this false if you are only planning to track
@@ -130,6 +148,20 @@ web_js_blackspots_visible: "true"
 # DRIVER can display crashes as individual points, as a heatmap, or both. Set this to "true" to
 # enable the heatmap visualization.
 web_js_heatmap_visible: "true"
+# Whether or not to show the weather filter in the filter bar. This decision may depend on the
+# quality of the weather data available in your location.
+web_js_weather_filter_visible: "false"
+# Whether or not to show the Created By filter in the filter bar.
+web_js_created_by_filter_visible: "false"
+# Whether or not to show the Created Date filter in the filter bar.
+web_js_created_date_filter_visible: "false"
+# Whether or not to show the "Location outside boundary" Quality Check filter in the filter bar.
+web_js_outside_boundary_quality_check_visible: "false"
+# Whether or not to show the "Zoom to" address search bar in the map view
+web_js_map_address_search_visible: "false"
+# Whether or not to show a link to the Manage Duplicate Records page in the account dropdown
+web_js_duplicate_records_link_visible: "false"
+
 # The Google Analytics ID that should be used for the application. For more information, see here:
 # https://support.google.com/analytics/answer/1008080?hl=en
 google_analytics_id: ""

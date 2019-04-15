@@ -13,20 +13,16 @@ done
 # Set up group vars
 echo "setting up group vars..."
 set +x
-grep -v 'nominatim_key\|app_version:' deployment/ansible/group_vars/all.example \
-    > deployment/ansible/group_vars/all
-echo "app_version: \"latest\"" \
-    >> deployment/ansible/group_vars/all
 echo "web_js_nominatim_key: \"${NOMINATIM_API_KEY}\"" \
-    >> deployment/ansible/group_vars/all
+    >> deployment/ansible/group_vars/staging
 echo "oauth_client_id: \"${OAUTH_CLIENT_ID}\"" \
-    >> deployment/ansible/group_vars/all
+    >> deployment/ansible/group_vars/staging
 echo "oauth_client_secret: \"${OAUTH_CLIENT_SECRET}\"" \
-    >> deployment/ansible/group_vars/all
+    >> deployment/ansible/group_vars/staging
 echo "forecast_io_api_key: \"${FORECAST_IO_API_KEY}\"" \
-    >> deployment/ansible/group_vars/all
+    >> deployment/ansible/group_vars/staging
 echo "keystore_password: \"${DRIVER_KEYSTORE_PASSWORD}\"" \
-    >> deployment/ansible/group_vars/all
+    >> deployment/ansible/group_vars/staging
 set -x
 
 ansible-galaxy install -f -r deployment/ansible/roles.yml -p deployment/ansible/roles

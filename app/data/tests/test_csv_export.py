@@ -9,15 +9,15 @@ from django.test import TestCase
 
 from django_redis import get_redis_connection
 
-from ashlar.models import Record, RecordSchema, RecordType
+from grout.models import RecordSchema, RecordType
 
 from data.tasks.export_csv import (get_sql_string_by_key, get_queryset_by_key,
-                                   AshlarRecordExporter, ReadOnlyRecordExporter,
+                                   DriverRecordExporter, ReadOnlyRecordExporter,
                                    RecordModelWriter, RelatedInfoWriter,
                                    ModelAndDetailsWriter)
 
 
-class AshlarRecordExporterTestCase(TestCase):
+class DriverRecordExporterTestCase(TestCase):
     def setUp(self):
         record_type = RecordType.objects.create(label='foo', plural_label='foos')
         self.schema_def = {
@@ -37,7 +37,7 @@ class AshlarRecordExporterTestCase(TestCase):
         }
         self.schema = RecordSchema.objects.create(schema=self.schema_def, version=1,
                                                   record_type=record_type)
-        self.exporter = AshlarRecordExporter(self.schema)
+        self.exporter = DriverRecordExporter(self.schema)
         self.read_only_exporter = ReadOnlyRecordExporter(self.schema)
 
     def tearDown(self):

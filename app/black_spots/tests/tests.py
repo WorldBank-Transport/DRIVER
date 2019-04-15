@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from rest_framework.test import APIClient, APITestCase, APIRequestFactory
 
-from ashlar.models import RecordType
+from grout.models import RecordType
 
 from black_spots.models import (BlackSpot, BlackSpotSet)
 

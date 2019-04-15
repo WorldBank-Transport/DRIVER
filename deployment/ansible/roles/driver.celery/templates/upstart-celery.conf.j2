@@ -29,7 +29,6 @@ exec /usr/bin/docker run \
   --volume {{ root_media_dir }}:{{ root_media_dir }} \
   {% if 'development' in group_names -%}
   --volume {{ root_app_dir }}:{{ root_app_dir }} \
-  --volume /opt/ashlar:/opt/ashlar \
   --env DJANGO_SETTINGS_MODULE=driver.settings_dev \
   {% endif -%}
   {% for k,v in driver_conf.items() -%}
@@ -44,6 +43,6 @@ exec /usr/bin/docker run \
   --maxtasksperchild=1
 
 post-stop script
-  /usr/bin/docker kill driver-celery
-  /usr/bin/docker rm driver-celery
+  /usr/bin/docker kill driver-celery || true
+  /usr/bin/docker rm driver-celery || true
 end script

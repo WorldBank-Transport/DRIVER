@@ -9,7 +9,8 @@
                 data: '<',
                 properties: '<',
                 record: '<',
-                definition: '<'
+                definition: '<',
+                isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-single-partial.html',
             bindToController: true,

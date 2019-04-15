@@ -121,6 +121,10 @@ Resources:
       SecurityGroups: [!Ref 'AppSecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'AppInstanceType', Arch]]
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: "16"
       Tags:
       - Key: Name
         Value:
@@ -145,6 +149,10 @@ Resources:
       SecurityGroups: [!Ref 'CelerySecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'CeleryInstanceType', Arch]]
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: "16"
       Tags:
       - Key: Name
         Value:
@@ -179,6 +187,10 @@ Resources:
       SecurityGroups: [!Ref 'DatabaseSecurityGroup']
       KeyName: !Ref 'KeyName'
       ImageId: !FindInMap [AWSRegionArch2AMI, !Ref 'AWS::Region', !FindInMap [AWSInstanceType2Arch, !Ref 'DatabaseInstanceType', Arch]]
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sda1"
+          Ebs:
+            VolumeSize: "16"
       Tags:
       - Key: Name
         Value:

@@ -23,6 +23,7 @@
                 } else {
                     ctl.record.isSecondary = false;
                 }
+                ctl.isSecondary = ctl.record.isSecondary;
             });
         }
     }

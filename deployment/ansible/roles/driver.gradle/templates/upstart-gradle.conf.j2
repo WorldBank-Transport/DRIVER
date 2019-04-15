@@ -31,6 +31,6 @@ exec /usr/bin/docker run \
   {{ docker_repository }}driver-gradle:{{ docker_image_tag }}
 
 post-stop script
-  /usr/bin/docker kill driver-gradle
-  /usr/bin/docker rm driver-gradle
+  /usr/bin/docker kill driver-gradle || true
+  /usr/bin/docker rm driver-gradle || true
 end script

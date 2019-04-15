@@ -59,6 +59,10 @@
             referable = _.pick(referable, function(definition, key) {
                 return key !== ctl.schemaKey;
             });
+            // Don't allow referencing to single-instance-only types
+            referable = _.pick(referable, function(definition) {
+                return definition.multiple;
+            });
             // Map referable to objects -- needed in newer versions of json-editor
             referable = _.map(referable, function(definition, key) {
                 return {
@@ -113,6 +117,7 @@
             /* jshint camelcase: true */
 
             JsonEditorDefaults.customValidators.push(validateNoSelfReference);
+            JsonEditorDefaults.customValidators.push(validateNoSingleReference);
         }
 
         function onDataChange(newData, validationErrors) {
@@ -142,6 +147,25 @@
                     path: path,
                     property: pathKey,
                     message: 'Relationship must be to a different related content type'
+                });
+            }
+            return errors;
+        }
+
+        // Make sure that reference fields aren't referencing a single-instance type. Relations
+        // between a single and many should come from the single.
+        function validateNoSingleReference(schema, value, path) {
+            var errors = [];
+            var pathKey = 'referenceTarget';
+            if (!value || typeof value !== 'object' || !value.referenceTarget) {
+                return errors;
+            }
+
+            if (!ctl.recordSchema.schema.definitions[value.referenceTarget].multiple) {
+                errors.push({
+                    path: path,
+                    property: pathKey,
+                    message: 'Relationship must be to a multiple content type'
                 });
             }
             return errors;

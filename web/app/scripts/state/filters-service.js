@@ -17,6 +17,11 @@
         svc.getFilters = getFilters;
         svc.restoreFilters = restoreFilters;
         svc.getDateFilter = getDateFilter;
+        svc.getCreatedFilter = getCreatedFilter;
+        svc.getCreatedByFilter = getCreatedByFilter;
+        svc.getWeatherFilter = getWeatherFilter;
+        svc.getQualityChecksFilter = getQualityChecksFilter;
+        svc.getNonJsonFilterNames = getNonJsonFilterNames;
 
         // Need to debounce saveFilters, because it is called many times when the filters
         // are being initialized, and we only want the final one to take effect.
@@ -84,33 +89,42 @@
          * returns an object containing the min and max dates
          * If none are set, uses passed in defaults or its own
          */
-        function getDateFilter(defaults) {
-            // An exceptional case for date ranges (not part of the JsonB we filter over).
-            // If no dates are specified, the last 90 days are used.
-            var now = new Date();
+        function getGenericDateFilter(label, defaults) {
+            // By default, filter for the past 90 days
             var duration = moment.duration({ days:90 });
-            var maxDateString = now.toJSON().slice(0, 10);
-            var minDateString = new Date(now - duration).toJSON().slice(0, 10);
-            var dateFilters = {};
-            if(defaults){
-                maxDateString = defaults.maxDate ? defaults.maxDate : maxDateString;
-                minDateString = defaults.minDate ? defaults.minDate : minDateString;
-            }
+            var maxDate = new Date();
+            var minDate = new Date(maxDate - duration);
 
-            if (svc.filters && svc.filters.hasOwnProperty('__dateRange')) {
-                minDateString = convertDT(svc.filters.__dateRange.min || minDateString);
-                maxDateString = convertDT(svc.filters.__dateRange.max || maxDateString);
+            if(defaults){
+                // Defaults are in UTC but represent their desired date in the server timezone, so
+                //  we don't need to do any parsing to get them to point to the correct calendar
+                //  date in server time.
+                maxDate = defaults.maxDate || maxDate;
+                minDate = defaults.minDate || minDate;
+            }
+            if (svc.filters && svc.filters.hasOwnProperty(label)) {
+                // The date filter gives date strings that represent 00:00 local midnight of the
+                //  chosen day, in UTC. This means for locations with a positive UTC offset, the
+                //  date in the string will not match the date the user chose (00:00 Monday in
+                //  UTC+1 becomes 23:00 Sunday in UTC+0).
+                // Take the UTC-formatted date, have Moment parse it into the user's local timezone,
+                //  and format to extract the bare calendar date.
+                maxDate = moment(svc.filters[label].max).format('YYYY-MM-DD');
+                minDate = moment(svc.filters[label].min).format('YYYY-MM-DD');
             }
 
             // Perform some sanity checks on the dates
-            if (minDateString) {
-                var min = moment.tz(minDateString + ' 00:00:00', WebConfig.localization.timeZone);
+            var dateFilters = {};
+            if (minDate) {
+                // Convert the date into the server's timezone and get midnight that day's morning
+                var min = moment.tz(minDate, WebConfig.localization.timeZone).startOf('day');
                 if (!isNaN(min.unix())) {
                     dateFilters.minDate = min.toISOString();
                 }
             }
-            if (maxDateString) {
-                var max = moment.tz(maxDateString + ' 23:59:59', WebConfig.localization.timeZone);
+            if (maxDate) {
+                // Convert the date into the server's timezone and get midnight that day's night
+                var max = moment.tz(maxDate, WebConfig.localization.timeZone).endOf('day');
                 if (!isNaN(max.unix())) {
                     dateFilters.maxDate = max.toISOString();
                 }
@@ -118,25 +132,37 @@
             return dateFilters;
         }
 
-        // Helper for converting a datetime string to the proper format to work with moment.tz.
-        // A datetime in the format MM/DD/YYYY doesn't work properly with with moment tz conversion,
-        // and must be converted to YYYY-MM-DD
-        function convertDT(dtString) {
-            // If empty, return null, we don't want it on the query
-            if (!dtString) {
-                return null;
-            }
+        function getDateFilter(defaults) {
+            return getGenericDateFilter('__dateRange', defaults);
+        }
 
-            // If it's already in the right format, don't do the conversion
-            if (dtString.indexOf('/') <= 0) {
-                return dtString;
-            }
+        function getCreatedFilter(defaults) {
+            return getGenericDateFilter('__createdRange', defaults);
+        }
 
-            var components = dtString.split('/');
-            var month = components[0];
-            var day = components[1];
-            var year = components[2];
-            return year + '-' + month + '-' + day;
+        function getCreatedByFilter() {
+            return svc.filters.__createdBy;
+        }
+
+        function getWeatherFilter() {
+            return svc.filters.__weather;
+        }
+        function getQualityChecksFilter() {
+            var qualityChecks = {};
+            _.forEach(svc.filters.__quality, function(checkKey) {
+                qualityChecks[checkKey] = true;
+            });
+            return qualityChecks;
+        }
+
+        function getNonJsonFilterNames() {
+            return [
+                '__dateRange',
+                '__createdRange',
+                '__createdBy',
+                '__quality',
+                '__weather'
+            ];
         }
 
         return svc;

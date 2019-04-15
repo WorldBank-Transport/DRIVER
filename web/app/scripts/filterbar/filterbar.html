@@ -1,13 +1,22 @@
 <div class="filterbar drop-shadow">
     <div class="pull-left">
         <ul class="nav navbar-nav">
-            <li text-search-field></li>
+            <li text-search-field="__searchText"></li>
         </ul>
         <ul class="nav navbar-nav">
-            <li date-range-field class="dropdown"></li>
+            <li date-range-field="__dateRange" class="dropdown"></li>
+        </ul>
+        <ul class="nav navbar-nav" ng-if="::filterbar.showCreatedDateFilter">
+            <li date-range-field="__createdRange" class="dropdown"></li>
+        </ul>
+        <ul class="nav navbar-nav" ng-if="::filterbar.showCreatedByFilter">
+            <li text-search-field="__createdBy"></li>
+        </ul>
+        <ul class="nav navbar-nav" ng-if="::filterbar.showWeatherFilter">
+            <li weather-field class="dropdown"></li>
         </ul>
         <ul class="nav navbar-nav" ng-repeat="(key, value) in filterbar.filterables">
-            <li ng-if="value.format === 'number'"
+            <li ng-if="(value.format === 'number') || (value.fieldType === 'integer') || (value.fieldType === 'number')"
                 numeric-range-field
                 label="key"
                 data="value"
@@ -18,6 +27,9 @@
                 data="value"
                 class="dropdown">
             </li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li quality-field="__quality"></li>
         </ul>
     </div>
     <div class="pull-right">

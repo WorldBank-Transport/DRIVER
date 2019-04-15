@@ -18,16 +18,15 @@
 - name: Pull application Docker image
   command: /usr/bin/docker pull {{ docker_repository }}driver-app:{{ docker_image_tag}}
   when: staging or production
-  notify:
-    - Restart driver-celery
 
-- name: Configure Driver celery service definition
+- name: Configure DRIVER Celery service definition
   template: src=upstart-celery.conf.j2 dest=/etc/init/driver-celery.conf
-  notify:
-    - Restart driver-celery
 
-- name: Ensure Driver celery service is running
-  service: name=driver-celery state=started
+- name: Restart DRIVER Celery service
+  service: name=driver-celery state=restarted
+
+- name: Restart DRIVER Gradle service
+  service: name=driver-gradle state=restarted
 
 - name: Set up monit monitoring of driver-celery container
   template: src=monit-driver-celery.cfg.j2 dest=/etc/monit/conf.d/driver-celery.cfg

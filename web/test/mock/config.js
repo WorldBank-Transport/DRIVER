@@ -42,6 +42,31 @@
                 { "id": "ar-sa", "label": "Arabic (Saudi Arabia)", "rtl": true },
                 { "id": "exclaim", "label": "Exclaim (DEV)", "rtl": false }
             ]
+        },
+        mapillary: {
+            enabled: false
+        },
+        filters: {
+            weather: {
+                visible: true
+            },
+            createdBy: {
+                visible: true
+            },
+            createdDate: {
+                visible: true
+            },
+        },
+        qualityChecks: {
+            outsideBoundary: {
+                visible: true
+            },
+        },
+        addressSearch: {
+            visible: true
+        },
+        duplicateRecordsLink: {
+            visible: true
         }
     };
 

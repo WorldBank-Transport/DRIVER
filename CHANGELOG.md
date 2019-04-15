@@ -1,5 +1,112 @@
 # Change Log
 
+## [2.0.2](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.2) (2019-04-12)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.2)
+
+**Merged pull requests:**
+
+- Fix Blackspot failures for Mumbai [\#770](https://github.com/WorldBank-Transport/DRIVER/pull/770)
+
+## [2.0.1](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.1) (2019-04-01)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.1)
+
+**Merged pull requests:**
+
+- Upgrade Docker Node template version [\#768](https://github.com/WorldBank-Transport/DRIVER/pull/768)
+- Prevent relationship fields from referencing single-type Content Types [\#767](https://github.com/WorldBank-Transport/DRIVER/pull/767)
+- Remove obsolete Dockerfile comment [\#766](https://github.com/WorldBank-Transport/DRIVER/pull/766)
+- Prevent failed post-stop script task from stopping Upstart respawning [\#765](https://github.com/WorldBank-Transport/DRIVER/pull/765)
+- Fix timezone date inconsistencies with date filter [\#764](https://github.com/WorldBank-Transport/DRIVER/pull/764)
+-  Remove remaining traces of Ashlar [\#763](https://github.com/WorldBank-Transport/DRIVER/pull/763)
+- Pin redis\_version in group\_vars to fix redis-tools error [\#762](https://github.com/WorldBank-Transport/DRIVER/pull/762)
+-  Fix hyphenated language capitalization issue in Date Picker [\#761](https://github.com/WorldBank-Transport/DRIVER/pull/761)
+- Reconcile differences in production.j2 and production.example [\#760](https://github.com/WorldBank-Transport/DRIVER/pull/760)
+- Add alternate languages to staging configuration [\#759](https://github.com/WorldBank-Transport/DRIVER/pull/759)
+
+## [2.0.0](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.0) (2019-03-06)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.0)
+
+**Merged pull requests:**
+
+- Smart default calendar configs [\#756](https://github.com/WorldBank-Transport/DRIVER/pull/756)
+- Remove deprecated --process-dependency-links flag from pip install [\#755](https://github.com/WorldBank-Transport/DRIVER/pull/755)
+- Allow customizing deduplication configuration variables from group\_vars [\#754](https://github.com/WorldBank-Transport/DRIVER/pull/754)
+- Upgrade certbot [\#753](https://github.com/WorldBank-Transport/DRIVER/pull/753)
+- Upgrade Grout to fix exception searching using non-ASCII characters [\#752](https://github.com/WorldBank-Transport/DRIVER/pull/752)
+- Fix crash printing lookup error message [\#751](https://github.com/WorldBank-Transport/DRIVER/pull/751)
+- Fix issue causing text box searching to be ignored [\#750](https://github.com/WorldBank-Transport/DRIVER/pull/750)
+- Pin Redis version to fix cache key type error [\#742](https://github.com/WorldBank-Transport/DRIVER/pull/742)
+- Add feature flags for prototype UI features [\#741](https://github.com/WorldBank-Transport/DRIVER/pull/741)
+- Fix build by explicitly installing and pinning rb-inotify in web and schema\_editor containers [\#737](https://github.com/WorldBank-Transport/DRIVER/pull/737)
+- Pin to specific version of karma-jasmine \#162584877 [\#736](https://github.com/WorldBank-Transport/DRIVER/pull/736)
+- Expand demo EC2 instances root partition size [\#735](https://github.com/WorldBank-Transport/DRIVER/pull/735)
+- Add one-off script for PRS data migration [\#734](https://github.com/WorldBank-Transport/DRIVER/pull/734)
+- Update Laos translations [\#733](https://github.com/WorldBank-Transport/DRIVER/pull/733)
+- Translate treatment IDs to treatment names [\#732](https://github.com/WorldBank-Transport/DRIVER/pull/732)
+- Modify Travis Slack integration config [\#730](https://github.com/WorldBank-Transport/DRIVER/pull/730)
+- Prevent address search click propagation to map [\#729](https://github.com/WorldBank-Transport/DRIVER/pull/729)
+- Fix flicker when mousing over tooltip in TODDOW widget \#161601083 [\#728](https://github.com/WorldBank-Transport/DRIVER/pull/728)
+- Upgrade driver-gradle to OpenJDK 8 \#161148068 [\#727](https://github.com/WorldBank-Transport/DRIVER/pull/727)
+- Add weather filter feature flag \#160200005 [\#726](https://github.com/WorldBank-Transport/DRIVER/pull/726)
+- Fix bug on editing record with old schema [\#724](https://github.com/WorldBank-Transport/DRIVER/pull/724)
+- Release 1.2.2 [\#723](https://github.com/WorldBank-Transport/DRIVER/pull/723)
+- Fix weather filter multiple selection [\#722](https://github.com/WorldBank-Transport/DRIVER/pull/722)
+- Filter for events outside the boundary [\#721](https://github.com/WorldBank-Transport/DRIVER/pull/721)
+- Add weather filter \#160199812 [\#720](https://github.com/WorldBank-Transport/DRIVER/pull/720)
+- Save original record every time a Record is created [\#719](https://github.com/WorldBank-Transport/DRIVER/pull/719)
+- Fix map centering after geocoding address [\#717](https://github.com/WorldBank-Transport/DRIVER/pull/717)
+- Add `group\_vars/all` to source control [\#716](https://github.com/WorldBank-Transport/DRIVER/pull/716)
+- Add sample data for public users [\#715](https://github.com/WorldBank-Transport/DRIVER/pull/715)
+- Fix docker command in grout playbook [\#714](https://github.com/WorldBank-Transport/DRIVER/pull/714)
+- Migrate to Grout [\#713](https://github.com/WorldBank-Transport/DRIVER/pull/713)
+- Update staging celery IP address [\#712](https://github.com/WorldBank-Transport/DRIVER/pull/712)
+- Allow filtering records by creator [\#710](https://github.com/WorldBank-Transport/DRIVER/pull/710)
+- Add address search functionality [\#709](https://github.com/WorldBank-Transport/DRIVER/pull/709)
+- Add created\_by to record list [\#708](https://github.com/WorldBank-Transport/DRIVER/pull/708)
+- Fix loss of polygon filtering caused by Created Date filter [\#707](https://github.com/WorldBank-Transport/DRIVER/pull/707)
+- Tweak README language and formatting [\#706](https://github.com/WorldBank-Transport/DRIVER/pull/706)
+- Add Django Debug Toolbar [\#703](https://github.com/WorldBank-Transport/DRIVER/pull/703)
+- Upgrade django-extensions to fix shell\_plus [\#702](https://github.com/WorldBank-Transport/DRIVER/pull/702)
+- Enable filtering records by creation date [\#701](https://github.com/WorldBank-Transport/DRIVER/pull/701)
+- Fix Google OAuth \#159990796 [\#700](https://github.com/WorldBank-Transport/DRIVER/pull/700)
+- Fix deploying to staging \#158669739 [\#699](https://github.com/WorldBank-Transport/DRIVER/pull/699)
+- Add latlng input as Leaflet control [\#698](https://github.com/WorldBank-Transport/DRIVER/pull/698)
+- Upgrade to Django 1.11 \#158323812 [\#696](https://github.com/WorldBank-Transport/DRIVER/pull/696)
+- Add Mapillary to record popup and blackspot popup [\#695](https://github.com/WorldBank-Transport/DRIVER/pull/695)
+
+## [1.2.5](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.5) (2018-11-12)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.4...1.2.5)
+
+**Merged pull requests:**
+
+- Update Lao translations [\#733](https://github.com/WorldBank-Transport/DRIVER/pull/733)
+
+## [1.2.4](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.4) (2018-11-08)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.3...1.2.4)
+
+**Merged pull requests:**
+
+- Translate "Log in to DRIVER" as a complete phrase [\#731](https://github.com/WorldBank-Transport/DRIVER/pull/731)
+
+## [1.2.3](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.3) (2018-10-17)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.2...1.2.3)
+
+**Merged pull requests:**
+
+- Bump version of azavea.pip to 1.0.1 [\#725](https://github.com/WorldBank-Transport/DRIVER/pull/725)
+
+## [1.2.2](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.2) (2018-10-15)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.1...1.2.2)
+
+**Merged pull requests:**
+
+- Fix certbot to stop and restart nginx before and after renew [\#704](https://github.com/WorldBank-Transport/DRIVER/pull/704)
+- Show numeric filter for number and integer filters [\#711](https://github.com/WorldBank-Transport/DRIVER/pull/711)
+- Fix provisioning of app VM [\#694](https://github.com/WorldBank-Transport/DRIVER/pull/694)
+- Fix Travis build [\#697](https://github.com/WorldBank-Transport/DRIVER/pull/697)
+- Restart driver-app service only after we have the new image [\#705](https://github.com/WorldBank-Transport/DRIVER/pull/705)
+- Fix bug with non-ASCII characters in filter name [\#718](https://github.com/WorldBank-Transport/DRIVER/pull/718)
+
 ## [1.2.1](https://github.com/WorldBank-Transport/DRIVER/tree/1.2.1) (2018-07-12)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.0...1.2.1)
 

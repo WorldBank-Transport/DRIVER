@@ -1,5 +1,5 @@
 ---
-certbot_version: "v0.20.0"
+certbot_version: "v0.30.0"
 letsencrypt_root: "/etc/letsencrypt"
 letsencrypt_cert_root: "{{ letsencrypt_root }}/live/{{ allowed_host }}"
 

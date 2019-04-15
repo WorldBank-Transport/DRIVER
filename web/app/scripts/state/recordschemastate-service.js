@@ -32,8 +32,7 @@
          * @param schemaID {string} The Schema UUID for which filterables are sought
          */
         function getFilterables(schemaID) {
-            var deferred = $q.defer();
-            get(schemaID).then(function(schema) {
+            return get(schemaID).then(function(schema) {
                 var definitions;
                 if (schema.schema && schema.schema.definitions) {
                     definitions = schema.schema.definitions;
@@ -56,10 +55,8 @@
                         filterables[i] = d;
                     }
                 });
-                deferred.resolve(filterables);
-
+                return filterables;
             });
-            return deferred.promise;
         }
 
 

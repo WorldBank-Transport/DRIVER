@@ -1,0 +1,48 @@
+---
+developing: "{{ 'development' in group_names }}"
+developing_or_staging: "{{ 'development' in group_names or 'staging' in group_names }}"
+not_developing: "{{ 'development' not in group_names }}"
+staging: "{{ 'staging' in group_names }}"
+not_staging: "{{ 'staging' not in group_names }}"
+production: "{{ 'production' in group_names }}"
+
+docker_version: "17.06.*"
+docker_py_version: "1.2.3"
+docker_options: "--storage-driver=aufs"
+
+python_version: "2.7.*"
+pip_version: "1.*"
+
+python_security_ndghttpsclient_version: 0.4.3
+python_security_pyasn1_version: 0.4.2
+
+postgresql_port: 5432
+# The maximum number of connections that PostgreSQL should allow. You shouldn't need to change this
+# except under conditions of very high load.
+postgresql_max_connections: 400
+
+postgresql_version: "9.4"
+postgresql_package_version: "9.4.*.pgdg14.04+1"
+postgresql_support_repository_channel: "main"
+postgresql_support_libpq_version: "9.3.4-1"
+postgresql_support_psycopg2_version: "2.6"
+postgis_version: "2.3"
+postgis_package_version: "2.3.*.pgdg14.04+1"
+
+## TABLES USED BY WINDSHAFT
+windshaft_tables:
+    - auth_user
+    - data_recordauditlogentry
+    - data_driverrecord
+    - grout_record
+    - grout_boundary
+    - grout_boundarypolygon
+    - grout_recordschema
+    - grout_recordtype
+    - black_spots_blackspot
+
+redis_port: 6379
+redis_version: 2:2.8.4-2ubuntu0.2
+
+## Reload the nginx config after an SSL certificate is renewed
+letsencrypt_post_renew_cmd: "service nginx reload"

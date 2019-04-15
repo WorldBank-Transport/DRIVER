@@ -9,7 +9,7 @@ from django.conf import settings
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ashlar', '0021_add_weather_fields'),
+        ('grout', '0021_add_weather_fields'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('record_uuid', models.CharField(max_length=36)),
                 ('date', models.DateTimeField(auto_now_add=True)),
                 ('action', models.CharField(max_length=6, choices=[(b'create', b'Create'), (b'update', b'Update'), (b'delete', b'Delete')])),
-                ('record', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='ashlar.Record', null=True)),
+                ('record', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to='grout.Record', null=True)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, null=True)),
             ],
         ),

@@ -1,0 +1,1001 @@
+surface_type,collision_type,severity,surface_condition,num_driver_casualties,lon,traffic_control,num_vehicles,num_passenger_casualties,num_pedestrian_casualties,record_date,lat,main_cause
+Concrete,Right angle,Injury,Dry,1,125.6550379223286,None,2,0,0,06/23/18,7.117457622918965,Human error
+Asphalt,Right angle,Property,Dry,0,120.66329811027552,Centerline,2,0,0,06/23/18,15.05146258923684,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.71005120901386,Centerline,2,1,0,06/23/18,13.136421692453892,Human error
+Asphalt,Side swipe,Injury,Dry,2,125.0133568466985,None,2,0,0,06/24/18,8.266624061502096,Human error
+Concrete,Rear end,Injury,Dry,1,120.86698594818543,None,2,0,0,06/24/18,14.300944203492383,Human error
+Concrete,Rear end,Property,Dry,0,120.92886441418983,None,2,0,0,06/24/18,14.446034377272154,Vehicle defect
+Concrete,Rear end,Property,Dry,0,121.06507561261382,None,2,0,0,06/24/18,14.551698510020154,Human error
+Concrete,Rear end,Injury,Dry,2,122.5246920516368,None,2,0,0,06/24/18,10.514128314719828,Human error
+Concrete,Right angle,Fatal,Dry,2,123.77386401029169,Centerline,2,0,0,06/24/18,7.90595539221904,Human error
+Concrete,Hit pedestrian,Property,Dry,0,120.56902022201648,None,1,0,0,06/24/18,18.08697339795816,Human error
+Asphalt,Right angle,Injury,Dry,2,123.45653292848365,Centerline,2,0,0,06/24/18,13.58671745422266,Human error
+Concrete,Side swipe,Property,Dry,0,121.05854305654088,None,2,0,0,06/24/18,14.604607124066474,Human error
+Concrete,Rear end,Property,Dry,0,125.81397850837295,Pedestrian crossing,2,0,0,06/24/18,7.44900496049378,Human error
+Concrete,Side swipe,Property,Dry,0,120.97272769372029,None,2,0,0,06/24/18,14.644763514648547,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.68383095159444,None,1,0,1,06/25/18,6.6922980362102935,Road defect
+Concrete,Side swipe,Injury,Dry,1,123.15893724882596,None,2,0,0,06/25/18,9.704953749262238,Human error
+Asphalt,Head on,Injury,Dry,1,120.97618029050327,Pedestrian crossing,3,0,0,06/25/18,14.470537988756496,Human error
+Concrete,Side swipe,Property,Wet,0,125.6338598534426,None,2,0,0,06/25/18,7.082845507476888,Human error
+Asphalt,Hit object off road,Property,Dry,0,120.9930356102757,None,1,0,0,06/25/18,14.706275789378054,Human error
+Asphalt,Right angle,Property,Dry,0,120.97887612390295,None,2,0,0,06/25/18,14.474458909947135,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.43477697208647,None,1,0,1,06/25/18,13.579875153980145,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,120.99155345796618,None,2,0,0,06/25/18,14.707560610809937,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.2564179837453,None,2,1,0,06/25/18,13.596795748726429,Human error
+Asphalt,Hit object in road,Injury,Wet,1,126.08019257869621,Centerline,1,4,0,06/25/18,7.855734557622594,Human error
+Asphalt,Side swipe,Property,Dry,0,125.54424354396902,None,2,0,0,06/25/18,8.94933023027452,Human error
+Concrete,Right angle,Injury,Dry,2,121.06722699979275,Centerline,3,13,0,06/26/18,14.321654638047077,Human error
+Concrete,Side swipe,Property,Dry,0,120.9195819695384,Centerline,2,0,0,06/26/18,14.2899896533908,Human error
+Asphalt,Right angle,Injury,Dry,2,123.27043927470035,None,2,2,0,06/26/18,13.552626629801534,Human error
+Concrete,Rear end,Property,Dry,0,125.8043345918427,None,2,0,0,06/26/18,7.437626677286749,Human error
+Concrete,Side swipe,Injury,Dry,1,120.87881311750188,Centerline,2,0,0,06/26/18,14.433679882040948,Human error
+Concrete,Head on,Fatal,Dry,1,120.60296310194511,Traffic lights,2,0,0,06/26/18,15.606332756892712,Vehicle defect
+Concrete,Rear end,Property,Dry,0,120.94974209972297,None,2,0,0,06/26/18,14.757302882101948,Human error
+Concrete,Right angle,Injury,Dry,2,124.4746768132812,None,2,4,0,06/26/18,10.050115409017943,Human error
+Concrete,Head on,Injury,Dry,1,124.79592653533011,None,2,0,0,06/26/18,8.728138477260291,Human error
+Concrete,Side swipe,Injury,Dry,1,124.0266161672006,Centerline,2,0,0,06/26/18,8.190474861367315,Human error
+Concrete,Right angle,Injury,Wet,2,124.85686625685881,None,2,0,0,06/27/18,8.606576285831576,Human error
+Concrete,Side swipe,Property,Dry,0,120.94082610573686,None,2,0,0,06/27/18,14.772080693596573,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.5881837607843,None,1,1,1,06/27/18,8.504590233330507,Human error
+Asphalt,Hit parked vehicle,Injury,Dry,1,121.2879822149786,None,2,1,0,06/27/18,14.179363256589,Human error
+Concrete,Rear end,Injury,Dry,1,125.19929029162758,None,2,0,0,06/27/18,6.799855216020166,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.01942892295187,Centerline,1,0,1,06/27/18,8.18804815926493,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.24360283980134,None,1,0,1,06/27/18,8.224960324690741,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,0,126.00976536655568,None,1,0,1,06/27/18,7.7041214198411385,Human error
+Concrete,Side swipe,Property,Dry,0,121.06528960750624,Traffic lights,2,0,0,06/27/18,14.558289582583065,Human error
+Concrete,Rear end,Fatal,Dry,1,124.78318802888849,None,2,1,0,06/27/18,8.770577272549536,Human error
+Concrete,Hit object off road,Fatal,Dry,0,125.16248835585286,Centerline,1,1,0,06/27/18,8.841676802925319,Vehicle defect
+Concrete,Side swipe,Injury,Dry,1,120.34726146225978,Centerline,2,0,0,06/28/18,16.05247599965394,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.18740446856094,None,1,0,1,06/28/18,13.6054648355375,Human error
+Concrete,Side swipe,Injury,Wet,2,121.85682334680942,None,2,0,0,06/28/18,17.038291801832873,Vehicle defect
+Concrete,Hit pedestrian,Injury,Dry,0,125.62251413099405,None,1,0,1,06/28/18,7.070437573371378,Human error
+Concrete,Right angle,Property,Wet,0,125.60764121895733,None,2,0,0,06/28/18,7.057544964671144,Road defect
+Asphalt,Side swipe,Injury,Dry,1,121.55970629419524,Centerline,2,0,0,06/28/18,16.696611405364028,Human error
+Asphalt,Head on,Injury,Dry,1,124.83781032483923,None,1,3,0,06/28/18,8.369151413296445,Human error
+Concrete,Head on,Injury,Dry,1,123.93890747900406,None,2,0,0,06/28/18,11.08591596248944,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,122.24338544581444,None,1,0,1,06/28/18,10.64378598539789,Human error
+Asphalt,Hit object off road,Injury,Dry,1,123.5309797478273,None,1,0,0,06/28/18,8.528161610789828,Human error
+Concrete,Side swipe,Injury,Dry,2,120.59662433605011,None,2,0,0,06/28/18,14.939950035941816,Human error
+Concrete,Side swipe,Property,Dry,0,125.63422755446797,None,2,0,0,06/28/18,7.086809149172073,Human error
+Asphalt,Right angle,Injury,Dry,1,121.04836134949636,None,2,0,0,06/28/18,14.371629411475002,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.62615604271096,None,1,0,1,06/28/18,7.082733786195201,Human error
+Asphalt,Rear end,Property,Dry,0,120.19582919413527,None,2,0,0,06/28/18,14.937940627601765,Human error
+Concrete,Right angle,Property,Dry,0,122.08008931977778,Centerline,2,0,0,06/29/18,6.907044349715709,Vehicle defect
+Concrete,Right angle,Injury,Dry,1,125.48358491110143,None,2,3,0,06/29/18,7.145102906076386,Human error
+Asphalt,Rear end,Property,Dry,0,123.1981722930862,None,2,0,0,06/29/18,13.61973037193547,Human error
+Concrete,Head on,Property,Dry,0,124.62767979403563,None,2,0,0,06/29/18,8.50386913671727,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.59838984385839,School crossing,1,0,1,06/29/18,16.413657001831304,Human error
+Concrete,Hit parked vehicle,Injury,Wet,0,121.76075459880518,None,2,1,0,06/29/18,17.592612362033304,Human error
+Gravel,Side swipe,Property,Dry,0,125.22932505875102,None,2,0,0,06/29/18,6.764433670261535,Human error
+Asphalt,Rear end,Injury,Dry,0,123.30740629678094,None,3,2,0,06/29/18,13.545760475052697,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,126.2184608785452,None,1,0,1,06/29/18,6.949877546578067,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,0,125.08384322030966,None,1,0,1,06/30/18,5.907599917711527,Human error
+Concrete,Rear end,Property,Dry,0,120.94511768820922,None,2,0,0,06/30/18,14.659963453667217,Human error
+Asphalt,Side swipe,Fatal,Dry,2,121.25111650956235,None,2,0,0,06/30/18,16.577069622802988,Human error
+Concrete,Rear end,Injury,Dry,1,121.08969324857898,Centerline,2,0,0,06/30/18,16.356275657050862,Human error
+Concrete,Head on,Injury,Dry,1,121.40958224539045,None,2,0,0,06/30/18,13.928709622076084,Human error
+Asphalt,Side swipe,Property,Dry,0,125.11178318019056,Centerline,2,0,0,06/30/18,8.169516125296727,Human error
+Asphalt,Hit object off road,Injury,Wet,1,120.5482014517161,None,1,0,0,06/30/18,16.111135779215005,Human error
+Concrete,Side swipe,Property,Dry,0,120.92616788994005,None,2,0,0,06/30/18,14.794618241459185,Human error
+Asphalt,Rear end,Property,Dry,0,123.18697203384374,None,2,0,0,07/01/18,13.621934747108728,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.75020493874935,None,1,0,1,07/01/18,6.606625736579497,Human error
+Asphalt,Side swipe,Injury,Dry,2,122.57970782590878,Centerline,2,0,0,07/01/18,7.8404722075960525,Human error
+Asphalt,Side swipe,Injury,Dry,0,123.82792483552515,None,2,4,0,07/01/18,12.967459771969482,Human error
+Asphalt,Rear end,Injury,Dry,1,120.59613440636655,Police controlled,2,0,0,07/01/18,15.149937863796831,Human error
+Asphalt,Hit pedestrian,Property,Dry,0,122.22293215219797,Centerline,1,0,0,07/01/18,10.634667987944614,Human error
+Concrete,Hit object off road,Injury,Dry,1,125.35353520567115,None,1,0,0,07/01/18,6.703878139308573,Vehicle defect
+Concrete,Hit pedestrian,Injury,Dry,0,124.226135211153,None,1,0,1,07/01/18,13.577470970524146,Human error
+Concrete,Side swipe,Property,Dry,0,124.73558534981471,None,2,0,0,07/02/18,8.482955775168518,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.49965153096466,None,2,0,0,07/02/18,7.094360643446189,Human error
+Concrete,Side swipe,Property,Wet,0,125.66586062146332,None,2,0,0,07/02/18,7.147405097829513,Human error
+Asphalt,Hit object in road,Injury,Dry,1,123.5063472981142,None,1,0,0,07/02/18,7.857378032019288,Human error
+Concrete,Side swipe,Injury,Dry,0,124.68796523844789,Centerline,1,0,1,07/02/18,9.116027405927879,Human error
+Concrete,Rear end,Property,Dry,0,125.34692498945066,None,3,0,0,07/02/18,6.61193218028138,Human error
+Concrete,Rear end,Property,Dry,0,124.80308065286205,None,2,0,0,07/02/18,10.689153939559679,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.2735774821007,None,2,1,0,07/02/18,13.559103578548138,Human error
+Asphalt,Hit object in road,Fatal,Wet,1,122.87775386653325,Centerline,2,5,0,07/02/18,13.783597971491279,Human error
+Concrete,Hit parked vehicle,Fatal,Dry,1,125.7015408904671,None,2,4,0,07/02/18,7.337929871684662,Human error
+Asphalt,Head on,Fatal,Dry,1,122.3238400527538,None,2,3,0,07/02/18,13.993749154619088,Human error
+Asphalt,Right angle,Property,Dry,0,120.59151390965825,Give way,2,0,0,07/02/18,16.415710470974844,Human error
+Asphalt,Rear end,Property,Dry,0,124.99679451475778,Centerline,2,0,0,07/02/18,11.162362854120023,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,121.06926458348997,None,2,0,0,07/02/18,14.563786400388365,Human error
+Asphalt,Right angle,Property,Dry,0,121.00323604011274,Traffic lights,2,0,0,07/03/18,14.582436255866456,Human error
+Concrete,Right angle,Property,Dry,0,120.76997554988242,Centerline,2,0,0,07/03/18,16.636573168836293,Human error
+Concrete,Head on,Property,Dry,0,125.65238501835863,None,2,0,0,07/03/18,7.109777307906311,Human error
+Concrete,Side swipe,Property,Dry,0,125.62301625802262,Traffic lights,2,0,0,07/03/18,7.065026630306299,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,125.65937269693188,None,1,1,1,07/03/18,7.136538134505368,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.31756085483623,Centerline,1,0,1,07/03/18,13.17282635195083,Human error
+Asphalt,Side swipe,Injury,Dry,1,126.07917012739956,Centerline,2,1,0,07/03/18,7.853908841034074,Human error
+Asphalt,Rear end,Property,Dry,0,121.14968672089488,None,2,0,0,07/03/18,14.07997136026545,Vehicle defect
+Concrete,Rear end,Property,Dry,0,125.60322877095197,None,2,0,0,07/03/18,7.064667994067483,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.12946867820317,None,2,0,0,07/03/18,14.258819459028386,Human error
+Concrete,Side swipe,Injury,Dry,1,123.41389564418385,Pedestrian crossing,1,1,1,07/03/18,13.435002077286564,Human error
+Concrete,Side swipe,Injury,Dry,1,125.59456978971268,None,2,0,0,07/03/18,7.050570110437673,Human error
+Concrete,Side swipe,Injury,Dry,1,123.1791858161866,None,2,0,0,07/03/18,13.597011966710173,Human error
+Concrete,Side swipe,Injury,Dry,1,124.60649750055224,None,2,1,0,07/04/18,11.02312034825633,Human error
+Concrete,Rear end,Property,Wet,0,121.10763761018964,None,2,0,0,07/04/18,14.60263718346791,Vehicle defect
+Concrete,Side swipe,Injury,Wet,1,121.1563161522005,None,2,0,0,07/04/18,15.569514494553394,Human error
+Asphalt,Head on,Property,Dry,0,121.16970410190113,Centerline,2,0,0,07/04/18,13.382218100819463,Human error
+Asphalt,Rear end,Injury,Dry,0,125.47261824443365,None,2,1,0,07/04/18,6.941782033186864,Human error
+Asphalt,Head on,Injury,Dry,2,120.35732898424078,Centerline,2,4,0,07/04/18,16.387624962933305,Human error
+Concrete,Side swipe,Property,Dry,0,121.58987838092438,None,2,0,0,07/04/18,13.946304382178477,Human error
+Concrete,Rear end,Property,Dry,0,125.00907441604943,None,2,0,0,07/04/18,11.205262841833688,Human error
+Asphalt,Side swipe,Property,Dry,0,120.98297472277035,None,2,0,0,07/04/18,14.662695509978118,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,120.40187028029008,None,1,1,1,07/04/18,16.08159175791057,Human error
+Concrete,Rear end,Property,Dry,0,120.94407087426593,None,2,0,0,07/04/18,14.429607594045,Human error
+Asphalt,Rear end,Property,Dry,0,123.26971923064649,None,2,0,0,07/04/18,9.186024512737985,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,121.50460364744187,None,1,0,1,07/04/18,14.482081260511317,Human error
+Concrete,Side swipe,Property,Dry,0,124.76146807734018,None,2,0,0,07/04/18,10.52498317480568,Human error
+Concrete,Rear end,Injury,Dry,1,124.91123407409601,None,2,0,0,07/04/18,6.375883932692751,Human error
+Asphalt,Head on,Fatal,Dry,1,125.93770325127971,None,2,0,0,07/04/18,7.581081735945894,Human error
+Asphalt,Side swipe,Property,Dry,0,120.59557638219648,Centerline,2,0,0,07/04/18,15.379441925587836,Human error
+Asphalt,Side swipe,Injury,Dry,2,123.3266576231184,None,2,0,0,07/04/18,10.357460603187606,Human error
+Concrete,Right angle,Property,Dry,0,121.04498480531444,None,2,0,0,07/04/18,14.75625624881091,Human error
+Concrete,Right angle,Injury,Dry,2,122.70508083306486,None,2,0,0,07/04/18,9.382651626942739,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,124.98755487737904,None,2,0,0,07/04/18,10.393126411207714,Human error
+Asphalt,Side swipe,Property,Dry,0,120.97676090017555,None,2,0,0,07/04/18,14.686039575007527,Human error
+Asphalt,Side swipe,Injury,Dry,2,123.18410558137846,None,2,2,0,07/04/18,13.646566454779522,Human error
+Asphalt,Rear end,Injury,Wet,1,125.00351307613349,Centerline,2,1,0,07/05/18,7.759720410374935,Human error
+Concrete,Hit animal,Fatal,Dry,0,125.9881366641561,None,1,0,1,07/05/18,7.016675195890579,Human error
+Asphalt,Hit object off road,Property,Dry,0,121.41947923121197,None,1,0,0,07/05/18,16.650428979160203,Vehicle defect
+Asphalt,Right angle,Injury,Dry,1,120.97600812611276,Police controlled,2,0,0,07/05/18,14.689288783738633,Human error
+Concrete,Head on,Injury,Dry,1,123.20101590195215,None,2,0,0,07/05/18,13.621686937478932,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.38362286132121,None,1,0,1,07/05/18,13.55690018575449,Human error
+Concrete,Overturned vehicle,Fatal,Dry,0,123.3759079753656,Centerline,1,0,1,07/05/18,13.357402747416902,Human error
+Asphalt,Side swipe,Injury,Dry,2,123.36460600112383,None,2,0,0,07/05/18,13.547167980407686,Human error
+Asphalt,Right angle,Property,Dry,0,123.86191685536171,None,2,0,0,07/06/18,8.164568089092105,Human error
+Concrete,Head on,Injury,Dry,2,120.59186036941709,None,2,2,0,07/06/18,15.326245105610464,Human error
+Concrete,Rear end,Property,Dry,0,120.59689911813963,Centerline,2,0,0,07/06/18,16.447001730912998,Human error
+Concrete,Rear end,Injury,Dry,0,124.57515397897207,Centerline,2,1,0,07/06/18,11.234187726255515,Vehicle defect
+Concrete,Side swipe,Injury,Dry,2,125.54334252023735,None,2,0,0,07/06/18,8.924769308341387,Human error
+Concrete,Side swipe,Injury,Dry,1,124.01620024097541,Centerline,2,0,0,07/06/18,8.183617119330664,Human error
+Concrete,Rear end,Property,Dry,0,123.4170980936282,Centerline,2,0,0,07/06/18,13.426969898588782,Human error
+Asphalt,Overturned vehicle,Injury,Dry,0,123.66302775719267,None,1,4,0,07/06/18,12.326750711574114,Human error
+Asphalt,Hit object in road,Fatal,Dry,1,123.13801926402789,None,1,4,0,07/06/18,8.516112954240143,Human error
+Asphalt,Hit object off road,Injury,Dry,1,122.20914960300702,Centerline,1,0,0,07/06/18,10.634172762318629,Human error
+Concrete,Right angle,Property,Dry,0,125.46311761967453,None,2,0,0,07/06/18,7.323036531304776,Human error
+Concrete,Side swipe,Injury,Dry,2,123.32356118199596,None,2,0,0,07/07/18,10.3365892901574,Human error
+Asphalt,Rear end,Property,Dry,0,120.94361181824081,None,2,0,0,07/07/18,15.062893342831076,Human error
+Concrete,Rear end,Property,Dry,0,121.00074698448321,None,2,0,0,07/07/18,14.597469245361024,Human error
+Concrete,Head on,Fatal,Dry,1,121.79731088383119,None,2,1,0,07/07/18,16.081386844171803,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.1521202115597,None,1,0,1,07/07/18,9.903775952245805,Human error
+Asphalt,Right angle,Injury,Dry,1,123.28544564967693,Police controlled,2,0,0,07/07/18,13.539962531078956,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,120.95714108000335,None,2,0,0,07/08/18,14.710592487621797,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.38538201365952,None,2,1,0,07/08/18,6.5935886594773505,Vehicle defect
+Concrete,Rear end,Property,Dry,0,121.06729786152964,Traffic lights,2,0,0,07/08/18,14.55834007409662,Human error
+Concrete,Hit object in road,Property,Dry,0,125.49412463858619,None,1,0,0,07/08/18,8.937453675957281,Human error
+Concrete,Hit animal,Property,Wet,0,125.61737773441432,None,1,0,0,07/08/18,11.34488359153901,Vehicle defect
+Concrete,Rear end,Property,Dry,0,125.58744085306523,None,2,0,0,07/08/18,7.051146211506337,Human error
+Asphalt,Hit parked vehicle,Injury,Dry,1,125.47130571061834,None,2,0,0,07/08/18,6.919052423777586,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.66335768722037,None,1,0,1,07/08/18,7.151591300198538,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,125.75695312089493,None,1,0,2,07/09/18,7.379450302397428,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.12067699484815,Centerline,1,0,1,07/09/18,16.04661243357452,Human error
+Asphalt,Side swipe,Injury,Wet,1,121.86423472426846,None,2,0,0,07/09/18,17.10928117695356,Human error
+Asphalt,Rear end,Property,Dry,0,123.18514445563953,None,2,0,0,07/09/18,13.608530353236025,Human error
+Asphalt,Rear end,Property,Dry,0,121.14118987361164,None,2,0,0,07/09/18,13.98817323099989,Human error
+Concrete,Side swipe,Injury,Dry,1,125.00150170625052,Centerline,2,0,0,07/09/18,7.763203126805356,Human error
+Concrete,Side swipe,Injury,Dry,1,120.99506727037235,None,2,0,0,07/09/18,14.709826927816744,Human error
+Concrete,Rear end,Property,Dry,0,120.88831177834446,None,2,0,0,07/09/18,14.429054517320052,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,122.85596714424061,None,1,2,0,07/10/18,10.4077072381553,Human error
+Concrete,Rear end,Property,Dry,0,125.60368971260486,Centerline,2,0,0,07/10/18,7.0565391989057735,Human error
+Concrete,Side swipe,Injury,Dry,2,120.26011601431975,None,2,2,0,07/10/18,15.838129274281314,Road defect
+Concrete,Rear end,Property,Dry,0,120.40547486632755,None,2,0,0,07/10/18,15.986452992924537,Human error
+Asphalt,Side swipe,Fatal,Dry,2,125.35267342196511,None,2,2,0,07/10/18,6.650427952437783,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,125.7540829406801,None,1,0,1,07/10/18,8.716816636870451,Human error
+Asphalt,Rear end,Injury,Wet,1,120.44869265051656,None,2,0,0,07/10/18,14.864254676904201,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.59236515455547,Centerline,1,0,1,07/10/18,16.44770957734551,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,124.80958079986723,None,1,0,1,07/10/18,12.001977219832064,Human error
+Concrete,Overturned vehicle,Injury,Dry,0,125.22343249272527,None,3,2,0,07/10/18,6.810525952427677,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.70226504293461,None,2,0,0,07/10/18,13.07495158588019,Human error
+Asphalt,Right angle,Injury,Dry,1,120.58139825506083,None,2,1,0,07/11/18,15.943598431178017,Human error
+Concrete,Side swipe,Property,Dry,0,125.6257435649701,Centerline,2,0,0,07/11/18,7.072688115938286,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.68123143688356,Centerline,1,0,2,07/11/18,9.25397219805064,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.95909331056296,Pedestrian crossing,1,0,1,07/11/18,14.717100334974443,Human error
+Asphalt,Hit parked vehicle,Fatal,Dry,1,120.67992455553856,None,1,0,0,07/11/18,15.024798806513976,Human error
+Concrete,Head on,Injury,Dry,1,125.70531931987546,None,2,2,0,07/11/18,7.079438126068968,Human error
+Asphalt,Rear end,Injury,Dry,2,123.52883985990267,Centerline,2,0,0,07/11/18,13.716305195013417,Human error
+Asphalt,Hit object off road,Injury,Dry,1,124.6595856181799,Centerline,1,0,0,07/11/18,8.48405324324576,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,125.61969895465535,Centerline,2,0,0,07/11/18,7.0946788522218585,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,120.45711168765048,None,1,0,1,07/11/18,17.796456582212777,Human error
+Concrete,Right angle,Property,Dry,0,120.60463729926026,None,2,0,0,07/11/18,16.411349811436374,Human error
+Concrete,Hit parked vehicle,Injury,Wet,1,122.55074395909406,None,2,0,0,07/11/18,10.520496808728797,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.24492738687135,Centerline,1,0,1,07/11/18,8.239609595449494,Human error
+Concrete,Rear end,Property,Dry,0,120.67036488792664,Centerline,2,0,0,07/12/18,15.040657329738575,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,0,124.97751362041083,Centerline,1,0,1,07/12/18,8.348702644015825,Human error
+Concrete,Rear end,Injury,Dry,1,124.6841188567853,None,1,1,0,07/12/18,9.119658896203529,Human error
+Concrete,Side swipe,Property,Dry,0,125.51172245543455,None,2,0,0,07/12/18,7.028076601881146,Human error
+Asphalt,Right angle,Injury,Dry,1,121.25446103825533,Centerline,2,0,0,07/12/18,16.580566085043515,Human error
+Asphalt,Rear end,Property,Dry,0,125.34910741843166,Centerline,4,0,0,07/12/18,6.626470996851041,Human error
+Asphalt,Head on,Injury,Dry,1,123.38117611184273,None,2,0,0,07/12/18,8.61834091918983,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.37474118481339,None,1,0,1,07/12/18,13.406455408538635,Human error
+Asphalt,Rear end,Property,Dry,0,123.27010485061436,None,2,0,0,07/12/18,9.196414162417458,Human error
+Concrete,Rear end,Property,Dry,0,120.95954060120663,None,2,0,0,07/13/18,14.461260840803535,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,1,123.29265551369934,Pedestrian crossing,1,0,1,07/13/18,9.329991606495467,Human error
+Asphalt,Head on,Injury,Dry,2,123.7264118064473,None,2,2,0,07/13/18,12.282514309474022,Human error
+Concrete,Side swipe,Injury,Dry,2,125.66296302484533,Centerline,2,0,0,07/13/18,7.136552792634642,Human error
+Concrete,Side swipe,Injury,Dry,1,124.64005527615844,Centerline,2,0,0,07/13/18,11.293118670961405,Human error
+Asphalt,Head on,Property,Dry,0,121.46679936748696,None,2,0,0,07/13/18,13.932639123728075,Road defect
+Asphalt,Rear end,Property,Dry,0,125.45321314035048,None,2,0,0,07/13/18,9.805107528712568,Road defect
+Asphalt,Rear end,Injury,Dry,0,123.62822592455682,None,2,2,0,07/13/18,10.059968455238272,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.70045685893834,None,1,0,1,07/13/18,9.248001011599126,Human error
+Concrete,Rear end,Property,Dry,0,120.59612802755096,Centerline,2,0,0,07/13/18,16.466421978058747,Human error
+Concrete,Rear end,Property,Dry,0,121.05597997909979,Traffic lights,2,0,0,07/13/18,14.597822115857584,Human error
+Concrete,Rear end,Injury,Dry,1,125.48521722257321,None,2,1,0,07/13/18,9.775157157037471,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,121.58851618112746,None,1,0,1,07/13/18,16.879289279659343,Human error
+Asphalt,Rear end,Fatal,Dry,1,122.97925684803549,None,2,0,0,07/14/18,14.112563589890708,Human error
+Concrete,Side swipe,Property,Dry,0,120.88902280714636,None,2,0,0,07/14/18,14.432504521938464,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,121.1090388166013,Centerline,1,0,0,07/14/18,16.37671533993197,Human error
+Concrete,Rear end,Property,Dry,0,125.51261255937409,None,2,0,0,07/14/18,7.051868006333327,Vehicle defect
+Concrete,Hit pedestrian,Injury,Dry,0,124.09583217955887,None,1,0,1,07/14/18,9.912077750173856,Human error
+Asphalt,Rear end,Property,Dry,0,120.9997246320572,None,2,0,0,07/14/18,14.433400192427595,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,123.39313553159121,None,1,0,0,07/14/18,13.55676767642896,Human error
+Concrete,Right angle,Injury,Dry,2,120.59992945980753,None,2,0,0,07/15/18,15.443869716052344,Human error
+Concrete,Rear end,Property,Dry,0,124.87194354491854,None,2,0,0,07/15/18,10.12721499296339,Vehicle defect
+Asphalt,Side swipe,Property,Dry,0,124.57142196934484,None,2,0,0,07/15/18,8.532917764870106,Human error
+Concrete,Overturned vehicle,Fatal,Dry,1,124.46281856188239,None,2,0,0,07/15/18,9.871353280370144,Human error
+Concrete,Rear end,Property,Dry,0,120.90618455173895,None,2,0,0,07/15/18,14.436491909282056,Human error
+Concrete,Right angle,Property,Dry,0,125.59182279881259,Centerline,2,0,0,07/15/18,7.049648117818384,Human error
+Concrete,Side swipe,Injury,Dry,1,123.51476263306648,Centerline,2,1,0,07/15/18,13.61045114546235,Human error
+Concrete,Side swipe,Property,Dry,0,124.44860589920025,None,2,0,0,07/15/18,10.92202079641535,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.07414894204773,None,2,1,0,07/16/18,7.8860989215263135,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.58746168594497,Pedestrian crossing,1,0,1,07/16/18,15.661228175040057,Human error
+Asphalt,Rear end,Injury,Wet,1,125.97412027354471,None,2,0,0,07/16/18,7.623576351158983,Human error
+Concrete,Right angle,Property,Dry,0,125.60555100493892,None,2,0,0,07/16/18,7.05785784857354,Human error
+Concrete,Rear end,Property,Dry,0,120.98099632290736,None,3,0,0,07/16/18,14.130951915555126,Human error
+Concrete,Right angle,Injury,Dry,1,123.83971058288635,Centerline,2,0,0,07/16/18,8.151585210416478,Human error
+Asphalt,Hit object off road,Injury,Dry,1,120.58020708919855,None,1,0,0,07/16/18,15.948626855888653,Human error
+Concrete,Right angle,Injury,Dry,1,125.61423565288958,None,2,0,0,07/17/18,7.082628321026166,Human error
+Asphalt,Side swipe,Property,Dry,0,123.71508115195242,Centerline,2,0,0,07/17/18,13.149228713572121,Human error
+Asphalt,Rear end,Property,Dry,0,125.61091725579792,Centerline,2,0,0,07/17/18,7.073330201637059,Human error
+Asphalt,Rear end,Property,Dry,0,121.08601455633887,Traffic lights,2,0,0,07/17/18,14.587636840608678,Human error
+Asphalt,Side swipe,Property,Dry,0,123.19950788738461,None,3,0,0,07/17/18,13.62714675305103,Human error
+Asphalt,Side swipe,Property,Dry,0,123.20829923603493,None,2,0,0,07/17/18,13.619345010171799,Human error
+Concrete,Rear end,Injury,Dry,1,124.79746627613886,Centerline,2,2,0,07/17/18,8.983513978251644,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.29081105459429,None,1,0,1,07/17/18,13.695121006763278,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.61109595921067,None,1,0,1,07/18/18,7.0929604918773705,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,120.91604648128173,None,1,0,1,07/18/18,15.430503774275667,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.53064803327528,Centerline,1,0,1,07/18/18,13.605890163546048,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,124.7301723915669,None,1,0,1,07/18/18,9.241746408789892,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,122.34797040434414,None,1,1,0,07/18/18,14.024933865654608,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,124.52128804015929,None,1,0,1,07/18/18,11.662424606964606,Human error
+Asphalt,Head on,Property,Dry,0,125.98649065062938,None,2,0,0,07/18/18,7.664266073910014,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,121.09160602685442,None,2,1,1,07/18/18,14.622498813170989,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,121.59363060340723,Centerline,1,0,1,07/18/18,16.694273422832644,Human error
+Concrete,Head on,Fatal,Dry,2,124.58675192826081,None,2,1,0,07/18/18,8.513333039667268,Vehicle defect
+Concrete,Rear end,Property,Dry,0,120.89700555830905,None,2,0,0,07/18/18,14.484634211883687,Human error
+Concrete,Rear end,Property,Dry,0,125.60413740451769,None,2,0,0,07/18/18,7.067503165611539,Human error
+Concrete,Rear end,Property,Wet,0,120.74189545350436,None,2,0,0,07/18/18,14.993227543036912,Human error
+Asphalt,Rear end,Injury,Dry,1,121.10844688438173,None,2,3,0,07/18/18,16.39087621311495,Human error
+Asphalt,Rear end,Property,Dry,0,123.26457214454435,None,2,0,0,07/18/18,13.59224648674186,Human error
+Asphalt,Right angle,Property,Dry,0,123.4468763454492,None,2,0,0,07/18/18,8.136006083278485,Human error
+Asphalt,Rear end,Property,Dry,0,120.44745213955181,None,3,0,0,07/19/18,16.92929999737152,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.94372423796833,Pedestrian crossing,1,0,1,07/19/18,11.17238037895763,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.59595340778385,Pedestrian crossing,1,0,1,07/19/18,10.340532769148908,Human error
+Concrete,Rear end,Injury,Dry,1,124.53157479491088,None,2,0,0,07/19/18,8.557921555641709,Human error
+Asphalt,Right angle,Injury,Dry,0,123.19218169060748,None,2,1,0,07/19/18,13.628466903245535,Human error
+Concrete,Side swipe,Property,Dry,0,125.00947263797643,None,2,0,0,07/19/18,11.149852399053877,Human error
+Concrete,Side swipe,Property,Dry,0,121.0602135684705,None,2,0,0,07/19/18,14.588496811487817,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.00297528014745,None,1,1,1,07/19/18,9.60717745629113,Human error
+Concrete,Side swipe,Injury,Dry,2,123.14898101419745,None,2,0,0,07/19/18,9.677038919742948,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,126.54735886566515,None,1,0,1,07/19/18,7.72717796525302,Human error
+Concrete,Side swipe,Property,Dry,0,124.66800704890602,None,2,0,0,07/19/18,9.242886744674736,Human error
+Asphalt,Rear end,Property,Dry,0,120.67796704848648,None,2,0,0,07/19/18,15.9551828041676,Human error
+Concrete,Side swipe,Property,Dry,0,121.78064988980738,None,2,0,0,07/20/18,16.111229533431864,Human error
+Concrete,Rear end,Property,Dry,0,120.9485083211621,None,2,0,0,07/20/18,14.758483930019555,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,122.07833465759408,None,1,0,1,07/20/18,6.906512700552448,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,120.81831365540071,None,2,0,0,07/20/18,14.36788831983145,Vehicle defect
+Concrete,Side swipe,Injury,Dry,2,120.76762017054742,Centerline,2,4,0,07/20/18,15.062533798235249,Human error
+Concrete,Side swipe,Injury,Dry,1,121.65144218568943,None,2,0,2,07/20/18,18.165982946148723,Human error
+Concrete,Side swipe,Property,Dry,0,122.05954147445993,Traffic lights,2,0,0,07/20/18,6.9162554681797825,Human error
+Concrete,Rear end,Property,Dry,0,121.01432576589934,Centerline,2,0,0,07/20/18,14.293509703493323,Human error
+Gravel,Overturned vehicle,Injury,Dry,1,125.34828769797441,None,1,0,0,07/20/18,6.588752044123064,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.67641600445175,Centerline,1,0,1,07/21/18,9.25023687897965,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.38556952934988,None,1,0,1,07/21/18,11.621184271845824,Human error
+Concrete,Side swipe,Property,Dry,0,120.5915320717744,None,2,0,0,07/21/18,16.412429831079777,Human error
+Concrete,Side swipe,Property,Dry,0,120.91339565093277,None,2,0,0,07/21/18,14.291437850859609,Human error
+Concrete,Rear end,Property,Dry,0,124.65715415977363,Traffic lights,2,0,0,07/21/18,8.480850628902754,Human error
+Concrete,Rear end,Injury,Dry,1,123.20483201359781,None,2,0,0,07/21/18,13.637246480278744,Human error
+Concrete,Right angle,Injury,Wet,2,121.59813641685591,None,2,1,0,07/21/18,13.93541734623538,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,120.45821270195941,None,1,0,1,07/21/18,16.993712168524414,Human error
+Concrete,Rear end,Fatal,Dry,1,120.54348149932125,None,2,0,0,07/21/18,18.026390462274566,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.59527530799683,Centerline,1,0,1,07/21/18,16.439736142052904,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,120.96198195904122,None,1,1,1,07/21/18,14.706820386033554,Human error
+Concrete,Side swipe,Injury,Dry,1,125.8073414664424,None,2,0,0,07/21/18,7.440746149823892,Human error
+Asphalt,Side swipe,Injury,Dry,1,120.5844576894959,None,2,1,0,07/21/18,15.752997487188342,Human error
+Asphalt,Head on,Injury,Dry,2,125.08271050729086,None,2,0,0,07/22/18,7.8955847186277985,Human error
+Concrete,Overturned vehicle,Property,Dry,0,121.79410311023386,None,1,0,0,07/22/18,17.4775257944038,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.59347124236567,None,1,0,1,07/22/18,16.069268386016386,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.84040590044278,Centerline,1,2,1,07/22/18,8.091176447261747,Human error
+Concrete,Side swipe,Property,Dry,0,121.03866490115107,None,2,0,0,07/22/18,14.555884594884468,Human error
+Concrete,Side swipe,Property,Dry,0,123.30130840685781,None,2,0,0,07/22/18,9.320443943202088,Human error
+Concrete,Right angle,Property,Dry,0,125.63486884896834,None,2,0,0,07/22/18,7.0907301156695635,Human error
+Concrete,Side swipe,Injury,Dry,2,120.97574662276256,None,2,0,0,07/22/18,14.387623520594195,Human error
+Concrete,Rear end,Property,Dry,0,124.85318890969258,None,2,0,0,07/22/18,6.490845786164755,Road defect
+Concrete,Hit pedestrian,Injury,Dry,0,125.66471121147225,Centerline,1,0,1,07/22/18,7.139028080536685,Human error
+Concrete,Rear end,Property,Dry,0,121.09091288978541,None,2,0,0,07/22/18,13.848127466349956,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,120.77476557783038,None,1,0,1,07/23/18,15.119117976343768,Human error
+Concrete,Rear end,Property,Dry,0,124.74197038431679,None,2,0,0,07/23/18,8.682128814057267,Human error
+Concrete,Head on,Fatal,Wet,1,120.93537957652369,Centerline,1,1,0,07/23/18,16.126337508196777,Vehicle defect
+Concrete,Side swipe,Fatal,Dry,1,124.95772683378372,Centerline,1,1,0,07/23/18,10.059830876994496,Human error
+Asphalt,Head on,Fatal,Dry,1,123.8158228546797,Centerline,2,0,0,07/23/18,12.974579191473591,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.52781698656435,Centerline,1,0,1,07/23/18,15.848736750575734,Human error
+Concrete,Side swipe,Fatal,Dry,1,120.9611229238239,None,2,1,1,07/23/18,15.184510821855023,Human error
+Concrete,Side swipe,Property,Dry,0,120.91536096911372,None,2,0,0,07/23/18,14.972151775951566,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,126.01550054919204,None,1,0,1,07/23/18,6.934393951276802,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.57880096792204,Centerline,1,0,1,07/24/18,8.51878730869747,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,120.52013647274784,None,2,0,0,07/24/18,16.375134971004428,Vehicle defect
+Asphalt,Head on,Property,Dry,0,122.37849802595181,None,2,0,0,07/24/18,10.67324654776025,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.83901936886598,None,2,2,0,07/24/18,8.350143598617318,Human error
+Concrete,Side swipe,Property,Dry,0,125.6362990264201,None,2,0,0,07/24/18,7.097321968552468,Human error
+Concrete,Hit animal,Injury,Dry,1,123.95354977799404,None,1,1,0,07/24/18,9.610462432294826,Human error
+Concrete,Rear end,Injury,Dry,1,123.18855637492403,None,2,0,0,07/24/18,13.625435215198655,Human error
+Concrete,Side swipe,Injury,Dry,0,124.66325154259769,Centerline,1,0,1,07/24/18,9.135981701072852,Human error
+Concrete,Right angle,Injury,Dry,0,124.61178822703512,None,2,2,0,07/24/18,11.009504888305075,Human error
+Asphalt,Side swipe,Injury,Dry,1,124.97984337055836,None,2,0,0,07/24/18,8.331873669335115,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.9540465015148,Centerline,2,0,1,07/24/18,14.302325806293284,Human error
+Asphalt,Head on,Injury,Dry,1,121.85311297837218,None,2,1,0,07/24/18,17.088305326226852,Human error
+Concrete,Rear end,Fatal,Dry,1,121.75981576363742,Centerline,2,1,0,07/24/18,16.874861900807275,Human error
+Concrete,Hit object off road,Property,Dry,0,124.46179374442073,Centerline,1,0,0,07/24/18,11.476600428845135,Human error
+Concrete,Overturned vehicle,Fatal,Dry,0,121.56814779055763,Centerline,1,1,0,07/24/18,16.858971392047767,Vehicle defect
+Concrete,Rear end,Property,Wet,0,125.61182125193238,None,2,0,0,07/25/18,7.087084303129614,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.08015191152344,None,1,0,1,07/25/18,14.999557033712318,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.39868999000971,None,1,0,1,07/25/18,11.570683875121114,Human error
+Concrete,Head on,Injury,Dry,1,121.18393845322373,None,2,3,0,07/25/18,16.51773567536972,Human error
+Concrete,Rear end,Property,Dry,0,123.19325686212652,None,2,0,0,07/25/18,13.63134954449682,Human error
+Asphalt,Head on,Fatal,Dry,2,123.91557206686515,None,2,3,0,07/25/18,12.978395063822708,Human error
+Concrete,Hit parked vehicle,Injury,Dry,1,123.17355023870206,None,2,0,0,07/25/18,9.922597918889506,Vehicle defect
+Asphalt,Head on,Fatal,Dry,2,120.23737088302117,Stop sign,2,0,0,07/25/18,14.87655707767452,Human error
+Concrete,Hit parked vehicle,Property,Wet,0,120.59151259930373,Centerline,2,0,0,07/25/18,16.469323232992622,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,121.06651774116497,None,1,0,1,07/25/18,14.759964983142325,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.45111498246249,None,2,0,0,07/25/18,14.437876444562551,Human error
+Concrete,Hit pedestrian,Property,Dry,0,125.23487246078,None,1,0,0,07/25/18,6.759057355988194,Human error
+Asphalt,Side swipe,Injury,Dry,1,126.08090134648445,None,2,0,0,07/25/18,7.929612445073475,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,122.06462392949392,None,1,0,1,07/25/18,6.907542190114983,Human error
+Concrete,Side swipe,Property,Wet,0,125.1694624091385,Centerline,2,0,0,07/25/18,6.857264957101205,Human error
+Concrete,Rear end,Injury,Dry,1,125.01815728042355,None,2,0,0,07/25/18,11.20793750240113,Human error
+Concrete,Right angle,Injury,Dry,1,124.97126885635001,None,2,1,0,07/26/18,11.254414161729997,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.64518181850102,None,2,3,0,07/26/18,10.106352716487836,Human error
+Gravel,Rear end,Property,Dry,0,123.2024289270166,None,2,0,0,07/26/18,13.61490483911435,Human error
+Concrete,Head on,Injury,Dry,1,124.04125783189546,Centerline,2,0,0,07/26/18,8.19176969070571,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,120.35285945013051,None,1,0,0,07/26/18,16.045407802976882,Human error
+Asphalt,Rear end,Fatal,Wet,1,120.86478452445604,None,2,0,0,07/26/18,14.891076694653622,Human error
+Concrete,Right angle,Property,Dry,0,124.66053769107467,None,2,0,0,07/26/18,8.48383008183842,Human error
+Concrete,Side swipe,Property,Dry,0,120.33245654502002,None,2,0,0,07/26/18,16.03943624365284,Human error
+Concrete,Right angle,Property,Dry,0,120.9849478249087,Pedestrian crossing,2,0,0,07/26/18,14.645322441201236,Human error
+Asphalt,Head on,Property,Dry,0,120.98046080847547,None,2,0,0,07/26/18,14.676376546393739,Human error
+Concrete,Side swipe,Property,Flooded,0,125.65557802890109,None,2,0,0,07/26/18,7.14555866960359,Human error
+Asphalt,Side swipe,Property,Dry,0,120.97488877253015,None,2,0,0,07/26/18,14.687618183339076,Human error
+Concrete,Side swipe,Injury,Dry,2,120.45985663982619,None,2,0,0,07/26/18,14.868787086267567,Human error
+Concrete,Side swipe,Property,Dry,0,120.92174317302363,None,2,0,0,07/27/18,14.290615038960334,Human error
+Asphalt,Rear end,Property,Dry,0,125.50873425892777,None,2,0,0,07/27/18,6.513044566251447,Human error
+Concrete,Side swipe,Injury,Dry,2,124.25723453618622,Centerline,2,1,0,07/27/18,8.259026359469233,Human error
+Asphalt,Side swipe,Fatal,Dry,1,120.53823259523205,None,2,0,0,07/27/18,14.733718071461858,Human error
+Asphalt,Head on,Fatal,Dry,1,120.05231306255105,Centerline,2,0,0,07/27/18,15.163754397180103,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.3275381526189,None,1,0,0,07/27/18,9.654218351825358,Human error
+Asphalt,Side swipe,Injury,Dry,2,125.34190021459192,None,2,0,0,07/27/18,6.642616825792714,Human error
+Concrete,Side swipe,Injury,Dry,0,124.76742444155562,Centerline,2,1,0,07/27/18,9.078387021382378,Human error
+Concrete,Side swipe,Injury,Dry,2,125.00439145689553,Centerline,2,0,0,07/27/18,10.90428731180277,Human error
+Asphalt,Head on,Injury,Dry,1,119.95344852601879,None,2,0,0,07/27/18,15.538341696141611,Human error
+Asphalt,Side swipe,Injury,Dry,1,122.31187015481031,Stop sign,2,0,0,07/28/18,10.663522501222518,Human error
+Concrete,Head on,Property,Dry,0,121.53674211997962,None,2,0,0,07/28/18,13.963576260335094,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.33715896845024,Centerline,1,0,1,07/28/18,12.339102131579013,Human error
+Concrete,Rear end,Injury,Dry,1,120.58993163253449,None,2,1,0,07/28/18,15.67586636879196,Human error
+Asphalt,Side swipe,Property,Wet,0,120.56139085232691,Centerline,2,0,0,07/28/18,15.27025783699758,Human error
+Concrete,Head on,Injury,Dry,1,123.86357939324853,None,2,0,0,07/28/18,9.665922045195078,Human error
+Asphalt,Side swipe,Property,Dry,0,120.9841459073826,None,2,0,0,07/28/18,14.656062257351115,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.79354522242001,Pedestrian crossing,1,0,1,07/28/18,8.044293693310557,Human error
+Concrete,Right angle,Injury,Dry,1,124.76736578369443,None,2,1,0,07/28/18,8.331521658288654,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,120.99470337503008,None,2,0,0,07/29/18,14.71018871785321,Human error
+Concrete,Head on,Injury,Dry,2,121.23743903731753,None,2,0,0,07/29/18,17.397982746256353,Human error
+Concrete,Right angle,Property,Dry,0,125.62356422969425,None,2,0,0,07/29/18,7.092872398337263,Human error
+Asphalt,Head on,Fatal,Wet,2,124.82758043267586,Centerline,2,2,0,07/29/18,8.41236600881631,Human error
+Gravel,Rear end,Injury,Dry,1,124.74752243243242,Centerline,2,0,0,07/29/18,8.49360788114531,Human error
+Asphalt,Side swipe,Injury,Dry,1,120.96584453473452,Centerline,2,1,0,07/29/18,14.116155875755071,Human error
+Concrete,Side swipe,Property,Dry,0,123.29867054598331,None,2,0,0,07/29/18,9.321326027452825,Human error
+Asphalt,Head on,Fatal,Dry,2,123.23802092004617,None,2,1,0,07/29/18,10.04188797557148,Human error
+Asphalt,Side swipe,Property,Dry,0,120.97776320940676,None,2,0,0,07/29/18,14.673947200695917,Human error
+Concrete,Head on,Fatal,Wet,2,122.58874636610938,None,2,0,0,07/29/18,10.605192208122066,Human error
+Concrete,Side swipe,Injury,Dry,2,120.64169558470307,Stop sign,2,0,0,07/29/18,18.006467553729163,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.97003832262428,None,1,0,1,07/29/18,14.655507670910843,Human error
+Concrete,Rear end,Property,Dry,0,120.35379413789339,Centerline,2,0,0,07/29/18,16.045948454266632,Human error
+Concrete,Right angle,Injury,Dry,1,124.2920148716518,None,2,0,0,07/30/18,8.43505048485238,Human error
+Concrete,Right angle,Injury,Dry,1,120.94256382213446,None,2,0,0,07/30/18,14.399551953821641,Human error
+Concrete,Head on,Injury,Dry,2,121.55724163023456,Centerline,2,0,0,07/30/18,16.665280954269594,Human error
+Asphalt,Rear end,Property,Dry,0,120.9623607521933,None,3,0,0,07/30/18,14.703145717250537,Human error
+Concrete,Rear end,Injury,Dry,2,124.86060777160993,None,2,0,0,07/30/18,7.099141373305724,Human error
+Concrete,Right angle,Property,Dry,0,120.85699495310044,Police controlled,2,0,0,07/30/18,14.391854078671528,Human error
+Concrete,Side swipe,Property,Dry,0,121.03700057368081,Police controlled,2,0,0,07/30/18,14.743259900159394,Human error
+Concrete,Side swipe,Property,Dry,0,125.60889339961517,None,2,0,0,07/30/18,7.091592464372381,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.55937904947109,None,1,0,1,07/30/18,12.300537863811988,Human error
+Asphalt,Rear end,Property,Dry,0,121.16206624044395,Centerline,2,0,0,07/31/18,13.366424303796254,Human error
+Concrete,Rear end,Fatal,Dry,1,124.54517223686062,None,2,2,0,07/31/18,6.693123869010588,Human error
+Concrete,Side swipe,Injury,Dry,1,124.64385345186045,None,2,0,0,07/31/18,8.487885997145545,Human error
+Asphalt,Hit animal,Injury,Dry,1,125.70035893294876,Centerline,1,1,0,07/31/18,11.098696961452609,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.05931692739696,None,2,0,0,07/31/18,14.359479840804275,Human error
+Concrete,Right angle,Injury,Dry,1,123.15754480880926,None,2,0,0,08/01/18,9.694564932144274,Human error
+Concrete,Head on,Injury,Dry,2,120.22508078090338,None,2,0,0,08/01/18,15.92650934469745,Human error
+Concrete,Side swipe,Injury,Dry,1,124.71178667124646,Centerline,2,0,0,08/01/18,9.251647667741144,Human error
+Concrete,Side swipe,Fatal,Dry,1,121.17319340499125,None,2,1,0,08/01/18,16.722881787201615,Road defect
+Concrete,Side swipe,Property,Dry,0,124.26467486180881,None,2,0,0,08/01/18,8.24725066781471,Human error
+Asphalt,Hit parked vehicle,Property,Dry,0,120.67895143677205,None,2,0,0,08/01/18,15.958534377748595,Human error
+Concrete,Hit animal,Injury,Dry,1,124.74547121416278,None,1,0,0,08/02/18,8.491958635473036,Human error
+Concrete,Rear end,Property,Wet,0,125.60486102058853,None,2,0,0,08/02/18,7.064658984542902,Human error
+Concrete,Right angle,Injury,Dry,1,125.49561817618877,School crossing,4,0,0,08/02/18,7.019825184145657,Road defect
+Asphalt,Hit object off road,Property,Dry,0,122.78473587102904,None,1,0,0,08/02/18,13.830843826450797,Human error
+Concrete,Side swipe,Property,Dry,0,125.65926732280695,Centerline,2,0,0,08/02/18,7.152190647736074,Human error
+Concrete,Right angle,Property,Dry,0,121.05466868817595,Traffic lights,2,0,0,08/02/18,14.579843050837527,Human error
+Concrete,Rear end,Property,Dry,0,120.59695849995381,Traffic lights,2,0,0,08/02/18,16.411805775455182,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,125.62743623777872,None,1,0,1,08/02/18,7.537427149390038,Human error
+Concrete,Side swipe,Property,Dry,0,125.01154458657562,None,2,0,0,08/02/18,11.24278046450722,Human error
+Concrete,Head on,Fatal,Dry,1,120.56180461630964,Centerline,2,0,0,08/02/18,18.066855019058927,Human error
+Concrete,Overturned vehicle,Injury,Wet,1,121.01718745191266,None,1,0,0,08/02/18,14.71609890702144,Road defect
+Asphalt,Right angle,Fatal,Dry,1,125.96153209860675,None,2,0,0,08/03/18,7.6039042705893936,Human error
+Concrete,Right angle,Property,Dry,0,121.08046276910544,None,2,0,0,08/03/18,14.605644300939653,Human error
+Concrete,Side swipe,Property,Dry,0,120.97345429973966,None,2,0,0,08/03/18,14.415450513100495,Human error
+Asphalt,Right angle,Property,Wet,0,120.99712025452884,Police controlled,2,0,0,08/03/18,14.442433771316514,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.52744875021591,Centerline,1,0,1,08/03/18,13.606937115855915,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.59866543959676,Pedestrian crossing,1,0,4,08/03/18,14.940970350217027,Human error
+Concrete,Side swipe,Injury,Dry,2,123.90220261845765,None,2,0,0,08/03/18,9.623321413786895,Human error
+Concrete,Side swipe,Injury,Dry,1,122.07874091083318,Traffic lights,2,0,0,08/03/18,6.921438081204134,Human error
+Concrete,Right angle,Injury,Wet,1,125.7068800674755,None,2,0,0,08/04/18,7.357659632086356,Human error
+Concrete,Rear end,Property,Wet,0,125.61249237751663,None,2,0,0,08/04/18,7.092529767461015,Human error
+Concrete,Rear end,Property,Dry,0,125.63908350993475,None,2,0,0,08/04/18,7.099950758081019,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.44355358658657,None,1,0,1,08/04/18,11.585569159076904,Vehicle defect
+Concrete,Side swipe,Property,Dry,0,125.62171937448919,Centerline,2,0,0,08/04/18,7.096420593698019,Human error
+Asphalt,Overturned vehicle,Property,Wet,0,121.28070966416068,Centerline,2,0,0,08/04/18,16.60596497955349,Vehicle defect
+Asphalt,Head on,Property,Dry,0,123.4868372514339,None,2,0,0,08/04/18,13.288955491088288,Human error
+Asphalt,Rear end,Property,Dry,0,120.98606828208098,None,2,0,0,08/04/18,14.70523841305621,Human error
+Concrete,Rear end,Property,Dry,0,124.84962449703004,None,2,0,0,08/04/18,6.494692269787741,Human error
+Concrete,Head on,Fatal,Dry,2,121.62064727268331,None,2,3,0,08/04/18,13.958357648022423,Vehicle defect
+Concrete,Hit parked vehicle,Property,Dry,0,120.98999444560052,None,2,0,0,08/04/18,14.684194404085858,Human error
+Concrete,Right angle,Property,Dry,0,125.6352675705893,None,2,0,0,08/05/18,7.099121422444569,Human error
+Concrete,Rear end,Injury,Dry,1,124.00589217143845,None,2,0,0,08/05/18,11.0395207194625,Human error
+Concrete,Side swipe,Injury,Dry,1,121.71680762044781,None,1,1,0,08/05/18,13.981916851266531,Human error
+Concrete,Head on,Injury,Dry,2,123.11090771368724,None,2,1,0,08/05/18,9.568352399599696,Human error
+Concrete,Side swipe,Property,Dry,0,120.98269966925581,None,2,0,0,08/05/18,14.666775667621163,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.95216809940845,Police controlled,1,0,5,08/05/18,14.644813262675438,Human error
+Asphalt,Overturned vehicle,Fatal,Dry,1,123.15438137728539,None,1,0,0,08/05/18,9.727554666290457,Human error
+Concrete,Rear end,Injury,Dry,0,120.64604370306347,Traffic lights,2,1,0,08/05/18,15.072245903808858,Human error
+Asphalt,Head on,Injury,Dry,1,123.29673763696445,None,2,1,0,08/05/18,9.329765874102206,Human error
+Asphalt,Overturned vehicle,Injury,Wet,1,120.55569445243755,Centerline,1,8,0,08/05/18,16.260919489856153,Human error
+Concrete,Hit parked vehicle,Fatal,Dry,0,124.75390889714765,None,2,0,1,08/05/18,8.496945691713204,Vehicle defect
+Asphalt,Right angle,Injury,Dry,0,123.76954578472024,None,2,0,1,08/06/18,12.98206638378028,Human error
+Concrete,Rear end,Property,Dry,0,121.0480010650186,Traffic lights,2,0,0,08/06/18,14.565929391577864,Human error
+Concrete,Head on,Injury,Dry,1,123.42814845194982,None,1,0,1,08/06/18,8.48399689442059,Human error
+Concrete,Hit pedestrian,Property,Dry,0,125.84766553683895,None,1,0,0,08/06/18,7.372562865255632,Human error
+Concrete,Side swipe,Injury,Dry,2,120.86133481724015,Centerline,3,0,0,08/06/18,14.404430432560805,Human error
+Concrete,Rear end,Property,Dry,0,120.97716527465957,None,2,0,0,08/06/18,14.409410814362111,Human error
+Asphalt,Head on,Property,Wet,0,123.50491518680217,None,2,0,0,08/06/18,7.8560604471989235,Human error
+Concrete,Head on,Fatal,Wet,0,125.27727681492236,None,2,1,0,08/06/18,6.0911569135251735,Vehicle defect
+Concrete,Side swipe,Injury,Dry,1,125.60651482020504,None,2,0,0,08/06/18,7.074288206264512,Human error
+Asphalt,Side swipe,Property,Dry,0,121.17063116493496,None,2,0,0,08/07/18,13.987786217032578,Human error
+Concrete,Side swipe,Property,Dry,0,120.59667711374438,Centerline,2,0,0,08/07/18,16.4514796161435,Human error
+Concrete,Side swipe,Injury,Dry,1,121.51905203921982,None,2,0,0,08/07/18,13.958324931595477,Human error
+Concrete,Side swipe,Injury,Dry,2,124.99698438028909,None,2,0,0,08/07/18,11.183799894300412,Human error
+Asphalt,Rear end,Fatal,Dry,1,121.81203831524512,Centerline,2,0,0,08/07/18,17.044995187488606,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.85715086903681,Centerline,2,2,0,08/07/18,8.202192107423633,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,120.15949697824416,None,2,0,0,08/07/18,15.997877669562877,Human error
+Concrete,Hit object off road,Fatal,Wet,1,123.11730048407716,None,1,0,0,08/07/18,9.574115056409077,Human error
+Concrete,Right angle,Property,Dry,0,120.33328227660292,Centerline,2,0,0,08/07/18,16.0361500243863,Human error
+Asphalt,Right angle,Injury,Dry,0,125.0019890469093,Centerline,4,2,0,08/07/18,11.180331617453,Human error
+Concrete,Right angle,Property,Wet,0,120.93744725080533,None,2,0,0,08/07/18,14.38293150424191,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.37416605427141,None,2,2,1,08/08/18,13.406256896037688,Human error
+Concrete,Side swipe,Injury,Dry,2,125.61861792217537,None,2,0,0,08/08/18,7.386365648380752,Human error
+Concrete,Rear end,Injury,Dry,1,121.09405440116223,None,2,0,0,08/09/18,16.363466160494333,Human error
+Concrete,Hit object off road,Fatal,Dry,1,124.48908483584748,None,1,0,0,08/09/18,9.760336167285015,Human error
+Gravel,Rear end,Fatal,Dry,3,124.38394582524509,None,3,4,0,08/09/18,11.610417548066044,Road defect
+Concrete,Head on,Injury,Dry,2,120.20535188993787,None,2,0,0,08/09/18,14.929953599463596,Road defect
+Concrete,Rear end,Fatal,Dry,1,121.58541540846831,Centerline,2,2,0,08/09/18,16.872539514275687,Human error
+Concrete,Head on,Fatal,Dry,1,121.67468587931096,Centerline,2,0,0,08/09/18,16.948831682942547,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,122.16264575176059,None,2,0,0,08/09/18,11.818445593025803,Human error
+Asphalt,Head on,Fatal,Dry,2,123.61336013254473,Centerline,2,3,0,08/09/18,12.359500815208868,Human error
+Concrete,Side swipe,Fatal,Dry,2,125.62153659862781,None,3,0,0,08/09/18,7.447938990267972,Human error
+Concrete,Hit object off road,Injury,Dry,0,122.58951915754285,None,2,3,0,08/09/18,10.601094825039816,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,121.0449302935897,None,1,0,1,08/10/18,14.619831444891037,Human error
+Concrete,Side swipe,Property,Dry,0,124.638871039699,None,2,0,0,08/10/18,8.48781432496472,Human error
+Concrete,Head on,Fatal,Dry,1,123.67809853544001,Centerline,2,2,0,08/10/18,12.985428376866944,Human error
+Concrete,Right angle,Property,Dry,0,125.62023451628907,None,2,0,0,08/10/18,7.099076654554022,Human error
+Asphalt,Rear end,Fatal,Dry,1,120.5848243725942,None,2,1,0,08/10/18,15.658037035936974,Human error
+Concrete,Head on,Injury,Dry,0,120.95468548759685,None,2,1,0,08/10/18,14.746538365183573,Human error
+Concrete,Side swipe,Injury,Dry,1,123.15147273855897,Police controlled,2,0,0,08/10/18,9.512363502682843,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.0548918935022,None,1,0,1,08/10/18,13.540078836703897,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,124.89107744487728,Centerline,1,0,1,08/10/18,12.56687325487055,Human error
+Asphalt,Head on,Injury,Dry,1,123.2781378602371,None,2,0,0,08/10/18,13.548540126444962,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.95498530621632,None,1,0,1,08/10/18,14.641068300208785,Human error
+Asphalt,Rear end,Property,Dry,0,123.6296225325295,Centerline,2,0,0,08/10/18,12.366043977546129,Human error
+Concrete,Rear end,Property,Wet,0,121.36374406402092,Centerline,2,0,0,08/10/18,14.24354593150661,Human error
+Asphalt,Rear end,Injury,Wet,2,121.7923383886927,Centerline,2,1,0,08/10/18,17.274625487690702,Human error
+Concrete,Head on,Fatal,Dry,1,123.3418816598514,Pedestrian crossing,1,0,1,08/10/18,8.578404553066395,Human error
+Concrete,Right angle,Injury,Dry,1,124.73344241023828,Centerline,2,0,0,08/11/18,9.243641006568376,Road defect
+Concrete,Rear end,Property,Dry,0,120.58085082111808,None,2,0,0,08/11/18,16.445865283711996,Human error
+Concrete,Hit object off road,Property,Dry,0,124.7413534325286,Centerline,1,0,0,08/11/18,9.103947267515741,Human error
+Concrete,Side swipe,Injury,Dry,1,123.39407603699537,None,2,0,0,08/11/18,13.562875271867915,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,0,125.47687408034851,None,1,0,1,08/11/18,6.548225758149918,Human error
+Asphalt,Hit object in road,Property,Dry,0,125.25890159945192,None,2,0,0,08/11/18,6.752852024870934,Human error
+Concrete,Side swipe,Property,Dry,0,123.1845376573209,None,2,0,0,08/11/18,13.705490233273103,Human error
+Concrete,Rear end,Injury,Dry,1,124.38270131465087,None,2,2,0,08/11/18,11.615162662942133,Vehicle defect
+Concrete,Side swipe,Injury,Dry,2,123.21189121666782,None,2,0,0,08/11/18,13.613328583070917,Human error
+Asphalt,Rear end,Fatal,Dry,1,121.14436219586136,None,2,0,0,08/11/18,14.12084715737667,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.23931845139391,None,2,0,0,08/11/18,13.614396242348114,Human error
+Concrete,Side swipe,Property,Dry,0,121.05962317444354,None,2,0,0,08/11/18,14.590201397138726,Human error
+Concrete,Side swipe,Property,Dry,0,120.9809038075203,None,2,0,0,08/12/18,14.410335322750324,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.3653819443215,None,2,0,0,08/12/18,14.240266776745898,Human error
+Concrete,Hit object off road,Property,Dry,0,124.41527903812033,None,1,0,0,08/12/18,7.274024085821067,Human error
+Asphalt,Rear end,Property,Dry,0,124.70691040669423,None,2,0,0,08/12/18,8.466928944773512,Human error
+Concrete,Side swipe,Fatal,Dry,2,125.3836936537048,Centerline,2,4,0,08/12/18,6.801273459818126,Human error
+Concrete,Rear end,Property,Wet,0,124.64468418635126,None,2,0,0,08/12/18,8.487843431934735,Vehicle defect
+Asphalt,Right angle,Property,Dry,0,124.99322097719671,Centerline,2,0,0,08/12/18,11.156924335107078,Human error
+Asphalt,Hit parked vehicle,Injury,Dry,2,121.3572657002644,Centerline,2,3,0,08/12/18,16.64266989378231,Human error
+Concrete,Side swipe,Injury,Dry,2,125.21617599306411,None,2,0,0,08/12/18,10.367377944392175,Human error
+Asphalt,Side swipe,Injury,Dry,1,120.5857907756694,None,2,0,0,08/12/18,16.07099812495429,Human error
+Concrete,Right angle,Property,Dry,0,125.64270120672634,None,2,0,0,08/12/18,7.221836644294909,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,126.02261388245724,None,1,2,0,08/12/18,7.555234351364352,Human error
+Concrete,Side swipe,Property,Dry,0,120.6126526266566,Centerline,1,0,0,08/12/18,16.460274028891003,Human error
+Concrete,Right angle,Property,Dry,0,120.59246336533508,None,2,0,0,08/13/18,16.42292789183487,Human error
+Concrete,Hit object off road,Property,Dry,0,120.91605371932506,Centerline,1,0,0,08/13/18,14.291352470353809,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.5985610458543,None,1,1,2,08/13/18,12.070403088153565,Vehicle defect
+Asphalt,Rear end,Injury,Dry,1,123.36936379471253,None,2,2,0,08/13/18,8.55773215677887,Road defect
+Concrete,Rear end,Injury,Dry,1,123.29559176705199,None,2,1,0,08/13/18,13.392208071272963,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.15892465807556,None,1,0,1,08/13/18,6.114452546604827,Human error
+Concrete,Side swipe,Property,Dry,0,125.60329822089136,None,2,0,0,08/13/18,7.070876749308168,Human error
+Concrete,Side swipe,Property,Dry,0,125.62146350425256,None,2,0,0,08/13/18,7.07328003566487,Human error
+Asphalt,Head on,Injury,Wet,2,122.79223313280573,None,2,0,0,08/13/18,13.826485370089479,Human error
+Asphalt,Right angle,Injury,Dry,1,121.04857284549094,Police controlled,2,0,0,08/13/18,14.410874247754608,Human error
+Asphalt,Right angle,Property,Dry,0,125.60620091693387,Centerline,2,0,0,08/13/18,7.056116230820646,Human error
+Concrete,Hit object off road,Property,Wet,0,125.88489767760544,None,1,0,0,08/13/18,7.206713951441801,Human error
+Asphalt,Head on,Property,Dry,0,121.0374416835019,None,2,0,0,08/13/18,14.600272518626582,Human error
+Asphalt,Right angle,Fatal,Dry,1,125.34407457146278,None,2,0,0,08/13/18,6.6073717364702444,Human error
+Concrete,Right angle,Injury,Dry,0,120.96081728010691,None,2,1,0,08/13/18,14.681272888885657,Vehicle defect
+Concrete,Head on,Fatal,Wet,0,125.06565083500115,None,2,1,0,08/13/18,7.740412019645455,Human error
+Asphalt,Head on,Injury,Dry,1,125.00191399239546,Centerline,2,2,0,08/13/18,11.148372787856282,Human error
+Concrete,Right angle,Injury,Wet,1,120.40317312046353,None,2,0,0,08/13/18,16.07321371518811,Human error
+Asphalt,Head on,Injury,Dry,1,120.59627578050745,None,2,0,0,08/13/18,15.49142587226765,Vehicle defect
+Asphalt,Overturned vehicle,Injury,Dry,1,123.82398028834028,None,1,0,0,08/13/18,9.606099575600721,Vehicle defect
+Asphalt,Side swipe,Injury,Dry,1,125.0014132651189,Centerline,2,0,0,08/14/18,11.151368318529613,Human error
+Concrete,Rear end,Injury,Dry,1,125.66170754114145,None,2,0,0,08/14/18,7.546413899012392,Human error
+Asphalt,Right angle,Injury,Dry,1,123.19717546713613,None,2,2,0,08/14/18,13.63107136076961,Human error
+Asphalt,Rear end,Fatal,Dry,2,123.61991006795861,None,2,0,0,08/14/18,10.015219401816083,Human error
+Concrete,Side swipe,Injury,Dry,2,120.92206912265324,Centerline,2,0,0,08/14/18,14.290214512791033,Human error
+Concrete,Side swipe,Property,Dry,0,121.0517071059689,None,2,0,0,08/14/18,14.751956658158655,Human error
+Asphalt,Right angle,Fatal,Dry,1,125.96400637491193,None,2,1,0,08/14/18,7.60090184855101,Human error
+Asphalt,Rear end,Property,Dry,0,123.43314235402136,None,2,0,0,08/14/18,9.515630427476454,Human error
+Asphalt,Side swipe,Property,Dry,0,120.96386318074515,None,2,0,0,08/14/18,14.80986763923098,Human error
+Asphalt,Overturned vehicle,Fatal,Dry,1,122.51312803585797,None,1,3,0,08/14/18,14.017922731441411,Vehicle defect
+Concrete,Side swipe,Property,Dry,0,121.04258010721952,Police controlled,2,0,0,08/14/18,14.718660331953565,Human error
+Concrete,Right angle,Property,Dry,0,125.61803636693826,Centerline,2,0,0,08/14/18,7.072669332886266,Human error
+Concrete,Rear end,Property,Dry,0,120.90699711840259,Centerline,2,0,0,08/14/18,14.479801429483997,Road defect
+Asphalt,Rear end,Injury,Dry,2,120.59880273610658,None,2,0,0,08/15/18,15.135988001351379,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.59879710738494,None,1,0,1,08/15/18,16.433500994824502,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,124.81847055048664,None,1,3,0,08/15/18,6.521308976905862,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.9168324818024,Police controlled,1,0,1,08/15/18,14.292570838676918,Human error
+Concrete,Rear end,Property,Dry,0,120.97996267088983,Police controlled,2,0,0,08/15/18,14.363143781739112,Human error
+Concrete,Side swipe,Property,Dry,0,124.67154316247746,None,2,0,0,08/15/18,8.479798525576303,Human error
+Concrete,Side swipe,Injury,Dry,1,123.36493753554592,None,2,2,0,08/15/18,13.548142352335057,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,0,120.59769521872366,Pedestrian crossing,1,0,1,08/15/18,15.414114704138512,Human error
+Concrete,Side swipe,Property,Dry,0,121.07027867951629,Police controlled,2,0,0,08/15/18,14.70459238684006,Human error
+Concrete,Rear end,Property,Dry,0,125.23811718368364,None,2,0,0,08/15/18,6.760363082252117,Human error
+Concrete,Rear end,Property,Dry,0,121.04220730888925,None,2,0,0,08/15/18,14.576356529083787,Human error
+Concrete,Rear end,Property,Dry,0,124.37382429996094,Centerline,3,0,0,08/15/18,8.58030286442185,Vehicle defect
+Asphalt,Right angle,Injury,Dry,1,123.26516223359963,None,2,2,0,08/15/18,13.58284464195219,Human error
+Concrete,Rear end,Injury,Dry,1,123.20385903613561,None,2,0,0,08/15/18,13.637409392404733,Human error
+Concrete,Rear end,Injury,Wet,0,125.61377945580281,None,2,1,0,08/15/18,7.076230396232877,Human error
+Concrete,Rear end,Property,Dry,0,125.61767828334878,None,2,0,0,08/15/18,7.097908556231523,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.6404383496053,None,1,0,1,08/15/18,7.235403104929735,Human error
+Concrete,Hit object off road,Property,Dry,0,125.1897120908093,None,1,0,0,08/15/18,8.912885559060584,Vehicle defect
+Asphalt,Side swipe,Property,Dry,0,120.58411795860506,None,2,0,0,08/16/18,15.913915329663013,Human error
+Concrete,Hit pedestrian,Injury,Wet,0,120.5927305943946,None,1,0,1,08/16/18,16.441317616630045,Human error
+Concrete,Overturned vehicle,Property,Dry,0,125.26628080234418,None,2,0,0,08/16/18,6.752611110888158,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.02792239928365,None,1,0,1,08/16/18,7.631584986809877,Vehicle defect
+Concrete,Rear end,Injury,Dry,1,125.57880743669423,Centerline,2,2,0,08/16/18,9.456609975081163,Human error
+Concrete,Hit parked vehicle,Fatal,Dry,1,125.45312757700947,None,1,0,1,08/16/18,6.8948736061761355,Human error
+Asphalt,Side swipe,Property,Dry,0,121.13409229690588,None,2,0,0,08/16/18,13.942824675446968,Human error
+Asphalt,Side swipe,Property,Dry,0,121.16359891425141,None,2,0,0,08/16/18,14.018399007509187,Vehicle defect
+Asphalt,Rear end,Injury,Dry,1,121.63676294127552,None,2,2,0,08/17/18,16.696310071339727,Human error
+Asphalt,Hit parked vehicle,Property,Dry,0,120.98244213951543,None,2,0,0,08/17/18,14.652918279523103,Human error
+Asphalt,Rear end,Property,Dry,0,120.95740448862688,Centerline,2,0,0,08/17/18,14.750773501104772,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.84623302114407,None,1,0,1,08/17/18,8.34031129711013,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.64632589255217,None,2,0,0,08/17/18,18.066315204781276,Human error
+Asphalt,Hit parked vehicle,Injury,Wet,1,124.99438248149832,Pedestrian crossing,2,0,0,08/17/18,7.572631646061672,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.66180388425465,Centerline,1,0,1,08/17/18,7.123681199843165,Human error
+Asphalt,Head on,Injury,Dry,1,120.57406351701647,None,2,1,0,08/17/18,16.276523840964987,Human error
+Asphalt,Right angle,Injury,Dry,2,120.27596208823437,None,2,0,0,08/17/18,16.02306719458398,Vehicle defect
+Concrete,Side swipe,Property,Dry,0,121.0670700002341,None,2,0,0,08/17/18,14.56941932706936,Human error
+Concrete,Rear end,Property,Dry,0,120.60029913362844,Give way,2,0,0,08/17/18,16.396788618624587,Human error
+Concrete,Head on,Property,Dry,0,120.89777030961552,None,2,0,0,08/18/18,16.916441541810386,Human error
+Asphalt,Overturned vehicle,Property,Dry,0,125.07695523084041,Centerline,1,0,0,08/18/18,8.18965120284725,Human error
+Concrete,Side swipe,Property,Dry,0,120.96341412387704,Traffic lights,2,0,0,08/18/18,14.642722220716994,Human error
+Concrete,Rear end,Property,Dry,0,125.60148256321905,Traffic lights,2,0,0,08/18/18,7.053470038191399,Human error
+Concrete,Right angle,Property,Dry,0,125.60716637692002,Traffic lights,2,0,0,08/18/18,7.069564733325102,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,124.67938555856432,Centerline,1,0,1,08/18/18,9.25071262944462,Human error
+Concrete,Head on,Property,Dry,0,123.18481155774725,None,2,0,0,08/18/18,13.643918370683851,Human error
+Asphalt,Head on,Injury,Dry,2,122.6154673654733,None,2,1,0,08/18/18,9.424175618070615,Human error
+Asphalt,Head on,Property,Dry,0,121.08795784936738,Centerline,2,0,0,08/18/18,13.362487815659152,Human error
+Concrete,Head on,Injury,Dry,1,125.28345293992145,None,2,0,0,08/18/18,6.061387213176893,Human error
+Asphalt,Hit pedestrian,Injury,Dry,2,123.2671080643028,Centerline,2,0,1,08/18/18,13.565193054828304,Human error
+Concrete,Side swipe,Property,Dry,0,124.39909143036971,None,2,0,0,08/18/18,11.561769668958451,Human error
+Concrete,Rear end,Property,Dry,0,125.0021979588553,None,2,0,0,08/18/18,10.877524436168457,Human error
+Asphalt,Head on,Injury,Dry,1,121.73408788817535,None,2,3,0,08/18/18,17.77152033396423,Human error
+Concrete,Head on,Injury,Dry,2,123.735241555899,Centerline,2,1,0,08/18/18,10.501609203128803,Human error
+Concrete,Side swipe,Property,Dry,0,125.00759140763616,Centerline,2,0,0,08/18/18,11.176465393761786,Human error
+Asphalt,Rear end,Property,Dry,0,123.4062791660382,Centerline,2,0,0,08/19/18,13.385806442058227,Human error
+Concrete,Rear end,Property,Dry,0,124.6118972236769,Centerline,2,0,0,08/19/18,11.00589466010447,Human error
+Asphalt,Hit parked vehicle,Injury,Dry,1,123.78524415520579,Give way,2,2,0,08/19/18,9.771632306408785,Vehicle defect
+Concrete,Head on,Property,Dry,0,122.07797956553205,None,3,0,0,08/19/18,6.918563610558595,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,123.2845330975423,None,1,0,0,08/19/18,9.217654118054948,Human error
+Concrete,Right angle,Injury,Dry,2,125.03986064200589,Centerline,2,0,0,08/19/18,10.983188414938708,Human error
+Concrete,Rear end,Injury,Wet,2,123.54738374805513,Police controlled,2,0,0,08/19/18,7.972989237077995,Human error
+Asphalt,Right angle,Injury,Dry,0,125.48726666757969,Centerline,2,1,0,08/19/18,7.120461734174998,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,120.57605210189881,None,1,0,0,08/20/18,15.955272281796715,Human error
+Asphalt,Rear end,Property,Dry,0,121.10121269475228,Centerline,2,0,0,08/20/18,14.313077793015573,Human error
+Concrete,Hit object off road,Fatal,Dry,1,120.64800001688464,None,1,0,0,08/20/18,17.976731269719398,Human error
+Concrete,Rear end,Property,Dry,0,125.5695655712399,None,2,0,0,08/20/18,7.058517471150685,Human error
+Concrete,Side swipe,Property,Dry,0,125.919604298455,None,2,0,0,08/20/18,7.536665076805869,Human error
+Concrete,Right angle,Injury,Dry,1,120.33535127291039,Centerline,2,0,0,08/20/18,16.04431880616697,Human error
+Concrete,Head on,Injury,Dry,1,125.24051096412907,None,2,0,0,08/20/18,12.509042178535395,Human error
+Concrete,Side swipe,Injury,Dry,1,123.192799533328,None,2,0,0,08/20/18,13.662946713759855,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.19867496553081,None,1,0,1,08/20/18,11.183518851348767,Human error
+Concrete,Rear end,Property,Dry,0,123.18657482993348,None,2,0,0,08/20/18,13.655320877435233,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.98763084597512,None,1,0,1,08/20/18,12.011281960589201,Vehicle defect
+Asphalt,Hit pedestrian,Injury,Dry,0,125.48785485813396,None,1,0,1,08/20/18,7.105457593168829,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.52483304207934,Centerline,1,0,1,08/20/18,13.730755883894531,Human error
+Concrete,Head on,Property,Dry,0,120.5834873532946,None,2,0,0,08/21/18,16.444985330575236,Human error
+Asphalt,Hit object in road,Fatal,Dry,0,122.80634159798119,None,1,0,1,08/21/18,13.802746624946437,Human error
+Concrete,Side swipe,Injury,Dry,1,121.79687485729674,None,2,1,0,08/21/18,17.269723988753558,Human error
+Concrete,Side swipe,Injury,Dry,1,120.92148632243595,None,2,0,0,08/21/18,14.448696584256789,Human error
+Concrete,Rear end,Property,Dry,0,120.93538517945758,None,2,0,0,08/21/18,14.294633816537148,Human error
+Asphalt,Hit pedestrian,Property,Dry,0,124.53742674735467,Centerline,1,0,0,08/21/18,7.19312505403601,Human error
+Concrete,Head on,Fatal,Dry,1,123.14665138058658,None,2,1,0,08/21/18,9.104679211617718,Human error
+Concrete,Rear end,Injury,Dry,1,121.46219045517842,None,2,0,0,08/21/18,13.928802911943784,Human error
+Asphalt,Rear end,Property,Dry,0,120.21860401341053,Centerline,2,0,0,08/21/18,15.929720283602762,Vehicle defect
+Concrete,Rear end,Injury,Dry,1,124.14855098556365,None,2,0,0,08/21/18,8.187762755281515,Human error
+Concrete,Side swipe,Injury,Dry,1,124.68261030180535,None,2,0,0,08/21/18,8.470574545046176,Human error
+Concrete,Rear end,Property,Dry,0,121.95948166744179,None,2,0,0,08/21/18,16.98550539488251,Human error
+Concrete,Rear end,Property,Dry,0,120.9829844324507,Pedestrian crossing,2,0,0,08/22/18,14.672932703303953,Human error
+Concrete,Head on,Injury,Dry,2,125.90032698132717,None,2,3,0,08/22/18,7.164879335259492,Human error
+Asphalt,Rear end,Property,Dry,0,125.50210757805242,School crossing,2,0,0,08/22/18,7.08633638251799,Human error
+Asphalt,Head on,Fatal,Dry,1,121.27871058541116,Centerline,2,0,0,08/22/18,16.584895954211234,Human error
+Asphalt,Rear end,Property,Dry,0,120.7289794033427,None,2,0,0,08/22/18,13.988837372319365,Human error
+Asphalt,Hit object off road,Property,Wet,0,124.82823996051764,None,1,0,0,08/22/18,11.849271053808833,Human error
+Concrete,Rear end,Property,Dry,0,125.62293609201494,Centerline,2,0,0,08/22/18,7.061303075644256,Human error
+Concrete,Side swipe,Injury,Dry,1,121.1610699536136,None,2,0,0,08/22/18,15.566881336031267,Human error
+Asphalt,Head on,Fatal,Dry,3,125.02511431564132,None,3,11,0,08/22/18,11.769237142313665,Human error
+Asphalt,Rear end,Injury,Dry,1,119.94949821484131,Centerline,2,1,0,08/22/18,15.586408907667126,Human error
+Concrete,Hit pedestrian,Fatal,Wet,0,120.63908599954213,Centerline,1,0,1,08/22/18,16.411254400370538,Human error
+Asphalt,Head on,Injury,Dry,1,125.93370390301061,None,2,1,0,08/22/18,7.554986841845341,Human error
+Asphalt,Rear end,Injury,Dry,2,125.59989610828437,None,2,0,0,08/23/18,9.659681552408134,Human error
+Concrete,Hit parked vehicle,Property,Wet,0,120.99535396143042,None,2,0,0,08/23/18,14.707166792669298,Human error
+Concrete,Head on,Injury,Dry,2,123.32611882143927,None,2,2,0,08/23/18,9.653153622955966,Human error
+Concrete,Hit object in road,Injury,Dry,1,125.11427255073771,Stop sign,2,0,0,08/23/18,10.183549310429498,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,1,120.60404191488863,None,1,0,1,08/23/18,15.609177205297756,Human error
+Asphalt,Rear end,Property,Dry,0,120.8763309095455,None,2,0,0,08/23/18,14.885505412313098,Human error
+Concrete,Side swipe,Injury,Dry,2,121.07438796969055,None,3,0,0,08/23/18,14.766885881649827,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,125.48722057144813,None,1,0,1,08/23/18,7.127716637530252,Human error
+Concrete,Rear end,Injury,Dry,0,121.99786629800667,Centerline,2,1,0,08/23/18,18.259887047940076,Human error
+Concrete,Right angle,Injury,Dry,1,125.21863508356196,None,2,0,0,08/23/18,6.779206261700185,Human error
+Asphalt,Side swipe,Injury,Dry,2,120.59465974318546,Police controlled,2,0,0,08/23/18,15.12678017902468,Human error
+Concrete,Side swipe,Property,Dry,0,124.77792195778395,None,2,0,0,08/23/18,8.560043957497816,Human error
+Asphalt,Head on,Property,Dry,0,123.70023089012516,Centerline,2,0,0,08/23/18,8.054451538050596,Human error
+Asphalt,Rear end,Property,Dry,0,120.10393734792203,None,2,0,0,08/23/18,14.997573574931174,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,125.01893763155711,Centerline,1,0,1,08/24/18,8.26774798618627,Human error
+Concrete,Side swipe,Property,Dry,0,125.65452932469421,None,2,0,0,08/24/18,7.152357444466541,Human error
+Concrete,Rear end,Property,Dry,0,122.81967964334544,None,2,0,0,08/24/18,9.989574719553051,Road defect
+Concrete,Hit pedestrian,Fatal,Dry,0,126.01525469008578,Centerline,1,0,1,08/25/18,9.830421900417464,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,121.3183096376283,None,1,4,0,08/25/18,15.67366320311066,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,121.03309072566334,None,1,0,1,08/25/18,14.740180161551574,Human error
+Concrete,Right angle,Injury,Dry,1,123.8422155844617,Centerline,2,0,0,08/25/18,8.14342647521527,Human error
+Asphalt,Hit object off road,Injury,Wet,1,123.10555768108142,Centerline,1,0,0,08/25/18,9.110805628677765,Vehicle defect
+Asphalt,Head on,Injury,Dry,1,120.59864924600478,None,2,0,0,08/25/18,15.469205281794508,Human error
+Concrete,Side swipe,Injury,Dry,1,125.42562336063338,None,2,0,0,08/25/18,6.849975364030979,Human error
+Asphalt,Right angle,Injury,Dry,2,123.19950309752518,None,2,0,0,08/25/18,13.634188238124937,Human error
+Concrete,Side swipe,Injury,Dry,1,124.97790074798071,Centerline,2,0,0,08/26/18,10.203703037653954,Human error
+Concrete,Side swipe,Property,Dry,0,120.9860952845087,None,2,0,0,08/26/18,14.71805138504903,Human error
+Concrete,Side swipe,Injury,Dry,1,120.58738798410405,None,2,4,0,08/26/18,15.67448720282692,Vehicle defect
+Asphalt,Head on,Fatal,Dry,1,124.59807469443062,Centerline,2,1,0,08/26/18,6.011823342792531,Human error
+Concrete,Head on,Injury,Wet,1,124.8758558407697,Centerline,2,0,0,08/26/18,11.193590931760015,Human error
+Asphalt,Right angle,Injury,Dry,1,120.9661361769158,Police controlled,2,0,0,08/26/18,14.464776559985706,Human error
+Concrete,Side swipe,Injury,Dry,1,120.15651273675704,None,2,0,0,08/26/18,14.971324435296173,Human error
+Concrete,Side swipe,Injury,Dry,0,124.62831012680563,None,1,0,1,08/26/18,6.488274735650845,Vehicle defect
+Concrete,Rear end,Injury,Dry,1,122.07526734141183,Centerline,2,0,0,08/26/18,6.920529476440752,Human error
+Concrete,Right angle,Property,Wet,0,125.62163807142792,Centerline,2,0,0,08/26/18,7.077523140300816,Human error
+Asphalt,Rear end,Injury,Dry,0,123.28801787081066,None,2,1,0,08/26/18,13.532234607809995,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.45924508118713,None,1,0,1,08/26/18,8.496502076928241,Human error
+Concrete,Right angle,Injury,Dry,2,125.43479841086408,Centerline,2,2,0,08/26/18,11.607415379815171,Human error
+Asphalt,Hit parked vehicle,Property,Dry,0,120.50154107244177,None,2,0,0,08/27/18,15.977446586393054,Human error
+Concrete,Side swipe,Injury,Wet,0,125.17732925651498,None,2,1,0,08/27/18,6.831287210713875,Human error
+Concrete,Right angle,Property,Dry,0,125.00649042491472,None,2,0,0,08/27/18,7.759834768443159,Road defect
+Asphalt,Head on,Injury,Dry,1,120.51948096668072,Centerline,2,0,0,08/27/18,17.508820118721534,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,121.09386673628724,Centerline,1,0,0,08/27/18,14.616159381417626,Human error
+Asphalt,Head on,Fatal,Dry,2,125.04805486210209,Centerline,2,1,0,08/27/18,7.847555686197207,Human error
+Concrete,Side swipe,Injury,Wet,1,123.48197302785704,Police controlled,2,0,0,08/28/18,8.093982641880732,Human error
+Concrete,Rear end,Injury,Dry,1,124.24276830377254,Centerline,2,0,0,08/28/18,8.226521019354005,Human error
+Concrete,Hit parked vehicle,Injury,Dry,1,120.59539986553148,Centerline,2,1,0,08/28/18,16.44794788295643,Human error
+Concrete,Right angle,Property,Dry,0,121.01197150514014,None,3,0,0,08/28/18,14.717980700051237,Human error
+Asphalt,Side swipe,Property,Dry,0,121.61021085384512,None,2,0,0,08/28/18,13.931913667504956,Human error
+Asphalt,Rear end,Property,Dry,0,121.27741465832277,Centerline,2,0,0,08/28/18,14.176036321113912,Human error
+Asphalt,Rear end,Injury,Dry,1,123.20144449093726,None,3,0,0,08/28/18,13.620997578127138,Human error
+Asphalt,Side swipe,Property,Dry,0,123.62179535257218,Centerline,2,0,0,08/28/18,13.184554491128944,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.33753297763309,Centerline,1,0,1,08/28/18,16.015630048798887,Human error
+Concrete,Side swipe,Property,Dry,0,120.59629927660254,Police controlled,2,0,0,08/28/18,16.405246401686252,Human error
+Concrete,Head on,Property,Dry,0,124.65828793079301,None,2,0,0,08/28/18,8.482465820805665,Human error
+Concrete,Right angle,Injury,Dry,1,126.07356315269722,None,2,0,0,08/28/18,7.8622381756953255,Human error
+Concrete,Side swipe,Injury,Dry,0,123.18764896795811,None,1,0,1,08/28/18,13.629096753088973,Human error
+Concrete,Rear end,Property,Dry,0,121.04741701043378,None,2,0,0,08/28/18,14.56643642633771,Human error
+Concrete,Hit pedestrian,Property,Dry,0,121.80605021694957,Pedestrian crossing,1,0,0,08/29/18,17.486338284484482,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,120.81754079678923,None,1,0,1,08/29/18,15.447956982433638,Human error
+Concrete,Rear end,Fatal,Dry,1,120.85829768043185,None,2,0,0,08/29/18,15.432976708874893,Human error
+Concrete,Head on,Injury,Dry,1,123.38349375230658,None,2,0,0,08/29/18,8.515500990365009,Human error
+Concrete,Rear end,Injury,Dry,1,120.95563886689492,None,2,0,0,08/29/18,14.29711119793955,Human error
+Concrete,Rear end,Property,Dry,0,121.0598536152818,None,2,0,0,08/29/18,14.592179223250076,Human error
+Concrete,Rear end,Injury,Dry,1,121.14746710238822,None,2,0,0,08/29/18,16.484313414323918,Human error
+Concrete,Hit parked vehicle,Injury,Dry,2,121.28839352444567,None,2,0,0,08/29/18,15.513395140431918,Human error
+Concrete,Overturned vehicle,Property,Dry,0,123.76239857699707,None,2,0,0,08/30/18,12.479339650437339,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,1,123.26268967148589,Pedestrian crossing,1,0,1,08/30/18,13.592832544597329,Human error
+Concrete,Hit object in road,Injury,Wet,1,120.73777712611283,None,1,0,0,08/30/18,15.442359233728853,Human error
+Concrete,Hit animal,Injury,Dry,2,125.07791988105352,None,2,0,0,08/30/18,6.205276950416749,Human error
+Concrete,Side swipe,Fatal,Dry,1,124.96064975219946,Centerline,2,1,0,08/30/18,11.271434728268655,Human error
+Concrete,Side swipe,Property,Dry,0,125.59754905224696,None,2,0,0,08/30/18,7.061490343573298,Human error
+Asphalt,Side swipe,Property,Dry,0,125.9402973090607,None,2,0,0,08/30/18,7.5839137140370605,Vehicle defect
+Concrete,Rear end,Injury,Wet,1,125.85640334046082,None,2,0,0,08/31/18,7.366129965784461,Human error
+Concrete,Overturned vehicle,Property,Dry,0,125.69761966577317,None,1,0,0,08/31/18,7.579782591141044,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,120.59671285763196,None,2,6,0,08/31/18,16.46750738160879,Human error
+Concrete,Side swipe,Injury,Dry,2,124.99416787680623,None,2,1,0,08/31/18,11.220012114508403,Human error
+Concrete,Side swipe,Injury,Dry,1,123.75519053834591,Stop sign,2,0,0,08/31/18,13.302503438344468,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.13668547377596,Centerline,2,0,0,08/31/18,8.080931511341603,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,121.80100724634895,None,1,1,0,08/31/18,13.98254384454396,Human error
+Concrete,Rear end,Injury,Dry,0,123.83293500512505,Centerline,2,1,0,08/31/18,8.086666724797025,Human error
+Concrete,Right angle,Injury,Dry,0,123.84498967082833,None,2,2,0,09/01/18,8.147727167015777,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,123.25341617412282,None,1,0,0,09/01/18,10.370716049123207,Vehicle defect
+Concrete,Right angle,Injury,Dry,1,124.40059531072492,None,2,0,0,09/01/18,11.564222917521848,Human error
+Asphalt,Head on,Property,Wet,0,121.08769985723964,None,4,0,0,09/01/18,14.619691196488453,Vehicle defect
+Concrete,Head on,Property,Dry,0,121.56846933760751,None,2,0,0,09/01/18,13.95938986323803,Human error
+Asphalt,Side swipe,Property,Dry,0,125.61326436642167,Traffic lights,2,0,0,09/01/18,7.083643540225614,Human error
+Asphalt,Rear end,Injury,Dry,2,123.14938174884453,Centerline,2,0,0,09/01/18,13.567787942622036,Human error
+Concrete,Rear end,Property,Dry,0,120.86328896646057,Centerline,2,0,0,09/02/18,14.420617334104964,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,124.33904192185638,Centerline,1,0,1,09/02/18,8.550050046803229,Human error
+Concrete,Head on,Fatal,Dry,2,121.53980204320555,None,2,2,0,09/02/18,16.834248716333196,Human error
+Concrete,Rear end,Property,Dry,0,120.97633995222102,None,2,0,0,09/02/18,14.685104850661178,Human error
+Concrete,Right angle,Property,Dry,0,122.83647058941037,None,2,0,0,09/02/18,10.536835319308343,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,123.36668403789412,None,1,0,1,09/02/18,13.41116972375354,Human error
+Asphalt,Side swipe,Fatal,Dry,0,123.8489920274789,Pedestrian crossing,1,0,1,09/02/18,8.242396514208535,Human error
+Asphalt,Right angle,Property,Dry,0,122.49232094287545,None,2,0,0,09/02/18,10.694033294716588,Human error
+Asphalt,Side swipe,Injury,Dry,2,123.71775165866617,Centerline,2,1,0,09/02/18,13.033314725107218,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,1,124.98102476629164,Centerline,1,0,1,09/02/18,11.164716702722064,Human error
+Concrete,Rear end,Injury,Dry,1,125.56349791659892,None,2,0,0,09/02/18,7.059919220417248,Human error
+Concrete,Overturned vehicle,Fatal,Dry,1,121.01715958761748,Centerline,5,0,0,09/02/18,14.286022363937542,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.68633885867298,None,2,0,0,09/03/18,13.174481048930357,Human error
+Concrete,Side swipe,Injury,Dry,1,120.96512351693022,None,2,0,0,09/03/18,14.659121464599101,Human error
+Concrete,Rear end,Property,Dry,0,123.84284565736802,None,2,0,0,09/03/18,8.146751128467326,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,124.00432975963258,Pedestrian crossing,1,1,1,09/03/18,12.863673088747493,Vehicle defect
+Concrete,Side swipe,Injury,Dry,1,122.06850989512033,None,2,0,0,09/03/18,6.907477966794693,Vehicle defect
+Concrete,Head on,Injury,Dry,0,123.48825883652258,Police controlled,1,0,1,09/03/18,8.09256027770397,Human error
+Concrete,Head on,Fatal,Dry,1,124.53111862427515,None,2,0,0,09/03/18,8.558016316963933,Human error
+Asphalt,Side swipe,Injury,Dry,1,120.58769944176152,None,2,0,0,09/03/18,16.07448361664103,Human error
+Asphalt,Right angle,Property,Dry,0,125.14024799023468,Centerline,2,0,0,09/04/18,8.051129200356838,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.14165204441139,None,2,0,0,09/04/18,13.563734804631826,Human error
+Concrete,Hit parked vehicle,Injury,Wet,1,120.73191194523991,None,2,3,0,09/04/18,16.33109525672877,Road defect
+Asphalt,Head on,Fatal,Dry,1,121.61491528761519,Centerline,2,2,0,09/04/18,14.698127984184197,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.20656300950785,None,1,0,1,09/04/18,13.621496977477669,Human error
+Asphalt,Hit object off road,Fatal,Dry,0,121.97567100319489,None,1,0,1,09/04/18,13.979130470610377,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,121.63749156109898,None,1,4,0,09/04/18,17.013670103517565,Human error
+Concrete,Right angle,Injury,Dry,1,125.66948875239437,Centerline,2,0,0,09/04/18,7.324944527328942,Human error
+Asphalt,Right angle,Injury,Dry,1,120.9886000974936,None,2,1,0,09/04/18,14.648557913868615,Human error
+Concrete,Head on,Injury,Dry,1,125.96562586578749,None,2,1,0,09/04/18,7.600131435222222,Human error
+Concrete,Head on,Injury,Dry,1,120.40221113771467,None,2,0,0,09/04/18,16.076536576636613,Human error
+Concrete,Right angle,Property,Dry,0,125.85979073123517,None,2,0,0,09/04/18,7.36550655953911,Human error
+Concrete,Rear end,Property,Dry,0,120.58229345113638,None,2,0,0,09/05/18,16.417961086854334,Human error
+Concrete,Hit pedestrian,Injury,Wet,1,125.70849049974903,None,1,0,1,09/05/18,7.356416383137515,Human error
+Asphalt,Side swipe,Property,Dry,0,121.47083329363872,None,2,0,0,09/05/18,14.261898006831501,Human error
+Asphalt,Side swipe,Property,Dry,0,123.15047245383032,None,2,0,0,09/05/18,13.564746204072865,Human error
+Concrete,Side swipe,Property,Dry,0,124.47448063628957,None,2,0,0,09/05/18,8.570711818688633,Human error
+Concrete,Head on,Property,Dry,0,121.60041670459071,None,2,0,0,09/05/18,13.935161849032198,Human error
+Asphalt,Right angle,Injury,Dry,1,120.57066177594136,Centerline,2,2,0,09/05/18,15.284480313324837,Human error
+Concrete,Side swipe,Injury,Dry,0,124.43107751204953,None,1,0,1,09/05/18,12.16610205104481,Human error
+Concrete,Right angle,Property,Dry,0,125.60461555468437,None,2,0,0,09/05/18,7.059010105089283,Human error
+Concrete,Head on,Injury,Dry,2,121.92347281600384,Centerline,2,0,0,09/05/18,10.487468905285933,Human error
+Concrete,Side swipe,Injury,Dry,2,121.53642559149465,Centerline,2,1,0,09/05/18,16.78081511594971,Human error
+Concrete,Right angle,Property,Dry,0,125.13401076072344,None,2,0,0,09/05/18,8.156707053445633,Human error
+Asphalt,Head on,Fatal,Dry,1,123.69814944380583,None,2,0,0,09/05/18,8.61018380246798,Human error
+Concrete,Rear end,Property,Dry,0,124.75602561914316,Centerline,2,0,0,09/06/18,8.506946002916852,Human error
+Asphalt,Hit object in road,Property,Dry,0,123.96983215657171,None,2,0,0,09/06/18,9.603738294237091,Human error
+Concrete,Right angle,Injury,Dry,2,125.06471025116184,None,2,0,0,09/06/18,6.214538539481959,Human error
+Asphalt,Right angle,Injury,Wet,0,125.4784647670783,None,2,1,0,09/06/18,7.114517859854404,Human error
+Concrete,Overturned vehicle,Property,Dry,0,121.4418075649936,None,1,0,0,09/06/18,17.405013167428212,Vehicle defect
+Concrete,Head on,Property,Dry,0,122.0690378762134,None,2,0,0,09/06/18,6.903671542249674,Human error
+Concrete,Rear end,Property,Dry,0,120.59435967678763,Give way,2,0,0,09/06/18,16.40992653114087,Human error
+Concrete,Rear end,Property,Dry,0,120.59598582571643,None,2,0,0,09/06/18,16.41256340753676,Human error
+Concrete,Side swipe,Injury,Dry,1,122.63289089987485,None,2,1,0,09/06/18,13.911065761329729,Human error
+Concrete,Rear end,Property,Dry,0,120.96640576281494,None,2,0,0,09/06/18,14.827425886954453,Human error
+Concrete,Side swipe,Property,Dry,0,125.60295791977347,Centerline,2,0,0,09/06/18,7.056399661455011,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,123.29183451366599,None,1,0,1,09/06/18,13.52811623801725,Human error
+Concrete,Rear end,Property,Dry,0,120.68288984406966,None,2,0,0,09/06/18,15.96254495504144,Human error
+Concrete,Head on,Injury,Dry,1,123.51138068737734,None,1,0,1,09/06/18,8.290915054996288,Human error
+Asphalt,Side swipe,Property,Dry,0,120.93991784255721,None,2,0,0,09/07/18,14.383929429527175,Human error
+Concrete,Rear end,Injury,Wet,2,120.63460913685151,None,2,0,0,09/07/18,13.950149616274343,Vehicle defect
+Concrete,Rear end,Property,Dry,0,121.04979050942488,None,2,0,0,09/07/18,14.620127836474765,Human error
+Concrete,Overturned vehicle,Injury,Wet,1,125.60336306494027,None,1,0,0,09/07/18,8.971856081080128,Human error
+Concrete,Side swipe,Injury,Dry,1,120.96308604846949,None,2,0,0,09/07/18,14.644240002353927,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,124.63702848310393,Centerline,2,0,0,09/07/18,11.289021228314866,Human error
+Concrete,Right angle,Property,Dry,0,125.50487843569663,None,2,0,0,09/07/18,8.943453178330142,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.78919171291234,Centerline,1,1,1,09/07/18,8.02951681615821,Human error
+Concrete,Rear end,Injury,Dry,2,121.25067949333035,Centerline,2,0,0,09/07/18,16.578441991223873,Human error
+Concrete,Head on,Injury,Dry,2,125.5855201058829,None,2,0,0,09/08/18,9.494794129325358,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.45747947020924,Centerline,2,0,0,09/08/18,7.189590665806917,Human error
+Concrete,Right angle,Property,Dry,0,121.44199018771185,Centerline,2,0,0,09/08/18,17.40973466047623,Human error
+Concrete,Rear end,Injury,Dry,2,121.2126135271585,Centerline,2,0,0,09/08/18,16.65508107388731,Human error
+Concrete,Right angle,Property,Dry,0,121.04289933223153,Centerline,2,0,0,09/08/18,14.63959971063266,Human error
+Concrete,Right angle,Injury,Dry,0,123.81356180961801,Centerline,2,1,0,09/08/18,8.052808080557599,Human error
+Asphalt,Side swipe,Property,Dry,0,120.57375205035133,Centerline,2,0,0,09/08/18,15.267752401122223,Human error
+Asphalt,Hit object off road,Property,Dry,0,123.2353130903139,None,1,0,0,09/08/18,13.61874242055567,Vehicle defect
+Concrete,Side swipe,Injury,Dry,2,120.85821912027144,None,2,0,0,09/08/18,14.82538082190616,Human error
+Concrete,Side swipe,Property,Dry,0,125.70979780274213,None,2,0,0,09/08/18,7.5807039651255925,Human error
+Concrete,Rear end,Property,Dry,0,125.22990839822265,None,2,0,0,09/08/18,6.76418066627931,Human error
+Concrete,Hit object in road,Property,Dry,0,120.96628649980453,Centerline,1,0,0,09/08/18,16.021574013288575,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,120.53353018117623,School crossing,1,0,0,09/08/18,16.44568286099428,Human error
+Concrete,Side swipe,Property,Dry,0,121.71056461193261,Centerline,2,0,0,09/08/18,16.795962082028858,Human error
+Concrete,Side swipe,Property,Dry,0,125.61324015327016,Police controlled,2,0,0,09/09/18,7.0781617871628875,Human error
+Concrete,Side swipe,Property,Dry,0,125.3463809810144,None,2,0,0,09/09/18,6.764047265716505,Human error
+Asphalt,Rear end,Property,Dry,0,121.19861163540236,Centerline,2,0,0,09/09/18,14.17265590872162,Human error
+Concrete,Right angle,Property,Dry,0,125.89454629960268,None,2,0,0,09/09/18,7.154545475332063,Human error
+Concrete,Side swipe,Injury,Dry,1,120.87506875387533,Centerline,2,0,0,09/09/18,14.283521424887912,Human error
+Concrete,Hit pedestrian,Property,Wet,0,124.91754327315064,Centerline,1,0,0,09/09/18,10.090006131774672,Human error
+Concrete,Side swipe,Injury,Dry,0,124.58331588613477,Centerline,1,0,1,09/09/18,8.510701465710905,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,124.54073210622414,None,1,2,0,09/09/18,7.198755616252072,Vehicle defect
+Concrete,Rear end,Property,Dry,0,123.9601106447588,None,2,0,0,09/09/18,8.156880953804974,Human error
+Asphalt,Head on,Fatal,Dry,1,124.71105479815277,Centerline,2,1,0,09/09/18,8.46937398093569,Human error
+Asphalt,Hit animal,Injury,Dry,1,123.25020759923792,None,1,0,0,09/10/18,13.611005704774747,Human error
+Concrete,Right angle,Property,Dry,0,125.61085538027052,None,2,0,0,09/10/18,7.08976962544404,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.37980551655788,None,1,0,1,09/10/18,13.558726628215913,Human error
+Asphalt,Side swipe,Injury,Dry,0,123.7125850595236,Centerline,2,1,0,09/10/18,13.053205096965259,Human error
+Concrete,Side swipe,Injury,Dry,1,120.38168052967859,None,2,0,0,09/10/18,16.048892334292848,Human error
+Concrete,Rear end,Property,Dry,0,120.98380588879549,None,2,0,0,09/10/18,14.35465430149514,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,121.66868950347019,None,2,0,0,09/10/18,18.190762080085186,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.86366356766848,None,1,0,1,09/10/18,9.644591036724739,Human error
+Concrete,Side swipe,Injury,Dry,2,119.93252458364267,Centerline,2,0,0,09/10/18,15.62184500332053,Human error
+Concrete,Right angle,Property,Dry,0,125.57958551725108,None,2,0,0,09/10/18,7.055144288537273,Human error
+Asphalt,Rear end,Injury,Dry,2,120.95214349020503,None,2,0,0,09/10/18,15.221125146226365,Vehicle defect
+Concrete,Side swipe,Property,Wet,0,125.17002713469896,None,2,0,0,09/10/18,6.8486750536452305,Human error
+Concrete,Right angle,Injury,Dry,1,125.50790646334913,Centerline,1,0,1,09/10/18,9.700999775941165,Human error
+Concrete,Rear end,Property,Dry,0,123.99491421184585,None,2,0,0,09/11/18,8.178506811226377,Human error
+Concrete,Hit object off road,Property,Dry,0,121.14344007853151,None,1,0,0,09/11/18,16.76354323050141,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.83906688389662,None,2,0,0,09/11/18,8.342681519818766,Human error
+Concrete,Hit parked vehicle,Fatal,Dry,0,120.82890838992148,None,1,0,1,09/11/18,15.66386128727433,Human error
+Concrete,Hit pedestrian,Injury,Wet,0,126.55793072795925,None,1,1,0,09/11/18,7.5794018873986575,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,123.3989537563625,Pedestrian crossing,1,0,1,09/11/18,10.472996374401912,Human error
+Asphalt,Side swipe,Property,Dry,0,123.7101090311529,None,2,0,0,09/11/18,13.143748813466745,Vehicle defect
+Concrete,Hit pedestrian,Property,Dry,0,125.86066017092507,None,1,0,0,09/11/18,7.343785787904738,Human error
+Asphalt,Right angle,Injury,Dry,2,124.69319561595606,Centerline,2,0,0,09/11/18,8.4795549546894,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.2066316861467,None,2,0,0,09/11/18,13.622735569766908,Human error
+Concrete,Side swipe,Property,Dry,0,120.39117437615542,None,2,0,0,09/11/18,16.07946493943031,Human error
+Concrete,Side swipe,Property,Dry,0,125.60986064234494,Centerline,2,0,0,09/11/18,7.078388217597061,Human error
+Asphalt,Rear end,Property,Dry,0,125.60065263949124,Traffic lights,2,0,0,09/12/18,7.058988259837276,Human error
+Concrete,Right angle,Injury,Dry,2,121.14934005920496,None,2,0,0,09/12/18,16.489247722826466,Human error
+Asphalt,Right angle,Injury,Dry,1,120.68220166678952,None,2,2,0,09/12/18,15.036962369176184,Human error
+Concrete,Rear end,Property,Dry,0,125.58407046033827,Traffic lights,2,0,0,09/12/18,7.052842416196922,Human error
+Concrete,Head on,Injury,Dry,2,123.18200114556998,None,2,0,0,09/12/18,13.612786424496075,Human error
+Concrete,Head on,Injury,Dry,2,123.26413506427699,None,2,0,0,09/12/18,9.188717505606114,Human error
+Asphalt,Head on,Property,Dry,0,123.61004394319507,Centerline,2,0,0,09/12/18,13.189445030739801,Human error
+Concrete,Head on,Fatal,Wet,1,124.74170031352557,None,2,0,0,09/13/18,8.674586430079733,Human error
+Asphalt,Head on,Injury,Dry,2,124.0187374274699,Centerline,2,0,0,09/13/18,12.974469054922784,Human error
+Concrete,Rear end,Property,Dry,0,120.99401431653894,None,2,0,0,09/13/18,14.658332369628166,Road defect
+Asphalt,Hit pedestrian,Injury,Dry,1,123.16827561441889,None,1,1,1,09/13/18,13.58502808169675,Human error
+Asphalt,Head on,Injury,Dry,1,123.85307473575646,Centerline,2,0,0,09/13/18,8.158533125751172,Human error
+Asphalt,Side swipe,Property,Dry,0,120.70094091930684,None,2,0,0,09/13/18,15.016352375510545,Human error
+Asphalt,Side swipe,Fatal,Dry,1,120.99403450670829,None,2,1,0,09/13/18,15.793355729482924,Human error
+Concrete,Hit parked vehicle,Injury,Dry,0,124.26779279534709,Centerline,2,0,6,09/13/18,8.374602394468136,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.6078231659461,Centerline,1,0,1,09/13/18,16.35812526965214,Human error
+Concrete,Hit parked vehicle,Injury,Dry,1,123.00680542236056,Centerline,2,0,0,09/13/18,8.228416939184653,Vehicle defect
+Concrete,Head on,Fatal,Dry,1,121.1478520184864,None,2,0,0,09/13/18,14.535943650027031,Human error
+Concrete,Rear end,Property,Dry,0,123.19700601720855,None,2,0,0,09/13/18,13.631721941358354,Human error
+Asphalt,Rear end,Property,Dry,0,122.97933078792201,Centerline,2,0,0,09/14/18,13.720205682248608,Human error
+Concrete,Right angle,Property,Dry,0,125.65280676615582,Centerline,2,0,0,09/14/18,7.142598829290592,Vehicle defect
+Concrete,Rear end,Property,Dry,0,125.55978762206998,None,2,0,0,09/14/18,7.060246751416034,Human error
+Concrete,Hit object in road,Injury,Dry,1,124.35846323392494,None,1,0,0,09/14/18,11.678766595498095,Human error
+Concrete,Head on,Property,Dry,0,123.51530035995002,None,2,0,0,09/14/18,9.207843870823051,Human error
+Concrete,Head on,Injury,Dry,1,120.93156950603847,None,2,0,0,09/14/18,16.11459418046381,Human error
+Concrete,Rear end,Property,Dry,0,125.60754940921669,Traffic lights,2,0,0,09/14/18,7.076791115257504,Human error
+Concrete,Side swipe,Property,Dry,0,120.97324692873431,None,2,0,0,09/15/18,14.695176203544865,Human error
+Concrete,Right angle,Injury,Dry,2,124.12321707358099,None,2,0,0,09/15/18,10.089725222699798,Human error
+Concrete,Rear end,Property,Dry,0,125.60483737303574,None,2,0,0,09/15/18,7.068002860662891,Human error
+Concrete,Overturned vehicle,Injury,Dry,1,122.97873887711928,None,1,1,0,09/15/18,13.752671432362895,Vehicle defect
+Concrete,Side swipe,Injury,Dry,1,123.19919938333783,None,2,1,0,09/15/18,13.663104398541224,Human error
+Concrete,Side swipe,Property,Wet,0,120.952359484213,None,2,0,0,09/15/18,14.755470176058422,Human error
+Concrete,Right angle,Property,Wet,0,123.54906409180617,Police controlled,2,0,0,09/15/18,7.977045350855027,Human error
+Concrete,Rear end,Property,Dry,0,120.94581973099326,None,2,0,0,09/15/18,14.428549026652746,Human error
+Asphalt,Rear end,Property,Dry,0,120.5790142920935,Centerline,2,0,0,09/15/18,15.303068180084068,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.73556598847895,Centerline,1,0,1,09/15/18,10.504106391485864,Human error
+Concrete,Rear end,Fatal,Dry,2,121.14975083659598,None,3,0,0,09/15/18,15.616555088320538,Human error
+Concrete,Right angle,Property,Dry,0,123.76084646520182,Police controlled,2,0,0,09/16/18,13.263259611666607,Human error
+Concrete,Right angle,Property,Dry,0,122.07607198546005,Police controlled,2,0,0,09/16/18,6.918935534940496,Human error
+Concrete,Side swipe,Property,Dry,0,125.68808814930316,None,2,0,0,09/16/18,7.601358886669266,Human error
+Asphalt,Head on,Property,Wet,0,125.53251072767749,None,2,0,0,09/16/18,8.944776395743684,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,125.0236727663844,None,1,0,1,09/16/18,10.053405942392562,Human error
+Asphalt,Hit pedestrian,Fatal,Dry,1,123.75100693489381,None,1,0,1,09/16/18,8.062561279056586,Human error
+Concrete,Side swipe,Fatal,Dry,1,121.77434938608874,Centerline,2,0,0,09/16/18,16.9478292920135,Human error
+Concrete,Rear end,Property,Dry,0,125.61704174141549,None,2,0,0,09/16/18,7.068145114342587,Human error
+Concrete,Side swipe,Property,Dry,0,121.00833010837802,None,3,0,0,09/16/18,14.556830985933875,Human error
+Concrete,Right angle,Injury,Dry,0,120.99284202190192,Stop sign,2,3,0,09/16/18,14.658558724580457,Human error
+Asphalt,Side swipe,Fatal,Dry,1,125.09437155365629,None,2,1,0,09/16/18,7.92318453715895,Human error
+Concrete,Rear end,Property,Dry,0,123.3093767763209,None,2,0,0,09/16/18,9.30122003403411,Human error
+Concrete,Head on,Property,Wet,0,123.56044272221287,Centerline,2,0,0,09/16/18,7.968575353722578,Human error
+Concrete,Right angle,Property,Dry,0,121.03057127132426,None,2,0,0,09/17/18,14.548113905121076,Human error
+Asphalt,Side swipe,Injury,Dry,1,125.28221692121443,None,1,0,0,09/17/18,6.379213762330873,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.48122133543843,None,1,0,1,09/17/18,15.812455694109255,Human error
+Asphalt,Side swipe,Injury,Dry,1,121.59366169773858,Give way,2,0,0,09/17/18,13.94942659060434,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,120.4916096804444,None,1,0,1,09/17/18,15.810360354096764,Human error
+Asphalt,Head on,Injury,Wet,2,125.6078126623014,None,2,1,0,09/17/18,7.051442517717918,Human error
+Concrete,Rear end,Property,Dry,0,121.0417588358703,Traffic lights,2,0,0,09/17/18,14.421996086368072,Human error
+Asphalt,Rear end,Property,Dry,0,120.98592570016169,None,2,0,0,09/17/18,14.66138949465655,Human error
+Concrete,Hit pedestrian,Fatal,Dry,1,120.95838988428012,None,1,0,1,09/17/18,15.568904595163369,Human error
+Concrete,Side swipe,Fatal,Wet,1,121.85764176875283,None,2,2,0,09/17/18,17.03549962341474,Human error
+Concrete,Rear end,Property,Dry,0,120.94603068207523,None,2,0,0,09/17/18,14.394702258898954,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,123.21831828004396,None,1,0,1,09/17/18,13.617860831475674,Human error
+Concrete,Head on,Injury,Dry,1,121.08192579199289,None,2,0,0,09/17/18,14.629726860382213,Human error
+Concrete,Side swipe,Fatal,Dry,1,124.53602413751054,None,1,0,1,09/18/18,12.099085290545938,Human error
+Asphalt,Head on,Injury,Dry,2,120.27912520140599,None,2,0,0,09/18/18,14.831934519214395,Road defect
+Concrete,Hit pedestrian,Injury,Dry,0,120.32930744027789,Pedestrian crossing,1,0,1,09/18/18,16.021314524860365,Human error
+Concrete,Rear end,Property,Dry,0,125.0187675406961,Centerline,2,0,0,09/18/18,11.209360584329088,Human error
+Concrete,Rear end,Property,Dry,0,121.14607653141726,None,2,0,0,09/18/18,14.089326546313147,Human error
+Concrete,Right angle,Property,Dry,0,124.99999302987837,None,2,0,0,09/18/18,11.169958281773237,Human error
+Asphalt,Rear end,Property,Dry,0,120.4638624454829,None,2,0,0,09/18/18,14.877297951980957,Human error
+Concrete,Rear end,Property,Dry,0,125.6248502408409,None,2,0,0,09/18/18,7.072959076074647,Human error
+Asphalt,Side swipe,Injury,Dry,2,123.25045052032554,None,2,0,0,09/19/18,13.610187424786947,Human error
+Concrete,Rear end,Property,Dry,0,120.94273008802796,Centerline,2,0,0,09/19/18,14.410647379596035,Human error
+Concrete,Head on,Fatal,Dry,1,124.99794047369839,None,1,0,1,09/19/18,7.661366601382558,Road defect
+Asphalt,Rear end,Property,Dry,0,121.19823666924907,None,2,0,0,09/19/18,14.170757154076902,Human error
+Concrete,Rear end,Injury,Dry,1,124.65995079923917,None,2,0,0,09/19/18,6.6806273081911085,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,125.17513603301806,None,1,0,1,09/19/18,8.843265768877261,Human error
+Concrete,Head on,Fatal,Dry,3,125.02228748607519,Centerline,3,8,0,09/19/18,11.086217282942359,Human error
+Concrete,Head on,Injury,Dry,2,120.84035988595676,None,2,0,0,09/19/18,14.382465637866062,Human error
+Concrete,Side swipe,Property,Wet,0,120.97787874280716,Centerline,2,0,0,09/19/18,14.349418782397057,Human error
+Concrete,Rear end,Property,Dry,0,125.96883085593421,None,2,0,0,09/19/18,7.599554857310674,Human error
+Asphalt,Rear end,Property,Dry,0,123.18685329033634,None,2,0,0,09/19/18,13.631150997355704,Human error
+Concrete,Rear end,Property,Dry,0,120.98554899299558,None,2,0,0,09/19/18,14.660805430832196,Human error
+Asphalt,Right angle,Injury,Dry,1,123.18933038398639,None,2,3,0,09/19/18,13.633408267028326,Human error
+Concrete,Head on,Injury,Dry,1,120.86472326873061,None,2,1,0,09/19/18,14.294482262356638,Human error
+Concrete,Rear end,Property,Dry,0,125.60324966312511,Traffic lights,2,0,0,09/20/18,7.063925669865778,Human error
+Concrete,Rear end,Property,Dry,0,125.66282048913564,None,2,0,0,09/20/18,7.14298681889551,Human error
+Asphalt,Rear end,Property,Dry,0,123.80126385688969,Centerline,4,0,0,09/20/18,12.97468554587245,Human error
+Concrete,Hit pedestrian,Injury,Dry,1,123.49080919278849,None,1,0,1,09/20/18,7.905653539159448,Human error
+Asphalt,Head on,Property,Dry,0,125.51412753395208,None,2,0,0,09/20/18,8.941551514711467,Human error
+Concrete,Hit pedestrian,Fatal,Dry,0,123.97587878595058,None,1,0,1,09/20/18,10.883832193114756,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,120.89073072453222,None,1,0,1,09/20/18,16.917079642267723,Vehicle defect
+Asphalt,Head on,Injury,Dry,1,121.04762185882431,Centerline,2,0,0,09/20/18,14.379911075324145,Human error
+Asphalt,Rear end,Injury,Dry,1,123.23263580792454,None,2,0,0,09/20/18,13.616454099401466,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,125.66164086852456,None,1,0,1,09/21/18,7.148611661082857,Human error
+Asphalt,Side swipe,Property,Dry,0,120.63964407789837,None,2,0,0,09/21/18,15.079146163200999,Human error
+Concrete,Side swipe,Injury,Dry,1,125.85879490686987,None,2,0,0,09/21/18,7.368784550622453,Human error
+Asphalt,Side swipe,Property,Dry,0,121.04503765211182,None,2,0,0,09/21/18,14.588021129662442,Human error
+Concrete,Side swipe,Property,Dry,0,120.39623759992305,None,2,0,0,09/21/18,16.08344195848494,Human error
+Asphalt,Side swipe,Injury,Dry,1,123.22642850979136,None,2,2,0,09/21/18,13.617650379500326,Human error
+Gravel,Hit pedestrian,Fatal,Dry,1,125.18068104239575,None,1,0,2,09/21/18,10.259134161472982,Vehicle defect
+Concrete,Side swipe,Property,Dry,0,120.90862060683426,None,2,0,0,09/21/18,14.44155988399131,Human error
+Asphalt,Hit pedestrian,Injury,Dry,1,125.02385850708804,Pedestrian crossing,1,0,1,09/21/18,11.201039057017223,Human error
+Concrete,Head on,Property,Dry,0,122.08098723666795,None,2,0,0,09/21/18,6.922594465644031,Vehicle defect
+Concrete,Rear end,Injury,Dry,1,125.78605974442334,None,2,0,0,09/21/18,7.455398062245686,Human error
+Concrete,Side swipe,Property,Dry,0,124.48095453078324,None,2,0,0,09/21/18,11.154101917808383,Human error
+Asphalt,Hit parked vehicle,Property,Dry,0,120.58106067293384,None,1,0,0,09/22/18,15.948388166355404,Human error
+Concrete,Side swipe,Fatal,Dry,1,120.58996857758997,None,1,0,0,09/22/18,15.161370432089846,Human error
+Concrete,Right angle,Injury,Dry,1,125.24095162234401,None,2,1,0,09/22/18,6.748874883915225,Human error
+Asphalt,Side swipe,Injury,Dry,0,120.97910397849891,None,1,2,0,09/22/18,14.39043939212078,Road defect
+Concrete,Side swipe,Property,Dry,0,121.04386811900201,None,2,0,0,09/22/18,14.626947061589195,Human error
+Concrete,Rear end,Property,Dry,0,121.10817831361372,None,2,0,0,09/22/18,14.599238108280726,Human error
+Concrete,Side swipe,Property,Dry,0,122.07728335162413,Police controlled,2,0,0,09/22/18,6.919218411015422,Human error
+Asphalt,Hit pedestrian,Injury,Dry,0,121.32106107356068,None,1,0,1,09/22/18,13.961234102115535,Human error
+Concrete,Side swipe,Property,Dry,0,121.96399841127933,None,2,0,0,09/22/18,16.982963717181946,Vehicle defect
+Concrete,Head on,Fatal,Dry,2,120.98688366360727,None,2,0,0,09/22/18,14.93842990795169,Human error
+Concrete,Hit parked vehicle,Property,Dry,0,121.02691800172842,None,2,0,0,09/22/18,14.54735097273101,Human error
+Concrete,Right angle,Injury,Dry,1,124.78452402930313,Centerline,2,2,0,09/23/18,9.084478169016316,Human error
+Concrete,Side swipe,Fatal,Dry,1,124.87246588148606,None,2,1,0,09/23/18,9.0031561043891,Human error
+Concrete,Head on,Property,Dry,0,121.55426874813021,Traffic lights,2,0,0,09/23/18,13.971116140581879,Human error
+Concrete,Head on,Property,Dry,0,124.63761458805882,Centerline,2,0,0,09/23/18,8.472375996418158,Road defect
+Concrete,Rear end,Injury,Dry,1,124.90959473821559,Centerline,3,0,0,09/23/18,7.809595141147157,Human error
+Concrete,Hit pedestrian,Injury,Dry,0,121.27940224770741,Centerline,1,0,1,09/23/18,13.176901217033086,Human error
+Concrete,Side swipe,Property,Dry,0,124.645607416853,None,2,0,0,09/24/18,8.488342453240243,Human error
+Concrete,Right angle,Property,Dry,0,121.03325450477281,None,2,0,0,09/24/18,14.654814365163428,Human error
+Asphalt,Hit object in road,Property,Dry,0,122.65090063550727,None,2,0,0,09/24/18,13.901037271581433,Vehicle defect
+Concrete,Rear end,Property,Wet,0,120.98475099043152,None,2,0,0,09/24/18,14.64034077899052,Vehicle defect
+Concrete,Side swipe,Injury,Dry,1,125.60969621075957,Centerline,2,0,0,09/24/18,7.078868732912439,Human error
+Concrete,Head on,Injury,Dry,1,120.58729379714809,None,2,1,0,09/24/18,15.13557632576611,Vehicle defect
+Concrete,Rear end,Property,Dry,0,125.63976508010869,None,2,0,0,09/24/18,7.128516381443241,Human error
+Asphalt,Overturned vehicle,Injury,Dry,1,124.75888895277487,Centerline,1,3,0,09/24/18,8.494814277085846,Vehicle defect
+Asphalt,Head on,Fatal,Dry,1,120.34304151686506,None,2,0,0,09/24/18,16.704848583141214,Human error

@@ -32,16 +32,12 @@
 - name: Pull application Docker image
   command: /usr/bin/docker pull {{ docker_repository }}driver-app:{{ docker_image_tag }}
   when: staging or production
-  notify:
-    - Restart driver-app
 
-- name: Configure Driver application service definition
+- name: Configure DRIVER application service definition
   template: src=upstart-app.conf.j2 dest=/etc/init/driver-app.conf
-  notify:
-    - Restart driver-app
 
-- name: Ensure Driver application is running
-  service: name=driver-app state=started
+- name: Restart DRIVER application
+  service: name=driver-app state=restarted
 
 - name: Set up monit monitoring of driver-app container
   template: src=monit-driver-app.cfg.j2 dest=/etc/monit/conf.d/driver-app.cfg
@@ -55,5 +51,6 @@
 - name: Run Django migrations
   command: >
     /usr/bin/docker exec -i driver-app ./manage.py migrate
+  when: developing or staging
 
 - { include: firewall.yml }

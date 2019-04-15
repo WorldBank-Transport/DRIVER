@@ -2,6 +2,7 @@
 
 describe('driver.filterbar: FilterbarController', function () {
 
+    beforeEach(module('driver.weather'));
     beforeEach(module('driver.filterbar'));
     beforeEach(module('driver.state'));
     beforeEach(module('ase.mock.resources'));

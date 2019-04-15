@@ -1,4 +1,4 @@
-FROM node:4-slim
+FROM node:8-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN gem install ffi -v 1.9.18
 RUN gem install sass -v 3.4.22
+RUN gem install rb-inotify -v 0.9.10
 RUN gem install compass
 
 RUN mkdir -p /opt/web /npm /bower

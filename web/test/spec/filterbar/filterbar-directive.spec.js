@@ -9,6 +9,7 @@ describe('driver.filterbar: FilterbarDirective', function () {
     beforeEach(module('driver.mock.resources'));
     beforeEach(module('ase.templates'));
     beforeEach(module('pascalprecht.translate'));
+    beforeEach(module('driver.weather'));
 
     var $compile;
     var $httpBackend;

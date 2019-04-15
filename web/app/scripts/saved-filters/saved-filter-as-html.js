@@ -4,10 +4,13 @@
     // Angular filter for  transforming a saved filter object to an HTML representation.
     // Note: if a new filter rule type is implemented, a new case must be added here for display.
     /* ngInject */
-    function SavedFilterAsHTML($translate) {
+    function SavedFilterAsHTML($translate, $filter) {
         var searchTextLabel = $translate.instant('SAVED_FILTERS.SEARCH_TEXT');
         var textSearchLabel = $translate.instant('SAVED_FILTERS.TEXT_SEARCH');
+        var checkOutsideBoundaryLabel = $translate.instant('RECORD.OUT_OF_BOUNDS');
+        var createdByLabel = $translate.instant('RECORD.CREATED_BY');
         var unknownRuleType = $translate.instant('ERRORS.UNKNOWN_RULE_TYPE');
+        var weatherLabel = $translate.instant('RECORD.WEATHER');
 
         // Helper for determining if a value is a number
         function isNumeric(n) {
@@ -56,8 +59,18 @@
                         break;
 
                     default:
+                        // TODO: Refactor now that we have more of these. See #160822988
                         if (key === '__searchText') {
                             htmlBlocks.push('<strong>' + textSearchLabel + ':</strong> ' + val);
+                        } else if (key === '__weather') {
+                            var valTranslation = _.map(val, function(weatherKey) {
+                                return $translate.instant($filter('weatherLabel')(weatherKey));
+                            }).join(', ');
+                            htmlBlocks.push('<strong>' + weatherLabel + ':</strong> ' + valTranslation);
+                        } else if (key === '__quality') {
+                            htmlBlocks.push('<strong>' + checkOutsideBoundaryLabel + '</strong>');
+                        } else if (key === '__createdBy') {
+                            htmlBlocks.push('<strong>' + createdByLabel + ':</strong> ' + val);
                         } else {
                             htmlBlocks.push(unknownRuleType + ': ' + val._rule_type);
                         }

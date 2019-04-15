@@ -3,7 +3,7 @@
 
     /* ngInject */
     function FilterbarController($modal, $scope, $timeout, debounce, RecordSchemaState,
-                                 AuthService, FilterState, RecordState) {
+                                 AuthService, FilterState, RecordState, WebConfig) {
         var ctl = this;
         ctl.filters = {};
         ctl.filterPolygon = null;
@@ -11,6 +11,10 @@
         ctl.reset = reset;
         ctl.showSavedFiltersModal = showSavedFiltersModal;
         ctl.userCanAdd = false;
+        ctl.hasWriteAccess = AuthService.hasWriteAccess();
+        ctl.showWeatherFilter = WebConfig.filters.weather.visible;
+        ctl.showCreatedByFilter = WebConfig.filters.createdBy.visible;
+        ctl.showCreatedDateFilter = ctl.hasWriteAccess && WebConfig.filters.createdDate.visible;
         init();
 
         function init() {
@@ -33,7 +37,6 @@
                 //unset
                 delete ctl.filters[filterLabel];
             }
-
             FilterState.saveFilters(ctl.filters);
             ctl.sendFilter();
         };
@@ -111,18 +114,14 @@
             var value;
             ctl.filters = filters[0];
             ctl.filterPolygon = filters[1];
-
             if (!ctl.filters.__dateRange && dateRange) {
                 ctl.filters.__dateRange = dateRange;
             }
-
-            if (ctl.filters.__dateRange) {
-                filterOn.push('__dateRange');
-            }
-
-            if (ctl.filters.__searchText) {
-                filterOn.push('__searchText');
-            }
+            _.each(FilterState.getNonJsonFilterNames(), function(filterName) {
+                if (ctl.filters[filterName]) {
+                    filterOn.push(filterName);
+                }
+            });
 
             _.each(filterOn, function(label) {
                 if (ctl.filters[label]) {
