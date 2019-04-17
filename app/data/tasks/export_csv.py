@@ -172,10 +172,9 @@ class DriverRecordExporter(object):
 
     def get_files_and_names(self):
         """Return all file objects maintained by this exporter along with suggested names"""
-        result = [(self.rec_outfile, 'records.csv')]
+        yield (self.rec_outfile, 'records.csv')
         for related_name, out_file in self.outfiles.viewitems():
-            result.append((out_file, related_name + '.csv'))
-        return result
+            yield (out_file, related_name + '.csv')
 
     def write_record(self, rec):
         """Pass rec's fields through all writers to output all info as CSVs"""
