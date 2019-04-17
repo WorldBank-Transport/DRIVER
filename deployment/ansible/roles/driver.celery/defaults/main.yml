@@ -25,6 +25,7 @@ driver_conf:
   DJANGO_SECRET_KEY: "{{ postgresql_password | md5 }}"
   DJANGO_ENV: "{% if developing %}development{% elif staging %}staging{% else %}production{% endif %}"
   DRIVER_OSM_EXTRACT_URL: "{{ osm_extract_url }}"
+  DRIVER_LOCAL_TIME_ZONE: "{{ local_time_zone_id }}"
   BLACKSPOT_RECORD_TYPE_LABEL: "{{ web_js_record_type_primary_label }}"
   ALLOWED_HOST: "{{ allowed_host }}"
 
