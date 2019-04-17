@@ -136,7 +136,7 @@ class DriverRecordExporter(object):
         # All non-details related info types
         self.writers = {related: self.make_related_info_writer(related, subschema)
                         for related, subschema in self.schema['definitions'].viewitems()
-                        if 'details' not in subschema or subschema['details'] is False}
+                        if not subschema.get('details')}
 
         self.rec_outfile, self.outfiles = self.setup_output_files()
         self.write_headers()
@@ -147,9 +147,8 @@ class DriverRecordExporter(object):
         # https://bugs.python.org/issue21044
         rec_outfile = tempfile.NamedTemporaryFile(delete=False)
         outfiles = {related: tempfile.NamedTemporaryFile(delete=False)
-                    for related in self.schema['definitions']
-                    if ('details' not in self.schema['definitions'][related] or
-                        self.schema['definitions'][related]['details'] is False)}
+                    for related, subschema in self.schema['definitions'].iteritems()
+                    if not subschema.get('details')}
         return (rec_outfile, outfiles)
 
     def write_headers(self):
@@ -223,8 +222,8 @@ class DriverRecordExporter(object):
         """
         # Need to drop Media fields; we can't export them to CSV usefully.
         drop_keys = dict()
-        for prop in info_definition['properties']:
-            if 'media' in info_definition['properties'][prop]:
+        for prop, attributes in info_definition['properties'].iteritems():
+            if 'media' in attributes:
                 drop_keys[prop] = None
         return RelatedInfoWriter(info_name, info_definition, field_transform=drop_keys,
                                  include_record_id=include_record_id)
@@ -233,7 +232,7 @@ class DriverRecordExporter(object):
         """Generate a writer to put record fields and details in one CSV"""
         model_writer = self.make_constants_csv_writer()
         details = {key: subschema for key, subschema in self.schema['definitions'].viewitems()
-                   if 'details' in subschema and subschema['details'] is True}
+                   if subschema.get('details') is True}
         details_key = details.keys()[0]
         details_writer = self.make_related_info_writer(details_key, details[details_key],
                                                        include_record_id=False)
@@ -335,19 +334,15 @@ class RecordModelWriter(BaseRecordWriter):
 
     def get_model_value_for_column(self, record, column):
         """Gets the value from the appropriate model field to populate column"""
-        # Get the value from record.<column> if no source_field specified, otherwise
-        # get it from record.<source_field>
-        model_field = column
-        if column in self.source_fields:
-            model_field = self.source_fields[column]
+        # Get the value from record.<source_field> if a <source_field> is defined for <column>,
+        # otherwise get it from record.<column>
+        model_field = self.source_fields.get(column, column)
         return getattr(record, model_field)
 
     def transform_model_value(self, value, column):
         """Transforms value into an appropriate value for column"""
         # Pass the value through any necessary transformation before output.
-        val_transform = lambda v: v
-        if column in self.value_transforms:
-            val_transform = self.value_transforms[column]
+        val_transform = self.value_transforms.get(column, lambda v: v)
         return val_transform(value)
 
 
