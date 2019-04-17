@@ -4,6 +4,7 @@ import zipfile
 import tempfile
 import time
 import StringIO
+import pytz
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -18,6 +19,7 @@ from data.models import DriverRecord
 from driver_auth.permissions import is_admin_or_writer
 
 logger = get_task_logger(__name__)
+local_tz = pytz.timezone(settings.TIME_ZONE)
 
 
 def _utf8(value):
@@ -192,24 +194,31 @@ class DriverRecordExporter(object):
 
     def make_constants_csv_writer(self):
         """Generate a Record Writer capable of writing out the non-json fields of a Record"""
+        def render_date(d):
+            return d.astimezone(local_tz).strftime('%Y-%m-%d %H:%M:%S')
+
         # TODO: Currently this is hard-coded; it may be worthwhile to make this introspect Record
         # to figure out which fields to use, but that will be somewhat involved.
-        csv_columns = ['record_id', 'created', 'modified', 'occurred_from',
+        csv_columns = ['record_id', 'timezone', 'created', 'modified', 'occurred_from',
                        'occurred_to', 'lat', 'lon', 'location_text',
                        'city', 'city_district', 'county', 'neighborhood', 'road',
                        'state', 'weather', 'light']
         # Model field from which to get data for each csv column
-        source_fields = {'record_id': 'uuid',
-                         'lat': 'geom',
-                         'lon': 'geom'}
+        source_fields = {
+            'record_id': 'uuid',
+            'timezone': None,
+            'lat': 'geom',
+            'lon': 'geom'
+        }
+
         # Some model fields need to be transformed before they can go into a CSV
-        date_iso = lambda d: d.isoformat()
         value_transforms = {
             'record_id': lambda uuid: str(uuid),
-            'created': date_iso,
-            'modified': date_iso,
-            'occurred_from': date_iso,
-            'occurred_to': date_iso,
+            'timezone': lambda _: settings.TIME_ZONE,
+            'created': render_date,
+            'modified': render_date,
+            'occurred_from': render_date,
+            'occurred_to': render_date,
             'lat': lambda geom: geom.y,
             'lon': lambda geom: geom.x,
         }
@@ -336,6 +345,8 @@ class RecordModelWriter(BaseRecordWriter):
         # Get the value from record.<source_field> if a <source_field> is defined for <column>,
         # otherwise get it from record.<column>
         model_field = self.source_fields.get(column, column)
+        if model_field is None:
+            return None
         return getattr(record, model_field)
 
     def transform_model_value(self, value, column):
