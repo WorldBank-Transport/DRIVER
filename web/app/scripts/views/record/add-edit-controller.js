@@ -348,7 +348,8 @@
                     iconlib: 'bootstrap3',
                     show_errors: 'change',
                     no_additional_properties: true,
-                    startval: ctl.record ? ctl.record.data : null
+                    startval: ctl.record ? ctl.record.data : null,
+                    use_auto_inc_titles: true
                 },
                 errors: []
             };

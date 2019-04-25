@@ -45,7 +45,8 @@
                     disable_array_add: false,
                     theme: 'bootstrap3',
                     show_errors: 'change',
-                    no_additional_properties: true
+                    no_additional_properties: true,
+                    use_auto_inc_titles: true
                 },
                 errors: []
             };
