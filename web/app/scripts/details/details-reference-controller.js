@@ -19,7 +19,13 @@
             // have a -1 populated here, so we can just take the maxiumum of the array
             var index = _.max(candidateIndices);
             if (index > -1) {
-                ctl.referenceDisplay = ctl.property.propertyName + ' ' + (index + 1);
+                // Property name of the target
+                var targetKey = ctl.property.watch.target;
+
+                // Single title of the referenced target
+                var singleTitle = ctl.recordSchema.schema.definitions[targetKey].title;
+
+                ctl.referenceDisplay = singleTitle + ' ' + (index + 1);
             }
         }
     }

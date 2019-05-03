@@ -9,6 +9,7 @@
                 data: '<',
                 properties: '<',
                 record: '<',
+                recordSchema: '<',
                 definition: '<',
                 isSecondary: '<'
             },
