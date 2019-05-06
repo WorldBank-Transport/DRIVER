@@ -22,7 +22,7 @@
     "angular-translate-loader-static-files": "2.11.0",
     "bootstrap-sass-official": "twbs/bootstrap-sass#02c61388626f6942a8bcbb2129866a976b093acb",
     "ng-file-upload": "^4.0.0",
-    "json-editor": "azavea/json-editor#v10.7.26",
+    "json-editor": "azavea/json-editor#v10.7.29",
     "ng-debounce": "^0.1.7",
     "bootstrap-select": "1.7.3",
     "lodash": "^3.8.0",
