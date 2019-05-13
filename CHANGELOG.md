@@ -1,5 +1,15 @@
 # Change Log
 
+## [2.0.3](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.3) (2019-05-13)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v2.0.2...2.0.3)
+
+**Merged pull requests:**
+
+- Make relationship field value use the title [\#775](https://github.com/WorldBank-Transport/DRIVER/pull/775)
+- Use auto-incrementing labels for related items [\#774](https://github.com/WorldBank-Transport/DRIVER/pull/774)
+- Use local time in CSV exports [\#773](https://github.com/WorldBank-Transport/DRIVER/pull/773)
+- Fix relationship value not showing on record modal [\#772](https://github.com/WorldBank-Transport/DRIVER/pull/772)
+
 ## [2.0.2](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.2) (2019-04-12)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.2)
 
