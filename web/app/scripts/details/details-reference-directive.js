@@ -9,6 +9,7 @@
                 data: '=',
                 property: '=',
                 record: '=',
+                recordSchema: '=',
                 compact: '='
             },
             templateUrl: 'scripts/details/details-reference-partial.html',

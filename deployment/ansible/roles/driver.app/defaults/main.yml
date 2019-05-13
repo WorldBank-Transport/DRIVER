@@ -25,6 +25,7 @@ driver_conf:
   DJANGO_SECRET_KEY: "{{ postgresql_password | md5 }}"
   DJANGO_ENV: "{% if developing %}development{% elif staging %}staging{% else %}production{% endif %}"
   DRIVER_OSM_EXTRACT_URL: "{{ osm_extract_url }}"
+  DRIVER_LOCAL_TIME_ZONE: "{{ local_time_zone_id }}"
   ALLOWED_HOST: "{{ allowed_host }}"
   DRIVER_DEDUPE_TIME_RANGE_HOURS: "{{ dedupe_time_range_hours }}"
   DRIVER_DEDUPE_DISTANCE_DEGREES: "{{ dedupe_distance_degrees }}"

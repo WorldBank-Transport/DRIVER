@@ -10,6 +10,7 @@
               data: '=',
               property: '=',
               record: '=',
+              recordSchema: '=',
               isSecondary: '<'
             },
             templateUrl: 'scripts/details/details-field-partial.html',
