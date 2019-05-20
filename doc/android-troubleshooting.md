@@ -6,6 +6,15 @@ users in the field to easily submit data to the DRIVER platform. Integrating the
 specific installation of DRIVER requires some configuration. This document provides a guide to
 troubleshooting some of the most common problems with the Android application.
 
+## Table of Contents
+- [**Prerequisites**](#prerequisites)
+- [**Troubleshooting instructions**](#troubleshooting-instructions)
+  - [**Symptom: Logging in to the app with username and password doesn't work**](#symptom-logging-in-to-the-app-with-username-and-password-doesnt-work)
+  - [**Symptom: Logging in to the app with Google doesn't work.**](#symptom-logging-in-to-the-app-with-google-doesnt-work)
+  - [**Symptom: Uploading records from the app doesn't work.**](#symptom-uploading-records-from-the-app-doesnt-work)
+  - [**Symptom: Updating the schema on the app doesn't work.**](#symptom-updating-the-schema-on-the-app-doesnt-work)
+  - [**Symptom: Updating the schema always returns the message "Schema update is not ready yet"**](#symptom-updating-the-schema-always-returns-the-message-schema-update-is-not-ready-yet)
+
 ## Prerequisites
 This document assumes that you are able to build a copy of the Android app and install it on an
 Android device, and that you have a working installation of DRIVER running at a publicly-available

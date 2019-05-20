@@ -5,6 +5,18 @@ The goal of this document is to provide enough information to allow a system adm
 These instructions are designed to be run on a Linux- or Unix-like system.
 
 
+## Sections
+- [**General system architecture**](#general-system-architecture)
+- [**Deployment**](#deployment)
+- [**Deploying updates**](#deploying-updates)
+- [**Making custom changes**](#making-custom-changes)
+- [**Using Monit to restart services**](#using-monit-to-restart-services)
+- [**Logging into servers and viewing logs**](#logging-into-servers-and-viewing-logs)
+- [**Firewall configuration**](#firewall-configuration)
+- [**SSL certificate configuration**](#ssl-certificate-configuration)
+- [**Cleaning up after Docker**](#cleaning-up-after-docker)
+- [**General troubleshooting notes for server restarts**](#general-troubleshooting-notes-for-server-restarts)
+
 ## General system architecture
 
 The default DRIVER production setup consists of three servers, all running Ubuntu 14.04 LTS:
