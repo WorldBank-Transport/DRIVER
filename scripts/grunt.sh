@@ -14,7 +14,7 @@ SCHEMA_EDITOR_ROOT=/opt/schema_editor
 # contained within the appropriate section.
 case "$1" in
   -h|help)
-    echo "Usage: grunt.sh {editor,web} [GRUNT_COMMAND]"
+    echo "Usage: `grunt.sh editor [GRUNT_COMMAND]` or `grunt.sh web [GRUNT_COMMAND]`"
 
     exit 0
     ;;

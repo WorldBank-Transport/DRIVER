@@ -90,8 +90,14 @@ vagrant provision app
 ### Frontend
 Both Angular apps can be run in development mode via:
 ```bash
-./scripts/grunt.sh {editor,web} serve
+./scripts/grunt.sh editor serve
 ```
+and
+```bash
+./scripts/grunt.sh web serve
+```
+You will need to run these commands in separate terminals if you'd like to have both running at the same time.
+
 The frontend app will be available on port 7002 at http://localhost:7002 and the schema editor will be available on port
 7001 at http://localhost:7001. Both will reload automatically as changes are made.
 
@@ -156,6 +162,8 @@ python scripts/load_incidents_v3.py --authz 'Token <YOUR_AUTH_TOKEN>' scripts/sa
 Note that the import process will take roughly two hours for the full data set; you can cut down the
 number of records with `head` on the individual CSVs.
 
+The `load_incidents_v3.py` script will also create a schema for you. If you already have a schema in place, and simply want to load data associated with that schema, you will need to modify the script accordingly: change the `schema_id = create_schema(...)` line with `schema_id = 'replace-this-with-the-existing-schema-id'`.
+
 To load mock black spots, run:
 ```bash
 python scripts/load_black_spots.py --authz 'Token <YOUR_AUTH_TOKEN>' /path/to/black_spots.json
@@ -209,6 +217,8 @@ Returns:
     "scope": "read write groups"
 }
 ```
+
+Note: If you're experiencing SSL errors with cURL, your version of cURL may not have the right certificate authorities installed. Try passing the `-k` parameter to `curl`.
 
 Making requests with a token:
 ```bash

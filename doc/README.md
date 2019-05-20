@@ -3,6 +3,7 @@ DRIVER's documentation is spread across multiple files. This lists potentially r
 
 | Document | Description |
 | - | - |
+| [**Frequently Asked Questions**](frequently-asked-questions.md) | A set of questions that have previously been asked by developers and system adminstrators. |
 | [**System Administration**](system-administration.md) | General purpose information needed for configuring, deploying, and administering a DRIVER environment. |
 | [**Logging**](logging.md) | List of services, which host they run on, and log file destinations. |
 | [**Troubleshooting Android app issues**](android-troubleshooting.md) | Overview of common potential problems connecting a DRIVER environment with its DRIVER Android application. |
