@@ -33,7 +33,7 @@ This is a known bug in Ansible 2.7.8. Try downgrading to the previous version of
 This can happen if no Record Type exists with the name configured in: `web_js_record_type_primary_label`. Make sure to update that group_var accordingly.
 
 ### Why do I see the JavaScript warnings: `No geographies returned`, `No boundaries returned`, or `No record types returned`?
-Geographies, boundaries, and record types need to be configured withing the schema editor before the application can be used.
+Geographies, boundaries, and record types need to be configured within the schema editor before the application can be used.
 
 
 ## Deployment
