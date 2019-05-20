@@ -35,7 +35,9 @@ In order to find a list of recent accidents where a person involved was fatally 
 
 ## Obtaining the record type uuid
 
-The record type uuid of the `Incident` record type may be obtained by querying the `recordtypes` endpoint with the `label` URL parameter set to the desired value: `Incident`. Setting `active` to `True` also ensures that only active record types will be returned. The `curl` utility is used to demonstrate how to query the API, but it can be queried with any program that supports making HTTP calls. Also, the URL shown here,  `DRIVERURL`, is only a placeholder and should be replaced with the actual URL of the application. The same applies to the `TOKEN` placeholder, whose actual value was obtained earlier on in this document.
+The record type uuid of the `Incident` record type may be obtained by querying the `recordtypes` endpoint with the `label` URL parameter set to the desired value: `Incident`. Setting `active` to `True` also ensures that only active record types will be returned. The cURL utility is used to demonstrate how to query the API, but it can be queried with any program that supports making HTTP calls. If you're experiencing SSL errors with cURL, your version of cURL may not have the right certificate authorities installed. Try passing the `-k` parameter to `curl`.
+
+Also, the URL shown here,  `DRIVERURL`, is only a placeholder and should be replaced with the actual URL of the application. The same applies to the `TOKEN` placeholder, whose actual value was obtained earlier on in this document.
 
 ```
 curl -H "Authorization: Token TOKEN" \
