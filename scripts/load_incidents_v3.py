@@ -113,8 +113,7 @@ def load(obj, api, headers=None):
             logger.error('retrying...')
 
 
-def create_schema(schema_path, api, headers=None):
-    """Create a recordtype/schema into which to load all new objects"""
+def create_record_type(api, headers=None):
     # Create record type
     response = requests.post(api + '/recordtypes/',
                              data={'label': 'Incident',
@@ -124,19 +123,21 @@ def create_schema(schema_path, api, headers=None):
                                    'active': True},
                              headers=headers)
     response.raise_for_status()
-    rectype_id = response.json()['uuid']
-    logger.info('Created RecordType')
+    return response.json()['uuid']
+
+
+def create_schema(schema_path, api, record_type_id, headers=None):
+    """Create a RecordSchema into which to load all new objects"""
     # Create associated schema
     with open(schema_path, 'r') as schema_file:
         schema_json = json.load(schema_file)
         response = requests.post(api + '/recordschemas/',
-                                 data=json.dumps({u'record_type': rectype_id,
+                                 data=json.dumps({u'record_type': record_type_id,
                                                   u'schema': schema_json}),
                                  headers=dict({'content-type': 'application/json'}.items() +
                                               headers.items()))
     logger.debug(response.json())
     response.raise_for_status()
-    logger.info('Created RecordSchema')
     return response.json()['uuid']
 
 
@@ -149,15 +150,33 @@ def main():
     parser.add_argument('--api-url', help='API host / path to target for loading data',
                         default='http://localhost:7000/api')
     parser.add_argument('--authz', help='Authorization header')
+    parser.add_argument('--schema-id', help='UUID for the Record Type schema to use')
+    parser.add_argument('--record-type-id', help='UUID for the Record Type to use')
     args = parser.parse_args()
 
     headers = None
 
     if args.authz:
         headers = {'Authorization': args.authz}
+    else:
+        logger.info("No authorization token provided")
 
     # Do the work
-    schema_id = create_schema(args.schema_path, args.api_url, headers)
+    schema_id = args.schema_id
+    if not schema_id:
+        record_type_id = args.record_type_id
+        if not record_type_id:
+            logger.info("No Record Type ID, creating new Record Type in 2s")
+            sleep(2)
+            logger.info("Creating new Record Type...")
+            record_type_id = create_record_type(args.api_url, headers)
+            logger.info("Record Type created, ID is {}".format(record_type_id))
+
+        logger.info("No schema ID, creating new schema in 2s")
+        sleep(2)
+        logger.info("Creating new schema...")
+        schema_id = create_schema(args.schema_path, args.api_url, record_type_id, headers)
+        logger.info("Schema created, ID is {}".format(schema_id))
     logger.info("Loading data")
     count = 1
 
