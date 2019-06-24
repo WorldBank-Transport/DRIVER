@@ -36,7 +36,7 @@ would become
 
 In order to for the new translations to appear in your copy of DRIVER, we suggest that you [make a pull request](https://github.com/WorldBank-Transport/DRIVER/pulls) with your changes. You may need to get a developer or system administrator to help you do this.
 
-Once your language is available in DRIVER, you will need to update your copy of DRIVER to use the new version and enable your language. Please see [System Administration](system-administration.md) for how to do this. In particular, you will need to update list of languages for your DRIVER instance using the [Configuration Wizard](https://github.com/WorldBank-Transport/DRIVER/blob/develop/doc/system-administration.md#configuration-wizard).
+Once your language is available in DRIVER, you will need to update your copy of DRIVER to use the new version and enable your language. Please see [System Administration](system-administration.md) for how to do this. In particular, you will need to update list of languages for your DRIVER instance using the [Configuration Wizard](system-administration.md#configuration-wizard).
 ## Schema translations
 The schema translation determines the language that will be used for data entry forms and editing forms, and for filter controls. Currently, the schema cannot be translated by switching the web interface language. Instead, you should pick a single language for the schema that will be usable by a majority of your users. If your instance of DRIVER has a schema in English, simply use the schema editor to translate all fields into your language.
 
