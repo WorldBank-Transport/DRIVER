@@ -1,5 +1,18 @@
 # Change Log
 
+## [2.0.4](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.4) (2019-07-12)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-release/2.0.3...2.0.4)
+
+**Merged pull requests:**
+
+- Add link to Configuration Wizard [\#795](https://github.com/WorldBank-Transport/DRIVER/pull/795)
+- Add translation file for French language [\#794](https://github.com/WorldBank-Transport/DRIVER/pull/794)
+- Update docs with frequently asked questions [\#780](https://github.com/WorldBank-Transport/DRIVER/pull/780)
+- Add indexes for documentation [\#779](https://github.com/WorldBank-Transport/DRIVER/pull/779)
+- Add doc for troubleshooting server restarts [\#778](https://github.com/WorldBank-Transport/DRIVER/pull/778)
+
+# Change Log
+
 ## [2.0.3](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.3) (2019-05-13)
 [Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v2.0.2...2.0.3)
 

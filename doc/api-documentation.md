@@ -1,6 +1,20 @@
+# API Documentation
+## Overview
 DRIVER is a flexible app for storing crash data and related information. DRIVER provides a robust REST API for querying its data. This document describes how to interact with the DRIVER API.
 
-# Resource Types
+## Table of Contents
+- [**Resource Types**](#resource-types)
+- [**Authentication**](#authentication)
+- [**Requests and Responses**](#requests-and-responses)
+- [**Record Types**](#record-types)
+- [**Record Schemas**](#record-schemas)
+- [**Records**](#records)
+- [**Boundaries**](#boundaries)
+- [**Boundary Polygons**](#boundary-polygons)
+- [**Black Spot Sets**](#black-spot-sets)
+- [**Black Spots**](#black-spots)
+
+## Resource Types
 
 The following resources are made available via the API:
 
@@ -34,7 +48,7 @@ The following resources are made available via the API:
 
 Note : there are other resource types available but they are used primarily for internal purposes; a complete list of resource types is available by sending an authenticated GET request to /api/ (see below).
 
-# Authentication
+## Authentication
 
 In order to interact with the DRIVER API you will need a user account. This can be given to you as a username and password by an administrator, or you can use your Google account to sign up.
 
@@ -84,7 +98,7 @@ Once you have a token, you will be able to make requests to the API by including
 
 `Authorization: Token <token>`
 
-# Requests and Responses
+## Requests and Responses
 
 Communication with the API generally follows the principles of RESTful API design. API paths correspond to resources, GET requests are used to retrieve objects, while POST requests are used to create new objects. This pattern is followed in nearly all cases; any exceptions will be noted in the documentation.
 
@@ -92,7 +106,7 @@ Responses from the API are exclusively JSON, unless another format is clearly re
 
 Endpoint behavior can be configured using query parameters for GET requests, while POST requests require a payload in JSON format.
 
-## Pagination
+### Pagination
 
 All API endpoints that return lists of resources are paginated. The pagination takes the following format:
 ```
@@ -108,13 +122,13 @@ All API endpoints that return lists of resources are paginated. The pagination t
 ```
 In a real response, the domain and port for the next and previous fields will be that of the server responding to the request.
 
-This format applies to the API endpoints below and will not be repeated in the documentation for each individual endpoint. 
+This format applies to the API endpoints below and will not be repeated in the documentation for each individual endpoint.
 
-## JSON-Schema
+### JSON-Schema
 
 The DRIVER API makes heavy use of [JSON Schema](http://json-schema.org/) -- it's a good idea to gain familiarity with how JSON Schema works before interacting with the API.
 
-# Record Types
+## Record Types
 
 Paths
 
@@ -152,9 +166,9 @@ Results fields
 
 **Notes**
 
-Because the data schema for a RecordType can be changed by system administrators or programmatically, it is *highly* recommended to use the RecordType API in order to discover the most recent RecordSchema for the RecordType you are interested in before performing further queries. Record Types do not change frequently after initial setup is complete, so knowing the UUID of the Record Type you're interested in will usually be sufficient. 
+Because the data schema for a RecordType can be changed by system administrators or programmatically, it is *highly* recommended to use the RecordType API in order to discover the most recent RecordSchema for the RecordType you are interested in before performing further queries. Record Types do not change frequently after initial setup is complete, so knowing the UUID of the Record Type you're interested in will usually be sufficient.
 
-# Record Schemas
+## Record Schemas
 
 Paths
 
@@ -190,7 +204,7 @@ Results fields
 
     * A JSON Schema object
 
-# Records
+## Records
 
 **Paths**
 
@@ -353,7 +367,7 @@ Assuming a properly formatted enumeration is found at the path, each possible en
         "5": 2
     }
 }`
-                
+
                 * `table_labels`: Object
 
                     * Similarly to how `row_labels` and `col_labels` work, each key in this object corresponds to the tablekey of a table.
@@ -488,7 +502,7 @@ List / Detail Results fields
 
     * A JSON object representing the data associated with this Record. It is always true that the object stored in "data" conforms to the RecordSchema referenced by the "schema" UUID.
 
-# Boundaries
+## Boundaries
 
 Paths
 
@@ -540,7 +554,7 @@ Creating a new Boundary and its Polygons correctly is a two-step process.
 
 2. The response from the previous request will have a blank `display_field`. Select one of the fields in `data_fields` and make a PATCH request to `/api/boundaries/{uuid}/` with that value in `display_field`. You are now ready to use this Boundary and its associated Boundary Polygons.
 
-# Boundary Polygons
+## Boundary Polygons
 
 Paths
 
@@ -586,7 +600,7 @@ Query Parameters:
 
     * When passed with any value, causes the geometry field to be replaced with a bbox field. This reduces the response size and is sufficient for many purposes.
 
-# Black Spot Sets
+## Black Spot Sets
 
 Paths
 
@@ -624,7 +638,7 @@ Query Parameters
 
 **Notes**
 
-# Black Spots
+## Black Spots
 
 Paths
 
