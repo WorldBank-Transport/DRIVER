@@ -1,19 +1,13 @@
 ---
 # Set up certificates on the machine using CertBot
-- name: Install CertBot dependencies
-  apt:
-    pkg: software-properties-common
-    state: present
 
-- name: Add CertBot repository
-  apt_repository:
-    repo: "ppa:certbot/certbot"
-    state: present
-
-- name: Install CertBot
-  apt:
-    pkg: certbot
-    state: latest
+# Need to download certbot directly, since PPA no longer works
+# for this version of Ubuntu
+- name: Download certbot
+  get_url: >
+    url=https://dl.eff.org/certbot-auto
+    dest=/usr/local/bin/certbot
+    mode=0755
 
 - name: Stop nginx
   service:
