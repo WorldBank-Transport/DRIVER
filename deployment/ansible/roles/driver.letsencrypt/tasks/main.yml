@@ -9,6 +9,12 @@
     dest: /usr/local/bin/certbot
     mode: 0755
 
+- name: Install certbot dependencies
+  command: certbot --non-interactive --os-packages-only
+
+- name: Install certbot
+  command: certbot --non-interactive --install-only
+
 - name: Stop nginx
   service:
     name: nginx
