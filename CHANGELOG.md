@@ -1,7 +1,15 @@
 # Change Log
 
+## [2.0.5](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.5) (2019-10-24)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/2.0.4...2.0.5)
+
+**Merged pull requests:**
+
+- Fix deploy [\#808](https://github.com/WorldBank-Transport/DRIVER/pull/808)
+- Reorder celery role dependencies [\#806](https://github.com/WorldBank-Transport/DRIVER/pull/806)
+
 ## [2.0.4](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.4) (2019-07-12)
-[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-release/2.0.3...2.0.4)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/2.0.3...2.0.4)
 
 **Merged pull requests:**
 
@@ -14,7 +22,7 @@
 # Change Log
 
 ## [2.0.3](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.3) (2019-05-13)
-[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v2.0.2...2.0.3)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/2.0.2...2.0.3)
 
 **Merged pull requests:**
 
@@ -24,14 +32,14 @@
 - Fix relationship value not showing on record modal [\#772](https://github.com/WorldBank-Transport/DRIVER/pull/772)
 
 ## [2.0.2](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.2) (2019-04-12)
-[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.2)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/2.0.1...2.0.2)
 
 **Merged pull requests:**
 
 - Fix Blackspot failures for Mumbai [\#770](https://github.com/WorldBank-Transport/DRIVER/pull/770)
 
 ## [2.0.1](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.1) (2019-04-01)
-[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.1)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/2.0.0...2.0.1)
 
 **Merged pull requests:**
 
@@ -47,7 +55,7 @@
 - Add alternate languages to staging configuration [\#759](https://github.com/WorldBank-Transport/DRIVER/pull/759)
 
 ## [2.0.0](https://github.com/WorldBank-Transport/DRIVER/tree/2.0.0) (2019-03-06)
-[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/archive-v1.0.0...2.0.0)
+[Full Changelog](https://github.com/WorldBank-Transport/DRIVER/compare/1.2.5...2.0.0)
 
 **Merged pull requests:**
 
