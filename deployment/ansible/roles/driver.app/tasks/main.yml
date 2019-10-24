@@ -51,6 +51,5 @@
 - name: Run Django migrations
   command: >
     /usr/bin/docker exec -i driver-app ./manage.py migrate
-  when: developing or staging
 
 - { include: firewall.yml }

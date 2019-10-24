@@ -24,7 +24,7 @@
       apt: update_cache=yes
 
   roles:
+    - { role: "driver.gradle" }
     - { role: "driver.celery" }
     - { role: "driver-celery.nginx" }
     - { role: "driver.r-docker" }
-    - { role: "driver.gradle" }
