@@ -5,6 +5,7 @@ Brief description of what this PR does, and why it is needed.
 ### Checklist
 
 - [ ] PR has a descriptive enough title to be useful in changelogs
+- [ ] PR is targeting the `develop` branch (unless this is a release)
 
 ### Demo
 
@@ -24,4 +25,3 @@ Optional. Ancillary topics, caveats, alternative strategies that didn't work out
  * Include test case, and expected output
 
 Closes #XXX
-

@@ -247,7 +247,7 @@ Releases use a `github_changelog_generator` tool written in `ruby`.
     ```
 -
     ```bash
-    docker run -ti --rm -v ${PWD}:/changelog -w /changelog ruby:2.3 /bin/bash
+    docker run -ti --rm -v ${PWD}:/changelog -w /changelog ruby:2.5 /bin/bash
     ```
 - From the container:
     ```bash
