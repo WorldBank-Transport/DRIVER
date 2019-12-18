@@ -4,7 +4,7 @@
     /* ngInject */
     function Nominatim($http, WebConfig) {
 
-        var PICKPOINT_NOMINATIM_URL = 'https://pickpoint.io/api/v1/';
+        var PICKPOINT_NOMINATIM_URL = 'https://api.pickpoint.io/v1/';
         var SUGGEST_LIMIT = 15;
 
         var module = {
