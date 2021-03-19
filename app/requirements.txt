@@ -1,4 +1,4 @@
-djangorestframework==3.8.0
+djangorestframework==3.11.2
 # coreapi is an optional requirement for djangorestframework that we need for
 # authentication
 coreapi==2.3.3
