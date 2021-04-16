@@ -3,7 +3,7 @@ djangorestframework==3.8.0
 # authentication
 coreapi==2.3.3
 djangorestframework-gis==0.13.0
-django-debug-toolbar==1.9.1
+django-debug-toolbar==1.11.1
 django-filter==1.1.0
 django-extensions==2.1.2
 django-cors-headers==2.4.0
